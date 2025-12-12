@@ -104,11 +104,12 @@ InstrumentMap Document::createInstrumentMap(Cmper forPartId) const
                         }
                         for (StaffCmper staffId : multiStaffInst->staffNums) {
                             std::optional<size_t> staffIndex = scrollView.getIndexForStaff(staffId);
-                            MUSX_ASSERT_IF(!staffIndex.has_value()) {
-                                throw std::logic_error("Unable to find staff " + std::to_string(staffId) + " from multistaff instrument group in scrollView.");
+                            if (staffIndex.has_value()) {
+                                it->second.staves.emplace(staffId, staffIndex.value() - topIndex.value());
+                                mappedStaves.emplace(staffId);
+                            } else if (forPartId == SCORE_PARTID) {
+                                MUSX_INTEGRITY_ERROR("Unable to find staff " + std::to_string(staffId) + " from multistaff instrument group in scrollView.");
                             }
-                            it->second.staves.emplace(staffId, staffIndex.value() - topIndex.value());
-                            mappedStaves.emplace(staffId);
                         }
                     }
                 }
@@ -143,7 +144,7 @@ InstrumentMap Document::createInstrumentMap(Cmper forPartId) const
                     auto& [top, instInfo] = *instIt;
                     if (created || instInfo.staffGroupId == 0 || group->getCmper2() == instInfo.staffGroupId) {
                         if (instInfo.staffGroupId == 0) {
-                            util::Logger::log(util::Logger::LogLevel::Info, "Treating piano brace " + std::to_string(group->getCmper2())
+                            util::Logger::log(util::Logger::LogLevel::Verbose, "Treating piano brace " + std::to_string(group->getCmper2())
                                 + " [" + group->getFullName() + "] on staff " + std::to_string(group->startInst) + " as a multistaff instrument.");
                         }
                         instInfo.staffGroupId = group->getCmper2();

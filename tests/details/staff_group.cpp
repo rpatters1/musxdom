@@ -169,23 +169,3 @@ TEST(StaffGroupTest, PopulateFields)
     EXPECT_NE(staffGroup->staves.find(3), staffGroup->staves.end()) << "group contains staff 3";
     EXPECT_EQ(staffGroup->staves.find(4), staffGroup->staves.end()) << "group does not contain staff 4";
 }
-
-TEST(StaffGroupTest, MultiInstrumentPartScore)
-{
-    std::vector<char> xml;
-    musxtest::readFile(musxtest::getInputPath() / "piano_inst.enigmaxml", xml);
-    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml);
-    ASSERT_TRUE(doc);
-
-    auto scoreStaff = doc->getOthers()->get<others::Staff>(SCORE_PARTID, 1);
-    ASSERT_TRUE(scoreStaff) << "unable to get score staff 1";
-    EXPECT_EQ(scoreStaff->getFullInstrumentName(), "Piano");
-    EXPECT_EQ(scoreStaff->getAbbreviatedInstrumentName(), "Pno.");
-    EXPECT_TRUE(scoreStaff->calcShowInstrumentName());
-
-    auto part1Staff = doc->getOthers()->get<others::Staff>(1, 1);
-    ASSERT_TRUE(part1Staff) << "unable to get part 1 staff 1";
-    EXPECT_EQ(part1Staff->getFullInstrumentName(), "Pianoforte");
-    EXPECT_EQ(part1Staff->getAbbreviatedInstrumentName(), "Pnof.");
-    EXPECT_FALSE(part1Staff->calcShowInstrumentName());
-}

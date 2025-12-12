@@ -297,3 +297,35 @@ TEST(MultiStaffGroupTest, InstrumentDetectionPart)
     EXPECT_EQ(instInfo.staves.at(3), 0);
     EXPECT_EQ(instInfo.staves.at(4), 1);
 }
+
+TEST(MultiStaffGroupTest, PartScoreInstrumentNames)
+{
+    std::vector<char> xml;
+    musxtest::readFile(musxtest::getInputPath() / "piano_inst.enigmaxml", xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml);
+    ASSERT_TRUE(doc);
+
+    auto scoreStaff = others::StaffComposite::createCurrent(doc, SCORE_PARTID, 1, 1, 0);
+    ASSERT_TRUE(scoreStaff) << "unable to get score staff 1";
+    EXPECT_EQ(scoreStaff->getFullInstrumentName(), "Piano");
+    EXPECT_EQ(scoreStaff->getAbbreviatedInstrumentName(), "Pno.");
+    EXPECT_TRUE(scoreStaff->calcShowInstrumentName());
+
+    auto part1Staff = others::StaffComposite::createCurrent(doc, 1, 1, 1, 0);
+    ASSERT_TRUE(part1Staff) << "unable to get part 1 staff 1";
+    EXPECT_EQ(part1Staff->getFullInstrumentName(), "Pianoforte");
+    EXPECT_EQ(part1Staff->getAbbreviatedInstrumentName(), "Pnof.");
+    EXPECT_FALSE(part1Staff->calcShowInstrumentName());
+
+    auto part2Staff = others::StaffComposite::createCurrent(doc, 2, 1, 1, 0);
+    ASSERT_TRUE(part2Staff) << "unable to get part 2 staff 1";
+    EXPECT_EQ(part2Staff->getFullInstrumentName(), "Piano RH");
+    EXPECT_EQ(part2Staff->getAbbreviatedInstrumentName(), "RH");
+    EXPECT_TRUE(part2Staff->calcShowInstrumentName());
+
+    auto part3Staff = others::StaffComposite::createCurrent(doc, 3, 2, 1, 0);
+    ASSERT_TRUE(part3Staff) << "unable to get part 3 staff 2";
+    EXPECT_EQ(part3Staff->getFullInstrumentName(), "Pianoforte LH");
+    EXPECT_EQ(part3Staff->getAbbreviatedInstrumentName(), "Pf LH");
+    EXPECT_FALSE(part3Staff->calcShowInstrumentName());
+}

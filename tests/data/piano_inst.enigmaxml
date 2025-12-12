@@ -61,7 +61,7 @@
       <modified>
         <year>2025</year>
         <month>12</month>
-        <day>11</day>
+        <day>12</day>
         <modifiedBy/>
         <enigmaVersion>
           <major>27</major>
@@ -1454,6 +1454,54 @@
       <pos>252</pos>
       <endPos>336</endPos>
     </beatChart>
+    <beatChart cmper="1" inci="0" part="2" shared="false">
+      <control>
+        <totalDur>4096</totalDur>
+        <totalWidth>336</totalWidth>
+      </control>
+    </beatChart>
+    <beatChart cmper="1" inci="1" part="2" shared="false">
+      <endPos>84</endPos>
+    </beatChart>
+    <beatChart cmper="1" inci="2" part="2" shared="false">
+      <dur>1024</dur>
+      <pos>84</pos>
+      <endPos>168</endPos>
+    </beatChart>
+    <beatChart cmper="1" inci="3" part="2" shared="false">
+      <dur>2048</dur>
+      <pos>168</pos>
+      <endPos>252</endPos>
+    </beatChart>
+    <beatChart cmper="1" inci="4" part="2" shared="false">
+      <dur>3072</dur>
+      <pos>252</pos>
+      <endPos>336</endPos>
+    </beatChart>
+    <beatChart cmper="1" inci="0" part="3" shared="false">
+      <control>
+        <totalDur>4096</totalDur>
+        <totalWidth>336</totalWidth>
+      </control>
+    </beatChart>
+    <beatChart cmper="1" inci="1" part="3" shared="false">
+      <endPos>84</endPos>
+    </beatChart>
+    <beatChart cmper="1" inci="2" part="3" shared="false">
+      <dur>1024</dur>
+      <pos>84</pos>
+      <endPos>168</endPos>
+    </beatChart>
+    <beatChart cmper="1" inci="3" part="3" shared="false">
+      <dur>2048</dur>
+      <pos>168</pos>
+      <endPos>252</endPos>
+    </beatChart>
+    <beatChart cmper="1" inci="4" part="3" shared="false">
+      <dur>3072</dur>
+      <pos>252</pos>
+      <endPos>336</endPos>
+    </beatChart>
     <durAllot cmper="0">
       <allotment>84</allotment>
     </durAllot>
@@ -1534,20 +1582,6 @@
       <family>0</family>
       <name>Broadway Copyist Text</name>
     </fontName>
-    <fontName cmper="11">
-      <charsetBank>Mac</charsetBank>
-      <charsetVal>0</charsetVal>
-      <pitch>0</pitch>
-      <family>0</family>
-      <name>Lucida Grande</name>
-    </fontName>
-    <fontName cmper="12">
-      <charsetBank>Mac</charsetBank>
-      <charsetVal>4095</charsetVal>
-      <pitch>0</pitch>
-      <family>0</family>
-      <name>Symbol</name>
-    </fontName>
     <fontName cmper="13">
       <charsetBank>Mac</charsetBank>
       <charsetVal>0</charsetVal>
@@ -1561,6 +1595,20 @@
       <pitch>0</pitch>
       <family>0</family>
       <name>Engraver Text T</name>
+    </fontName>
+    <fontName cmper="15">
+      <charsetBank>Mac</charsetBank>
+      <charsetVal>0</charsetVal>
+      <pitch>0</pitch>
+      <family>0</family>
+      <name>Lucida Grande</name>
+    </fontName>
+    <fontName cmper="16">
+      <charsetBank>Mac</charsetBank>
+      <charsetVal>4095</charsetVal>
+      <pitch>0</pitch>
+      <family>0</family>
+      <name>Symbol</name>
     </fontName>
     <frameSpec cmper="1" inci="0">
       <startEntry>1</startEntry>
@@ -1655,6 +1703,28 @@
         <endEdu>2147483647</endEdu>
       </range>
     </instUsed>
+    <instUsed cmper="0" inci="0" part="2" shared="false">
+      <inst>1</inst>
+      <trackType>staff</trackType>
+      <distFromTop>0</distFromTop>
+      <range>
+        <startMeas>1</startMeas>
+        <startEdu>0</startEdu>
+        <endMeas>32767</endMeas>
+        <endEdu>2147483647</endEdu>
+      </range>
+    </instUsed>
+    <instUsed cmper="0" inci="0" part="3" shared="false">
+      <inst>2</inst>
+      <trackType>staff</trackType>
+      <distFromTop>0</distFromTop>
+      <range>
+        <startMeas>1</startMeas>
+        <startEdu>0</startEdu>
+        <endMeas>32767</endMeas>
+        <endEdu>2147483647</endEdu>
+      </range>
+    </instUsed>
     <instUsed cmper="1" inci="0">
       <inst>1</inst>
       <trackType>staff</trackType>
@@ -1692,6 +1762,28 @@
       <inst>2</inst>
       <trackType>staff</trackType>
       <distFromTop>-288</distFromTop>
+      <range>
+        <startMeas>1</startMeas>
+        <startEdu>0</startEdu>
+        <endMeas>32767</endMeas>
+        <endEdu>2147483647</endEdu>
+      </range>
+    </instUsed>
+    <instUsed cmper="1" inci="0" part="2" shared="false">
+      <inst>1</inst>
+      <trackType>staff</trackType>
+      <distFromTop>0</distFromTop>
+      <range>
+        <startMeas>1</startMeas>
+        <startEdu>0</startEdu>
+        <endMeas>32767</endMeas>
+        <endEdu>2147483647</endEdu>
+      </range>
+    </instUsed>
+    <instUsed cmper="1" inci="0" part="3" shared="false">
+      <inst>2</inst>
+      <trackType>staff</trackType>
+      <distFromTop>0</distFromTop>
       <range>
         <startMeas>1</startMeas>
         <startEdu>0</startEdu>
@@ -1758,6 +1850,50 @@
       <inst>2</inst>
       <trackType>staff</trackType>
       <distFromTop>-736</distFromTop>
+      <range>
+        <startMeas>1</startMeas>
+        <startEdu>0</startEdu>
+        <endMeas>32767</endMeas>
+        <endEdu>2147483647</endEdu>
+      </range>
+    </instUsed>
+    <instUsed cmper="65400" inci="0" part="2" shared="false">
+      <inst>32767</inst>
+      <trackType>staff</trackType>
+      <distFromTop>0</distFromTop>
+      <range>
+        <startMeas>1</startMeas>
+        <startEdu>0</startEdu>
+        <endMeas>32767</endMeas>
+        <endEdu>2147483647</endEdu>
+      </range>
+    </instUsed>
+    <instUsed cmper="65400" inci="1" part="2" shared="false">
+      <inst>1</inst>
+      <trackType>staff</trackType>
+      <distFromTop>-316</distFromTop>
+      <range>
+        <startMeas>1</startMeas>
+        <startEdu>0</startEdu>
+        <endMeas>32767</endMeas>
+        <endEdu>2147483647</endEdu>
+      </range>
+    </instUsed>
+    <instUsed cmper="65400" inci="0" part="3" shared="false">
+      <inst>32767</inst>
+      <trackType>staff</trackType>
+      <distFromTop>0</distFromTop>
+      <range>
+        <startMeas>1</startMeas>
+        <startEdu>0</startEdu>
+        <endMeas>32767</endMeas>
+        <endEdu>2147483647</endEdu>
+      </range>
+    </instUsed>
+    <instUsed cmper="65400" inci="1" part="3" shared="false">
+      <inst>2</inst>
+      <trackType>staff</trackType>
+      <distFromTop>-316</distFromTop>
       <range>
         <startMeas>1</startMeas>
         <startEdu>0</startEdu>
@@ -1959,6 +2095,9 @@
     <metaClef cmper="73">
       <clef>17</clef>
     </metaClef>
+    <metaStaffStyle cmper="45">
+      <style>1</style>
+    </metaStaffStyle>
     <measSpec cmper="1">
       <width>600</width>
       <beats>4</beats>
@@ -1973,6 +2112,29 @@
       <width>368</width>
       <posMode>beatchartPlusPos</posMode>
     </measSpec>
+    <measSpec cmper="1" part="2" shared="true">
+      <width>368</width>
+      <posMode>beatchartPlusPos</posMode>
+    </measSpec>
+    <measSpec cmper="1" part="3" shared="true">
+      <width>368</width>
+      <posMode>beatchartPlusPos</posMode>
+    </measSpec>
+    <measSpec cmper="1" part="4" shared="true"/>
+    <namePosAbbrvStyle cmper="1">
+      <horzOff>-72</horzOff>
+      <justify>right</justify>
+      <halign>right</halign>
+      <expand/>
+    </namePosAbbrvStyle>
+    <namePosAbbrvStyle cmper="1" part="2" shared="false"/>
+    <namePosFullStyle cmper="1">
+      <horzOff>-72</horzOff>
+      <justify>right</justify>
+      <halign>right</halign>
+      <expand/>
+    </namePosFullStyle>
+    <namePosFullStyle cmper="1" part="2" shared="false"/>
     <textBlock cmper="1">
       <textID>1</textID>
       <lineSpacingPercent>100</lineSpacingPercent>
@@ -2023,6 +2185,86 @@
       <cornerRadius>512</cornerRadius>
       <textTag>block</textTag>
     </textBlock>
+    <textBlock cmper="6">
+      <textID>6</textID>
+      <lineSpacingPercent>100</lineSpacingPercent>
+      <newPos36/>
+      <showShape/>
+      <wordWrap/>
+      <roundCorners/>
+      <cornerRadius>512</cornerRadius>
+      <textTag>block</textTag>
+    </textBlock>
+    <textBlock cmper="7">
+      <textID>7</textID>
+      <lineSpacingPercent>100</lineSpacingPercent>
+      <newPos36/>
+      <showShape/>
+      <wordWrap/>
+      <roundCorners/>
+      <cornerRadius>512</cornerRadius>
+      <textTag>block</textTag>
+    </textBlock>
+    <textBlock cmper="8">
+      <textID>8</textID>
+      <lineSpacingPercent>100</lineSpacingPercent>
+      <newPos36/>
+      <showShape/>
+      <wordWrap/>
+      <roundCorners/>
+      <cornerRadius>512</cornerRadius>
+      <textTag>block</textTag>
+    </textBlock>
+    <textBlock cmper="9">
+      <textID>9</textID>
+      <lineSpacingPercent>100</lineSpacingPercent>
+      <newPos36/>
+      <showShape/>
+      <wordWrap/>
+      <roundCorners/>
+      <cornerRadius>512</cornerRadius>
+      <textTag>block</textTag>
+    </textBlock>
+    <textBlock cmper="10">
+      <textID>10</textID>
+      <lineSpacingPercent>100</lineSpacingPercent>
+      <newPos36/>
+      <showShape/>
+      <wordWrap/>
+      <roundCorners/>
+      <cornerRadius>512</cornerRadius>
+      <textTag>block</textTag>
+    </textBlock>
+    <textBlock cmper="11">
+      <textID>11</textID>
+      <lineSpacingPercent>100</lineSpacingPercent>
+      <newPos36/>
+      <showShape/>
+      <wordWrap/>
+      <roundCorners/>
+      <cornerRadius>512</cornerRadius>
+      <textTag>block</textTag>
+    </textBlock>
+    <textBlock cmper="12">
+      <textID>12</textID>
+      <lineSpacingPercent>100</lineSpacingPercent>
+      <newPos36/>
+      <showShape/>
+      <wordWrap/>
+      <roundCorners/>
+      <cornerRadius>512</cornerRadius>
+      <textTag>block</textTag>
+    </textBlock>
+    <textBlock cmper="13">
+      <textID>13</textID>
+      <lineSpacingPercent>100</lineSpacingPercent>
+      <newPos36/>
+      <showShape/>
+      <wordWrap/>
+      <roundCorners/>
+      <cornerRadius>512</cornerRadius>
+      <textTag>block</textTag>
+    </textBlock>
     <playbackRoute cmper="1">
       <patchType>C0_C32_PC</patchType>
       <msb>121</msb>
@@ -2043,6 +2285,28 @@
       <margRight>-144</margRight>
     </pageSpec>
     <pageSpec cmper="1" part="1" shared="false">
+      <height>3168</height>
+      <width>2448</width>
+      <percent>100</percent>
+      <firstSystem>1</firstSystem>
+      <scaleContentOnly/>
+      <margTop>-180</margTop>
+      <margLeft>144</margLeft>
+      <margBottom>180</margBottom>
+      <margRight>-144</margRight>
+    </pageSpec>
+    <pageSpec cmper="1" part="2" shared="false">
+      <height>3168</height>
+      <width>2448</width>
+      <percent>100</percent>
+      <firstSystem>1</firstSystem>
+      <scaleContentOnly/>
+      <margTop>-180</margTop>
+      <margLeft>144</margLeft>
+      <margBottom>180</margBottom>
+      <margRight>-144</margRight>
+    </pageSpec>
+    <pageSpec cmper="1" part="3" shared="false">
       <height>3168</height>
       <width>2448</width>
       <percent>100</percent>
@@ -2656,6 +2920,30 @@
       <scaleVert/>
       <scaleContentOnly/>
     </staffSystemSpec>
+    <staffSystemSpec cmper="1" part="2" shared="false">
+      <startMeas>1</startMeas>
+      <endMeas>2</endMeas>
+      <horzPercent>59511</horzPercent>
+      <ssysPercent>100</ssysPercent>
+      <staffHeight>5248</staffHeight>
+      <top>-432</top>
+      <left>144</left>
+      <bottom>-200</bottom>
+      <scaleVert/>
+      <scaleContentOnly/>
+    </staffSystemSpec>
+    <staffSystemSpec cmper="1" part="3" shared="false">
+      <startMeas>1</startMeas>
+      <endMeas>2</endMeas>
+      <horzPercent>59484</horzPercent>
+      <ssysPercent>100</ssysPercent>
+      <staffHeight>5248</staffHeight>
+      <top>-432</top>
+      <left>144</left>
+      <bottom>-200</bottom>
+      <scaleVert/>
+      <scaleContentOnly/>
+    </staffSystemSpec>
     <staffPlayData cmper="1">
       <chords>
         <velControlLevel>101</velControlLevel>
@@ -2760,6 +3048,7 @@
       <staffLines>5</staffLines>
       <lineSpace>24</lineSpace>
       <instUuid>776a2734-3f38-4cac-8fa2-90e62b368ec1</instUuid>
+      <hasStyles/>
       <transposition>
         <noKeyOpt/>
         <keysig>
@@ -2767,11 +3056,14 @@
           <adjust>0</adjust>
         </keysig>
       </transposition>
+      <hideStfNameInScore/>
       <dwRestOffset>-4</dwRestOffset>
       <wRestOffset>-4</wRestOffset>
       <hRestOffset>-4</hRestOffset>
       <otherRestOffset>-4</otherRestOffset>
       <stemReversal>-4</stemReversal>
+      <fullName>7</fullName>
+      <abbrvName>10</abbrvName>
       <botRepeatDotOff>-5</botRepeatDotOff>
       <topRepeatDotOff>-3</topRepeatDotOff>
       <vertTabNumOff>-1024</vertTabNumOff>
@@ -2790,11 +3082,14 @@
       </transposition>
       <hideMeasNums/>
       <hideRepeats/>
+      <hideStfNameInScore/>
       <dwRestOffset>-4</dwRestOffset>
       <wRestOffset>-4</wRestOffset>
       <hRestOffset>-4</hRestOffset>
       <otherRestOffset>-4</otherRestOffset>
       <stemReversal>-4</stemReversal>
+      <fullName>8</fullName>
+      <abbrvName>9</abbrvName>
       <botRepeatDotOff>-5</botRepeatDotOff>
       <topRepeatDotOff>-3</topRepeatDotOff>
       <vertTabNumOff>-1024</vertTabNumOff>
@@ -2823,6 +3118,31 @@
       <vertTabNumOff>-1024</vertTabNumOff>
       <stemDir>alwaysUp</stemDir>
     </staffSpec>
+    <staffStyle cmper="1">
+      <staffLines>5</staffLines>
+      <lineSpace>24</lineSpace>
+      <instUuid>54422b22-4627-4100-abbf-064eedc15fe3</instUuid>
+      <showNameParts/>
+      <dwRestOffset>-4</dwRestOffset>
+      <wRestOffset>-4</wRestOffset>
+      <hRestOffset>-4</hRestOffset>
+      <otherRestOffset>-4</otherRestOffset>
+      <stemReversal>-4</stemReversal>
+      <botRepeatDotOff>-5</botRepeatDotOff>
+      <topRepeatDotOff>-3</topRepeatDotOff>
+      <vertTabNumOff>-1024</vertTabNumOff>
+      <styleName>Show Name in Part</styleName>
+      <addToMenu/>
+      <mask>
+        <showNameParts/>
+      </mask>
+    </staffStyle>
+    <staffStyleAssign cmper="1" inci="0" part="2" shared="false">
+      <style>1</style>
+      <startMeas>1</startMeas>
+      <endEdu>2147483647</endEdu>
+      <endMeas>1</endMeas>
+    </staffStyleAssign>
     <viSetup cmper="0"/>
     <audioUnitInfo cmper="1">
       <pluginID>1195463233</pluginID>
@@ -2841,15 +3161,41 @@
       <partOrder>1</partOrder>
       <copies>1</copies>
       <extractPart/>
+      <needsRecalc/>
       <useAsSmpInst/>
       <smartMusicInst>-1</smartMusicInst>
       <defaultNameGroup>1</defaultNameGroup>
+    </partDef>
+    <partDef cmper="2">
+      <nameID>6</nameID>
+      <partOrder>2</partOrder>
+      <copies>1</copies>
+      <extractPart/>
+      <needsRecalc/>
+      <useAsSmpInst/>
+      <smartMusicInst>-1</smartMusicInst>
+    </partDef>
+    <partDef cmper="3">
+      <nameID>11</nameID>
+      <partOrder>3</partOrder>
+      <copies>1</copies>
+      <extractPart/>
+      <useAsSmpInst/>
+      <smartMusicInst>-1</smartMusicInst>
     </partDef>
     <partGlobals cmper="65534">
       <showTransposed/>
       <studioViewIUlist>65400</studioViewIUlist>
     </partGlobals>
     <partGlobals cmper="65534" part="1" shared="false">
+      <showTransposed/>
+      <studioViewIUlist>65400</studioViewIUlist>
+    </partGlobals>
+    <partGlobals cmper="65534" part="2" shared="false">
+      <showTransposed/>
+      <studioViewIUlist>65400</studioViewIUlist>
+    </partGlobals>
+    <partGlobals cmper="65534" part="3" shared="false">
       <showTransposed/>
       <studioViewIUlist>65400</studioViewIUlist>
     </partGlobals>
@@ -3274,6 +3620,25 @@
       <abbrvID>5</abbrvID>
       <optimize>asGroup</optimize>
     </staffGroup>
+    <staffGroup cmper1="0" cmper2="4" part="3" shared="false">
+      <startInst>2</startInst>
+      <endInst>2</endInst>
+      <startMeas>1</startMeas>
+      <endMeas>32767</endMeas>
+      <fullID>12</fullID>
+      <fullXadj>-48</fullXadj>
+      <bracket>
+        <id>3</id>
+        <bracPos>-12</bracPos>
+        <bracTop>24</bracTop>
+        <bracBot>-24</bracBot>
+        <onSingle/>
+      </bracket>
+      <barline>normal</barline>
+      <groupBarlineStyle>group</groupBarlineStyle>
+      <hideName/>
+      <abbrvID>13</abbrvID>
+    </staffGroup>
   </details>
   <entries>
     <entry entnum="1" prev="0" next="2">
@@ -3331,5 +3696,13 @@
     <blockText number="3">^fontid(1)^size(14)^nfx(0)Pno.</blockText>
     <blockText number="4">^fontid(1)^size(14)^nfx(0)Pianoforte</blockText>
     <blockText number="5">^fontid(1)^size(14)^nfx(0)Pnof.</blockText>
+    <blockText number="6">^fontid(1)^size(12)^nfx(0)Piano RH</blockText>
+    <blockText number="7">^fontid(1)^size(14)^nfx(0)Piano RH</blockText>
+    <blockText number="8">^fontid(1)^size(14)^nfx(0)Piano LH</blockText>
+    <blockText number="9">^fontid(1)^size(14)^nfx(0)LH</blockText>
+    <blockText number="10">^fontid(1)^size(14)^nfx(0)RH</blockText>
+    <blockText number="11">^fontid(1)^size(12)^nfx(0)Piano LH</blockText>
+    <blockText number="12">^fontid(1)^size(14)^nfx(0)Pianoforte LH</blockText>
+    <blockText number="13">^fontid(1)^size(14)^nfx(0)Pf LH</blockText>
   </texts>
 </finale>
