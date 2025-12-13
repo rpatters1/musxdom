@@ -2620,7 +2620,7 @@ Note::NoteProperties NoteInfoPtr::calcNoteProperties(const std::optional<bool>& 
         staffId = calcStaff();
         if (staffId != m_entry.getStaff()) {
             if (auto staff = m_entry.createCurrentStaff(staffId)) {
-                clefIndex = staff->calcClefIndexAt(m_entry.getMeasure(), m_entry->elapsedDuration.calcEduDuration(), /*forWrittenPitch*/ true);
+                clefIndex = staff->calcClefIndex(/*forWrittenPitch*/ true);
             }
         }
     }
@@ -2635,7 +2635,7 @@ Note::NoteProperties NoteInfoPtr::calcNotePropertiesConcert(bool alwaysUseEntryS
             StaffCmper staffId = calcStaff();
             if (staffId != m_entry.getStaff()) {
                 if (auto staff = m_entry.createCurrentStaff(staffId)) {
-                    return staff->calcClefIndexAt(m_entry.getMeasure(), m_entry->elapsedDuration.calcEduDuration(), /*forWrittenPitch*/ false);
+                    return staff->calcClefIndex(/*forWrittenPitch*/ false);
                 }
             }
         }

@@ -732,6 +732,11 @@ public:
     /// @brief Returns if this composite staff includes an instrument uuid changed by a staff style.
     bool getInstrumentUuidChanged() const { return m_instUuidChanged; }
 
+    /// @brief Returns the clef in this staff at the location of the composite staff.
+    /// @param forWrittenPitch If true, return the transposing clef if there is one.
+    ClefIndex calcClefIndex(bool forWrittenPitch = false) const
+    { return this->calcClefIndexAt(m_measureId, m_eduPosition, forWrittenPitch); }
+
     /// @brief Returns the underlying staff without any staff styles applied.
     MusxInstance<others::Staff> getRawStaff() const;
 };
