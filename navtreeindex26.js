@@ -1,5 +1,7 @@
 var NAVTREEINDEX26 =
 {
+"classmusx_1_1dom_1_1others_1_1TextExpressionEnclosure.html":[2,0,1,0,3,84],
+"classmusx_1_1dom_1_1others_1_1TextExpressionEnclosure.html#a16eb6d6996b874384713fe3b28a5b81c":[2,0,1,0,3,84,0],
 "classmusx_1_1dom_1_1others_1_1TextExpressionEnclosure.html#a16eb6d6996b874384713fe3b28a5b81c":[1,0,1,0,3,84,0],
 "classmusx_1_1dom_1_1others_1_1TextRepeatAssign.html":[2,0,1,0,3,85],
 "classmusx_1_1dom_1_1others_1_1TextRepeatAssign.html":[1,0,1,0,3,85],
@@ -224,8 +226,8 @@ var NAVTREEINDEX26 =
 "classmusx_1_1factory_1_1TextsFactory.html":[1,0,1,1,9],
 "classmusx_1_1factory_1_1TypeRegistry.html":[1,0,1,1,10],
 "classmusx_1_1factory_1_1TypeRegistry.html":[2,0,1,1,10],
-"classmusx_1_1factory_1_1unknown__xml__error.html":[1,0,1,1,11],
 "classmusx_1_1factory_1_1unknown__xml__error.html":[2,0,1,1,11],
+"classmusx_1_1factory_1_1unknown__xml__error.html":[1,0,1,1,11],
 "classmusx_1_1util_1_1EnigmaParsingContext.html":[2,0,1,2,1],
 "classmusx_1_1util_1_1EnigmaParsingContext.html#a04534e2885dd5ed69b055e0ed8d0cbc2":[2,0,1,2,1,10],
 "classmusx_1_1util_1_1EnigmaParsingContext.html#a1d1178005a52284ba506019c5b94cbbb":[2,0,1,2,1,5],
@@ -247,7 +249,5 @@ var NAVTREEINDEX26 =
 "classmusx_1_1util_1_1EnigmaString.html#ab46ba36ca6082f38e0ce7be58a0553c3":[2,0,1,2,2,3],
 "classmusx_1_1util_1_1EnigmaString.html#ab46ba36ca6082f38e0ce7be58a0553c3a47299dda67970441e982743972d64cfc":[2,0,1,2,2,3,0],
 "classmusx_1_1util_1_1EnigmaString.html#ab46ba36ca6082f38e0ce7be58a0553c3a5f7bbf366eef76376ac3d25b02eb5164":[2,0,1,2,2,3,1],
-"classmusx_1_1util_1_1EnigmaString.html#ab7774814f864c7fc4e840f73af322936":[2,0,1,2,2,1],
-"classmusx_1_1util_1_1EnigmaString.html#ad0503e291556abece57b9c47b16bbf1e":[2,0,1,2,2,2],
-"classmusx_1_1util_1_1Fraction.html":[2,0,1,2,4]
+"classmusx_1_1util_1_1EnigmaString.html#ab7774814f864c7fc4e840f73af322936":[2,0,1,2,2,1]
 };

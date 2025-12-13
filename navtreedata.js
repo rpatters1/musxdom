@@ -82,16 +82,16 @@ var NAVTREEINDEX =
 "classmusx_1_1dom_1_1others_1_1SmartShape.html#a3bc036352680b720c793d3946379cd63ad2c24d59e0baff4d0155fbdf62590867",
 "classmusx_1_1dom_1_1others_1_1SmartShapeCustomLine_1_1DashedParams.html",
 "classmusx_1_1dom_1_1others_1_1Staff.html#a9d9db3e303ed468b4dc81f3a0e7377dd",
-"classmusx_1_1dom_1_1others_1_1StaffStyle_1_1Masks.html#aba6dd4f444ec3bd10e087a715850075b",
-"classmusx_1_1dom_1_1others_1_1TextExpressionEnclosure.html#a16eb6d6996b874384713fe3b28a5b81c",
-"classmusx_1_1util_1_1Fraction.html#a0b2deebb89a0eea510a378463a836feb",
-"functions_u.html",
-"namespacemusx_1_1dom_1_1details.html",
-"namespacemusx_1_1dom_1_1uuid.html#a3508ee8a3c4373b9bf9cf0f35e1652ef",
-"namespacemusx_1_1dom_1_1uuid.html#a843a01d9291a923064f34b592f605cc3",
-"namespacemusx_1_1dom_1_1uuid.html#ad415a27abbf389460a043f94e83486d3",
-"structmusx_1_1dom_1_1ShapeDefInstruction_1_1Decoded.html#ae041ab69c922d8e201204087caa8f965",
-"structmusx_1_1dom_1_1options_1_1TextOptions_1_1InsertSymbolInfo.html#a8038c695540334a67aee1b2ba42deb00"
+"classmusx_1_1dom_1_1others_1_1StaffStyle_1_1Masks.html#ab21296a1524a4d1e0b417f0cc6c5ce1c",
+"classmusx_1_1dom_1_1others_1_1TextExpressionEnclosure.html",
+"classmusx_1_1util_1_1EnigmaString.html#ad0503e291556abece57b9c47b16bbf1e",
+"functions_t.html",
+"namespacemusx_1_1dom.html#af72aa98bddad049ec18ef7858aea2168",
+"namespacemusx_1_1dom_1_1uuid.html#a33a60ef19230e7b84220dd9d4e6f117c",
+"namespacemusx_1_1dom_1_1uuid.html#a837ff56e6c6fb189b144018c439bea5c",
+"namespacemusx_1_1dom_1_1uuid.html#ad28045088af7b5d085cda19b347c23bc",
+"structmusx_1_1dom_1_1ShapeDefInstruction_1_1Decoded.html#ad46f8542ff9cb7ce5628fe6909ca6ff8",
+"structmusx_1_1dom_1_1options_1_1TextOptions_1_1InsertSymbolInfo.html#a64dddac4922d9997b963af2eb0c65632"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

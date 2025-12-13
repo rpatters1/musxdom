@@ -133,6 +133,9 @@ Public Member Functions</h2></td></tr>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>getInstrumentUuidChanged</b> () const</td></tr>
 <tr class="memdesc:a1d0732f857507fed0213cab5f594d967"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns if this composite staff includes an instrument uuid changed by a staff style. <br /></td></tr>
 <tr class="separator:a1d0732f857507fed0213cab5f594d967"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a48acd1112922d9aab25f2e1374d15f6d" id="r_a48acd1112922d9aab25f2e1374d15f6d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemusx_1_1dom.html#a894a6de7cd017628a3b75a07ed40952c">ClefIndex</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1StaffComposite.html#a48acd1112922d9aab25f2e1374d15f6d">calcClefIndex</a> (bool forWrittenPitch=false) const</td></tr>
+<tr class="memdesc:a48acd1112922d9aab25f2e1374d15f6d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the clef in this staff at the location of the composite staff.  <br /></td></tr>
+<tr class="separator:a48acd1112922d9aab25f2e1374d15f6d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a88bbeac61f942e3554390fa625ca025d" id="r_a88bbeac61f942e3554390fa625ca025d"><td class="memItemLeft" align="right" valign="top"><a id="a88bbeac61f942e3554390fa625ca025d" name="a88bbeac61f942e3554390fa625ca025d"></a>
 <a class="el" href="namespacemusx_1_1dom.html#a4223cd531120dbef7acd854c3d2631b8">MusxInstance</a>&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html">others::Staff</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getRawStaff</b> () const</td></tr>
 <tr class="memdesc:a88bbeac61f942e3554390fa625ca025d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the underlying staff without any staff styles applied. <br /></td></tr>
@@ -849,6 +852,40 @@ static constexpr std::string_view&#160;</td><td class="memItemRight" valign="bot
 <div class="textblock"><p>Represents a composite of an underlying <a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html">Staff</a> instance with any applicable <a class="el" href="classmusx_1_1dom_1_1others_1_1StaffStyle.html">StaffStyle</a> instances applied. </p>
 <p>Instances of <a class="el" href="classmusx_1_1dom_1_1others_1_1StaffComposite.html" title="Represents a composite of an underlying Staff instance with any applicable StaffStyle instances appli...">StaffComposite</a> are not part of the document structure and cannot be created directly. Use <a class="el" href="classmusx_1_1dom_1_1others_1_1StaffComposite.html#a15e0e770936caed1cd1326a65fb7aa4e" title="Calculates the current staff at the specified metric position by applying all relevant staff styles,...">createCurrent</a> to create an instance. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="a48acd1112922d9aab25f2e1374d15f6d" name="a48acd1112922d9aab25f2e1374d15f6d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a48acd1112922d9aab25f2e1374d15f6d">&#9670;&#160;</a></span>calcClefIndex()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacemusx_1_1dom.html#a894a6de7cd017628a3b75a07ed40952c">ClefIndex</a> musx::dom::others::StaffComposite::calcClefIndex </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>forWrittenPitch</em> = <code>false</code></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the clef in this staff at the location of the composite staff. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">forWrittenPitch</td><td>If true, return the transposing clef if there is one. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a id="a15e0e770936caed1cd1326a65fb7aa4e" name="a15e0e770936caed1cd1326a65fb7aa4e"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a15e0e770936caed1cd1326a65fb7aa4e">&#9670;&#160;</a></span>createCurrent()</h2>
 

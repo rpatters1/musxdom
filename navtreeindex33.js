@@ -1,5 +1,7 @@
 var NAVTREEINDEX33 =
 {
+"structmusx_1_1dom_1_1ShapeDefInstruction_1_1Decoded.html#ad46f8542ff9cb7ce5628fe6909ca6ff8":[2,0,1,0,47,3,3],
+"structmusx_1_1dom_1_1ShapeDefInstruction_1_1Decoded.html#ad46f8542ff9cb7ce5628fe6909ca6ff8":[1,0,1,0,46,3,3],
 "structmusx_1_1dom_1_1ShapeDefInstruction_1_1Decoded.html#ae041ab69c922d8e201204087caa8f965":[1,0,1,0,46,3,2],
 "structmusx_1_1dom_1_1ShapeDefInstruction_1_1Decoded.html#ae041ab69c922d8e201204087caa8f965":[2,0,1,0,47,3,2],
 "structmusx_1_1dom_1_1ShapeDefInstruction_1_1DrawChar.html":[2,0,1,0,47,4],
@@ -247,7 +249,5 @@ var NAVTREEINDEX33 =
 "structmusx_1_1dom_1_1options_1_1TextOptions_1_1InsertSymbolInfo.html#a57cf53760a0a5c83c199101c89919122":[2,0,1,0,2,24,0,5],
 "structmusx_1_1dom_1_1options_1_1TextOptions_1_1InsertSymbolInfo.html#a57cf53760a0a5c83c199101c89919122":[1,0,1,0,2,24,0,5],
 "structmusx_1_1dom_1_1options_1_1TextOptions_1_1InsertSymbolInfo.html#a5dea2d4320cb8e07057969ff5a644a7f":[2,0,1,0,2,24,0,4],
-"structmusx_1_1dom_1_1options_1_1TextOptions_1_1InsertSymbolInfo.html#a5dea2d4320cb8e07057969ff5a644a7f":[1,0,1,0,2,24,0,4],
-"structmusx_1_1dom_1_1options_1_1TextOptions_1_1InsertSymbolInfo.html#a64dddac4922d9997b963af2eb0c65632":[2,0,1,0,2,24,0,3],
-"structmusx_1_1dom_1_1options_1_1TextOptions_1_1InsertSymbolInfo.html#a64dddac4922d9997b963af2eb0c65632":[1,0,1,0,2,24,0,3]
+"structmusx_1_1dom_1_1options_1_1TextOptions_1_1InsertSymbolInfo.html#a5dea2d4320cb8e07057969ff5a644a7f":[1,0,1,0,2,24,0,4]
 };
