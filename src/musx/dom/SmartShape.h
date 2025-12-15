@@ -314,18 +314,6 @@ public:
                         ///< #makeHorz is false, this forces the system break to be horizontal.
     };
 
-    /**
-     * @enum LyricTextType
-     * @brief The lyric text type if this is a lyrics smart shape.
-     */
-    enum class LyricTextType
-    {
-        None,           ///< The default, for when there is no lyrics text block.
-        Verse,          ///< The assignment is to a Verse lyrics text block.
-        Chorus,         ///< The assignment is to a Chorus lyrics text block.
-        Section,        ///< The assignment is to a Section lyrics text block.
-    };
-
     ShapeType shapeType{};                          ///< Type of smart shape.
     bool entryBased{};                              ///< Whether the shape is entry-based.
     bool rotate{};                                  ///< Purpose unknown: always set for slurs.
@@ -348,8 +336,8 @@ public:
                                                     ///< It can also have an apparent nonsense value (.e.g, "-2"). The meaning of this is not known. The Finale U.I. does not appear
                                                     ///< to allow hyphen or word extensions between syllables from two different lyric blocks, so the need for start and end blocks
                                                     ///< is unclear.
-    LyricTextType startLyricType{};                 ///< The type of lyrics block for #startLyricNum. (xml node is `<startLyricTag>`)
-    LyricTextType endLyricType{};                   ///< The type of lyrics block for #endLyricNum. The speculative comments at #endLyricNum also apply here.
+    std::optional<LyricTextType> startLyricType;    ///< The type of lyrics block for #startLyricNum. (xml node is `<startLyricTag>`)
+    std::optional<LyricTextType> endLyricType;      ///< The type of lyrics block for #endLyricNum. The speculative comments at #endLyricNum also apply here.
                                                     ///< This value has never been seen to be different than #startLyricNum unless endLyricNum is zero. (xml node is `<endLyricTag>`)
 
     /// @brief Calculates if the smart shape applies to the specified entry.
