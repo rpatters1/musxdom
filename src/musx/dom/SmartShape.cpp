@@ -36,7 +36,7 @@ EntryInfoPtr smartshape::EndPoint::calcAssociatedEntry(Cmper forPartId, bool fin
 {
     EntryInfoPtr result;
     if (entryNumber != 0) {
-        result = EntryInfoPtr::fromPositionOrNull(getDocument(), forPartId, staffId, measId, entryNumber);
+        result = EntryInfoPtr::fromEntryNumber(getDocument(), forPartId, entryNumber);
         if (!result) {
             MUSX_INTEGRITY_ERROR("SmartShape at Staff " + std::to_string(staffId) + " Measure " + std::to_string(measId)
                 + " contains endpoint with invalid entry number " + std::to_string(entryNumber));

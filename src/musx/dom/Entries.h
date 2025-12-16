@@ -442,19 +442,6 @@ public:
     explicit EntryInfoPtr(const std::shared_ptr<const EntryFrame>& entryFrame, size_t index = 0)
         : m_entryFrame(entryFrame), m_indexInFrame(index) {}
 
-    /// @brief Searches the given position at @p staffId and @p measureId for the @p entryNumber.
-    /// @param document The document to search.
-    /// @param partId The part within the document for which to create the #EntryInfoPtr.
-    /// @param staffId The ID of the staff to search.
-    /// @param measureId The ID of the measure to search.
-    /// @param entryNumber The EntryNumber to search for.
-    /// @param timeOffset Subtract this amount from elapsed durations. A common usage might be to pass in here the
-    /// value returned by #others::Measure::calcMinLegacyPickupSpacer.
-    /// @return If found, an #EntryInfoPtr for the given entry number. Otherwise an null instance.
-    [[nodiscard]]
-    static EntryInfoPtr fromPositionOrNull(const DocumentPtr& document, Cmper partId, StaffCmper staffId, MeasCmper measureId,
-        EntryNumber entryNumber, util::Fraction timeOffset = 0);
-
     /// @brief Returns an EntryInfoPtr for the entry specified by @p entryNumber.
     ///
     /// If you are directly importing a musx file last saved in a version before Finale 25, it may contain mirrors.
