@@ -1265,6 +1265,7 @@ public:
     /// @brief Get the raw lyric text for this assignment.
     virtual MusxInstance<texts::LyricsTextBase> getLyricText() const = 0;
 
+    /// @brief Get the lyric text type for this assignment.
     virtual LyricTextType getLyricTextType() const = 0;
 
     /// @brief Return an Enigma parsing context for the associated lyrics text block.
