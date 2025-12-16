@@ -5,7 +5,7 @@ var searchData=
   ['scoreandpart_2',['ScoreAndPart',['../classmusx_1_1dom_1_1others_1_1MeasureExprAssign.html#a086834c0cd00799bce31cdc0522ce0d3a7538d62bd653b25559d4b13546fa7421',1,'musx::dom::others::MeasureExprAssign']]],
   ['scoreonly_3',['ScoreOnly',['../classmusx_1_1dom_1_1others_1_1MeasureExprAssign.html#a086834c0cd00799bce31cdc0522ce0d3acd53fa916b261fb48fb78117cd459006',1,'musx::dom::others::MeasureExprAssign']]],
   ['scoreparts_4',['ScoreParts',['../classmusx_1_1dom_1_1others_1_1Staff.html#ab23c7e94e4782a34d7f06e54e6fed7d0a630aab72810a94e7a0cf5896f5d99aa4',1,'musx::dom::others::Staff']]],
-  ['section_5',['Section',['../classmusx_1_1dom_1_1others_1_1SmartShape.html#a3bc036352680b720c793d3946379cd63ad2c24d59e0baff4d0155fbdf62590867',1,'musx::dom::others::SmartShape']]],
+  ['section_5',['Section',['../namespacemusx_1_1dom.html#a15ce5f78a9bdae32abc605711086c991ad2c24d59e0baff4d0155fbdf62590867',1,'musx::dom']]],
   ['selectednotes_6',['SelectedNotes',['../classmusx_1_1dom_1_1others_1_1PartVoicing.html#a021c50bccc2430c402141b9b4e1cb852a06073e55afa93d2dfbabfb39d203c9f1',1,'musx::dom::others::PartVoicing']]],
   ['setarrowhead_7',['SetArrowhead',['../namespacemusx_1_1dom.html#a93764339b56e531ea37af5181b20b113ae6c8603537164df7d6f44cc48b44d1b3',1,'musx::dom']]],
   ['setblack_8',['SetBlack',['../namespacemusx_1_1dom.html#a93764339b56e531ea37af5181b20b113a3e9af05adfca77e0d1b8e6f7828ca8ce',1,'musx::dom']]],

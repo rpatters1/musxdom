@@ -888,6 +888,11 @@ var namespacemusx_1_1dom =
       [ "Blank", "namespacemusx_1_1dom.html#a16d85e8ed9439b9a2ef071d38ffa0fd7ae4ef81cce7e4e10033ebb10962dfdd5e", null ],
       [ "TenutoMark", "namespacemusx_1_1dom.html#a16d85e8ed9439b9a2ef071d38ffa0fd7ac6cdf96e9804915f9f5c6771802805fd", null ]
     ] ],
+    [ "LyricTextType", "namespacemusx_1_1dom.html#a15ce5f78a9bdae32abc605711086c991", [
+      [ "Verse", "namespacemusx_1_1dom.html#a15ce5f78a9bdae32abc605711086c991a98cc99adc12166c3d8f086c0ccc2cde9", null ],
+      [ "Chorus", "namespacemusx_1_1dom.html#a15ce5f78a9bdae32abc605711086c991a9dcf77c2f2237c9e2013ea0175bf1745", null ],
+      [ "Section", "namespacemusx_1_1dom.html#a15ce5f78a9bdae32abc605711086c991ad2c24d59e0baff4d0155fbdf62590867", null ]
+    ] ],
     [ "NoteType", "namespacemusx_1_1dom.html#a3c91ee84b72cc27a2899191d6baee312", [
       [ "Maxima", "namespacemusx_1_1dom.html#a3c91ee84b72cc27a2899191d6baee312abc3292567552688d69e5ddc95781245b", null ],
       [ "Longa", "namespacemusx_1_1dom.html#a3c91ee84b72cc27a2899191d6baee312a30cba0c98833cb8bf807c5d2280b17be", null ],

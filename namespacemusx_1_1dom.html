@@ -377,30 +377,6 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>TextsPoolPtr</b> = s
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="enum-members" name="enum-members"></a>
 Enumerations</h2></td></tr>
-<tr class="memitem:a3c91ee84b72cc27a2899191d6baee312" id="r_a3c91ee84b72cc27a2899191d6baee312"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemusx_1_1dom.html#a3c91ee84b72cc27a2899191d6baee312">NoteType</a> : Edu { <br />
-&#160;&#160;<b>Maxima</b> = 0x8000
-, <b>Longa</b> = 0x4000
-, <b>Breve</b> = 0x2000
-, <b>Whole</b> = EDU_PER_WHOLE_NOTE
-, <br />
-&#160;&#160;<b>Half</b> = 0x0800
-, <b>Quarter</b> = 0x0400
-, <b>Eighth</b> = 0x0200
-, <b>Note16th</b> = 0x0100
-, <br />
-&#160;&#160;<b>Note32nd</b> = 0x0080
-, <b>Note64th</b> = 0x0040
-, <b>Note128th</b> = 0x0020
-, <b>Note256th</b> = 0x0010
-, <br />
-&#160;&#160;<b>Note512th</b> = 0x0008
-, <b>Note1024th</b> = 0x0004
-, <b>Note2048th</b> = 0x0002
-, <b>Note4096th</b> = 0x0001
-<br />
- }</td></tr>
-<tr class="memdesc:a3c91ee84b72cc27a2899191d6baee312"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enum class representing note types based on EDU values.  <a href="namespacemusx_1_1dom.html#a3c91ee84b72cc27a2899191d6baee312">More...</a><br /></td></tr>
-<tr class="separator:a3c91ee84b72cc27a2899191d6baee312"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a86d8f1c0b9cc21018e4d1257c193f67f" id="r_a86d8f1c0b9cc21018e4d1257c193f67f"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemusx_1_1dom.html#a86d8f1c0b9cc21018e4d1257c193f67f">DefaultClefType</a> : ClefIndex { <br />
 &#160;&#160;<a class="el" href="namespacemusx_1_1dom.html#a86d8f1c0b9cc21018e4d1257c193f67fa56694ab2f8017b01b4284af08186b5fd">Treble</a> = 0
 , <a class="el" href="namespacemusx_1_1dom.html#a86d8f1c0b9cc21018e4d1257c193f67fa2c90bb36efdd18b04a68c6de1e1be466">Alto</a> = 1
@@ -428,6 +404,36 @@ Enumerations</h2></td></tr>
  }</td></tr>
 <tr class="memdesc:a86d8f1c0b9cc21018e4d1257c193f67f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clef types used by default in Finale documents. The values correspond to indices into <a class="el" href="classmusx_1_1dom_1_1options_1_1ClefOptions.html#a4c29545222e1c6de9dc8db061aed8f04">musx::dom::options::ClefOptions::clefDefs</a>. Note that the user may change the clef list to any clefs the user wishes. These are only defaults, but they are frequently left unchanged.  <a href="namespacemusx_1_1dom.html#a86d8f1c0b9cc21018e4d1257c193f67f">More...</a><br /></td></tr>
 <tr class="separator:a86d8f1c0b9cc21018e4d1257c193f67f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a15ce5f78a9bdae32abc605711086c991" id="r_a15ce5f78a9bdae32abc605711086c991"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemusx_1_1dom.html#a15ce5f78a9bdae32abc605711086c991">LyricTextType</a> { <a class="el" href="namespacemusx_1_1dom.html#a15ce5f78a9bdae32abc605711086c991a98cc99adc12166c3d8f086c0ccc2cde9">Verse</a>
+, <a class="el" href="namespacemusx_1_1dom.html#a15ce5f78a9bdae32abc605711086c991a9dcf77c2f2237c9e2013ea0175bf1745">Chorus</a>
+, <a class="el" href="namespacemusx_1_1dom.html#a15ce5f78a9bdae32abc605711086c991ad2c24d59e0baff4d0155fbdf62590867">Section</a>
+ }</td></tr>
+<tr class="memdesc:a15ce5f78a9bdae32abc605711086c991"><td class="mdescLeft">&#160;</td><td class="mdescRight">The lyric text type if this is a lyrics smart shape.  <a href="namespacemusx_1_1dom.html#a15ce5f78a9bdae32abc605711086c991">More...</a><br /></td></tr>
+<tr class="separator:a15ce5f78a9bdae32abc605711086c991"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3c91ee84b72cc27a2899191d6baee312" id="r_a3c91ee84b72cc27a2899191d6baee312"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemusx_1_1dom.html#a3c91ee84b72cc27a2899191d6baee312">NoteType</a> : Edu { <br />
+&#160;&#160;<b>Maxima</b> = 0x8000
+, <b>Longa</b> = 0x4000
+, <b>Breve</b> = 0x2000
+, <b>Whole</b> = EDU_PER_WHOLE_NOTE
+, <br />
+&#160;&#160;<b>Half</b> = 0x0800
+, <b>Quarter</b> = 0x0400
+, <b>Eighth</b> = 0x0200
+, <b>Note16th</b> = 0x0100
+, <br />
+&#160;&#160;<b>Note32nd</b> = 0x0080
+, <b>Note64th</b> = 0x0040
+, <b>Note128th</b> = 0x0020
+, <b>Note256th</b> = 0x0010
+, <br />
+&#160;&#160;<b>Note512th</b> = 0x0008
+, <b>Note1024th</b> = 0x0004
+, <b>Note2048th</b> = 0x0002
+, <b>Note4096th</b> = 0x0001
+<br />
+ }</td></tr>
+<tr class="memdesc:a3c91ee84b72cc27a2899191d6baee312"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enum class representing note types based on EDU values.  <a href="namespacemusx_1_1dom.html#a3c91ee84b72cc27a2899191d6baee312">More...</a><br /></td></tr>
+<tr class="separator:a3c91ee84b72cc27a2899191d6baee312"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a09b81b6535bd382e3afc1a00ba080215" id="r_a09b81b6535bd382e3afc1a00ba080215"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemusx_1_1dom.html#a09b81b6535bd382e3afc1a00ba080215">ShowClefMode</a> { <a class="el" href="namespacemusx_1_1dom.html#a09b81b6535bd382e3afc1a00ba080215a1547a66f02e98611ff7d77d5ba567377">WhenNeeded</a>
 , <a class="el" href="namespacemusx_1_1dom.html#a09b81b6535bd382e3afc1a00ba080215a6e7b34fa59e1bd229b207892956dc41c">Never</a>
 , <a class="el" href="namespacemusx_1_1dom.html#a09b81b6535bd382e3afc1a00ba080215a68eec46437c384d8dad18d5464ebc35c">Always</a>
@@ -698,6 +704,38 @@ template&lt;typename T &gt; </div>
 <tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a16d85e8ed9439b9a2ef071d38ffa0fd7ae4ef81cce7e4e10033ebb10962dfdd5e" name="a16d85e8ed9439b9a2ef071d38ffa0fd7ae4ef81cce7e4e10033ebb10962dfdd5e"></a>Blank&#160;</td><td class="fielddoc"><p>A blank shape containing no instructions. </p>
 </td></tr>
 <tr><td class="fieldname"><a id="a16d85e8ed9439b9a2ef071d38ffa0fd7ac6cdf96e9804915f9f5c6771802805fd" name="a16d85e8ed9439b9a2ef071d38ffa0fd7ac6cdf96e9804915f9f5c6771802805fd"></a>TenutoMark&#160;</td><td class="fielddoc"><p>A horizontal tenuto mark, typically used as an articulation symbol. </p>
+</td></tr>
+</table>
+
+</div>
+</div>
+<a id="a15ce5f78a9bdae32abc605711086c991" name="a15ce5f78a9bdae32abc605711086c991"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a15ce5f78a9bdae32abc605711086c991">&#9670;&#160;</a></span>LyricTextType</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum class <a class="el" href="namespacemusx_1_1dom.html#a15ce5f78a9bdae32abc605711086c991">musx::dom::LyricTextType</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">strong</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The lyric text type if this is a lyrics smart shape. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a15ce5f78a9bdae32abc605711086c991a98cc99adc12166c3d8f086c0ccc2cde9" name="a15ce5f78a9bdae32abc605711086c991a98cc99adc12166c3d8f086c0ccc2cde9"></a>Verse&#160;</td><td class="fielddoc"><p>The assignment is to a Verse lyrics text block. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a15ce5f78a9bdae32abc605711086c991a9dcf77c2f2237c9e2013ea0175bf1745" name="a15ce5f78a9bdae32abc605711086c991a9dcf77c2f2237c9e2013ea0175bf1745"></a>Chorus&#160;</td><td class="fielddoc"><p>The assignment is to a Chorus lyrics text block. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a15ce5f78a9bdae32abc605711086c991ad2c24d59e0baff4d0155fbdf62590867" name="a15ce5f78a9bdae32abc605711086c991ad2c24d59e0baff4d0155fbdf62590867"></a>Section&#160;</td><td class="fielddoc"><p>The assignment is to a Section lyrics text block. </p>
 </td></tr>
 </table>
 

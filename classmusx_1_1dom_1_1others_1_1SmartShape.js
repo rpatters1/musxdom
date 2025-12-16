@@ -6,12 +6,6 @@ var classmusx_1_1dom_1_1others_1_1SmartShape =
       [ "Off", "classmusx_1_1dom_1_1others_1_1SmartShape.html#a401ee7c12c872ce9f039ab9994a6708bad15305d7a4e34e02489c74a5ef542f36", null ],
       [ "On", "classmusx_1_1dom_1_1others_1_1SmartShape.html#a401ee7c12c872ce9f039ab9994a6708ba521c36a31c2762741cf0f8890cbe05e3", null ]
     ] ],
-    [ "LyricTextType", "classmusx_1_1dom_1_1others_1_1SmartShape.html#a3bc036352680b720c793d3946379cd63", [
-      [ "None", "classmusx_1_1dom_1_1others_1_1SmartShape.html#a3bc036352680b720c793d3946379cd63a6adf97f83acf6453d4a6a4b1070f3754", null ],
-      [ "Verse", "classmusx_1_1dom_1_1others_1_1SmartShape.html#a3bc036352680b720c793d3946379cd63a98cc99adc12166c3d8f086c0ccc2cde9", null ],
-      [ "Chorus", "classmusx_1_1dom_1_1others_1_1SmartShape.html#a3bc036352680b720c793d3946379cd63a9dcf77c2f2237c9e2013ea0175bf1745", null ],
-      [ "Section", "classmusx_1_1dom_1_1others_1_1SmartShape.html#a3bc036352680b720c793d3946379cd63ad2c24d59e0baff4d0155fbdf62590867", null ]
-    ] ],
     [ "ShapeType", "classmusx_1_1dom_1_1others_1_1SmartShape.html#a7b869b52ed9d931b235b79d2c4ed1e6f", [
       [ "SlurDown", "classmusx_1_1dom_1_1others_1_1SmartShape.html#a7b869b52ed9d931b235b79d2c4ed1e6fa3387fd3030fde215f2319c5d84b7cae3", null ],
       [ "SlurUp", "classmusx_1_1dom_1_1others_1_1SmartShape.html#a7b869b52ed9d931b235b79d2c4ed1e6fadb43c8e054e0157befe80ccb8c127e72", null ],
@@ -73,7 +67,7 @@ var classmusx_1_1dom_1_1others_1_1SmartShape =
     [ "integrityCheck", "classmusx_1_1dom_1_1others_1_1SmartShape.html#ad5faca45c7d8f9e3376fbde6405d109d", null ],
     [ "iterateEntries", "classmusx_1_1dom_1_1others_1_1SmartShape.html#a247e5ea76b94a8de228db134de7092c1", null ],
     [ "endLyricNum", "classmusx_1_1dom_1_1others_1_1SmartShape.html#a8788a59bf45fc907bdc16daa4d3d639d", null ],
-    [ "endLyricType", "classmusx_1_1dom_1_1others_1_1SmartShape.html#a349d187043a07bccc22108631e011fed", null ],
+    [ "endLyricType", "classmusx_1_1dom_1_1others_1_1SmartShape.html#a2c6f50d410ca198a830b429394844010", null ],
     [ "endNoteId", "classmusx_1_1dom_1_1others_1_1SmartShape.html#a5fa83fc067c41f14b3cc56dc45af82dd", null ],
     [ "endTermSeg", "classmusx_1_1dom_1_1others_1_1SmartShape.html#a4e56b4c73aef844dcbdb8753768824a5", null ],
     [ "engraverSlurState", "classmusx_1_1dom_1_1others_1_1SmartShape.html#a76f47c85e23c3feeb7c33030cd3d0e02", null ],
@@ -89,7 +83,7 @@ var classmusx_1_1dom_1_1others_1_1SmartShape =
     [ "shapeType", "classmusx_1_1dom_1_1others_1_1SmartShape.html#afa31bfe2cd31267bab0850949664ca0f", null ],
     [ "slurAvoidAcciState", "classmusx_1_1dom_1_1others_1_1SmartShape.html#a8e6fd3be8b6e91f0b9a943482726f61f", null ],
     [ "startLyricNum", "classmusx_1_1dom_1_1others_1_1SmartShape.html#a4572610d46004f8e2a30ad71800bd8ad", null ],
-    [ "startLyricType", "classmusx_1_1dom_1_1others_1_1SmartShape.html#aded2cefc8a24bb7a4c7b3361a816687b", null ],
+    [ "startLyricType", "classmusx_1_1dom_1_1others_1_1SmartShape.html#a5aeeec46a2a4adbedf00ba04d0108ba5", null ],
     [ "startNoteId", "classmusx_1_1dom_1_1others_1_1SmartShape.html#a2ea630f2e58899b51ec9d83b213defd7", null ],
     [ "startTermSeg", "classmusx_1_1dom_1_1others_1_1SmartShape.html#ad128b33128dddbd914ea29d96eac2514", null ],
     [ "yBreakType", "classmusx_1_1dom_1_1others_1_1SmartShape.html#a7fdb15ac5e8b0bd6169b4aee41ef7517", null ]
