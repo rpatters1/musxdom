@@ -150,10 +150,8 @@ class LyricsVerse : public LyricsTextBase
 public:
     using LyricsTextBase::LyricsTextBase;
 
-    /**
-     * @brief The XML node name for this type.
-     */
-    constexpr static std::string_view XmlNodeName = "verse";
+    constexpr static std::string_view XmlNodeName = "verse"; ///< The XML node name for this type.
+    constexpr static LyricTextType lyricTextType = LyricTextType::Verse; ///< Lyric text type for looking up word extensions.
 };
 
 /**
@@ -165,10 +163,8 @@ class LyricsChorus : public LyricsTextBase
 public:
     using LyricsTextBase::LyricsTextBase;
 
-    /**
-     * @brief The XML node name for this type.
-     */
-    constexpr static std::string_view XmlNodeName = "chorus";
+    constexpr static std::string_view XmlNodeName = "chorus"; ///< The XML node name for this type.
+    constexpr static LyricTextType lyricTextType = LyricTextType::Chorus; ///< Lyric text type for looking up word extensions.
 };
 
 /**
@@ -180,10 +176,8 @@ class LyricsSection : public LyricsTextBase
 public:
     using LyricsTextBase::LyricsTextBase;
 
-    /**
-     * @brief The XML node name for this type.
-     */
-    constexpr static std::string_view XmlNodeName = "section";
+    constexpr static std::string_view XmlNodeName = "section"; ///< The XML node name for this type.
+    constexpr static LyricTextType lyricTextType = LyricTextType::Section; ///< Lyric text type for looking up word extensions.
 };
 
 /**

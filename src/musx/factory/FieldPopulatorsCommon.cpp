@@ -29,6 +29,12 @@ namespace factory {
 using namespace ::musx::xml;
 using namespace ::musx::dom::others;
 
+MUSX_XML_ENUM_MAPPING(LyricTextType, {
+    {"verse", LyricTextType::Verse},
+    {"chorus", LyricTextType::Chorus},
+    {"section", LyricTextType::Section},
+});
+
 MUSX_XML_ENUM_MAPPING(NamePositioning::AlignJustify, {
     //{"left", NamePositioning::AlignJustify::Left}, this is the default and is not known to occur in the xml
     {"center", NamePositioning::AlignJustify::Center},

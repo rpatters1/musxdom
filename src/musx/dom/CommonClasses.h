@@ -51,32 +51,6 @@ class Staff;
 
 // This file contains common classes that are shared among Options, Others, and Details.
 
-/**
- * @enum NoteType
- * @brief Enum class representing note types based on EDU values.
- *
- * The values are expressed in hexadecimal.
- */
-enum class NoteType : Edu
-{
-    Maxima = 0x8000,
-    Longa = 0x4000,
-    Breve = 0x2000,
-    Whole = EDU_PER_WHOLE_NOTE,
-    Half = 0x0800,
-    Quarter = 0x0400,
-    Eighth = 0x0200,
-    Note16th = 0x0100,
-    Note32nd = 0x0080,
-    Note64th = 0x0040,
-    Note128th = 0x0020,
-    Note256th = 0x0010,
-    Note512th = 0x0008,
-    Note1024th = 0x0004,
-    Note2048th = 0x0002,
-    Note4096th = 0x0001
-};
-
 /// @enum DefaultClefType
 /// @brief Clef types used by default in Finale documents. The values correspond to indices into
 /// @ref musx::dom::options::ClefOptions::clefDefs.
@@ -102,6 +76,43 @@ enum class DefaultClefType : ClefIndex
     Blank           = 15, ///< Blank clef (invisible, no symbol).
     Tab1            = 16, ///< Tablature clef (5 lines).
     Tab2            = 17  ///< Tablature clef (5 lines, alternative style).
+};
+
+/**
+ * @enum LyricTextType
+ * @brief The lyric text type if this is a lyrics smart shape.
+ */
+enum class LyricTextType
+{
+    Verse,          ///< The assignment is to a Verse lyrics text block.
+    Chorus,         ///< The assignment is to a Chorus lyrics text block.
+    Section,        ///< The assignment is to a Section lyrics text block.
+};
+
+/**
+ * @enum NoteType
+ * @brief Enum class representing note types based on EDU values.
+ *
+ * The values are expressed in hexadecimal.
+ */
+enum class NoteType : Edu
+{
+    Maxima = 0x8000,
+    Longa = 0x4000,
+    Breve = 0x2000,
+    Whole = EDU_PER_WHOLE_NOTE,
+    Half = 0x0800,
+    Quarter = 0x0400,
+    Eighth = 0x0200,
+    Note16th = 0x0100,
+    Note32nd = 0x0080,
+    Note64th = 0x0040,
+    Note128th = 0x0020,
+    Note256th = 0x0010,
+    Note512th = 0x0008,
+    Note1024th = 0x0004,
+    Note2048th = 0x0002,
+    Note4096th = 0x0001
 };
 
 /**

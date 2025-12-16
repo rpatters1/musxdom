@@ -406,11 +406,48 @@ MusxInstance<texts::LyricsTextBase> LyricAssignSection::getLyricText() const
     return getDocument()->getTexts()->get<TextType>(lyricNumber);
 }
 
+LyricTextType LyricAssignVerse::getLyricTextType() const
+{
+    return TextType::lyricTextType;
+}
+
+LyricTextType LyricAssignChorus::getLyricTextType() const
+{
+    return TextType::lyricTextType;
+}
+
+LyricTextType LyricAssignSection::getLyricTextType() const
+{
+    return TextType::lyricTextType;
+}
+
 util::EnigmaParsingContext LyricAssign::getRawTextCtx() const
 {
     // note that lyrics do not have text inserts. The UI doesn't permit them.
     if (auto rawText = getLyricText()) {
         return rawText->getRawTextCtx(rawText, SCORE_PARTID);
+    }
+    return {};
+}
+
+EntryInfoPtr LyricAssign::calcWordExtensionEndpoint() const
+{
+    if (!wext) {
+        return {};
+    }
+    const auto doc = getDocument();
+    if (auto lyricOptions = doc->getOptions()->get<options::LyricOptions>()) {
+        if (!lyricOptions->useSmartHyphens) {
+            return {};
+        }
+    }
+    auto wordExtShapeAssigns = doc->getDetails()->getArray<SmartShapeEntryAssign>(getRequestedPartId(), getEntryNumber());
+    for (const auto& assign : wordExtShapeAssigns) {
+        if (auto shape = doc->getOthers()->get<others::SmartShape>(getRequestedPartId(), assign->shapeNum)) {
+            if (shape->shapeType == others::SmartShape::ShapeType::WordExtension && shape->startLyricType == getLyricTextType() && shape->startLyricNum == lyricNumber) {
+                return shape->endTermSeg->endPoint->calcAssociatedEntry(getRequestedPartId());
+            }
+        }
     }
     return {};
 }

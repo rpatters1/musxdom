@@ -431,21 +431,6 @@ bool EntryFrame::TupletInfo::calcCreatesTimeStretch() const
 // ***** EntryInfoPtr *****
 // ************************
 
-EntryInfoPtr EntryInfoPtr::fromPositionOrNull(const DocumentPtr& document, Cmper partId, StaffCmper staffId, MeasCmper measureId, EntryNumber entryNumber, util::Fraction timeOffset)
-{
-    EntryInfoPtr result;
-    if (auto gfhold = details::GFrameHoldContext(document, partId, staffId, measureId, timeOffset)) {
-        gfhold.iterateEntries([&](const EntryInfoPtr& entryInfo) {
-            if (entryInfo->getEntry()->getEntryNumber() == entryNumber) {
-                result = entryInfo;
-                return false; // stop iterating
-            }
-            return true;
-        });
-    }
-    return result;
-}
-
 EntryInfoPtr EntryInfoPtr::fromEntryNumber(const DocumentPtr& document, Cmper partId, EntryNumber entryNumber, util::Fraction timeOffset)
 {
     if (const auto entry = document->getEntries()->get(entryNumber)) {
@@ -460,6 +445,9 @@ EntryInfoPtr EntryInfoPtr::fromEntryNumber(const DocumentPtr& document, Cmper pa
                     }
                     return true;
                 });
+                MUSX_ASSERT_IF(!result) {
+                    throw std::logic_error("Entry " + std::to_string(entryNumber) + " has invalid location values.");
+                }
                 return result;
             }
         }

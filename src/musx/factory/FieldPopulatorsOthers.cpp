@@ -30,6 +30,7 @@ using namespace ::musx::xml;
 using namespace ::musx::dom::smartshape;
 using namespace ::musx::dom::others;
 
+extern template const XmlEnumMappingElement<LyricTextType> XmlEnumMapping<LyricTextType>::mapping;
 extern template const XmlEnumMappingElement<ShowClefMode> XmlEnumMapping<ShowClefMode>::mapping;
 extern template const XmlEnumMappingElement<options::TextOptions::HorizontalAlignment> XmlEnumMapping<options::TextOptions::HorizontalAlignment>::mapping;
 extern template const XmlEnumMappingElement<options::TextOptions::VerticalAlignment> XmlEnumMapping<options::TextOptions::VerticalAlignment>::mapping;
@@ -313,13 +314,6 @@ MUSX_XML_ENUM_MAPPING(SmartShape::SlurAvoidAccidentalsState, {
 MUSX_XML_ENUM_MAPPING(SmartShape::SystemBreakType, {
     // {"same", SystemBreakType::Same}, // Default value, may not appear in XML.
     {"opposite", SmartShape::SystemBreakType::Opposite},
-});
-
-MUSX_XML_ENUM_MAPPING(SmartShape::LyricTextType, {
-    // {"none", SmartShape::LyricTextType::None}, // Default value, may not appear in XML.
-    {"verse", SmartShape::LyricTextType::Verse},
-    {"chorus", SmartShape::LyricTextType::Chorus},
-    {"section", SmartShape::LyricTextType::Section},
 });
 
 MUSX_XML_ENUM_MAPPING(SmartShapeCustomLine::LineStyle, {
@@ -1228,8 +1222,8 @@ MUSX_XML_ELEMENT_ARRAY(SmartShape, {
     {"lineStyleID", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape>& i) { i->lineStyleId = e->getTextAs<Cmper>(); }},
     {"startLyricNum", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape>& i) { i->startLyricNum = e->getTextAs<Cmper>(); }},
     {"endLyricNum",   [](const XmlElementPtr& e, const std::shared_ptr<SmartShape>& i) { i->endLyricNum = e->getTextAs<Cmper>(); }},
-    {"startLyricTag", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape>& i) { i->startLyricType = toEnum<SmartShape::LyricTextType>(e); }},
-    {"endLyricTag",   [](const XmlElementPtr& e, const std::shared_ptr<SmartShape>& i) { i->endLyricType = toEnum<SmartShape::LyricTextType>(e); }},
+    {"startLyricTag", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape>& i) { i->startLyricType = toEnum<LyricTextType>(e); }},
+    {"endLyricTag",   [](const XmlElementPtr& e, const std::shared_ptr<SmartShape>& i) { i->endLyricType = toEnum<LyricTextType>(e); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(SmartShapeCustomLine::CharParams, {

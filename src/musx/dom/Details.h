@@ -1265,10 +1265,18 @@ public:
     /// @brief Get the raw lyric text for this assignment.
     virtual MusxInstance<texts::LyricsTextBase> getLyricText() const = 0;
 
+    /// @brief Get the lyric text type for this assignment.
+    virtual LyricTextType getLyricTextType() const = 0;
+
     /// @brief Return an Enigma parsing context for the associated lyrics text block.
     /// @note The Finale UI prevents the use of text inserts in lyric text blocsk, so there
     /// is no need for a part ID to be passed in, as for other Enigma parsing contexts.
     util::EnigmaParsingContext getRawTextCtx() const;
+
+    /// @brief Calculate the entry to which an automatic word extension extends.
+    /// @return The terminating entry of the word extension, or null if no word extension or if the document
+    /// uses legacy word extensions.
+    EntryInfoPtr calcWordExtensionEndpoint() const;
 
     static const xml::XmlElementArray<LyricAssign>& xmlMappingArray();   ///< Required for musx::factory::FieldPopulator.
 };
@@ -1285,7 +1293,8 @@ public:
     using LyricAssign::LyricAssign;
 
     MusxInstance<texts::LyricsTextBase> getLyricText() const override;
-
+    LyricTextType getLyricTextType() const override;
+        
     using BaselineType = BaselineLyricsChorus; ///< The baseline type for this item.
     using TextType = texts::LyricsChorus; ///< The text type for this item.
     constexpr static std::string_view XmlNodeName = "lyrDataChorus"; ///< The XML node name for this type.
@@ -1303,6 +1312,7 @@ public:
     using LyricAssign::LyricAssign;
 
     MusxInstance<texts::LyricsTextBase> getLyricText() const override;
+    LyricTextType getLyricTextType() const override;
 
     using BaselineType = BaselineLyricsSection; ///< The baseline type for this item.
     using TextType = texts::LyricsSection; ///< The text type for this item.
@@ -1321,6 +1331,7 @@ public:
     using LyricAssign::LyricAssign;
 
     MusxInstance<texts::LyricsTextBase> getLyricText() const override;
+    LyricTextType getLyricTextType() const override;
 
     using BaselineType = BaselineLyricsVerse; ///< The baseline type for this item.
     using TextType = texts::LyricsVerse; ///< The text type for this item.

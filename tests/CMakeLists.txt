@@ -117,6 +117,7 @@ add_executable(musxdomtests
 	details/floats.cpp
     details/fretboards_diagrams.cpp
 	details/gfhold.cpp
+    details/lyrics.cpp
 	details/secondary_beams.cpp
     details/shape_note.cpp
 	details/staff_group.cpp
