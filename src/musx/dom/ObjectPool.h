@@ -155,6 +155,30 @@ private:
         };
     }
 
+    template <typename T>
+    inline static MusxInstance<T> checkedStaticCast(const ObjectKey& key, const ObjectPtr& p)
+    {
+        static_assert(std::is_base_of_v<ObjectBaseType, T>, "T must derive from ObjectBaseType");
+        if constexpr (!std::is_same_v<T, ObjectBaseType>) {
+            assert(T::XmlNodeName == key.nodeId && "nodeId/type mismatch: pool invariant violated");
+        }
+    #ifndef NDEBUG
+        // Optional paranoia while refactoring:
+        //assert(std::dynamic_pointer_cast<T>(p));
+    #endif
+        return std::static_pointer_cast<T>(p);
+    }
+
+    inline static bool logicalLess(const ObjectKey& a, const ObjectKey& b)
+    {
+        return std::tie(a.cmper1, a.cmper2, a.inci) < std::tie(b.cmper1, b.cmper2, b.inci);
+    }
+
+    inline static bool logicalEq(const ObjectKey& a, const ObjectKey& b)
+    {
+        return a.cmper1 == b.cmper1 && a.cmper2 == b.cmper2 && a.inci == b.inci;
+    }
+
 public:
     /** @brief virtual destructor */
     virtual ~ObjectPool() = default;
@@ -214,8 +238,7 @@ public:
         auto rangeEnd = m_pool.upper_bound(makeEndKey(key));
 
         for (auto it = rangeStart; it != rangeEnd; ++it) {
-            auto typedPtr = bindWithPartId<T>(std::dynamic_pointer_cast<T>(it->second), requestedPartId);
-            assert(typedPtr);
+            auto typedPtr = bindWithPartId<T>(checkedStaticCast<T>(key, it->second), requestedPartId);
             result.push_back(typedPtr);
         }
         return result;
@@ -244,25 +267,53 @@ public:
             if (it != m_shareMode.end()) {
                 forShareMode = it->second;
             }
-            if (forShareMode == Base::ShareMode::Partial) {
-                if constexpr (std::is_base_of_v<OthersBase, T>) {
-                    if (!key.cmper1.has_value()) {
-                        throw std::invalid_argument("Array searches on partially shared Others must supply a cmper.");
-                    }
-                } else if constexpr (std::is_base_of_v<DetailsBase, T>) {
-                    if (!key.cmper1.has_value() || !key.cmper2.has_value()) {
-                        throw std::invalid_argument("Array searches on partially shared Details must supply both cmpers.");
-                    }
-                }
-            }
         }
+
         if (key.partId == SCORE_PARTID || forShareMode != Base::ShareMode::Partial) {
             return getArray<T>(key, key.partId);
         }
 
+        const auto partStart = m_pool.lower_bound(key);
+        const auto partEnd   = m_pool.upper_bound(makeEndKey(key));
+
         ObjectKey scoreKey(key);
         scoreKey.partId = SCORE_PARTID;
-        return getArray<T>(scoreKey, key.partId);
+        const auto scoreStart = m_pool.lower_bound(scoreKey);
+        const auto scoreEnd   = m_pool.upper_bound(makeEndKey(scoreKey));
+
+        auto pit = partStart;
+        auto sit = scoreStart;
+
+        MusxInstanceList<T> result(m_document, key.partId);
+        while (pit != partEnd || sit != scoreEnd) {
+            auto emit = [&](const auto& it) {
+                auto typed = bindWithPartId<T>(checkedStaticCast<T>(key, it->second), key.partId);
+                result.push_back(typed);
+            };
+
+            if (sit == scoreEnd) {
+                emit(pit++);
+                continue;
+            }
+            if (pit == partEnd) {
+                emit(sit++); // bind score record to requested part
+                continue;
+            }
+
+            const ObjectKey& pk = pit->first;
+            const ObjectKey& sk = sit->first;
+
+            if (logicalEq(pk, sk)) {
+                emit(pit++); // prefer part instance
+                sit++;
+            } else if (logicalLess(pk, sk)) {
+                emit(pit++);
+            } else {
+                emit(sit++); // score fallback
+            }
+        }
+
+        return result;
     }
 
     /**
@@ -283,9 +334,7 @@ public:
         if (it == m_pool.end()) {
             return nullptr;
         }
-        auto typedPtr = std::dynamic_pointer_cast<T>(it->second);
-        assert(typedPtr); // There is a program bug if the pointer cast fails.
-        return typedPtr;
+        return checkedStaticCast<T>(key, it->second);
     }
 
     /**
