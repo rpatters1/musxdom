@@ -293,7 +293,6 @@ public:
             result.push_back(typed);
         };
         while (partIt != partEnd || scoreIt != scoreEnd) {
-
             if (scoreIt == scoreEnd) {
                 emit(partIt++);
                 continue;
@@ -302,10 +301,8 @@ public:
                 emit(scoreIt++); // bind score record to requested part
                 continue;
             }
-
             const ObjectKey& pk = partIt->first;
             const ObjectKey& sk = scoreIt->first;
-
             if (logicalEq(pk, sk)) {
                 emit(partIt++); // prefer part instance
                 scoreIt++;
@@ -315,7 +312,6 @@ public:
                 emit(scoreIt++); // score fallback
             }
         }
-
         return result;
     }
 
