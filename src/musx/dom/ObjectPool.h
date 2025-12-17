@@ -75,19 +75,8 @@ inline constexpr bool is_pool_type_v = is_pool_type<Pool, T>::value;
 template <typename ObjectBaseType>
 class ObjectPool
 {
-    template <typename T>
-    std::shared_ptr<const T> bindWithPartId(std::shared_ptr<const T> obj, Cmper requestedPartId) const
-    {
-        if constexpr (std::is_base_of_v<OthersBase, T> || std::is_base_of_v<DetailsBase, T>) {
-            if (obj && obj->getRequestedPartId() != requestedPartId) {
-                return PartContextCloner::copyWithPartId(obj, requestedPartId);
-            }
-        }
-        return obj;
-    }
-
 public:
-    /** @brief shared pointer to `ObjectBaseType` */
+        /** @brief shared pointer to `ObjectBaseType` */
     using ObjectPtr = std::shared_ptr<ObjectBaseType>;
     /** @brief key type for storing in pool */
     struct ObjectKey {
@@ -143,6 +132,54 @@ public:
         }
     };
 
+private:
+    template <typename T>
+    std::shared_ptr<const T> bindWithPartId(std::shared_ptr<const T> obj, Cmper requestedPartId) const
+    {
+        if constexpr (std::is_base_of_v<OthersBase, T> || std::is_base_of_v<DetailsBase, T>) {
+            if (obj && obj->getRequestedPartId() != requestedPartId) {
+                return PartContextCloner::copyWithPartId(obj, requestedPartId);
+            }
+        }
+        return obj;
+    }
+
+    inline static ObjectKey makeEndKey(const ObjectKey& key)
+    {
+        return ObjectKey{
+            key.nodeId,
+            key.partId,
+            key.cmper1.value_or((std::numeric_limits<Cmper>::max)()),
+            key.cmper2.value_or((std::numeric_limits<Cmper>::max)()),
+            key.inci.value_or((std::numeric_limits<Inci>::max)())
+        };
+    }
+
+    template <typename T>
+    inline static MusxInstance<T> checkedStaticCast(const ObjectKey& key, const ObjectPtr& p)
+    {
+        static_assert(std::is_base_of_v<ObjectBaseType, T>, "T must derive from ObjectBaseType");
+        if constexpr (!std::is_same_v<T, ObjectBaseType>) {
+            assert(T::XmlNodeName == key.nodeId && "nodeId/type mismatch: pool invariant violated");
+        }
+    #ifndef NDEBUG
+        // Optional paranoia while refactoring:
+        //assert(std::dynamic_pointer_cast<T>(p));
+    #endif
+        return std::static_pointer_cast<T>(p);
+    }
+
+    inline static bool logicalLess(const ObjectKey& a, const ObjectKey& b)
+    {
+        return std::tie(a.cmper1, a.cmper2, a.inci) < std::tie(b.cmper1, b.cmper2, b.inci);
+    }
+
+    inline static bool logicalEq(const ObjectKey& a, const ObjectKey& b)
+    {
+        return a.cmper1 == b.cmper1 && a.cmper2 == b.cmper2 && a.inci == b.inci;
+    }
+
+public:
     /** @brief virtual destructor */
     virtual ~ObjectPool() = default;
 
@@ -198,19 +235,10 @@ public:
         MusxInstanceList<T> result(m_document, requestedPartId);
 
         auto rangeStart = m_pool.lower_bound(key);
-        auto rangeEnd = m_pool.upper_bound(
-            ObjectKey{
-                key.nodeId,
-                key.partId,
-                key.cmper1.value_or((std::numeric_limits<Cmper>::max)()),
-                key.cmper2.value_or((std::numeric_limits<Cmper>::max)()),
-                key.inci.value_or((std::numeric_limits<Inci>::max)())
-            }
-        );
+        auto rangeEnd = m_pool.upper_bound(makeEndKey(key));
 
         for (auto it = rangeStart; it != rangeEnd; ++it) {
-            auto typedPtr = bindWithPartId<T>(std::dynamic_pointer_cast<T>(it->second), requestedPartId);
-            assert(typedPtr);
+            auto typedPtr = bindWithPartId<T>(checkedStaticCast<T>(key, it->second), requestedPartId);
             result.push_back(typedPtr);
         }
         return result;
@@ -239,25 +267,52 @@ public:
             if (it != m_shareMode.end()) {
                 forShareMode = it->second;
             }
-            if (forShareMode == Base::ShareMode::Partial) {
-                if constexpr (std::is_base_of_v<OthersBase, T>) {
-                    if (!key.cmper1.has_value()) {
-                        throw std::invalid_argument("Array searches on partially shared Others must supply a cmper.");
-                    }
-                } else if constexpr (std::is_base_of_v<DetailsBase, T>) {
-                    if (!key.cmper1.has_value() || !key.cmper2.has_value()) {
-                        throw std::invalid_argument("Array searches on partially shared Details must supply both cmpers.");
-                    }
-                }
-            }
         }
-        auto keyResult = getArray<T>(key, key.partId);
-        if (!keyResult.empty() || key.partId == SCORE_PARTID || forShareMode == Base::ShareMode::None) {
-            return keyResult;
+
+        if (key.partId == SCORE_PARTID || forShareMode == Base::ShareMode::None) {
+            return getArray<T>(key, key.partId);
         }
         ObjectKey scoreKey(key);
         scoreKey.partId = SCORE_PARTID;
-        return getArray<T>(scoreKey, key.partId);
+        if (forShareMode == Base::ShareMode::All) {
+            return getArray<T>(scoreKey, key.partId);
+        }
+
+        const auto partStart = m_pool.lower_bound(key);
+        const auto partEnd   = m_pool.upper_bound(makeEndKey(key));
+
+        const auto scoreStart = m_pool.lower_bound(scoreKey);
+        const auto scoreEnd   = m_pool.upper_bound(makeEndKey(scoreKey));
+
+        auto partIt = partStart;
+        auto scoreIt = scoreStart;
+
+        MusxInstanceList<T> result(m_document, key.partId);
+        auto emit = [&](const auto& it) {
+            auto typed = bindWithPartId<T>(checkedStaticCast<T>(key, it->second), key.partId);
+            result.push_back(typed);
+        };
+        while (partIt != partEnd || scoreIt != scoreEnd) {
+            if (scoreIt == scoreEnd) {
+                emit(partIt++);
+                continue;
+            }
+            if (partIt == partEnd) {
+                emit(scoreIt++); // bind score record to requested part
+                continue;
+            }
+            const ObjectKey& pk = partIt->first;
+            const ObjectKey& sk = scoreIt->first;
+            if (logicalEq(pk, sk)) {
+                emit(partIt++); // prefer part instance
+                scoreIt++;
+            } else if (logicalLess(pk, sk)) {
+                emit(partIt++);
+            } else {
+                emit(scoreIt++); // score fallback
+            }
+        }
+        return result;
     }
 
     /**
@@ -278,9 +333,7 @@ public:
         if (it == m_pool.end()) {
             return nullptr;
         }
-        auto typedPtr = std::dynamic_pointer_cast<T>(it->second);
-        assert(typedPtr); // There is a program bug if the pointer cast fails.
-        return typedPtr;
+        return checkedStaticCast<T>(key, it->second);
     }
 
     /**

@@ -200,20 +200,23 @@ void benchmarkEntries(const DocumentPtr& doc)
             << foundCount << " found)\n";
 }
 
-void benchmarkOthersArrays(const DocumentPtr& doc)
+void benchmarkOthersArrays(const DocumentPtr& doc, Cmper partId)
 {
     using clock = std::chrono::high_resolution_clock;
 
-    constexpr Cmper partId = SCORE_PARTID;
     const std::vector<std::string> nodeIds = {
         "articDef", "beatChart", "frameSpec",
-        "instUsed", "layerAtts", "measSpec", "measNumbRegion",
+        "instUsed", "layerAtts", "measSpec", "measExprAssign", "measNumbRegion",
         "miscNoExist", "mmRest", "multiStaffInstGroup", "pageSpec",
         "pageTextAssign", "partDef", "partGlobals", "repeatEndingStart",
         "shapeDef", "smartShape", "staffSpec", "staffStyle", "staffSystemSpec",
         "textBlock"
     };
 
+    std::string partName = "Part " + std::to_string(partId);
+    if (const auto partDef = doc->getOthers()->get<others::PartDefinition>(SCORE_PARTID, partId)) {
+        partName = partDef->getName();
+    }
     std::cout << "Benchmarking others arrays:\n";
 
     auto othersPool = bench::PoolAccessor<OthersPool>::get(*doc->getOthers());
@@ -223,12 +226,12 @@ void benchmarkOthersArrays(const DocumentPtr& doc)
         ObjectPool::ObjectKey key(nodeId, partId);
 
         auto start = clock::now();
-        auto result = othersPool.getArray<OthersBase>(key, partId);
+        auto result = othersPool.getArrayForPart<OthersBase>(key);
         auto end = clock::now();
 
         const auto elapsedMs = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
 
-        std::cout << "  " << nodeId << ": "
+        std::cout << "  " << nodeId << " " << partName << ": "
                   << result.size() << " objects found in "
                   << elapsedMs << " μs\n";
     }
@@ -349,11 +352,18 @@ int main(int argc, char* argv[])
         std::cerr << "Failed to load musx document.\n";
         return 1;
     }
+    auto partDefs = others::PartDefinition::getInUserOrder(doc);
 
     adHocTest(doc);
     traverseEntries(doc);
     benchmarkEntries(doc);
-    benchmarkOthersArrays(doc);
+    benchmarkOthersArrays(doc, SCORE_PARTID);
+    if (partDefs.size() >= 2) {
+        benchmarkOthersArrays(doc, partDefs[1]->getCmper());
+    }
+    if (partDefs.size() >= 3) {
+        benchmarkOthersArrays(doc, partDefs[2]->getCmper());
+    }
     benchmarkOthers(doc);
 
     return 0;
