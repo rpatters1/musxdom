@@ -75,19 +75,8 @@ inline constexpr bool is_pool_type_v = is_pool_type<Pool, T>::value;
 template <typename ObjectBaseType>
 class ObjectPool
 {
-    template <typename T>
-    std::shared_ptr<const T> bindWithPartId(std::shared_ptr<const T> obj, Cmper requestedPartId) const
-    {
-        if constexpr (std::is_base_of_v<OthersBase, T> || std::is_base_of_v<DetailsBase, T>) {
-            if (obj && obj->getRequestedPartId() != requestedPartId) {
-                return PartContextCloner::copyWithPartId(obj, requestedPartId);
-            }
-        }
-        return obj;
-    }
-
 public:
-    /** @brief shared pointer to `ObjectBaseType` */
+        /** @brief shared pointer to `ObjectBaseType` */
     using ObjectPtr = std::shared_ptr<ObjectBaseType>;
     /** @brief key type for storing in pool */
     struct ObjectKey {
@@ -143,6 +132,30 @@ public:
         }
     };
 
+private:
+    template <typename T>
+    std::shared_ptr<const T> bindWithPartId(std::shared_ptr<const T> obj, Cmper requestedPartId) const
+    {
+        if constexpr (std::is_base_of_v<OthersBase, T> || std::is_base_of_v<DetailsBase, T>) {
+            if (obj && obj->getRequestedPartId() != requestedPartId) {
+                return PartContextCloner::copyWithPartId(obj, requestedPartId);
+            }
+        }
+        return obj;
+    }
+
+    inline static ObjectKey makeEndKey(const ObjectKey& key)
+    {
+        return ObjectKey{
+            key.nodeId,
+            key.partId,
+            key.cmper1.value_or((std::numeric_limits<Cmper>::max)()),
+            key.cmper2.value_or((std::numeric_limits<Cmper>::max)()),
+            key.inci.value_or((std::numeric_limits<Inci>::max)())
+        };
+    }
+
+public:
     /** @brief virtual destructor */
     virtual ~ObjectPool() = default;
 
@@ -198,15 +211,7 @@ public:
         MusxInstanceList<T> result(m_document, requestedPartId);
 
         auto rangeStart = m_pool.lower_bound(key);
-        auto rangeEnd = m_pool.upper_bound(
-            ObjectKey{
-                key.nodeId,
-                key.partId,
-                key.cmper1.value_or((std::numeric_limits<Cmper>::max)()),
-                key.cmper2.value_or((std::numeric_limits<Cmper>::max)()),
-                key.inci.value_or((std::numeric_limits<Inci>::max)())
-            }
-        );
+        auto rangeEnd = m_pool.upper_bound(makeEndKey(key));
 
         for (auto it = rangeStart; it != rangeEnd; ++it) {
             auto typedPtr = bindWithPartId<T>(std::dynamic_pointer_cast<T>(it->second), requestedPartId);
@@ -251,10 +256,10 @@ public:
                 }
             }
         }
-        auto keyResult = getArray<T>(key, key.partId);
-        if (!keyResult.empty() || key.partId == SCORE_PARTID || forShareMode == Base::ShareMode::None) {
-            return keyResult;
+        if (key.partId == SCORE_PARTID || forShareMode != Base::ShareMode::Partial) {
+            return getArray<T>(key, key.partId);
         }
+
         ObjectKey scoreKey(key);
         scoreKey.partId = SCORE_PARTID;
         return getArray<T>(scoreKey, key.partId);
