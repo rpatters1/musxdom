@@ -269,47 +269,50 @@ public:
             }
         }
 
-        if (key.partId == SCORE_PARTID || forShareMode != Base::ShareMode::Partial) {
+        if (key.partId == SCORE_PARTID || forShareMode == Base::ShareMode::None) {
             return getArray<T>(key, key.partId);
+        }
+        ObjectKey scoreKey(key);
+        scoreKey.partId = SCORE_PARTID;
+        if (forShareMode == Base::ShareMode::All) {
+            return getArray<T>(scoreKey, key.partId);
         }
 
         const auto partStart = m_pool.lower_bound(key);
         const auto partEnd   = m_pool.upper_bound(makeEndKey(key));
 
-        ObjectKey scoreKey(key);
-        scoreKey.partId = SCORE_PARTID;
         const auto scoreStart = m_pool.lower_bound(scoreKey);
         const auto scoreEnd   = m_pool.upper_bound(makeEndKey(scoreKey));
 
-        auto pit = partStart;
-        auto sit = scoreStart;
+        auto partIt = partStart;
+        auto scoreIt = scoreStart;
 
         MusxInstanceList<T> result(m_document, key.partId);
-        while (pit != partEnd || sit != scoreEnd) {
-            auto emit = [&](const auto& it) {
-                auto typed = bindWithPartId<T>(checkedStaticCast<T>(key, it->second), key.partId);
-                result.push_back(typed);
-            };
+        auto emit = [&](const auto& it) {
+            auto typed = bindWithPartId<T>(checkedStaticCast<T>(key, it->second), key.partId);
+            result.push_back(typed);
+        };
+        while (partIt != partEnd || scoreIt != scoreEnd) {
 
-            if (sit == scoreEnd) {
-                emit(pit++);
+            if (scoreIt == scoreEnd) {
+                emit(partIt++);
                 continue;
             }
-            if (pit == partEnd) {
-                emit(sit++); // bind score record to requested part
+            if (partIt == partEnd) {
+                emit(scoreIt++); // bind score record to requested part
                 continue;
             }
 
-            const ObjectKey& pk = pit->first;
-            const ObjectKey& sk = sit->first;
+            const ObjectKey& pk = partIt->first;
+            const ObjectKey& sk = scoreIt->first;
 
             if (logicalEq(pk, sk)) {
-                emit(pit++); // prefer part instance
-                sit++;
+                emit(partIt++); // prefer part instance
+                scoreIt++;
             } else if (logicalLess(pk, sk)) {
-                emit(pit++);
+                emit(partIt++);
             } else {
-                emit(sit++); // score fallback
+                emit(scoreIt++); // score fallback
             }
         }
 

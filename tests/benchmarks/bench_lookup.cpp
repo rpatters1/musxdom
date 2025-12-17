@@ -352,13 +352,18 @@ int main(int argc, char* argv[])
         std::cerr << "Failed to load musx document.\n";
         return 1;
     }
+    auto partDefs = others::PartDefinition::getInUserOrder(doc);
 
     adHocTest(doc);
     traverseEntries(doc);
     benchmarkEntries(doc);
     benchmarkOthersArrays(doc, SCORE_PARTID);
-    benchmarkOthersArrays(doc, 1);
-    benchmarkOthersArrays(doc, 4);
+    if (partDefs.size() >= 2) {
+        benchmarkOthersArrays(doc, partDefs[1]->getCmper());
+    }
+    if (partDefs.size() >= 3) {
+        benchmarkOthersArrays(doc, partDefs[2]->getCmper());
+    }
     benchmarkOthers(doc);
 
     return 0;
