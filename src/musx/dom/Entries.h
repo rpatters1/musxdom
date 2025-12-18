@@ -344,12 +344,23 @@ public:
     /** @brief Collection of notes that comprise the entry. These are in order from lowest to highest. */
     std::vector<std::shared_ptr<Note>> notes;
 
-    /** @brief The location(s) of this entry calculated by #calcLocations, which is called by the factory.
-     * An entry can have multiple locations if it is mirrored with the Mirror Tool. Finale 27 flattens out
-     * all mirrors so musx files created by Finale 27 never should have more than one location. But if a musx
-     * from an earlier version is read, the entry might have multiple locations.
-     */
-    std::vector<std::tuple<StaffCmper, MeasCmper, LayerIndex>> locations;
+    /// @struct EntryLocation
+    /// @brief The location of this entry as calculated by #calcLocations, which is called by the factory.
+    ///
+    /// Any mirrors that are encountered are ignored. This is the source location of the entry.
+    /// (Mirrors were deprecated after Finale 2014.5, so they should be relatively rare in musx files.)
+    struct EntryLocation
+    {
+        StaffCmper staffId{};       ///< The staff containing this entry.
+        MeasCmper measureId{};      ///< The measure containing this entry.
+        LayerIndex layerIndex{};    ///< The layer containing this entry within the measure.
+        size_t entryIndex{};        ///< The 0-based index of this entry within its layer.
+
+        /// @brief Returns if this entry has been found.
+        bool found() const { return staffId != 0 && measureId != 0; }
+        /// @brief Clears the entry location. (Mainly used for benchmarking.)
+        void clear() { *this = {}; }
+    } location;                     ///< The location of this entry.
 
     /// @brief Gets the entry number for this entry
     EntryNumber getEntryNumber() const { return m_entnum; }

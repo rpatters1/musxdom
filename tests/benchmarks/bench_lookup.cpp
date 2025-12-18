@@ -49,6 +49,21 @@ public:
 
 } // namespace bench
 
+template <typename T>
+static std::string duration(T timeDiff)
+{
+    auto loadMs = std::chrono::duration_cast<std::chrono::nanoseconds>(timeDiff).count();
+    if (loadMs < 1500) {
+        return std::to_string(loadMs) + " ns";
+    }
+    loadMs = std::chrono::duration_cast<std::chrono::microseconds>(timeDiff).count();
+    if (loadMs < 1500) {
+        return std::to_string(loadMs) + " µs";
+    }
+    loadMs = std::chrono::duration_cast<std::chrono::milliseconds>(timeDiff).count();
+    return std::to_string(loadMs) + " ms";
+}
+
 DocumentPtr loadDocument(const std::vector<char>& buffer)
 {
     using clock = std::chrono::high_resolution_clock;
@@ -57,22 +72,22 @@ DocumentPtr loadDocument(const std::vector<char>& buffer)
         auto loadTinyStart = clock::now();
         auto docTiny = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(buffer);
         auto loadTinyEnd = clock::now();
-        auto loadMs = std::chrono::duration_cast<std::chrono::milliseconds>(loadTinyEnd - loadTinyStart).count();
-        std::cout << "Loaded enigmaxml with tinyxml2 in " << loadMs << " ms\n";
+        auto loadMs = loadTinyEnd - loadTinyStart;
+        std::cout << "Loaded enigmaxml with tinyxml2 in " << duration(loadMs) << "\n";
     }
     {
         auto loadRapidStart = clock::now();
         auto docRapid = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(buffer);
         auto loadRapidEnd = clock::now();
-        auto loadMs = std::chrono::duration_cast<std::chrono::milliseconds>(loadRapidEnd - loadRapidStart).count();
-        std::cout << "Loaded enigmaxml with rapidxml in " << loadMs << " ms\n";
+        auto loadMs = loadRapidEnd - loadRapidStart;
+        std::cout << "Loaded enigmaxml with rapidxml in " << duration(loadMs) << "\n";
     }
     {
         auto loadPugiStart = clock::now();
         auto docPugi = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(buffer);
         auto loadPugiEnd = clock::now();
-        auto loadMs = std::chrono::duration_cast<std::chrono::milliseconds>(loadPugiEnd - loadPugiStart).count();
-        std::cout << "Loaded enigmaxml with pugi in " << loadMs << " ms\n";
+        auto loadMs = loadPugiEnd - loadPugiStart;
+        std::cout << "Loaded enigmaxml with pugi in " << duration(loadMs) << "\n";
         return docPugi;
     }
 }
@@ -108,6 +123,9 @@ void traverseEntries(const DocumentPtr& doc)
     size_t entryCount = 0;
     auto iterateStart = clock::now();
     doc->iterateEntries(SCORE_PARTID, [&](const EntryInfoPtr& entryInfo) {
+        if (entryInfo.getFrame()->getContext()->mirrorFrame) {
+            return true;
+        }
         auto entryNum = entryInfo->getEntry()->getEntryNumber();
         auto result = entryList.emplace(entryNum);
         if (!result.second) {
@@ -117,14 +135,17 @@ void traverseEntries(const DocumentPtr& doc)
         return true;
     });
     auto iterateEnd = clock::now();
-    auto iterateMs = std::chrono::duration_cast<std::chrono::milliseconds>(iterateEnd - iterateStart).count();
-    std::cout << "Using full iterator, iterated " << entryCount << " entries in " << iterateMs << " ms\n";
+    auto iterateMs = iterateEnd - iterateStart;
+    std::cout << "Using full iterator, iterated " << entryCount << " entries in " << duration(iterateMs) << "\n";
 
     entryCount = 0;
     size_t extraEntries = 0;
     iterateStart = clock::now();
     auto gfHolds = doc->getDetails()->getArray<details::GFrameHold>(SCORE_PARTID);
     for (const auto& gfHold : gfHolds) {
+        if (gfHold->mirrorFrame) {
+            continue;
+        }
         gfHold->iterateRawEntries([&](const MusxInstance<Entry>& entry, LayerIndex) {
             if (gfHold->getCmper1() != 32767) { // 32767 is the Studio View click staff
                 auto entryNum = entry->getEntryNumber();
@@ -144,8 +165,8 @@ void traverseEntries(const DocumentPtr& doc)
         });
     }
     iterateEnd = clock::now();
-    iterateMs = std::chrono::duration_cast<std::chrono::milliseconds>(iterateEnd - iterateStart).count();
-    std::cout << "Using lightweight search, iterated " << entryCount << " entries in " << iterateMs << " ms\n";
+    iterateMs = iterateEnd - iterateStart;
+    std::cout << "Using lightweight search, iterated " << entryCount << " entries in " << duration(iterateMs) << "\n";
     std::cout << "Encountered " << entryList.size() << " unique entries not including " << extraEntries << " extra entries.\n";
 
     std::vector<EntryNumber> missing;
@@ -158,15 +179,24 @@ void traverseEntries(const DocumentPtr& doc)
 
     std::vector<EntryNumber> orphanEntries;
     for (const auto& [num, entry] : entryPool) {
-        if (entry->locations.empty()) {
+        if (!entry->location.found()) {
             orphanEntries.push_back(num);
         }
+        entry->location.clear();
     }
     std::cout << "Encountered " << orphanEntries.size() << " entries with no location.\n";
+
+    iterateStart = clock::now();
+    Entry::calcLocations(doc);
+    iterateEnd = clock::now();
+    iterateMs = iterateEnd - iterateStart;
+    std::cout << "Entry::calcLocations ran for " << duration(iterateMs) << "\n";
 }
 
 void benchmarkEntries(const DocumentPtr& doc)
 {
+    auto entryPool = bench::PoolAccessor<EntryPool>::get(*doc->getEntries());
+
     using clock = std::chrono::high_resolution_clock;
 
     const int repetitions = 1'000'000;
@@ -194,10 +224,27 @@ void benchmarkEntries(const DocumentPtr& doc)
     }
     auto lookupEnd = clock::now();
 
-    auto lookupMs = std::chrono::duration_cast<std::chrono::milliseconds>(lookupEnd - lookupStart).count();
-
-    std::cout << "Looked up " << repetitions << " entries in " << lookupMs << " ms ("
+    auto lookupMs = lookupEnd - lookupStart;
+    std::cout << "Looked up " << repetitions << " entries in " << duration(lookupMs) << " ("
             << foundCount << " found)\n";
+            
+    constexpr int MAX_ENTRIES_TO_CREATE = 10000;
+    int numEntriesCreated = 0;
+    int numNotFound = 0;
+    lookupStart = clock::now();
+    for (const auto& [entNum, _] : entryPool) {
+        if (EntryInfoPtr::fromEntryNumber(doc, SCORE_PARTID, entNum)) {
+            if (++numEntriesCreated >= MAX_ENTRIES_TO_CREATE) {
+                break;
+            }
+        } else {
+            numNotFound++;
+        }
+    }
+    lookupEnd = clock::now();
+    lookupMs = lookupEnd - lookupStart;
+    std::cout << "Created " << numEntriesCreated << " EntryInfoPtr instances in " << duration(lookupMs) << " ("
+            << numNotFound << " not found)\n";
 }
 
 void benchmarkOthersArrays(const DocumentPtr& doc, Cmper partId)
@@ -229,11 +276,11 @@ void benchmarkOthersArrays(const DocumentPtr& doc, Cmper partId)
         auto result = othersPool.getArrayForPart<OthersBase>(key);
         auto end = clock::now();
 
-        const auto elapsedMs = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
+        const auto elapsedMs = end - start;
 
         std::cout << "  " << nodeId << " " << partName << ": "
                   << result.size() << " objects found in "
-                  << elapsedMs << " μs\n";
+                  << duration(elapsedMs) << "\n";
     }
 }
 
@@ -300,18 +347,18 @@ void benchmarkOthers(const DocumentPtr& doc)
         auto result = othersPool.getSource<OthersBase>(key);
         auto end = clock::now();
 
-        const auto elapsedUs = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
+        const auto elapsedUs = end - start;
 
         std::cout << "  " << c.nodeId
                   << " (part=" << c.partId
                   << (c.cmper1 ? ", cmper1=" + std::to_string(*c.cmper1) : "")
                   << (c.inci ? ", inci=" + std::to_string(*c.inci) : "")
                   << "): " << (result ? "found" : "NOT FOUND")
-                  << " in " << elapsedUs << " μs\n";
+                  << " in " << duration(elapsedUs) << "\n";
 
         if (result) ++foundCount;
     }
-    std::cout << foundCount << " of " << cases.size() << " cases found.\n";
+    std::cout << "  " << foundCount << " of " << cases.size() << " cases found.\n";
 }
 
 int main(int argc, char* argv[])

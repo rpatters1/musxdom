@@ -684,6 +684,21 @@ Cmper PartGlobals::calcScrollViewCmper() const
     return BASE_SYSTEM_ID;
 }
 
+// ***********************
+// ***** PartVoicing *****
+// ***********************
+
+bool PartVoicing::showsLayer(LayerIndex layerIndex, bool frameIsMultilayerInScore) const
+{
+    if (!enabled) {
+        return true;
+    }
+    if (voicingType == VoicingType::UseSingleLayer) {
+        return layerIndex == singleLayer;
+    }
+    return !frameIsMultilayerInScore || layerIndex == multiLayer;
+}
+
 // ******************************
 // ***** PercussionNoteInfo *****
 // ******************************

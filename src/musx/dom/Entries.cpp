@@ -91,10 +91,16 @@ void Entry::calcLocations(const DocumentPtr& document)
 {
     auto gfholds = document->getDetails()->getArray<details::GFrameHold>(SCORE_PARTID);
     for (const auto& gfhold : gfholds) {
+        if (gfhold->mirrorFrame) {
+            continue;
+        }
+        std::array<size_t, MAX_LAYERS> nextIndexByLayer{};
+        const auto staffId = static_cast<StaffCmper>(gfhold->getCmper1());
+        const auto measureId  = static_cast<MeasCmper>(gfhold->getCmper2());
         gfhold->iterateRawEntries([&](const MusxInstance<Entry>& entry, LayerIndex layerIndex) {
+            const auto li = static_cast<size_t>(layerIndex);
             Entry* mutableEntry = const_cast<Entry*>(entry.get());
-            mutableEntry->locations.emplace_back(std::make_tuple(static_cast<StaffCmper>(gfhold->getCmper1()),
-                static_cast<MeasCmper>(gfhold->getCmper2()), layerIndex));
+            mutableEntry->location = { staffId, measureId, layerIndex, nextIndexByLayer[li]++ };
             return true;
         });
     }
@@ -434,21 +440,22 @@ bool EntryFrame::TupletInfo::calcCreatesTimeStretch() const
 EntryInfoPtr EntryInfoPtr::fromEntryNumber(const DocumentPtr& document, Cmper partId, EntryNumber entryNumber, util::Fraction timeOffset)
 {
     if (const auto entry = document->getEntries()->get(entryNumber)) {
-        if (!entry->locations.empty()) {
-            auto [staffId, measureId,layerIndex] = entry->locations[0];
-            if (auto gfhold = details::GFrameHoldContext(document, partId, staffId, measureId, timeOffset)) {
-                EntryInfoPtr result;
-                gfhold.iterateEntries(layerIndex, [&](const EntryInfoPtr& entryInfo) {
-                    if (entryInfo->getEntry()->getEntryNumber() == entryNumber) {
-                        result = entryInfo;
-                        return false; // stop iterating
+        if (entry->location.found()) {
+            const auto& loc = entry->location;
+            if (auto gfhold = details::GFrameHoldContext(document, partId, loc.staffId, loc.measureId, timeOffset)) {
+                if (auto entryFrame = gfhold.createEntryFrame(loc.layerIndex)) {
+                    MUSX_ASSERT_IF(loc.entryIndex >= entryFrame->getEntries().size()) {
+                        throw std::logic_error("Entry " + std::to_string(entryNumber) + " has entry index " + std::to_string(loc.entryIndex) + " that is too large for frame.");
                     }
-                    return true;
-                });
-                MUSX_ASSERT_IF(!result) {
-                    throw std::logic_error("Entry " + std::to_string(entryNumber) + " has invalid location values.");
+                    auto result = EntryInfoPtr(entryFrame, loc.entryIndex);
+                    MUSX_ASSERT_IF(result->getEntry()->getEntryNumber() != entryNumber) {
+                        throw std::logic_error("Entry " + std::to_string(entryNumber) + " has incorrect location values.");
+                    }
+                    return result;
                 }
-                return result;
+            }
+            MUSX_ASSERT_IF(false) {
+                throw std::logic_error("Entry " + std::to_string(entryNumber) + " has invalid location values.");
             }
         }
     }

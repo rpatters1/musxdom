@@ -156,7 +156,7 @@ private:
     }
 
     template <typename T>
-    inline static MusxInstance<T> checkedStaticCast(const ObjectKey& key, const ObjectPtr& p)
+    inline static MusxInstance<T> checkedStaticCast([[maybe_unused]]const ObjectKey& key, const ObjectPtr& p)
     {
         static_assert(std::is_base_of_v<ObjectBaseType, T>, "T must derive from ObjectBaseType");
         if constexpr (!std::is_same_v<T, ObjectBaseType>) {
