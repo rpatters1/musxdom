@@ -288,28 +288,28 @@ public:
         auto scoreIt = scoreStart;
 
         MusxInstanceList<T> result(m_document, key.partId);
-        auto emit = [&](const auto& it) {
+        auto pushInstance = [&](const auto& it) {
             auto typed = bindWithPartId<T>(checkedStaticCast<T>(key, it->second), key.partId);
             result.push_back(typed);
         };
         while (partIt != partEnd || scoreIt != scoreEnd) {
             if (scoreIt == scoreEnd) {
-                emit(partIt++);
+                pushInstance(partIt++);
                 continue;
             }
             if (partIt == partEnd) {
-                emit(scoreIt++); // bind score record to requested part
+                pushInstance(scoreIt++); // bind score record to requested part
                 continue;
             }
             const ObjectKey& pk = partIt->first;
             const ObjectKey& sk = scoreIt->first;
             if (logicalEq(pk, sk)) {
-                emit(partIt++); // prefer part instance
+                pushInstance(partIt++); // prefer part instance
                 scoreIt++;
             } else if (logicalLess(pk, sk)) {
-                emit(partIt++);
+                pushInstance(partIt++);
             } else {
-                emit(scoreIt++); // score fallback
+                pushInstance(scoreIt++); // score fallback
             }
         }
         return result;
