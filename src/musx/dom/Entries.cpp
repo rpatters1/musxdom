@@ -2143,6 +2143,7 @@ details::GFrameHoldContext::GFrameHoldContext(const DocumentPtr& document, Cmper
     : m_requestedPartId(partId), m_timeOffset(timeOffset)
 {
     m_hold = document->getDetails()->get<details::GFrameHold>(partId, staffId, measureId);
+    m_partVoicing = document->getOthers()->get<others::PartVoicing>(partId, staffId);
 }
 
 #ifndef DOXYGEN_SHOULD_IGNORE_THIS
@@ -2408,6 +2409,14 @@ util::Fraction details::GFrameHoldContext::calcMinLegacyPickupSpacer() const
         return util::Fraction::fromEdu(result);
     }
     return 0;
+}
+
+bool details::GFrameHoldContext::calcVoicingIncludesLayer(LayerIndex layerIndex) const
+{
+    if (m_partVoicing) {
+        return m_partVoicing->calcShowsLayer(layerIndex, m_hold->calcIsMultiLayer());
+    }
+    return true;
 }
 
 // ****************

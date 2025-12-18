@@ -39,6 +39,7 @@ namespace dom {
 
 namespace others {
 class Frame;
+class PartVoicing;
 class PercussionNoteInfo;
 class Staff;
 class StaffComposite;
@@ -76,6 +77,13 @@ public:
      * @return The requested part ID.
      */
     Cmper getRequestedPartId() const { return m_requestedPartId; }
+
+    /**
+     * @brief Returns the part voicing for the requested part.
+     *
+     * @return The part voicing or nullptr if none.
+     */
+    MusxInstance<others::PartVoicing> getPartVoicing() const { return m_partVoicing; }
 
     /**
      * @brief Provides const pointer-style access to the underlying @ref GFrameHold.
@@ -151,10 +159,16 @@ public:
     /// @return The smallest legacy pickup spacer encountered in a layer for this measure and staff. Zero if none.
     util::Fraction calcMinLegacyPickupSpacer() const;
 
+    /// @brief Calculates if the part voicing for the current requested part includes the specified layer.
+    /// @param layerIndex The 0-based layer indes to check.
+    /// @return True if the layer is included in the part voicing, otherwise false.
+    bool calcVoicingIncludesLayer(LayerIndex layerIndex) const;
+
 private:
-    MusxInstance<GFrameHold> m_hold;        ///< The resolved GFrameHold object, or null if not found.
-    Cmper m_requestedPartId;                ///< The requested part context.
-    util::Fraction m_timeOffset;            ///< The time offset to apply to entry frames.
+    MusxInstance<GFrameHold> m_hold;                    ///< The resolved GFrameHold object, or null if not found.
+    Cmper m_requestedPartId;                            ///< The requested part context.
+    util::Fraction m_timeOffset;                        ///< The time offset to apply to entry frames.
+    MusxInstance<others::PartVoicing> m_partVoicing;    ///< The part voicing for the requested part, if any.
 };
 
 } // namespace details

@@ -2074,7 +2074,7 @@ public:
     /// @param layerIndex The 0-based layer index to check.
     /// @param frameIsMultilayerInScore Whether the frame we are checking is multi-layer in the score.
     /// @return True if the layer shows.
-    bool showsLayer(LayerIndex layerIndex, bool frameIsMultilayerInScore) const;
+    bool calcShowsLayer(LayerIndex layerIndex, bool frameIsMultilayerInScore) const;
 
     constexpr static std::string_view XmlNodeName = "voicingDef"; ///< The XML node name for this type.
     static const xml::XmlElementArray<PartVoicing>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.

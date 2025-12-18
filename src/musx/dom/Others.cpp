@@ -688,7 +688,7 @@ Cmper PartGlobals::calcScrollViewCmper() const
 // ***** PartVoicing *****
 // ***********************
 
-bool PartVoicing::showsLayer(LayerIndex layerIndex, bool frameIsMultilayerInScore) const
+bool PartVoicing::calcShowsLayer(LayerIndex layerIndex, bool frameIsMultilayerInScore) const
 {
     if (!enabled) {
         return true;
