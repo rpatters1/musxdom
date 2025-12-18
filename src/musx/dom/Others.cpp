@@ -699,6 +699,58 @@ bool PartVoicing::calcShowsLayer(LayerIndex layerIndex, bool frameIsMultilayerIn
     return !frameIsMultilayerInScore || layerIndex == multiLayer;
 }
 
+bool PartVoicing::calcShowsNote(const NoteInfoPtr& noteInfoPtr) const
+{
+    if (!enabled || !noteInfoPtr) {
+        return true;
+    }
+    
+    const auto& entryInfoPtr = noteInfoPtr.getEntryInfo();
+    const auto& frame = entryInfoPtr.getFrame();
+    const auto layerIndex = frame->getLayerIndex();
+    if (voicingType == VoicingType::UseSingleLayer) {
+        return layerIndex == singleLayer;
+    }
+
+    const bool isMultiLayer = frame->getContext()->calcIsMultiLayer();
+    if (isMultiLayer) {
+        return layerIndex == multiLayer;
+    }
+
+    const size_t noteCount = entryInfoPtr->getEntry()->notes.size();
+    const size_t noteIndex = noteInfoPtr.getNoteIndex();
+
+    if (selectSingleNote && noteCount == 1) {
+        return true;
+    }
+
+    // Notes are ordered lowest -> highest.
+    const size_t rankFromBottom = noteIndex;                 // 0 = bottom note
+    const size_t rankFromTop = (noteCount - 1) - noteIndex;  // 0 = top note
+    const size_t rank = selectFromBottom ? rankFromBottom : rankFromTop;
+
+    switch (singleLayerVoiceType) {
+    case SingleLayerVoiceType::AllNotes:
+        return true;
+
+    case SingleLayerVoiceType::TopNote:
+        return noteIndex + 1 == noteCount; // highest
+
+    case SingleLayerVoiceType::BottomNote:
+        return noteIndex == 0; // lowest
+
+    case SingleLayerVoiceType::SelectedNotes:
+        if (rank == 0) return select1st;
+        if (rank == 1) return select2nd;
+        if (rank == 2) return select3rd;
+        if (rank == 3) return select4th;
+        if (rank == 4) return select5th;
+        return false;
+    }
+
+    return true; // fail open
+}
+
 // ******************************
 // ***** PercussionNoteInfo *****
 // ******************************

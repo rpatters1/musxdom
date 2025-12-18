@@ -43,6 +43,7 @@ namespace musx {
 namespace dom {
 
 class Entry;
+class NoteInfoPtr;
 
 namespace details {
 class FretboardDiagram;
@@ -2075,6 +2076,11 @@ public:
     /// @param frameIsMultilayerInScore Whether the frame we are checking is multi-layer in the score.
     /// @return True if the layer shows.
     bool calcShowsLayer(LayerIndex layerIndex, bool frameIsMultilayerInScore) const;
+
+    /// @brief Returns if this part voicing includes the specified note.
+    /// @param noteInfoPtr The note to check.
+    /// @return True is the note shows in this part.
+    bool calcShowsNote(const NoteInfoPtr& noteInfoPtr) const;
 
     constexpr static std::string_view XmlNodeName = "voicingDef"; ///< The XML node name for this type.
     static const xml::XmlElementArray<PartVoicing>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.

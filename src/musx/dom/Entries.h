@@ -1371,6 +1371,7 @@ public:
 
     /// @brief Get the entry
     /// @throws std::logic_error if the entry pointer is no longer valid
+    [[nodiscard]]
     MusxInstance<Entry> getEntry() const
     {
         auto retval = m_entry.lock();
@@ -1381,6 +1382,7 @@ public:
     }
 
     /// @brief Calculates the next duration position after this entry
+    [[nodiscard]]
     util::Fraction calcNextElapsedDuration() const
     { return elapsedDuration + actualDuration; }
 
@@ -1408,15 +1410,18 @@ public:
 
     /// @brief Returns whether the input and the current instance refer to the same note.
     /// @param src The EntryInfoPtr to compare with.
+    [[nodiscard]]
     bool isSameNote(const NoteInfoPtr& src) const
     { return m_entry.isSameEntry(src.m_entry) && m_noteIndex == src.m_noteIndex; }
 
     /// @brief Finds a note with the same pitch in the supplied entry
     /// @param entry the entry to search
     /// @return The found note or an null instance of NoteInfoPtr.
+    [[nodiscard]]
     NoteInfoPtr findEqualPitch(const EntryInfoPtr& entry) const;
 
     /// @brief Allows `->` access to the underlying @ref Note instance.
+    [[nodiscard]]
     MusxInstance<Note> operator->() const
     {
         MUSX_ASSERT_IF(m_noteIndex >= m_entry->getEntry()->notes.size()) {
@@ -1426,9 +1431,15 @@ public:
     }
 
     /// @brief Gets the entry info for this note
+    [[nodiscard]]
     EntryInfoPtr getEntryInfo() const
     { return m_entry; }
 
+    /// @brief Gets the note index for this note
+    [[nodiscard]]
+    size_t getNoteIndex() const
+    { return m_noteIndex; }
+    
     /**
      * @brief Calculates the note name, octave number, actual alteration, and staff position. This function does
      * not take into account percussion notes and their staff position override. To get the staff position taking
@@ -1441,6 +1452,7 @@ public:
      * @param alwaysUseEntryStaff If true, the entry is not checked for cross-staff staffing. Normally you omit this.
      * @return #Note::NoteProperties
      */
+    [[nodiscard]]
     Note::NoteProperties calcNoteProperties(const std::optional<bool>& enharmonicRespell = std::nullopt, bool alwaysUseEntryStaff = false) const;
 
     /**
@@ -1450,6 +1462,7 @@ public:
      * @param alwaysUseEntryStaff If true, the entry is not checked for cross-staff staffing. Normally you omit this.
      * @return #Note::NoteProperties
      */
+    [[nodiscard]]
     Note::NoteProperties calcNotePropertiesConcert(bool alwaysUseEntryStaff = false) const;
 
     /**
@@ -1459,36 +1472,44 @@ public:
      * @param alwaysUseEntryStaff If true, the entry is not checked for cross-staff staffing. Normally you omit this.
      * @return #Note::NoteProperties
      */
+    [[nodiscard]]
     Note::NoteProperties calcNotePropertiesInView(bool alwaysUseEntryStaff = false) const;
 
     /// @brief Calculates the percussion note info for this note, if any.
     /// @return If the note is on a percussion staff and has percussion note info assigned, returns it. Otherwise `nullptr`.
+    [[nodiscard]]
     MusxInstance<others::PercussionNoteInfo> calcPercussionNoteInfo() const;
 
     /// @brief Calculates the staff position for this note, taking into account percussion notes.
     /// @return
+    [[nodiscard]]
     int calcStaffPosition() const;
 
     /// @brief Calculates the note that this note could tie to. Check the return value's #Note::tieEnd
     /// to see if there is actually a tie end. (Note that Finale shows a tie whether there #Note::tieEnd is true or not.)
     /// @return The candidate note or an empty NoteInfoPtr if no candidate was found.
+    [[nodiscard]]
     NoteInfoPtr calcTieTo() const;
 
     /// @brief Calculates the note that this note could tie from.
     /// @param requireTie If @p requireTie is true, the returned value must have its #Note::tieStart flag set to true.
     /// You can set @p requireTie to false to find the *potential* note this note might be tied from.
     /// @return The candidate note or an empty NoteInfoPtr if no candidate was found.
+    [[nodiscard]]
     NoteInfoPtr calcTieFrom(bool requireTie = true) const;
 
     /// @brief Calculates the staff number, taking into account cross staffing
+    [[nodiscard]]
     StaffCmper calcStaff() const;
 
     /// @brief Creates a transposer for this Note instance.
     /// @return A unique pointer to a transposer for this Note.
+    [[nodiscard]]
     std::unique_ptr<music_theory::Transposer> createTransposer() const;
 
     /// @brief Gets the next note in a chord on the same entry.
     /// @return The next note or nullptr if none.
+    [[nodiscard]]
     NoteInfoPtr getNext() const
     {
         if (m_noteIndex >= m_entry->getEntry()->notes.size()) {
@@ -1499,6 +1520,7 @@ public:
 
     /// @brief Gets the next note in a chord on the same entry.
     /// @return The next note or nullptr if none.
+    [[nodiscard]]
     NoteInfoPtr getPrevious() const
     {
         if (m_noteIndex <= 0) {
@@ -1508,6 +1530,7 @@ public:
     }
 
     /// @brief Returns if this note is enharmonically respelled in the current part view
+    [[nodiscard]]
     bool calcIsEnharmonicRespell() const;
 
     /// @brief Calculates the default enharmonic equivalent of this note. This is the value that Finale uses when
@@ -1519,6 +1542,7 @@ public:
     /// @return A std::pair containing
     ///         - int: the enharmonic equivalent's displacement value relative to the tonic.
     ///         - int: the enharmonic equivalent's alteration value relative to the key signature.
+    [[nodiscard]]
     std::pair<int, int> calcDefaultEnharmonic() const
     { return (*this)->calcDefaultEnharmonic(m_entry.getKeySignature()); }
 
@@ -1531,17 +1555,24 @@ public:
     ///   - **1**  if the note crosses upward to a higher staff
     ///   - **0**  if the note is not cross-staffed
     ///   - **−1** if the note crosses downward to a lower staff
+    [[nodiscard]]
     int calcCrossStaffDirection(DeferredReference<MusxInstanceList<others::StaffUsed>> staffList = {}) const;
+
+    /// @brief Returns true if this note is included in the part voicing.
+    [[nodiscard]]
+    bool calcIsIncludedInVoicing() const;
 
 private:
     /// @brief Returns true if the two notes represent the same concert pitch or
     /// percussion note.
     /// @param src the value to compare with.
+    [[nodiscard]]
     bool isSamePitch(const NoteInfoPtr& src) const;
 
     /// @brief Returns true if the @p src and this have the same pitch information.
     /// It is only meaningful when this and src are in the same key.
     /// @param src the value to compare with.
+    [[nodiscard]]
     bool isSamePitchValues(const NoteInfoPtr& src) const;
 
     EntryInfoPtr m_entry;

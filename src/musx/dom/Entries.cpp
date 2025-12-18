@@ -799,8 +799,20 @@ EntryInfoPtr EntryInfoPtr::getPreviousInBeamGroupAcrossBars(BeamIterationMode be
 
 bool EntryInfoPtr::calcDisplaysAsRest() const
 {
-    return !(*this)->getEntry()->isNote;
-    /// @todo Add code to detect that the entry is converted to a rest by voiced part settings
+    const auto entry = (*this)->getEntry();
+    if (!entry->isNote) {
+        return true;
+    }
+    if (const auto partVoicing = m_entryFrame->getContext().getPartVoicing()) {
+        const size_t numNotes = entry->notes.size();
+        for (size_t noteIndex = 0; noteIndex < numNotes; noteIndex++) {
+            if (partVoicing->calcShowsNote(NoteInfoPtr(*this, noteIndex))) {
+                return false;
+            }
+        }
+        return true;
+    }
+    return false;
 }
 
 std::pair<int, int> EntryInfoPtr::calcTopBottomStaffPositions() const
@@ -2143,7 +2155,9 @@ details::GFrameHoldContext::GFrameHoldContext(const DocumentPtr& document, Cmper
     : m_requestedPartId(partId), m_timeOffset(timeOffset)
 {
     m_hold = document->getDetails()->get<details::GFrameHold>(partId, staffId, measureId);
-    m_partVoicing = document->getOthers()->get<others::PartVoicing>(partId, staffId);
+    if (document->getPartVoicingPolicy() == PartVoicingPolicy::Apply) {
+        m_partVoicing = document->getOthers()->get<others::PartVoicing>(partId, staffId);
+    }
 }
 
 #ifndef DOXYGEN_SHOULD_IGNORE_THIS
@@ -2170,7 +2184,7 @@ struct TupletState
 
 std::shared_ptr<const EntryFrame> details::GFrameHoldContext::createEntryFrame(LayerIndex layerIndex) const
 {
-    if (!m_hold) return nullptr;
+    if (!m_hold || !calcVoicingIncludesLayer(layerIndex)) return nullptr;
     if (layerIndex >= m_hold->frames.size()) { // note: layerIndex is unsigned
         throw std::invalid_argument("invalid layer index [" + std::to_string(layerIndex) + "]");
     }
@@ -2306,6 +2320,9 @@ std::map<LayerIndex, int> details::GFrameHoldContext::calcVoices(bool excludeHid
 {
     std::map<LayerIndex, int> result;
     for (LayerIndex layerIndex = 0; layerIndex < m_hold->frames.size(); layerIndex++) {
+        if (!calcVoicingIncludesLayer(layerIndex)) {
+            continue;
+        }
         auto [frame, startEdu] = m_hold->findLayerFrame(layerIndex);
         if (frame) {
             bool gotLayer = false;
@@ -2358,6 +2375,9 @@ bool details::GFrameHoldContext::calcIsCuesOnly(bool includeVisibleInScore) cons
 {
     bool foundCue = false;
     for (LayerIndex layerIndex = 0; layerIndex < m_hold->frames.size(); layerIndex++) {
+        if (!calcVoicingIncludesLayer(layerIndex)) {
+            continue;
+        }
         auto [frame, startEdu] = m_hold->findLayerFrame(layerIndex);
         if (frame) {
             auto entries = frame->getEntries();
@@ -2744,6 +2764,14 @@ int NoteInfoPtr::calcCrossStaffDirection(DeferredReference<MusxInstanceList<othe
     }
 
     return 0;
+}
+
+bool NoteInfoPtr::calcIsIncludedInVoicing() const
+{
+    if (const auto partVoicing = getEntryInfo().getFrame()->getContext().getPartVoicing()) {
+        return partVoicing->calcShowsNote(*this);
+    }
+    return true;
 }
 
 } // namespace dom
