@@ -131,7 +131,7 @@ TEST(EntryTest, PopulateFields)
         EXPECT_TRUE(note->parenAcci);
         EXPECT_TRUE(note->freezeAcci);
 
-        auto [noteType, numDots] = entry->calcNoteInfo();
+        auto [noteType, numDots] = entry->calcDurationInfo();
         EXPECT_EQ(noteType, NoteType::Eighth);
         EXPECT_EQ(numDots, 2);
     }
@@ -158,7 +158,7 @@ TEST(EntryTest, PopulateFields)
 
         EXPECT_EQ(entry->notes.size(), 0);
 
-        auto [noteType, numDots] = entry->calcNoteInfo();
+        auto [noteType, numDots] = entry->calcDurationInfo();
         EXPECT_EQ(noteType, NoteType::Note16th);
         EXPECT_EQ(numDots, 0);
     }
@@ -235,12 +235,12 @@ TEST(EntryTest, IntegrityCheck)
     ASSERT_TRUE(entry);
 
     EXPECT_THROW(
-        entry->getNext(),
+        static_cast<void>(entry->getNext()),
         musx::dom::integrity_error
     ) << "next entry does not exist";
 
     EXPECT_THROW(
-        entry->getPrevious(),
+        static_cast<void>(entry->getPrevious()),
         musx::dom::integrity_error
     ) << "previous entry does not exist";
 }

@@ -65,7 +65,7 @@ MusxInstance<Entry> Entry::getPrevious() const
     return retval;
 }
 
-std::pair<NoteType, unsigned> calcNoteInfoFromEdu(Edu duration)
+std::pair<NoteType, unsigned> calcDurationInfoFromEdu(Edu duration)
 {
     if (duration < 1 || duration >= 0x10000) {
         throw std::invalid_argument("Duration is out of valid range for NoteType.");
@@ -322,7 +322,7 @@ bool EntryFrame::TupletInfo::calcIsTremolo() const
 
     // if the actual duration of the tuplet is less than a half, at least one beam must be detached.
     if (tuplet->calcReferenceDuration().calcEduDuration() < Edu(NoteType::Half)) {
-        auto targetNoteType = std::get<0>(calcNoteInfoFromEdu(targetNotated)); // C++17 complains about structured bindings captured in a lamda.
+        auto targetNoteType = std::get<0>(calcDurationInfoFromEdu(targetNotated)); // C++17 complains about structured bindings captured in a lamda.
         if (auto beamExt = details::BeamExtension::getForStem(first)) {
             return beamExt->mask >= unsigned(targetNoteType) && beamExt->leftOffset > 0 && beamExt->rightOffset < 0;
         } else {
@@ -1602,8 +1602,8 @@ bool EntryInfoPtr::calcBeamStubIsLeft() const
         if (isSecondaryTerminator(calcLowestBeamEnd(), next)) return true;      // end of 2ndary beam points left
     }
 
-    auto prevDots = calcNoteInfoFromEdu(prev->actualDuration.calcEduDuration()).second;
-    auto nextDots = calcNoteInfoFromEdu(next->actualDuration.calcEduDuration()).second;
+    auto prevDots = calcDurationInfoFromEdu(prev->actualDuration.calcEduDuration()).second;
+    auto nextDots = calcDurationInfoFromEdu(next->actualDuration.calcEduDuration()).second;
 
     if (prevDots || nextDots) {
         return prevDots >= nextDots;
