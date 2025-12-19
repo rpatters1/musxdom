@@ -803,7 +803,7 @@ bool EntryInfoPtr::calcDisplaysAsRest() const
     if (!entry->isNote) {
         return true;
     }
-    if (const auto partVoicing = m_entryFrame->getContext().getPartVoicing()) {
+    if (const auto partVoicing = m_entryFrame->getContext().getPolicyPartVoicing()) {
         const size_t numNotes = entry->notes.size();
         for (size_t noteIndex = 0; noteIndex < numNotes; noteIndex++) {
             if (partVoicing->calcShowsNote(NoteInfoPtr(*this, noteIndex))) {
@@ -2155,9 +2155,8 @@ details::GFrameHoldContext::GFrameHoldContext(const DocumentPtr& document, Cmper
     : m_requestedPartId(partId), m_timeOffset(timeOffset)
 {
     m_hold = document->getDetails()->get<details::GFrameHold>(partId, staffId, measureId);
-    if (document->getPartVoicingPolicy() == PartVoicingPolicy::Apply) {
-        m_partVoicing = document->getOthers()->get<others::PartVoicing>(partId, staffId);
-    }
+    m_partVoicing = document->getOthers()->get<others::PartVoicing>(partId, staffId);
+    m_honorPartVoicing = document->getPartVoicingPolicy() == PartVoicingPolicy::Apply;
 }
 
 #ifndef DOXYGEN_SHOULD_IGNORE_THIS
@@ -2184,7 +2183,9 @@ struct TupletState
 
 std::shared_ptr<const EntryFrame> details::GFrameHoldContext::createEntryFrame(LayerIndex layerIndex) const
 {
-    if (!m_hold || !calcVoicingIncludesLayer(layerIndex)) return nullptr;
+    if (!m_hold || !calcPolicyVoicingIncludesLayer(layerIndex)) {
+        return nullptr;
+    }
     if (layerIndex >= m_hold->frames.size()) { // note: layerIndex is unsigned
         throw std::invalid_argument("invalid layer index [" + std::to_string(layerIndex) + "]");
     }
@@ -2320,7 +2321,7 @@ std::map<LayerIndex, int> details::GFrameHoldContext::calcVoices(bool excludeHid
 {
     std::map<LayerIndex, int> result;
     for (LayerIndex layerIndex = 0; layerIndex < m_hold->frames.size(); layerIndex++) {
-        if (!calcVoicingIncludesLayer(layerIndex)) {
+        if (!calcPolicyVoicingIncludesLayer(layerIndex)) {
             continue;
         }
         auto [frame, startEdu] = m_hold->findLayerFrame(layerIndex);
@@ -2375,7 +2376,7 @@ bool details::GFrameHoldContext::calcIsCuesOnly(bool includeVisibleInScore) cons
 {
     bool foundCue = false;
     for (LayerIndex layerIndex = 0; layerIndex < m_hold->frames.size(); layerIndex++) {
-        if (!calcVoicingIncludesLayer(layerIndex)) {
+        if (!calcPolicyVoicingIncludesLayer(layerIndex)) {
             continue;
         }
         auto [frame, startEdu] = m_hold->findLayerFrame(layerIndex);

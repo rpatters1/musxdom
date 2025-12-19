@@ -86,6 +86,14 @@ public:
     MusxInstance<others::PartVoicing> getPartVoicing() const { return m_partVoicing; }
 
     /**
+     * @brief Returns the part voicing for the requested part, based on the document's `PartVoicingPolicy`. 
+     *
+     * @return The part voicing if it exists and if the document's `PartVoicingPolicy` applies part voicing. Otherwise nullptr.
+     */
+    MusxInstance<others::PartVoicing> getPolicyPartVoicing() const
+    { return m_honorPartVoicing ? m_partVoicing : nullptr; }
+
+    /**
      * @brief Provides const pointer-style access to the underlying @ref GFrameHold.
      *
      * @return A const pointer to @ref GFrameHold.
@@ -160,15 +168,21 @@ public:
     util::Fraction calcMinLegacyPickupSpacer() const;
 
     /// @brief Calculates if the part voicing for the current requested part includes the specified layer.
+    /// This function returns the correct value even if the document's `PartVoicingPolicy` is to ignore part voicing.
     /// @param layerIndex The 0-based layer indes to check.
     /// @return True if the layer is included in the part voicing, otherwise false.
     bool calcVoicingIncludesLayer(LayerIndex layerIndex) const;
 
-private:
+    /// @brief Similar to #calcVoicingIncludesLayer, but honoring the document's part voicing policy.
+    bool calcPolicyVoicingIncludesLayer(LayerIndex layerIndex) const
+    { return !m_honorPartVoicing || calcVoicingIncludesLayer(layerIndex); }
+
+private:        
     MusxInstance<GFrameHold> m_hold;                    ///< The resolved GFrameHold object, or null if not found.
-    Cmper m_requestedPartId;                            ///< The requested part context.
+    Cmper m_requestedPartId{};                          ///< The requested part context.
     util::Fraction m_timeOffset;                        ///< The time offset to apply to entry frames.
     MusxInstance<others::PartVoicing> m_partVoicing;    ///< The part voicing for the requested part, if any.
+    bool m_honorPartVoicing{};                          ///< Cache the document's `PartVoicingPolicy`.
 };
 
 } // namespace details
@@ -1466,7 +1480,8 @@ public:
     Note::NoteProperties calcNotePropertiesConcert(bool alwaysUseEntryStaff = false) const;
 
     /**
-     * @brief Calculates the note name, octave number, actual alteration, and staff position for the pitch of the note in view. This may be
+     * @brief Calculates the note name, octave number, actual alteration, and staff position for the pitch of the note in the currently
+     * selected "Display In Concert Pitch" view for the current part. This may be
      * particularly useful with non-floating rests, but it can be used with any note. As with other versions of the function, it does not
      * handle the staff position override of percussion notes.
      * @param alwaysUseEntryStaff If true, the entry is not checked for cross-staff staffing. Normally you omit this.
@@ -1558,7 +1573,8 @@ public:
     [[nodiscard]]
     int calcCrossStaffDirection(DeferredReference<MusxInstanceList<others::StaffUsed>> staffList = {}) const;
 
-    /// @brief Returns true if this note is included in the part voicing.
+    /// @brief Returns true if this note is included in the part voicing. This function returns the correct value
+    /// even if the document's `PartVoicingPolicy` is to ignore part voicing.
     [[nodiscard]]
     bool calcIsIncludedInVoicing() const;
 
