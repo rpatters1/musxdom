@@ -440,6 +440,11 @@ Enumerations</h2></td></tr>
  }</td></tr>
 <tr class="memdesc:a09b81b6535bd382e3afc1a00ba080215"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enum representing the clef display mode for a frame.  <a href="namespacemusx_1_1dom.html#a09b81b6535bd382e3afc1a00ba080215">More...</a><br /></td></tr>
 <tr class="separator:a09b81b6535bd382e3afc1a00ba080215"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8ff59967b46549e150ea4f524c00de95" id="r_a8ff59967b46549e150ea4f524c00de95"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemusx_1_1dom.html#a8ff59967b46549e150ea4f524c00de95">PartVoicingPolicy</a> { <a class="el" href="namespacemusx_1_1dom.html#a8ff59967b46549e150ea4f524c00de95afd038fc7f319e48f3115d92bf5bdbef9">Ignore</a>
+, <a class="el" href="namespacemusx_1_1dom.html#a8ff59967b46549e150ea4f524c00de95a9639e32cab248434a17ab32237cb3b71">Apply</a>
+ }</td></tr>
+<tr class="memdesc:a8ff59967b46549e150ea4f524c00de95"><td class="mdescLeft">&#160;</td><td class="mdescRight">Controls whether Finale-style part voicing is applied when iterating entries via <a class="el" href="classmusx_1_1dom_1_1details_1_1GFrameHoldContext.html">musx::dom::details::GFrameHoldContext</a>.  <a href="namespacemusx_1_1dom.html#a8ff59967b46549e150ea4f524c00de95">More...</a><br /></td></tr>
+<tr class="separator:a8ff59967b46549e150ea4f524c00de95"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a16d85e8ed9439b9a2ef071d38ffa0fd7" id="r_a16d85e8ed9439b9a2ef071d38ffa0fd7"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemusx_1_1dom.html#a16d85e8ed9439b9a2ef071d38ffa0fd7">KnownShapeDefType</a> { <a class="el" href="namespacemusx_1_1dom.html#a16d85e8ed9439b9a2ef071d38ffa0fd7ae4ef81cce7e4e10033ebb10962dfdd5e">Blank</a>
 , <a class="el" href="namespacemusx_1_1dom.html#a16d85e8ed9439b9a2ef071d38ffa0fd7ac6cdf96e9804915f9f5c6771802805fd">TenutoMark</a>
  }</td></tr>
@@ -487,9 +492,9 @@ Enumerations</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:aa215062b953a2a9a8e0062df4d991cdd" id="r_aa215062b953a2a9a8e0062df4d991cdd"><td class="memItemLeft" align="right" valign="top">std::pair&lt; <a class="el" href="namespacemusx_1_1dom.html#a3c91ee84b72cc27a2899191d6baee312">NoteType</a>, unsigned &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemusx_1_1dom.html#aa215062b953a2a9a8e0062df4d991cdd">calcNoteInfoFromEdu</a> (<a class="el" href="namespacemusx_1_1dom.html#a907ef641c247f1a5dbe75bbc972661f5">Edu</a> duration)</td></tr>
-<tr class="memdesc:aa215062b953a2a9a8e0062df4d991cdd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the <a class="el" href="namespacemusx_1_1dom.html#a3c91ee84b72cc27a2899191d6baee312">NoteType</a> and number of dots in an <a class="el" href="namespacemusx_1_1dom.html#a907ef641c247f1a5dbe75bbc972661f5">Edu</a> value.  <br /></td></tr>
-<tr class="separator:aa215062b953a2a9a8e0062df4d991cdd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a938f344e829f7109948169079587c9ef" id="r_a938f344e829f7109948169079587c9ef"><td class="memItemLeft" align="right" valign="top">std::pair&lt; <a class="el" href="namespacemusx_1_1dom.html#a3c91ee84b72cc27a2899191d6baee312">NoteType</a>, unsigned &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemusx_1_1dom.html#a938f344e829f7109948169079587c9ef">calcDurationInfoFromEdu</a> (<a class="el" href="namespacemusx_1_1dom.html#a907ef641c247f1a5dbe75bbc972661f5">Edu</a> duration)</td></tr>
+<tr class="memdesc:a938f344e829f7109948169079587c9ef"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the <a class="el" href="namespacemusx_1_1dom.html#a3c91ee84b72cc27a2899191d6baee312">NoteType</a> and number of dots in an <a class="el" href="namespacemusx_1_1dom.html#a907ef641c247f1a5dbe75bbc972661f5">Edu</a> value.  <br /></td></tr>
+<tr class="separator:a938f344e829f7109948169079587c9ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa75d341865ea5c3e1a8fcb735ea5e51b" id="r_aa75d341865ea5c3e1a8fcb735ea5e51b"><td class="memItemLeft" align="right" valign="top"><a id="aa75d341865ea5c3e1a8fcb735ea5e51b" name="aa75d341865ea5c3e1a8fcb735ea5e51b"></a>
 unsigned&#160;</td><td class="memItemRight" valign="bottom"><b>calcNumberOfBeamsInEdu</b> (<a class="el" href="namespacemusx_1_1dom.html#a907ef641c247f1a5dbe75bbc972661f5">Edu</a> duration)</td></tr>
 <tr class="memdesc:aa75d341865ea5c3e1a8fcb735ea5e51b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the number of beams or flags in the <a class="el" href="namespacemusx_1_1dom.html#a907ef641c247f1a5dbe75bbc972661f5">Edu</a> value. <br /></td></tr>
@@ -766,6 +771,36 @@ template&lt;typename T &gt; </div>
 
 </div>
 </div>
+<a id="a8ff59967b46549e150ea4f524c00de95" name="a8ff59967b46549e150ea4f524c00de95"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8ff59967b46549e150ea4f524c00de95">&#9670;&#160;</a></span>PartVoicingPolicy</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum class <a class="el" href="namespacemusx_1_1dom.html#a8ff59967b46549e150ea4f524c00de95">musx::dom::PartVoicingPolicy</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">strong</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Controls whether Finale-style part voicing is applied when iterating entries via <a class="el" href="classmusx_1_1dom_1_1details_1_1GFrameHoldContext.html">musx::dom::details::GFrameHoldContext</a>. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a8ff59967b46549e150ea4f524c00de95afd038fc7f319e48f3115d92bf5bdbef9" name="a8ff59967b46549e150ea4f524c00de95afd038fc7f319e48f3115d92bf5bdbef9"></a>Ignore&#160;</td><td class="fielddoc"><p>Default. Part voicing is ignored entirely. All layers in a staff are visible to all parts, and entries behave as if no part-voicing definitions exist. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a8ff59967b46549e150ea4f524c00de95a9639e32cab248434a17ab32237cb3b71" name="a8ff59967b46549e150ea4f524c00de95a9639e32cab248434a17ab32237cb3b71"></a>Apply&#160;</td><td class="fielddoc"><p>Apply Finale’s voiced-part interpretation. When enabled, entry iteration filters layers according to the active part voicing, and individual notes may be included or excluded based on voicing rules. Callers that operate at the note level should use <a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html#aa078714d4ad095bd9be5da204e9bc438" title="Returns true if this note is included in the part voicing. This function returns the correct value ev...">NoteInfoPtr::calcIsIncludedInVoicing</a> to test note visibility. If all notes in an entry are excluded by voicing, then <a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#a91dd4f09e8c863732cfa52f13275995b" title="Calculates if an entry displays as a rest.">EntryInfoPtr::calcDisplaysAsRest</a> returns true for that entry. </p>
+</td></tr>
+</table>
+
+</div>
+</div>
 <a id="a93764339b56e531ea37af5181b20b113" name="a93764339b56e531ea37af5181b20b113"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a93764339b56e531ea37af5181b20b113">&#9670;&#160;</a></span>ShapeDefInstructionType</h2>
 
@@ -892,14 +927,14 @@ template&lt;typename T &gt; </div>
 </div>
 </div>
 <h2 class="groupheader">Function Documentation</h2>
-<a id="aa215062b953a2a9a8e0062df4d991cdd" name="aa215062b953a2a9a8e0062df4d991cdd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa215062b953a2a9a8e0062df4d991cdd">&#9670;&#160;</a></span>calcNoteInfoFromEdu()</h2>
+<a id="a938f344e829f7109948169079587c9ef" name="a938f344e829f7109948169079587c9ef"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a938f344e829f7109948169079587c9ef">&#9670;&#160;</a></span>calcDurationInfoFromEdu()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">std::pair&lt; <a class="el" href="namespacemusx_1_1dom.html#a3c91ee84b72cc27a2899191d6baee312">NoteType</a>, unsigned &gt; musx::dom::calcNoteInfoFromEdu </td>
+          <td class="memname">std::pair&lt; <a class="el" href="namespacemusx_1_1dom.html#a3c91ee84b72cc27a2899191d6baee312">NoteType</a>, unsigned &gt; musx::dom::calcDurationInfoFromEdu </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="namespacemusx_1_1dom.html#a907ef641c247f1a5dbe75bbc972661f5">Edu</a>&#160;</td>
           <td class="paramname"><em>duration</em></td><td>)</td>

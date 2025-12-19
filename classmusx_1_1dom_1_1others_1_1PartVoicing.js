@@ -11,6 +11,8 @@ var classmusx_1_1dom_1_1others_1_1PartVoicing =
       [ "UseMultipleLayers", "classmusx_1_1dom_1_1others_1_1PartVoicing.html#a648ab1f3aab46486b429653ec46cb996a6816d1b8f2ced4932bf87776b46e8233", null ]
     ] ],
     [ "PartVoicing", "classmusx_1_1dom_1_1others_1_1PartVoicing.html#a03c335657597e333e80166a305a1ff05", null ],
+    [ "calcShowsLayer", "classmusx_1_1dom_1_1others_1_1PartVoicing.html#abfca13f7f54289dd806d2b2651382fea", null ],
+    [ "calcShowsNote", "classmusx_1_1dom_1_1others_1_1PartVoicing.html#ad3d7b3509dd27405859fb5ad7a84e603", null ],
     [ "enabled", "classmusx_1_1dom_1_1others_1_1PartVoicing.html#a15bd39947911c26cbb9410f063a0fde7", null ],
     [ "multiLayer", "classmusx_1_1dom_1_1others_1_1PartVoicing.html#a42849fcb7a0b4abd18060d32c5e28f73", null ],
     [ "select1st", "classmusx_1_1dom_1_1others_1_1PartVoicing.html#a08c194121e04f7bc2e544885979d8edf", null ],

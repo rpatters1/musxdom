@@ -17,9 +17,10 @@ var searchData=
   ['entryframe_14',['EntryFrame',['../classmusx_1_1dom_1_1EntryFrame.html',1,'musx::dom']]],
   ['entryinfo_15',['EntryInfo',['../classmusx_1_1dom_1_1EntryInfo.html',1,'musx::dom']]],
   ['entryinfoptr_16',['EntryInfoPtr',['../classmusx_1_1dom_1_1EntryInfoPtr.html',1,'musx::dom']]],
-  ['entrypartfielddetail_17',['EntryPartFieldDetail',['../classmusx_1_1dom_1_1details_1_1EntryPartFieldDetail.html',1,'musx::dom::details']]],
-  ['entrypool_18',['EntryPool',['../classmusx_1_1dom_1_1EntryPool.html',1,'musx::dom']]],
-  ['entrysize_19',['EntrySize',['../classmusx_1_1dom_1_1details_1_1EntrySize.html',1,'musx::dom::details']]],
-  ['expressiontext_20',['ExpressionText',['../classmusx_1_1dom_1_1texts_1_1ExpressionText.html',1,'musx::dom::texts']]],
-  ['externalgraphic_21',['ExternalGraphic',['../structmusx_1_1dom_1_1ShapeDefInstruction_1_1ExternalGraphic.html',1,'musx::dom::ShapeDefInstruction']]]
+  ['entrylocation_17',['EntryLocation',['../structmusx_1_1dom_1_1Entry_1_1EntryLocation.html',1,'musx::dom::Entry']]],
+  ['entrypartfielddetail_18',['EntryPartFieldDetail',['../classmusx_1_1dom_1_1details_1_1EntryPartFieldDetail.html',1,'musx::dom::details']]],
+  ['entrypool_19',['EntryPool',['../classmusx_1_1dom_1_1EntryPool.html',1,'musx::dom']]],
+  ['entrysize_20',['EntrySize',['../classmusx_1_1dom_1_1details_1_1EntrySize.html',1,'musx::dom::details']]],
+  ['expressiontext_21',['ExpressionText',['../classmusx_1_1dom_1_1texts_1_1ExpressionText.html',1,'musx::dom::texts']]],
+  ['externalgraphic_22',['ExternalGraphic',['../structmusx_1_1dom_1_1ShapeDefInstruction_1_1ExternalGraphic.html',1,'musx::dom::ShapeDefInstruction']]]
 ];

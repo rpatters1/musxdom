@@ -112,6 +112,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:acff7329c626f98038fffe6cfff7ee880" id="r_acff7329c626f98038fffe6cfff7ee880"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1details_1_1GFrameHoldContext.html#acff7329c626f98038fffe6cfff7ee880">getRequestedPartId</a> () const</td></tr>
 <tr class="memdesc:acff7329c626f98038fffe6cfff7ee880"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the requested part ID associated with this context.  <br /></td></tr>
 <tr class="separator:acff7329c626f98038fffe6cfff7ee880"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a38a0424f31be934c318142230bc02812" id="r_a38a0424f31be934c318142230bc02812"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemusx_1_1dom.html#a4223cd531120dbef7acd854c3d2631b8">MusxInstance</a>&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1PartVoicing.html">others::PartVoicing</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1details_1_1GFrameHoldContext.html#a38a0424f31be934c318142230bc02812">getPartVoicing</a> () const</td></tr>
+<tr class="memdesc:a38a0424f31be934c318142230bc02812"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the part voicing for the requested part.  <br /></td></tr>
+<tr class="separator:a38a0424f31be934c318142230bc02812"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2c976e105a78fe315488b062a7b4f78e" id="r_a2c976e105a78fe315488b062a7b4f78e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemusx_1_1dom.html#a4223cd531120dbef7acd854c3d2631b8">MusxInstance</a>&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1PartVoicing.html">others::PartVoicing</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1details_1_1GFrameHoldContext.html#a2c976e105a78fe315488b062a7b4f78e">getPolicyPartVoicing</a> () const</td></tr>
+<tr class="memdesc:a2c976e105a78fe315488b062a7b4f78e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the part voicing for the requested part, based on the document's <code>PartVoicingPolicy</code>.  <br /></td></tr>
+<tr class="separator:a2c976e105a78fe315488b062a7b4f78e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a200ea257e62dd6fb5c5f820d70febd49" id="r_a200ea257e62dd6fb5c5f820d70febd49"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classmusx_1_1dom_1_1details_1_1GFrameHold.html">GFrameHold</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1details_1_1GFrameHoldContext.html#a200ea257e62dd6fb5c5f820d70febd49">operator-&gt;</a> () const</td></tr>
 <tr class="memdesc:a200ea257e62dd6fb5c5f820d70febd49"><td class="mdescLeft">&#160;</td><td class="mdescRight">Provides const pointer-style access to the underlying <a class="el" href="classmusx_1_1dom_1_1details_1_1GFrameHold.html">GFrameHold</a>.  <br /></td></tr>
 <tr class="separator:a200ea257e62dd6fb5c5f820d70febd49"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -145,6 +151,13 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a904e4afe0ed1e60e508d488f00b2fff4" id="r_a904e4afe0ed1e60e508d488f00b2fff4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1util_1_1Fraction.html">util::Fraction</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1details_1_1GFrameHoldContext.html#a904e4afe0ed1e60e508d488f00b2fff4">calcMinLegacyPickupSpacer</a> () const</td></tr>
 <tr class="memdesc:a904e4afe0ed1e60e508d488f00b2fff4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the minimum legacy pickup spacer, if any.  <br /></td></tr>
 <tr class="separator:a904e4afe0ed1e60e508d488f00b2fff4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab0022d7cc68c332bfb806cafa5ff477f" id="r_ab0022d7cc68c332bfb806cafa5ff477f"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1details_1_1GFrameHoldContext.html#ab0022d7cc68c332bfb806cafa5ff477f">calcVoicingIncludesLayer</a> (<a class="el" href="namespacemusx_1_1dom.html#a58ecc2c31e1c1ff88267f87f028b5981">LayerIndex</a> layerIndex) const</td></tr>
+<tr class="memdesc:ab0022d7cc68c332bfb806cafa5ff477f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates if the part voicing for the current requested part includes the specified layer. This function returns the correct value even if the document's <code>PartVoicingPolicy</code> is to ignore part voicing.  <br /></td></tr>
+<tr class="separator:ab0022d7cc68c332bfb806cafa5ff477f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab32ace295dddee96d8f7dd41086b8423" id="r_ab32ace295dddee96d8f7dd41086b8423"><td class="memItemLeft" align="right" valign="top"><a id="ab32ace295dddee96d8f7dd41086b8423" name="ab32ace295dddee96d8f7dd41086b8423"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>calcPolicyVoicingIncludesLayer</b> (<a class="el" href="namespacemusx_1_1dom.html#a58ecc2c31e1c1ff88267f87f028b5981">LayerIndex</a> layerIndex) const</td></tr>
+<tr class="memdesc:ab32ace295dddee96d8f7dd41086b8423"><td class="mdescLeft">&#160;</td><td class="mdescRight">Similar to <a class="el" href="classmusx_1_1dom_1_1details_1_1GFrameHoldContext.html#ab0022d7cc68c332bfb806cafa5ff477f" title="Calculates if the part voicing for the current requested part includes the specified layer....">calcVoicingIncludesLayer</a>, but honoring the document's part voicing policy. <br /></td></tr>
+<tr class="separator:ab32ace295dddee96d8f7dd41086b8423"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>A context wrapper for <a class="el" href="classmusx_1_1dom_1_1details_1_1GFrameHold.html">GFrameHold</a> associated with a specific part and location. </p>
@@ -401,6 +414,33 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="ab0022d7cc68c332bfb806cafa5ff477f" name="ab0022d7cc68c332bfb806cafa5ff477f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab0022d7cc68c332bfb806cafa5ff477f">&#9670;&#160;</a></span>calcVoicingIncludesLayer()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool musx::dom::details::GFrameHoldContext::calcVoicingIncludesLayer </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespacemusx_1_1dom.html#a58ecc2c31e1c1ff88267f87f028b5981">LayerIndex</a>&#160;</td>
+          <td class="paramname"><em>layerIndex</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Calculates if the part voicing for the current requested part includes the specified layer. This function returns the correct value even if the document's <code>PartVoicingPolicy</code> is to ignore part voicing. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">layerIndex</td><td>The 0-based layer indes to check. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True if the layer is included in the part voicing, otherwise false. </dd></dl>
+
+</div>
+</div>
 <a id="a5ee488176e8e510a181cc59b9bcfeef9" name="a5ee488176e8e510a181cc59b9bcfeef9"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a5ee488176e8e510a181cc59b9bcfeef9">&#9670;&#160;</a></span>createEntryFrame()</h2>
 
@@ -425,6 +465,62 @@ Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd><a class="el" href="classmusx_1_1dom_1_1EntryFrame.html" title="Represents a vector of EntryInfo instances for a given frame, along with computed information.">EntryFrame</a> for layer or nullptr if none. </dd></dl>
+
+</div>
+</div>
+<a id="a38a0424f31be934c318142230bc02812" name="a38a0424f31be934c318142230bc02812"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a38a0424f31be934c318142230bc02812">&#9670;&#160;</a></span>getPartVoicing()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacemusx_1_1dom.html#a4223cd531120dbef7acd854c3d2631b8">MusxInstance</a>&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1PartVoicing.html">others::PartVoicing</a> &gt; musx::dom::details::GFrameHoldContext::getPartVoicing </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the part voicing for the requested part. </p>
+<dl class="section return"><dt>Returns</dt><dd>The part voicing or nullptr if none. </dd></dl>
+
+</div>
+</div>
+<a id="a2c976e105a78fe315488b062a7b4f78e" name="a2c976e105a78fe315488b062a7b4f78e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2c976e105a78fe315488b062a7b4f78e">&#9670;&#160;</a></span>getPolicyPartVoicing()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacemusx_1_1dom.html#a4223cd531120dbef7acd854c3d2631b8">MusxInstance</a>&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1PartVoicing.html">others::PartVoicing</a> &gt; musx::dom::details::GFrameHoldContext::getPolicyPartVoicing </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the part voicing for the requested part, based on the document's <code>PartVoicingPolicy</code>. </p>
+<dl class="section return"><dt>Returns</dt><dd>The part voicing if it exists and if the document's <code>PartVoicingPolicy</code> applies part voicing. Otherwise nullptr. </dd></dl>
 
 </div>
 </div>

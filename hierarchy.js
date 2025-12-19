@@ -309,6 +309,7 @@ var hierarchy =
     [ "musx::util::EnigmaStyles", "structmusx_1_1util_1_1EnigmaStyles.html", null ],
     [ "musx::dom::EntryInfo", "classmusx_1_1dom_1_1EntryInfo.html", null ],
     [ "musx::dom::EntryInfoPtr", "classmusx_1_1dom_1_1EntryInfoPtr.html", null ],
+    [ "musx::dom::Entry::EntryLocation", "structmusx_1_1dom_1_1Entry_1_1EntryLocation.html", null ],
     [ "musx::dom::EntryPool", "classmusx_1_1dom_1_1EntryPool.html", null ],
     [ "musx::dom::ShapeDefInstruction::ExternalGraphic", "structmusx_1_1dom_1_1ShapeDefInstruction_1_1ExternalGraphic.html", null ],
     [ "musx::factory::FactoryBase", "classmusx_1_1factory_1_1FactoryBase.html", [

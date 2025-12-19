@@ -911,6 +911,10 @@ var namespacemusx_1_1dom =
       [ "Note2048th", "namespacemusx_1_1dom.html#a3c91ee84b72cc27a2899191d6baee312a63e3a214703146dacc03d8cded7d770d", null ],
       [ "Note4096th", "namespacemusx_1_1dom.html#a3c91ee84b72cc27a2899191d6baee312ad7c06d6056952818ee768091427b977e", null ]
     ] ],
+    [ "PartVoicingPolicy", "namespacemusx_1_1dom.html#a8ff59967b46549e150ea4f524c00de95", [
+      [ "Ignore", "namespacemusx_1_1dom.html#a8ff59967b46549e150ea4f524c00de95afd038fc7f319e48f3115d92bf5bdbef9", null ],
+      [ "Apply", "namespacemusx_1_1dom.html#a8ff59967b46549e150ea4f524c00de95a9639e32cab248434a17ab32237cb3b71", null ]
+    ] ],
     [ "ShapeDefInstructionType", "namespacemusx_1_1dom.html#a93764339b56e531ea37af5181b20b113", [
       [ "Undocumented", "namespacemusx_1_1dom.html#a93764339b56e531ea37af5181b20b113afcb2132b65cdd119b19be66fbc3622e2", null ],
       [ "Bracket", "namespacemusx_1_1dom.html#a93764339b56e531ea37af5181b20b113ab5c644787d66a37b2d0e7eefaf11506b", null ],
@@ -946,7 +950,7 @@ var namespacemusx_1_1dom =
       [ "Never", "namespacemusx_1_1dom.html#a09b81b6535bd382e3afc1a00ba080215a6e7b34fa59e1bd229b207892956dc41c", null ],
       [ "Always", "namespacemusx_1_1dom.html#a09b81b6535bd382e3afc1a00ba080215a68eec46437c384d8dad18d5464ebc35c", null ]
     ] ],
-    [ "calcNoteInfoFromEdu", "namespacemusx_1_1dom.html#aa215062b953a2a9a8e0062df4d991cdd", null ],
+    [ "calcDurationInfoFromEdu", "namespacemusx_1_1dom.html#a938f344e829f7109948169079587c9ef", null ],
     [ "calcNumberOfBeamsInEdu", "namespacemusx_1_1dom.html#aa75d341865ea5c3e1a8fcb735ea5e51b", null ],
     [ "BASE_SYSTEM_ID", "namespacemusx_1_1dom.html#ac87f0744ae26e5eb9f08d9615fc15bc5", null ],
     [ "EFIX_PER_EVPU", "namespacemusx_1_1dom.html#a6e7e94e8e870c83e2fb15709b0c87fa3", null ],

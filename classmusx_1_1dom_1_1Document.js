@@ -19,6 +19,7 @@ var classmusx_1_1dom_1_1Document =
     [ "getOptions", "classmusx_1_1dom_1_1Document.html#ac1157cd13a429ed6c2e27a0ca008551d", null ],
     [ "getOthers", "classmusx_1_1dom_1_1Document.html#a32f5bc74b654fdb67dbaa2508309cae5", null ],
     [ "getOthers", "classmusx_1_1dom_1_1Document.html#ad515ea56c2c7a1d8f10681bc84eff560", null ],
+    [ "getPartVoicingPolicy", "classmusx_1_1dom_1_1Document.html#a5b93af4a8022dfce8ac7cc7a59d48041", null ],
     [ "getScrollViewStaves", "classmusx_1_1dom_1_1Document.html#aaa777b3635d7f5c40c9dc99ccdedbac2", null ],
     [ "getTexts", "classmusx_1_1dom_1_1Document.html#ac1bf9233c31c0ef654d2cead254f7ae7", null ],
     [ "getTexts", "classmusx_1_1dom_1_1Document.html#a2c77b6f1a626b8ce48552d4b58f72446", null ],

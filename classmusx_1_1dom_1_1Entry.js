@@ -1,8 +1,9 @@
 var classmusx_1_1dom_1_1Entry =
 [
+    [ "EntryLocation", "structmusx_1_1dom_1_1Entry_1_1EntryLocation.html", "structmusx_1_1dom_1_1Entry_1_1EntryLocation" ],
     [ "Entry", "classmusx_1_1dom_1_1Entry.html#a0d0212e38649a2376155155c477a138c", null ],
+    [ "calcDurationInfo", "classmusx_1_1dom_1_1Entry.html#a47e88880c48a7fdcc28de239c6603d4c", null ],
     [ "calcFraction", "classmusx_1_1dom_1_1Entry.html#a8964412efe44b6569c970cecc4b4631f", null ],
-    [ "calcNoteInfo", "classmusx_1_1dom_1_1Entry.html#a1929de44334812a632e8a1ba1e27df9e", null ],
     [ "getEntryNumber", "classmusx_1_1dom_1_1Entry.html#a0d3cc0d02d7768f4153b0741d0a238ca", null ],
     [ "getNext", "classmusx_1_1dom_1_1Entry.html#a23ec586ae3f82602d46c3b6368b69e76", null ],
     [ "getPrevious", "classmusx_1_1dom_1_1Entry.html#a3342a6cc4cc79b6ebfc754f5ef8f8742", null ],
@@ -29,7 +30,7 @@ var classmusx_1_1dom_1_1Entry =
     [ "isHidden", "classmusx_1_1dom_1_1Entry.html#aa140b2bc34357eee1085828bae9c9bae", null ],
     [ "isNote", "classmusx_1_1dom_1_1Entry.html#a1b7183f1bc2716b5eb961a2beab9e3c9", null ],
     [ "isValid", "classmusx_1_1dom_1_1Entry.html#a47d4b2fe926ac4f0a7dbd22f08b50c1b", null ],
-    [ "locations", "classmusx_1_1dom_1_1Entry.html#a0420ba6ff55a188f1952b6e6e81a1deb", null ],
+    [ "location", "classmusx_1_1dom_1_1Entry.html#af0f0419c903b4c517d2cc6d6819e9d5a", null ],
     [ "lyricDetail", "classmusx_1_1dom_1_1Entry.html#ab39cf53be02d0856378fd81602a118a2", null ],
     [ "noLeger", "classmusx_1_1dom_1_1Entry.html#a1e97e6ca23c02f4f2b98a875ad863459", null ],
     [ "noPlayback", "classmusx_1_1dom_1_1Entry.html#a252e490a7345608cef59ea26cf7f6bc0", null ],
