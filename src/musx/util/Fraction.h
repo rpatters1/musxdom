@@ -66,7 +66,7 @@ private:
         return result;
     }
 
-    friend struct std::numeric_limits<Fraction>;
+    friend class std::numeric_limits<Fraction>;
 
 public:
     constexpr Fraction() = default;

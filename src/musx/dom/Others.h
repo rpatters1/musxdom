@@ -43,6 +43,7 @@ namespace musx {
 namespace dom {
 
 class Entry;
+class NoteInfoPtr;
 
 namespace details {
 class FretboardDiagram;
@@ -2044,7 +2045,7 @@ public:
     enum class VoicingType
     {
         UseSingleLayer,             ///< Display all notes from the layer specified by #singleLayer. (This is the default value and may never appear in the xml.)
-        UseMultipleLayers           ///< Display selected notes from one or more layer(s)
+        UseMultipleLayers           ///< Display selected notes from one or more layer(s).
     };
 
     /// @brief Choices for how notes are selected when the staff contains only one layer.
@@ -2069,6 +2070,17 @@ public:
     bool selectSingleNote{};                    ///< If true, always include any passages containing only a single note.
     LayerIndex singleLayer{};                   ///< The 0-based LayerIndex of the layer to uses when #voicingType is `UseSingleLayer`.
     LayerIndex multiLayer{};                    ///< The 0-based LayerIndex of the layer to include when the staff contains multiple layers and #voicingType is `UseMultipleLayers`.
+
+    /// @brief Returns if this part voicing includes the specified layer in a given frame context.
+    /// @param layerIndex The 0-based layer index to check.
+    /// @param frameIsMultilayerInScore Whether the frame we are checking is multi-layer in the score.
+    /// @return True if the layer shows.
+    bool calcShowsLayer(LayerIndex layerIndex, bool frameIsMultilayerInScore) const;
+
+    /// @brief Returns if this part voicing includes the specified note.
+    /// @param noteInfoPtr The note to check.
+    /// @return True is the note shows in this part.
+    bool calcShowsNote(const NoteInfoPtr& noteInfoPtr) const;
 
     constexpr static std::string_view XmlNodeName = "voicingDef"; ///< The XML node name for this type.
     static const xml::XmlElementArray<PartVoicing>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.

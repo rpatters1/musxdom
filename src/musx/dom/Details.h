@@ -616,7 +616,7 @@ public:
 
     /// @brief Constructor for embedded instances.
     explicit Bracket(const DocumentWeakPtr& document)
-        : DetailsBase(document, SCORE_PARTID, Base::ShareMode::All, 0, 0, 0)
+        : DetailsBase(document, SCORE_PARTID, Base::ShareMode::All, Cmper{}, Cmper{}, Inci{})
     {
     }
 

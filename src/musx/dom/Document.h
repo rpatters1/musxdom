@@ -54,7 +54,7 @@ using InstrumentMap = std::unordered_map<StaffCmper, InstrumentInfo>; ///< A lis
 /// staff groups, and multistaff instrument groups.
 struct InstrumentInfo
 {
-    std::unordered_map<StaffCmper, size_t> staves;   ///< List of each staffId with its sequence index from top to bottom.
+    std::unordered_map<StaffCmper, size_t> staves;  ///< List of each staffId with its sequence index from top to bottom.
     Cmper staffGroupId{};                           ///< The @ref details::StaffGroup that visually represents the instrument. (May be zero.)
     Cmper multistaffGroupId{};                      ///< The @ref others::MultiStaffInstrumentGroup that defines the instrument. (May be zero.)
 
@@ -68,41 +68,75 @@ struct InstrumentInfo
     static const InstrumentInfo* getInstrumentForStaff(const InstrumentMap& map, StaffCmper staffId);
 };
 
+/// @enum PartVoicingPolicy
+/// @brief Controls whether Finale-style part voicing is applied when iterating entries via
+///        @ref musx::dom::details::GFrameHoldContext.
+enum class PartVoicingPolicy
+{
+    Ignore,     ///< Default. Part voicing is ignored entirely. All layers in a staff are visible to all parts,
+                ///< and entries behave as if no part-voicing definitions exist.
+
+    Apply       ///< Apply Finale’s voiced-part interpretation.
+                ///< When enabled, entry iteration filters layers according to the active part voicing,
+                ///< and individual notes may be included or excluded based on voicing rules.
+                ///< Callers that operate at the note level should use
+                ///< #NoteInfoPtr::calcIsIncludedInVoicing to test note visibility.
+                ///< If all notes in an entry are excluded by voicing, then
+                ///< #EntryInfoPtr::calcDisplaysAsRest returns true for that entry.
+};
+
 /**
  * @brief Represents a document object that encapsulates the entire EnigmaXML structure.
  */
 class Document
 {
 public:
+
     /**  @brief Retrieves the header */
+    [[nodiscard]]
     HeaderPtr& getHeader() { return m_header; }
     /**  @brief Retrieves the const header */
+    [[nodiscard]]
     const HeaderPtr& getHeader() const { return m_header; }
 
     /** @brief Retrieves the options pool */
+    [[nodiscard]]
     OptionsPoolPtr& getOptions() { return m_options; }
     /** @brief Retrieves the const options pool */
+    [[nodiscard]]
     const OptionsPoolPtr& getOptions() const { return m_options; }
 
     /** @brief Retrieves the others pool */
+    [[nodiscard]]
     OthersPoolPtr& getOthers() { return m_others; }
     /** @brief Retrieves the const others pool */
+    [[nodiscard]]
     const OthersPoolPtr& getOthers() const { return m_others; }
 
     /** @brief Retrieves the details pool */
+    [[nodiscard]]
     DetailsPoolPtr& getDetails() { return m_details; }
     /** @brief Retrieves the const others pool */
+    [[nodiscard]]
     const DetailsPoolPtr& getDetails() const { return m_details; }
 
     /** @brief Retrieves the entry pool */
+    [[nodiscard]]
     EntryPoolPtr& getEntries() { return m_entries; }
     /** @brief Retrieves the entry others pool */
+    [[nodiscard]]
     const EntryPoolPtr& getEntries() const { return m_entries; }
 
     /** @brief Retrieves the texts pool */
+    [[nodiscard]]
     TextsPoolPtr& getTexts() { return m_texts; }
     /** @brief Retrieves the const texts pool */
+    [[nodiscard]]
     const TextsPoolPtr& getTexts() const { return m_texts; }
+
+    /** @brief Retrieves the document's part voicing policy */
+    [[nodiscard]]
+    PartVoicingPolicy getPartVoicingPolicy() const { return m_partVoicingPolicy; }
 
     /// @brief Returns the Scroll View Cmper for the given @p partId.
     /// @param partId The linked part to check.
@@ -115,26 +149,32 @@ public:
 
     /// @brief Returns the scroll view staves for the given @p partId.
     /// @param partId The linked part to check.
+    [[nodiscard]]
     MusxInstanceList<others::StaffUsed> getScrollViewStaves(Cmper partId) const;
 
     /// @brief Searches pages to find the page that contains the measure.
     /// @param partId the linked part to search
     /// @param measureId the measure to find
+    [[nodiscard]]
     MusxInstance<others::Page> calculatePageFromMeasure(Cmper partId, MeasCmper measureId) const;
 
     /// @brief Searches systems to find the page that contains the measure.
     /// @param partId the linked part to search
     /// @param measureId the measure to find
+    [[nodiscard]]
     MusxInstance<others::StaffSystem> calculateSystemFromMeasure(Cmper partId, MeasCmper measureId) const;
 
     /// @brief Returns the maximum number of blank pages in any part. This is calculated by #factory::DocumentFactory::create.
+    [[nodiscard]]
     int getMaxBlankPages() const { return m_maxBlankPages; }
 
     /// @brief Returns the instrument map for this document. It is computed by the factory.
+    [[nodiscard]]
     const InstrumentMap& getInstruments() const { return m_instruments; }
 
     /// @brief Get the instrument info for the given staffId
     /// @param staffId The staffId to find.
+    [[nodiscard]]
     const InstrumentInfo& getInstrumentForStaff(StaffCmper staffId) const;
 
     /**
@@ -150,13 +190,16 @@ public:
      *
      * @param forPartId The linked part for which to create the map.
      */
+    [[nodiscard]]
     InstrumentMap createInstrumentMap(Cmper forPartId) const;
 
     /// @brief Calculate if the current score/part has staves that differ from system to system.
     /// @param forPartId The linked score or part ID to check.
+    [[nodiscard]]
     bool calcHasVaryingSystemStaves(Cmper forPartId) const;
 
     /// @brief Calcuate a @ref MusicRange instance for the entire document.
+    [[nodiscard]]
     MusicRange calcEntireDocument() const;
 
     /// @brief Iterate all entries in the document by staff and then measure. This function wraps MusxInstanceList<others::StaffUsed>::iterateEntries.
@@ -182,6 +225,8 @@ private:
 
     InstrumentMap m_instruments; ///< List of instruments in the document, indexed by the top staff in each instrument in Scroll View of the score.
                                 ///< This computed by the factory.
+
+    PartVoicingPolicy m_partVoicingPolicy{};    ///< The part voicing policy in effect for this document.
 
     // Grant the factory class access to the private constructor
     friend class musx::factory::DocumentFactory;

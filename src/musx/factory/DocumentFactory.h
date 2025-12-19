@@ -45,11 +45,13 @@ public:
      *
      * @param data Pointer to a buffer containing EnigmaXML for a musx file.
      * @param size The size of the buffer.
+     * @param partVoicingPolicy Whether to ignore or apply part voicing as defined by @ref dom::others::PartVoicing (when it exists).
      * @return A fully populated `Document` object.
      * @throws std::invalid_argument If required nodes or attributes are missing or invalid.
      */
     template <typename XmlDocumentType>
-    [[nodiscard]] static DocumentPtr create(const char * data, size_t size)
+    [[nodiscard]]
+    static DocumentPtr create(const char* data, size_t size, dom::PartVoicingPolicy partVoicingPolicy = dom::PartVoicingPolicy::Ignore)
     {
         static_assert(std::is_base_of<musx::xml::IXmlDocument, XmlDocumentType>::value,
                       "XmlReaderType must derive from IXmlDocument.");
@@ -64,6 +66,7 @@ public:
 
         DocumentPtr document(new Document);
         document->m_self = document;
+        document->m_partVoicingPolicy = partVoicingPolicy;
 
         ElementLinker elementLinker;
         for (auto element = rootElement->getFirstChildElement(); element; element = element->getNextSibling()) {
@@ -119,13 +122,15 @@ public:
      * @brief Creates a `Document` object from an XML buffer.
      *
      * @param xmlBuffer Buffer containing EnigmaXML for a musx file.
+     * @param partVoicingPolicy Whether to ignore or apply part voicing as defined by @ref dom::others::PartVoicing (when it exists).
      * @return A fully populated `Document` object.
      * @throws std::invalid_argument If required nodes or attributes are missing or invalid.
      */
     template <typename XmlDocumentType>
-    [[nodiscard]] static DocumentPtr create(const std::vector<char>& xmlBuffer)
+    [[nodiscard]]
+    static DocumentPtr create(const std::vector<char>& xmlBuffer, dom::PartVoicingPolicy partVoicingPolicy = dom::PartVoicingPolicy::Ignore)
     {
-        return create<XmlDocumentType>(xmlBuffer.data(), xmlBuffer.size());
+        return create<XmlDocumentType>(xmlBuffer.data(), xmlBuffer.size(), partVoicingPolicy);
     }
 };
 

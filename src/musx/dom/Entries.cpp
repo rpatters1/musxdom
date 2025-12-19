@@ -65,7 +65,7 @@ MusxInstance<Entry> Entry::getPrevious() const
     return retval;
 }
 
-std::pair<NoteType, unsigned> calcNoteInfoFromEdu(Edu duration)
+std::pair<NoteType, unsigned> calcDurationInfoFromEdu(Edu duration)
 {
     if (duration < 1 || duration >= 0x10000) {
         throw std::invalid_argument("Duration is out of valid range for NoteType.");
@@ -91,10 +91,16 @@ void Entry::calcLocations(const DocumentPtr& document)
 {
     auto gfholds = document->getDetails()->getArray<details::GFrameHold>(SCORE_PARTID);
     for (const auto& gfhold : gfholds) {
+        if (gfhold->mirrorFrame) {
+            continue;
+        }
+        std::array<size_t, MAX_LAYERS> nextIndexByLayer{};
+        const auto staffId = static_cast<StaffCmper>(gfhold->getCmper1());
+        const auto measureId  = static_cast<MeasCmper>(gfhold->getCmper2());
         gfhold->iterateRawEntries([&](const MusxInstance<Entry>& entry, LayerIndex layerIndex) {
+            const auto li = static_cast<size_t>(layerIndex);
             Entry* mutableEntry = const_cast<Entry*>(entry.get());
-            mutableEntry->locations.emplace_back(std::make_tuple(static_cast<StaffCmper>(gfhold->getCmper1()),
-                static_cast<MeasCmper>(gfhold->getCmper2()), layerIndex));
+            mutableEntry->location = { staffId, measureId, layerIndex, nextIndexByLayer[li]++ };
             return true;
         });
     }
@@ -316,7 +322,7 @@ bool EntryFrame::TupletInfo::calcIsTremolo() const
 
     // if the actual duration of the tuplet is less than a half, at least one beam must be detached.
     if (tuplet->calcReferenceDuration().calcEduDuration() < Edu(NoteType::Half)) {
-        auto targetNoteType = std::get<0>(calcNoteInfoFromEdu(targetNotated)); // C++17 complains about structured bindings captured in a lamda.
+        auto targetNoteType = std::get<0>(calcDurationInfoFromEdu(targetNotated)); // C++17 complains about structured bindings captured in a lamda.
         if (auto beamExt = details::BeamExtension::getForStem(first)) {
             return beamExt->mask >= unsigned(targetNoteType) && beamExt->leftOffset > 0 && beamExt->rightOffset < 0;
         } else {
@@ -434,21 +440,22 @@ bool EntryFrame::TupletInfo::calcCreatesTimeStretch() const
 EntryInfoPtr EntryInfoPtr::fromEntryNumber(const DocumentPtr& document, Cmper partId, EntryNumber entryNumber, util::Fraction timeOffset)
 {
     if (const auto entry = document->getEntries()->get(entryNumber)) {
-        if (!entry->locations.empty()) {
-            auto [staffId, measureId,layerIndex] = entry->locations[0];
-            if (auto gfhold = details::GFrameHoldContext(document, partId, staffId, measureId, timeOffset)) {
-                EntryInfoPtr result;
-                gfhold.iterateEntries(layerIndex, [&](const EntryInfoPtr& entryInfo) {
-                    if (entryInfo->getEntry()->getEntryNumber() == entryNumber) {
-                        result = entryInfo;
-                        return false; // stop iterating
+        if (entry->location.found()) {
+            const auto& loc = entry->location;
+            if (auto gfhold = details::GFrameHoldContext(document, partId, loc.staffId, loc.measureId, timeOffset)) {
+                if (auto entryFrame = gfhold.createEntryFrame(loc.layerIndex)) {
+                    MUSX_ASSERT_IF(loc.entryIndex >= entryFrame->getEntries().size()) {
+                        throw std::logic_error("Entry " + std::to_string(entryNumber) + " has entry index " + std::to_string(loc.entryIndex) + " that is too large for frame.");
                     }
-                    return true;
-                });
-                MUSX_ASSERT_IF(!result) {
-                    throw std::logic_error("Entry " + std::to_string(entryNumber) + " has invalid location values.");
+                    auto result = EntryInfoPtr(entryFrame, loc.entryIndex);
+                    MUSX_ASSERT_IF(result->getEntry()->getEntryNumber() != entryNumber) {
+                        throw std::logic_error("Entry " + std::to_string(entryNumber) + " has incorrect location values.");
+                    }
+                    return result;
                 }
-                return result;
+            }
+            MUSX_ASSERT_IF(false) {
+                throw std::logic_error("Entry " + std::to_string(entryNumber) + " has invalid location values.");
             }
         }
     }
@@ -792,8 +799,20 @@ EntryInfoPtr EntryInfoPtr::getPreviousInBeamGroupAcrossBars(BeamIterationMode be
 
 bool EntryInfoPtr::calcDisplaysAsRest() const
 {
-    return !(*this)->getEntry()->isNote;
-    /// @todo Add code to detect that the entry is converted to a rest by voiced part settings
+    const auto entry = (*this)->getEntry();
+    if (!entry->isNote) {
+        return true;
+    }
+    if (const auto partVoicing = m_entryFrame->getContext().getPolicyPartVoicing()) {
+        const size_t numNotes = entry->notes.size();
+        for (size_t noteIndex = 0; noteIndex < numNotes; noteIndex++) {
+            if (partVoicing->calcShowsNote(NoteInfoPtr(*this, noteIndex))) {
+                return false;
+            }
+        }
+        return true;
+    }
+    return false;
 }
 
 std::pair<int, int> EntryInfoPtr::calcTopBottomStaffPositions() const
@@ -1583,8 +1602,8 @@ bool EntryInfoPtr::calcBeamStubIsLeft() const
         if (isSecondaryTerminator(calcLowestBeamEnd(), next)) return true;      // end of 2ndary beam points left
     }
 
-    auto prevDots = calcNoteInfoFromEdu(prev->actualDuration.calcEduDuration()).second;
-    auto nextDots = calcNoteInfoFromEdu(next->actualDuration.calcEduDuration()).second;
+    auto prevDots = calcDurationInfoFromEdu(prev->actualDuration.calcEduDuration()).second;
+    auto nextDots = calcDurationInfoFromEdu(next->actualDuration.calcEduDuration()).second;
 
     if (prevDots || nextDots) {
         return prevDots >= nextDots;
@@ -2136,6 +2155,8 @@ details::GFrameHoldContext::GFrameHoldContext(const DocumentPtr& document, Cmper
     : m_requestedPartId(partId), m_timeOffset(timeOffset)
 {
     m_hold = document->getDetails()->get<details::GFrameHold>(partId, staffId, measureId);
+    m_partVoicing = document->getOthers()->get<others::PartVoicing>(partId, staffId);
+    m_honorPartVoicing = document->getPartVoicingPolicy() == PartVoicingPolicy::Apply;
 }
 
 #ifndef DOXYGEN_SHOULD_IGNORE_THIS
@@ -2162,7 +2183,9 @@ struct TupletState
 
 std::shared_ptr<const EntryFrame> details::GFrameHoldContext::createEntryFrame(LayerIndex layerIndex) const
 {
-    if (!m_hold) return nullptr;
+    if (!m_hold || !calcPolicyVoicingIncludesLayer(layerIndex)) {
+        return nullptr;
+    }
     if (layerIndex >= m_hold->frames.size()) { // note: layerIndex is unsigned
         throw std::invalid_argument("invalid layer index [" + std::to_string(layerIndex) + "]");
     }
@@ -2298,6 +2321,9 @@ std::map<LayerIndex, int> details::GFrameHoldContext::calcVoices(bool excludeHid
 {
     std::map<LayerIndex, int> result;
     for (LayerIndex layerIndex = 0; layerIndex < m_hold->frames.size(); layerIndex++) {
+        if (!calcPolicyVoicingIncludesLayer(layerIndex)) {
+            continue;
+        }
         auto [frame, startEdu] = m_hold->findLayerFrame(layerIndex);
         if (frame) {
             bool gotLayer = false;
@@ -2350,6 +2376,9 @@ bool details::GFrameHoldContext::calcIsCuesOnly(bool includeVisibleInScore) cons
 {
     bool foundCue = false;
     for (LayerIndex layerIndex = 0; layerIndex < m_hold->frames.size(); layerIndex++) {
+        if (!calcPolicyVoicingIncludesLayer(layerIndex)) {
+            continue;
+        }
         auto [frame, startEdu] = m_hold->findLayerFrame(layerIndex);
         if (frame) {
             auto entries = frame->getEntries();
@@ -2401,6 +2430,14 @@ util::Fraction details::GFrameHoldContext::calcMinLegacyPickupSpacer() const
         return util::Fraction::fromEdu(result);
     }
     return 0;
+}
+
+bool details::GFrameHoldContext::calcVoicingIncludesLayer(LayerIndex layerIndex) const
+{
+    if (m_partVoicing) {
+        return m_partVoicing->calcShowsLayer(layerIndex, m_hold->calcIsMultiLayer());
+    }
+    return true;
 }
 
 // ****************
@@ -2728,6 +2765,14 @@ int NoteInfoPtr::calcCrossStaffDirection(DeferredReference<MusxInstanceList<othe
     }
 
     return 0;
+}
+
+bool NoteInfoPtr::calcIsIncludedInVoicing() const
+{
+    if (const auto partVoicing = getEntryInfo().getFrame()->getContext().getPartVoicing()) {
+        return partVoicing->calcShowsNote(*this);
+    }
+    return true;
 }
 
 } // namespace dom

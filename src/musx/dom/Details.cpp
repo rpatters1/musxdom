@@ -358,7 +358,7 @@ std::pair<MusxInstance<others::Frame>, Edu> details::GFrameHold::findLayerFrame(
 bool GFrameHold::iterateRawEntries(std::function<bool(const MusxInstance<Entry>&, LayerIndex)> iterator) const
 {
     for (size_t layerIndex = 0; layerIndex < frames.size(); layerIndex++) {
-        auto [frame, startEdu] = findLayerFrame(layerIndex);
+        auto [frame, startEdu] = findLayerFrame(static_cast<LayerIndex>(layerIndex));
         if (frame) {
             if (!frame->iterateRawEntries([&](const MusxInstance<Entry>& entry) {
                     return iterator(entry, static_cast<LayerIndex>(layerIndex));

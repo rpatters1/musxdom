@@ -39,6 +39,7 @@ namespace dom {
 
 namespace others {
 class Frame;
+class PartVoicing;
 class PercussionNoteInfo;
 class Staff;
 class StaffComposite;
@@ -75,7 +76,25 @@ public:
      *
      * @return The requested part ID.
      */
+    [[nodiscard]]
     Cmper getRequestedPartId() const { return m_requestedPartId; }
+
+    /**
+     * @brief Returns the part voicing for the requested part.
+     *
+     * @return The part voicing or nullptr if none.
+     */
+    [[nodiscard]]
+    MusxInstance<others::PartVoicing> getPartVoicing() const { return m_partVoicing; }
+
+    /**
+     * @brief Returns the part voicing for the requested part, based on the document's `PartVoicingPolicy`. 
+     *
+     * @return The part voicing if it exists and if the document's `PartVoicingPolicy` applies part voicing. Otherwise nullptr.
+     */
+    [[nodiscard]]
+    MusxInstance<others::PartVoicing> getPolicyPartVoicing() const
+    { return m_honorPartVoicing ? m_partVoicing : nullptr; }
 
     /**
      * @brief Provides const pointer-style access to the underlying @ref GFrameHold.
@@ -94,11 +113,13 @@ public:
     /// @brief Returns the clef index in effect for at the specified @ref Edu position.
     /// This function does not take into account transposing clefs. Those are addressed in #createEntryFrame.
     /// @param position The Edu position of the clef *in staff-level Edus*. (The staff-level matters for Independent Key Signature staves.)
+    [[nodiscard]]
     ClefIndex calcClefIndexAt(Edu position) const;
 
     /// @brief Returns the clef index in effect for at the specified @ref util::Fraction position (as a fraction of whole notes).
     /// This function does not take into account transposing clefs. Those are addressed in #createEntryFrame.
     /// @param position The *staff-level* position of the clef. (The staff-level matters for Independent Key Signature staves.)
+    [[nodiscard]]
     ClefIndex calcClefIndexAt(util::Fraction position) const
     { return calcClefIndexAt(position.calcEduDuration()); }
 
@@ -107,6 +128,7 @@ public:
      * @param layerIndex The layer index (0..3) to iterate.
      * @return EntryFrame for layer or nullptr if none.
      */
+    [[nodiscard]]
     std::shared_ptr<const EntryFrame> createEntryFrame(LayerIndex layerIndex) const;
 
     /**
@@ -128,10 +150,12 @@ public:
     /// @brief Calculates the number of voices used by the GFrameHold instance.
     /// @param excludeHidden If true, hidden entries are excluded from consideration.
     /// @return A list of each layer that contains entries and the number voice2 entries in that layer.
+    [[nodiscard]]
     std::map<LayerIndex, int> calcVoices(bool excludeHidden = false) const;
 
     /// @brief Calculates if this staff in this measure contains only a cue layer and full-measure rest layers.
     /// @param includeVisibleInScore If true, include cues that are visible in the score.
+    [[nodiscard]]
     bool calcIsCuesOnly(bool includeVisibleInScore = false) const;
 
     /// @brief Calculates the nearest non-grace-note entry at the given @p position.
@@ -141,6 +165,7 @@ public:
     /// @param matchVoice2 If specified, the value of #Entry::voice2 must match the specified value.
     /// @param atGraceNoteDuration Match on this grace note duration. When it is zero, grace notes are skipped.
     /// @return The entry if found, otherwise `nullptr`.
+    [[nodiscard]]
     EntryInfoPtr calcNearestEntry(util::Fraction position, bool findExact = true, std::optional<LayerIndex> matchLayer = std::nullopt,
         std::optional<bool> matchVoice2 = std::nullopt, util::Fraction atGraceNoteDuration = 0) const;
 
@@ -149,12 +174,27 @@ public:
     /// Legacy pickup spacers, created by the legacy Mirror Tool, can differ for each staff and layer. The spacer takes away
     /// time from the beginning of the layer, leaving the time at the end for the pickup to the next measure.
     /// @return The smallest legacy pickup spacer encountered in a layer for this measure and staff. Zero if none.
+    [[nodiscard]]
     util::Fraction calcMinLegacyPickupSpacer() const;
 
-private:
-    MusxInstance<GFrameHold> m_hold;        ///< The resolved GFrameHold object, or null if not found.
-    Cmper m_requestedPartId;                ///< The requested part context.
-    util::Fraction m_timeOffset;            ///< The time offset to apply to entry frames.
+    /// @brief Calculates if the part voicing for the current requested part includes the specified layer.
+    /// This function returns the correct value even if the document's `PartVoicingPolicy` is to ignore part voicing.
+    /// @param layerIndex The 0-based layer indes to check.
+    /// @return True if the layer is included in the part voicing, otherwise false.
+    [[nodiscard]]
+    bool calcVoicingIncludesLayer(LayerIndex layerIndex) const;
+
+    /// @brief Similar to #calcVoicingIncludesLayer, but honoring the document's part voicing policy.
+    [[nodiscard]]
+    bool calcPolicyVoicingIncludesLayer(LayerIndex layerIndex) const
+    { return !m_honorPartVoicing || calcVoicingIncludesLayer(layerIndex); }
+
+private:        
+    MusxInstance<GFrameHold> m_hold;                    ///< The resolved GFrameHold object, or null if not found.
+    Cmper m_requestedPartId{};                          ///< The requested part context.
+    util::Fraction m_timeOffset;                        ///< The time offset to apply to entry frames.
+    MusxInstance<others::PartVoicing> m_partVoicing;    ///< The part voicing for the requested part, if any.
+    bool m_honorPartVoicing{};                          ///< Cache the document's `PartVoicingPolicy`.
 };
 
 } // namespace details
@@ -168,7 +208,7 @@ private:
  *         - unsigned: The number of augmentation dots
  * @throws std::invalid_argument if the duration is out of valid range (> 1 and < 0x10000).
  */
-std::pair<NoteType, unsigned> calcNoteInfoFromEdu(Edu duration);
+std::pair<NoteType, unsigned> calcDurationInfoFromEdu(Edu duration);
 
 /// @brief Calculates the number of beams or flags in the @ref Edu value.
 unsigned calcNumberOfBeamsInEdu(Edu duration);
@@ -221,6 +261,7 @@ public:
 
     /// @brief Gets the note id for this note. This value does not change, even if the notes
     /// in a chord are rearranged (which affects the order of #Entry::notes.)
+    [[nodiscard]]
     NoteNumber getNoteId() const { return m_noteId; }
 
     /// @brief Calculates the default enharmonic equivalent of this note. This is the value that Finale uses when
@@ -233,6 +274,7 @@ public:
     /// @return A std::pair containing
     ///         - int: the enharmonic equivalent's displacement value relative to the tonic.
     ///         - int: the enharmonic equivalent's alteration value relative to the key signature.
+    [[nodiscard]]
     std::pair<int, int> calcDefaultEnharmonic(const MusxInstance<KeySignature>& key) const;
 
     /**
@@ -260,6 +302,7 @@ public:
      * @param respellEnharmonic If true, the notes are enharmonically respelled using the default enharmonic spelling.
      * @return #NoteProperties
      */
+    [[nodiscard]]
     NoteProperties calcNoteProperties(const MusxInstance<KeySignature>& key, KeySignature::KeyContext ctx, ClefIndex clefIndex,
         const MusxInstance<others::PercussionNoteInfo>& percNoteInfo, const MusxInstance<others::Staff>& staff = nullptr, bool respellEnharmonic = false) const;
 
@@ -344,44 +387,62 @@ public:
     /** @brief Collection of notes that comprise the entry. These are in order from lowest to highest. */
     std::vector<std::shared_ptr<Note>> notes;
 
-    /** @brief The location(s) of this entry calculated by #calcLocations, which is called by the factory.
-     * An entry can have multiple locations if it is mirrored with the Mirror Tool. Finale 27 flattens out
-     * all mirrors so musx files created by Finale 27 never should have more than one location. But if a musx
-     * from an earlier version is read, the entry might have multiple locations.
-     */
-    std::vector<std::tuple<StaffCmper, MeasCmper, LayerIndex>> locations;
+    /// @struct EntryLocation
+    /// @brief The location of this entry as calculated by #calcLocations, which is called by the factory.
+    ///
+    /// Any mirrors that are encountered are ignored. This is the source location of the entry.
+    /// (Mirrors were deprecated after Finale 2014.5, so they should be relatively rare in musx files.)
+    struct EntryLocation
+    {
+        StaffCmper staffId{};       ///< The staff containing this entry.
+        MeasCmper measureId{};      ///< The measure containing this entry.
+        LayerIndex layerIndex{};    ///< The layer containing this entry within the measure.
+        size_t entryIndex{};        ///< The 0-based index of this entry within its layer.
+
+        /// @brief Returns if this entry has been found.
+        bool found() const { return staffId != 0 && measureId != 0; }
+        /// @brief Clears the entry location. (Mainly used for benchmarking.)
+        void clear() { *this = {}; }
+    } location;                     ///< The location of this entry.
 
     /// @brief Gets the entry number for this entry
+    [[nodiscard]]
     EntryNumber getEntryNumber() const { return m_entnum; }
 
     /// @brief Gets the next entry in this list or nullptr if none.
     ///
     /// Note that the entry list may contain entries that aren't in any frame. These should be ignored.
+    [[nodiscard]]
     MusxInstance<Entry> getNext() const;
 
     /// @brief Gets the previous entry in this list or nullptr if none
     ///
     /// Note that the entry list may contain entries that aren't in any frame. These should be ignored.
+    [[nodiscard]]
     MusxInstance<Entry> getPrevious() const;
 
     /**
-     * @brief Calculates the NoteType and number of augmentation dots. (See #calcNoteInfoFromEdu.)
+     * @brief Calculates the NoteType and number of augmentation dots. (See #calcDurationInfoFromEdu.)
      */
-    std::pair<NoteType, unsigned> calcNoteInfo() const { return calcNoteInfoFromEdu(duration); }
+    [[nodiscard]]
+    std::pair<NoteType, unsigned> calcDurationInfo() const { return calcDurationInfoFromEdu(duration); }
 
     /**
      * @brief Calculates the duration as a @ref util::Fraction of a whole note
      */
+    [[nodiscard]]
     util::Fraction calcFraction() const { return util::Fraction::fromEdu(duration); }
 
     /// @brief Returns true if the entry's duration has a stem.
     /// @return True if the entry's duration is less than a whole note, irrespective of whether it is a rest or a note.
+    [[nodiscard]]
     bool hasStem() const { return duration < Edu(NoteType::Whole); }
 
     /// @brief Returns true if the entry could be a full-measure rest.
     /// @note Finale recognizes only whole rests as possible full-measure rests. Any other rest types (specifically
     /// breve rests in 4/2 and larger time signatures) are implemented by users as workarounds. These workarouds typically
     /// involve suppressing Finale's full-measure rest display and replacing them with a text expression.
+    [[nodiscard]]
     bool isPossibleFullMeasureRest() const
     { return !isNote && !isHidden && duration == Edu(NoteType::Whole); }
 
@@ -1054,6 +1115,7 @@ public:
         {}
 
         /// @brief Return the number of entries in the tuplet
+        [[nodiscard]]
         size_t numEntries() const
         {
             MUSX_ASSERT_IF(startIndex > endIndex) {
@@ -1064,6 +1126,7 @@ public:
 
         /// @brief Return true if the entry is part of this tuplet.
         /// @param entryInfo The entry to check.
+        [[nodiscard]]
         bool includesEntry(const EntryInfoPtr& entryInfo) const
         {
             const size_t x = entryInfo.getIndexInFrame();
@@ -1081,6 +1144,7 @@ public:
         ///
         /// @return true if the tuplet is a tremolo. If so, use `EntryInfoPtr::calcNumberOfBeams` on either entry to determine
         /// the number of beams. Use `details::TupletDef::calcReferenceDuration` to get the total length of the tremolo.
+        [[nodiscard]]
         bool calcIsTremolo() const;
 
         /// @brief Calculates if this tuplet is being used to create a singleton beam to the right.
@@ -1096,6 +1160,7 @@ public:
         /// has the correct value.
         ///     - Ignore the entry's next neighbor in the same voice. It will have its leger lines suppressed and non-visible notehead(s) and stem.
         /// Its `hidden` flag, however, will still be false. (This function guarantees these conditions if it returns `true`.)
+        [[nodiscard]]
         bool calcCreatesSingletonBeamRight() const { return calcCreatesSingleton(false); }
 
         /// @brief Calculates if this tuplet is being used to create a singleton beam to the left.
@@ -1107,6 +1172,7 @@ public:
         ///     - You can mark the next entry in the same voice as having a singleton beam left, if your application allows it.
         ///     - The current entry with the 0-length tuplet will have its leger lines suppressed and non-visible notehead(s) and stem.
         /// Its `hidden` flag, however, will still be false. (This function guarantees these conditions if it returns `true`.)
+        [[nodiscard]]
         bool calcCreatesSingletonBeamLeft() const { return calcCreatesSingleton(true); }
 
         /// @brief Detects tuplets being used to create time stretch in an independent time signature.
@@ -1120,11 +1186,14 @@ public:
         ///     - the tuplet is invisible
         ///     - the staff has an independent time signature
         //      - the independent display time signature matches the tuplet's total display duration
+        [[nodiscard]]
         bool calcCreatesTimeStretch() const;
 
     private:
+        [[nodiscard]]
         bool calcCreatesSingleton(bool left) const;
 
+        [[nodiscard]]
         const std::shared_ptr<const EntryFrame> getParent() const
         {
             auto result = m_parent.lock();
@@ -1150,42 +1219,53 @@ public:
                                                 ///< have to equal the measure duration, but normally it does.
 
     /// @brief Get the document for the entry frame
+    [[nodiscard]]
     DocumentPtr getDocument() const;
 
     /// @brief Get the frame context for this frame
+    [[nodiscard]]
     const details::GFrameHoldContext& getContext() const { return m_context; }
 
     /// @brief Get the requested part ID for the entry frame
+    [[nodiscard]]
     Cmper getRequestedPartId() const { return m_context.getRequestedPartId(); }
 
     /// @brief Get the staff for the entry
+    [[nodiscard]]
     StaffCmper getStaff() const;
 
     /// @brief Get the measure for the entry frame
+    [[nodiscard]]
     MeasCmper getMeasure() const;
 
     /// @brief Get the layer index (0..3) of the entry frame
+    [[nodiscard]]
     LayerIndex getLayerIndex() const { return m_layerIndex; }
 
     /// @brief Get the LayerAttributes for this entry frame.
+    [[nodiscard]]
     MusxInstance<others::LayerAttributes> getLayerAttributes() const;
 
     /// @brief Get the time stretch in this frame. Rather than accessing this value directly,
     /// consider using #EntryInfoPtr::calcGlobalElapsedDuration or #EntryInfoPtr::calcGlobalActualDuration instead.
+    [[nodiscard]]
     util::Fraction getTimeStretch() const { return m_timeStretch; }
 
     /// @brief Get the entry list.
+    [[nodiscard]]
     const std::vector<std::shared_ptr<const EntryInfo>>& getEntries() const
     { return m_entries; }
 
     /// @brief Returns the first entry in the specified v1/v2 or null if none.
     ///
     /// @param voice  Must be 1 or 2.
+    [[nodiscard]]
     EntryInfoPtr getFirstInVoice(int voice) const;
 
     /// @brief Returns the last entry in the specified v1/v2 or null if none.
     ///
     /// @param voice  Must be 1 or 2.
+    [[nodiscard]]
     EntryInfoPtr getLastInVoice(int voice) const;
 
     /// @brief Returns a workaround-aware iterator at the first entry in the
@@ -1240,6 +1320,7 @@ public:
     ///            on the iterator).
     /// @return A InterpretedIterator positioned at the first usable entry, or an
     ///         empty iterator if no usable entry exists.
+    [[nodiscard]]
     EntryInfoPtr::InterpretedIterator getFirstInterpretedIterator(int voice, bool remapBeamOverBarlineEntries = true) const;
 
     /// @brief Add an entry to the list.
@@ -1248,22 +1329,27 @@ public:
 
     /// @brief Gets the entry frame for the next measure with the same staff and layer.
     /// @return Frame or nullpter if the next measure has no matching frame.
+    [[nodiscard]]
     std::shared_ptr<const EntryFrame> getNext() const;
 
     /// @brief Gets the entry frame for the previous measure with the same staff and layer.
     /// @return Frame or nullpter if the previous measure has no matching frame,
+    [[nodiscard]]
     std::shared_ptr<const EntryFrame> getPrevious() const;
 
     /// @brief Gets the staff at eduPosition 0 without needing to create it again.
+    [[nodiscard]]
     MusxInstance<others::StaffComposite> getStartStaffInstance() const
     { return m_startStaff; }
 
     /// @brief Creates a current StaffComposite for the entry frame.
     /// @param eduPosition The Edu position for which to create the staff.
     /// @param forStaffId Specifies optional staff ID. If supplied, it overrides the entry's staff ID. (Useful when notes are cross-staffed.)
+    [[nodiscard]]
     MusxInstance<others::StaffComposite> createCurrentStaff(Edu eduPosition, const std::optional<StaffCmper>& forStaffId = std::nullopt) const;
 
     /// @brief Get the measure instance
+    [[nodiscard]]
     MusxInstance<others::Measure> getMeasureInstance() const;
 
     /// @brief Calculates if this entry frame is part of a cue.
@@ -1271,6 +1357,7 @@ public:
     /// fast to compute when there is no cue.
     /// @param includeVisibleInScore If true, include cues that are visible in the score.
     /// @return true if all entries in the frame are either cue entries or hidden.
+    [[nodiscard]]
     bool calcIsCueFrame(bool includeVisibleInScore = false) const;
 
     /// @brief Calculates if this all notes in the frame are hidden.
@@ -1278,6 +1365,7 @@ public:
     /// according to its specific needs. For example, to determine if a layer is hidden for the purposes of checking validity of layer attributes,
     /// only the staff at edu position 0 should be checked.
     /// @return true if all entries in the frame are hidden.
+    [[nodiscard]]
     bool calcAreAllEntriesHiddenInFrame() const;
 
     /// @brief Calculates the nearest non-grace-note entry at the given @p position.
@@ -1286,6 +1374,7 @@ public:
     /// @param matchVoice2 If specified, the value of #Entry::voice2 must match the specified value.
     /// @param atGraceNoteDuration Match on this grace note duration. When it is zero, grace notes are skipped.
     /// @return The entry if found, otherwise `nullptr`.
+    [[nodiscard]]
     EntryInfoPtr calcNearestEntry(util::Fraction position, bool findExact = true, std::optional<bool> matchVoice2 = std::nullopt,
         util::Fraction atGraceNoteDuration = 0) const;
 
@@ -1346,6 +1435,7 @@ public:
 
     /// @brief Get the entry
     /// @throws std::logic_error if the entry pointer is no longer valid
+    [[nodiscard]]
     MusxInstance<Entry> getEntry() const
     {
         auto retval = m_entry.lock();
@@ -1356,6 +1446,7 @@ public:
     }
 
     /// @brief Calculates the next duration position after this entry
+    [[nodiscard]]
     util::Fraction calcNextElapsedDuration() const
     { return elapsedDuration + actualDuration; }
 
@@ -1383,15 +1474,18 @@ public:
 
     /// @brief Returns whether the input and the current instance refer to the same note.
     /// @param src The EntryInfoPtr to compare with.
+    [[nodiscard]]
     bool isSameNote(const NoteInfoPtr& src) const
     { return m_entry.isSameEntry(src.m_entry) && m_noteIndex == src.m_noteIndex; }
 
     /// @brief Finds a note with the same pitch in the supplied entry
     /// @param entry the entry to search
     /// @return The found note or an null instance of NoteInfoPtr.
+    [[nodiscard]]
     NoteInfoPtr findEqualPitch(const EntryInfoPtr& entry) const;
 
     /// @brief Allows `->` access to the underlying @ref Note instance.
+    [[nodiscard]]
     MusxInstance<Note> operator->() const
     {
         MUSX_ASSERT_IF(m_noteIndex >= m_entry->getEntry()->notes.size()) {
@@ -1401,9 +1495,15 @@ public:
     }
 
     /// @brief Gets the entry info for this note
+    [[nodiscard]]
     EntryInfoPtr getEntryInfo() const
     { return m_entry; }
 
+    /// @brief Gets the note index for this note
+    [[nodiscard]]
+    size_t getNoteIndex() const
+    { return m_noteIndex; }
+    
     /**
      * @brief Calculates the note name, octave number, actual alteration, and staff position. This function does
      * not take into account percussion notes and their staff position override. To get the staff position taking
@@ -1416,6 +1516,7 @@ public:
      * @param alwaysUseEntryStaff If true, the entry is not checked for cross-staff staffing. Normally you omit this.
      * @return #Note::NoteProperties
      */
+    [[nodiscard]]
     Note::NoteProperties calcNoteProperties(const std::optional<bool>& enharmonicRespell = std::nullopt, bool alwaysUseEntryStaff = false) const;
 
     /**
@@ -1425,45 +1526,55 @@ public:
      * @param alwaysUseEntryStaff If true, the entry is not checked for cross-staff staffing. Normally you omit this.
      * @return #Note::NoteProperties
      */
+    [[nodiscard]]
     Note::NoteProperties calcNotePropertiesConcert(bool alwaysUseEntryStaff = false) const;
 
     /**
-     * @brief Calculates the note name, octave number, actual alteration, and staff position for the pitch of the note in view. This may be
+     * @brief Calculates the note name, octave number, actual alteration, and staff position for the pitch of the note in the currently
+     * selected "Display In Concert Pitch" view for the current part. This may be
      * particularly useful with non-floating rests, but it can be used with any note. As with other versions of the function, it does not
      * handle the staff position override of percussion notes.
      * @param alwaysUseEntryStaff If true, the entry is not checked for cross-staff staffing. Normally you omit this.
      * @return #Note::NoteProperties
      */
+    [[nodiscard]]
     Note::NoteProperties calcNotePropertiesInView(bool alwaysUseEntryStaff = false) const;
 
     /// @brief Calculates the percussion note info for this note, if any.
     /// @return If the note is on a percussion staff and has percussion note info assigned, returns it. Otherwise `nullptr`.
+    [[nodiscard]]
     MusxInstance<others::PercussionNoteInfo> calcPercussionNoteInfo() const;
 
     /// @brief Calculates the staff position for this note, taking into account percussion notes.
     /// @return
+    [[nodiscard]]
     int calcStaffPosition() const;
 
     /// @brief Calculates the note that this note could tie to. Check the return value's #Note::tieEnd
     /// to see if there is actually a tie end. (Note that Finale shows a tie whether there #Note::tieEnd is true or not.)
     /// @return The candidate note or an empty NoteInfoPtr if no candidate was found.
+    [[nodiscard]]
     NoteInfoPtr calcTieTo() const;
 
     /// @brief Calculates the note that this note could tie from.
     /// @param requireTie If @p requireTie is true, the returned value must have its #Note::tieStart flag set to true.
     /// You can set @p requireTie to false to find the *potential* note this note might be tied from.
     /// @return The candidate note or an empty NoteInfoPtr if no candidate was found.
+    [[nodiscard]]
     NoteInfoPtr calcTieFrom(bool requireTie = true) const;
 
     /// @brief Calculates the staff number, taking into account cross staffing
+    [[nodiscard]]
     StaffCmper calcStaff() const;
 
     /// @brief Creates a transposer for this Note instance.
     /// @return A unique pointer to a transposer for this Note.
+    [[nodiscard]]
     std::unique_ptr<music_theory::Transposer> createTransposer() const;
 
     /// @brief Gets the next note in a chord on the same entry.
     /// @return The next note or nullptr if none.
+    [[nodiscard]]
     NoteInfoPtr getNext() const
     {
         if (m_noteIndex >= m_entry->getEntry()->notes.size()) {
@@ -1474,6 +1585,7 @@ public:
 
     /// @brief Gets the next note in a chord on the same entry.
     /// @return The next note or nullptr if none.
+    [[nodiscard]]
     NoteInfoPtr getPrevious() const
     {
         if (m_noteIndex <= 0) {
@@ -1483,6 +1595,7 @@ public:
     }
 
     /// @brief Returns if this note is enharmonically respelled in the current part view
+    [[nodiscard]]
     bool calcIsEnharmonicRespell() const;
 
     /// @brief Calculates the default enharmonic equivalent of this note. This is the value that Finale uses when
@@ -1494,6 +1607,7 @@ public:
     /// @return A std::pair containing
     ///         - int: the enharmonic equivalent's displacement value relative to the tonic.
     ///         - int: the enharmonic equivalent's alteration value relative to the key signature.
+    [[nodiscard]]
     std::pair<int, int> calcDefaultEnharmonic() const
     { return (*this)->calcDefaultEnharmonic(m_entry.getKeySignature()); }
 
@@ -1506,17 +1620,25 @@ public:
     ///   - **1**  if the note crosses upward to a higher staff
     ///   - **0**  if the note is not cross-staffed
     ///   - **−1** if the note crosses downward to a lower staff
+    [[nodiscard]]
     int calcCrossStaffDirection(DeferredReference<MusxInstanceList<others::StaffUsed>> staffList = {}) const;
+
+    /// @brief Returns true if this note is included in the part voicing. This function returns the correct value
+    /// even if the document's `PartVoicingPolicy` is to ignore part voicing.
+    [[nodiscard]]
+    bool calcIsIncludedInVoicing() const;
 
 private:
     /// @brief Returns true if the two notes represent the same concert pitch or
     /// percussion note.
     /// @param src the value to compare with.
+    [[nodiscard]]
     bool isSamePitch(const NoteInfoPtr& src) const;
 
     /// @brief Returns true if the @p src and this have the same pitch information.
     /// It is only meaningful when this and src are in the same key.
     /// @param src the value to compare with.
+    [[nodiscard]]
     bool isSamePitchValues(const NoteInfoPtr& src) const;
 
     EntryInfoPtr m_entry;
