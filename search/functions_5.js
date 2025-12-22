@@ -21,7 +21,7 @@ var searchData=
   ['fontdefinition_18',['FontDefinition',['../classmusx_1_1dom_1_1others_1_1FontDefinition.html#a5ab1f7c8015fbf95b296fdf824cacdb5',1,'musx::dom::others::FontDefinition']]],
   ['fontinfo_19',['FontInfo',['../classmusx_1_1dom_1_1FontInfo.html#a0b5a0f5843f363230f090f76325495ae',1,'musx::dom::FontInfo']]],
   ['fontoptions_20',['FontOptions',['../classmusx_1_1dom_1_1options_1_1FontOptions.html#ad02a81fefc0688893ddf06685aa6da8c',1,'musx::dom::options::FontOptions']]],
-  ['formatdate_21',['formatDate',['../structmusx_1_1util_1_1DateTime.html#a382fae852404d4688dbf25db7290bcdd',1,'musx::util::DateTime']]],
+  ['formatdate_21',['formatDate',['../structmusx_1_1util_1_1DateTime.html#a60abca6a57d6aa3b05f8675cae49ceb4',1,'musx::util::DateTime']]],
   ['formattime_22',['formatTime',['../structmusx_1_1util_1_1DateTime.html#ac53c15b2cc28f2c6d62fce70701f52b1',1,'musx::util::DateTime']]],
   ['found_23',['found',['../structmusx_1_1dom_1_1Entry_1_1EntryLocation.html#a3ffd38b57681d5cce3de07a2c1d8bb08',1,'musx::dom::Entry::EntryLocation']]],
   ['fraction_24',['fraction',['../classmusx_1_1util_1_1Fraction.html#a53148c96102e3c9063815698642f2f0c',1,'musx::util::Fraction::Fraction(int num, int den)'],['../classmusx_1_1util_1_1Fraction.html#ab3a1097731acab882bcd033b6ca84df6',1,'musx::util::Fraction::Fraction(int value)']]],

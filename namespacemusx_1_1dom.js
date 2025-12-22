@@ -864,6 +864,16 @@ var namespacemusx_1_1dom =
     [ "StaffCmper", "namespacemusx_1_1dom.html#ada2c0787f5b7cb764d2a344d491ab99c", null ],
     [ "SystemCmper", "namespacemusx_1_1dom.html#ada9565e4288b6e80b32971960acb0237", null ],
     [ "TextsPoolPtr", "namespacemusx_1_1dom.html#a8da452175665b93e3cf051de6c5a08b4", null ],
+    [ "AlignJustify", "namespacemusx_1_1dom.html#ae1cc711919158f264a344a6a966f5d4c", [
+      [ "Left", "namespacemusx_1_1dom.html#ae1cc711919158f264a344a6a966f5d4ca945d5e233cf7d6240f6b783b36a374ff", null ],
+      [ "Right", "namespacemusx_1_1dom.html#ae1cc711919158f264a344a6a966f5d4ca92b09c7c48c520c3c55e497875da437c", null ],
+      [ "Center", "namespacemusx_1_1dom.html#ae1cc711919158f264a344a6a966f5d4ca4f1f6016fc9f3f2353c0cc7c67b292bd", null ]
+    ] ],
+    [ "DateFormat", "namespacemusx_1_1dom.html#a6bd9f8875781e736128880418451040b", [
+      [ "Short", "namespacemusx_1_1dom.html#a6bd9f8875781e736128880418451040ba30bb747c98bccdd11b3f89e644c4d0ad", null ],
+      [ "Long", "namespacemusx_1_1dom.html#a6bd9f8875781e736128880418451040ba8394f0347c184cf156ac5924dccb773b", null ],
+      [ "Abbrev", "namespacemusx_1_1dom.html#a6bd9f8875781e736128880418451040ba950e309484331f4c6665f51f103816f5", null ]
+    ] ],
     [ "DefaultClefType", "namespacemusx_1_1dom.html#a86d8f1c0b9cc21018e4d1257c193f67f", [
       [ "Treble", "namespacemusx_1_1dom.html#a86d8f1c0b9cc21018e4d1257c193f67fa56694ab2f8017b01b4284af08186b5fd", null ],
       [ "Alto", "namespacemusx_1_1dom.html#a86d8f1c0b9cc21018e4d1257c193f67fa2c90bb36efdd18b04a68c6de1e1be466", null ],

@@ -377,6 +377,23 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>TextsPoolPtr</b> = s
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="enum-members" name="enum-members"></a>
 Enumerations</h2></td></tr>
+<tr class="memitem:a8ff59967b46549e150ea4f524c00de95" id="r_a8ff59967b46549e150ea4f524c00de95"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemusx_1_1dom.html#a8ff59967b46549e150ea4f524c00de95">PartVoicingPolicy</a> { <a class="el" href="namespacemusx_1_1dom.html#a8ff59967b46549e150ea4f524c00de95afd038fc7f319e48f3115d92bf5bdbef9">Ignore</a>
+, <a class="el" href="namespacemusx_1_1dom.html#a8ff59967b46549e150ea4f524c00de95a9639e32cab248434a17ab32237cb3b71">Apply</a>
+ }</td></tr>
+<tr class="memdesc:a8ff59967b46549e150ea4f524c00de95"><td class="mdescLeft">&#160;</td><td class="mdescRight">Controls whether Finale-style part voicing is applied when iterating entries via <a class="el" href="classmusx_1_1dom_1_1details_1_1GFrameHoldContext.html">musx::dom::details::GFrameHoldContext</a>.  <a href="namespacemusx_1_1dom.html#a8ff59967b46549e150ea4f524c00de95">More...</a><br /></td></tr>
+<tr class="separator:a8ff59967b46549e150ea4f524c00de95"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae1cc711919158f264a344a6a966f5d4c" id="r_ae1cc711919158f264a344a6a966f5d4c"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemusx_1_1dom.html#ae1cc711919158f264a344a6a966f5d4c">AlignJustify</a> { <a class="el" href="namespacemusx_1_1dom.html#ae1cc711919158f264a344a6a966f5d4ca945d5e233cf7d6240f6b783b36a374ff">Left</a>
+, <a class="el" href="namespacemusx_1_1dom.html#ae1cc711919158f264a344a6a966f5d4ca92b09c7c48c520c3c55e497875da437c">Right</a>
+, <a class="el" href="namespacemusx_1_1dom.html#ae1cc711919158f264a344a6a966f5d4ca4f1f6016fc9f3f2353c0cc7c67b292bd">Center</a>
+ }</td></tr>
+<tr class="memdesc:ae1cc711919158f264a344a6a966f5d4c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Alignment and justification options for staff and group names.  <a href="namespacemusx_1_1dom.html#ae1cc711919158f264a344a6a966f5d4c">More...</a><br /></td></tr>
+<tr class="separator:ae1cc711919158f264a344a6a966f5d4c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6bd9f8875781e736128880418451040b" id="r_a6bd9f8875781e736128880418451040b"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemusx_1_1dom.html#a6bd9f8875781e736128880418451040b">DateFormat</a> : int { <a class="el" href="namespacemusx_1_1dom.html#a6bd9f8875781e736128880418451040ba30bb747c98bccdd11b3f89e644c4d0ad">Short</a> = 0
+, <a class="el" href="namespacemusx_1_1dom.html#a6bd9f8875781e736128880418451040ba8394f0347c184cf156ac5924dccb773b">Long</a> = 1
+, <a class="el" href="namespacemusx_1_1dom.html#a6bd9f8875781e736128880418451040ba950e309484331f4c6665f51f103816f5">Abbrev</a> = 2
+ }</td></tr>
+<tr class="memdesc:a6bd9f8875781e736128880418451040b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Date format options. This value is coded into the Enigma <code>date</code> insert when the page title is created.  <a href="namespacemusx_1_1dom.html#a6bd9f8875781e736128880418451040b">More...</a><br /></td></tr>
+<tr class="separator:a6bd9f8875781e736128880418451040b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a86d8f1c0b9cc21018e4d1257c193f67f" id="r_a86d8f1c0b9cc21018e4d1257c193f67f"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemusx_1_1dom.html#a86d8f1c0b9cc21018e4d1257c193f67f">DefaultClefType</a> : ClefIndex { <br />
 &#160;&#160;<a class="el" href="namespacemusx_1_1dom.html#a86d8f1c0b9cc21018e4d1257c193f67fa56694ab2f8017b01b4284af08186b5fd">Treble</a> = 0
 , <a class="el" href="namespacemusx_1_1dom.html#a86d8f1c0b9cc21018e4d1257c193f67fa2c90bb36efdd18b04a68c6de1e1be466">Alto</a> = 1
@@ -440,11 +457,6 @@ Enumerations</h2></td></tr>
  }</td></tr>
 <tr class="memdesc:a09b81b6535bd382e3afc1a00ba080215"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enum representing the clef display mode for a frame.  <a href="namespacemusx_1_1dom.html#a09b81b6535bd382e3afc1a00ba080215">More...</a><br /></td></tr>
 <tr class="separator:a09b81b6535bd382e3afc1a00ba080215"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8ff59967b46549e150ea4f524c00de95" id="r_a8ff59967b46549e150ea4f524c00de95"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemusx_1_1dom.html#a8ff59967b46549e150ea4f524c00de95">PartVoicingPolicy</a> { <a class="el" href="namespacemusx_1_1dom.html#a8ff59967b46549e150ea4f524c00de95afd038fc7f319e48f3115d92bf5bdbef9">Ignore</a>
-, <a class="el" href="namespacemusx_1_1dom.html#a8ff59967b46549e150ea4f524c00de95a9639e32cab248434a17ab32237cb3b71">Apply</a>
- }</td></tr>
-<tr class="memdesc:a8ff59967b46549e150ea4f524c00de95"><td class="mdescLeft">&#160;</td><td class="mdescRight">Controls whether Finale-style part voicing is applied when iterating entries via <a class="el" href="classmusx_1_1dom_1_1details_1_1GFrameHoldContext.html">musx::dom::details::GFrameHoldContext</a>.  <a href="namespacemusx_1_1dom.html#a8ff59967b46549e150ea4f524c00de95">More...</a><br /></td></tr>
-<tr class="separator:a8ff59967b46549e150ea4f524c00de95"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a16d85e8ed9439b9a2ef071d38ffa0fd7" id="r_a16d85e8ed9439b9a2ef071d38ffa0fd7"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemusx_1_1dom.html#a16d85e8ed9439b9a2ef071d38ffa0fd7">KnownShapeDefType</a> { <a class="el" href="namespacemusx_1_1dom.html#a16d85e8ed9439b9a2ef071d38ffa0fd7ae4ef81cce7e4e10033ebb10962dfdd5e">Blank</a>
 , <a class="el" href="namespacemusx_1_1dom.html#a16d85e8ed9439b9a2ef071d38ffa0fd7ac6cdf96e9804915f9f5c6771802805fd">TenutoMark</a>
  }</td></tr>
@@ -622,6 +634,70 @@ template&lt;typename T &gt; </div>
 </div>
 </div>
 <h2 class="groupheader">Enumeration Type Documentation</h2>
+<a id="ae1cc711919158f264a344a6a966f5d4c" name="ae1cc711919158f264a344a6a966f5d4c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae1cc711919158f264a344a6a966f5d4c">&#9670;&#160;</a></span>AlignJustify</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum class <a class="el" href="namespacemusx_1_1dom.html#ae1cc711919158f264a344a6a966f5d4c">musx::dom::AlignJustify</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">strong</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Alignment and justification options for staff and group names. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="ae1cc711919158f264a344a6a966f5d4ca945d5e233cf7d6240f6b783b36a374ff" name="ae1cc711919158f264a344a6a966f5d4ca945d5e233cf7d6240f6b783b36a374ff"></a>Left&#160;</td><td class="fielddoc"><p>Left alignment or justification (the default value.) </p>
+</td></tr>
+<tr><td class="fieldname"><a id="ae1cc711919158f264a344a6a966f5d4ca92b09c7c48c520c3c55e497875da437c" name="ae1cc711919158f264a344a6a966f5d4ca92b09c7c48c520c3c55e497875da437c"></a>Right&#160;</td><td class="fielddoc"><p>Right alignment. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="ae1cc711919158f264a344a6a966f5d4ca4f1f6016fc9f3f2353c0cc7c67b292bd" name="ae1cc711919158f264a344a6a966f5d4ca4f1f6016fc9f3f2353c0cc7c67b292bd"></a>Center&#160;</td><td class="fielddoc"><p>Center alignment. </p>
+</td></tr>
+</table>
+
+</div>
+</div>
+<a id="a6bd9f8875781e736128880418451040b" name="a6bd9f8875781e736128880418451040b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6bd9f8875781e736128880418451040b">&#9670;&#160;</a></span>DateFormat</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum class <a class="el" href="namespacemusx_1_1dom.html#a6bd9f8875781e736128880418451040b">musx::dom::DateFormat</a> : int</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">strong</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Date format options. This value is coded into the Enigma <code>date</code> insert when the page title is created. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a6bd9f8875781e736128880418451040ba30bb747c98bccdd11b3f89e644c4d0ad" name="a6bd9f8875781e736128880418451040ba30bb747c98bccdd11b3f89e644c4d0ad"></a>Short&#160;</td><td class="fielddoc"><p>Short date format, based on locale. US format is MM/DD/YY (Default value may not appear in the xml) </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a6bd9f8875781e736128880418451040ba8394f0347c184cf156ac5924dccb773b" name="a6bd9f8875781e736128880418451040ba8394f0347c184cf156ac5924dccb773b"></a>Long&#160;</td><td class="fielddoc"><p>Long date format, based on locale. US format is Month DD, YYYY. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a6bd9f8875781e736128880418451040ba950e309484331f4c6665f51f103816f5" name="a6bd9f8875781e736128880418451040ba950e309484331f4c6665f51f103816f5"></a>Abbrev&#160;</td><td class="fielddoc"><p>Abbreviated date format, based on locale. US format is Mon DD, YYYY. </p>
+</td></tr>
+</table>
+
+</div>
+</div>
 <a id="a86d8f1c0b9cc21018e4d1257c193f67f" name="a86d8f1c0b9cc21018e4d1257c193f67f"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a86d8f1c0b9cc21018e4d1257c193f67f">&#9670;&#160;</a></span>DefaultClefType</h2>
 

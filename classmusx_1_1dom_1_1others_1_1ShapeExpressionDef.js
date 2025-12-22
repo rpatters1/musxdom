@@ -6,7 +6,7 @@ var classmusx_1_1dom_1_1others_1_1ShapeExpressionDef =
     [ "categoryId", "classmusx_1_1dom_1_1others_1_1ShapeExpressionDef.html#a13f2061288fa15a54abef3cd212956f8", null ],
     [ "description", "classmusx_1_1dom_1_1others_1_1ShapeExpressionDef.html#a3eb33310221bde902596c9dae45acfa8", null ],
     [ "execShape", "classmusx_1_1dom_1_1others_1_1ShapeExpressionDef.html#ae6a1538ca186e0e02f58802f6191f9d4", null ],
-    [ "horzExprJustification", "classmusx_1_1dom_1_1others_1_1ShapeExpressionDef.html#a6bab0d97ab08035515a79008243e646c", null ],
+    [ "horzExprJustification", "classmusx_1_1dom_1_1others_1_1ShapeExpressionDef.html#a210dd44a3ebef5711f3325b5dafe511a", null ],
     [ "horzMeasExprAlign", "classmusx_1_1dom_1_1others_1_1ShapeExpressionDef.html#a6e3e92258ef45ec1b11b2f9f8669166b", null ],
     [ "masterShape", "classmusx_1_1dom_1_1others_1_1ShapeExpressionDef.html#a0d4d312ef89a4e29beab6b951fd39abd", null ],
     [ "measXAdjust", "classmusx_1_1dom_1_1others_1_1ShapeExpressionDef.html#accd41925bdc61978a38c9dda60047825", null ],

@@ -1,16 +1,7 @@
 var classmusx_1_1dom_1_1options_1_1TextOptions =
 [
     [ "InsertSymbolInfo", "structmusx_1_1dom_1_1options_1_1TextOptions_1_1InsertSymbolInfo.html", "structmusx_1_1dom_1_1options_1_1TextOptions_1_1InsertSymbolInfo" ],
-    [ "DateFormat", "classmusx_1_1dom_1_1options_1_1TextOptions.html#afcc30134c44b1318ef6b0f13d834c46b", [
-      [ "Short", "classmusx_1_1dom_1_1options_1_1TextOptions.html#afcc30134c44b1318ef6b0f13d834c46ba30bb747c98bccdd11b3f89e644c4d0ad", null ],
-      [ "Long", "classmusx_1_1dom_1_1options_1_1TextOptions.html#afcc30134c44b1318ef6b0f13d834c46ba8394f0347c184cf156ac5924dccb773b", null ],
-      [ "Abbrev", "classmusx_1_1dom_1_1options_1_1TextOptions.html#afcc30134c44b1318ef6b0f13d834c46ba950e309484331f4c6665f51f103816f5", null ]
-    ] ],
-    [ "HorizontalAlignment", "classmusx_1_1dom_1_1options_1_1TextOptions.html#a4fee6124a674bcfdf9536c529579d865", [
-      [ "Left", "classmusx_1_1dom_1_1options_1_1TextOptions.html#a4fee6124a674bcfdf9536c529579d865a945d5e233cf7d6240f6b783b36a374ff", null ],
-      [ "Center", "classmusx_1_1dom_1_1options_1_1TextOptions.html#a4fee6124a674bcfdf9536c529579d865a4f1f6016fc9f3f2353c0cc7c67b292bd", null ],
-      [ "Right", "classmusx_1_1dom_1_1options_1_1TextOptions.html#a4fee6124a674bcfdf9536c529579d865a92b09c7c48c520c3c55e497875da437c", null ]
-    ] ],
+    [ "HorizontalAlignment", "classmusx_1_1dom_1_1options_1_1TextOptions.html#a542fed587e97a0d5735e4ccde2f78737", null ],
     [ "TextJustify", "classmusx_1_1dom_1_1options_1_1TextOptions.html#af6f614ae053143877dcf70e44023feb3", [
       [ "Left", "classmusx_1_1dom_1_1options_1_1TextOptions.html#af6f614ae053143877dcf70e44023feb3a945d5e233cf7d6240f6b783b36a374ff", null ],
       [ "Center", "classmusx_1_1dom_1_1options_1_1TextOptions.html#af6f614ae053143877dcf70e44023feb3a4f1f6016fc9f3f2353c0cc7c67b292bd", null ],

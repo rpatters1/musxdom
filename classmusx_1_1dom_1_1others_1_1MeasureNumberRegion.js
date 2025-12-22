@@ -1,11 +1,6 @@
 var classmusx_1_1dom_1_1others_1_1MeasureNumberRegion =
 [
     [ "ScorePartData", "classmusx_1_1dom_1_1others_1_1MeasureNumberRegion_1_1ScorePartData.html", "classmusx_1_1dom_1_1others_1_1MeasureNumberRegion_1_1ScorePartData" ],
-    [ "AlignJustify", "classmusx_1_1dom_1_1others_1_1MeasureNumberRegion.html#a38d4a6a6f163ef2b55c680bc5bd79699", [
-      [ "Left", "classmusx_1_1dom_1_1others_1_1MeasureNumberRegion.html#a38d4a6a6f163ef2b55c680bc5bd79699a945d5e233cf7d6240f6b783b36a374ff", null ],
-      [ "Right", "classmusx_1_1dom_1_1others_1_1MeasureNumberRegion.html#a38d4a6a6f163ef2b55c680bc5bd79699a92b09c7c48c520c3c55e497875da437c", null ],
-      [ "Center", "classmusx_1_1dom_1_1others_1_1MeasureNumberRegion.html#a38d4a6a6f163ef2b55c680bc5bd79699a4f1f6016fc9f3f2353c0cc7c67b292bd", null ]
-    ] ],
     [ "TimePrecision", "classmusx_1_1dom_1_1others_1_1MeasureNumberRegion.html#a7f9e41dc1e40505990951abfcf894cd1", [
       [ "WholeSeconds", "classmusx_1_1dom_1_1others_1_1MeasureNumberRegion.html#a7f9e41dc1e40505990951abfcf894cd1ae4c12a21d171cc5d2ce906a4e3344fcc", null ],
       [ "Tenths", "classmusx_1_1dom_1_1others_1_1MeasureNumberRegion.html#a7f9e41dc1e40505990951abfcf894cd1a3e12e72830031de22a8580ec21c09cd3", null ],

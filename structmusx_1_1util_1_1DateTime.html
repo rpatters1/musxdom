@@ -107,63 +107,28 @@ $(document).ready(function(){initNavTree('structmusx_1_1util_1_1DateTime.html','
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-types" name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:ac7fa126bfcdf8eb2f8330d02292c3f75" id="r_ac7fa126bfcdf8eb2f8330d02292c3f75"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmusx_1_1util_1_1DateTime.html#ac7fa126bfcdf8eb2f8330d02292c3f75">DateFormatStyle</a> : int { <a class="el" href="structmusx_1_1util_1_1DateTime.html#ac7fa126bfcdf8eb2f8330d02292c3f75a30bb747c98bccdd11b3f89e644c4d0ad">Short</a> = 0
-, <a class="el" href="structmusx_1_1util_1_1DateTime.html#ac7fa126bfcdf8eb2f8330d02292c3f75a8394f0347c184cf156ac5924dccb773b">Long</a> = 1
-, <a class="el" href="structmusx_1_1util_1_1DateTime.html#ac7fa126bfcdf8eb2f8330d02292c3f75a9e37beb27c126d7cf9e63e0943d9b683">LongAbbreviated</a> = 2
- }</td></tr>
-<tr class="memdesc:ac7fa126bfcdf8eb2f8330d02292c3f75"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines the date format styles supported by formatDate.  <a href="structmusx_1_1util_1_1DateTime.html#ac7fa126bfcdf8eb2f8330d02292c3f75">More...</a><br /></td></tr>
-<tr class="separator:ac7fa126bfcdf8eb2f8330d02292c3f75"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a89f7e590d321c8479cd10ca1f993522d" id="r_a89f7e590d321c8479cd10ca1f993522d"><td class="memItemLeft" align="right" valign="top"><a id="a89f7e590d321c8479cd10ca1f993522d" name="a89f7e590d321c8479cd10ca1f993522d"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>DateFormat</b> = <a class="el" href="namespacemusx_1_1dom.html#a6bd9f8875781e736128880418451040b">musx::dom::DateFormat</a></td></tr>
+<tr class="memdesc:a89f7e590d321c8479cd10ca1f993522d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Date format options. <br /></td></tr>
+<tr class="separator:a89f7e590d321c8479cd10ca1f993522d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a32d2196ae166ac7826be14454e18ae97" id="r_a32d2196ae166ac7826be14454e18ae97"><td class="memItemLeft" align="right" valign="top">static std::time_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmusx_1_1util_1_1DateTime.html#a32d2196ae166ac7826be14454e18ae97">makeTimeT</a> (int year, int month, int day)</td></tr>
 <tr class="memdesc:a32d2196ae166ac7826be14454e18ae97"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a std::time_t from integer year, month, and day.  <br /></td></tr>
 <tr class="separator:a32d2196ae166ac7826be14454e18ae97"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a382fae852404d4688dbf25db7290bcdd" id="r_a382fae852404d4688dbf25db7290bcdd"><td class="memItemLeft" align="right" valign="top">static std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmusx_1_1util_1_1DateTime.html#a382fae852404d4688dbf25db7290bcdd">formatDate</a> (std::time_t t, <a class="el" href="structmusx_1_1util_1_1DateTime.html#ac7fa126bfcdf8eb2f8330d02292c3f75">DateFormatStyle</a> style)</td></tr>
-<tr class="memdesc:a382fae852404d4688dbf25db7290bcdd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Formats a date according to the current locale on POSIX systems.  <br /></td></tr>
-<tr class="separator:a382fae852404d4688dbf25db7290bcdd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a60abca6a57d6aa3b05f8675cae49ceb4" id="r_a60abca6a57d6aa3b05f8675cae49ceb4"><td class="memItemLeft" align="right" valign="top">static std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmusx_1_1util_1_1DateTime.html#a60abca6a57d6aa3b05f8675cae49ceb4">formatDate</a> (std::time_t t, <a class="el" href="namespacemusx_1_1dom.html#a6bd9f8875781e736128880418451040b">DateFormat</a> style)</td></tr>
+<tr class="memdesc:a60abca6a57d6aa3b05f8675cae49ceb4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Formats a date according to the current locale on POSIX systems.  <br /></td></tr>
+<tr class="separator:a60abca6a57d6aa3b05f8675cae49ceb4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac53c15b2cc28f2c6d62fce70701f52b1" id="r_ac53c15b2cc28f2c6d62fce70701f52b1"><td class="memItemLeft" align="right" valign="top">static std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmusx_1_1util_1_1DateTime.html#ac53c15b2cc28f2c6d62fce70701f52b1">formatTime</a> (std::time_t t, bool includeSeconds)</td></tr>
 <tr class="memdesc:ac53c15b2cc28f2c6d62fce70701f52b1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Formats a time according to the current locale.  <br /></td></tr>
 <tr class="separator:ac53c15b2cc28f2c6d62fce70701f52b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Static class to provide utility functions for formatting date and time. </p>
-</div><h2 class="groupheader">Member Enumeration Documentation</h2>
-<a id="ac7fa126bfcdf8eb2f8330d02292c3f75" name="ac7fa126bfcdf8eb2f8330d02292c3f75"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac7fa126bfcdf8eb2f8330d02292c3f75">&#9670;&#160;</a></span>DateFormatStyle</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">enum class <a class="el" href="structmusx_1_1util_1_1DateTime.html#ac7fa126bfcdf8eb2f8330d02292c3f75">musx::util::DateTime::DateFormatStyle</a> : int</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">strong</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Defines the date format styles supported by formatDate. </p>
-<table class="fieldtable">
-<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="ac7fa126bfcdf8eb2f8330d02292c3f75a30bb747c98bccdd11b3f89e644c4d0ad" name="ac7fa126bfcdf8eb2f8330d02292c3f75a30bb747c98bccdd11b3f89e644c4d0ad"></a>Short&#160;</td><td class="fielddoc"><p>Short date format (e.g., 7/10/25) </p>
-</td></tr>
-<tr><td class="fieldname"><a id="ac7fa126bfcdf8eb2f8330d02292c3f75a8394f0347c184cf156ac5924dccb773b" name="ac7fa126bfcdf8eb2f8330d02292c3f75a8394f0347c184cf156ac5924dccb773b"></a>Long&#160;</td><td class="fielddoc"><p>Long date format (e.g., July 10, 2025) </p>
-</td></tr>
-<tr><td class="fieldname"><a id="ac7fa126bfcdf8eb2f8330d02292c3f75a9e37beb27c126d7cf9e63e0943d9b683" name="ac7fa126bfcdf8eb2f8330d02292c3f75a9e37beb27c126d7cf9e63e0943d9b683"></a>LongAbbreviated&#160;</td><td class="fielddoc"><p>Long abbreviated date format (e.g., Jul 10, 2025) </p>
-</td></tr>
-</table>
-
-</div>
-</div>
-<h2 class="groupheader">Member Function Documentation</h2>
-<a id="a382fae852404d4688dbf25db7290bcdd" name="a382fae852404d4688dbf25db7290bcdd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a382fae852404d4688dbf25db7290bcdd">&#9670;&#160;</a></span>formatDate()</h2>
+</div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="a60abca6a57d6aa3b05f8675cae49ceb4" name="a60abca6a57d6aa3b05f8675cae49ceb4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a60abca6a57d6aa3b05f8675cae49ceb4">&#9670;&#160;</a></span>formatDate()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -180,7 +145,7 @@ Static Public Member Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="structmusx_1_1util_1_1DateTime.html#ac7fa126bfcdf8eb2f8330d02292c3f75">DateFormatStyle</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespacemusx_1_1dom.html#a6bd9f8875781e736128880418451040b">DateFormat</a>&#160;</td>
           <td class="paramname"><em>style</em>&#160;</td>
         </tr>
         <tr>

@@ -8,7 +8,7 @@ var classmusx_1_1dom_1_1others_1_1TextRepeatDef =
     [ "TextRepeatDef", "classmusx_1_1dom_1_1others_1_1TextRepeatDef.html#a1225c3d0be498d98bd2014a3f3f1602c", null ],
     [ "font", "classmusx_1_1dom_1_1others_1_1TextRepeatDef.html#a2c27148798454512844e57b3ec74dcb5", null ],
     [ "hasEnclosure", "classmusx_1_1dom_1_1others_1_1TextRepeatDef.html#a6b3a6c982061e1ff69373ed57faea885", null ],
-    [ "justification", "classmusx_1_1dom_1_1others_1_1TextRepeatDef.html#afae0c3f06c0d4c6fec2619562b90f5c0", null ],
+    [ "justification", "classmusx_1_1dom_1_1others_1_1TextRepeatDef.html#a5a09eb79a006f27b0f07695340ed4bba", null ],
     [ "passList", "classmusx_1_1dom_1_1others_1_1TextRepeatDef.html#a512dc7bfe908183a1cdf60d113709044", null ],
     [ "poundReplace", "classmusx_1_1dom_1_1others_1_1TextRepeatDef.html#a08147a3e5e7a5ccceaccde06cfc992c7", null ],
     [ "useThisFont", "classmusx_1_1dom_1_1others_1_1TextRepeatDef.html#a4e0cf82565351e6b4959f9cf041686e1", null ]

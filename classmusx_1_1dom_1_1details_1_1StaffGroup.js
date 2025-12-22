@@ -1,6 +1,5 @@
 var classmusx_1_1dom_1_1details_1_1StaffGroup =
 [
-    [ "AlignJustify", "classmusx_1_1dom_1_1details_1_1StaffGroup.html#a1afaa847e6f12bd4daca163208d0ebaa", null ],
     [ "BarlineType", "classmusx_1_1dom_1_1details_1_1StaffGroup.html#ab36419f8aa5abf27258bfb9326610bd7", null ],
     [ "DrawBarlineStyle", "classmusx_1_1dom_1_1details_1_1StaffGroup.html#a2cf0e2aae310990f7858de64aa3d7cc5", [
       [ "OnlyOnStaves", "classmusx_1_1dom_1_1details_1_1StaffGroup.html#a2cf0e2aae310990f7858de64aa3d7cc5ae5d09867326aa5589d1585b7d49de225", null ],

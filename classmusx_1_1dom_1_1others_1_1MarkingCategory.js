@@ -18,7 +18,7 @@ var classmusx_1_1dom_1_1others_1_1MarkingCategory =
     [ "categoryType", "classmusx_1_1dom_1_1others_1_1MarkingCategory.html#af1ee5a4eb2f3864079627aebd99ff5b0", null ],
     [ "horzAlign", "classmusx_1_1dom_1_1others_1_1MarkingCategory.html#af1c2c79138184dcf8f929e90c88e0bd5", null ],
     [ "horzOffset", "classmusx_1_1dom_1_1others_1_1MarkingCategory.html#a0e3c8f1f9f51a0f4f7b75497ec5c06d7", null ],
-    [ "justification", "classmusx_1_1dom_1_1others_1_1MarkingCategory.html#a91272a011b1b778d38d78a2ac34b236e", null ],
+    [ "justification", "classmusx_1_1dom_1_1others_1_1MarkingCategory.html#a7de241231de2c0ab4f8b48bb95e2a7ce", null ],
     [ "musicFont", "classmusx_1_1dom_1_1others_1_1MarkingCategory.html#a7e97659c8727ca49809ba173718c96f3", null ],
     [ "numberFont", "classmusx_1_1dom_1_1others_1_1MarkingCategory.html#afd5fcceb53abce7485ddf8d0ad42e570", null ],
     [ "shapeExpressions", "classmusx_1_1dom_1_1others_1_1MarkingCategory.html#aab38316636e70d6751fbdcb02f598e8a", null ],

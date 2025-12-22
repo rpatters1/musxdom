@@ -112,11 +112,6 @@ var namespacemusx_1_1dom_1_1others =
       [ "CenterOverMusic", "namespacemusx_1_1dom_1_1others.html#a2a5fff566977d572109c7b3256120e8eaa520875f5e831f5487362ba2ab5d56d7", null ],
       [ "RightBarline", "namespacemusx_1_1dom_1_1others.html#a2a5fff566977d572109c7b3256120e8ea1c1d38f2cecf469e41f461d784f6d82c", null ]
     ] ],
-    [ "HorizontalTextJustification", "namespacemusx_1_1dom_1_1others.html#a2a0385cc23c878743981d02e4f9df60c", [
-      [ "Left", "namespacemusx_1_1dom_1_1others.html#a2a0385cc23c878743981d02e4f9df60ca945d5e233cf7d6240f6b783b36a374ff", null ],
-      [ "Center", "namespacemusx_1_1dom_1_1others.html#a2a0385cc23c878743981d02e4f9df60ca4f1f6016fc9f3f2353c0cc7c67b292bd", null ],
-      [ "Right", "namespacemusx_1_1dom_1_1others.html#a2a0385cc23c878743981d02e4f9df60ca92b09c7c48c520c3c55e497875da437c", null ]
-    ] ],
     [ "PlaybackType", "namespacemusx_1_1dom_1_1others.html#a8ca1afe21691e4db1cdfd8b62344ecfe", [
       [ "None", "namespacemusx_1_1dom_1_1others.html#a8ca1afe21691e4db1cdfd8b62344ecfea6adf97f83acf6453d4a6a4b1070f3754", null ],
       [ "Tempo", "namespacemusx_1_1dom_1_1others.html#a8ca1afe21691e4db1cdfd8b62344ecfead65dabf567cb1c43358066ab02217611", null ],

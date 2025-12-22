@@ -2,11 +2,6 @@ var classmusx_1_1dom_1_1options_1_1LyricOptions =
 [
     [ "SyllablePosStyle", "structmusx_1_1dom_1_1options_1_1LyricOptions_1_1SyllablePosStyle.html", "structmusx_1_1dom_1_1options_1_1LyricOptions_1_1SyllablePosStyle" ],
     [ "WordExtConnectStyle", "structmusx_1_1dom_1_1options_1_1LyricOptions_1_1WordExtConnectStyle.html", "structmusx_1_1dom_1_1options_1_1LyricOptions_1_1WordExtConnectStyle" ],
-    [ "AlignJustify", "classmusx_1_1dom_1_1options_1_1LyricOptions.html#af1469c5a8b8e4abaac74d4be6cd29588", [
-      [ "Left", "classmusx_1_1dom_1_1options_1_1LyricOptions.html#af1469c5a8b8e4abaac74d4be6cd29588a945d5e233cf7d6240f6b783b36a374ff", null ],
-      [ "Center", "classmusx_1_1dom_1_1options_1_1LyricOptions.html#af1469c5a8b8e4abaac74d4be6cd29588a4f1f6016fc9f3f2353c0cc7c67b292bd", null ],
-      [ "Right", "classmusx_1_1dom_1_1options_1_1LyricOptions.html#af1469c5a8b8e4abaac74d4be6cd29588a92b09c7c48c520c3c55e497875da437c", null ]
-    ] ],
     [ "AutoNumberingAlign", "classmusx_1_1dom_1_1options_1_1LyricOptions.html#a667cd4621db4c89bb97b97628836f0cc", [
       [ "None", "classmusx_1_1dom_1_1options_1_1LyricOptions.html#a667cd4621db4c89bb97b97628836f0cca6adf97f83acf6453d4a6a4b1070f3754", null ],
       [ "Align", "classmusx_1_1dom_1_1options_1_1LyricOptions.html#a667cd4621db4c89bb97b97628836f0ccad12fbc9a2ba3b0b91a4190959b4c966b", null ]
