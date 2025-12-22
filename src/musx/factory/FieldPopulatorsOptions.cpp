@@ -282,12 +282,6 @@ MUSX_XML_ENUM_MAPPING(TextOptions::DateFormat, {
     {"abbrev", TextOptions::DateFormat::Abbrev}
 });
 
-MUSX_XML_ENUM_MAPPING(TextOptions::HorizontalAlignment, {
-    {"left", TextOptions::HorizontalAlignment::Left}, // This is the default.
-    {"center", TextOptions::HorizontalAlignment::Center},
-    {"right", TextOptions::HorizontalAlignment::Right},
-});
-
 MUSX_XML_ENUM_MAPPING(TextOptions::VerticalAlignment, {
     {"top", TextOptions::VerticalAlignment::Top}, // This is the default.
     {"center", TextOptions::VerticalAlignment::Center},

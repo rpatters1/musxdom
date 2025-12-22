@@ -1480,15 +1480,9 @@ public:
     }
 
     /**
-     * @enum HorizontalAlignment
      * @brief Horizontal alignment options for page text positioning.
      */
-    enum class HorizontalAlignment
-    {
-        Left, // default value: leave as first (0) item
-        Center,
-        Right
-    };
+    using HorizontalAlignment = AlignJustify;
 
     /**
      * @enum VerticalAlignment

@@ -77,7 +77,7 @@ TEST(TextExpressionDef, ValidExpression)
     EXPECT_FALSE(expression->breakMmRest);  // Default
     EXPECT_EQ(expression->playbackType, others::PlaybackType::MidiController);  // From XML
     EXPECT_EQ(expression->horzMeasExprAlign, others::HorizontalMeasExprAlign::LeftOfPrimaryNotehead);  // From XML
-    EXPECT_EQ(expression->horzExprJustification, others::HorizontalTextJustification::Right);  // From XML
+    EXPECT_EQ(expression->horzExprJustification, AlignJustify::Right);  // From XML
     EXPECT_EQ(expression->vertMeasExprAlign, others::VerticalMeasExprAlign::AboveStaff);  // Default
     EXPECT_EQ(expression->measXAdjust, 0);  // Default
     EXPECT_EQ(expression->yAdjustEntry, -54);  // From XML
@@ -189,7 +189,7 @@ TEST(MarkingCategoryTest, ValidMarkingCategory)
     EXPECT_EQ(markingCategory->numberFont->fontSize, 0) << "NumberFont should contain nothing";
 
     // Other properties
-    EXPECT_EQ(markingCategory->justification, others::HorizontalTextJustification::Right);  // From XML
+    EXPECT_EQ(markingCategory->justification, AlignJustify::Right);  // From XML
     EXPECT_EQ(markingCategory->horzAlign, others::HorizontalMeasExprAlign::LeftOfAllNoteheads);  // From XML
     EXPECT_EQ(markingCategory->horzOffset, 12);  // From XML
     EXPECT_EQ(markingCategory->vertAlign, others::VerticalMeasExprAlign::AboveStaffOrEntry);  // From XML
@@ -249,7 +249,7 @@ TEST(TextExpressionDef, EnumDefaults)
     EXPECT_EQ(expression->rehearsalMarkStyle, others::RehearsalMarkStyle::None);
     EXPECT_EQ(expression->playbackType, others::PlaybackType::None);
     EXPECT_EQ(expression->horzMeasExprAlign, others::HorizontalMeasExprAlign::LeftBarline);
-    EXPECT_EQ(expression->horzExprJustification, others::HorizontalTextJustification::Left);
+    EXPECT_EQ(expression->horzExprJustification, AlignJustify::Left);
     EXPECT_EQ(expression->vertMeasExprAlign, others::VerticalMeasExprAlign::AboveStaff);
 }
 
@@ -398,7 +398,7 @@ TEST(ShapeExpressionDef, Populate)
     EXPECT_TRUE(shapeExpr->noHorzStretch);
     EXPECT_EQ(shapeExpr->playbackType, others::PlaybackType::Tempo);
     EXPECT_EQ(shapeExpr->horzMeasExprAlign, others::HorizontalMeasExprAlign::CenterOverMusic);
-    EXPECT_EQ(shapeExpr->horzExprJustification, others::HorizontalTextJustification::Center);
+    EXPECT_EQ(shapeExpr->horzExprJustification, AlignJustify::Center);
     EXPECT_EQ(shapeExpr->measXAdjust, 1);
     EXPECT_EQ(shapeExpr->vertMeasExprAlign, others::VerticalMeasExprAlign::AboveStaffOrEntry);
     EXPECT_EQ(shapeExpr->yAdjustBaseline, 2);
