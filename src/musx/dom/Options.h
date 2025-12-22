@@ -1505,15 +1505,6 @@ public:
         ForcedFull      ///< "forcedFull"
     };
 
-    /// @enum DateFormat
-    /// @brief Date format options. This value is coded into the Enigma `date` insert when the page title is created.
-    enum class DateFormat
-    {
-        Short,      ///< Short date format, based on locale. US format is MM/DD/YY (Default value may not appear in the xml)
-        Long,       ///< Long date format, based on locale. US format is Month DD, YYYY.
-        Abbrev      ///< Abbreviated date format, based on locale. US format is Mon DD, YYYY.
-    };
-
     int textLineSpacingPercent{};                 ///< "Line Spacing: Automatic" percent value
     bool showTimeSeconds{};                       ///< "Include Seconds in Time Stamp"
     DateFormat dateFormat{};                      ///< "Date Format"

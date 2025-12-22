@@ -374,11 +374,11 @@ bool EnigmaString::parseEnigmaTextImpl(const std::shared_ptr<dom::Document>& doc
         }
 
         auto processDate = [&](std::time_t time) -> std::string {
-            util::DateTime::DateFormatStyle style = util::DateTime::DateFormatStyle::Short;
+            util::DateTime::DateFormat style = util::DateTime::DateFormat::Short;
             if (components.size() > 1) {
                 int i = std::stoi(components[1]);
                 if (i >= 0 && i <= 2) {
-                    style = util::DateTime::DateFormatStyle(i);
+                    style = util::DateTime::DateFormat(i);
                 } else {
                     MUSX_INTEGRITY_ERROR("Enigma string encounted tag " + components[0] + " with input value " + components[1]);
                 }

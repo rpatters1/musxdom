@@ -35,6 +35,12 @@ MUSX_XML_ENUM_MAPPING(AlignJustify, {
     {"right", AlignJustify::Right},
 });
 
+MUSX_XML_ENUM_MAPPING(DateFormat, {
+    // {"short", DateFormat::Short}, // default value may not appear in the XML
+    {"long",   DateFormat::Long},
+    {"abbrev", DateFormat::Abbrev}
+});
+
 MUSX_XML_ENUM_MAPPING(LyricTextType, {
     {"verse", LyricTextType::Verse},
     {"chorus", LyricTextType::Chorus},
