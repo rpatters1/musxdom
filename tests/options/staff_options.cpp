@@ -64,7 +64,7 @@ TEST(StaffOptionsTest, PropertiesTest)
 )xml";
 
     using StaffOptions = musx::dom::options::StaffOptions;
-    using AlignJustify = musx::dom::others::NamePositioning::AlignJustify;
+    using AlignJustify = musx::dom::AlignJustify;
 
     auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml);
     auto options = doc->getOptions();

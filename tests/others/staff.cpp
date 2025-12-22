@@ -540,7 +540,7 @@ TEST(StaffTest, NamePositioning)
     auto others = doc->getOthers();
     ASSERT_TRUE(others);
 
-    using Align = others::NamePositioning::AlignJustify;
+    using Align = AlignJustify;
 
     auto checkNamePos = [&](StaffCmper staffId, MeasCmper measId,
             Evpu expectedFullX, Evpu expectedFullY, Align expectedFullAlign,

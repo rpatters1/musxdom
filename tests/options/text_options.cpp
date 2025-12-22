@@ -107,7 +107,7 @@ TEST(TextOptionsTest, PropertiesAndSymbolInserts)
 
     EXPECT_EQ(textOptions->textLineSpacingPercent, 100);
     EXPECT_TRUE(textOptions->showTimeSeconds);
-    EXPECT_EQ(textOptions->dateFormat, TextOptions::DateFormat::Abbrev);
+    EXPECT_EQ(textOptions->dateFormat, musx::dom::DateFormat::Abbrev);
     EXPECT_EQ(textOptions->tabSpaces, 4);
     EXPECT_EQ(textOptions->textTracking, 5);
     EXPECT_EQ(textOptions->textBaselineShift, 1);

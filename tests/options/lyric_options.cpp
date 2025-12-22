@@ -130,15 +130,15 @@ TEST(LyricOptionsTest, PropertiesAndSubnodes)
 
     // syllablePosStyles
     EXPECT_EQ(lyric->syllablePosStyles.size(), 4);
-    EXPECT_EQ(lyric->syllablePosStyles.at(LyricOptions::SyllablePosStyleType::Default)->align, LyricOptions::AlignJustify::Center);
-    EXPECT_EQ(lyric->syllablePosStyles.at(LyricOptions::SyllablePosStyleType::Default)->justify, LyricOptions::AlignJustify::Center);
+    EXPECT_EQ(lyric->syllablePosStyles.at(LyricOptions::SyllablePosStyleType::Default)->align, AlignJustify::Center);
+    EXPECT_EQ(lyric->syllablePosStyles.at(LyricOptions::SyllablePosStyleType::Default)->justify, AlignJustify::Center);
     EXPECT_TRUE(lyric->syllablePosStyles.at(LyricOptions::SyllablePosStyleType::Default)->on);
 
-    EXPECT_EQ(lyric->syllablePosStyles.at(LyricOptions::SyllablePosStyleType::WordExt)->align, LyricOptions::AlignJustify::Left);
-    EXPECT_EQ(lyric->syllablePosStyles.at(LyricOptions::SyllablePosStyleType::WordExt)->justify, LyricOptions::AlignJustify::Left);
+    EXPECT_EQ(lyric->syllablePosStyles.at(LyricOptions::SyllablePosStyleType::WordExt)->align, AlignJustify::Left);
+    EXPECT_EQ(lyric->syllablePosStyles.at(LyricOptions::SyllablePosStyleType::WordExt)->justify, AlignJustify::Left);
 
-    EXPECT_EQ(lyric->syllablePosStyles.at(LyricOptions::SyllablePosStyleType::First)->justify, LyricOptions::AlignJustify::Left);
-    EXPECT_EQ(lyric->syllablePosStyles.at(LyricOptions::SyllablePosStyleType::SystemStart)->justify, LyricOptions::AlignJustify::Left);
+    EXPECT_EQ(lyric->syllablePosStyles.at(LyricOptions::SyllablePosStyleType::First)->justify, AlignJustify::Left);
+    EXPECT_EQ(lyric->syllablePosStyles.at(LyricOptions::SyllablePosStyleType::SystemStart)->justify, AlignJustify::Left);
 
     // wordExtConnectStyles
     EXPECT_EQ(lyric->wordExtConnectStyles.size(), 9);

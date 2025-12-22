@@ -34,6 +34,8 @@
 #include <langinfo.h>
 #endif
 
+#include "musx/dom/EnumClasses.h"
+
 namespace musx {
 namespace util {
 
@@ -43,17 +45,7 @@ namespace util {
  */
 struct DateTime
 {
-
-    /**
-     * @enum DateFormatStyle
-     * @brief Defines the date format styles supported by formatDate.
-     */
-    enum class DateFormatStyle : int
-    {
-        Short = 0,              ///< Short date format (e.g., 7/10/25)
-        Long = 1,               ///< Long date format (e.g., July 10, 2025)
-        LongAbbreviated = 2     ///< Long abbreviated date format (e.g., Jul 10, 2025)
-    };
+    using DateFormat = musx::dom::DateFormat;   ///< Date format options
 
     /**
      * @brief Creates a std::time_t from integer year, month, and day.
@@ -87,7 +79,7 @@ struct DateTime
      * @param style The desired date format style.
      * @return A formatted date string, or an empty string on failure.
      */
-    inline static std::string formatDate(std::time_t t, DateFormatStyle style)
+    inline static std::string formatDate(std::time_t t, DateFormat style)
     {
         SYSTEMTIME st;
         {
@@ -108,15 +100,15 @@ struct DateTime
 
         switch (style)
         {
-        case DateFormatStyle::Short:
+        case DateFormat::Short:
             flags = DATE_SHORTDATE;
             break;
 
-        case DateFormatStyle::Long:
+        case DateFormat::Long:
             flags = DATE_LONGDATE;
             break;
 
-        case DateFormatStyle::LongAbbreviated:
+        case DateFormat::Abbrev:
             // Windows does not provide a built-in long abbreviated date, so use custom format string
             customFormat = L"MMM d, yyyy";
             break;
@@ -161,7 +153,7 @@ struct DateTime
      * @param style The desired date format style.
      * @return A formatted date string, or an empty string on failure.
      */
-    inline static std::string formatDate(std::time_t t, DateFormatStyle style)
+    inline static std::string formatDate(std::time_t t, DateFormat style)
     {
         struct tm tm;
 
@@ -169,13 +161,13 @@ struct DateTime
 
         const char* fmt = nullptr;
         switch (style) {
-        case DateFormatStyle::Short:
+        case DateFormat::Short:
             fmt = "%x";
             break;
-        case DateFormatStyle::Long:
+        case DateFormat::Long:
             fmt = "%B %d, %Y";
             break;
-        case DateFormatStyle::LongAbbreviated:
+        case DateFormat::Abbrev:
             fmt = "%b %d, %Y";
             break;
         }

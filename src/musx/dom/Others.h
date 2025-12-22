@@ -995,17 +995,6 @@ enum class VerticalMeasExprAlign
     BelowStaffOrEntry    ///< Align below the staff or entry.
 };
 
-/**
- * @enum HorizontalTextJustification
- * @brief Specifies the horizontal alignment for text expressions and marking categories.
- */
-enum class HorizontalTextJustification
-{
-    Left,    ///< Justified left.
-    Center,  ///< Justified center.
-    Right    ///< Justified right.
-};
-
 class ShapeExpressionDef;
 class TextExpressionDef;
 
@@ -1046,7 +1035,7 @@ public:
 
     HorizontalMeasExprAlign horzAlign{};     ///< Horizontal alignment for the marking
     VerticalMeasExprAlign vertAlign{};       ///< Vertical alignment for the marking
-    HorizontalTextJustification justification{}; ///< Justification for the text within the marking
+    AlignJustify justification{};            ///< Justification for the text within the marking
 
     // Vertical and horizontal offsets for positioning adjustments
     Evpu horzOffset{};         ///< Additional horizontal offset
@@ -1424,15 +1413,6 @@ public:
     /** @brief Constructor function */
     explicit MeasureNumberRegion(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
         : OthersBase(document, partId, shareMode, cmper) {}
-
-    /// @enum AlignJustify
-    /// @brief Alignment and justification options for measure numbers.
-    enum class AlignJustify
-    {
-        Left,   ///< Left alignment or justification (the default value.)
-        Right,  ///< Right alignment.
-        Center  ///< Center alignment.
-    };
 
     /// @enum TimePrecision
     /// @brief Precision for time display
@@ -2451,7 +2431,7 @@ public:
     PlaybackType playbackType{};                    ///< Playback behavior of the text expression.
     HorizontalMeasExprAlign horzMeasExprAlign{};    ///< Horizontal alignment of the expression.
     VerticalMeasExprAlign vertMeasExprAlign{};      ///< Vertical alignment of the expression.
-    HorizontalTextJustification horzExprJustification{}; ///< Horizontal justification of the text expression.
+    AlignJustify horzExprJustification{};           ///< Horizontal justification of the text expression.
     Evpu measXAdjust{};                             ///< Horizontal adjustment for measurement alignment.
     Evpu yAdjustEntry{};                            ///< Vertical adjustment for entry alignment.
     Evpu yAdjustBaseline{};                         ///< Vertical adjustment for baseline alignment.
@@ -2945,7 +2925,7 @@ public:
     PlaybackType playbackType{};                    ///< Playback behavior of the text expression.
     HorizontalMeasExprAlign horzMeasExprAlign{};    ///< Horizontal alignment of the expression.
     VerticalMeasExprAlign vertMeasExprAlign{};      ///< Vertical alignment of the expression.
-    HorizontalTextJustification horzExprJustification{}; ///< Horizontal justification of the text expression.
+    AlignJustify horzExprJustification{};           ///< Horizontal justification of the text expression.
     Evpu measXAdjust{};                             ///< Horizontal adjustment for measurement alignment.
     Evpu yAdjustEntry{};                            ///< Vertical adjustment for entry alignment.
     Evpu yAdjustBaseline{};                         ///< Vertical adjustment for baseline alignment.
@@ -3069,7 +3049,7 @@ public:
     bool hasEnclosure{};                            ///< Whether the text repeat has an enclosure. (xml node is `<newEnclosure>`)
     bool useThisFont{};                             ///< "Use This Font" (for the `#` substitution)
     PoundReplaceOption poundReplace{};              ///< "Replace # With" choice.
-    HorizontalTextJustification justification{};    ///< Although called "justification" in Finale's U.I, this value is used
+    AlignJustify justification{};                   ///< Although called "justification" in Finale's U.I, this value is used
                                                     ///< for both the alignment of the text within the measure as well as its justification.
                                                     ///< (xml node is `<justify >`)
     std::vector<int> passList;                      ///< If this vector contains elements, they define the repeat passes that apply to this instance.

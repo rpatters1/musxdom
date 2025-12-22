@@ -600,14 +600,6 @@ public:
         Align       ///< "Group Under the Same Note"
     };
 
-    /// @enum AlignJustify
-    /// @brief Horizontal and vertical alignment/justification values
-    enum class AlignJustify {
-        Left,
-        Center,
-        Right
-    };
-
     /// @enum WordExtConnectIndex
     /// @brief Word extension connection points
     enum class WordExtConnectIndex {
@@ -1488,15 +1480,9 @@ public:
     }
 
     /**
-     * @enum HorizontalAlignment
      * @brief Horizontal alignment options for page text positioning.
      */
-    enum class HorizontalAlignment
-    {
-        Left, // default value: leave as first (0) item
-        Center,
-        Right
-    };
+    using HorizontalAlignment = AlignJustify;
 
     /**
      * @enum VerticalAlignment
@@ -1517,15 +1503,6 @@ public:
         Right,          ///< "right"
         Full,           ///< "full"
         ForcedFull      ///< "forcedFull"
-    };
-
-    /// @enum DateFormat
-    /// @brief Date format options. This value is coded into the Enigma `date` insert when the page title is created.
-    enum class DateFormat
-    {
-        Short,      ///< Short date format, based on locale. US format is MM/DD/YY (Default value may not appear in the xml)
-        Long,       ///< Long date format, based on locale. US format is Month DD, YYYY.
-        Abbrev      ///< Abbreviated date format, based on locale. US format is Mon DD, YYYY.
     };
 
     int textLineSpacingPercent{};                 ///< "Line Spacing: Automatic" percent value

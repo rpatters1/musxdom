@@ -182,7 +182,7 @@ TEST(TextRepeatDef, Populate)
 
     EXPECT_EQ(textRepeatDef->poundReplace, others::TextRepeatDef::PoundReplaceOption::RepeatID);
     EXPECT_TRUE(textRepeatDef->useThisFont);
-    EXPECT_EQ(textRepeatDef->justification, others::HorizontalTextJustification::Right);
+    EXPECT_EQ(textRepeatDef->justification, AlignJustify::Right);
 
     // Test TextRepeatText
     auto textRepeatText = others->get<others::TextRepeatText>(SCORE_PARTID, 1);
@@ -194,7 +194,7 @@ TEST(TextRepeatDef, Populate)
     auto textRepeatDef2 = others->get<others::TextRepeatDef>(SCORE_PARTID, 2);
     ASSERT_TRUE(textRepeatDef2) << "TextRepeatDef with cmper 2 not found";
     EXPECT_TRUE(textRepeatDef2->font) << "TextRepeatDef with cmper 2 font not created";
-    EXPECT_EQ(textRepeatDef2->justification, others::HorizontalTextJustification::Center);
+    EXPECT_EQ(textRepeatDef2->justification, AlignJustify::Center);
 }
 
 TEST(TextRepeatAssign, Populate)

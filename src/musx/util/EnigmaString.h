@@ -122,7 +122,7 @@ class EnigmaParsingContext;
  * - `^pass()`: inserts the repeat pass value from the associated text or shape expression. (See @ref musx::dom::others::TextExpressionDef::playPass.)
  *
  * <b>Data/time inserts</b>
- * - `^date(format)`: inserts the current date where format 0=short, 1=long, 2=abbreviated. (See @ref musx::dom::options::TextOptions::DateFormat.)
+ * - `^date(format)`: inserts the current date where format 0=short, 1=long, 2=abbreviated. (See @ref musx::dom::DateFormat.)
  * - `^fdate(format)`: inserts the file modified date where the format is the same as for `^date`.
  * - `^time(seconds)`: inserts the current time where seconds 0=omit seconds, nonzero (normally 1)=include seconds.
  * The OS locale settings determine if it is rendered with AM/PM or 24-hour times. (See @ref musx::dom::options::TextOptions::showTimeSeconds.)

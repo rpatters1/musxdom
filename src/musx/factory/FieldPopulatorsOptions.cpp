@@ -29,6 +29,9 @@ namespace factory {
 using namespace ::musx::xml;
 using namespace ::musx::dom::options;
 
+extern template const XmlEnumMappingElement<AlignJustify> XmlEnumMapping<AlignJustify>::mapping;
+extern template const XmlEnumMappingElement<DateFormat> XmlEnumMapping<DateFormat>::mapping;
+
 MUSX_XML_ENUM_MAPPING(BeamOptions::FlattenStyle, {
     {"onEndNotes", BeamOptions::FlattenStyle::OnEndNotes},
     {"onStandardNote", BeamOptions::FlattenStyle::OnStandardNote},
@@ -109,12 +112,6 @@ MUSX_XML_ENUM_MAPPING(LyricOptions::SmartHyphenStart, {
 MUSX_XML_ENUM_MAPPING(LyricOptions::AutoNumberingAlign, {
     {"none", LyricOptions::AutoNumberingAlign::None},   // this default value may never appear in the xml
     {"align", LyricOptions::AutoNumberingAlign::Align},
-});
-
-MUSX_XML_ENUM_MAPPING(LyricOptions::AlignJustify, {
-    {"left", LyricOptions::AlignJustify::Left},
-    {"center", LyricOptions::AlignJustify::Center},
-    {"right", LyricOptions::AlignJustify::Right},
 });
 
 MUSX_XML_ENUM_MAPPING(LyricOptions::WordExtConnectIndex, {
@@ -278,18 +275,6 @@ MUSX_XML_ENUM_MAPPING(SmartShapeOptions::SlurControlStyleType, {
     {"mediumSpan", SmartShapeOptions::SlurControlStyleType::MediumSpan},
     {"longSpan", SmartShapeOptions::SlurControlStyleType::LongSpan},
     {"extraLongSpan", SmartShapeOptions::SlurControlStyleType::ExtraLongSpan}
-});
-
-MUSX_XML_ENUM_MAPPING(TextOptions::DateFormat, {
-    // {"short", TextOptions::DateFormat::Short}, // default value may not appear in the XML
-    {"long",   TextOptions::DateFormat::Long},
-    {"abbrev", TextOptions::DateFormat::Abbrev}
-});
-
-MUSX_XML_ENUM_MAPPING(TextOptions::HorizontalAlignment, {
-    {"left", TextOptions::HorizontalAlignment::Left}, // This is the default.
-    {"center", TextOptions::HorizontalAlignment::Center},
-    {"right", TextOptions::HorizontalAlignment::Right},
 });
 
 MUSX_XML_ENUM_MAPPING(TextOptions::VerticalAlignment, {
@@ -593,8 +578,8 @@ MUSX_XML_ELEMENT_ARRAY(LineCurveOptions, {
 });
 
 MUSX_XML_ELEMENT_ARRAY(LyricOptions::SyllablePosStyle, {
-    {"align",   [](const XmlElementPtr& e, const std::shared_ptr<LyricOptions::SyllablePosStyle>& i) { i->align = toEnum<LyricOptions::AlignJustify>(e); }},
-    {"justify", [](const XmlElementPtr& e, const std::shared_ptr<LyricOptions::SyllablePosStyle>& i) { i->justify = toEnum<LyricOptions::AlignJustify>(e); }},
+    {"align",   [](const XmlElementPtr& e, const std::shared_ptr<LyricOptions::SyllablePosStyle>& i) { i->align = toEnum<AlignJustify>(e); }},
+    {"justify", [](const XmlElementPtr& e, const std::shared_ptr<LyricOptions::SyllablePosStyle>& i) { i->justify = toEnum<AlignJustify>(e); }},
     {"on",      [](const XmlElementPtr& e, const std::shared_ptr<LyricOptions::SyllablePosStyle>& i) { i->on = populateBoolean(e, i); }}
 });
 
@@ -974,7 +959,7 @@ MUSX_XML_ELEMENT_ARRAY(TextOptions::InsertSymbolInfo, {
 MUSX_XML_ELEMENT_ARRAY(TextOptions, {
     {"textLineSpacingPercent", [](const XmlElementPtr& e, const std::shared_ptr<TextOptions>& i) { i->textLineSpacingPercent = e->getTextAs<int>(); }},
     {"showTimeSeconds",        [](const XmlElementPtr& e, const std::shared_ptr<TextOptions>& i) { i->showTimeSeconds = populateBoolean(e, i); }},
-    {"dateFormat",             [](const XmlElementPtr& e, const std::shared_ptr<TextOptions>& i) { i->dateFormat = toEnum<TextOptions::DateFormat>(e); }},
+    {"dateFormat",             [](const XmlElementPtr& e, const std::shared_ptr<TextOptions>& i) { i->dateFormat = toEnum<DateFormat>(e); }},
     {"tabSpaces",              [](const XmlElementPtr& e, const std::shared_ptr<TextOptions>& i) { i->tabSpaces = e->getTextAs<int>(); }},
     {"textTracking",           [](const XmlElementPtr& e, const std::shared_ptr<TextOptions>& i) { i->textTracking = e->getTextAs<int>(); }},
     {"textBaselineShift",      [](const XmlElementPtr& e, const std::shared_ptr<TextOptions>& i) { i->textBaselineShift = e->getTextAs<Evpu>(); }},
