@@ -106,7 +106,7 @@ public:
     Evpu endCtlPtX{};               ///< Horizontal offset of the end control point.
     Evpu endCtlPtY{};               ///< Vertical offset of the end control point.
     bool active{};                  ///< If true, this adjustment should be used when it is applicable.
-    DirectionType contextDir{};  ///< The direction type for this adjustment.
+    DirectionType contextDir{};     ///< The direction type for this adjustment.
 
     static const xml::XmlElementArray<ControlPointAdjustment>& xmlMappingArray();  ///< Required for musx::factory::FieldPopulator.
 };
