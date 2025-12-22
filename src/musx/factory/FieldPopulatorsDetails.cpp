@@ -29,12 +29,11 @@ namespace factory {
 using namespace ::musx::xml;
 using namespace ::musx::dom::details;
 
+extern template const XmlEnumMappingElement<AlignJustify> XmlEnumMapping<AlignJustify>::mapping;
 extern template const XmlEnumMappingElement<ShowClefMode> XmlEnumMapping<ShowClefMode>::mapping;
 extern template const XmlEnumMappingElement<others::Measure::BarlineType> XmlEnumMapping<others::Measure::BarlineType>::mapping;
-extern template const XmlEnumMappingElement<others::NamePositioning::AlignJustify> XmlEnumMapping<others::NamePositioning::AlignJustify>::mapping;
 extern template const XmlEnumMappingElement<others::PageGraphicAssign::PageAssignType> XmlEnumMapping<others::PageGraphicAssign::PageAssignType>::mapping;
 extern template const XmlEnumMappingElement<options::BeamOptions::FlattenStyle> XmlEnumMapping<options::BeamOptions::FlattenStyle>::mapping;
-extern template const XmlEnumMappingElement<options::LyricOptions::AlignJustify> XmlEnumMapping<options::LyricOptions::AlignJustify>::mapping;
 extern template const XmlEnumMappingElement<options::TupletOptions::AutoBracketStyle> XmlEnumMapping<options::TupletOptions::AutoBracketStyle>::mapping;
 extern template const XmlEnumMappingElement<options::TupletOptions::BracketStyle> XmlEnumMapping<options::TupletOptions::BracketStyle>::mapping;
 extern template const XmlEnumMappingElement<options::TupletOptions::NumberStyle> XmlEnumMapping<options::TupletOptions::NumberStyle>::mapping;
@@ -332,8 +331,8 @@ MUSX_XML_ELEMENT_ARRAY(LyricAssign, {
 });
 
 MUSX_XML_ELEMENT_ARRAY(LyricEntryInfo, {
-    {"justify", [](const XmlElementPtr& e, const std::shared_ptr<LyricEntryInfo>& i) { i->justify = toEnum<LyricEntryInfo::AlignJustify>(e); }},
-    {"align",   [](const XmlElementPtr& e, const std::shared_ptr<LyricEntryInfo>& i) { i->align   = toEnum<LyricEntryInfo::AlignJustify>(e); }},
+    {"justify", [](const XmlElementPtr& e, const std::shared_ptr<LyricEntryInfo>& i) { i->justify = toEnum<AlignJustify>(e); }},
+    {"align",   [](const XmlElementPtr& e, const std::shared_ptr<LyricEntryInfo>& i) { i->align   = toEnum<AlignJustify>(e); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(MeasureGraphicAssign, {
@@ -451,8 +450,8 @@ MUSX_XML_ELEMENT_ARRAY(StaffGroup, {
     {"fullYadj", [](const XmlElementPtr& e, const std::shared_ptr<StaffGroup>& i) { i->fullNameYadj = e->getTextAs<int>(); }},
     {"bracket", [](const XmlElementPtr& e, const std::shared_ptr<StaffGroup>& i) { i->bracket = FieldPopulator<Bracket>::createAndPopulate(e, i->getDocument()); }},
     {"barline", [](const XmlElementPtr& e, const std::shared_ptr<StaffGroup>& i) { i->barlineType = toEnum<StaffGroup::BarlineType>(e); }},
-    {"fullJustify", [](const XmlElementPtr& e, const std::shared_ptr<StaffGroup>& i) { i->fullNameJustify = toEnum<StaffGroup::AlignJustify>(e); }},
-    {"abbrvJustify", [](const XmlElementPtr& e, const std::shared_ptr<StaffGroup>& i) { i->abbrvNameJustify = toEnum<StaffGroup::AlignJustify>(e); }},
+    {"fullJustify", [](const XmlElementPtr& e, const std::shared_ptr<StaffGroup>& i) { i->fullNameJustify = toEnum<AlignJustify>(e); }},
+    {"abbrvJustify", [](const XmlElementPtr& e, const std::shared_ptr<StaffGroup>& i) { i->abbrvNameJustify = toEnum<AlignJustify>(e); }},
     {"groupBarlineStyle", [](const XmlElementPtr& e, const std::shared_ptr<StaffGroup>& i) { i->drawBarlines = toEnum<StaffGroup::DrawBarlineStyle>(e); }},
     {"ownBarline", [](const XmlElementPtr& e, const std::shared_ptr<StaffGroup>& i) { i->ownBarline = populateBoolean(e, i); }},
     {"fullIndivPos", [](const XmlElementPtr& e, const std::shared_ptr<StaffGroup>& i) { i->fullNameIndivPos = populateBoolean(e, i); }},
@@ -461,8 +460,8 @@ MUSX_XML_ELEMENT_ARRAY(StaffGroup, {
     {"abbrvID", [](const XmlElementPtr& e, const std::shared_ptr<StaffGroup>& i) { i->abbrvNameId = e->getTextAs<Cmper>(); }},
     {"abbrvXadj", [](const XmlElementPtr& e, const std::shared_ptr<StaffGroup>& i) { i->abbrvNameXadj = e->getTextAs<int>(); }},
     {"abbrvYadj", [](const XmlElementPtr& e, const std::shared_ptr<StaffGroup>& i) { i->abbrvNameYadj = e->getTextAs<int>(); }},
-    {"fullHAlign", [](const XmlElementPtr& e, const std::shared_ptr<StaffGroup>& i) { i->fullNameAlign = toEnum<StaffGroup::AlignJustify>(e); }},
-    {"abbrvHAlign", [](const XmlElementPtr& e, const std::shared_ptr<StaffGroup>& i) { i->abbrvNameAlign = toEnum<StaffGroup::AlignJustify>(e); }},
+    {"fullHAlign", [](const XmlElementPtr& e, const std::shared_ptr<StaffGroup>& i) { i->fullNameAlign = toEnum<AlignJustify>(e); }},
+    {"abbrvHAlign", [](const XmlElementPtr& e, const std::shared_ptr<StaffGroup>& i) { i->abbrvNameAlign = toEnum<AlignJustify>(e); }},
     {"fullExpand", [](const XmlElementPtr& e, const std::shared_ptr<StaffGroup>& i) { i->fullNameExpand = populateBoolean(e, i); }},
     {"abbrvExpand", [](const XmlElementPtr& e, const std::shared_ptr<StaffGroup>& i) { i->abbrvNameExpand = populateBoolean(e, i); }},
     {"optimize", [](const XmlElementPtr& e, const std::shared_ptr<StaffGroup>& i) { i->hideStaves = toEnum<StaffGroup::HideStaves>(e); }},

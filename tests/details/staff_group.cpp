@@ -147,14 +147,14 @@ TEST(StaffGroupTest, PopulateFields)
     EXPECT_TRUE(staffGroup->bracket->showOnSingleStaff);
 
     EXPECT_EQ(staffGroup->barlineType, details::StaffGroup::BarlineType::Double);
-    EXPECT_EQ(staffGroup->fullNameJustify, details::StaffGroup::AlignJustify::Center);
-    EXPECT_EQ(staffGroup->abbrvNameJustify, details::StaffGroup::AlignJustify::Center);
+    EXPECT_EQ(staffGroup->fullNameJustify, AlignJustify::Center);
+    EXPECT_EQ(staffGroup->abbrvNameJustify, AlignJustify::Center);
     EXPECT_EQ(staffGroup->drawBarlines, details::StaffGroup::DrawBarlineStyle::Mensurstriche);
     EXPECT_EQ(staffGroup->abbrvNameId, 46);
     EXPECT_EQ(staffGroup->abbrvNameXadj, -106);
     EXPECT_EQ(staffGroup->abbrvNameYadj, 4);
-    EXPECT_EQ(staffGroup->fullNameAlign, details::StaffGroup::AlignJustify::Center);
-    EXPECT_EQ(staffGroup->abbrvNameAlign, details::StaffGroup::AlignJustify::Center);
+    EXPECT_EQ(staffGroup->fullNameAlign, AlignJustify::Center);
+    EXPECT_EQ(staffGroup->abbrvNameAlign, AlignJustify::Center);
     EXPECT_TRUE(staffGroup->ownBarline);
     EXPECT_TRUE(staffGroup->fullNameIndivPos);
     EXPECT_TRUE(staffGroup->abbrvNameIndivPos);

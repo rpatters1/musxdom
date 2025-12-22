@@ -600,14 +600,6 @@ public:
         Align       ///< "Group Under the Same Note"
     };
 
-    /// @enum AlignJustify
-    /// @brief Horizontal and vertical alignment/justification values
-    enum class AlignJustify {
-        Left,
-        Center,
-        Right
-    };
-
     /// @enum WordExtConnectIndex
     /// @brief Word extension connection points
     enum class WordExtConnectIndex {

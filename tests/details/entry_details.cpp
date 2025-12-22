@@ -417,7 +417,7 @@ TEST(LyricEntryInfoTest, PopulateFields)
         ASSERT_TRUE(info);
 
         ASSERT_TRUE(info->justify);
-        EXPECT_EQ(*info->justify, details::LyricEntryInfo::AlignJustify::Left);
+        EXPECT_EQ(*info->justify, AlignJustify::Left);
         EXPECT_FALSE(info->align);
     }
 
@@ -428,7 +428,7 @@ TEST(LyricEntryInfoTest, PopulateFields)
 
         EXPECT_FALSE(info->justify);
         ASSERT_TRUE(info->align);
-        EXPECT_EQ(*info->align, details::LyricEntryInfo::AlignJustify::Center);
+        EXPECT_EQ(*info->align, AlignJustify::Center);
     }
 }
 

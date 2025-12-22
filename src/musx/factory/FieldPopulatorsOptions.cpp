@@ -29,6 +29,8 @@ namespace factory {
 using namespace ::musx::xml;
 using namespace ::musx::dom::options;
 
+extern template const XmlEnumMappingElement<AlignJustify> XmlEnumMapping<AlignJustify>::mapping;
+
 MUSX_XML_ENUM_MAPPING(BeamOptions::FlattenStyle, {
     {"onEndNotes", BeamOptions::FlattenStyle::OnEndNotes},
     {"onStandardNote", BeamOptions::FlattenStyle::OnStandardNote},
@@ -109,12 +111,6 @@ MUSX_XML_ENUM_MAPPING(LyricOptions::SmartHyphenStart, {
 MUSX_XML_ENUM_MAPPING(LyricOptions::AutoNumberingAlign, {
     {"none", LyricOptions::AutoNumberingAlign::None},   // this default value may never appear in the xml
     {"align", LyricOptions::AutoNumberingAlign::Align},
-});
-
-MUSX_XML_ENUM_MAPPING(LyricOptions::AlignJustify, {
-    {"left", LyricOptions::AlignJustify::Left},
-    {"center", LyricOptions::AlignJustify::Center},
-    {"right", LyricOptions::AlignJustify::Right},
 });
 
 MUSX_XML_ENUM_MAPPING(LyricOptions::WordExtConnectIndex, {
@@ -593,8 +589,8 @@ MUSX_XML_ELEMENT_ARRAY(LineCurveOptions, {
 });
 
 MUSX_XML_ELEMENT_ARRAY(LyricOptions::SyllablePosStyle, {
-    {"align",   [](const XmlElementPtr& e, const std::shared_ptr<LyricOptions::SyllablePosStyle>& i) { i->align = toEnum<LyricOptions::AlignJustify>(e); }},
-    {"justify", [](const XmlElementPtr& e, const std::shared_ptr<LyricOptions::SyllablePosStyle>& i) { i->justify = toEnum<LyricOptions::AlignJustify>(e); }},
+    {"align",   [](const XmlElementPtr& e, const std::shared_ptr<LyricOptions::SyllablePosStyle>& i) { i->align = toEnum<AlignJustify>(e); }},
+    {"justify", [](const XmlElementPtr& e, const std::shared_ptr<LyricOptions::SyllablePosStyle>& i) { i->justify = toEnum<AlignJustify>(e); }},
     {"on",      [](const XmlElementPtr& e, const std::shared_ptr<LyricOptions::SyllablePosStyle>& i) { i->on = populateBoolean(e, i); }}
 });
 

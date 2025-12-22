@@ -29,16 +29,16 @@ namespace factory {
 using namespace ::musx::xml;
 using namespace ::musx::dom::others;
 
+MUSX_XML_ENUM_MAPPING(AlignJustify, {
+    {"left", AlignJustify::Left},
+    {"center", AlignJustify::Center},
+    {"right", AlignJustify::Right},
+});
+
 MUSX_XML_ENUM_MAPPING(LyricTextType, {
     {"verse", LyricTextType::Verse},
     {"chorus", LyricTextType::Chorus},
     {"section", LyricTextType::Section},
-});
-
-MUSX_XML_ENUM_MAPPING(NamePositioning::AlignJustify, {
-    //{"left", NamePositioning::AlignJustify::Left}, this is the default and is not known to occur in the xml
-    {"center", NamePositioning::AlignJustify::Center},
-    {"right", NamePositioning::AlignJustify::Right},
 });
 
 MUSX_XML_ENUM_MAPPING(ShowClefMode, {
@@ -119,9 +119,9 @@ MUSX_XML_ELEMENT_ARRAY(EnigmaMusicRange, {
 MUSX_XML_ELEMENT_ARRAY(NamePositioning, {
     {"horzOff", [](const XmlElementPtr& e, const std::shared_ptr<NamePositioning>& i) { i->horzOff = e->getTextAs<Evpu>(); }},
     {"vertOff", [](const XmlElementPtr& e, const std::shared_ptr<NamePositioning>& i) { i->vertOff = e->getTextAs<Evpu>(); }},
-    {"justify", [](const XmlElementPtr& e, const std::shared_ptr<NamePositioning>& i) { i->justify = toEnum<NamePositioning::AlignJustify>(e); }},
+    {"justify", [](const XmlElementPtr& e, const std::shared_ptr<NamePositioning>& i) { i->justify = toEnum<AlignJustify>(e); }},
     {"indivPos", [](const XmlElementPtr& e, const std::shared_ptr<NamePositioning>& i) { i->indivPos = populateBoolean(e, i); }},
-    {"halign", [](const XmlElementPtr& e, const std::shared_ptr<NamePositioning>& i) { i->hAlign = toEnum<NamePositioning::AlignJustify>(e); }},
+    {"halign", [](const XmlElementPtr& e, const std::shared_ptr<NamePositioning>& i) { i->hAlign = toEnum<AlignJustify>(e); }},
     {"expand", [](const XmlElementPtr& e, const std::shared_ptr<NamePositioning>& i) { i->expand = populateBoolean(e, i); }},
 });
 

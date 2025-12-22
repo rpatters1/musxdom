@@ -51,6 +51,15 @@ class Staff;
 
 // This file contains common classes that are shared among Options, Others, and Details.
 
+/// @enum AlignJustify
+/// @brief Alignment and justification options for staff and group names.
+enum class AlignJustify
+{
+    Left,   ///< Left alignment or justification (the default value.)
+    Right,  ///< Right alignment.
+    Center  ///< Center alignment.
+};
+
 /// @enum DefaultClefType
 /// @brief Clef types used by default in Finale documents. The values correspond to indices into
 /// @ref musx::dom::options::ClefOptions::clefDefs.
@@ -769,15 +778,6 @@ public:
      */
     explicit NamePositioning(const DocumentWeakPtr& document, Cmper partId = SCORE_PARTID, ShareMode shareMode = ShareMode::All, Cmper cmper = 0)
         : OthersBase(document, partId, shareMode, cmper) {}
-
-    /// @enum AlignJustify
-    /// @brief Alignment and justification options for staff and group names.
-    enum class AlignJustify
-    {
-        Left,   ///< Left alignment or justification (the default value.)
-        Right,  ///< Right alignment.
-        Center  ///< Center alignment.
-    };
 
     Evpu horzOff{};             ///< Horizontal distance from staff in @ref Evpu.
     Evpu vertOff{};             ///< Vertical offset from staff in @ref Evpu.

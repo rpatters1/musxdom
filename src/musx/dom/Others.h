@@ -1425,15 +1425,6 @@ public:
     explicit MeasureNumberRegion(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
         : OthersBase(document, partId, shareMode, cmper) {}
 
-    /// @enum AlignJustify
-    /// @brief Alignment and justification options for measure numbers.
-    enum class AlignJustify
-    {
-        Left,   ///< Left alignment or justification (the default value.)
-        Right,  ///< Right alignment.
-        Center  ///< Center alignment.
-    };
-
     /// @enum TimePrecision
     /// @brief Precision for time display
     enum class TimePrecision

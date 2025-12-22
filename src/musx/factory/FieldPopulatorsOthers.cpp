@@ -30,6 +30,8 @@ using namespace ::musx::xml;
 using namespace ::musx::dom::smartshape;
 using namespace ::musx::dom::others;
 
+
+extern template const XmlEnumMappingElement<AlignJustify> XmlEnumMapping<AlignJustify>::mapping;
 extern template const XmlEnumMappingElement<LyricTextType> XmlEnumMapping<LyricTextType>::mapping;
 extern template const XmlEnumMappingElement<ShowClefMode> XmlEnumMapping<ShowClefMode>::mapping;
 extern template const XmlEnumMappingElement<options::TextOptions::HorizontalAlignment> XmlEnumMapping<options::TextOptions::HorizontalAlignment>::mapping;
@@ -101,12 +103,6 @@ MUSX_XML_ENUM_MAPPING(musx::dom::others::MeasureExprAssign::ShowStaffList, {
     // {"", MeasureExprAssign::ShowStaffList::ScoreAndPart}, // Default; may not appear in the XML.
     {"scoreOnly", MeasureExprAssign::ShowStaffList::ScoreOnly},
     {"partOnly", MeasureExprAssign::ShowStaffList::PartOnly},
-});
-
-MUSX_XML_ENUM_MAPPING(MeasureNumberRegion::AlignJustify, {
-    //{"left", MeasureNumberRegion::AlignJustify::Left}, this is the default and is not known to occur in the xml
-    {"center", MeasureNumberRegion::AlignJustify::Center},
-    {"right", MeasureNumberRegion::AlignJustify::Right},
 });
 
 MUSX_XML_ENUM_MAPPING(MeasureNumberRegion::TimePrecision, {
@@ -850,9 +846,9 @@ MUSX_XML_ELEMENT_ARRAY(MeasureNumberRegion::ScorePartData, {
     {"rightMmBracketChar", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberRegion::ScorePartData>& i) { i->rightMmBracketChar = e->getTextAs<char32_t>(); }},
     {"startWith", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberRegion::ScorePartData>& i) { i->startWith = e->getTextAs<int>(); }},
     {"incidence", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberRegion::ScorePartData>& i) { i->incidence = e->getTextAs<int>(); }},
-    {"startAlign", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberRegion::ScorePartData>& i) { i->startAlign = toEnum<MeasureNumberRegion::AlignJustify>(e); }},
-    {"multipleAlign", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberRegion::ScorePartData>& i) { i->multipleAlign = toEnum<MeasureNumberRegion::AlignJustify>(e); }},
-    {"mmRestAlign", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberRegion::ScorePartData>& i) { i->mmRestAlign = toEnum<MeasureNumberRegion::AlignJustify>(e); }},
+    {"startAlign", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberRegion::ScorePartData>& i) { i->startAlign = toEnum<AlignJustify>(e); }},
+    {"multipleAlign", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberRegion::ScorePartData>& i) { i->multipleAlign = toEnum<AlignJustify>(e); }},
+    {"mmRestAlign", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberRegion::ScorePartData>& i) { i->mmRestAlign = toEnum<AlignJustify>(e); }},
     {"startOfLine", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberRegion::ScorePartData>& i) { i->showOnStart = populateBoolean(e, i); }},
     {"multipleOf", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberRegion::ScorePartData>& i) { i->showOnEvery = populateBoolean(e, i); }},
     {"exceptFirstMeas", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberRegion::ScorePartData>& i) { i->hideFirstMeasure = populateBoolean(e, i); }},
@@ -864,9 +860,9 @@ MUSX_XML_ELEMENT_ARRAY(MeasureNumberRegion::ScorePartData, {
     {"showOnBottom", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberRegion::ScorePartData>& i) { i->showOnBottom = populateBoolean(e, i); }},
     {"excludeOthers", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberRegion::ScorePartData>& i) { i->excludeOthers = populateBoolean(e, i); }},
     {"breakMmRest", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberRegion::ScorePartData>& i) { i->breakMmRest = populateBoolean(e, i); }},
-    {"startJustify", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberRegion::ScorePartData>& i) { i->startJustify = toEnum<MeasureNumberRegion::AlignJustify>(e); }},
-    {"multipleJustify", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberRegion::ScorePartData>& i) { i->multipleJustify = toEnum<MeasureNumberRegion::AlignJustify>(e); }},
-    {"mmRestJustify", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberRegion::ScorePartData>& i) { i->mmRestJustify = toEnum<MeasureNumberRegion::AlignJustify>(e); }}
+    {"startJustify", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberRegion::ScorePartData>& i) { i->startJustify = toEnum<AlignJustify>(e); }},
+    {"multipleJustify", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberRegion::ScorePartData>& i) { i->multipleJustify = toEnum<AlignJustify>(e); }},
+    {"mmRestJustify", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberRegion::ScorePartData>& i) { i->mmRestJustify = toEnum<AlignJustify>(e); }}
 });
 
 MUSX_XML_ELEMENT_ARRAY(MeasureNumberRegion, {

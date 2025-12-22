@@ -191,8 +191,8 @@ TEST(MeasureNumberRegionTest, PropertiesTest)
     EXPECT_EQ(scoreData->rightMmBracketChar, 93);
     EXPECT_EQ(scoreData->startWith, 2);
     EXPECT_EQ(scoreData->incidence, 1);
-    EXPECT_EQ(scoreData->multipleJustify, MeasureNumberRegion::AlignJustify::Center);
-    EXPECT_EQ(scoreData->mmRestJustify, MeasureNumberRegion::AlignJustify::Center);
+    EXPECT_EQ(scoreData->multipleJustify, AlignJustify::Center);
+    EXPECT_EQ(scoreData->mmRestJustify, AlignJustify::Center);
 
     // Boolean fields
     EXPECT_TRUE(scoreData->showOnStart);

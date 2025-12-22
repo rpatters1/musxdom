@@ -1348,9 +1348,6 @@ public:
 class LyricEntryInfo : public EntryDetailsBase
 {
 public:
-    /// @brief AlignJustify from @ref options::LyricOptions.
-    using AlignJustify = options::LyricOptions::AlignJustify;
-
     /**
      * @brief Constructor
      * @param document A weak pointer to the associated document.
@@ -1751,9 +1748,6 @@ public:
 
     /** @brief Enum for barline justification */
     using BarlineType = others::Measure::BarlineType;
-
-    /** @brief Enum for horizontal alignment */
-    using AlignJustify = others::NamePositioning::AlignJustify;
 
     /**
      * @enum DrawBarlineStyle
