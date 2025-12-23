@@ -1288,7 +1288,7 @@ public:
     };
 
     /// @enum SlurControlStyleType
-    /// @brief Slue control style types
+    /// @brief Slur control style types
     enum class SlurControlStyleType
     {
         ShortSpan,
