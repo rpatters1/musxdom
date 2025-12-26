@@ -179,6 +179,9 @@ Functions</h2></td></tr>
 <tr class="memitem:aa8135fae68fcafc7da27d3540d2a04b3" id="r_aa8135fae68fcafc7da27d3540d2a04b3"><td class="memItemLeft" align="right" valign="top">constexpr int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemusic__theory.html#aa8135fae68fcafc7da27d3540d2a04b3">calcAlterationFromKeySigChange</a> (int interval, int keySigChange)</td></tr>
 <tr class="memdesc:aa8135fae68fcafc7da27d3540d2a04b3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines the chromatic alteration needed for a diatonic interval to produce a desired key signature change.  <br /></td></tr>
 <tr class="separator:aa8135fae68fcafc7da27d3540d2a04b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa537406e4ca826927f9dfe4f3c238d52" id="r_aa537406e4ca826927f9dfe4f3c238d52"><td class="memItemLeft" align="right" valign="top">constexpr int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemusic__theory.html#aa537406e4ca826927f9dfe4f3c238d52">calcKeySigChangeFromInterval</a> (int interval, int chromaticAlteration)</td></tr>
+<tr class="memdesc:aa537406e4ca826927f9dfe4f3c238d52"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the resulting key signature change (sharps/flats) produced by a diatonic interval and chromatic alteration.  <br /></td></tr>
+<tr class="separator:aa537406e4ca826927f9dfe4f3c238d52"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaf657cfd2d18ef5386cc35a5d1283ea4" id="r_aaf657cfd2d18ef5386cc35a5d1283ea4"><td class="memItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemusic__theory.html#aaf657cfd2d18ef5386cc35a5d1283ea4">calcTranspositionIsOctave</a> (int displacement, int alteration)</td></tr>
 <tr class="memdesc:aaf657cfd2d18ef5386cc35a5d1283ea4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines if the transposition values result in trasposing by one or more octaves.  <br /></td></tr>
 <tr class="separator:aaf657cfd2d18ef5386cc35a5d1283ea4"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -477,6 +480,52 @@ constexpr std::array&lt; int, <a class="el" href="namespacemusic__theory.html#ab
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A displacement value that can be used to create a <a class="el" href="classmusic__theory_1_1Transposer.html">Transposer</a> instance. </dd></dl>
+
+</div>
+</div>
+<a id="aa537406e4ca826927f9dfe4f3c238d52" name="aa537406e4ca826927f9dfe4f3c238d52"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa537406e4ca826927f9dfe4f3c238d52">&#9670;&#160;</a></span>calcKeySigChangeFromInterval()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr int music_theory::calcKeySigChangeFromInterval </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>interval</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>chromaticAlteration</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Calculates the resulting key signature change (sharps/flats) produced by a diatonic interval and chromatic alteration. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">interval</td><td>The diatonic displacement (e.g. +3 for a perfect fourth up). </td></tr>
+    <tr><td class="paramname">chromaticAlteration</td><td>The chromatic alteration in halfsteps that defines the chromatic interval. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The change in key signature (positive for sharps added or flats removed, negative for flats added or sharps removed). </dd></dl>
 
 </div>
 </div>

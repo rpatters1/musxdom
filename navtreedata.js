@@ -86,12 +86,12 @@ var NAVTREEINDEX =
 "classmusx_1_1dom_1_1others_1_1TextRepeatAssign.html#a84005cceb180df0d07d62e16fbe84987",
 "classmusx_1_1util_1_1Fraction.html#ada796810cfe48b0fe6be5891bb1ed9bd",
 "functions_vars_s.html",
-"namespacemusx_1_1dom_1_1header.html#a2fa96df1709a0b0ff96523e710bad8f9",
-"namespacemusx_1_1dom_1_1uuid.html#a3738093087a59d7c89fdd77c7e99fc14",
-"namespacemusx_1_1dom_1_1uuid.html#a874ee3b8f1c97c7105c0f323701ec042",
-"namespacemusx_1_1dom_1_1uuid.html#ad6cd55a8f955a088e0d54cc0b7ed8274",
-"structmusx_1_1dom_1_1ShapeDefInstruction_1_1Decoded.html#ad2324993a03e5b8dcf3da1bbbbd4ee2d",
-"structmusx_1_1dom_1_1options_1_1TextOptions_1_1InsertSymbolInfo.html#a5dea2d4320cb8e07057969ff5a644a7f"
+"namespacemusx_1_1dom_1_1header.html#a0690e3150e4d4fd42ba95f3f57e5d391aaea23489ce3aa9b6406ebb28e0cda430",
+"namespacemusx_1_1dom_1_1uuid.html#a369bdc1a72d58a984558cc25de0a25b0",
+"namespacemusx_1_1dom_1_1uuid.html#a86923b30252ad0685ed6f7ae4e1fe2fa",
+"namespacemusx_1_1dom_1_1uuid.html#ad6a235691f62ad6f6516437e6801acbb",
+"structmusx_1_1dom_1_1ShapeDefInstruction_1_1Decoded.html#a81dd4cc6815244168741fce5ce27e83f",
+"structmusx_1_1dom_1_1options_1_1TextOptions_1_1InsertSymbolInfo.html#a57cf53760a0a5c83c199101c89919122"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';
