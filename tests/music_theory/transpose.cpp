@@ -341,3 +341,69 @@ TEST(TransposerTest, CalcAlterationFromKeySigChange_Theoretical)
     // D# Transposition dn
     EXPECT_EQ(calcAlterationFromKeySigChange(-1, -9), -1) << "resulting interval should be down aug 2nd {-1, -1}";
 }
+
+TEST(TransposerTest, CalcKeySigChangeFromInterval_Basic)
+{
+    // Bb clarinet transposes a major second up
+    // Expected key change for major second up is +2
+    EXPECT_EQ(calcKeySigChangeFromInterval(1, 0), +2);
+
+    // A clarinet transposes a minor third up
+    // Expected for major third up is -3; minor third is one halfstep smaller => alteration -1
+    EXPECT_EQ(calcKeySigChangeFromInterval(2, -1), -3);
+
+    // Eb clarinet transposes a minor third down
+    // This matches your prior test: interval -2 with keySigChange +3 required alteration +1,
+    // so reversing should yield +3.
+    EXPECT_EQ(calcKeySigChangeFromInterval(-2, +1), +3);
+
+    // Eb bari sax transposes up a major 13th (octave + major sixth)
+    // Expected for major sixth up is +3
+    EXPECT_EQ(calcKeySigChangeFromInterval(12, 0), +3);
+
+    // F Horn transposes a perfect fifth up
+    // Expected for perfect fifth up is +1
+    EXPECT_EQ(calcKeySigChangeFromInterval(4, 0), +1);
+
+    // D Horn transposes a minor 7th up
+    // Expected for minor 7th up is -2, which corresponds to alteration -1 for interval 6
+    EXPECT_EQ(calcKeySigChangeFromInterval(6, -1), -2);
+
+    // B Horn transposes a minor 9th up
+    // Expected for minor 9th up is -5, which corresponds to alteration -1 for interval 8
+    EXPECT_EQ(calcKeySigChangeFromInterval(8, -1), -5);
+
+    // G-basso Horn transposes a perfect fifth down
+    // This matches your prior test: interval -4 with keySigChange -1 required alteration 0.
+    EXPECT_EQ(calcKeySigChangeFromInterval(-4, 0), -1);
+}
+
+TEST(TransposerTest, CalcKeySigChangeFromInterval_Theoretical)
+{
+    // Fb Transposition up: from your test {4, 1} should produce +8
+    EXPECT_EQ(calcKeySigChangeFromInterval(4, 1), +8) << "interval should be up aug 5th {4, 1}";
+
+    // Fb Transposition down: from your test {-3, 1} should produce +8
+    EXPECT_EQ(calcKeySigChangeFromInterval(-3, 1), +8) << "interval should be down dim 4th {-3, 1}";
+
+    // Gb Transposition up: from your test {3, 1} should produce +6
+    EXPECT_EQ(calcKeySigChangeFromInterval(3, 1), +6) << "interval should be up aug 4th {3, 1}";
+
+    // Gb Transposition down: from your test {-4, 1} should produce +6
+    EXPECT_EQ(calcKeySigChangeFromInterval(-4, 1), +6) << "interval should be down dim 5th {-4, 1}";
+
+    // F# Transposition up: from your test {4, -1} should produce -6
+    EXPECT_EQ(calcKeySigChangeFromInterval(4, -1), -6) << "interval should be up dim 5th {4, -1}";
+
+    // Ebb Transposition up: from your test {5, 1} should produce +10
+    EXPECT_EQ(calcKeySigChangeFromInterval(5, 1), +10) << "interval should be up aug 6th {5, 1}";
+
+    // Ebb Transposition down: from your test {-2, 2} should produce +10
+    EXPECT_EQ(calcKeySigChangeFromInterval(-2, 2), +10) << "interval should be down dim 3rd {-2, 2}";
+
+    // D# Transposition up: from your test {6, -2} should produce -9
+    EXPECT_EQ(calcKeySigChangeFromInterval(6, -2), -9) << "interval should be up dim 7th {6, -2}";
+
+    // D# Transposition down: from your test {-1, -1} should produce -9
+    EXPECT_EQ(calcKeySigChangeFromInterval(-1, -1), -9) << "interval should be down aug 2nd {-1, -1}";
+}

@@ -199,6 +199,24 @@ constexpr int calcAlterationFromKeySigChange(int interval, int keySigChange)
     return alteration;
 }
 
+/// @brief Calculates the resulting key signature change (sharps/flats) produced by a diatonic interval
+///        and chromatic alteration.
+/// @param interval            The diatonic displacement (e.g. +3 for a perfect fourth up).
+/// @param chromaticAlteration The chromatic alteration in halfsteps that defines the chromatic interval.
+/// @return The change in key signature (positive for sharps added or flats removed,
+///         negative for flats added or sharps removed).
+constexpr int calcKeySigChangeFromInterval(int interval, int chromaticAlteration)
+{
+    const int diatonic = positiveModulus(interval, STANDARD_DIATONIC_STEPS);
+    int expectedKeyChange = DIATONIC_INTERVAL_ADJUSTMENTS[diatonic][0];
+    if (interval < 0) {
+        if (std::abs(expectedKeyChange) > 1) { // imperfect intervals
+            expectedKeyChange -= STANDARD_DIATONIC_STEPS;
+        }
+    }
+    return expectedKeyChange + (chromaticAlteration * STANDARD_DIATONIC_STEPS);
+}
+
 /// @brief Determines if the transposition values result in trasposing by one or more octaves.
 /// @param displacement The diatonic displacement.
 /// @param alteration The chromatic alteration.
