@@ -71,10 +71,10 @@ FetchContent_MakeAvailable(musx)
 target_link_libraries(project PRIVATE musx) # replace "project" with your actual project name
 ```
 
-You will also need an xml parser. This repository provides implementations for [tinyxml](https://github.com/leethomason/tinyxml2), [rapidxml](https://rapidxml.sourceforge.net/), and [pugixml](https://github.com/zeux/pugixml). If you wish to use one of these, define one and/or the other in your project's CMakeLists.txt file:
+You will also need an xml parser. This repository provides implementations for [tinyxml](https://github.com/leethomason/tinyxml2), [rapidxml](https://rapidxml.sourceforge.net/), and [pugixml](https://github.com/zeux/pugixml). If you wish to use one of these, define the one(s) you wish to use in your project's CMakeLists.txt file:
 
 ```cmake
-set(MUSX_USE_TINYXML2 ON CACHE BOOL "Disable tinyxml2 parsing classes" FORCE)
+set(MUSX_USE_TINYXML2 ON CACHE BOOL "Enable tinyxml2 parsing classes" FORCE)
 set(MUSX_USE_RAPIDXML ON CACHE BOOL "Enable rapidxml parsing classes" FORCE)
 set(MUSX_USE_PUGIXML ON CACHE BOOL "Enable pugixml parsing classes" FORCE)
 ```
