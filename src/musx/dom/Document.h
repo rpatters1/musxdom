@@ -156,13 +156,13 @@ public:
     /// @param partId the linked part to search
     /// @param measureId the measure to find
     [[nodiscard]]
-    MusxInstance<others::Page> calculatePageFromMeasure(Cmper partId, MeasCmper measureId) const;
+    MusxInstance<others::Page> calcPageFromMeasure(Cmper partId, MeasCmper measureId) const;
 
     /// @brief Searches systems to find the page that contains the measure.
     /// @param partId the linked part to search
     /// @param measureId the measure to find
     [[nodiscard]]
-    MusxInstance<others::StaffSystem> calculateSystemFromMeasure(Cmper partId, MeasCmper measureId) const;
+    MusxInstance<others::StaffSystem> calcSystemFromMeasure(Cmper partId, MeasCmper measureId) const;
 
     /// @brief Returns the maximum number of blank pages in any part. This is calculated by #factory::DocumentFactory::create.
     [[nodiscard]]

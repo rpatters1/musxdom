@@ -464,7 +464,7 @@ MusxInstance<others::TextBlock> MeasureTextAssign::getTextBlock() const
 util::EnigmaParsingContext MeasureTextAssign::getRawTextCtx(Cmper forPartId) const
 {
     if (auto textBlock = getTextBlock()) {
-        if (const auto page = getDocument()->calculatePageFromMeasure(forPartId, getCmper2())) {
+        if (const auto page = getDocument()->calcPageFromMeasure(forPartId, getCmper2())) {
             return textBlock->getRawTextCtx(forPartId, page->getCmper());
         }
     }
