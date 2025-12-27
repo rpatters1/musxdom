@@ -2,9 +2,9 @@ var classmusx_1_1dom_1_1Document =
 [
     [ "calcEntireDocument", "classmusx_1_1dom_1_1Document.html#addda2caaa580246270bcbd1622bde086", null ],
     [ "calcHasVaryingSystemStaves", "classmusx_1_1dom_1_1Document.html#abf79aabe5f131018df3561b9302b3585", null ],
+    [ "calcPageFromMeasure", "classmusx_1_1dom_1_1Document.html#a3b1cdc185b66bf8fa55be29d36280e66", null ],
     [ "calcScrollViewCmper", "classmusx_1_1dom_1_1Document.html#a8ea1ce4314627bcd01d5dcd48d279c94", null ],
-    [ "calculatePageFromMeasure", "classmusx_1_1dom_1_1Document.html#a55deb9eede2e4d0faf4e9a8e70a912ca", null ],
-    [ "calculateSystemFromMeasure", "classmusx_1_1dom_1_1Document.html#a7ffeceb4ce06623a0878a0ae6dadc5d6", null ],
+    [ "calcSystemFromMeasure", "classmusx_1_1dom_1_1Document.html#a58c106af9d550b67ae51bafca0987a6c", null ],
     [ "createInstrumentMap", "classmusx_1_1dom_1_1Document.html#ad7512a1daf902e8580a8b4418a31ded8", null ],
     [ "getDetails", "classmusx_1_1dom_1_1Document.html#ae5cc504ac90381247c976fddfbf8f6a7", null ],
     [ "getDetails", "classmusx_1_1dom_1_1Document.html#a9c2d300cb8b2da41a34601235b41d963", null ],
