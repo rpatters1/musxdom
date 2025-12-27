@@ -39,7 +39,7 @@ MusxInstanceList<others::StaffUsed> Document::getScrollViewStaves(Cmper partId) 
     return getOthers()->getArray<others::StaffUsed>(partId, calcScrollViewCmper(partId));
 }
 
-MusxInstance<others::Page> Document::calculatePageFromMeasure(Cmper partId, MeasCmper measureId) const
+MusxInstance<others::Page> Document::calcPageFromMeasure(Cmper partId, MeasCmper measureId) const
 {
     MusxInstance<others::Page> result;
     auto pages = getOthers()->getArray<others::Page>(partId);
@@ -57,7 +57,7 @@ MusxInstance<others::Page> Document::calculatePageFromMeasure(Cmper partId, Meas
     return result;
 }
 
-MusxInstance<others::StaffSystem> Document::calculateSystemFromMeasure(Cmper partId, MeasCmper measureId) const
+MusxInstance<others::StaffSystem> Document::calcSystemFromMeasure(Cmper partId, MeasCmper measureId) const
 {
     MusxInstance<others::StaffSystem> result;
     auto systems = getOthers()->getArray<others::StaffSystem>(partId);

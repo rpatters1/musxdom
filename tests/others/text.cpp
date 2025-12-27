@@ -1215,9 +1215,9 @@ TEST(TextsTest, ExpressionsAndTitles)
     auto measTexts = doc->getDetails()->getArray<details::MeasureTextAssign>(SCORE_PARTID, 1, 34);
     ASSERT_FALSE(measTexts.empty());
 
-    const auto scorePageNum = doc->calculatePageFromMeasure(SCORE_PARTID, measTexts[0]->getCmper2())->getCmper();
+    const auto scorePageNum = doc->calcPageFromMeasure(SCORE_PARTID, measTexts[0]->getCmper2())->getCmper();
     EXPECT_EQ(scorePageNum, 2);
-    const auto partPageNum = doc->calculatePageFromMeasure(kClarinetPartId, measTexts[0]->getCmper2())->getCmper();
+    const auto partPageNum = doc->calcPageFromMeasure(kClarinetPartId, measTexts[0]->getCmper2())->getCmper();
     EXPECT_EQ(partPageNum, 1);
 
     output.clear();

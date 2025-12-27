@@ -310,7 +310,7 @@ StaffCmper MeasureExprAssign::calcAssignedStaffId(bool forPageView) const
     }
     const auto systemStaves = [&]() -> std::optional<MusxInstanceList<StaffUsed>> {
         if (forPageView) {
-            if (auto system = getDocument()->calculateSystemFromMeasure(getRequestedPartId(), getCmper())) {
+            if (auto system = getDocument()->calcSystemFromMeasure(getRequestedPartId(), getCmper())) {
                 return getDocument()->getOthers()->getArray<StaffUsed>(getRequestedPartId(), system->getCmper());
             }
         }
