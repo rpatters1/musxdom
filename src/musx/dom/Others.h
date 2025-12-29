@@ -1429,7 +1429,7 @@ public:
     {
     public:
         using ContainedClassBase::ContainedClassBase;
-     
+
         std::shared_ptr<FontInfo> startFont;          ///< The font used for numbers at start of system.
         std::shared_ptr<FontInfo> multipleFont;       ///< The font used for mid-system numbers.
         std::shared_ptr<FontInfo> mmRestFont;         ///< The font used for multi-measure rest ranges.

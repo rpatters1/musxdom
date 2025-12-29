@@ -843,13 +843,13 @@ std::pair<int, int> EntryInfoPtr::calcTopBottomStaffPositions() const
 bool EntryInfoPtr::calcUpStemDefault() const
 {
     //stem direction is determined by the beam a note or rest is part of, if any, so
-	//we must always look for a beam to calculate direction.
+    //we must always look for a beam to calculate direction.
     auto beamStart = findBeamStartOrCurrent();
 
-  	int maxTopDiff = (std::numeric_limits<int>::min)();
-	int minBotDiff = (std::numeric_limits<int>::max)();
-	int numAbove = 0;
-	int numBelow = 0;
+    int maxTopDiff = (std::numeric_limits<int>::min)();
+    int minBotDiff = (std::numeric_limits<int>::max)();
+    int numAbove = 0;
+    int numBelow = 0;
     bool gotNonGrace = false;
     bool gotNonFloatRest = false;
 

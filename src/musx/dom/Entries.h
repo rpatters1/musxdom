@@ -88,7 +88,7 @@ public:
     MusxInstance<others::PartVoicing> getPartVoicing() const { return m_partVoicing; }
 
     /**
-     * @brief Returns the part voicing for the requested part, based on the document's `PartVoicingPolicy`. 
+     * @brief Returns the part voicing for the requested part, based on the document's `PartVoicingPolicy`.
      *
      * @return The part voicing if it exists and if the document's `PartVoicingPolicy` applies part voicing. Otherwise nullptr.
      */
@@ -189,7 +189,7 @@ public:
     bool calcPolicyVoicingIncludesLayer(LayerIndex layerIndex) const
     { return !m_honorPartVoicing || calcVoicingIncludesLayer(layerIndex); }
 
-private:        
+private:
     MusxInstance<GFrameHold> m_hold;                    ///< The resolved GFrameHold object, or null if not found.
     Cmper m_requestedPartId{};                          ///< The requested part context.
     util::Fraction m_timeOffset;                        ///< The time offset to apply to entry frames.
@@ -1503,7 +1503,7 @@ public:
     [[nodiscard]]
     size_t getNoteIndex() const
     { return m_noteIndex; }
-    
+
     /**
      * @brief Calculates the note name, octave number, actual alteration, and staff position. This function does
      * not take into account percussion notes and their staff position override. To get the staff position taking
