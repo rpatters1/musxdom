@@ -990,6 +990,31 @@ std::pair<util::Fraction, util::Fraction> StaffSystem::calcMinMaxStaffSizes() co
     return std::make_pair(util::Fraction(1), util::Fraction(1));;
 }
 
+std::optional<EvpuFloat> StaffSystem::calcHorzNeighborSystemDistance() const
+{
+    const auto prev = getDocument()->getOthers()->get<StaffSystem>(getRequestedPartId(), getCmper() - 1);
+    const auto page = getPage();
+    const auto instrumentsInSystem = getDocument()->getOthers()->getArray<StaffUsed>(getRequestedPartId(), getCmper() - 1);
+    if (!prev || !page || instrumentsInSystem.empty()) {
+        return std::nullopt;
+    }
+
+    // Check if horizontal distance between systems is larger than 0,
+    // systems are scaled equally, systems are on same page, and
+    // first staves appear at same height.
+    const Evpu pageWidth = (page->width - page->margLeft - (-page->margRight));
+    const EvpuFloat horzDistance = (left + prev->right) * page->calcPageScaling().toDouble() - pageWidth;
+
+    if (horzDistance > 0.0 // Neighbor doesn't overlap horizontally
+        && calcSystemScaling() == prev->calcSystemScaling() // Staff systems are the same size
+        && pageId == prev->pageId // Staff Systems are on the same page
+        && (distanceToPrev + top) // Tops of staff systems are at the same height
+           == (instrumentsInSystem.at(instrumentsInSystem.size() - 1)->distFromTop + prev->bottom) * calcSystemScaling().toDouble()) {
+        return horzDistance;
+    }
+    return std::nullopt;
+}
+
 // ***********************
 // ***** TempoChange *****
 // ***********************
