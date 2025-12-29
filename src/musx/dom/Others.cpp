@@ -704,7 +704,7 @@ bool PartVoicing::calcShowsNote(const NoteInfoPtr& noteInfoPtr) const
     if (!enabled || !noteInfoPtr) {
         return true;
     }
-    
+
     const auto& entryInfoPtr = noteInfoPtr.getEntryInfo();
     const auto& frame = entryInfoPtr.getFrame();
     const auto layerIndex = frame->getLayerIndex();
