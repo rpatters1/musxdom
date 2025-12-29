@@ -817,14 +817,22 @@ public:
 
 /**
  * @class MusicSymbolOptions
- * @brief Options specifying the charactes for musical symbols.
+ * @brief Specifies font-specific glyphs used to render common musical symbols.
  *
- * These values are code points from the default music font. If the default music font is
- * SMuFL-compliant, they are SMuFL glyph values. Otherwise, they are most likely Maestro font values.
- * Note that Maestro font values are symbol code points, not Unicode. Use #FontInfo::calcIsSymbolFont to
- * check if the current non-SMuFL music font is using symbol code points.
+ * Each field stores a code point identifying the glyph to use for a particular
+ * notation symbol. The font used to interpret a given value is determined by
+ * the associated #FontOptions::FontType for that symbol category (e.g., noteheads,
+ * accidentals, rests).
  *
- * This class is identified by the XML node name "musicSymbolOptions".
+ * - For SMuFL-compliant fonts, values are Unicode code points corresponding to
+ *   SMuFL glyphs.
+ * - For non-SMuFL music fonts (such as Maestro), values typically represent raw
+ *   glyph indices rather than Unicode code points.
+ *
+ * Use #FontInfo::calcIsSymbolFont to determine whether a (non-SMuFL) font uses raw
+ * glyph indices.
+ *
+ * This class corresponds to the XML element "musicSymbolOptions".
  */
 class MusicSymbolOptions : public OptionsBase
 {
@@ -835,71 +843,71 @@ public:
     {
     }
 
-    char32_t noteheadQuarter{};       ///< Code point for quarter notehead
-    char32_t noteheadHalf{};          ///< Code point for half notehead
-    char32_t noteheadWhole{};         ///< Code point for whole notehead
-    char32_t noteheadDblWhole{};      ///< Code point for double whole notehead
-    char32_t natural{};               ///< Code point for natural sign
-    char32_t flat{};                  ///< Code point for flat sign
-    char32_t sharp{};                 ///< Code point for sharp sign
-    char32_t dblFlat{};               ///< Code point for double flat sign
-    char32_t dblSharp{};              ///< Code point for double sharp sign
-    char32_t parenNatural{};          ///< Code point for parenthesized natural
-    char32_t parenFlat{};             ///< Code point for parenthesized flat
-    char32_t parenSharp{};            ///< Code point for parenthesized sharp
-    char32_t parenDblFlat{};          ///< Code point for parenthesized double flat
-    char32_t parenDblSharp{};         ///< Code point for parenthesized double sharp
-    char32_t chordNatural{};          ///< Code point for chord natural sign
-    char32_t chordFlat{};             ///< Code point for chord flat sign
-    char32_t chordSharp{};            ///< Code point for chord sharp sign
-    char32_t chordDblFlat{};          ///< Code point for chord double flat sign
-    char32_t chordDblSharp{};         ///< Code point for chord double sharp sign
-    char32_t keySigNatural{};         ///< Code point for key signature natural
-    char32_t keySigFlat{};            ///< Code point for key signature flat
-    char32_t keySigSharp{};           ///< Code point for key signature sharp
-    char32_t keySigDblFlat{};         ///< Code point for key signature double flat
-    char32_t keySigDblSharp{};        ///< Code point for key signature double sharp
-    char32_t restLonga{};             ///< Code point for longa rest
-    char32_t restDblWhole{};          ///< Code point for double whole rest
-    char32_t restWhole{};             ///< Code point for whole rest
-    char32_t restHalf{};              ///< Code point for half rest
-    char32_t restQuarter{};           ///< Code point for quarter rest
-    char32_t restEighth{};            ///< Code point for eighth rest
-    char32_t rest16th{};              ///< Code point for 16th rest
-    char32_t rest32nd{};              ///< Code point for 32nd rest
-    char32_t rest64th{};              ///< Code point for 64th rest
-    char32_t rest128th{};             ///< Code point for 128th rest
-    char32_t restDefMeas{};           ///< Code point for default measure rest
-    char32_t oneBarRepeat{};          ///< Code point for one-bar repeat
-    char32_t twoBarRepeat{};          ///< Code point for two-bar repeat
-    char32_t slashBar{};              ///< Code point for slash bar
-    char32_t quarterSlash{};          ///< Code point for quarter slash
-    char32_t halfSlash{};             ///< Code point for half slash
-    char32_t wholeSlash{};            ///< Code point for whole slash
-    char32_t dblWholeSlash{};         ///< Code point for double whole slash
-    char32_t timeSigPlus{};           ///< Code point for time signature plus sign
-    char32_t timeSigPlusParts{};      ///< Code point for time signature plus (parts)
-    char32_t timeSigAbrvCommon{};     ///< Code point for common time abbreviation
-    char32_t timeSigAbrvCut{};        ///< Code point for cut time abbreviation
-    char32_t timeSigAbrvCommonParts{}; ///< Code point for common time abbreviation (parts)
-    char32_t timeSigAbrvCutParts{};   ///< Code point for cut time abbreviation (parts)
-    char32_t augDot{};                ///< Code point for augmentation dot
-    char32_t forwardRepeatDot{};      ///< Code point for forward repeat dot
-    char32_t backRepeatDot{};         ///< Code point for backward repeat dot
-    char32_t eightVaUp{};             ///< Code point for 8va (ottava) up
-    char32_t eightVbDown{};           ///< Code point for 8vb (ottava) down
-    char32_t fifteenMaUp{};           ///< Code point for 15ma (quindicesima) up
-    char32_t fifteenMbDown{};         ///< Code point for 15mb (quindicesima) down
-    char32_t trillChar{};             ///< Code point for trill symbol
-    char32_t wiggleChar{};            ///< Code point for wiggle (trill line) symbol
-    char32_t flagUp{};                ///< Code point for upward flag
-    char32_t flagDown{};              ///< Code point for downward flag
-    char32_t flag16Up{};              ///< Code point for 16th note upward flag
-    char32_t flag16Down{};            ///< Code point for 16th note downward flag
-    char32_t flag2Up{};               ///< Code point for 32nd note upward flag
-    char32_t flag2Down{};             ///< Code point for 32nd note downward flag
-    char32_t flagStraightUp{};        ///< Code point for straight upward flag
-    char32_t flagStraightDown{};      ///< Code point for straight downward flag
+    char32_t noteheadQuarter{};         ///< Code point for quarter notehead (#FontOptions::FontType::Noteheads)
+    char32_t noteheadHalf{};            ///< Code point for half notehead (#FontOptions::FontType::Noteheads)
+    char32_t noteheadWhole{};           ///< Code point for whole notehead (#FontOptions::FontType::Noteheads)
+    char32_t noteheadDblWhole{};        ///< Code point for double whole notehead (#FontOptions::FontType::Noteheads)
+    char32_t natural{};                 ///< Code point for natural sign (#FontOptions::FontType::Accis)
+    char32_t flat{};                    ///< Code point for flat sign (#FontOptions::FontType::Accis)
+    char32_t sharp{};                   ///< Code point for sharp sign (#FontOptions::FontType::Accis)
+    char32_t dblFlat{};                 ///< Code point for double flat sign (#FontOptions::FontType::Accis)
+    char32_t dblSharp{};                ///< Code point for double sharp sign (#FontOptions::FontType::Accis)
+    char32_t parenNatural{};            ///< Code point for parenthesized natural (#FontOptions::FontType::Accis)
+    char32_t parenFlat{};               ///< Code point for parenthesized flat (#FontOptions::FontType::Accis)
+    char32_t parenSharp{};              ///< Code point for parenthesized sharp (#FontOptions::FontType::Accis)
+    char32_t parenDblFlat{};            ///< Code point for parenthesized double flat (#FontOptions::FontType::Accis)
+    char32_t parenDblSharp{};           ///< Code point for parenthesized double sharp (#FontOptions::FontType::Accis)
+    char32_t chordNatural{};            ///< Code point for chord natural sign (#FontOptions::FontType::ChordAcci)
+    char32_t chordFlat{};               ///< Code point for chord flat sign (#FontOptions::FontType::ChordAcci)
+    char32_t chordSharp{};              ///< Code point for chord sharp sign (#FontOptions::FontType::ChordAcci)
+    char32_t chordDblFlat{};            ///< Code point for chord double flat sign (#FontOptions::FontType::ChordAcci)
+    char32_t chordDblSharp{};           ///< Code point for chord double sharp sign (#FontOptions::FontType::ChordAcci)
+    char32_t keySigNatural{};           ///< Code point for key signature natural (#FontOptions::FontType::Key)
+    char32_t keySigFlat{};              ///< Code point for key signature flat (#FontOptions::FontType::Key)
+    char32_t keySigSharp{};             ///< Code point for key signature sharp (#FontOptions::FontType::Key)
+    char32_t keySigDblFlat{};           ///< Code point for key signature double flat (#FontOptions::FontType::Key)
+    char32_t keySigDblSharp{};          ///< Code point for key signature double sharp (#FontOptions::FontType::Key)
+    char32_t restLonga{};               ///< Code point for longa rest (#FontOptions::FontType::Rests)
+    char32_t restDblWhole{};            ///< Code point for double whole rest (#FontOptions::FontType::Rests)
+    char32_t restWhole{};               ///< Code point for whole rest (#FontOptions::FontType::Rests)
+    char32_t restHalf{};                ///< Code point for half rest (#FontOptions::FontType::Rests)
+    char32_t restQuarter{};             ///< Code point for quarter rest (#FontOptions::FontType::Rests)
+    char32_t restEighth{};              ///< Code point for eighth rest (#FontOptions::FontType::Rests)
+    char32_t rest16th{};                ///< Code point for 16th rest (#FontOptions::FontType::Rests)
+    char32_t rest32nd{};                ///< Code point for 32nd rest (#FontOptions::FontType::Rests)
+    char32_t rest64th{};                ///< Code point for 64th rest (#FontOptions::FontType::Rests)
+    char32_t rest128th{};               ///< Code point for 128th rest (#FontOptions::FontType::Rests)
+    char32_t restDefMeas{};             ///< Code point for default measure rest (#FontOptions::FontType::Rests)
+    char32_t oneBarRepeat{};            ///< Code point for one-bar repeat (#FontOptions::FontType::AltNotSlash)
+    char32_t twoBarRepeat{};            ///< Code point for two-bar repeat (#FontOptions::FontType::AltNotSlash)
+    char32_t slashBar{};                ///< Code point for slash bar (#FontOptions::FontType::AltNotSlash)
+    char32_t quarterSlash{};            ///< Code point for quarter slash (#FontOptions::FontType::AltNotSlash)
+    char32_t halfSlash{};               ///< Code point for half slash (#FontOptions::FontType::AltNotSlash)
+    char32_t wholeSlash{};              ///< Code point for whole slash (#FontOptions::FontType::AltNotSlash)
+    char32_t dblWholeSlash{};           ///< Code point for double whole slash (#FontOptions::FontType::AltNotSlash)
+    char32_t timeSigPlus{};             ///< Code point for time signature plus sign (#FontOptions::FontType::TimePlus)
+    char32_t timeSigPlusParts{};        ///< Code point for time signature plus (parts) (#FontOptions::FontType::TimePlusParts)
+    char32_t timeSigAbrvCommon{};       ///< Code point for common time abbreviation (#FontOptions::FontType::Time)
+    char32_t timeSigAbrvCut{};          ///< Code point for cut time abbreviation (#FontOptions::FontType::Time)
+    char32_t timeSigAbrvCommonParts{};  ///< Code point for common time abbreviation (parts) (#FontOptions::FontType::TimeParts)
+    char32_t timeSigAbrvCutParts{};     ///< Code point for cut time abbreviation (parts) (#FontOptions::FontType::TimeParts)
+    char32_t augDot{};                  ///< Code point for augmentation dot (#FontOptions::FontType::AugDots)
+    char32_t forwardRepeatDot{};        ///< Code point for forward repeat dot (#FontOptions::FontType::ReptDots)
+    char32_t backRepeatDot{};           ///< Code point for backward repeat dot (#FontOptions::FontType::ReptDots)
+    char32_t eightVaUp{};               ///< Code point for 8va (ottava) up (#FontOptions::FontType::SmartShape8va)
+    char32_t eightVbDown{};             ///< Code point for 8vb (ottava) down (#FontOptions::FontType::SmartShape8vb)
+    char32_t fifteenMaUp{};             ///< Code point for 15ma (quindicesima) up (#FontOptions::FontType::SmartShape15ma)
+    char32_t fifteenMbDown{};           ///< Code point for 15mb (quindicesima) down (#FontOptions::FontType::SmartShape15mb)
+    char32_t trillChar{};               ///< Code point for trill symbol (#FontOptions::FontType::SmartShapeTrill)
+    char32_t wiggleChar{};              ///< Code point for wiggle (trill line) symbol (#FontOptions::FontType::SmartShapeWiggle)
+    char32_t flagUp{};                  ///< Code point for upward flag (#FontOptions::FontType::Flags)
+    char32_t flagDown{};                ///< Code point for downward flag (#FontOptions::FontType::Flags)
+    char32_t flag16Up{};                ///< Code point for 16th note upward flag (#FontOptions::FontType::Flags)
+    char32_t flag16Down{};              ///< Code point for 16th note downward flag (#FontOptions::FontType::Flags)
+    char32_t flag2Up{};                 ///< Code point for 32nd note upward flag (#FontOptions::FontType::Flags)
+    char32_t flag2Down{};               ///< Code point for 32nd note downward flag (#FontOptions::FontType::Flags)
+    char32_t flagStraightUp{};          ///< Code point for straight upward flag (#FontOptions::FontType::Flags)
+    char32_t flagStraightDown{};        ///< Code point for straight downward flag (#FontOptions::FontType::Flags)
 
     constexpr static std::string_view XmlNodeName = "musicSymbolOptions"; ///< The XML node name for this type.
     static const xml::XmlElementArray<MusicSymbolOptions>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
