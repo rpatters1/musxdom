@@ -210,7 +210,11 @@ private:
  */
 std::pair<NoteType, unsigned> calcDurationInfoFromEdu(Edu duration);
 
-/// @brief Calculates the number of beams or flags in the @ref Edu value.
+/// @brief Returns the number of beams implied by an EDU duration.
+///
+/// Uses calcDurationInfoFromEdu to determine the base note value.
+/// Durations greater than a quarter note return 0 flags.
+/// Dots are ignored.
 unsigned calcNumberOfBeamsInEdu(Edu duration);
 
 /**

@@ -87,6 +87,19 @@ std::pair<NoteType, unsigned> calcDurationInfoFromEdu(Edu duration)
     return std::make_pair(NoteType(noteValueMsb), count);
 }
 
+unsigned calcNumberOfBeamsInEdu(Edu duration)
+{
+    unsigned result = 0;
+    MUSX_ASSERT_IF(!duration) {
+        throw std::logic_error("Edu duration value is zero.");
+    }
+    while (duration < Edu(NoteType::Quarter)) {
+        result++;
+        duration <<= 1;
+    }
+    return result;
+}
+
 void Entry::calcLocations(const DocumentPtr& document)
 {
     auto gfholds = document->getDetails()->getArray<details::GFrameHold>(SCORE_PARTID);
@@ -1401,20 +1414,6 @@ EntryInfoPtr EntryInfoPtr::findBeamEnd() const
         }
     }
     return next;
-}
-
-unsigned calcNumberOfBeamsInEdu(Edu duration)
-{
-    unsigned result = 0;
-    MUSX_ASSERT_IF(!duration)
-    {
-        throw std::logic_error("Edu duration value is zero.");
-    }
-    while (duration < Edu(NoteType::Quarter)) {
-        result++;
-        duration <<= 1;
-    }
-    return result;
 }
 
 unsigned EntryInfoPtr::calcNumberOfBeams() const
