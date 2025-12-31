@@ -1428,6 +1428,8 @@ public:
                                         ///< This is a staff-level position and must be scaled for the global value. (Use #EntryInfoPtr::calcGlobalElapsedDuration.)
     util::Fraction actualDuration{};    ///< the actual duration of entry (in fractions of a whole note), taking into account tuplets and grace notes
                                         ///< This is a staff-level value and must be scaled for the global value. (Use #EntryInfoPtr::calcGlobalActualDuration.)
+    util::Fraction cumulativeRatio{};   ///< the cumulative tuplet ratio in effect at the time of this entry. This value allows a tuplet to discover the
+                                        ///< ratio of all the *other* active tuplets by backing out its own ratio.
     unsigned graceIndex{};              ///< the Finale grace note index, counting from 1 starting from the leftmost grace note counting rightward.
                                         ///< the main note has a grace index of zero.
     ClefIndex clefIndex{};              ///< the clef index in effect for the entry.
