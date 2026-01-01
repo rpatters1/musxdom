@@ -531,6 +531,7 @@ TEST(MeasureTest, LegacyPickupSpacers)
         EXPECT_EQ(measure->calcMinLegacyPickupSpacer(3), musx::util::Fraction(3, 4));
         EXPECT_EQ(measure->calcMinLegacyPickupSpacer(4), musx::util::Fraction(9, 16));
         EXPECT_EQ(measure->calcMinLegacyPickupSpacer(), musx::util::Fraction(3, 4));
+        EXPECT_EQ(measure->calcDefaultRestValue(), (Duration{ NoteType::Whole, 0 }));
     }
     {
         auto measure = others->get<others::Measure>(SCORE_PARTID, 2);
@@ -538,12 +539,38 @@ TEST(MeasureTest, LegacyPickupSpacers)
         EXPECT_EQ(measure->calcMinLegacyPickupSpacer(1), 0);
         EXPECT_EQ(measure->calcMinLegacyPickupSpacer(2), 0);
         EXPECT_EQ(measure->calcMinLegacyPickupSpacer(), 0);
+        EXPECT_EQ(measure->calcDefaultRestValue(), (Duration{ NoteType::Whole, 0 }));
     }
     {
         auto measure = others->get<others::Measure>(SCORE_PARTID, 3);
         ASSERT_TRUE(measure);
         EXPECT_EQ(measure->calcMinLegacyPickupSpacer(1), 0);
         EXPECT_EQ(measure->calcMinLegacyPickupSpacer(2), 0);
+        EXPECT_EQ(measure->calcDefaultRestValue(), (Duration{ NoteType::Whole, 0 }));
+    }
+}
+
+TEST(MeasureTest, PickupFromMenu)
+{
+    std::vector<char> enigmaXml;
+    // NOTE: This enigmaxml has been hand-edited to remove Part 3's non-shared MultiStaffGroupId record.
+    musxtest::readFile(musxtest::getInputPath() / "pickup_from_menu.enigmaxml", enigmaXml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(enigmaXml);
+    ASSERT_TRUE(doc);
+    auto others = doc->getOthers();
+    ASSERT_TRUE(others);
+
+    {
+      auto measure = others->get<others::Measure>(SCORE_PARTID, 1);
+        ASSERT_TRUE(measure);
+        EXPECT_EQ(measure->calcMinLegacyPickupSpacer(1), musx::util::Fraction(3, 4));
+        EXPECT_EQ(measure->calcDefaultRestValue(), (Duration{ NoteType::Quarter, 0 }));
+    }
+    {
+      auto measure = others->get<others::Measure>(SCORE_PARTID, 2);
+        ASSERT_TRUE(measure);
+        EXPECT_EQ(measure->calcMinLegacyPickupSpacer(1), musx::util::Fraction(0));
+        EXPECT_EQ(measure->calcDefaultRestValue(), (Duration{ NoteType::Whole, 0 }));
     }
 }
 

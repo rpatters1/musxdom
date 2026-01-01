@@ -77,9 +77,6 @@ constexpr Cmper MUSX_GLOBALS_CMPER = 65534; ///< The prefs cmper for global vari
 constexpr int MAX_LAYERS = 4;       ///< The maximum number of music layers in a Finale document.
 constexpr int MAX_ALTERATIONS = 7;  ///< Maximum absolute value for chromatic alterations supported in Finale.
 constexpr Cmper SCORE_PARTID = 0;   ///< The part id of the score.
-constexpr Cmper BASE_SYSTEM_ID = 0; ///< The base system cmper that gives a list of all available staves and their score order (@ref others::StaffUsed cmper)
-                                    ///< Generally you should avoid using this directly and instead use #Document::calcScrollViewCmper or
-                                    ///< #Document::getScrollViewStaves for the list of scroll view staves.
 
 constexpr double EVPU_PER_INCH = 288.0;         ///< Number of Evpu units per inch
 constexpr double EVPU_PER_POINT = 4.0;          ///< Number of Evpu units per 72 DPI point
@@ -88,6 +85,17 @@ constexpr double EVPU_PER_SPACE = 24.0;         ///< Number of Evpu units per sp
 constexpr double EFIX_PER_EVPU = 64.0;          ///< Number of Efix units per Evpu
 constexpr double EFIX_PER_SPACE = EVPU_PER_SPACE * EFIX_PER_EVPU; ///< Number of Efix units per space (spatium)
 constexpr Edu EDU_PER_WHOLE_NOTE = 0x1000;    ///< Number of Edu units per whole note
+
+constexpr Cmper BASE_SYSTEM_ID = 0; ///< The base system cmper that gives a list of all available staves and their score order (@ref others::StaffUsed cmper)
+                                    ///< Generally you should avoid using this directly and instead use #Document::calcScrollViewCmper or
+                                    ///< #Document::getScrollViewStaves for the list of scroll view staves.
+constexpr Cmper STAFF_SET_1_SYSTEM_ID = 65500;  ///< The system cmoper for the first Scroll View staff set. Add 0..7 to this value to get one of the
+                                                ///< 8 staff sets.
+constexpr Cmper STUDIO_VIEW_SYSTEM_ID = 65400;  ///< The system cmper for Studio View. Studio View has entries for every click in the click track.
+constexpr Cmper SPECIAL_PART_EXTRACTION_SYSTEM_ID = 65528;  ///< The system comper for Special Part Extraction (mostly obsolete in Finale 27.)
+                                                            ///< See #others::PartGlobals::specialPartExtractionIUList for more information.
+constexpr Cmper TEMP_SYSTEM_ID = 65529;     ///< This is a scratch value. Finale and/or plugins can use this systemId to aggregate an arbitary list
+                                            ///< of staves for batch processing. It is possible that a plugin might have saved a file with it.
 
 constexpr int MAX_CUE_PERCENTAGE = 90; ///< Arbitrary value that determines the max scaling value for cue notes. This could be configurable in the future.
 

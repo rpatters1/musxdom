@@ -50,6 +50,9 @@ class OssiaHeader;
 class Staff;
 } // namespace others
 
+/// @brief Expresses a duration as a #NoteType and a number of dots (unsigned)
+using Duration = std::pair<NoteType, unsigned>;
+
 // This file contains common classes that are shared among Options, Others, and Details.
 
 /**

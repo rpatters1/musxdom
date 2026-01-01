@@ -65,7 +65,7 @@ MusxInstance<Entry> Entry::getPrevious() const
     return retval;
 }
 
-std::pair<NoteType, unsigned> calcDurationInfoFromEdu(Edu duration)
+Duration calcDurationInfoFromEdu(Edu duration)
 {
     if (duration < 1 || duration >= 0x10000) {
         throw std::invalid_argument("Duration is out of valid range for NoteType.");
