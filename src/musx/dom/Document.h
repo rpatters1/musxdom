@@ -147,10 +147,16 @@ public:
         return BASE_SYSTEM_ID;
     }
 
-    /// @brief Returns the scroll view staves for the given @p partId.
+    /// @brief Returns the Scroll View staves for the given @p partId.
     /// @param partId The linked part to check.
     [[nodiscard]]
     MusxInstanceList<others::StaffUsed> getScrollViewStaves(Cmper partId) const;
+
+    /// @brief Returns the Studio View staves for the given @p partId. Normally this is
+    /// only one staff and is invariant between parts.
+    /// @param partId The linked part to check.
+    [[nodiscard]]
+    MusxInstanceList<others::StaffUsed> getStudioViewStaves(Cmper partId) const;
 
     /// @brief Searches pages to find the page that contains the measure.
     /// @param partId the linked part to search

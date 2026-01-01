@@ -39,6 +39,17 @@ MusxInstanceList<others::StaffUsed> Document::getScrollViewStaves(Cmper partId) 
     return getOthers()->getArray<others::StaffUsed>(partId, calcScrollViewCmper(partId));
 }
 
+MusxInstanceList<others::StaffUsed> Document::getStudioViewStaves(Cmper partId) const
+{
+    const Cmper studioViewCmper = [&]() {
+        if (const auto partGlobals = getOthers()->get<others::PartGlobals>(partId, MUSX_GLOBALS_CMPER)) {
+            return partGlobals->studioViewIUlist;
+        }
+        return STUDIO_VIEW_SYSTEM_ID;
+    }();
+    return getOthers()->getArray<others::StaffUsed>(partId, studioViewCmper);
+}
+
 MusxInstance<others::Page> Document::calcPageFromMeasure(Cmper partId, MeasCmper measureId) const
 {
     MusxInstance<others::Page> result;

@@ -262,7 +262,7 @@ util::Fraction Measure::calcMinLegacyPickupSpacer() const
         
     checkStaves(doc->getScrollViewStaves(getRequestedPartId()));
     if (result < 0) { // only check Studio View if nothing was found in Scroll View.
-        checkStaves(doc->getOthers()->getArray<others::StaffUsed>(getRequestedPartId(), STUDIO_VIEW_SYSTEM_ID));
+        checkStaves(doc->getStudioViewStaves(getRequestedPartId()));
     }
 
     return (std::max)(util::Fraction(0), result);
