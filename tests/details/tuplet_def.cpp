@@ -158,3 +158,18 @@ TEST(TupletDefTest, PartCheck)
     tupletDef = details->getArray<details::TupletDef>(1, 7);
     ASSERT_EQ(tupletDef.size(), 1) << "TupletDef array for part1 entnum 7 had " << std::to_string(tupletDef.size()) << " items";
 }
+
+TEST(BeamDetection, TremoloDetectionInTuplet)
+{
+    std::vector<char> xml;
+    musxtest::readFile(musxtest::getInputPath() / "tremolos-adv.enigmaxml", xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(xml);
+    ASSERT_TRUE(doc);
+
+    const auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 1);
+    ASSERT_TRUE(gfhold);
+    const auto frame = gfhold.createEntryFrame(0);
+    ASSERT_TRUE(frame);
+    ASSERT_GT(frame->tupletInfo.size(), 2);
+    EXPECT_TRUE(frame->tupletInfo.at(1).calcIsTremolo());
+}

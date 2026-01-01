@@ -100,7 +100,7 @@ public:
     /// @param edu The Edu value to convert. It is converted to a fraction of a whole note, so 1024 is
     /// constructed as Fraction(1, 4).
     /// @todo Make this function constexpr when we drop C++17 support.
-    static constexpr Fraction fromEdu(dom::Edu edu) { return fromConstExpr(edu, EDU_PER_WHOLE_NOTE); }
+    static constexpr Fraction fromEdu(dom::Edu edu) { return fromConstExpr(edu, dom::EDU_PER_WHOLE_NOTE); }
 
     /// @brief Constructs a Fraction from a percent (where 100 is 100%)
     /// @param percent The integral percent value to convert.
@@ -152,7 +152,7 @@ public:
         using Wide = std::int64_t;
 
         // Do the scaling in wide integer to avoid overflow.
-        const auto num = Wide(m_numerator) * Wide(EDU_PER_WHOLE_NOTE);
+        const auto num = Wide(m_numerator) * Wide(dom::EDU_PER_WHOLE_NOTE);
         const auto den = Wide(m_denominator); // always > 0 by class invariant
 
         // Round to nearest, 0.5 away from zero, without using double.

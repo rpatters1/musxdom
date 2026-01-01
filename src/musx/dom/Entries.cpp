@@ -87,6 +87,19 @@ std::pair<NoteType, unsigned> calcDurationInfoFromEdu(Edu duration)
     return std::make_pair(NoteType(noteValueMsb), count);
 }
 
+unsigned calcNumberOfBeamsInEdu(Edu duration)
+{
+    unsigned result = 0;
+    MUSX_ASSERT_IF(!duration) {
+        throw std::logic_error("Edu duration value is zero.");
+    }
+    while (duration < Edu(NoteType::Quarter)) {
+        result++;
+        duration <<= 1;
+    }
+    return result;
+}
+
 void Entry::calcLocations(const DocumentPtr& document)
 {
     auto gfholds = document->getDetails()->getArray<details::GFrameHold>(SCORE_PARTID);
@@ -290,11 +303,12 @@ bool EntryFrame::TupletInfo::calcIsTremolo() const
     }
 
     EntryInfoPtr first(frame, startIndex);
+    const auto ratioLessThis = first->cumulativeRatio / tuplet->calcRatio();
     const auto targetActual = first->actualDuration;
-    const auto targetNotated = first->getEntry()->duration;
+    const auto targetNotated = util::Fraction::fromEdu(first->getEntry()->duration) * ratioLessThis;
 
     // actual duration must be >= 2x notated duration.
-    if (targetActual < util::Fraction::fromEdu(targetNotated) * 2) {
+    if (targetActual < targetNotated * 2) {
         return false;
     }
 
@@ -304,7 +318,7 @@ bool EntryFrame::TupletInfo::calcIsTremolo() const
         if (curr->actualDuration != targetActual) {
             return false;
         }
-        if (curr->getEntry()->duration != targetNotated) {
+        if (curr->getEntry()->duration != first->getEntry()->duration) {
             return false;
         }
     }
@@ -322,7 +336,7 @@ bool EntryFrame::TupletInfo::calcIsTremolo() const
 
     // if the actual duration of the tuplet is less than a half, at least one beam must be detached.
     if (tuplet->calcReferenceDuration().calcEduDuration() < Edu(NoteType::Half)) {
-        auto targetNoteType = std::get<0>(calcDurationInfoFromEdu(targetNotated)); // C++17 complains about structured bindings captured in a lamda.
+        auto targetNoteType = std::get<0>(calcDurationInfoFromEdu(first->getEntry()->duration)); // C++17 complains about structured bindings captured in a lamda.
         if (auto beamExt = details::BeamExtension::getForStem(first)) {
             return beamExt->mask >= unsigned(targetNoteType) && beamExt->leftOffset > 0 && beamExt->rightOffset < 0;
         } else {
@@ -1402,20 +1416,6 @@ EntryInfoPtr EntryInfoPtr::findBeamEnd() const
     return next;
 }
 
-unsigned calcNumberOfBeamsInEdu(Edu duration)
-{
-    unsigned result = 0;
-    MUSX_ASSERT_IF(!duration)
-    {
-        throw std::logic_error("Edu duration value is zero.");
-    }
-    while (duration < Edu(NoteType::Quarter)) {
-        result++;
-        duration <<= 1;
-    }
-    return result;
-}
-
 unsigned EntryInfoPtr::calcNumberOfBeams() const
 {
     return calcNumberOfBeamsInEdu((*this)->getEntry()->duration);
@@ -2174,7 +2174,7 @@ struct TupletState
 
     TupletState(const MusxInstance<details::TupletDef>& t, size_t i)
         : remainingSymbolicDuration(t->displayNumber* t->displayDuration, int(NoteType::Whole)),
-        ratio(t->referenceNumber* t->referenceDuration, t->displayNumber* t->displayDuration),
+        ratio(t->referenceNumber * t->referenceDuration, t->displayNumber * t->displayDuration),
         tuplet(t), infoIndex(i)
     {
     }
@@ -2260,6 +2260,7 @@ std::shared_ptr<const EntryFrame> details::GFrameHoldContext::createEntryFrame(L
                 }
                 util::Fraction actualDuration = zeroLengthTuplet ? 0 : entry->calcFraction() * cumulativeRatio;
                 entryInfo->actualDuration = actualDuration;
+                entryInfo->cumulativeRatio = cumulativeRatio;
             } else {
                 entryInfo->graceIndex = ++graceIndex;
             }
