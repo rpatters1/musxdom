@@ -224,7 +224,7 @@ util::Fraction Measure::calcMinLegacyPickupSpacer(StaffCmper forStaffId) const
     return globalSpacer / calcTimeStretch(forStaffId); // return staff-level value.
 }
 
-Duration Measure::calcDefaultRestValue() const
+std::optional<Duration> Measure::calcDefaultPickupRestValue() const
 {
     if (getCmper() == 1) { // only check first measure for a pickup: this is observed Finale behavior
         if (const auto miscOptions = getDocument()->getOptions()->get<options::MiscOptions>()) {
@@ -235,7 +235,7 @@ Duration Measure::calcDefaultRestValue() const
             }
         }
     }
-    return { NoteType::Whole, 0u };
+    return std::nullopt;
 }
 
 util::Fraction Measure::calcMinLegacyPickupSpacer() const

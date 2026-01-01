@@ -531,7 +531,7 @@ TEST(MeasureTest, LegacyPickupSpacers)
         EXPECT_EQ(measure->calcMinLegacyPickupSpacer(3), musx::util::Fraction(3, 4));
         EXPECT_EQ(measure->calcMinLegacyPickupSpacer(4), musx::util::Fraction(9, 16));
         EXPECT_EQ(measure->calcMinLegacyPickupSpacer(), musx::util::Fraction(3, 4));
-        EXPECT_EQ(measure->calcDefaultRestValue(), (Duration{ NoteType::Whole, 0 }));
+        EXPECT_EQ(measure->calcDefaultPickupRestValue(), std::nullopt);
     }
     {
         auto measure = others->get<others::Measure>(SCORE_PARTID, 2);
@@ -539,14 +539,14 @@ TEST(MeasureTest, LegacyPickupSpacers)
         EXPECT_EQ(measure->calcMinLegacyPickupSpacer(1), 0);
         EXPECT_EQ(measure->calcMinLegacyPickupSpacer(2), 0);
         EXPECT_EQ(measure->calcMinLegacyPickupSpacer(), 0);
-        EXPECT_EQ(measure->calcDefaultRestValue(), (Duration{ NoteType::Whole, 0 }));
+        EXPECT_EQ(measure->calcDefaultPickupRestValue(), std::nullopt);
     }
     {
         auto measure = others->get<others::Measure>(SCORE_PARTID, 3);
         ASSERT_TRUE(measure);
         EXPECT_EQ(measure->calcMinLegacyPickupSpacer(1), 0);
         EXPECT_EQ(measure->calcMinLegacyPickupSpacer(2), 0);
-        EXPECT_EQ(measure->calcDefaultRestValue(), (Duration{ NoteType::Whole, 0 }));
+        EXPECT_EQ(measure->calcDefaultPickupRestValue(), std::nullopt);
     }
 }
 
@@ -564,13 +564,13 @@ TEST(MeasureTest, PickupFromMenu)
       auto measure = others->get<others::Measure>(SCORE_PARTID, 1);
         ASSERT_TRUE(measure);
         EXPECT_EQ(measure->calcMinLegacyPickupSpacer(1), musx::util::Fraction(3, 4));
-        EXPECT_EQ(measure->calcDefaultRestValue(), (Duration{ NoteType::Quarter, 0 }));
+        EXPECT_EQ(measure->calcDefaultPickupRestValue(), (Duration{ NoteType::Quarter, 0 }));
     }
     {
       auto measure = others->get<others::Measure>(SCORE_PARTID, 2);
         ASSERT_TRUE(measure);
         EXPECT_EQ(measure->calcMinLegacyPickupSpacer(1), musx::util::Fraction(0));
-        EXPECT_EQ(measure->calcDefaultRestValue(), (Duration{ NoteType::Whole, 0 }));
+        EXPECT_EQ(measure->calcDefaultPickupRestValue(), std::nullopt);
     }
 }
 

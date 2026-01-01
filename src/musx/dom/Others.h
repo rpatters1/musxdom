@@ -1248,15 +1248,13 @@ public:
     /// @return The smallest legacy pickup spacer encountered in a layer for this measure and staff. Zero if none.
     util::Fraction calcMinLegacyPickupSpacer(StaffCmper forStaffId) const;
 
-    /// @brief Returns the default rest value used for empty staves in this measure.
+    /// @brief Returns the default rest value used for empty staves in a pickup, if any.
     ///
-    /// For most documents, this is a whole rest.However, if the document has a pickup created by the
-    /// `Document->Pickup Measure` menu option, this value may be a different value.
+    /// For most documents, this returns std::nullopt. However, if the document has a pickup created by the
+    /// `Document->Pickup Measure` menu option, this is the value that should be used for default rests.
     ///
-    /// @return a Duration where
-    ///         - NoteType specifies the base duration (Whole, Half, Quarter, etc.)
-    ///         - unsigned specifies the number of dots.
-    Duration calcDefaultRestValue() const;
+    /// @return the rest duration to use if this measure is a pickup measure created with the menu option; otherwise std::nullopt
+    std::optional<Duration> calcDefaultPickupRestValue() const;
 
     /// @brief Calculates the legacy pickup spacer in any staff, in global Edu values.
     ///
