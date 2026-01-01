@@ -201,9 +201,9 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>calcShouldShowFullNam
 <tr class="memitem:a7292509dd15a52901b8b7e27b1c0fa1e" id="r_a7292509dd15a52901b8b7e27b1c0fa1e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1util_1_1Fraction.html">util::Fraction</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1Measure.html#a7292509dd15a52901b8b7e27b1c0fa1e">calcMinLegacyPickupSpacer</a> (<a class="el" href="namespacemusx_1_1dom.html#ada2c0787f5b7cb764d2a344d491ab99c">StaffCmper</a> forStaffId) const</td></tr>
 <tr class="memdesc:a7292509dd15a52901b8b7e27b1c0fa1e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the legacy pickup spacer, if any.  <br /></td></tr>
 <tr class="separator:a7292509dd15a52901b8b7e27b1c0fa1e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a128c6fa54b6987e192ed0832be0fb8bd" id="r_a128c6fa54b6987e192ed0832be0fb8bd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemusx_1_1dom.html#a9fd6f660a4f7c02787b6bbe3307a15af">Duration</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1Measure.html#a128c6fa54b6987e192ed0832be0fb8bd">calcDefaultRestValue</a> () const</td></tr>
-<tr class="memdesc:a128c6fa54b6987e192ed0832be0fb8bd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the default rest value used for empty staves in this measure.  <br /></td></tr>
-<tr class="separator:a128c6fa54b6987e192ed0832be0fb8bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1e35c6ec5cc9a58e0111f54456ded628" id="r_a1e35c6ec5cc9a58e0111f54456ded628"><td class="memItemLeft" align="right" valign="top">std::optional&lt; <a class="el" href="namespacemusx_1_1dom.html#a9fd6f660a4f7c02787b6bbe3307a15af">Duration</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1Measure.html#a1e35c6ec5cc9a58e0111f54456ded628">calcDefaultPickupRestValue</a> () const</td></tr>
+<tr class="memdesc:a1e35c6ec5cc9a58e0111f54456ded628"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the default rest value used for empty staves in a pickup, if any.  <br /></td></tr>
+<tr class="separator:a1e35c6ec5cc9a58e0111f54456ded628"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a53580a7769b31e9aa51fee60790865c4" id="r_a53580a7769b31e9aa51fee60790865c4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1util_1_1Fraction.html">util::Fraction</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1Measure.html#a53580a7769b31e9aa51fee60790865c4">calcMinLegacyPickupSpacer</a> () const</td></tr>
 <tr class="memdesc:a53580a7769b31e9aa51fee60790865c4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the legacy pickup spacer in any staff, in global Edu values.  <br /></td></tr>
 <tr class="separator:a53580a7769b31e9aa51fee60790865c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -625,14 +625,14 @@ Additional Inherited Members</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a128c6fa54b6987e192ed0832be0fb8bd" name="a128c6fa54b6987e192ed0832be0fb8bd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a128c6fa54b6987e192ed0832be0fb8bd">&#9670;&#160;</a></span>calcDefaultRestValue()</h2>
+<a id="a1e35c6ec5cc9a58e0111f54456ded628" name="a1e35c6ec5cc9a58e0111f54456ded628"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1e35c6ec5cc9a58e0111f54456ded628">&#9670;&#160;</a></span>calcDefaultPickupRestValue()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespacemusx_1_1dom.html#a9fd6f660a4f7c02787b6bbe3307a15af">Duration</a> musx::dom::others::Measure::calcDefaultRestValue </td>
+          <td class="memname">std::optional&lt; <a class="el" href="namespacemusx_1_1dom.html#a9fd6f660a4f7c02787b6bbe3307a15af">Duration</a> &gt; musx::dom::others::Measure::calcDefaultPickupRestValue </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -640,13 +640,9 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Returns the default rest value used for empty staves in this measure. </p>
-<p>For most documents, this is a whole rest.However, if the document has a pickup created by the <code>Document-&gt;Pickup <a class="el" href="classmusx_1_1dom_1_1others_1_1Measure.html" title="Represents the attributes of a measure.">Measure</a></code> menu option, this value may be a different value.</p>
-<dl class="section return"><dt>Returns</dt><dd>a Duration where<ul>
-<li>NoteType specifies the base duration (Whole, Half, Quarter, etc.)</li>
-<li>unsigned specifies the number of dots. </li>
-</ul>
-</dd></dl>
+<p>Returns the default rest value used for empty staves in a pickup, if any. </p>
+<p>For most documents, this returns std::nullopt. However, if the document has a pickup created by the <code>Document-&gt;Pickup <a class="el" href="classmusx_1_1dom_1_1others_1_1Measure.html" title="Represents the attributes of a measure.">Measure</a></code> menu option, this is the value that should be used for default rests.</p>
+<dl class="section return"><dt>Returns</dt><dd>the rest duration to use if this measure is a pickup measure created with the menu option; otherwise std::nullopt </dd></dl>
 
 </div>
 </div>

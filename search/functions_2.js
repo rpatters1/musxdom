@@ -34,7 +34,7 @@ var searchData=
   ['calccrossstaffdirection_31',['calcCrossStaffDirection',['../classmusx_1_1dom_1_1NoteInfoPtr.html#aad11d0055ca42686bfb5d5f8dfa98247',1,'musx::dom::NoteInfoPtr']]],
   ['calccrossstaffdirectionforall_32',['calcCrossStaffDirectionForAll',['../classmusx_1_1dom_1_1EntryInfoPtr.html#ab3bc2e754d93395c71759df365142d8e',1,'musx::dom::EntryInfoPtr']]],
   ['calcdefaultenharmonic_33',['calcdefaultenharmonic',['../classmusx_1_1dom_1_1Note.html#a8b42277ba09844d042d326b07c5ab867',1,'musx::dom::Note::calcDefaultEnharmonic()'],['../classmusx_1_1dom_1_1NoteInfoPtr.html#aabb32c50345e151d488956b4f61f99b1',1,'musx::dom::NoteInfoPtr::calcDefaultEnharmonic()']]],
-  ['calcdefaultrestvalue_34',['calcDefaultRestValue',['../classmusx_1_1dom_1_1others_1_1Measure.html#a128c6fa54b6987e192ed0832be0fb8bd',1,'musx::dom::others::Measure']]],
+  ['calcdefaultpickuprestvalue_34',['calcDefaultPickupRestValue',['../classmusx_1_1dom_1_1others_1_1Measure.html#a1e35c6ec5cc9a58e0111f54456ded628',1,'musx::dom::others::Measure']]],
   ['calcdiatonicmode_35',['calcDiatonicMode',['../classmusx_1_1dom_1_1KeySignature.html#a70d5a77caa9ad5f9e5e5c89653125e34',1,'musx::dom::KeySignature']]],
   ['calcdisplacement_36',['calcDisplacement',['../namespacemusic__theory.html#a9c6451da69ad76a5cab37f007209c014',1,'music_theory']]],
   ['calcdisplayduration_37',['calcDisplayDuration',['../classmusx_1_1dom_1_1details_1_1TupletDef.html#a3eb20252e3d9315dc1fe41531ff5fdb6',1,'musx::dom::details::TupletDef']]],
