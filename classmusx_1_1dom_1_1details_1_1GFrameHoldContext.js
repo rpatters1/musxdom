@@ -13,6 +13,7 @@ var classmusx_1_1dom_1_1details_1_1GFrameHoldContext =
     [ "getPartVoicing", "classmusx_1_1dom_1_1details_1_1GFrameHoldContext.html#a38a0424f31be934c318142230bc02812", null ],
     [ "getPolicyPartVoicing", "classmusx_1_1dom_1_1details_1_1GFrameHoldContext.html#a2c976e105a78fe315488b062a7b4f78e", null ],
     [ "getRequestedPartId", "classmusx_1_1dom_1_1details_1_1GFrameHoldContext.html#acff7329c626f98038fffe6cfff7ee880", null ],
+    [ "getTimeOffset", "classmusx_1_1dom_1_1details_1_1GFrameHoldContext.html#a70869345bd4b411540058e4845e27fd5", null ],
     [ "iterateEntries", "classmusx_1_1dom_1_1details_1_1GFrameHoldContext.html#aa0771d8bedc1c79956eae58291052d92", null ],
     [ "iterateEntries", "classmusx_1_1dom_1_1details_1_1GFrameHoldContext.html#a634eded7bba5bdfd9b61385c933f7782", null ],
     [ "operator bool", "classmusx_1_1dom_1_1details_1_1GFrameHoldContext.html#aaabfe703ecfc3d56496efc9995e5bbbe", null ],

@@ -963,6 +963,7 @@ var namespacemusx_1_1dom =
     [ "calcDurationInfoFromEdu", "namespacemusx_1_1dom.html#a938f344e829f7109948169079587c9ef", null ],
     [ "calcNumberOfBeamsInEdu", "namespacemusx_1_1dom.html#aa75d341865ea5c3e1a8fcb735ea5e51b", null ],
     [ "BASE_SYSTEM_ID", "namespacemusx_1_1dom.html#ac87f0744ae26e5eb9f08d9615fc15bc5", null ],
+    [ "EDU_PER_WHOLE_NOTE", "namespacemusx_1_1dom.html#ace087082aba8a546ecd9abe14e0b2fc2", null ],
     [ "EFIX_PER_EVPU", "namespacemusx_1_1dom.html#a6e7e94e8e870c83e2fb15709b0c87fa3", null ],
     [ "EFIX_PER_SPACE", "namespacemusx_1_1dom.html#a32cf484712b32f0ca4834fd858e5f193", null ],
     [ "EVPU_PER_INCH", "namespacemusx_1_1dom.html#ae7da4591a9b109eadbf985a0589a1251", null ],

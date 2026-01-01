@@ -69,7 +69,7 @@ var searchData=
   ['path_66',['path',['../classmusx_1_1dom_1_1others_1_1FilePath.html#a20f6575ae0c4201adaa76f379c65a520',1,'musx::dom::others::FilePath']]],
   ['pathid_67',['pathId',['../classmusx_1_1dom_1_1others_1_1FileDescription.html#a728bbbc4208f8050e5b9dd4dadf0667a',1,'musx::dom::others::FileDescription']]],
   ['pathslurtipwidth_68',['pathSlurTipWidth',['../classmusx_1_1dom_1_1options_1_1LineCurveOptions.html#a730ed2648165ab9cad9ed079740e56b8',1,'musx::dom::options::LineCurveOptions']]],
-  ['pathtype_69',['pathtype',['../classmusx_1_1dom_1_1others_1_1FileDescription.html#a8d9d0ade14e9072cd17e2e3707c6b9f2',1,'musx::dom::others::FileDescription::PathType'],['../classmusx_1_1dom_1_1others_1_1FileDescription.html#ae7ed602f504548ccdc60965764c11df7',1,'musx::dom::others::FileDescription::pathType']]],
+  ['pathtype_69',['pathtype',['../classmusx_1_1dom_1_1others_1_1FileDescription.html#ae7ed602f504548ccdc60965764c11df7',1,'musx::dom::others::FileDescription::pathType'],['../classmusx_1_1dom_1_1others_1_1FileDescription.html#a8d9d0ade14e9072cd17e2e3707c6b9f2',1,'musx::dom::others::FileDescription::PathType']]],
   ['patschen_70',['Patschen',['../namespacemusx_1_1dom_1_1uuid.html#ad6cd55a8f955a088e0d54cc0b7ed8274',1,'musx::dom::uuid']]],
   ['pelogpanerusgamelan_71',['PelogPanerusGamelan',['../namespacemusx_1_1dom_1_1uuid.html#acdb4a22bab1a962e88c16dc891e0e14b',1,'musx::dom::uuid']]],
   ['pemadegamelan_72',['PemadeGamelan',['../namespacemusx_1_1dom_1_1uuid.html#a860cc91c9ae6cae6b1a6ddc00915c4f4',1,'musx::dom::uuid']]],

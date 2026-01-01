@@ -507,9 +507,8 @@ Functions</h2></td></tr>
 <tr class="memitem:a938f344e829f7109948169079587c9ef" id="r_a938f344e829f7109948169079587c9ef"><td class="memItemLeft" align="right" valign="top">std::pair&lt; <a class="el" href="namespacemusx_1_1dom.html#a3c91ee84b72cc27a2899191d6baee312">NoteType</a>, unsigned &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemusx_1_1dom.html#a938f344e829f7109948169079587c9ef">calcDurationInfoFromEdu</a> (<a class="el" href="namespacemusx_1_1dom.html#a907ef641c247f1a5dbe75bbc972661f5">Edu</a> duration)</td></tr>
 <tr class="memdesc:a938f344e829f7109948169079587c9ef"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the <a class="el" href="namespacemusx_1_1dom.html#a3c91ee84b72cc27a2899191d6baee312">NoteType</a> and number of dots in an <a class="el" href="namespacemusx_1_1dom.html#a907ef641c247f1a5dbe75bbc972661f5">Edu</a> value.  <br /></td></tr>
 <tr class="separator:a938f344e829f7109948169079587c9ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa75d341865ea5c3e1a8fcb735ea5e51b" id="r_aa75d341865ea5c3e1a8fcb735ea5e51b"><td class="memItemLeft" align="right" valign="top"><a id="aa75d341865ea5c3e1a8fcb735ea5e51b" name="aa75d341865ea5c3e1a8fcb735ea5e51b"></a>
-unsigned&#160;</td><td class="memItemRight" valign="bottom"><b>calcNumberOfBeamsInEdu</b> (<a class="el" href="namespacemusx_1_1dom.html#a907ef641c247f1a5dbe75bbc972661f5">Edu</a> duration)</td></tr>
-<tr class="memdesc:aa75d341865ea5c3e1a8fcb735ea5e51b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the number of beams or flags in the <a class="el" href="namespacemusx_1_1dom.html#a907ef641c247f1a5dbe75bbc972661f5">Edu</a> value. <br /></td></tr>
+<tr class="memitem:aa75d341865ea5c3e1a8fcb735ea5e51b" id="r_aa75d341865ea5c3e1a8fcb735ea5e51b"><td class="memItemLeft" align="right" valign="top">unsigned&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemusx_1_1dom.html#aa75d341865ea5c3e1a8fcb735ea5e51b">calcNumberOfBeamsInEdu</a> (<a class="el" href="namespacemusx_1_1dom.html#a907ef641c247f1a5dbe75bbc972661f5">Edu</a> duration)</td></tr>
+<tr class="memdesc:aa75d341865ea5c3e1a8fcb735ea5e51b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the number of beams implied by an EDU duration.  <br /></td></tr>
 <tr class="separator:aa75d341865ea5c3e1a8fcb735ea5e51b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="var-members" name="var-members"></a>
@@ -556,6 +555,10 @@ constexpr double&#160;</td><td class="memItemRight" valign="bottom"><b>EFIX_PER_
 constexpr double&#160;</td><td class="memItemRight" valign="bottom"><b>EFIX_PER_SPACE</b> = <a class="el" href="namespacemusx_1_1dom.html#a0fbe9bcf04cd6e9acfcb562fac1f6f25">EVPU_PER_SPACE</a> * <a class="el" href="namespacemusx_1_1dom.html#a6e7e94e8e870c83e2fb15709b0c87fa3">EFIX_PER_EVPU</a></td></tr>
 <tr class="memdesc:a32cf484712b32f0ca4834fd858e5f193"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of Efix units per space (spatium) <br /></td></tr>
 <tr class="separator:a32cf484712b32f0ca4834fd858e5f193"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ace087082aba8a546ecd9abe14e0b2fc2" id="r_ace087082aba8a546ecd9abe14e0b2fc2"><td class="memItemLeft" align="right" valign="top"><a id="ace087082aba8a546ecd9abe14e0b2fc2" name="ace087082aba8a546ecd9abe14e0b2fc2"></a>
+constexpr <a class="el" href="namespacemusx_1_1dom.html#a907ef641c247f1a5dbe75bbc972661f5">Edu</a>&#160;</td><td class="memItemRight" valign="bottom"><b>EDU_PER_WHOLE_NOTE</b> = 0x1000</td></tr>
+<tr class="memdesc:ace087082aba8a546ecd9abe14e0b2fc2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of Edu units per whole note. <br /></td></tr>
+<tr class="separator:ace087082aba8a546ecd9abe14e0b2fc2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a31c92a4751443e096b5a99100828f6e0" id="r_a31c92a4751443e096b5a99100828f6e0"><td class="memItemLeft" align="right" valign="top"><a id="a31c92a4751443e096b5a99100828f6e0" name="a31c92a4751443e096b5a99100828f6e0"></a>
 constexpr int&#160;</td><td class="memItemRight" valign="bottom"><b>MAX_CUE_PERCENTAGE</b> = 90</td></tr>
 <tr class="memdesc:a31c92a4751443e096b5a99100828f6e0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Arbitrary value that determines the max scaling value for cue notes. This could be configurable in the future. <br /></td></tr>
@@ -1037,6 +1040,27 @@ template&lt;typename T &gt; </div>
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a id="aa75d341865ea5c3e1a8fcb735ea5e51b" name="aa75d341865ea5c3e1a8fcb735ea5e51b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa75d341865ea5c3e1a8fcb735ea5e51b">&#9670;&#160;</a></span>calcNumberOfBeamsInEdu()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">unsigned musx::dom::calcNumberOfBeamsInEdu </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespacemusx_1_1dom.html#a907ef641c247f1a5dbe75bbc972661f5">Edu</a>&#160;</td>
+          <td class="paramname"><em>duration</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the number of beams implied by an EDU duration. </p>
+<p>Uses calcDurationInfoFromEdu to determine the base note value. Durations greater than a quarter note return 0 flags. Dots are ignored. </p>
 
 </div>
 </div>
