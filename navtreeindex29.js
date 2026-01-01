@@ -1,5 +1,14 @@
 var NAVTREEINDEX29 =
 {
+"namespacemusx_1_1dom.html#ae1cc711919158f264a344a6a966f5d4ca945d5e233cf7d6240f6b783b36a374ff":[1,0,1,0,79,0],
+"namespacemusx_1_1dom.html#ae7da4591a9b109eadbf985a0589a1251":[1,0,1,0,94],
+"namespacemusx_1_1dom.html#aea2ad29fab8a84e0bc89e8d209068a2e":[1,0,1,0,58],
+"namespacemusx_1_1dom.html#aee5506d8139b0409df00bff376061460":[1,0,1,0,70],
+"namespacemusx_1_1dom.html#aee7cd6e29b5e38d3437a608c29672a57":[1,0,1,0,107],
+"namespacemusx_1_1dom.html#af126d786c0d562de2e24d358782dea9e":[1,0,1,0,104],
+"namespacemusx_1_1dom.html#af3051df2564d9f3cae82e214142eebb2":[1,0,1,0,74],
+"namespacemusx_1_1dom.html#af72aa98bddad049ec18ef7858aea2168":[1,0,1,0,50],
+"namespacemusx_1_1dom.html#af9192bccf9b3700caeb880975e768c69":[1,0,1,0,66],
 "namespacemusx_1_1dom_1_1details.html":[1,0,1,0,0],
 "namespacemusx_1_1dom_1_1header.html":[1,0,1,0,1],
 "namespacemusx_1_1dom_1_1header.html#a0690e3150e4d4fd42ba95f3f57e5d391":[1,0,1,0,1,5],
@@ -240,14 +249,5 @@ var NAVTREEINDEX29 =
 "namespacemusx_1_1dom_1_1uuid.html#a304cf72893bad2eff3c49711875f47d5":[1,0,1,0,5,610],
 "namespacemusx_1_1dom_1_1uuid.html#a309e2631b3353a5ccfcefd6de94bccf0":[1,0,1,0,5,165],
 "namespacemusx_1_1dom_1_1uuid.html#a3109ed18a2f82c679830f77cd3cd4b35":[1,0,1,0,5,585],
-"namespacemusx_1_1dom_1_1uuid.html#a314e9d3b36605b119feafb9263eb79ab":[1,0,1,0,5,229],
-"namespacemusx_1_1dom_1_1uuid.html#a3156dde4a31cd709686cba47ef2f94a2":[1,0,1,0,5,573],
-"namespacemusx_1_1dom_1_1uuid.html#a325b4e10827fa82e12914ce1647a151b":[1,0,1,0,5,523],
-"namespacemusx_1_1dom_1_1uuid.html#a32d45730efae499790976cc9218841ee":[1,0,1,0,5,254],
-"namespacemusx_1_1dom_1_1uuid.html#a33a60ef19230e7b84220dd9d4e6f117c":[1,0,1,0,5,453],
-"namespacemusx_1_1dom_1_1uuid.html#a33d7072d7e7c7e69c0ccdd5924e97b0d":[1,0,1,0,5,57],
-"namespacemusx_1_1dom_1_1uuid.html#a3508ee8a3c4373b9bf9cf0f35e1652ef":[1,0,1,0,5,54],
-"namespacemusx_1_1dom_1_1uuid.html#a350ed36d13c178590da49a2db06a1544":[1,0,1,0,5,606],
-"namespacemusx_1_1dom_1_1uuid.html#a35250e0b5677bb7def99d0fb93b1f322":[1,0,1,0,5,652],
-"namespacemusx_1_1dom_1_1uuid.html#a3534411e01e6b1d8fe53a08db5ed80f5":[1,0,1,0,5,193]
+"namespacemusx_1_1dom_1_1uuid.html#a314e9d3b36605b119feafb9263eb79ab":[1,0,1,0,5,229]
 };

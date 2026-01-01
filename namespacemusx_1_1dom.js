@@ -842,6 +842,7 @@ var namespacemusx_1_1dom =
     [ "DetailsPoolPtr", "namespacemusx_1_1dom.html#a74491ac3ff15cd1edb203e46e4d04cf1", null ],
     [ "DocumentPtr", "namespacemusx_1_1dom.html#ac52edbaa60f81ba3df76ee77b37e95fd", null ],
     [ "DocumentWeakPtr", "namespacemusx_1_1dom.html#aa76356b1ad3580081294898c79615c4d", null ],
+    [ "Duration", "namespacemusx_1_1dom.html#a9fd6f660a4f7c02787b6bbe3307a15af", null ],
     [ "Edu", "namespacemusx_1_1dom.html#a907ef641c247f1a5dbe75bbc972661f5", null ],
     [ "EduFloat", "namespacemusx_1_1dom.html#aea2ad29fab8a84e0bc89e8d209068a2e", null ],
     [ "Efix", "namespacemusx_1_1dom.html#a3e452e4045d32c7e8a6acab66adf8e75", null ],
@@ -960,7 +961,7 @@ var namespacemusx_1_1dom =
       [ "Never", "namespacemusx_1_1dom.html#a09b81b6535bd382e3afc1a00ba080215a6e7b34fa59e1bd229b207892956dc41c", null ],
       [ "Always", "namespacemusx_1_1dom.html#a09b81b6535bd382e3afc1a00ba080215a68eec46437c384d8dad18d5464ebc35c", null ]
     ] ],
-    [ "calcDurationInfoFromEdu", "namespacemusx_1_1dom.html#a938f344e829f7109948169079587c9ef", null ],
+    [ "calcDurationInfoFromEdu", "namespacemusx_1_1dom.html#ad70355206e90c7b79b7860fc5d75bff0", null ],
     [ "calcNumberOfBeamsInEdu", "namespacemusx_1_1dom.html#aa75d341865ea5c3e1a8fcb735ea5e51b", null ],
     [ "BASE_SYSTEM_ID", "namespacemusx_1_1dom.html#ac87f0744ae26e5eb9f08d9615fc15bc5", null ],
     [ "EDU_PER_WHOLE_NOTE", "namespacemusx_1_1dom.html#ace087082aba8a546ecd9abe14e0b2fc2", null ],
@@ -975,5 +976,9 @@ var namespacemusx_1_1dom =
     [ "MAX_CUE_PERCENTAGE", "namespacemusx_1_1dom.html#a31c92a4751443e096b5a99100828f6e0", null ],
     [ "MAX_LAYERS", "namespacemusx_1_1dom.html#a83d296c53df0e81b30707dfd6210b77b", null ],
     [ "MUSX_GLOBALS_CMPER", "namespacemusx_1_1dom.html#a484882ede2c8bb64570f45fce4c0edef", null ],
-    [ "SCORE_PARTID", "namespacemusx_1_1dom.html#a5dd453394b3375a5be17055a82ddd9f0", null ]
+    [ "SCORE_PARTID", "namespacemusx_1_1dom.html#a5dd453394b3375a5be17055a82ddd9f0", null ],
+    [ "SPECIAL_PART_EXTRACTION_SYSTEM_ID", "namespacemusx_1_1dom.html#af126d786c0d562de2e24d358782dea9e", null ],
+    [ "STAFF_SET_1_SYSTEM_ID", "namespacemusx_1_1dom.html#a4b9366303184d73bffbde1123caeb358", null ],
+    [ "STUDIO_VIEW_SYSTEM_ID", "namespacemusx_1_1dom.html#a3c02ff3efcac252fc9358187a6bee09c", null ],
+    [ "TEMP_SYSTEM_ID", "namespacemusx_1_1dom.html#aee7cd6e29b5e38d3437a608c29672a57", null ]
 ];

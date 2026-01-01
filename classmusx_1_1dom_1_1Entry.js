@@ -2,7 +2,7 @@ var classmusx_1_1dom_1_1Entry =
 [
     [ "EntryLocation", "structmusx_1_1dom_1_1Entry_1_1EntryLocation.html", "structmusx_1_1dom_1_1Entry_1_1EntryLocation" ],
     [ "Entry", "classmusx_1_1dom_1_1Entry.html#a0d0212e38649a2376155155c477a138c", null ],
-    [ "calcDurationInfo", "classmusx_1_1dom_1_1Entry.html#a47e88880c48a7fdcc28de239c6603d4c", null ],
+    [ "calcDurationInfo", "classmusx_1_1dom_1_1Entry.html#af820863f6bca82bddc45dfa41a592234", null ],
     [ "calcFraction", "classmusx_1_1dom_1_1Entry.html#a8964412efe44b6569c970cecc4b4631f", null ],
     [ "getEntryNumber", "classmusx_1_1dom_1_1Entry.html#a0d3cc0d02d7768f4153b0741d0a238ca", null ],
     [ "getNext", "classmusx_1_1dom_1_1Entry.html#a23ec586ae3f82602d46c3b6368b69e76", null ],

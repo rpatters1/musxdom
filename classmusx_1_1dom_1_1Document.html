@@ -163,8 +163,11 @@ const <a class="el" href="namespacemusx_1_1dom.html#a8da452175665b93e3cf051de6c5
 <tr class="memdesc:a8ea1ce4314627bcd01d5dcd48d279c94"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the Scroll View Cmper for the given <code>partId</code>.  <br /></td></tr>
 <tr class="separator:a8ea1ce4314627bcd01d5dcd48d279c94"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaa777b3635d7f5c40c9dc99ccdedbac2" id="r_aaa777b3635d7f5c40c9dc99ccdedbac2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1dom_1_1MusxInstanceList.html">MusxInstanceList</a>&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1StaffUsed.html">others::StaffUsed</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1Document.html#aaa777b3635d7f5c40c9dc99ccdedbac2">getScrollViewStaves</a> (<a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> partId) const</td></tr>
-<tr class="memdesc:aaa777b3635d7f5c40c9dc99ccdedbac2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the scroll view staves for the given <code>partId</code>.  <br /></td></tr>
+<tr class="memdesc:aaa777b3635d7f5c40c9dc99ccdedbac2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the Scroll View staves for the given <code>partId</code>.  <br /></td></tr>
 <tr class="separator:aaa777b3635d7f5c40c9dc99ccdedbac2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8007e3abd2fde240fe374c81c82e1065" id="r_a8007e3abd2fde240fe374c81c82e1065"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1dom_1_1MusxInstanceList.html">MusxInstanceList</a>&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1StaffUsed.html">others::StaffUsed</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1Document.html#a8007e3abd2fde240fe374c81c82e1065">getStudioViewStaves</a> (<a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> partId) const</td></tr>
+<tr class="memdesc:a8007e3abd2fde240fe374c81c82e1065"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the Studio View staves for the given <code>partId</code>. Normally this is only one staff and is invariant between parts.  <br /></td></tr>
+<tr class="separator:a8007e3abd2fde240fe374c81c82e1065"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3b1cdc185b66bf8fa55be29d36280e66" id="r_a3b1cdc185b66bf8fa55be29d36280e66"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemusx_1_1dom.html#a4223cd531120dbef7acd854c3d2631b8">MusxInstance</a>&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1Page.html">others::Page</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1Document.html#a3b1cdc185b66bf8fa55be29d36280e66">calcPageFromMeasure</a> (<a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> partId, <a class="el" href="namespacemusx_1_1dom.html#a3d5af8a8174c235d3292c076def44817">MeasCmper</a> measureId) const</td></tr>
 <tr class="memdesc:a3b1cdc185b66bf8fa55be29d36280e66"><td class="mdescLeft">&#160;</td><td class="mdescRight">Searches pages to find the page that contains the measure.  <br /></td></tr>
 <tr class="separator:a3b1cdc185b66bf8fa55be29d36280e66"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -413,7 +416,33 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>musx::factory::Docum
       </table>
 </div><div class="memdoc">
 
-<p>Returns the scroll view staves for the given <code>partId</code>. </p>
+<p>Returns the Scroll View staves for the given <code>partId</code>. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">partId</td><td>The linked part to check. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a8007e3abd2fde240fe374c81c82e1065" name="a8007e3abd2fde240fe374c81c82e1065"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8007e3abd2fde240fe374c81c82e1065">&#9670;&#160;</a></span>getStudioViewStaves()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classmusx_1_1dom_1_1MusxInstanceList.html">MusxInstanceList</a>&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1StaffUsed.html">others::StaffUsed</a> &gt; musx::dom::Document::getStudioViewStaves </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a>&#160;</td>
+          <td class="paramname"><em>partId</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the Studio View staves for the given <code>partId</code>. Normally this is only one staff and is invariant between parts. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">partId</td><td>The linked part to check. </td></tr>

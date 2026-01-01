@@ -272,6 +272,10 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>DocumentPtr</b> = st
 using&#160;</td><td class="memItemRight" valign="bottom"><b>DocumentWeakPtr</b> = std::weak_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1Document.html">Document</a> &gt;</td></tr>
 <tr class="memdesc:aa76356b1ad3580081294898c79615c4d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Shared weak <code><a class="el" href="classmusx_1_1dom_1_1Document.html" title="Represents a document object that encapsulates the entire EnigmaXML structure.">Document</a></code> pointer. <br /></td></tr>
 <tr class="separator:aa76356b1ad3580081294898c79615c4d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9fd6f660a4f7c02787b6bbe3307a15af" id="r_a9fd6f660a4f7c02787b6bbe3307a15af"><td class="memItemLeft" align="right" valign="top"><a id="a9fd6f660a4f7c02787b6bbe3307a15af" name="a9fd6f660a4f7c02787b6bbe3307a15af"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>Duration</b> = std::pair&lt; <a class="el" href="namespacemusx_1_1dom.html#a3c91ee84b72cc27a2899191d6baee312">NoteType</a>, unsigned &gt;</td></tr>
+<tr class="memdesc:a9fd6f660a4f7c02787b6bbe3307a15af"><td class="mdescLeft">&#160;</td><td class="mdescRight">Expresses a duration as a <a class="el" href="namespacemusx_1_1dom.html#a3c91ee84b72cc27a2899191d6baee312" title="Enum class representing note types based on EDU values.">NoteType</a> and a number of dots (unsigned) <br /></td></tr>
+<tr class="separator:a9fd6f660a4f7c02787b6bbe3307a15af"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af9192bccf9b3700caeb880975e768c69" id="r_af9192bccf9b3700caeb880975e768c69"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemusx_1_1dom.html#af9192bccf9b3700caeb880975e768c69">InstrumentMap</a> = std::unordered_map&lt; <a class="el" href="namespacemusx_1_1dom.html#ada2c0787f5b7cb764d2a344d491ab99c">StaffCmper</a>, <a class="el" href="structmusx_1_1dom_1_1InstrumentInfo.html">InstrumentInfo</a> &gt;</td></tr>
 <tr class="separator:af9192bccf9b3700caeb880975e768c69"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a849c0fb091707be060d840e877486f65" id="r_a849c0fb091707be060d840e877486f65"><td class="memItemLeft" align="right" valign="top"><a id="a849c0fb091707be060d840e877486f65" name="a849c0fb091707be060d840e877486f65"></a>
@@ -504,9 +508,9 @@ Enumerations</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a938f344e829f7109948169079587c9ef" id="r_a938f344e829f7109948169079587c9ef"><td class="memItemLeft" align="right" valign="top">std::pair&lt; <a class="el" href="namespacemusx_1_1dom.html#a3c91ee84b72cc27a2899191d6baee312">NoteType</a>, unsigned &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemusx_1_1dom.html#a938f344e829f7109948169079587c9ef">calcDurationInfoFromEdu</a> (<a class="el" href="namespacemusx_1_1dom.html#a907ef641c247f1a5dbe75bbc972661f5">Edu</a> duration)</td></tr>
-<tr class="memdesc:a938f344e829f7109948169079587c9ef"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the <a class="el" href="namespacemusx_1_1dom.html#a3c91ee84b72cc27a2899191d6baee312">NoteType</a> and number of dots in an <a class="el" href="namespacemusx_1_1dom.html#a907ef641c247f1a5dbe75bbc972661f5">Edu</a> value.  <br /></td></tr>
-<tr class="separator:a938f344e829f7109948169079587c9ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad70355206e90c7b79b7860fc5d75bff0" id="r_ad70355206e90c7b79b7860fc5d75bff0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemusx_1_1dom.html#a9fd6f660a4f7c02787b6bbe3307a15af">Duration</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemusx_1_1dom.html#ad70355206e90c7b79b7860fc5d75bff0">calcDurationInfoFromEdu</a> (<a class="el" href="namespacemusx_1_1dom.html#a907ef641c247f1a5dbe75bbc972661f5">Edu</a> duration)</td></tr>
+<tr class="memdesc:ad70355206e90c7b79b7860fc5d75bff0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the <a class="el" href="namespacemusx_1_1dom.html#a3c91ee84b72cc27a2899191d6baee312">NoteType</a> and number of dots in an <a class="el" href="namespacemusx_1_1dom.html#a907ef641c247f1a5dbe75bbc972661f5">Edu</a> value.  <br /></td></tr>
+<tr class="separator:ad70355206e90c7b79b7860fc5d75bff0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa75d341865ea5c3e1a8fcb735ea5e51b" id="r_aa75d341865ea5c3e1a8fcb735ea5e51b"><td class="memItemLeft" align="right" valign="top">unsigned&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemusx_1_1dom.html#aa75d341865ea5c3e1a8fcb735ea5e51b">calcNumberOfBeamsInEdu</a> (<a class="el" href="namespacemusx_1_1dom.html#a907ef641c247f1a5dbe75bbc972661f5">Edu</a> duration)</td></tr>
 <tr class="memdesc:aa75d341865ea5c3e1a8fcb735ea5e51b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the number of beams implied by an EDU duration.  <br /></td></tr>
 <tr class="separator:aa75d341865ea5c3e1a8fcb735ea5e51b"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -529,8 +533,6 @@ constexpr int&#160;</td><td class="memItemRight" valign="bottom"><b>MAX_ALTERATI
 constexpr <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a>&#160;</td><td class="memItemRight" valign="bottom"><b>SCORE_PARTID</b> = 0</td></tr>
 <tr class="memdesc:a5dd453394b3375a5be17055a82ddd9f0"><td class="mdescLeft">&#160;</td><td class="mdescRight">The part id of the score. <br /></td></tr>
 <tr class="separator:a5dd453394b3375a5be17055a82ddd9f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac87f0744ae26e5eb9f08d9615fc15bc5" id="r_ac87f0744ae26e5eb9f08d9615fc15bc5"><td class="memItemLeft" align="right" valign="top">constexpr <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemusx_1_1dom.html#ac87f0744ae26e5eb9f08d9615fc15bc5">BASE_SYSTEM_ID</a> = 0</td></tr>
-<tr class="separator:ac87f0744ae26e5eb9f08d9615fc15bc5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae7da4591a9b109eadbf985a0589a1251" id="r_ae7da4591a9b109eadbf985a0589a1251"><td class="memItemLeft" align="right" valign="top"><a id="ae7da4591a9b109eadbf985a0589a1251" name="ae7da4591a9b109eadbf985a0589a1251"></a>
 constexpr double&#160;</td><td class="memItemRight" valign="bottom"><b>EVPU_PER_INCH</b> = 288.0</td></tr>
 <tr class="memdesc:ae7da4591a9b109eadbf985a0589a1251"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of Evpu units per inch. <br /></td></tr>
@@ -559,6 +561,18 @@ constexpr double&#160;</td><td class="memItemRight" valign="bottom"><b>EFIX_PER_
 constexpr <a class="el" href="namespacemusx_1_1dom.html#a907ef641c247f1a5dbe75bbc972661f5">Edu</a>&#160;</td><td class="memItemRight" valign="bottom"><b>EDU_PER_WHOLE_NOTE</b> = 0x1000</td></tr>
 <tr class="memdesc:ace087082aba8a546ecd9abe14e0b2fc2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of Edu units per whole note. <br /></td></tr>
 <tr class="separator:ace087082aba8a546ecd9abe14e0b2fc2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac87f0744ae26e5eb9f08d9615fc15bc5" id="r_ac87f0744ae26e5eb9f08d9615fc15bc5"><td class="memItemLeft" align="right" valign="top">constexpr <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemusx_1_1dom.html#ac87f0744ae26e5eb9f08d9615fc15bc5">BASE_SYSTEM_ID</a> = 0</td></tr>
+<tr class="separator:ac87f0744ae26e5eb9f08d9615fc15bc5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4b9366303184d73bffbde1123caeb358" id="r_a4b9366303184d73bffbde1123caeb358"><td class="memItemLeft" align="right" valign="top">constexpr <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemusx_1_1dom.html#a4b9366303184d73bffbde1123caeb358">STAFF_SET_1_SYSTEM_ID</a> = 65500</td></tr>
+<tr class="separator:a4b9366303184d73bffbde1123caeb358"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3c02ff3efcac252fc9358187a6bee09c" id="r_a3c02ff3efcac252fc9358187a6bee09c"><td class="memItemLeft" align="right" valign="top"><a id="a3c02ff3efcac252fc9358187a6bee09c" name="a3c02ff3efcac252fc9358187a6bee09c"></a>
+constexpr <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a>&#160;</td><td class="memItemRight" valign="bottom"><b>STUDIO_VIEW_SYSTEM_ID</b> = 65400</td></tr>
+<tr class="memdesc:a3c02ff3efcac252fc9358187a6bee09c"><td class="mdescLeft">&#160;</td><td class="mdescRight">The system cmper for Studio View. Studio View has entries for every click in the click track. <br /></td></tr>
+<tr class="separator:a3c02ff3efcac252fc9358187a6bee09c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af126d786c0d562de2e24d358782dea9e" id="r_af126d786c0d562de2e24d358782dea9e"><td class="memItemLeft" align="right" valign="top">constexpr <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemusx_1_1dom.html#af126d786c0d562de2e24d358782dea9e">SPECIAL_PART_EXTRACTION_SYSTEM_ID</a> = 65528</td></tr>
+<tr class="separator:af126d786c0d562de2e24d358782dea9e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aee7cd6e29b5e38d3437a608c29672a57" id="r_aee7cd6e29b5e38d3437a608c29672a57"><td class="memItemLeft" align="right" valign="top">constexpr <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemusx_1_1dom.html#aee7cd6e29b5e38d3437a608c29672a57">TEMP_SYSTEM_ID</a> = 65529</td></tr>
+<tr class="separator:aee7cd6e29b5e38d3437a608c29672a57"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a31c92a4751443e096b5a99100828f6e0" id="r_a31c92a4751443e096b5a99100828f6e0"><td class="memItemLeft" align="right" valign="top"><a id="a31c92a4751443e096b5a99100828f6e0" name="a31c92a4751443e096b5a99100828f6e0"></a>
 constexpr int&#160;</td><td class="memItemRight" valign="bottom"><b>MAX_CUE_PERCENTAGE</b> = 90</td></tr>
 <tr class="memdesc:a31c92a4751443e096b5a99100828f6e0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Arbitrary value that determines the max scaling value for cue notes. This could be configurable in the future. <br /></td></tr>
@@ -1006,14 +1020,14 @@ template&lt;typename T &gt; </div>
 </div>
 </div>
 <h2 class="groupheader">Function Documentation</h2>
-<a id="a938f344e829f7109948169079587c9ef" name="a938f344e829f7109948169079587c9ef"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a938f344e829f7109948169079587c9ef">&#9670;&#160;</a></span>calcDurationInfoFromEdu()</h2>
+<a id="ad70355206e90c7b79b7860fc5d75bff0" name="ad70355206e90c7b79b7860fc5d75bff0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad70355206e90c7b79b7860fc5d75bff0">&#9670;&#160;</a></span>calcDurationInfoFromEdu()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">std::pair&lt; <a class="el" href="namespacemusx_1_1dom.html#a3c91ee84b72cc27a2899191d6baee312">NoteType</a>, unsigned &gt; musx::dom::calcDurationInfoFromEdu </td>
+          <td class="memname"><a class="el" href="namespacemusx_1_1dom.html#a9fd6f660a4f7c02787b6bbe3307a15af">Duration</a> musx::dom::calcDurationInfoFromEdu </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="namespacemusx_1_1dom.html#a907ef641c247f1a5dbe75bbc972661f5">Edu</a>&#160;</td>
           <td class="paramname"><em>duration</em></td><td>)</td>
@@ -1084,7 +1098,76 @@ template&lt;typename T &gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>The base system cmper that gives a list of all available staves and their score order (<a class="el" href="classmusx_1_1dom_1_1others_1_1StaffUsed.html">others::StaffUsed</a> cmper) Generally you should avoid using this directly and instead use <a class="el" href="classmusx_1_1dom_1_1Document.html#a8ea1ce4314627bcd01d5dcd48d279c94" title="Returns the Scroll View Cmper for the given partId.">Document::calcScrollViewCmper</a> or <a class="el" href="classmusx_1_1dom_1_1Document.html#aaa777b3635d7f5c40c9dc99ccdedbac2" title="Returns the scroll view staves for the given partId.">Document::getScrollViewStaves</a> for the list of scroll view staves. </p>
+<p>The base system cmper that gives a list of all available staves and their score order (<a class="el" href="classmusx_1_1dom_1_1others_1_1StaffUsed.html">others::StaffUsed</a> cmper) Generally you should avoid using this directly and instead use <a class="el" href="classmusx_1_1dom_1_1Document.html#a8ea1ce4314627bcd01d5dcd48d279c94" title="Returns the Scroll View Cmper for the given partId.">Document::calcScrollViewCmper</a> or <a class="el" href="classmusx_1_1dom_1_1Document.html#aaa777b3635d7f5c40c9dc99ccdedbac2" title="Returns the Scroll View staves for the given partId.">Document::getScrollViewStaves</a> for the list of scroll view staves. </p>
+
+</div>
+</div>
+<a id="af126d786c0d562de2e24d358782dea9e" name="af126d786c0d562de2e24d358782dea9e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af126d786c0d562de2e24d358782dea9e">&#9670;&#160;</a></span>SPECIAL_PART_EXTRACTION_SYSTEM_ID</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> musx::dom::SPECIAL_PART_EXTRACTION_SYSTEM_ID = 65528</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>The system comper for Special Part Extraction (mostly obsolete in Finale 27.) See <a class="el" href="classmusx_1_1dom_1_1others_1_1PartGlobals.html#a2d1a52c48b402278588db0ff50ebff91" title="If non-zero, Special Part Extraction is enabled and this is the Cmper for its legacy StaffUsed array.">others::PartGlobals::specialPartExtractionIUList</a> for more information. </p>
+
+</div>
+</div>
+<a id="a4b9366303184d73bffbde1123caeb358" name="a4b9366303184d73bffbde1123caeb358"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4b9366303184d73bffbde1123caeb358">&#9670;&#160;</a></span>STAFF_SET_1_SYSTEM_ID</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> musx::dom::STAFF_SET_1_SYSTEM_ID = 65500</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>The system cmoper for the first Scroll View staff set. Add 0..7 to this value to get one of the 8 staff sets. </p>
+
+</div>
+</div>
+<a id="aee7cd6e29b5e38d3437a608c29672a57" name="aee7cd6e29b5e38d3437a608c29672a57"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aee7cd6e29b5e38d3437a608c29672a57">&#9670;&#160;</a></span>TEMP_SYSTEM_ID</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> musx::dom::TEMP_SYSTEM_ID = 65529</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>This is a scratch value. Finale and/or plugins can use this systemId to aggregate an arbitary list of staves for batch processing. It is possible that a plugin might have saved a file with it. </p>
 
 </div>
 </div>
