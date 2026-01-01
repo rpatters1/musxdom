@@ -189,6 +189,11 @@ public:
     bool calcPolicyVoicingIncludesLayer(LayerIndex layerIndex) const
     { return !m_honorPartVoicing || calcVoicingIncludesLayer(layerIndex); }
 
+    /// @brief Return the time offset applied to entries in this instance. One reason this might be non-zero
+    /// is if the instance is for a meausure that contains a legacy pickup spacer.
+    [[nodiscard]]
+    util::Fraction getTimeOffset() const { return m_timeOffset; }
+
 private:
     MusxInstance<GFrameHold> m_hold;                    ///< The resolved GFrameHold object, or null if not found.
     Cmper m_requestedPartId{};                          ///< The requested part context.
