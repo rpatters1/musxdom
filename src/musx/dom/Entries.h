@@ -213,7 +213,7 @@ private:
  *         - unsigned: The number of augmentation dots
  * @throws std::invalid_argument if the duration is out of valid range (> 1 and < 0x10000).
  */
-std::pair<NoteType, unsigned> calcDurationInfoFromEdu(Edu duration);
+Duration calcDurationInfoFromEdu(Edu duration);
 
 /// @brief Returns the number of beams implied by an EDU duration.
 ///
@@ -434,7 +434,7 @@ public:
      * @brief Calculates the NoteType and number of augmentation dots. (See #calcDurationInfoFromEdu.)
      */
     [[nodiscard]]
-    std::pair<NoteType, unsigned> calcDurationInfo() const { return calcDurationInfoFromEdu(duration); }
+    Duration calcDurationInfo() const { return calcDurationInfoFromEdu(duration); }
 
     /**
      * @brief Calculates the duration as a @ref util::Fraction of a whole note

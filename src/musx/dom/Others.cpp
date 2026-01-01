@@ -224,28 +224,48 @@ util::Fraction Measure::calcMinLegacyPickupSpacer(StaffCmper forStaffId) const
     return globalSpacer / calcTimeStretch(forStaffId); // return staff-level value.
 }
 
-util::Fraction Measure::calcMinLegacyPickupSpacer() const
+Duration Measure::calcDefaultRestValue() const
 {
-    util::Fraction result = -1;
-    auto scrollViewStaves = getDocument()->getScrollViewStaves(getRequestedPartId());
-    for (const auto& staffUsed : scrollViewStaves) {
-        if (auto gfHold = details::GFrameHoldContext(getDocument(), getRequestedPartId(), staffUsed->staffId, getCmper())) {
-            if (gfHold->calcContainsMusic()) {
-                // only consider gfHold if it contains music, because pickup spacers are attached to frames.
-                const auto nextValue = gfHold.calcMinLegacyPickupSpacer() * calcTimeStretch(staffUsed->staffId);
-                if (nextValue == 0) { // no need to keep searching if we are at zero.
-                    return 0;
-                }
-                if (result < 0 || nextValue < result) {
-                    result = nextValue;
-                }
+    if (getCmper() == 1) { // only check first measure for a pickup: this is observed Finale behavior
+        if (const auto miscOptions = getDocument()->getOptions()->get<options::MiscOptions>()) {
+            if (miscOptions->pickupValue > 0) {
+                // It may be necessary to check STUDIO_VIEW_SCROLL_VIEW_ID to see if it has a pickup spacer,
+                // but for now we trust MiscOptions.
+                return calcDurationInfoFromEdu(miscOptions->pickupValue);
             }
         }
     }
-    if (result >= 0) {
-        return result;
+    return { NoteType::Whole, 0u };
+}
+
+util::Fraction Measure::calcMinLegacyPickupSpacer() const
+{
+    util::Fraction result = -1;
+    auto doc = getDocument();
+
+    auto checkStaves = [&](const MusxInstanceList<others::StaffUsed>& staves) {
+        for (const auto& staffUsed : staves) {
+            if (auto gfHold = details::GFrameHoldContext(doc, getRequestedPartId(), staffUsed->staffId, getCmper())) {
+                if (gfHold->calcContainsMusic()) {
+                    // only consider gfHold if it contains music, because pickup spacers are attached to frames.
+                    const auto nextValue = gfHold.calcMinLegacyPickupSpacer() * calcTimeStretch(staffUsed->staffId);
+                    if (result < 0 || nextValue < result) {
+                        result = nextValue;
+                    }
+                    if (result == 0) { // no need to keep searching if we are at zero.
+                        return;
+                    }
+                }
+            }
+        }
+    };
+        
+    checkStaves(doc->getScrollViewStaves(getRequestedPartId()));
+    if (result < 0) { // only check Studio View if nothing was found in Scroll View.
+        checkStaves(doc->getOthers()->getArray<others::StaffUsed>(getRequestedPartId(), STUDIO_VIEW_SYSTEM_ID));
     }
-    return 0;
+
+    return (std::max)(util::Fraction(0), result);
 }
 
 util::Fraction Measure::calcDuration(const std::optional<StaffCmper>& forStaff) const

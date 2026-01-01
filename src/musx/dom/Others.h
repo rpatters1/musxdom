@@ -1248,6 +1248,16 @@ public:
     /// @return The smallest legacy pickup spacer encountered in a layer for this measure and staff. Zero if none.
     util::Fraction calcMinLegacyPickupSpacer(StaffCmper forStaffId) const;
 
+    /// @brief Returns the default rest value used for empty staves in this measure.
+    ///
+    /// For most documents, this is a whole rest.However, if the document has a pickup created by the
+    /// `Document->Pickup Measure` menu option, this value may be a different value.
+    ///
+    /// @return a Duration where
+    ///         - NoteType specifies the base duration (Whole, Half, Quarter, etc.)
+    ///         - unsigned specifies the number of dots.
+    Duration calcDefaultRestValue() const;
+
     /// @brief Calculates the legacy pickup spacer in any staff, in global Edu values.
     ///
     /// See comments at #details::GFrameHoldContext::calcMinLegacyPickupSpacer.
@@ -1983,7 +1993,7 @@ public:
      * is no longer consulted when constructing Page View systems.
      *
      * Its only remaining purpose is as a flag that Special Part Extraction is active,
-     * and as a filter for the Finale UI: it limits which staves may be added to a
+     * and as a filter for the Finale UI. It limits which staves may be added to a
      * Page View system when the user is working in the extracted-part layout.
      *
      * (xml node is `<pageViewIUlist>`)
@@ -2735,6 +2745,10 @@ public:
 /**
  * @class StaffUsed
  * @brief An array of StaffUsed defines a set of staves in a staff system or in Scroll View.
+ *
+ * The cmper is either #BASE_SYSTEM_ID (for Scroll View) or the SystemCmper of a system. There
+ * are some other special cmper values as well for staff sets in Scroll View or Special Part Extraction
+ * or Studio View.
  *
  * This class is identified by the XML node name "instUsed".
  */
