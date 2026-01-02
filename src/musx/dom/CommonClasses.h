@@ -106,16 +106,22 @@ public:
     inline static constexpr uint16_t EnigmaStyleHidden    = 0x80; ///< Hidden text bit
     /// @}
 
+    /// @brief Calculates the codepage for this font. See #others::FontDefinition::calcCodepage.
+    /// @return The calculated codepage or utf8.
+    /// @throws std::invalid_argument if FontDefinition not found.
+    CodePage calcCodepage() const;
+
     /**
      * @brief Get the name of the font.
      * @return The name of the font as a string.
+     * @throws std::invalid_argument if FontDefinition not found.
      */
     std::string getName() const;
 
     /**
      * @brief Sets the id of the font from a string name.
      * @param name The font name to find.
-     * @throws std::invalid_parameter if the name is not found.
+     * @throws std::invalid_argument if the name is not found.
      */
     void setFontIdByName(const std::string& name);
 

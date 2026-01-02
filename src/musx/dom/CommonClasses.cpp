@@ -49,6 +49,14 @@ namespace dom {
 // ***** FontInfo *****
 // ********************
 
+CodePage FontInfo::calcCodepage() const
+{
+    if (auto fontDef = getDocument()->getOthers()->get<others::FontDefinition>(SCORE_PARTID, fontId)) {
+        return fontDef->calcCodepage();
+    }
+    throw std::invalid_argument("font definition not found for font id " + std::to_string(fontId));
+}
+
 std::string FontInfo::getName() const
 {
     if (auto fontDef = getDocument()->getOthers()->get<others::FontDefinition>(SCORE_PARTID, fontId)) {

@@ -33,6 +33,25 @@ enum class AlignJustify
     Center  ///< Center alignment.
 };
 
+/**
+ * @brief Supported legacy text encodings for byte-to-UTF-8 conversion.
+ *
+ * The numeric values correspond to Windows code page numbers where applicable,
+ * allowing direct use with Win32 conversion APIs and straightforward mapping
+ * to iconv encoding names on non-Windows platforms.
+ */
+enum class CodePage : int
+{
+    Ansi            = 0,      ///< Unspecified encoding: apply heuristic detection.
+    Utf8            = 65001,  ///< UTF-8 encoded text.
+    Windows1252     = 1252,   ///< Windows Western European ("ANSI") encoding.
+    ShiftJis        = 932,    ///< Japanese Shift-JIS (Windows-932).
+    Korean          = 949,    ///< Korean (Windows-949).
+    Big5            = 950,    ///< Traditional Chinese Big5 (Windows-950).
+    Gb2312          = 936,    ///< Simplified Chinese GBK/GB2312 (Windows-936).
+    MacRoman        = 10000,  ///< Macintosh Roman (legacy).
+};
+
 /// @enum DateFormat
 /// @brief Date format options. This value is coded into the Enigma `date` insert when the page title is created.
 enum class DateFormat : int

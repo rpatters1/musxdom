@@ -31,6 +31,81 @@ namespace musx {
 namespace dom {
 namespace others {
 
+// **************************
+// ***** FontDefinition *****
+// **************************
+
+bool FontDefinition::calcIsSymbolFont() const
+{
+    if (charsetBank == CharacterSetBank::MacOS && charsetVal == SYMBOL_CHARSET_MAC) {
+        return true;
+    }
+    if (charsetBank == CharacterSetBank::Windows && charsetVal == SYMBOL_CHARSET_WIN) {
+        return true;
+    }
+    return false;
+}
+
+CodePage FontDefinition::calcCodepage() const
+{
+    // Symbol fonts are glyph-indexed, not text-encoded
+    if (calcIsSymbolFont()) {
+        return CodePage::Utf8;
+    }
+
+    switch (charsetBank) {
+    case CharacterSetBank::Windows:
+        switch (charsetVal) {
+        case 0:     // ANSI_CHARSET
+            // Portable default: treat "ANSI" as Windows-1252 rather than machine-local ACP.
+            // This is a guess as to how Finale created portable document files. It can be
+            // revised if needed.
+            return CodePage::Windows1252;
+
+        case 1:     // DEFAULT_CHARSET
+            return CodePage::Ansi;
+
+        case 128: // SHIFTJIS_CHARSET
+            return CodePage::ShiftJis;
+
+        case 129: // HANGEUL_CHARSET
+            return CodePage::Korean;
+
+        case 136: // CHINESEBIG5_CHARSET
+            return CodePage::Big5;
+
+        case 255: // OEM_CHARSET
+            return CodePage::Ansi; // ambiguous OEM; heuristic decode is safer than guessing 437
+
+        default:
+            return CodePage::Ansi; // let heuristics decide (e.g., try UTF-8, then fallback)
+        }
+
+    case CharacterSetBank::MacOS:
+        switch (charsetVal) {
+        case 0:     // smRoman / MacRoman
+            return CodePage::Ansi;
+
+        case 1:     // smJapanese
+            return CodePage::ShiftJis;
+
+        case 2:     // smTradChinese
+            return CodePage::Big5;
+
+        case 3:     // smKorean
+            return CodePage::Korean;
+
+        case 25:    // smSimpChinese
+            return CodePage::Gb2312;
+
+        default:
+            return CodePage::Utf8;
+        }
+    }
+
+    return CodePage::Utf8;    
+}
+
 // *****************
 // ***** Frame *****
 // *****************

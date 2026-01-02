@@ -540,7 +540,7 @@ class FontDefinition : public OthersBase
 {
     static constexpr uint32_t SYMBOL_CHARSET_MAC = 0xfff; // (4095)
     static constexpr uint32_t SYMBOL_CHARSET_WIN = 2;
-
+    
 public:
     /** @brief Constructor function */
     explicit FontDefinition(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
@@ -578,16 +578,20 @@ public:
      * either a Windows symbol font or a macOS symbol font, depending on the origin of the font
      * and of the document.
     */
-    bool calcIsSymbolFont() const
-    {
-        if (charsetBank == CharacterSetBank::MacOS && charsetVal == SYMBOL_CHARSET_MAC) {
-            return true;
-        }
-        if (charsetBank == CharacterSetBank::Windows && charsetVal == SYMBOL_CHARSET_WIN) {
-            return true;
-        }
-        return false;
-    }
+    bool calcIsSymbolFont() const;
+
+    /**
+     * @brief Calculates the Windows-style codepage corresponding to this font's charset.
+     *
+     * The returned value is a Windows codepage number (e.g. CP_UTF8, 932, 950),
+     * even on non-Windows platforms. Callers may use this value to drive
+     * platform-specific conversion APIs.
+     *
+     * If the charset is unknown or unsupported, CP_UTF8 is returned.
+     *
+     * Symbol fonts return CP_UTF8, as they do not use text encodings.
+     */
+    CodePage calcCodepage() const;
 
     constexpr static std::string_view XmlNodeName = "fontName"; ///< The XML node name for this type.
     static const xml::XmlElementArray<FontDefinition>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
