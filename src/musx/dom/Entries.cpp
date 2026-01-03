@@ -1952,6 +1952,27 @@ int EntryInfoPtr::calcCrossStaffDirectionForAll(DeferredReference<MusxInstanceLi
     return crossStaffDirectionFound;
 }
 
+std::optional<StaffCmper> EntryInfoPtr::calcCrossedStaffForAll() const
+{
+    auto entry = (*this)->getEntry();
+    if (!entry->isNote) {
+        return std::nullopt;
+    }
+    std::optional<StaffCmper> result;
+    for (size_t x = 0; x < entry->notes.size(); x++) {
+        if (!entry->notes[x]->crossStaff) {
+            return std::nullopt; // at least one note is not crossed.
+        }
+        StaffCmper noteStaff =  NoteInfoPtr(*this, x).calcStaff();
+        if (!result) {
+            result = noteStaff;
+        } else if (result != noteStaff) {
+            return std::nullopt; // not all notes crossed to same staff.
+        }
+    }
+    return result;
+}
+
 bool EntryInfoPtr::calcIsSingletonGrace() const
 {
     if ((*this)->getEntry()->graceNote) {
@@ -2628,9 +2649,10 @@ StaffCmper NoteInfoPtr::calcStaff() const
 {
     if ((*this)->crossStaff) {
         const auto entry = m_entry->getEntry();
-        const auto noteRestOptions = entry->getDocument()->getOptions()->get<options::NoteRestOptions>();
+        const auto doc = entry->getDocument();
+        const auto noteRestOptions = doc->getOptions()->get<options::NoteRestOptions>();
         if (!noteRestOptions || noteRestOptions->doCrossStaffNotes) {
-            if (auto crossStaff = entry->getDocument()->getDetails()->getForNote<details::CrossStaff>(*this)) {
+            if (auto crossStaff = doc->getDetails()->getForNote<details::CrossStaff>(*this)) {
                 return crossStaff->staff;
             }
         }

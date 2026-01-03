@@ -851,6 +851,11 @@ public:
     ///   - **−1** if all cross-staffed notes cross downward to a lower staff.
     [[nodiscard]] int calcCrossStaffDirectionForAll(DeferredReference<MusxInstanceList<others::StaffUsed>> staffList = {}) const;
 
+    /// @brief Calculates all the notes in this entry are crossed to the same staff. 
+    /// @return The crossed staffId if all notes are crossed to it. If no crossed notes, or if no all cross notes are crossed
+    ///         to the same staff, returns std::nullopt.
+    [[nodiscard]] std::optional<StaffCmper> calcCrossedStaffForAll() const;
+
     /// @brief Return true if this entry is a grace note and the only grace in the sequence at this location.
     [[nodiscard]] bool calcIsSingletonGrace() const;
 
