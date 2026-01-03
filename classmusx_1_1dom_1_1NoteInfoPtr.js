@@ -5,6 +5,7 @@ var classmusx_1_1dom_1_1NoteInfoPtr =
     [ "calcCrossStaffDirection", "classmusx_1_1dom_1_1NoteInfoPtr.html#aad11d0055ca42686bfb5d5f8dfa98247", null ],
     [ "calcDefaultEnharmonic", "classmusx_1_1dom_1_1NoteInfoPtr.html#aabb32c50345e151d488956b4f61f99b1", null ],
     [ "calcIsEnharmonicRespell", "classmusx_1_1dom_1_1NoteInfoPtr.html#aaa7136caca4301202a455a113f136553", null ],
+    [ "calcIsEnharmonicRespellInAnyPart", "classmusx_1_1dom_1_1NoteInfoPtr.html#a84f3b5f320d4e1dd16a71d82a3db7a4a", null ],
     [ "calcIsIncludedInVoicing", "classmusx_1_1dom_1_1NoteInfoPtr.html#aa078714d4ad095bd9be5da204e9bc438", null ],
     [ "calcNoteProperties", "classmusx_1_1dom_1_1NoteInfoPtr.html#a1d28b1b7789468004b3d08cb50d36b0a", null ],
     [ "calcNotePropertiesConcert", "classmusx_1_1dom_1_1NoteInfoPtr.html#a7ae784a48f045641dac1434223fd593f", null ],
