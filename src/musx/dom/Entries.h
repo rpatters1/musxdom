@@ -1622,6 +1622,11 @@ public:
     std::pair<int, int> calcDefaultEnharmonic() const
     { return (*this)->calcDefaultEnharmonic(m_entry.getKeySignature()); }
 
+    /// @brief Calculates if any linked part has this note enharmonically respelled.
+    /// @return True if a part exists with the note enharmonically respelled, otherwise false.
+    [[nodiscard]]
+    bool calcIsEnharmonicRespellInAnyPart() const;
+
     /// @brief Calculates if this note is cross-staffed and if so, which direction.
     /// @param staffList Optional staff list used to determine staff order.
     ///        If it is not supplied, the function automatically retrieves the scroll-view staff order

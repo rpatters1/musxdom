@@ -2717,6 +2717,24 @@ bool NoteInfoPtr::calcIsEnharmonicRespell() const
     return false;
 }
 
+bool NoteInfoPtr::calcIsEnharmonicRespellInAnyPart() const
+{
+    const auto entry = getEntryInfo()->getEntry();
+    if (entry->noteDetail) {
+        const auto doc = entry->getDocument();
+        const auto linkedParts = others::PartDefinition::getInUserOrder(doc);
+        for (const auto& linkedPart : linkedParts) {
+            if (const auto noteAlts = doc->getDetails()->getForNote<details::NoteAlterations>(*this, linkedPart->getCmper())) {
+                if (noteAlts->enharmonic) {
+                    return true;
+                    break;
+                }
+            }
+        }
+    }
+    return false;
+}
+
 bool NoteInfoPtr::isSamePitch(const NoteInfoPtr& src) const
 {
     if (!*this || !src) {
