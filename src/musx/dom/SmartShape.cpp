@@ -267,26 +267,36 @@ bool others::SmartShape::calcIsPotentialForwardTie() const
     return endTermSeg->endPointAdj->horzOffset > startTermSeg->endPointAdj->horzOffset;
 }
 
-NoteInfoPtr others::SmartShape::calcIsArpeggiatedTie() const
+NoteInfoPtr others::SmartShape::calcArpeggiatedTieEndNote() const
 {
     if (!calcIsPotentialForwardTie()) {
         return {};
     }
-    auto startEntry = startTermSeg->endPoint->calcAssociatedEntry(getRequestedPartId());
+    const auto startEntry = startTermSeg->endPoint->calcAssociatedEntry(getRequestedPartId());
     MUSX_ASSERT_IF(!startEntry) {
         throw std::logic_error("calcIsPotentialForwardTie was true but startEntry did not exist.");
     }
-    auto entry = startEntry->getEntry();
+    const auto entry = startEntry->getEntry();
     MUSX_ASSERT_IF(entry->notes.empty()) {
-        throw std::logic_error("calcIsPotentialForwardTie was true but startEntry had not notes.");
-    }
-    if (entry->notes.size() > 1) {
-        return {};
-    }
-    auto endEntry = endTermSeg->endPoint->calcAssociatedEntry(getRequestedPartId());
-    MUSX_ASSERT_IF(!startEntry) {
         throw std::logic_error("calcIsPotentialForwardTie was true but startEntry had no notes.");
     }
+    if (entry->notes.size() != 1) {
+        return {};
+    }
+    const auto endEntry = endTermSeg->endPoint->calcAssociatedEntry(getRequestedPartId());
+    MUSX_ASSERT_IF(!endEntry) {
+        throw std::logic_error("calcIsPotentialForwardTie was true but endEntry did not exist.");
+    }
+    const auto noteInfoPtr = NoteInfoPtr(startEntry, 0);
+    if (noteInfoPtr.calcTieTo()) {
+        // If Finale already provides a real tie target, this smart shape is not a stand-in.
+        return {};
+    }
+    auto endNote = noteInfoPtr.findEqualPitch(endEntry);
+    MUSX_ASSERT_IF(!endNote) {
+        throw std::logic_error("calcIsPotentialForwardTie was true but no matching pitch was found in endEntry.");
+    }
+    return endNote;
 }
 
 bool others::SmartShape::calcIsLaissezVibrerTie() const

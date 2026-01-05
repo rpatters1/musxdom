@@ -373,11 +373,11 @@ public:
 
     /// @brief Returns the tied-to note if this slur is being used as an arpeggiated tie.
     ///
-    /// - The current entry must consist only of a single note.
-    /// - There must be no note that this entry's note could be tied to.
+    /// - The start entry must consist only of a single note.
+    /// - There must be no note that the start entry's note could be tied to.
     ///
     /// @return The NoteInfoPtr that is the tied-to note for this note, or null if none.
-    NoteInfoPtr calcIsArpeggiatedTie() const;
+    NoteInfoPtr calcArpeggiatedTieEndNote() const;
 
     /// @brief Returns true if this slur is being used as a laissez vibrer tie. It is used by #EntryInfoPtr::calcHasLaissezVibrerTie,
     /// which imposes additional rules and checks.
