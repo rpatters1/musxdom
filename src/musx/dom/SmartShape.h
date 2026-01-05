@@ -130,6 +130,14 @@ public:
     /// @brief Calculates the global position of the endpoint within its measure, based on whether it is measure- or entry-attached
     util::Fraction calcGlobalPosition() const;
 
+    /// @brief Compares the metric position of two endpoints.
+    /// @param other The endpoint to compare.
+    /// @return Integer value where
+    ///         - negative (-1) means this is before @p other.
+    ///         - 0 means the endpoints have the same metric position.
+    ///         - positive (+1) means this is after @p other.
+    int compareMetricPosition(const EndPoint& other) const;
+
     /// @brief Calculates the entry associated with the endpoint.
     /// @note This function does not check for an actual assignment. It simply returns an entry the endpoint would be associated
     /// with if it were assigned. Use #calcIsAssigned to determine if the endpoint is actually assigned.
@@ -179,6 +187,13 @@ namespace others {
  */
 class SmartShape : public OthersBase
 {
+private:
+    /// @brief Calculates if this smart shape is potentially being used as a tie.
+    bool calcIsPotentialTie() const;
+
+    /// @brief Calculates if this smart shape is potentially being used as a forward tie.
+    bool calcIsPotentialForwardTie() const;
+
 public:
     /** @brief Constructor function */
     explicit SmartShape(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
@@ -355,6 +370,18 @@ public:
     /// @brief Creates a music range for the SmartShape in global EDUs.
     /// @return The created music range.
     MusicRange createGlobalMusicRange() const;
+
+    /// @brief Returns the tied-to note if this slur is being used as an arpeggiated tie.
+    ///
+    /// - The current entry must consist only of a single note.
+    /// - There must be no note that this entry's note could be tied to.
+    ///
+    /// @return The NoteInfoPtr that is the tied-to note for this note, or null if none.
+    NoteInfoPtr calcIsArpeggiatedTie() const;
+
+    /// @brief Returns true if this slur is being used as a laissez vibrer tie. It is used by #EntryInfoPtr::calcHasLaissezVibrerTie,
+    /// which imposes additional rules and checks.
+    bool calcIsLaissezVibrerTie() const;
 
     /// @brief Iterates all the entries that start within the staves and music range defined by the SmartShape. It iterates by staff and then measure.
     /// @param iterator The iterator function. Return `false` from this function to stop iterating.

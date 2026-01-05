@@ -563,6 +563,21 @@ public:
     [[nodiscard]]
     bool calcIsSamePitchContentAndDuration(const EntryInfoPtr& src, bool compareConcert = true, bool requireSameVoice = true, bool requireSameGraceElapsedDura = false) const;
 
+    /// @brief Returns whether @p src represent the same notated value.
+    ///
+    /// This function performs the same pitch comparison as #calcIsSamePitchContent but only requires that
+    /// the pitches in @p src be included in this entry. This entry may contain other pitches.
+    ///
+    /// @note Returns false if either entry displays as a rest.
+    ///
+    /// @param src The EntryInfoPtr to compare.
+    /// @param compareConcert If true, compares concert pitches. If false, compares scale degrees
+    ///        relative to the prevailing key.
+    ///
+    /// @return true if both pointers are non-null and all required properties match; false otherwise.
+    [[nodiscard]]
+    bool calcContainsPitchContent(const EntryInfoPtr& src, bool compareConcert = true) const;
+
     /// @brief Returns the frame.
     [[nodiscard]] std::shared_ptr<const EntryFrame> getFrame() const { return m_entryFrame; }
 
@@ -674,7 +689,8 @@ public:
     [[nodiscard]] EntryInfoPtr getPreviousInBeamGroupAcrossBars(BeamIterationMode beamIterationMode = BeamIterationMode::Normal) const;
 
     /// @brief Calculates if an entry displays as a rest.
-    /// @todo Eventually calcDisplaysAsRest should take into account voiced parts.
+    ///
+    /// This function takes voiced parts into account if the document's #PartVoicingPolicy applies part voicing. 
     [[nodiscard]] bool calcDisplaysAsRest() const;
 
     /// @brief Calculates the top and bottom staff positions of the entry, taking into account percussion notes. This function must not

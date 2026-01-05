@@ -505,6 +505,57 @@ int EntryInfoPtr::getVoice() const
     return int((*this)->getEntry()->voice2) + 1;
 }
 
+bool EntryInfoPtr::calcContainsPitchContent(const EntryInfoPtr& src, bool compareConcert) const
+{
+    if (!*this || !src) {
+        return false;
+    }
+    if (isSameEntry(src)) {
+        return true;
+    }
+    if (calcDisplaysAsRest() || src.calcDisplaysAsRest()) {
+        return false;
+    }
+
+    const auto entryThis = (*this)->getEntry();
+    const auto entrySrc  = src->getEntry();
+
+    if (entrySrc->notes.size() > entryThis->notes.size()) {
+        return false;
+    }
+
+    const bool sameKeys = this->getFrame()->keySignature->key == src.getFrame()->keySignature->key;
+
+    size_t thisIndex = 0;
+    for (size_t srcIndex = 0; srcIndex < entrySrc->notes.size(); ++srcIndex) {
+        const auto noteSrc = NoteInfoPtr(src, srcIndex);
+        bool found = false;
+
+        for (; thisIndex < entryThis->notes.size(); ++thisIndex) {
+            const auto noteThis = NoteInfoPtr(*this, thisIndex);
+            if (sameKeys || !compareConcert) {
+                if (noteThis->harmLev == noteSrc->harmLev && noteThis->harmAlt == noteSrc->harmAlt) {
+                    found = true;
+                    ++thisIndex;
+                    break;
+                }
+            } else {
+                auto [noteTypeThis, octaveThis, alterThis, staffLineThis] = noteThis.calcNotePropertiesConcert(true);
+                auto [noteTypeSrc, octaveSrc, alterSrc, staffLineSrc] = noteSrc.calcNotePropertiesConcert(true);
+                if (noteTypeThis == noteTypeSrc && octaveThis == octaveSrc && alterThis == alterSrc) {
+                    found = true;
+                    ++thisIndex;
+                    break;
+                }
+            }
+        }
+        if (!found) {
+            return false;
+        }
+    }
+    return true;
+}
+
 bool EntryInfoPtr::calcIsSamePitchContent(const EntryInfoPtr& src, bool compareConcert) const
 {
     if (!*this || !src) {

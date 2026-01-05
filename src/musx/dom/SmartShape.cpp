@@ -133,6 +133,25 @@ util::Fraction smartshape::EndPoint::calcGlobalPosition() const
     return 0;
 }
 
+int smartshape::EndPoint::compareMetricPosition(const EndPoint& other) const
+{
+    if (this->entryNumber != 0 && other.entryNumber != 0 && this->entryNumber == other.entryNumber) {
+        MUSX_ASSERT_IF(measId != other.measId) {
+            // nothing to do, but trap it in debug mode.
+        }
+        return 0;
+    }
+    if (measId != other.measId) {
+        return (measId < other.measId) ? -1 : +1;
+    }
+    const auto thisPosition = this->calcPosition();
+    const auto otherPosition = other.calcPosition();
+    if (thisPosition != otherPosition) {
+        return (thisPosition < otherPosition) ? -1 : +1;
+    }
+    return 0;
+}
+
 // **********************
 // ***** SmartShape *****
 // **********************
@@ -190,6 +209,92 @@ bool others::SmartShape::iterateEntries(std::function<bool(const EntryInfoPtr&)>
         throw std::logic_error("Smart shape spans staves that do not exist on the supplied staff list.");
     }
     return staffList->iterateEntries(*startIndex, *endIndex, createGlobalMusicRange(), iterator);
+}
+
+bool others::SmartShape::calcIsPotentialTie() const
+{
+    // 6 EVPU ≈ 1/4 staff space; threshold is applied strictly (|Δ| < 6 EVPU).
+    constexpr Evpu HORIZONTAL_THRESHOLD = 6;
+
+    switch (shapeType) {
+    case ShapeType::SlurAuto:
+    case ShapeType::SlurDown:
+    case ShapeType::SlurUp:
+        break;
+
+    default:
+        return false;
+    }
+
+    if (entryBased) {
+        // both ends must be the same entry for entry-attached
+        if (startTermSeg->endPoint->entryNumber != endTermSeg->endPoint->entryNumber) {
+            return false;
+        }
+    } else {
+        if (startTermSeg->endPoint->staffId != endTermSeg->endPoint->staffId) {
+            return false;
+        }
+    }
+    // both ends must match up with an equivalent entry for beat-attached
+    auto startEntry = startTermSeg->endPoint->calcAssociatedEntry(getRequestedPartId());
+    auto endEntry = endTermSeg->endPoint->calcAssociatedEntry(getRequestedPartId());
+    if (!startEntry || !endEntry) {
+        return false;
+    }
+    if (startEntry.calcDisplaysAsRest() || endEntry.calcDisplaysAsRest()) {
+        return false;
+    }
+    // Allow arpeggiation ties (e.g., C -> CEG): end entry may add pitches, but must contain all start pitches.
+    if (!endEntry.calcContainsPitchContent(startEntry)) {
+        return false;
+    }
+    const Evpu vertDiff = startTermSeg->endPointAdj->vertOffset - endTermSeg->endPointAdj->vertOffset;
+    return std::abs(vertDiff) < HORIZONTAL_THRESHOLD;
+}
+
+bool others::SmartShape::calcIsPotentialForwardTie() const
+{
+    if (!calcIsPotentialTie()) {
+        return false;
+    }
+    const auto& startEndPoint = *startTermSeg->endPoint;
+    const auto& endEndPoint   = *endTermSeg->endPoint;
+    const int cmp = startEndPoint.compareMetricPosition(endEndPoint);
+    if (cmp) {
+        return cmp < 0;
+    }
+    return endTermSeg->endPointAdj->horzOffset > startTermSeg->endPointAdj->horzOffset;
+}
+
+NoteInfoPtr others::SmartShape::calcIsArpeggiatedTie() const
+{
+    if (!calcIsPotentialForwardTie()) {
+        return {};
+    }
+    auto startEntry = startTermSeg->endPoint->calcAssociatedEntry(getRequestedPartId());
+    MUSX_ASSERT_IF(!startEntry) {
+        throw std::logic_error("calcIsPotentialForwardTie was true but startEntry did not exist.");
+    }
+    auto entry = startEntry->getEntry();
+    MUSX_ASSERT_IF(entry->notes.empty()) {
+        throw std::logic_error("calcIsPotentialForwardTie was true but startEntry had not notes.");
+    }
+    if (entry->notes.size() > 1) {
+        return {};
+    }
+    auto endEntry = endTermSeg->endPoint->calcAssociatedEntry(getRequestedPartId());
+    MUSX_ASSERT_IF(!startEntry) {
+        throw std::logic_error("calcIsPotentialForwardTie was true but startEntry had no notes.");
+    }
+}
+
+bool others::SmartShape::calcIsLaissezVibrerTie() const
+{
+    if (!calcIsPotentialForwardTie()) {
+        return false;
+    }
+    return startTermSeg->endPoint->compareMetricPosition(*endTermSeg->endPoint) == 0;
 }
 
 // ********************************
