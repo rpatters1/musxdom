@@ -34,16 +34,42 @@ namespace dom {
 
 EntryInfoPtr smartshape::EndPoint::calcAssociatedEntry(Cmper forPartId, bool findExact) const
 {
+    const auto doc = getDocument();
     EntryInfoPtr result;
     if (entryNumber != 0) {
-        result = EntryInfoPtr::fromEntryNumber(getDocument(), forPartId, entryNumber);
+        result = EntryInfoPtr::fromEntryNumber(doc, forPartId, entryNumber);
         if (!result) {
             MUSX_INTEGRITY_ERROR("SmartShape at Staff " + std::to_string(staffId) + " Measure " + std::to_string(measId)
                 + " contains endpoint with invalid entry number " + std::to_string(entryNumber));
         }
-    } else if (auto gfHold = details::GFrameHoldContext(getDocument(), forPartId, staffId, measId)) {
-        result = gfHold.calcNearestEntry(util::Fraction::fromEdu(eduPosition), findExact);
+        return result;
     }
+
+    auto gfHold = details::GFrameHoldContext(doc, forPartId, staffId, measId);
+    if (!gfHold) {
+        return {};
+    }
+
+    const auto pos = util::Fraction::fromEdu(eduPosition);
+    result = gfHold.calcNearestEntry(pos, findExact);
+    if (!result || findExact) {
+        return result;
+    }
+
+    const auto measure = doc->getOthers()->get<others::Measure>(forPartId, result.getMeasure());
+    MUSX_ASSERT_IF(!measure) {
+        // measure should exist, but there is nothing to do here: trap it in debug mode
+        return {};
+    }
+    const auto beatVal = measure->createTimeSignature(staffId)->calcBeatValueAt(eduPosition);
+
+    constexpr auto BEAT_THRESHOLD_MULTIPLIER = util::Fraction(1, 4); // modify this if too many false positives or negatives
+    const auto beatThreshold = beatVal * BEAT_THRESHOLD_MULTIPLIER;
+    using std::abs;
+    if (abs(result->elapsedDuration - pos) > beatThreshold) {
+        return {};
+    }
+
     return result;
 }
 
@@ -211,7 +237,7 @@ bool others::SmartShape::iterateEntries(std::function<bool(const EntryInfoPtr&)>
     return staffList->iterateEntries(*startIndex, *endIndex, createGlobalMusicRange(), iterator);
 }
 
-bool others::SmartShape::calcIsPotentialTie() const
+bool others::SmartShape::calcIsPotentialTie(const EntryInfoPtr& forStartEntry) const
 {
     // 6 EVPU ≈ 1/4 staff space; threshold is applied strictly (|Δ| < 6 EVPU).
     constexpr Evpu HORIZONTAL_THRESHOLD = 6;
@@ -228,34 +254,38 @@ bool others::SmartShape::calcIsPotentialTie() const
 
     if (entryBased) {
         // both ends must be the same entry for entry-attached
-        if (startTermSeg->endPoint->entryNumber != endTermSeg->endPoint->entryNumber) {
+        const auto startEntryNum = startTermSeg->endPoint->entryNumber;
+        if (startEntryNum != endTermSeg->endPoint->entryNumber || startEntryNum != forStartEntry->getEntry()->getEntryNumber()) {
             return false;
         }
-    } else {
+    }  else {
         if (startTermSeg->endPoint->staffId != endTermSeg->endPoint->staffId) {
+            return false;
+        }
+        const auto thisStartEntry = startTermSeg->endPoint->calcAssociatedEntry(getRequestedPartId(), /*findExact*/false);
+        if (!forStartEntry.isSameEntry(thisStartEntry)) {
             return false;
         }
     }
     // both ends must match up with an equivalent entry for beat-attached
-    auto startEntry = startTermSeg->endPoint->calcAssociatedEntry(getRequestedPartId());
-    auto endEntry = endTermSeg->endPoint->calcAssociatedEntry(getRequestedPartId());
-    if (!startEntry || !endEntry) {
+    auto endEntry = endTermSeg->endPoint->calcAssociatedEntry(getRequestedPartId(), /*findExact*/false);
+    if (!endEntry) {
         return false;
     }
-    if (startEntry.calcDisplaysAsRest() || endEntry.calcDisplaysAsRest()) {
+    if (forStartEntry.calcDisplaysAsRest() || endEntry.calcDisplaysAsRest()) {
         return false;
     }
     // Allow arpeggiation ties (e.g., C -> CEG): end entry may add pitches, but must contain all start pitches.
-    if (!endEntry.calcContainsPitchContent(startEntry)) {
+    if (!endEntry.calcContainsPitchContent(forStartEntry)) {
         return false;
     }
     const Evpu vertDiff = startTermSeg->endPointAdj->vertOffset - endTermSeg->endPointAdj->vertOffset;
     return std::abs(vertDiff) < HORIZONTAL_THRESHOLD;
 }
 
-bool others::SmartShape::calcIsPotentialForwardTie() const
+bool others::SmartShape::calcIsPotentialForwardTie(const EntryInfoPtr& forStartEntry) const
 {
-    if (!calcIsPotentialTie()) {
+    if (!calcIsPotentialTie(forStartEntry)) {
         return false;
     }
     const auto& startEndPoint = *startTermSeg->endPoint;
@@ -267,16 +297,12 @@ bool others::SmartShape::calcIsPotentialForwardTie() const
     return endTermSeg->endPointAdj->horzOffset > startTermSeg->endPointAdj->horzOffset;
 }
 
-NoteInfoPtr others::SmartShape::calcArpeggiatedTieEndNote() const
+NoteInfoPtr others::SmartShape::calcArpeggiatedTieEndNote(const EntryInfoPtr& forStartEntry) const
 {
-    if (!calcIsPotentialForwardTie()) {
+    if (!calcIsPotentialForwardTie(forStartEntry)) {
         return {};
     }
-    const auto startEntry = startTermSeg->endPoint->calcAssociatedEntry(getRequestedPartId());
-    MUSX_ASSERT_IF(!startEntry) {
-        throw std::logic_error("calcIsPotentialForwardTie was true but startEntry did not exist.");
-    }
-    const auto entry = startEntry->getEntry();
+    const auto entry = forStartEntry->getEntry();
     MUSX_ASSERT_IF(entry->notes.empty()) {
         throw std::logic_error("calcIsPotentialForwardTie was true but startEntry had no notes.");
     }
@@ -287,7 +313,10 @@ NoteInfoPtr others::SmartShape::calcArpeggiatedTieEndNote() const
     MUSX_ASSERT_IF(!endEntry) {
         throw std::logic_error("calcIsPotentialForwardTie was true but endEntry did not exist.");
     }
-    const auto noteInfoPtr = NoteInfoPtr(startEntry, 0);
+    if (forStartEntry.isSameEntry(endEntry)) {
+        return {}; // must be a different entry.
+    }
+    const auto noteInfoPtr = NoteInfoPtr(forStartEntry, 0);
     if (noteInfoPtr.calcTieTo()) {
         // If Finale already provides a real tie target, this smart shape is not a stand-in.
         return {};
@@ -299,9 +328,9 @@ NoteInfoPtr others::SmartShape::calcArpeggiatedTieEndNote() const
     return endNote;
 }
 
-bool others::SmartShape::calcIsLaissezVibrerTie() const
+bool others::SmartShape::calcIsLaissezVibrerTie(const EntryInfoPtr& forStartEntry) const
 {
-    if (!calcIsPotentialForwardTie()) {
+    if (!calcIsPotentialForwardTie(forStartEntry)) {
         return false;
     }
     return startTermSeg->endPoint->compareMetricPosition(*endTermSeg->endPoint) == 0;

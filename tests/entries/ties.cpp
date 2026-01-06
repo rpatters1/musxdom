@@ -329,3 +329,32 @@ TEST(TieDetection, AcrossKeyChange)
 
     checkTie(createNoteInfo(entryFrame1, 1, 0), createNoteInfo(entryFrame2, 0, 0));
 }
+
+TEST(TieDetection, ShapeTies)
+{
+    std::vector<char> xml;
+    musxtest::readFile(musxtest::getInputPath() / "slur_ties.enigmaxml", xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
+    ASSERT_TRUE(doc);
+
+    constexpr size_t EXPECTED_ELEMENTS = 6;
+    constexpr std::array<Cmper, EXPECTED_ELEMENTS> expectedCmpers = { 2, 3, 4, 5, 6, 7 };
+    constexpr std::array<bool, EXPECTED_ELEMENTS> expectedLv = { false, false, true, true, false, false };
+    constexpr std::array<bool, EXPECTED_ELEMENTS> expectedArp = { true, true, false, false, false, false };
+    constexpr std::array<size_t, EXPECTED_ELEMENTS> expectedEntryIdx = { 1, 2, 2, 0, 2, 1 }; // measure order 2, 2, 3, 1, 1, 4
+
+    auto smartShapes = doc->getOthers()->getArray<others::SmartShape>(SCORE_PARTID);
+    ASSERT_EQ(smartShapes.size(), EXPECTED_ELEMENTS) << "expected " << EXPECTED_ELEMENTS << " smart shapes but got " << smartShapes.size();
+
+    size_t x = 0;
+    for (const auto& smartShape : smartShapes) {
+        ASSERT_LT(x, EXPECTED_ELEMENTS);
+        EXPECT_EQ(smartShape->getCmper(), expectedCmpers[x]) << "expected cmper " << expectedCmpers[x] << " but got " << smartShape->getCmper();
+        auto startEntry = smartShape->startTermSeg->endPoint->calcAssociatedEntry(SCORE_PARTID, /*findExact*/ false);
+        ASSERT_TRUE(startEntry) << "start entry not found";
+        EXPECT_EQ(startEntry.getIndexInFrame(), expectedEntryIdx[x]) << "start entry is not expected entry";
+        EXPECT_EQ(smartShape->calcIsLaissezVibrerTie(startEntry), expectedLv[x]) << "lv tie value not the expected value for " << smartShape->getCmper();
+        EXPECT_EQ(bool(smartShape->calcArpeggiatedTieEndNote(startEntry)), expectedArp[x]) << "arppegio tie value not the expected value for " << smartShape->getCmper();
+        x++;
+    }
+}

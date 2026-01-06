@@ -602,15 +602,14 @@ std::pair<util::Fraction, NoteType> TimeSignature::calcSimplified() const
     }
 
     Edu finalUnit = computeGCD(allUnits); // The final unit size
+    if (!finalUnit) {
+        throw std::logic_error("The beat size is zero.");
+    }
 
     // Compute final beats relative to finalUnit
     auto totalBeats = std::accumulate(summedUnits.begin(), summedUnits.end(), util::Fraction{}, [finalUnit](auto acc, const auto& p) {
         return acc + p.first * (p.second / finalUnit);
     });
-
-    if (!finalUnit) {
-        throw std::logic_error("The beat size is zero.");
-    }
 
     int power2 = 0;
     int otherPrimes = finalUnit;
@@ -620,6 +619,43 @@ std::pair<util::Fraction, NoteType> TimeSignature::calcSimplified() const
     }
 
     return { totalBeats * otherPrimes, NoteType(1 << power2) };
+}
+
+util::Fraction TimeSignature::calcBeatValueAt(Edu eduPosition) const
+{
+    if (components.empty()) {
+        return {};
+    }
+
+    const util::Fraction pos = util::Fraction::fromEdu(eduPosition); // fraction of whole note
+    util::Fraction cursor{};
+    util::Fraction lastBeatValue{};
+
+    for (const TimeSigComponent& comp : components) {
+        MUSX_ASSERT_IF(comp.units.empty() || comp.counts.empty()) {
+            // detect this in debug mode, but handle without throw in production.
+            continue;
+        }
+
+        const Edu beatEdu = comp.sumUnits();
+        const util::Fraction beatCount = comp.sumCounts();
+
+        MUSX_ASSERT_IF(beatEdu <= 0 || beatCount <= util::Fraction{}) {
+            // detect this in debug mode, but handle without throw in production.
+            continue;
+        }
+
+        lastBeatValue = util::Fraction::fromEdu(beatEdu);
+        const util::Fraction compDur = beatCount * lastBeatValue;
+
+        if (pos >= cursor && pos < (cursor + compDur)) {
+            return lastBeatValue;
+        }
+
+        cursor += compDur;
+    }
+
+    return lastBeatValue;
 }
 
 } // namespace dom

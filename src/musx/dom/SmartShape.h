@@ -189,10 +189,10 @@ class SmartShape : public OthersBase
 {
 private:
     /// @brief Calculates if this smart shape is potentially being used as a tie.
-    bool calcIsPotentialTie() const;
+    bool calcIsPotentialTie(const EntryInfoPtr& forStartEntry) const;
 
     /// @brief Calculates if this smart shape is potentially being used as a forward tie.
-    bool calcIsPotentialForwardTie() const;
+    bool calcIsPotentialForwardTie(const EntryInfoPtr& forStartEntry) const;
 
 public:
     /** @brief Constructor function */
@@ -371,17 +371,18 @@ public:
     /// @return The created music range.
     MusicRange createGlobalMusicRange() const;
 
-    /// @brief Returns the tied-to note if this slur is being used as an arpeggiated tie.
+    /// @brief Returns the tied-to note if this slur is being used as an arpeggiated tie on the specified entry.
     ///
     /// - The start entry must consist only of a single note.
     /// - There must be no note that the start entry's note could be tied to.
-    ///
+    /// @param forStartEntry The entry to check.
     /// @return The NoteInfoPtr that is the tied-to note for this note, or null if none.
-    NoteInfoPtr calcArpeggiatedTieEndNote() const;
+    NoteInfoPtr calcArpeggiatedTieEndNote(const EntryInfoPtr& forStartEntry) const;
 
-    /// @brief Returns true if this slur is being used as a laissez vibrer tie. It is used by #EntryInfoPtr::calcHasLaissezVibrerTie,
-    /// which imposes additional rules and checks.
-    bool calcIsLaissezVibrerTie() const;
+    /// @brief Returns true if this slur is being used as a laissez vibrer tie on the specified entry.
+    /// It is used by #EntryInfoPtr::calcHasLaissezVibrerTie, which imposes additional rules and checks.
+    /// @param forStartEntry The entry to check.
+    bool calcIsLaissezVibrerTie(const EntryInfoPtr& forStartEntry) const;
 
     /// @brief Iterates all the entries that start within the staves and music range defined by the SmartShape. It iterates by staff and then measure.
     /// @param iterator The iterator function. Return `false` from this function to stop iterating.

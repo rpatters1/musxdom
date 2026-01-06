@@ -76,9 +76,8 @@ public:
      * @param num The m_numerator of the fraction.
      * @param den The m_denominator of the fraction. Defaults to 1.
      * @throws std::invalid_argument if the m_denominator is zero.
-     * @todo Make this constructor constexpr when we drop C++17 support.
      */
-    Fraction(int num, int den)
+    constexpr Fraction(int num, int den)
     {
         if (den == 0) {
             throw std::invalid_argument("Denominator cannot be zero.");
@@ -99,7 +98,6 @@ public:
     /// @brief Constructs a Fraction from edu.
     /// @param edu The Edu value to convert. It is converted to a fraction of a whole note, so 1024 is
     /// constructed as Fraction(1, 4).
-    /// @todo Make this function constexpr when we drop C++17 support.
     static constexpr Fraction fromEdu(dom::Edu edu) { return fromConstExpr(edu, dom::EDU_PER_WHOLE_NOTE); }
 
     /// @brief Constructs a Fraction from a percent (where 100 is 100%)
@@ -135,8 +133,7 @@ public:
     }
 
     /// @brief Returns the reciprocal fraction
-    /// @todo Make this function constexpr when we drop C++17 support.
-    Fraction reciprocal() const {
+    constexpr Fraction reciprocal() const {
         return Fraction(m_denominator, m_numerator);
     }
 
@@ -234,9 +231,8 @@ public:
      * @param other The other fraction to divide by.
      * @return The resulting fraction after division.
      * @throws std::invalid_argument if attempting to divide by a fraction with a zero m_numerator.
-     * @todo Make this function constexpr when we drop C++17 support.
      */
-    Fraction operator/(const Fraction& other) const {
+    constexpr Fraction operator/(const Fraction& other) const {
         return Fraction(
             m_numerator * other.m_denominator,
             m_denominator * other.m_numerator
@@ -277,9 +273,8 @@ public:
      * @brief Compound division assignment operator.
      * @param other The other fraction to divide by.
      * @return A reference to the updated fraction.
-     * @todo Make this function constexpr when we drop C++17 support.
      */
-    Fraction& operator/=(const Fraction& other) {
+    constexpr Fraction& operator/=(const Fraction& other) {
         *this = *this / other;
         return *this;
     }

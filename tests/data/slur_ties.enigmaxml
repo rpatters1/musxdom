@@ -61,7 +61,7 @@
       <modified>
         <year>2026</year>
         <month>1</month>
-        <day>5</day>
+        <day>6</day>
         <modifiedBy/>
         <enigmaVersion>
           <major>27</major>
@@ -1510,20 +1510,6 @@
       <family>0</family>
       <name>Broadway Copyist Text</name>
     </fontName>
-    <fontName cmper="11">
-      <charsetBank>Mac</charsetBank>
-      <charsetVal>0</charsetVal>
-      <pitch>0</pitch>
-      <family>0</family>
-      <name>Lucida Grande</name>
-    </fontName>
-    <fontName cmper="12">
-      <charsetBank>Mac</charsetBank>
-      <charsetVal>4095</charsetVal>
-      <pitch>0</pitch>
-      <family>0</family>
-      <name>Symbol</name>
-    </fontName>
     <fontName cmper="13">
       <charsetBank>Mac</charsetBank>
       <charsetVal>0</charsetVal>
@@ -1537,6 +1523,20 @@
       <pitch>0</pitch>
       <family>0</family>
       <name>Engraver Text T</name>
+    </fontName>
+    <fontName cmper="15">
+      <charsetBank>Mac</charsetBank>
+      <charsetVal>0</charsetVal>
+      <pitch>0</pitch>
+      <family>0</family>
+      <name>Lucida Grande</name>
+    </fontName>
+    <fontName cmper="16">
+      <charsetBank>Mac</charsetBank>
+      <charsetVal>4095</charsetVal>
+      <pitch>0</pitch>
+      <family>0</family>
+      <name>Symbol</name>
     </fontName>
     <frameSpec cmper="1" inci="0">
       <startEntry>1</startEntry>
@@ -1974,8 +1974,8 @@
     <measExprAssign cmper="4" inci="0">
       <textExprID>4</textExprID>
       <horzEduOff>1024</horzEduOff>
-      <horzEvpuOff>76</horzEvpuOff>
-      <vertOff>236</vertOff>
+      <horzEvpuOff>127</horzEvpuOff>
+      <vertOff>305</vertOff>
       <staffAssign>1</staffAssign>
       <layer>1</layer>
       <playbackStart>attach</playbackStart>
@@ -2026,6 +2026,7 @@
       <lineSpacingPercent>100</lineSpacingPercent>
       <newPos36/>
       <showShape/>
+      <noExpandSingleWord/>
       <wordWrap/>
       <roundCorners/>
       <cornerRadius>512</cornerRadius>
@@ -2628,7 +2629,7 @@
         <endPt>
           <inst>1</inst>
           <meas>2</meas>
-          <edu>1024</edu>
+          <edu>1126</edu>
         </endPt>
         <endPtAdj>
           <x>24</x>
@@ -2663,7 +2664,7 @@
         <endPt>
           <inst>1</inst>
           <meas>2</meas>
-          <edu>2048</edu>
+          <edu>1946</edu>
         </endPt>
         <endPtAdj>
           <x>46</x>
@@ -2681,7 +2682,7 @@
           <meas>3</meas>
         </endPt>
         <endPtAdj>
-          <x>-16</x>
+          <x>9</x>
           <y>-77</y>
           <on/>
         </endPtAdj>
@@ -2716,8 +2717,8 @@
           <entryNum>23</entryNum>
         </endPt>
         <endPtAdj>
-          <x>64</x>
-          <y>13</y>
+          <x>60</x>
+          <y>14</y>
           <on/>
           <contextDir>over</contextDir>
           <contextEntCnct>headRightTop</contextEntCnct>
@@ -3723,16 +3724,11 @@
     </entry>
     <entry entnum="14" prev="13" next="15">
       <dura>1024</dura>
-      <numNotes>1</numNotes>
+      <numNotes>0</numNotes>
       <isValid/>
       <floatRest/>
       <beam/>
       <sorted/>
-      <note id="31">
-        <harmLev>0</harmLev>
-        <harmAlt>0</harmAlt>
-        <isValid/>
-      </note>
     </entry>
     <entry entnum="15" prev="14" next="16">
       <dura>1024</dura>
@@ -3764,16 +3760,11 @@
     </entry>
     <entry entnum="17" prev="16" next="18">
       <dura>1024</dura>
-      <numNotes>1</numNotes>
+      <numNotes>0</numNotes>
       <isValid/>
       <floatRest/>
       <beam/>
       <sorted/>
-      <note id="31">
-        <harmLev>0</harmLev>
-        <harmAlt>0</harmAlt>
-        <isValid/>
-      </note>
     </entry>
     <entry entnum="18" prev="17" next="19">
       <dura>1024</dura>
@@ -3846,16 +3837,11 @@
     </entry>
     <entry entnum="22" prev="21" next="23">
       <dura>1024</dura>
-      <numNotes>1</numNotes>
+      <numNotes>0</numNotes>
       <isValid/>
       <floatRest/>
       <beam/>
       <sorted/>
-      <note id="31">
-        <harmLev>0</harmLev>
-        <harmAlt>0</harmAlt>
-        <isValid/>
-      </note>
     </entry>
     <entry entnum="23" prev="22" next="24">
       <dura>1024</dura>
@@ -3873,16 +3859,11 @@
     </entry>
     <entry entnum="24" prev="23" next="29">
       <dura>1024</dura>
-      <numNotes>1</numNotes>
+      <numNotes>0</numNotes>
       <isValid/>
       <floatRest/>
       <beam/>
       <sorted/>
-      <note id="31">
-        <harmLev>0</harmLev>
-        <harmAlt>0</harmAlt>
-        <isValid/>
-      </note>
     </entry>
     <entry entnum="25" prev="12" next="26">
       <dura>1024</dura>
@@ -3934,16 +3915,11 @@
     </entry>
     <entry entnum="29" prev="24" next="30">
       <dura>1024</dura>
-      <numNotes>1</numNotes>
+      <numNotes>0</numNotes>
       <isValid/>
       <floatRest/>
       <beam/>
       <sorted/>
-      <note id="31">
-        <harmLev>0</harmLev>
-        <harmAlt>0</harmAlt>
-        <isValid/>
-      </note>
     </entry>
     <entry entnum="30" prev="29" next="31">
       <dura>1024</dura>
@@ -3973,16 +3949,11 @@
     </entry>
     <entry entnum="32" prev="31" next="0">
       <dura>1024</dura>
-      <numNotes>1</numNotes>
+      <numNotes>0</numNotes>
       <isValid/>
       <floatRest/>
       <beam/>
       <sorted/>
-      <note id="31">
-        <harmLev>0</harmLev>
-        <harmAlt>0</harmAlt>
-        <isValid/>
-      </note>
     </entry>
   </entries>
   <texts>
@@ -3990,7 +3961,8 @@
     <expression number="1">^fontTxt(Times New Roman,4096)^size(12)^nfx(2)l.v. tie</expression>
     <expression number="2">^fontTxt(Times New Roman,4096)^size(12)^nfx(2)entry-attached slur: not a tie</expression>
     <expression number="3">^fontTxt(Times New Roman,4096)^size(12)^nfx(2)arpeggiated ties</expression>
-    <expression number="4">^fontTxt(Times New Roman,4096)^size(12)^nfx(2)beat-attached is a tie</expression>
+    <expression number="4">^fontTxt(Times New Roman,4096)^size(12)^nfx(2)beat-attached is not a tie
+because valid tie-to note exists</expression>
     <expression number="5">^fontTxt(Times New Roman,4096)^size(12)^nfx(2)entry-attached l.v. tie</expression>
   </texts>
 </finale>
