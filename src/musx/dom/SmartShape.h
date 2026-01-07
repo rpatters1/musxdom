@@ -172,6 +172,19 @@ public:
     DirectionType contextDir{};             ///< The direction type for this adjustment.
     EntryConnectionType contextEntCnct{};   ///< The entry conntection type for this adjustment.
 
+    /// @brief Returns the effective horizontal offset, taking into account whether the endpoint is active.
+    Evpu calcHorzOffset() const
+    { return active ? horzOffset : 0; }
+
+    /// @brief Returns the effective vertical offset, taking into account whether the endpoint is active.
+    Evpu calcVertOffset() const
+    { return active ? vertOffset : 0; }
+
+    /// @brief Returns true if the two intances of @ref EndPointAdjustment have connection types that allow
+    /// their vertical offsets to be compared.
+    /// @param other The @ref EndPointAdjustment to compare.
+    bool calcHasVerticalEquivalentConnection(const EndPointAdjustment& other) const;
+
     static const xml::XmlElementArray<EndPointAdjustment>& xmlMappingArray();    ///< Required for musx::factory::FieldPopulator.
 };
 
@@ -377,12 +390,16 @@ public:
     /// - There must be no note that the start entry's note could be tied to.
     /// @param forStartEntry The entry to check.
     /// @return The NoteInfoPtr that is the tied-to note for this note, or null if none.
-    NoteInfoPtr calcArpeggiatedTieEndNote(const EntryInfoPtr& forStartEntry) const;
+    NoteInfoPtr calcArpeggiatedTieToNote(const EntryInfoPtr& forStartEntry) const;
 
     /// @brief Returns true if this slur is being used as a laissez vibrer tie on the specified entry.
     /// It is used by #EntryInfoPtr::calcHasLaissezVibrerTie, which imposes additional rules and checks.
     /// @param forStartEntry The entry to check.
     bool calcIsLaissezVibrerTie(const EntryInfoPtr& forStartEntry) const;
+
+    /// @brief Returns true if this slur is being used as a tie end (for example, on a 2nd ending.)
+    /// @param forStartEntry The entry to check.
+    bool calcIsUsedAsTieEnd(const EntryInfoPtr& forStartEntry) const;
 
     /// @brief Iterates all the entries that start within the staves and music range defined by the SmartShape. It iterates by staff and then measure.
     /// @param iterator The iterator function. Return `false` from this function to stop iterating.

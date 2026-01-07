@@ -61,7 +61,7 @@
       <modified>
         <year>2026</year>
         <month>1</month>
-        <day>6</day>
+        <day>7</day>
         <modifiedBy/>
         <enigmaVersion>
           <major>27</major>
@@ -1570,6 +1570,14 @@
       <startEntry>29</startEntry>
       <endEntry>32</endEntry>
     </frameSpec>
+    <frameSpec cmper="9" inci="0">
+      <startEntry>33</startEntry>
+      <endEntry>36</endEntry>
+    </frameSpec>
+    <frameSpec cmper="10" inci="0">
+      <startEntry>37</startEntry>
+      <endEntry>40</endEntry>
+    </frameSpec>
     <fretInst cmper="1">
       <numFrets>20</numFrets>
       <numStrings>6</numStrings>
@@ -1660,6 +1668,17 @@
       </range>
     </instUsed>
     <instUsed cmper="4" inci="0">
+      <inst>1</inst>
+      <trackType>staff</trackType>
+      <distFromTop>0</distFromTop>
+      <range>
+        <startMeas>1</startMeas>
+        <startEdu>0</startEdu>
+        <endMeas>32767</endMeas>
+        <endEdu>2147483647</endEdu>
+      </range>
+    </instUsed>
+    <instUsed cmper="5" inci="0">
       <inst>1</inst>
       <trackType>staff</trackType>
       <distFromTop>0</distFromTop>
@@ -1884,7 +1903,7 @@
       <clef>17</clef>
     </metaClef>
     <metaDynam cmper="45">
-      <number>5</number>
+      <number>7</number>
       <isTextExpr/>
     </metaDynam>
     <metaShape cmper="45">
@@ -1938,6 +1957,18 @@
       <barline>normal</barline>
       <leftBarline>default</leftBarline>
     </measSpec>
+    <measSpec cmper="5">
+      <width>600</width>
+      <beats>4</beats>
+      <divbeat>1024</divbeat>
+      <dispBeats>4</dispBeats>
+      <dispDivbeat>1024</dispDivbeat>
+      <hasSmartShape/>
+      <posMode>timesigPlusPos</posMode>
+      <hasExpr/>
+      <barline>normal</barline>
+      <leftBarline>default</leftBarline>
+    </measSpec>
     <measExprAssign cmper="1" inci="0">
       <textExprID>1</textExprID>
       <staffAssign>1</staffAssign>
@@ -1976,6 +2007,24 @@
       <horzEduOff>1024</horzEduOff>
       <horzEvpuOff>127</horzEvpuOff>
       <vertOff>305</vertOff>
+      <staffAssign>1</staffAssign>
+      <layer>1</layer>
+      <playbackStart>attach</playbackStart>
+    </measExprAssign>
+    <measExprAssign cmper="5" inci="0">
+      <textExprID>6</textExprID>
+      <horzEduOff>1024</horzEduOff>
+      <horzEvpuOff>4</horzEvpuOff>
+      <vertOff>-36</vertOff>
+      <staffAssign>1</staffAssign>
+      <layer>1</layer>
+      <playbackStart>attach</playbackStart>
+    </measExprAssign>
+    <measExprAssign cmper="5" inci="1">
+      <textExprID>7</textExprID>
+      <horzEduOff>3072</horzEduOff>
+      <horzEvpuOff>-4</horzEvpuOff>
+      <vertOff>324</vertOff>
       <staffAssign>1</staffAssign>
       <layer>1</layer>
       <playbackStart>attach</playbackStart>
@@ -2042,6 +2091,26 @@
       <cornerRadius>512</cornerRadius>
       <textTag>expression</textTag>
     </textBlock>
+    <textBlock cmper="7">
+      <textID>6</textID>
+      <lineSpacingPercent>100</lineSpacingPercent>
+      <newPos36/>
+      <showShape/>
+      <wordWrap/>
+      <roundCorners/>
+      <cornerRadius>512</cornerRadius>
+      <textTag>expression</textTag>
+    </textBlock>
+    <textBlock cmper="8">
+      <textID>7</textID>
+      <lineSpacingPercent>100</lineSpacingPercent>
+      <newPos36/>
+      <showShape/>
+      <wordWrap/>
+      <roundCorners/>
+      <cornerRadius>512</cornerRadius>
+      <textTag>expression</textTag>
+    </textBlock>
     <playbackRoute cmper="1">
       <patchType>C0_C32_PC</patchType>
       <msb>121</msb>
@@ -2076,6 +2145,8 @@
     <playDumpText cmper="3"/>
     <playDumpText cmper="4"/>
     <playDumpText cmper="5"/>
+    <playDumpText cmper="6"/>
+    <playDumpText cmper="7"/>
     <shapeData cmper="1">
       <data>0</data>
       <data>-32</data>
@@ -2743,7 +2814,7 @@
           <meas>1</meas>
         </endPt>
         <endPtAdj>
-          <x>24</x>
+          <x>44</x>
           <y>-22</y>
           <on/>
         </endPtAdj>
@@ -2754,7 +2825,7 @@
           <meas>1</meas>
         </endPt>
         <endPtAdj>
-          <x>79</x>
+          <x>98</x>
           <y>-22</y>
           <on/>
         </endPtAdj>
@@ -2833,6 +2904,70 @@
         <contextDir>over</contextDir>
       </fullCtlPtAdj>
     </smartShape>
+    <smartShape cmper="9">
+      <shapeType>slurAuto</shapeType>
+      <entryBased/>
+      <rotate/>
+      <yBreakType>opposite</yBreakType>
+      <startTermSeg>
+        <endPt>
+          <inst>1</inst>
+          <meas>5</meas>
+          <entryNum>38</entryNum>
+        </endPt>
+        <endPtAdj>
+          <x>-64</x>
+          <y>17</y>
+          <on/>
+          <contextDir>over</contextDir>
+          <contextEntCnct>headRightTop</contextEntCnct>
+        </endPtAdj>
+      </startTermSeg>
+      <endTermSeg>
+        <endPt>
+          <inst>1</inst>
+          <meas>5</meas>
+          <entryNum>38</entryNum>
+        </endPt>
+      </endTermSeg>
+    </smartShape>
+    <smartShape cmper="10">
+      <shapeType>slurUp</shapeType>
+      <rotate/>
+      <yBreakType>opposite</yBreakType>
+      <startTermSeg>
+        <endPt>
+          <inst>1</inst>
+          <meas>5</meas>
+          <edu>3072</edu>
+        </endPt>
+        <endPtAdj>
+          <x>-38</x>
+          <y>-18</y>
+          <on/>
+        </endPtAdj>
+      </startTermSeg>
+      <endTermSeg>
+        <endPt>
+          <inst>1</inst>
+          <meas>5</meas>
+          <edu>3072</edu>
+        </endPt>
+        <endPtAdj>
+          <x>17</x>
+          <y>-18</y>
+          <on/>
+        </endPtAdj>
+      </endTermSeg>
+      <fullCtlPtAdj>
+        <startCtlPtX>607</startCtlPtX>
+        <startCtlPtY>19</startCtlPtY>
+        <endCtlPtX>-607</endCtlPtX>
+        <endCtlPtY>19</endCtlPtY>
+        <on/>
+        <contextDir>over</contextDir>
+      </fullCtlPtAdj>
+    </smartShape>
     <smartShapeMeasMark cmper="1" inci="0">
       <shapeNum>5</shapeNum>
     </smartShapeMeasMark>
@@ -2856,6 +2991,12 @@
     </smartShapeMeasMark>
     <smartShapeMeasMark cmper="4" inci="0">
       <shapeNum>7</shapeNum>
+    </smartShapeMeasMark>
+    <smartShapeMeasMark cmper="5" inci="0">
+      <shapeNum>9</shapeNum>
+    </smartShapeMeasMark>
+    <smartShapeMeasMark cmper="5" inci="1">
+      <shapeNum>10</shapeNum>
     </smartShapeMeasMark>
     <ssLineStyle cmper="1">
       <lineStyle>char</lineStyle>
@@ -2918,6 +3059,18 @@
     <staffSystemSpec cmper="4">
       <startMeas>4</startMeas>
       <endMeas>5</endMeas>
+      <horzPercent>40567</horzPercent>
+      <ssysPercent>100</ssysPercent>
+      <staffHeight>5248</staffHeight>
+      <top>-68</top>
+      <bottom>-200</bottom>
+      <scaleVert/>
+      <scaleContentOnly/>
+      <distanceToPrev>-76</distanceToPrev>
+    </staffSystemSpec>
+    <staffSystemSpec cmper="5">
+      <startMeas>5</startMeas>
+      <endMeas>6</endMeas>
       <horzPercent>40567</horzPercent>
       <ssysPercent>100</ssysPercent>
       <staffHeight>5248</staffHeight>
@@ -3069,6 +3222,28 @@
       <useCategoryFonts/>
       <useCategoryPos/>
     </textExprDef>
+    <textExprDef cmper="6">
+      <textIDKey>7</textIDKey>
+      <categoryID>1</categoryID>
+      <horzMeasExprAlign>leftOfPrimaryNotehead</horzMeasExprAlign>
+      <horzExprAlign>center</horzExprAlign>
+      <vertMeasExprAlign>belowStaffOrEntry</vertMeasExprAlign>
+      <yAdjustBaseline>16</yAdjustBaseline>
+      <yAdjustEntry>-72</yAdjustEntry>
+      <useCategoryFonts/>
+      <useCategoryPos/>
+    </textExprDef>
+    <textExprDef cmper="7">
+      <textIDKey>8</textIDKey>
+      <categoryID>1</categoryID>
+      <horzMeasExprAlign>leftOfPrimaryNotehead</horzMeasExprAlign>
+      <horzExprAlign>center</horzExprAlign>
+      <vertMeasExprAlign>belowStaffOrEntry</vertMeasExprAlign>
+      <yAdjustBaseline>16</yAdjustBaseline>
+      <yAdjustEntry>-72</yAdjustEntry>
+      <useCategoryFonts/>
+      <useCategoryPos/>
+    </textExprDef>
     <viSetup cmper="0"/>
     <partDef cmper="0">
       <nameID>1</nameID>
@@ -3081,7 +3256,7 @@
       <studioViewIUlist>65400</studioViewIUlist>
     </partGlobals>
     <markingsDialogList cmper="1">
-      <numElements>5</numElements>
+      <numElements>7</numElements>
       <item>
         <cmper>1</cmper>
         <tag>textExprDef</tag>
@@ -3100,6 +3275,14 @@
       </item>
       <item>
         <cmper>5</cmper>
+        <tag>textExprDef</tag>
+      </item>
+      <item>
+        <cmper>6</cmper>
+        <tag>textExprDef</tag>
+      </item>
+      <item>
+        <cmper>7</cmper>
         <tag>textExprDef</tag>
       </item>
     </markingsDialogList>
@@ -3492,6 +3675,11 @@
       <clefPercent>75</clefPercent>
       <frame1>8</frame1>
     </gfhold>
+    <gfhold cmper1="1" cmper2="5">
+      <clefID>0</clefID>
+      <clefPercent>75</clefPercent>
+      <frame1>10</frame1>
+    </gfhold>
     <gfhold cmper1="32767" cmper2="1">
       <clefID>0</clefID>
       <clefPercent>75</clefPercent>
@@ -3512,6 +3700,11 @@
       <clefPercent>75</clefPercent>
       <frame1>7</frame1>
     </gfhold>
+    <gfhold cmper1="32767" cmper2="5">
+      <clefID>0</clefID>
+      <clefPercent>75</clefPercent>
+      <frame1>9</frame1>
+    </gfhold>
     <smartShapeEntryMark entnum="15" inci="0">
       <shapeNum>6</shapeNum>
     </smartShapeEntryMark>
@@ -3520,6 +3713,9 @@
     </smartShapeEntryMark>
     <smartShapeEntryMark entnum="23" inci="0">
       <shapeNum>4</shapeNum>
+    </smartShapeEntryMark>
+    <smartShapeEntryMark entnum="38" inci="0">
+      <shapeNum>9</shapeNum>
     </smartShapeEntryMark>
     <tieAlterEnd entnum="21" inci="0">
       <noteID>3</noteID>
@@ -3901,7 +4097,7 @@
         <isValid/>
       </note>
     </entry>
-    <entry entnum="28" prev="27" next="0">
+    <entry entnum="28" prev="27" next="33">
       <dura>1024</dura>
       <numNotes>1</numNotes>
       <isValid/>
@@ -3947,13 +4143,114 @@
         <isValid/>
       </note>
     </entry>
-    <entry entnum="32" prev="31" next="0">
+    <entry entnum="32" prev="31" next="37">
       <dura>1024</dura>
       <numNotes>0</numNotes>
       <isValid/>
       <floatRest/>
       <beam/>
       <sorted/>
+    </entry>
+    <entry entnum="33" prev="28" next="34">
+      <dura>1024</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <sorted/>
+      <note id="1">
+        <harmLev>6</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="34" prev="33" next="35">
+      <dura>1024</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <sorted/>
+      <note id="1">
+        <harmLev>6</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="35" prev="34" next="36">
+      <dura>1024</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <sorted/>
+      <note id="1">
+        <harmLev>6</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="36" prev="35" next="0">
+      <dura>1024</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <sorted/>
+      <note id="1">
+        <harmLev>6</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="37" prev="32" next="38">
+      <dura>1024</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <floatRest/>
+      <beam/>
+      <sorted/>
+      <note id="31">
+        <harmLev>0</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="38" prev="37" next="39">
+      <dura>1024</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <beam/>
+      <smartShapeDetail/>
+      <sorted/>
+      <note id="1">
+        <harmLev>6</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="39" prev="38" next="40">
+      <dura>1024</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <floatRest/>
+      <beam/>
+      <sorted/>
+      <note id="31">
+        <harmLev>0</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="40" prev="39" next="0">
+      <dura>1024</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <beam/>
+      <sorted/>
+      <note id="1">
+        <harmLev>6</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
     </entry>
   </entries>
   <texts>
@@ -3964,5 +4261,9 @@
     <expression number="4">^fontTxt(Times New Roman,4096)^size(12)^nfx(2)beat-attached is not a tie
 because valid tie-to note exists</expression>
     <expression number="5">^fontTxt(Times New Roman,4096)^size(12)^nfx(2)entry-attached l.v. tie</expression>
+    <expression number="6">^fontTxt(Times New Roman,4096)^size(12)^nfx(2)entry-attached tie end
+(reverse direction)</expression>
+    <expression number="7">^fontTxt(Times New Roman,4096)^size(12)^nfx(2)beat-attached tie end
+(left shifted)</expression>
   </texts>
 </finale>

@@ -178,6 +178,68 @@ int smartshape::EndPoint::compareMetricPosition(const EndPoint& other) const
     return 0;
 }
 
+// ******************************
+// ***** EndPointAdjustment *****
+// ******************************
+
+bool smartshape::EndPointAdjustment::calcHasVerticalEquivalentConnection(const smartshape::EndPointAdjustment& other) const
+{
+    using E = EntryConnectionType;
+
+    const auto verticalGroup = [](E v) -> int {
+        switch (v) {
+        // System: always comparable with each other
+        case E::SystemLeft:
+        case E::SystemRight:
+            return 100;
+
+        // Head rectangle
+        case E::HeadLeftTop:
+        case E::HeadRightTop:
+            return 200;
+        case E::HeadLeftBottom:
+        case E::HeadRightBottom:
+            return 201;
+
+        // Stem rectangle
+        case E::StemLeftTop:
+        case E::StemRightTop:
+            return 210;
+        case E::StemLeftBottom:
+        case E::StemRightBottom:
+            return 211;
+
+        // Notehead
+        case E::NoteLeftTop:
+        case E::NoteRightTop:
+            return 220;
+        case E::NoteLeftBottom:
+        case E::NoteRightBottom:
+            return 221;
+        case E::NoteLeftCenter:
+        case E::NoteRightCenter:
+            return 222;
+
+        // Lyrics (obvious groupings)
+        case E::LyricLeftCenter:
+        case E::LyricRightCenter:
+            return 230;
+
+        case E::HeadRightLyricBaseline:
+        case E::DotRightLyricBaseline:
+        case E::DurationLyricBaseline:
+            return 231;
+
+        case E::LyricRightBottom:
+            return 232;
+        }
+
+        return -1; // should be unreachable if enum is complete
+    };
+
+    return verticalGroup(contextEntCnct) == verticalGroup(other.contextEntCnct);
+}
+
 // **********************
 // ***** SmartShape *****
 // **********************
@@ -279,7 +341,12 @@ bool others::SmartShape::calcIsPotentialTie(const EntryInfoPtr& forStartEntry) c
     if (!endEntry.calcContainsPitchContent(forStartEntry)) {
         return false;
     }
-    const Evpu vertDiff = startTermSeg->endPointAdj->vertOffset - endTermSeg->endPointAdj->vertOffset;
+    // if either endpoint is inactive, we can't compare the vertical positions, so just permissively allow them
+    // for now.
+    if (!startTermSeg->endPointAdj->active || !endTermSeg->endPointAdj->active) {
+        return startTermSeg->endPointAdj->calcHasVerticalEquivalentConnection(*endTermSeg->endPointAdj);
+    }
+    const Evpu vertDiff = startTermSeg->endPointAdj->calcVertOffset() - endTermSeg->endPointAdj->calcVertOffset();
     return std::abs(vertDiff) < HORIZONTAL_THRESHOLD;
 }
 
@@ -294,10 +361,10 @@ bool others::SmartShape::calcIsPotentialForwardTie(const EntryInfoPtr& forStartE
     if (cmp) {
         return cmp < 0;
     }
-    return endTermSeg->endPointAdj->horzOffset > startTermSeg->endPointAdj->horzOffset;
+    return endTermSeg->endPointAdj->calcHorzOffset() > startTermSeg->endPointAdj->calcHorzOffset();
 }
 
-NoteInfoPtr others::SmartShape::calcArpeggiatedTieEndNote(const EntryInfoPtr& forStartEntry) const
+NoteInfoPtr others::SmartShape::calcArpeggiatedTieToNote(const EntryInfoPtr& forStartEntry) const
 {
     if (!calcIsPotentialForwardTie(forStartEntry)) {
         return {};
@@ -333,7 +400,30 @@ bool others::SmartShape::calcIsLaissezVibrerTie(const EntryInfoPtr& forStartEntr
     if (!calcIsPotentialForwardTie(forStartEntry)) {
         return false;
     }
-    return startTermSeg->endPoint->compareMetricPosition(*endTermSeg->endPoint) == 0;
+    if (startTermSeg->endPoint->compareMetricPosition(*endTermSeg->endPoint) != 0) {
+        return false;
+    }
+    const auto startOffset = startTermSeg->endPointAdj->calcHorzOffset();
+    return startOffset > -EVPU_PER_SPACE;
+}
+
+bool others::SmartShape::calcIsUsedAsTieEnd(const EntryInfoPtr& forStartEntry) const
+{
+    if (!calcIsPotentialTie(forStartEntry)) {
+        return false;
+    }
+    if (startTermSeg->endPoint->compareMetricPosition(*endTermSeg->endPoint) != 0) {
+        return false;
+    }
+    const auto startOffset = startTermSeg->endPointAdj->calcHorzOffset();
+    const auto endOffset = endTermSeg->endPointAdj->calcHorzOffset();
+    if (endOffset < startOffset) {
+        return true;
+    }
+    // end may be left of the EDU position, but not more than one space to the right.
+    // start must be at least one space to the left.
+    constexpr int MAX_LEFT = -3 * EVPU_PER_SPACE; // adjust value if necessary
+    return endOffset <= EVPU_PER_SPACE && endOffset >= MAX_LEFT  && startOffset <= -EVPU_PER_SPACE;
 }
 
 // ********************************
