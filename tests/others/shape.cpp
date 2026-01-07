@@ -181,3 +181,22 @@ TEST(ShapeDefTest, InterateInstructions)
     EXPECT_EQ(nextIndex, shapeList->instructions.size()) << "iteration value " << nextIndex
         << " does not equal number of instructions " << shapeList->instructions.size();
 }
+
+TEST(ShapeDefTest, RecognizeShapes)
+{
+    std::vector<char> enigmaXml;
+    musxtest::readFile(musxtest::getInputPath() / "shape_recognize.enigmaxml", enigmaXml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(enigmaXml);
+    ASSERT_TRUE(doc);
+
+    {
+        auto shape = doc->getOthers()->get<others::ShapeDef>(SCORE_PARTID, 5);
+        ASSERT_TRUE(shape);
+        EXPECT_EQ(shape->recognize(), KnownShapeDefType::TenutoMark);
+    }
+    {
+        auto shape = doc->getOthers()->get<others::ShapeDef>(SCORE_PARTID, 6);
+        ASSERT_TRUE(shape);
+        EXPECT_EQ(shape->recognize(), KnownShapeDefType::Blank);
+    }
+}
