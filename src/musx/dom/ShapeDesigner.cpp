@@ -754,6 +754,81 @@ std::optional<KnownShapeDefType> ShapeDef::recognize() const
     return std::nullopt;
 }
 
+std::optional<Evpu> ShapeDef::calcWidth() const
+{
+    if (isBlank()) {
+        return Evpu{0};
+    }
+
+    Evpu minLeft = std::numeric_limits<Evpu>::max();
+    Evpu maxRight = std::numeric_limits<Evpu>::lowest();
+    bool hasBounds = false;
+    bool unsupported = false;
+
+    const auto updateBounds = [&](Evpu left, Evpu right) {
+        const Evpu normalizedLeft = std::min(left, right);
+        const Evpu normalizedRight = std::max(left, right);
+        minLeft = hasBounds ? std::min(minLeft, normalizedLeft) : normalizedLeft;
+        maxRight = hasBounds ? std::max(maxRight, normalizedRight) : normalizedRight;
+        hasBounds = true;
+    };
+
+    iterateInstructions([&](const ShapeDefInstruction::Decoded& inst) {
+        if (!inst.valid()) {
+            unsupported = true;
+            return false;
+        }
+
+        switch (inst.type) {
+        case ShapeDefInstructionType::StartObject: {
+            const auto* data = std::get_if<ShapeDefInstruction::StartObject>(&inst.data);
+            if (data) {
+                if (data->left == std::numeric_limits<Evpu>::min() ||
+                    data->right == std::numeric_limits<Evpu>::min() ||
+                    data->left == std::numeric_limits<Evpu>::max() ||
+                    data->right == std::numeric_limits<Evpu>::max()) {
+                    unsupported = true;
+                    return false;
+                }
+                updateBounds(data->left, data->right);
+            }
+            break;
+        }
+        case ShapeDefInstructionType::StartGroup: {
+            const auto* data = std::get_if<ShapeDefInstruction::StartGroup>(&inst.data);
+            if (data) {
+                if (data->left == std::numeric_limits<Evpu>::min() ||
+                    data->right == std::numeric_limits<Evpu>::min() ||
+                    data->left == std::numeric_limits<Evpu>::max() ||
+                    data->right == std::numeric_limits<Evpu>::max()) {
+                    unsupported = true;
+                    return false;
+                }
+                updateBounds(data->left, data->right);
+            }
+            break;
+        }
+        case ShapeDefInstructionType::SetFont:
+        case ShapeDefInstructionType::DrawChar:
+        case ShapeDefInstructionType::CloneChar:
+            unsupported = true;
+            return false;
+        default:
+            break;
+        }
+
+        return true;
+    });
+
+    if (unsupported || !hasBounds) {
+        return std::nullopt;
+    }
+    if (maxRight <= minLeft) {
+        return Evpu{0};
+    }
+    return maxRight - minLeft;
+}
+
 bool ShapeDef::iterateInstructions(std::function<bool(ShapeDefInstructionType, std::vector<int>)> callback) const
 {
     auto insts = getDocument()->getOthers()->get<ShapeInstructionList>(getRequestedPartId(), instructionList);

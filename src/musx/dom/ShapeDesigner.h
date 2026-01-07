@@ -528,6 +528,14 @@ public:
     /// @return If the shape is recognized, return its known type. Otherwise return std::nullopt.
     std::optional<KnownShapeDefType> recognize() const;
 
+    /// @brief Calculate the width of the shape in Evpu, if it can be determined.
+    /// @details The width is derived from stored StartObject/StartGroup bounding boxes.
+    /// Shapes that include text instructions or Finale's sentinel bounding boxes
+    /// (INT32 min/max markers) return std::nullopt because the true extents would
+    /// require replaying the drawing instructions with Finale's rendering context.
+    /// @return The width in Evpu or std::nullopt if it cannot be computed.
+    std::optional<Evpu> calcWidth() const;
+
     constexpr static std::string_view XmlNodeName = "shapeDef"; ///< The XML node name for this type.
     static const xml::XmlElementArray<ShapeDef>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
