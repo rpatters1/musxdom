@@ -189,8 +189,8 @@ TEST(ShapeDefTest, RecognizeShapes)
     auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(enigmaXml);
     ASSERT_TRUE(doc);
 
-    constexpr size_t EXPECTED_VALUES = 7;
-    constexpr std::array<Cmper, EXPECTED_VALUES> expectedCmpers = { 1, 2, 3, 4, 5, 6, 7 };
+    constexpr size_t EXPECTED_VALUES = 11;
+    constexpr std::array<Cmper, EXPECTED_VALUES> expectedCmpers = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 };
     constexpr std::array<std::optional<KnownShapeDefType>, EXPECTED_VALUES> expectedTypes =
     {
         std::nullopt,
@@ -200,6 +200,10 @@ TEST(ShapeDefTest, RecognizeShapes)
         KnownShapeDefType::TenutoMark,
         KnownShapeDefType::Blank,
         KnownShapeDefType::SlurTieCurveRight,
+        KnownShapeDefType::SlurTieCurveLeft,
+        std::nullopt,
+        std::nullopt,
+        std::nullopt,
     };
 
     auto shapes = doc->getOthers()->getArray<others::ShapeDef>(SCORE_PARTID);

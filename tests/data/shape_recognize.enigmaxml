@@ -1890,6 +1890,9 @@
     <metaClef cmper="73">
       <clef>17</clef>
     </metaClef>
+    <metaDynam cmper="45">
+      <number>2</number>
+    </metaDynam>
     <measSpec cmper="1">
       <width>600</width>
       <beats>4</beats>
@@ -1918,6 +1921,7 @@
       <dispBeats>4</dispBeats>
       <dispDivbeat>1024</dispDivbeat>
       <posMode>timesigPlusPos</posMode>
+      <hasExpr/>
       <barline>normal</barline>
       <leftBarline>default</leftBarline>
     </measSpec>
@@ -1935,6 +1939,13 @@
       <shapeExprID>1</shapeExprID>
       <horzEduOff>1024</horzEduOff>
       <vertOff>12</vertOff>
+      <staffAssign>1</staffAssign>
+      <layer>1</layer>
+    </measExprAssign>
+    <measExprAssign cmper="3" inci="0">
+      <shapeExprID>2</shapeExprID>
+      <horzEvpuOff>18</horzEvpuOff>
+      <vertOff>-110</vertOff>
       <staffAssign>1</staffAssign>
       <layer>1</layer>
     </measExprAssign>
@@ -1977,6 +1988,7 @@
       <noteDurations/>
       <keyVelocities/>
     </playDefs>
+    <playDumpShape cmper="2"/>
     <shapeData cmper="1">
       <data>0</data>
       <data>-32</data>
@@ -2247,6 +2259,113 @@
       <data>-72</data>
       <data>0</data>
     </shapeData>
+    <shapeData cmper="7">
+      <data>0</data>
+      <data>0</data>
+      <data>-60</data>
+      <data>5</data>
+      <data>0</data>
+      <data>-9</data>
+      <data>208</data>
+      <data>208</data>
+      <data>-2147483580</data>
+      <data>0</data>
+      <data>0</data>
+      <data>0</data>
+      <data>0</data>
+      <data>72</data>
+      <data>72</data>
+      <data>144</data>
+      <data>0</data>
+      <data>72</data>
+      <data>-72</data>
+      <data>0</data>
+      <data>72</data>
+    </shapeData>
+    <shapeData cmper="8">
+      <data>0</data>
+      <data>-1</data>
+      <data>0</data>
+      <data>0</data>
+      <data>0</data>
+      <data>-6</data>
+      <data>0</data>
+      <data>0</data>
+      <data>0</data>
+      <data>0</data>
+      <data>0</data>
+      <data>0</data>
+      <data>0</data>
+      <data>72</data>
+      <data>72</data>
+      <data>144</data>
+      <data>0</data>
+      <data>72</data>
+      <data>-72</data>
+      <data>0</data>
+      <data>0</data>
+      <data>0</data>
+      <data>63</data>
+      <data>170</data>
+      <data>0</data>
+      <data>615</data>
+      <data>615</data>
+      <data>289</data>
+      <data>0</data>
+      <data>0</data>
+      <data>0</data>
+      <data>0</data>
+      <data>72</data>
+      <data>72</data>
+      <data>144</data>
+      <data>0</data>
+      <data>72</data>
+      <data>-72</data>
+      <data>0</data>
+    </shapeData>
+    <shapeData cmper="9">
+      <data>0</data>
+      <data>0</data>
+      <data>-142</data>
+      <data>0</data>
+      <data>0</data>
+      <data>-66</data>
+      <data>535</data>
+      <data>535</data>
+      <data>-1073741425</data>
+      <data>0</data>
+      <data>0</data>
+      <data>0</data>
+      <data>0</data>
+      <data>72</data>
+      <data>72</data>
+      <data>144</data>
+      <data>0</data>
+      <data>72</data>
+      <data>-72</data>
+      <data>0</data>
+      <data>72</data>
+    </shapeData>
+    <shapeData cmper="10">
+      <data>0</data>
+      <data>2</data>
+      <data>0</data>
+      <data>2</data>
+      <data>56</data>
+      <data>-2</data>
+      <data>1000</data>
+      <data>1000</data>
+      <data>0</data>
+      <data>0</data>
+      <data>0</data>
+      <data>0</data>
+      <data>-2</data>
+      <data>256</data>
+      <data>18</data>
+      <data>0</data>
+      <data>56</data>
+      <data>0</data>
+    </shapeData>
     <shapeDef cmper="1">
       <instList>1</instList>
       <dataList>1</dataList>
@@ -2278,6 +2397,26 @@
       <instList>6</instList>
       <dataList>6</dataList>
       <shapeType>expression</shapeType>
+    </shapeDef>
+    <shapeDef cmper="8">
+      <instList>7</instList>
+      <dataList>7</dataList>
+      <shapeType>expression</shapeType>
+    </shapeDef>
+    <shapeDef cmper="9">
+      <instList>8</instList>
+      <dataList>8</dataList>
+      <shapeType>expression</shapeType>
+    </shapeDef>
+    <shapeDef cmper="10">
+      <instList>9</instList>
+      <dataList>9</dataList>
+      <shapeType>expression</shapeType>
+    </shapeDef>
+    <shapeDef cmper="11">
+      <instList>10</instList>
+      <dataList>10</dataList>
+      <shapeType>articulation</shapeType>
     </shapeDef>
     <shapeList cmper="1">
       <instruct>
@@ -2555,6 +2694,97 @@
         <tag>fillSolid</tag>
       </instruct>
     </shapeList>
+    <shapeList cmper="7">
+      <instruct>
+        <numData>11</numData>
+        <tag>startObject</tag>
+      </instruct>
+      <instruct>
+        <numData>2</numData>
+        <tag>rMoveTo</tag>
+      </instruct>
+      <instruct>
+        <numData>6</numData>
+        <tag>slur</tag>
+      </instruct>
+      <instruct>
+        <tag>fillSolid</tag>
+      </instruct>
+    </shapeList>
+    <shapeList cmper="8">
+      <instruct>
+        <numData>11</numData>
+        <tag>startObject</tag>
+      </instruct>
+      <instruct>
+        <numData>2</numData>
+        <tag>rMoveTo</tag>
+      </instruct>
+      <instruct>
+        <numData>6</numData>
+        <tag>slur</tag>
+      </instruct>
+      <instruct>
+        <tag>fillSolid</tag>
+      </instruct>
+      <instruct>
+        <numData>11</numData>
+        <tag>startObject</tag>
+      </instruct>
+      <instruct>
+        <numData>2</numData>
+        <tag>rMoveTo</tag>
+      </instruct>
+      <instruct>
+        <numData>6</numData>
+        <tag>slur</tag>
+      </instruct>
+      <instruct>
+        <tag>fillSolid</tag>
+      </instruct>
+    </shapeList>
+    <shapeList cmper="9">
+      <instruct>
+        <numData>11</numData>
+        <tag>startObject</tag>
+      </instruct>
+      <instruct>
+        <numData>2</numData>
+        <tag>rMoveTo</tag>
+      </instruct>
+      <instruct>
+        <numData>6</numData>
+        <tag>slur</tag>
+      </instruct>
+      <instruct>
+        <tag>fillSolid</tag>
+      </instruct>
+    </shapeList>
+    <shapeList cmper="10">
+      <instruct>
+        <numData>11</numData>
+        <tag>startObject</tag>
+      </instruct>
+      <instruct>
+        <numData>2</numData>
+        <tag>rMoveTo</tag>
+      </instruct>
+      <instruct>
+        <numData>1</numData>
+        <tag>lineWidth</tag>
+      </instruct>
+      <instruct>
+        <numData>2</numData>
+        <tag>setDash</tag>
+      </instruct>
+      <instruct>
+        <numData>2</numData>
+        <tag>rLineTo</tag>
+      </instruct>
+      <instruct>
+        <tag>stroke</tag>
+      </instruct>
+    </shapeList>
     <ssLineStyle cmper="1">
       <lineStyle>char</lineStyle>
       <charParams>
@@ -2698,6 +2928,14 @@
       <vertMeasExprAlign>aboveEntry</vertMeasExprAlign>
       <yAdjustEntry>6</yAdjustEntry>
     </shapeExprDef>
+    <shapeExprDef cmper="2">
+      <shapeDef>8</shapeDef>
+      <categoryID>7</categoryID>
+      <masterShape/>
+      <horzMeasExprAlign>manual</horzMeasExprAlign>
+      <vertMeasExprAlign>manual</vertMeasExprAlign>
+      <useCategoryPos/>
+    </shapeExprDef>
     <viSetup cmper="0"/>
     <partDef cmper="0">
       <nameID>1</nameID>
@@ -2709,6 +2947,17 @@
       <showTransposed/>
       <studioViewIUlist>65400</studioViewIUlist>
     </partGlobals>
+    <markingsDialogList cmper="1">
+      <numElements>2</numElements>
+      <item>
+        <cmper>1</cmper>
+        <tag>shapeExprDef</tag>
+      </item>
+      <item>
+        <cmper>2</cmper>
+        <tag>shapeExprDef</tag>
+      </item>
+    </markingsDialogList>
     <markingsCategory cmper="1">
       <categoryType>dynamics</categoryType>
       <textFont>

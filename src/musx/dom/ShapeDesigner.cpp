@@ -19,10 +19,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+#include <algorithm>
 #include <array>
+#include <cmath>
 #include <cstdlib>
 #include <exception>
 #include <functional>
+#include <limits>
 #include <memory>
 #include <string>
 #include <type_traits>
@@ -333,10 +336,76 @@ enum class SlurTieDirection
 
 constexpr Evpu SLUR_TIE_HORIZONTAL_TOLERANCE_EVPU = 6; // 1/4 space expressed in Evpu
 constexpr Evpu16ths SLUR_TIE_HORIZONTAL_TOLERANCE_16THS = SLUR_TIE_HORIZONTAL_TOLERANCE_EVPU * 16;
+constexpr int SLUR_TIE_BOUND_SAMPLE_COUNT = 32;
+constexpr double SLUR_TIE_VERTICAL_SCALE_THRESHOLD = 4.0;
 
 static Evpu16ths evpuTo16ths(Evpu value)
 {
     return static_cast<Evpu16ths>(value * 16);
+}
+
+static Evpu16ths evpuDoubleTo16ths(double value)
+{
+    return static_cast<Evpu16ths>(std::llround(value * 16.0));
+}
+
+static std::pair<double, double> computeSlurYBounds(const ShapeDefInstruction::Slur& slur)
+{
+    const double startY = 0.0;
+    const double c1y = static_cast<double>(slur.c1dy) / 16.0;
+    const double c2y = static_cast<double>(slur.c2dy) / 16.0;
+    const double endY = static_cast<double>(slur.edy) / 16.0;
+
+    double minY = std::numeric_limits<double>::infinity();
+    double maxY = -std::numeric_limits<double>::infinity();
+
+    for (int i = 0; i <= SLUR_TIE_BOUND_SAMPLE_COUNT; ++i) {
+        const double t = static_cast<double>(i) / SLUR_TIE_BOUND_SAMPLE_COUNT;
+        const double nt = 1.0 - t;
+        const double sampleY =
+            (nt * nt * nt * startY) +
+            (3.0 * nt * nt * t * (startY + c1y)) +
+            (3.0 * nt * t * t * (startY + c2y)) +
+            (t * t * t * (startY + endY));
+
+        minY = std::min(minY, sampleY);
+        maxY = std::max(maxY, sampleY);
+    }
+
+    if (!std::isfinite(minY) || !std::isfinite(maxY)) {
+        return {0.0, 0.0};
+    }
+
+    return {minY, maxY};
+}
+
+static std::optional<std::pair<Evpu16ths, Evpu16ths>> computeScaledSlurYPositions(
+    const ShapeDefInstruction::Slur& slur,
+    const ShapeDefInstruction::StartObject& startObject,
+    const ShapeDefInstruction::RMoveTo& move)
+{
+    const auto [rawMin, rawMax] = computeSlurYBounds(slur);
+    const double rawHeight = rawMax - rawMin;
+    const double targetHeight = static_cast<double>(startObject.top - startObject.bottom);
+
+    if (rawHeight <= std::numeric_limits<double>::epsilon() || std::abs(targetHeight) <= std::numeric_limits<double>::epsilon()) {
+        return std::nullopt;
+    }
+
+    const double ratio = std::abs(targetHeight) / rawHeight;
+    if (ratio <= SLUR_TIE_VERTICAL_SCALE_THRESHOLD) {
+        return std::nullopt;
+    }
+
+    const double scale = ratio;
+    const double offset = static_cast<double>(startObject.bottom) - rawMin * scale;
+    const double base = static_cast<double>(startObject.originY + move.dy);
+    const double rawEnd = static_cast<double>(slur.edy) / 16.0;
+
+    std::pair<Evpu16ths, Evpu16ths> result;
+    result.first = evpuDoubleTo16ths(base + offset);
+    result.second = evpuDoubleTo16ths(base + offset + rawEnd * scale);
+    return result;
 }
 
 struct InstructionExpectation
@@ -440,107 +509,174 @@ static ShapeRecognitionCandidate makeTenutoRecognizer()
     );
 }
 
-struct SlurTieSegment
+struct SlurTieContour
 {
+    Evpu16ths startX = 0;
     Evpu16ths startY = 0;
+    Evpu16ths endX = 0;
     Evpu16ths endY = 0;
-    bool populated = false;
+    Evpu16ths deltaX = 0;
+    Evpu16ths deltaY = 0;
 };
 
 struct SlurTieState
 {
-    std::optional<ShapeDefInstruction::StartObject> startObject;
-    std::optional<ShapeDefInstruction::RMoveTo> moveTo;
-    std::array<SlurTieSegment, 2> segments;
-    size_t nextSegment = 0;
+    std::optional<ShapeDefInstruction::StartObject> currentStart;
+    std::optional<ShapeDefInstruction::RMoveTo> currentMove;
+    std::optional<bool> currentRightHint;
+    std::optional<bool> expectedRight;
+    std::vector<SlurTieContour> contours;
 };
 
 static ShapeRecognitionCandidate makeSlurTieRecognizer(SlurTieDirection direction)
 {
     auto state = std::make_shared<SlurTieState>();
 
-    auto startObjectValidator = [state](const ShapeDefInstruction::Decoded& inst) {
-        const auto* data = std::get_if<ShapeDefInstruction::StartObject>(&inst.data);
-        if (!data) {
-            return false;
+    ShapeRecognitionCandidate candidate;
+    candidate.type = (direction == SlurTieDirection::CurveRight) ? KnownShapeDefType::SlurTieCurveRight : KnownShapeDefType::SlurTieCurveLeft;
+
+    candidate.consume = [state, direction](const ShapeDefInstruction::Decoded& inst) -> ShapeRecognitionStepResult {
+        switch (inst.type) {
+        case ShapeDefInstructionType::StartObject: {
+            const auto* data = std::get_if<ShapeDefInstruction::StartObject>(&inst.data);
+            if (!data) {
+                return ShapeRecognitionStepResult::Reject;
+            }
+            state->currentStart = *data;
+            state->currentMove.reset();
+            state->currentRightHint.reset();
+            const bool extendsLeft = data->right <= 0 && data->left <= data->right;
+            const bool extendsRight = data->left >= 0 && data->left <= data->right;
+            if (extendsLeft != extendsRight) {
+                state->currentRightHint = extendsRight;
+            }
+            return ShapeRecognitionStepResult::Continue;
         }
-        state->startObject = *data;
-        return true;
+
+        case ShapeDefInstructionType::RMoveTo: {
+            if (!state->currentStart) {
+                return ShapeRecognitionStepResult::Reject;
+            }
+            const auto* data = std::get_if<ShapeDefInstruction::RMoveTo>(&inst.data);
+            if (!data) {
+                return ShapeRecognitionStepResult::Reject;
+            }
+            state->currentMove = *data;
+            return ShapeRecognitionStepResult::Continue;
+        }
+
+        case ShapeDefInstructionType::Slur: {
+            if (!state->currentStart || !state->currentMove) {
+                return ShapeRecognitionStepResult::Reject;
+            }
+            const auto* slur = std::get_if<ShapeDefInstruction::Slur>(&inst.data);
+            if (!slur) {
+                return ShapeRecognitionStepResult::Reject;
+            }
+
+            const bool contourRight = state->currentRightHint.value_or(slur->edx > 0);
+            if (!state->expectedRight) {
+                state->expectedRight = contourRight;
+            } else if (contourRight != *state->expectedRight) {
+                return ShapeRecognitionStepResult::Reject;
+            }
+
+            if ((direction == SlurTieDirection::CurveRight && !contourRight) ||
+                (direction == SlurTieDirection::CurveLeft && contourRight)) {
+                return ShapeRecognitionStepResult::Reject;
+            }
+
+            SlurTieContour contour;
+            const Evpu startX = state->currentStart->originX + state->currentMove->dx;
+            const Evpu startYEvpu = state->currentStart->originY + state->currentMove->dy;
+            contour.startX = evpuTo16ths(startX);
+            contour.deltaX = slur->edx;
+            contour.endX = contour.startX + contour.deltaX;
+
+            auto scaledY = computeScaledSlurYPositions(*slur, *state->currentStart, *state->currentMove);
+            if (scaledY) {
+                contour.startY = scaledY->first;
+                contour.endY = scaledY->second;
+                contour.deltaY = contour.endY - contour.startY;
+            } else {
+                contour.startY = evpuTo16ths(startYEvpu);
+                contour.deltaY = slur->edy;
+                contour.endY = contour.startY + contour.deltaY;
+            }
+            state->contours.push_back(contour);
+
+            state->currentStart.reset();
+            state->currentMove.reset();
+            return ShapeRecognitionStepResult::Continue;
+        }
+
+        case ShapeDefInstructionType::FillSolid:
+        case ShapeDefInstructionType::SetDash:
+            return ShapeRecognitionStepResult::Continue;
+
+        default:
+            return ShapeRecognitionStepResult::Reject;
+        }
     };
 
-    auto moveValidator = [state](const ShapeDefInstruction::Decoded& inst) {
-        const auto* data = std::get_if<ShapeDefInstruction::RMoveTo>(&inst.data);
-        if (!data) {
+    candidate.finalize = [state]() -> bool {
+        if (!state->contours.empty() && (state->currentStart || state->currentMove)) {
             return false;
         }
-        state->moveTo = *data;
-        return state->startObject.has_value();
-    };
-
-    auto slurValidator = [state, direction](const ShapeDefInstruction::Decoded& inst) {
-        if (state->nextSegment >= state->segments.size() || !state->startObject || !state->moveTo) {
+        if (state->contours.empty()) {
             return false;
         }
-
-        const auto* slur = std::get_if<ShapeDefInstruction::Slur>(&inst.data);
-        if (!slur) {
+        if (!state->expectedRight) {
             return false;
         }
-
-        const bool curvesRight = slur->edx > 0;
-        if ((direction == SlurTieDirection::CurveRight && !curvesRight) ||
-            (direction == SlurTieDirection::CurveLeft && curvesRight)) {
-            return false;
+        for (const auto& contour : state->contours) {
+            if (contour.deltaX == 0) {
+                return false;
+            }
         }
 
-        const Evpu originY = state->startObject->originY;
-        const Evpu moveDy = state->moveTo->dy;
-        const Evpu16ths startY = evpuTo16ths(originY + moveDy);
-        const Evpu16ths endY = startY + slur->edy;
+        const bool expectingRight = *state->expectedRight;
+        Evpu16ths startSeparation = 0;
+        Evpu16ths endSeparation = 0;
 
-        auto& segment = state->segments[state->nextSegment];
-        segment.startY = startY;
-        segment.endY = endY;
-        segment.populated = true;
-
-        state->startObject.reset();
-        state->moveTo.reset();
-        state->nextSegment++;
-        return true;
-    };
-
-    InstructionExpectations expectations = {
-        {ShapeDefInstructionType::StartObject, startObjectValidator},
-        {ShapeDefInstructionType::RMoveTo, moveValidator},
-        {ShapeDefInstructionType::Slur, slurValidator},
-        {ShapeDefInstructionType::FillSolid, nullptr},
-        {ShapeDefInstructionType::StartObject, startObjectValidator},
-        {ShapeDefInstructionType::RMoveTo, moveValidator},
-        {ShapeDefInstructionType::Slur, slurValidator},
-        {ShapeDefInstructionType::FillSolid, nullptr},
-    };
-
-    const auto type = (direction == SlurTieDirection::CurveRight) ? KnownShapeDefType::SlurTieCurveRight : KnownShapeDefType::SlurTieCurveLeft;
-    auto candidate = makeSequenceRecognizer(type, std::move(expectations));
-
-    auto baseFinalize = candidate.finalize;
-    candidate.finalize = [state, baseFinalize]() -> bool {
-        if (!baseFinalize()) {
-            return false;
-        }
-        if (state->nextSegment != state->segments.size()) {
-            return false;
-        }
-        const auto& first = state->segments[0];
-        const auto& second = state->segments[1];
-        if (!first.populated || !second.populated) {
-            return false;
+        if (state->contours.size() == 1) {
+            startSeparation = 0;
+            endSeparation = state->contours.front().deltaY;
+        } else {
+            const auto compareStartY = [](const SlurTieContour& a, const SlurTieContour& b) {
+                return a.startY < b.startY;
+            };
+            const auto compareEndY = [](const SlurTieContour& a, const SlurTieContour& b) {
+                return a.endY < b.endY;
+            };
+            const auto startMinMax = std::minmax_element(state->contours.begin(), state->contours.end(), compareStartY);
+            const auto endMinMax = std::minmax_element(state->contours.begin(), state->contours.end(), compareEndY);
+            if (startMinMax.first == state->contours.end() || startMinMax.second == state->contours.end() ||
+                endMinMax.first == state->contours.end() || endMinMax.second == state->contours.end()) {
+                return false;
+            }
+            startSeparation = startMinMax.second->startY - startMinMax.first->startY;
+            endSeparation = endMinMax.second->endY - endMinMax.first->endY;
         }
 
-        const Evpu16ths startSeparation = first.startY - second.startY;
-        const Evpu16ths endSeparation = first.endY - second.endY;
         const Evpu16ths diff = std::abs(startSeparation - endSeparation);
-        return diff <= SLUR_TIE_HORIZONTAL_TOLERANCE_16THS;
+        if (diff > SLUR_TIE_HORIZONTAL_TOLERANCE_16THS) {
+            return false;
+        }
+
+        if (expectingRight) {
+            const auto leftmost = std::min_element(state->contours.begin(), state->contours.end(),
+                [](const SlurTieContour& a, const SlurTieContour& b) { return a.startX < b.startX; });
+            const auto rightmost = std::max_element(state->contours.begin(), state->contours.end(),
+                [](const SlurTieContour& a, const SlurTieContour& b) { return a.endX < b.endX; });
+            return leftmost != state->contours.end() && rightmost != state->contours.end();
+        } else {
+            const auto rightmostStart = std::max_element(state->contours.begin(), state->contours.end(),
+                [](const SlurTieContour& a, const SlurTieContour& b) { return a.startX < b.startX; });
+            const auto leftmostEnd = std::min_element(state->contours.begin(), state->contours.end(),
+                [](const SlurTieContour& a, const SlurTieContour& b) { return a.endX < b.endX; });
+            return rightmostStart != state->contours.end() && leftmostEnd != state->contours.end();
+        }
     };
 
     return candidate;
