@@ -19,10 +19,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-#include <string>
-#include <vector>
+#include <array>
 #include <cstdlib>
 #include <exception>
+#include <functional>
+#include <memory>
+#include <string>
+#include <type_traits>
+#include <vector>
 
 #include "musx/musx.h"
 
@@ -226,9 +230,9 @@ ShapeDefInstruction::parseSlur(const std::vector<int>& data)
 {
     if (data.size() >= 6) {
         return Slur{
-            Evpu{data[0]}, Evpu{data[1]}, // c1dx, c1dy
-            Evpu{data[2]}, Evpu{data[3]}, // c2dx, c2dy
-            Evpu{data[4]}, Evpu{data[5]}  // edx,  edy
+            Evpu16ths{data[0]}, Evpu16ths{data[1]}, // c1dx, c1dy
+            Evpu16ths{data[2]}, Evpu16ths{data[3]}, // c2dx, c2dy
+            Evpu16ths{data[4]}, Evpu16ths{data[5]}  // edx,  edy
         };
     }
     return std::nullopt;
@@ -302,51 +306,256 @@ namespace others {
 // ***** Shape recognition functions *****
 // ***************************************
 
-static bool isTenutoMark(const ShapeDef& shape)
+namespace {
+
+enum class ShapeRecognitionStepResult
 {
-    static const std::vector<ShapeDefInstructionType> expectedInsts = {
-        ShapeDefInstructionType::StartObject,
-        ShapeDefInstructionType::RMoveTo,
-        ShapeDefInstructionType::LineWidth,
-        ShapeDefInstructionType::RLineTo,
-        ShapeDefInstructionType::Stroke,
+    Continue,
+    Reject,
+    Accept
+};
+
+struct ShapeRecognitionCandidate
+{
+    KnownShapeDefType type;
+    std::function<ShapeRecognitionStepResult(const ShapeDefInstruction::Decoded&)> consume;
+    std::function<bool()> finalize = [] { return false; };
+    bool rejected = false;
+};
+
+using ShapeRecognitionCandidates = std::vector<ShapeRecognitionCandidate>;
+
+enum class SlurTieDirection
+{
+    CurveRight,
+    CurveLeft,
+};
+
+constexpr Evpu SLUR_TIE_HORIZONTAL_TOLERANCE_EVPU = 6; // 1/4 space expressed in Evpu
+constexpr Evpu16ths SLUR_TIE_HORIZONTAL_TOLERANCE_16THS = SLUR_TIE_HORIZONTAL_TOLERANCE_EVPU * 16;
+
+static Evpu16ths evpuTo16ths(Evpu value)
+{
+    return static_cast<Evpu16ths>(value * 16);
+}
+
+struct InstructionExpectation
+{
+    ShapeDefInstructionType type;
+    std::function<bool(const ShapeDefInstruction::Decoded&)> validate;
+};
+
+using InstructionExpectations = std::vector<InstructionExpectation>;
+
+static ShapeRecognitionCandidate makeSequenceRecognizer(
+    KnownShapeDefType type,
+    InstructionExpectations expectations,
+    std::function<bool(const ShapeDefInstruction::Decoded&)> skipPredicate = {})
+{
+    struct SequenceRecognizerState {
+        InstructionExpectations expectations;
+        std::function<bool(const ShapeDefInstruction::Decoded&)> skipPredicate;
+        size_t nextIndex = 0;
     };
 
-    size_t nextIndex = 0;
-    bool result = shape.iterateInstructions([&](const ShapeDefInstruction::Decoded& inst) {
-        if (inst.type == ShapeDefInstructionType::SetDash) {
-            return true; // skip SetDash
-        }
-        if (nextIndex >= expectedInsts.size()) {
-            return false;
-        }
-        if (inst.type != expectedInsts[nextIndex]) {
-            return false;
+    auto state = std::make_shared<SequenceRecognizerState>();
+    state->expectations = std::move(expectations);
+    state->skipPredicate = std::move(skipPredicate);
+
+    ShapeRecognitionCandidate candidate;
+    candidate.type = type;
+    candidate.consume = [state](const ShapeDefInstruction::Decoded& inst) -> ShapeRecognitionStepResult {
+        if (!inst.valid()) {
+            return ShapeRecognitionStepResult::Reject;
         }
 
-        bool result = true;
+        if (state->skipPredicate && state->skipPredicate(inst)) {
+            return ShapeRecognitionStepResult::Continue;
+        }
+
+        if (state->nextIndex >= state->expectations.size()) {
+            return ShapeRecognitionStepResult::Reject;
+        }
+
+        const auto& expected = state->expectations[state->nextIndex];
+        if (inst.type != expected.type) {
+            return ShapeRecognitionStepResult::Reject;
+        }
+
+        if (expected.validate && !expected.validate(inst)) {
+            return ShapeRecognitionStepResult::Reject;
+        }
+
+        state->nextIndex++;
+        return ShapeRecognitionStepResult::Continue;
+    };
+
+    candidate.finalize = [state]() -> bool {
+        return state->nextIndex == state->expectations.size();
+    };
+
+    return candidate;
+}
+
+static ShapeRecognitionCandidate makeTenutoRecognizer()
+{
+    auto skipPredicate = [](const ShapeDefInstruction::Decoded& inst) {
+        return inst.type == ShapeDefInstructionType::SetDash;
+    };
+
+    auto lineWidthValidator = [](const ShapeDefInstruction::Decoded& inst) {
+        bool valid = false;
         std::visit([&](auto&& instData) {
             using T = std::decay_t<decltype(instData)>;
             if constexpr (std::is_same_v<T, ShapeDefInstruction::LineWidth>) {
-                if (instData.efix < 4 * EFIX_PER_EVPU || instData.efix > 6 * EFIX_PER_EVPU) {
-                    result = false;
-                }
-            } else if constexpr (std::is_same_v<T, ShapeDefInstruction::RLineTo>) {
-                if (instData.dx < EVPU_PER_SPACE || instData.dx > 1.5 * EVPU_PER_SPACE || instData.dy != 0) {
-                    result = false;
-                }
+                valid = instData.efix >= 4 * EFIX_PER_EVPU && instData.efix <= 6 * EFIX_PER_EVPU;
             }
         }, inst.data);
+        return valid;
+    };
 
-        if (!result) {
+    auto horizontalLineValidator = [](const ShapeDefInstruction::Decoded& inst) {
+        bool valid = false;
+        std::visit([&](auto&& instData) {
+            using T = std::decay_t<decltype(instData)>;
+            if constexpr (std::is_same_v<T, ShapeDefInstruction::RLineTo>) {
+                valid = instData.dx >= EVPU_PER_SPACE &&
+                    instData.dx <= 1.5 * EVPU_PER_SPACE &&
+                    instData.dy == 0;
+            }
+        }, inst.data);
+        return valid;
+    };
+
+    return makeSequenceRecognizer(
+        KnownShapeDefType::TenutoMark,
+        InstructionExpectations{
+            {ShapeDefInstructionType::StartObject, nullptr},
+            {ShapeDefInstructionType::RMoveTo, nullptr},
+            {ShapeDefInstructionType::LineWidth, lineWidthValidator},
+            {ShapeDefInstructionType::RLineTo, horizontalLineValidator},
+            {ShapeDefInstructionType::Stroke, nullptr},
+        },
+        skipPredicate
+    );
+}
+
+struct SlurTieSegment
+{
+    Evpu16ths startY = 0;
+    Evpu16ths endY = 0;
+    bool populated = false;
+};
+
+struct SlurTieState
+{
+    std::optional<ShapeDefInstruction::StartObject> startObject;
+    std::optional<ShapeDefInstruction::RMoveTo> moveTo;
+    std::array<SlurTieSegment, 2> segments;
+    size_t nextSegment = 0;
+};
+
+static ShapeRecognitionCandidate makeSlurTieRecognizer(SlurTieDirection direction)
+{
+    auto state = std::make_shared<SlurTieState>();
+
+    auto startObjectValidator = [state](const ShapeDefInstruction::Decoded& inst) {
+        const auto* data = std::get_if<ShapeDefInstruction::StartObject>(&inst.data);
+        if (!data) {
+            return false;
+        }
+        state->startObject = *data;
+        return true;
+    };
+
+    auto moveValidator = [state](const ShapeDefInstruction::Decoded& inst) {
+        const auto* data = std::get_if<ShapeDefInstruction::RMoveTo>(&inst.data);
+        if (!data) {
+            return false;
+        }
+        state->moveTo = *data;
+        return state->startObject.has_value();
+    };
+
+    auto slurValidator = [state, direction](const ShapeDefInstruction::Decoded& inst) {
+        if (state->nextSegment >= state->segments.size() || !state->startObject || !state->moveTo) {
             return false;
         }
 
-        nextIndex++;
+        const auto* slur = std::get_if<ShapeDefInstruction::Slur>(&inst.data);
+        if (!slur) {
+            return false;
+        }
+
+        const bool curvesRight = slur->edx > 0;
+        if ((direction == SlurTieDirection::CurveRight && !curvesRight) ||
+            (direction == SlurTieDirection::CurveLeft && curvesRight)) {
+            return false;
+        }
+
+        const Evpu originY = state->startObject->originY;
+        const Evpu moveDy = state->moveTo->dy;
+        const Evpu16ths startY = evpuTo16ths(originY + moveDy);
+        const Evpu16ths endY = startY + slur->edy;
+
+        auto& segment = state->segments[state->nextSegment];
+        segment.startY = startY;
+        segment.endY = endY;
+        segment.populated = true;
+
+        state->startObject.reset();
+        state->moveTo.reset();
+        state->nextSegment++;
         return true;
-    });
-    return result && nextIndex == expectedInsts.size();
+    };
+
+    InstructionExpectations expectations = {
+        {ShapeDefInstructionType::StartObject, startObjectValidator},
+        {ShapeDefInstructionType::RMoveTo, moveValidator},
+        {ShapeDefInstructionType::Slur, slurValidator},
+        {ShapeDefInstructionType::FillSolid, nullptr},
+        {ShapeDefInstructionType::StartObject, startObjectValidator},
+        {ShapeDefInstructionType::RMoveTo, moveValidator},
+        {ShapeDefInstructionType::Slur, slurValidator},
+        {ShapeDefInstructionType::FillSolid, nullptr},
+    };
+
+    const auto type = (direction == SlurTieDirection::CurveRight) ? KnownShapeDefType::SlurTieCurveRight : KnownShapeDefType::SlurTieCurveLeft;
+    auto candidate = makeSequenceRecognizer(type, std::move(expectations));
+
+    auto baseFinalize = candidate.finalize;
+    candidate.finalize = [state, baseFinalize]() -> bool {
+        if (!baseFinalize()) {
+            return false;
+        }
+        if (state->nextSegment != state->segments.size()) {
+            return false;
+        }
+        const auto& first = state->segments[0];
+        const auto& second = state->segments[1];
+        if (!first.populated || !second.populated) {
+            return false;
+        }
+
+        const Evpu16ths startSeparation = first.startY - second.startY;
+        const Evpu16ths endSeparation = first.endY - second.endY;
+        const Evpu16ths diff = std::abs(startSeparation - endSeparation);
+        return diff <= SLUR_TIE_HORIZONTAL_TOLERANCE_16THS;
+    };
+
+    return candidate;
 }
+
+static ShapeRecognitionCandidates createShapeRecognizers(const ShapeDef&)
+{
+    ShapeRecognitionCandidates candidates;
+    candidates.push_back(makeTenutoRecognizer());
+    candidates.push_back(makeSlurTieRecognizer(SlurTieDirection::CurveRight));
+    candidates.push_back(makeSlurTieRecognizer(SlurTieDirection::CurveLeft));
+    return candidates;
+}
+
+} // anonymous namespace
 
 // add recognition functions as needed...
 
@@ -359,9 +568,53 @@ std::optional<KnownShapeDefType> ShapeDef::recognize() const
     if (isBlank()) {
         return KnownShapeDefType::Blank;
     }
-    if (isTenutoMark(*this)) {
-        return KnownShapeDefType::TenutoMark;
+
+    auto recognizers = createShapeRecognizers(*this);
+    if (recognizers.empty()) {
+        return std::nullopt;
     }
+
+    std::optional<KnownShapeDefType> recognized;
+    iterateInstructions([&](const ShapeDefInstruction::Decoded& inst) {
+        bool anyActive = false;
+
+        for (auto& recognizer : recognizers) {
+            if (recognizer.rejected) {
+                continue;
+            }
+
+            switch (recognizer.consume(inst)) {
+            case ShapeRecognitionStepResult::Continue:
+                anyActive = true;
+                break;
+
+            case ShapeRecognitionStepResult::Reject:
+                recognizer.rejected = true;
+                break;
+
+            case ShapeRecognitionStepResult::Accept:
+                recognized = recognizer.type;
+                return false;
+            }
+        }
+
+        if (!anyActive) {
+            return false;
+        }
+
+        return true;
+    });
+
+    if (recognized) {
+        return recognized;
+    }
+
+    for (auto& recognizer : recognizers) {
+        if (!recognizer.rejected && recognizer.finalize()) {
+            return recognizer.type;
+        }
+    }
+
     return std::nullopt;
 }
 

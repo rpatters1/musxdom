@@ -39,6 +39,8 @@ enum class KnownShapeDefType
 {
     Blank,                      ///< A blank shape containing no instructions.
     TenutoMark,                 ///< A horizontal tenuto mark, typically used as an articulation symbol.
+    SlurTieCurveRight,          ///< Horizontal slur-based tie curving toward the right.
+    SlurTieCurveLeft,           ///< Horizontal slur-based tie curving toward the left.
 
     // Add more known types here
 };
@@ -279,13 +281,14 @@ struct ShapeDefInstruction
 
     /// @brief Holds the parsed data for a Slur instruction.
     /// @details Same data layout as CurveTo, but rendered using the slur thickness settings.
+    /// @note Finale stores these deltas in 1/16 Evpu units.
     struct Slur {
-        Evpu c1dx; ///< Relative X offset of the first control point.
-        Evpu c1dy; ///< Relative Y offset of the first control point.
-        Evpu c2dx; ///< Relative X offset of the second control point.
-        Evpu c2dy; ///< Relative Y offset of the second control point.
-        Evpu edx;  ///< Relative X offset of the end point.
-        Evpu edy;  ///< Relative Y offset of the end point.
+        Evpu16ths c1dx; ///< Relative X offset of the first control point (1/16 Evpu units).
+        Evpu16ths c1dy; ///< Relative Y offset of the first control point (1/16 Evpu units).
+        Evpu16ths c2dx; ///< Relative X offset of the second control point (1/16 Evpu units).
+        Evpu16ths c2dy; ///< Relative Y offset of the second control point (1/16 Evpu units).
+        Evpu16ths edx;  ///< Relative X offset of the end point (1/16 Evpu units).
+        Evpu16ths edy;  ///< Relative Y offset of the end point (1/16 Evpu units).
     };
 
     /// @brief Holds the parsed data for a StartObject instruction.

@@ -1588,6 +1588,14 @@
       <startEntry>16</startEntry>
       <endEntry>19</endEntry>
     </frameSpec>
+    <frameSpec cmper="6" inci="0">
+      <startEntry>20</startEntry>
+      <endEntry>22</endEntry>
+    </frameSpec>
+    <frameSpec cmper="7" inci="0">
+      <startEntry>23</startEntry>
+      <endEntry>24</endEntry>
+    </frameSpec>
     <fretInst cmper="1">
       <numFrets>20</numFrets>
       <numStrings>6</numStrings>
@@ -1899,6 +1907,7 @@
       <dispBeats>4</dispBeats>
       <dispDivbeat>1024</dispDivbeat>
       <posMode>timesigPlusPos</posMode>
+      <hasExpr/>
       <barline>normal</barline>
       <leftBarline>default</leftBarline>
     </measSpec>
@@ -1922,6 +1931,13 @@
       <barline>normal</barline>
       <leftBarline>default</leftBarline>
     </measSpec>
+    <measExprAssign cmper="2" inci="0">
+      <shapeExprID>1</shapeExprID>
+      <horzEduOff>1024</horzEduOff>
+      <vertOff>12</vertOff>
+      <staffAssign>1</staffAssign>
+      <layer>1</layer>
+    </measExprAssign>
     <textBlock cmper="1">
       <textID>1</textID>
       <lineSpacingPercent>100</lineSpacingPercent>
@@ -2190,6 +2206,47 @@
       <data>28</data>
       <data>0</data>
     </shapeData>
+    <shapeData cmper="6">
+      <data>0</data>
+      <data>-1</data>
+      <data>0</data>
+      <data>0</data>
+      <data>0</data>
+      <data>-9</data>
+      <data>0</data>
+      <data>0</data>
+      <data>0</data>
+      <data>0</data>
+      <data>0</data>
+      <data>0</data>
+      <data>0</data>
+      <data>72</data>
+      <data>72</data>
+      <data>144</data>
+      <data>0</data>
+      <data>72</data>
+      <data>-72</data>
+      <data>0</data>
+      <data>0</data>
+      <data>0</data>
+      <data>15</data>
+      <data>60</data>
+      <data>-1</data>
+      <data>208</data>
+      <data>208</data>
+      <data>0</data>
+      <data>0</data>
+      <data>0</data>
+      <data>0</data>
+      <data>0</data>
+      <data>72</data>
+      <data>72</data>
+      <data>144</data>
+      <data>0</data>
+      <data>72</data>
+      <data>-72</data>
+      <data>0</data>
+    </shapeData>
     <shapeDef cmper="1">
       <instList>1</instList>
       <dataList>1</dataList>
@@ -2216,6 +2273,11 @@
     </shapeDef>
     <shapeDef cmper="6">
       <shapeType>note</shapeType>
+    </shapeDef>
+    <shapeDef cmper="7">
+      <instList>6</instList>
+      <dataList>6</dataList>
+      <shapeType>expression</shapeType>
     </shapeDef>
     <shapeList cmper="1">
       <instruct>
@@ -2461,6 +2523,38 @@
         <tag>stroke</tag>
       </instruct>
     </shapeList>
+    <shapeList cmper="6">
+      <instruct>
+        <numData>11</numData>
+        <tag>startObject</tag>
+      </instruct>
+      <instruct>
+        <numData>2</numData>
+        <tag>rMoveTo</tag>
+      </instruct>
+      <instruct>
+        <numData>6</numData>
+        <tag>slur</tag>
+      </instruct>
+      <instruct>
+        <tag>fillSolid</tag>
+      </instruct>
+      <instruct>
+        <numData>11</numData>
+        <tag>startObject</tag>
+      </instruct>
+      <instruct>
+        <numData>2</numData>
+        <tag>rMoveTo</tag>
+      </instruct>
+      <instruct>
+        <numData>6</numData>
+        <tag>slur</tag>
+      </instruct>
+      <instruct>
+        <tag>fillSolid</tag>
+      </instruct>
+    </shapeList>
     <ssLineStyle cmper="1">
       <lineStyle>char</lineStyle>
       <charParams>
@@ -2594,6 +2688,16 @@
       <vertTabNumOff>-1024</vertTabNumOff>
       <stemDir>alwaysUp</stemDir>
     </staffSpec>
+    <shapeExprDef cmper="1">
+      <shapeDef>7</shapeDef>
+      <categoryID>7</categoryID>
+      <masterShape/>
+      <noHorzStretch/>
+      <horzMeasExprAlign>rightOfAllNoteheads</horzMeasExprAlign>
+      <measXAdjust>-9</measXAdjust>
+      <vertMeasExprAlign>aboveEntry</vertMeasExprAlign>
+      <yAdjustEntry>6</yAdjustEntry>
+    </shapeExprDef>
     <viSetup cmper="0"/>
     <partDef cmper="0">
       <nameID>1</nameID>
@@ -2983,6 +3087,16 @@
       <clefPercent>75</clefPercent>
       <frame1>2</frame1>
     </gfhold>
+    <gfhold cmper1="1" cmper2="2">
+      <clefID>0</clefID>
+      <clefPercent>75</clefPercent>
+      <frame1>6</frame1>
+    </gfhold>
+    <gfhold cmper1="1" cmper2="3">
+      <clefID>0</clefID>
+      <clefPercent>75</clefPercent>
+      <frame1>7</frame1>
+    </gfhold>
     <gfhold cmper1="32767" cmper2="1">
       <clefID>0</clefID>
       <clefPercent>75</clefPercent>
@@ -3085,7 +3199,7 @@
         <isValid/>
       </note>
     </entry>
-    <entry entnum="7" prev="6" next="0">
+    <entry entnum="7" prev="6" next="20">
       <dura>2048</dura>
       <numNotes>0</numNotes>
       <isValid/>
@@ -3236,6 +3350,54 @@
         <harmAlt>0</harmAlt>
         <isValid/>
       </note>
+    </entry>
+    <entry entnum="20" prev="7" next="21">
+      <dura>1024</dura>
+      <numNotes>0</numNotes>
+      <isValid/>
+      <floatRest/>
+      <beam/>
+    </entry>
+    <entry entnum="21" prev="20" next="22">
+      <dura>1024</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <beam/>
+      <sorted/>
+      <note id="1">
+        <harmLev>8</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="22" prev="21" next="23">
+      <dura>2048</dura>
+      <numNotes>0</numNotes>
+      <isValid/>
+      <floatRest/>
+      <beam/>
+    </entry>
+    <entry entnum="23" prev="22" next="24">
+      <dura>2048</dura>
+      <numNotes>1</numNotes>
+      <isValid/>
+      <isNote/>
+      <beam/>
+      <upStem/>
+      <sorted/>
+      <note id="1">
+        <harmLev>4</harmLev>
+        <harmAlt>0</harmAlt>
+        <isValid/>
+      </note>
+    </entry>
+    <entry entnum="24" prev="23" next="0">
+      <dura>2048</dura>
+      <numNotes>0</numNotes>
+      <isValid/>
+      <floatRest/>
+      <beam/>
     </entry>
   </entries>
   <texts>

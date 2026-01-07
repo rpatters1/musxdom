@@ -189,14 +189,26 @@ TEST(ShapeDefTest, RecognizeShapes)
     auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(enigmaXml);
     ASSERT_TRUE(doc);
 
+    constexpr size_t EXPECTED_VALUES = 7;
+    constexpr std::array<Cmper, EXPECTED_VALUES> expectedCmpers = { 1, 2, 3, 4, 5, 6, 7 };
+    constexpr std::array<std::optional<KnownShapeDefType>, EXPECTED_VALUES> expectedTypes =
     {
-        auto shape = doc->getOthers()->get<others::ShapeDef>(SCORE_PARTID, 5);
-        ASSERT_TRUE(shape);
-        EXPECT_EQ(shape->recognize(), KnownShapeDefType::TenutoMark);
-    }
-    {
-        auto shape = doc->getOthers()->get<others::ShapeDef>(SCORE_PARTID, 6);
-        ASSERT_TRUE(shape);
-        EXPECT_EQ(shape->recognize(), KnownShapeDefType::Blank);
+        std::nullopt,
+        std::nullopt,
+        std::nullopt,
+        std::nullopt,
+        KnownShapeDefType::TenutoMark,
+        KnownShapeDefType::Blank,
+        KnownShapeDefType::SlurTieCurveRight,
+    };
+
+    auto shapes = doc->getOthers()->getArray<others::ShapeDef>(SCORE_PARTID);
+    ASSERT_EQ(shapes.size(), EXPECTED_VALUES);
+    size_t x = 0;
+    for (const auto& shape : shapes) {
+        ASSERT_LT(x, shapes.size());
+        EXPECT_EQ(shape->getCmper(), expectedCmpers[x]) << "shape cmper " << shape->getCmper() << " is not expected value " << expectedCmpers[x];
+        EXPECT_EQ(shape->recognize(), expectedTypes[x]) << "recognized shape type is not the expected value for cmper " << shape->getCmper();
+        x++;
     }
 }
