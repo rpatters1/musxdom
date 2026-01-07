@@ -41,6 +41,7 @@ namespace others {
 class Frame;
 class PartVoicing;
 class PercussionNoteInfo;
+class SmartShape;
 class Staff;
 class StaffComposite;
 class StaffUsed;
@@ -923,7 +924,25 @@ public:
     /// is not a grace note.
     [[nodiscard]] EntryInfoPtr findMainEntryForGraceNote(bool ignoreRests = false) const;
 
-    /// @brief Explicit operator< for std::map
+    /// @brief Iterates all smart shapes whose start anchor resolves to this entry.
+    ///
+    /// Invokes the supplied predicate for each @ref others::SmartShape whose *starting*
+    /// attachment is determined to be associated with this entry. This includes smart
+    /// shapes that explicitly start on this entry as well as beat-attached shapes whose
+    /// anchor does not directly reference the entry but is resolved to it using
+    /// #smartshape::EndPoint::calcAssociatedEntry.
+    ///
+    /// Iteration stops early if the predicate returns false.
+    ///
+    /// @param callback Function invoked for each matching smart shape. Returning
+    ///        false aborts iteration.
+    /// @param findExact If true, only match beat-attached shapes that match the entry's exact
+    ///        position. This defaults to false.
+    /// @return True if iteration completed normally; false if terminated early by
+    ///         the callback.
+    bool iterateStartingSmartShapes(std::function<bool(const MusxInstance<others::SmartShape>&)> callback, bool findExact = false) const;
+        
+        /// @brief Explicit operator< for std::map
     bool operator<(const EntryInfoPtr& other) const
     {
         if (m_entryFrame != other.m_entryFrame)
@@ -1664,6 +1683,15 @@ public:
     /// even if the document's `PartVoicingPolicy` is to ignore part voicing.
     [[nodiscard]]
     bool calcIsIncludedInVoicing() const;
+
+    /// @brief If this note has a smart shape acting as an arpeggio tie, return the tied-to note. If this note
+    /// is part of a chord, the function always returns null.
+    /// @param [out] isTiedOver An option out parameter returning whether the ties if force over (true),
+    ///         forced under (false) or unspecified (std::nullopt).
+    /// @return If the arpeggio tie slur exists return true. Null if it does not or if this note is part of
+    /// a chord.
+    [[nodiscard]]
+    NoteInfoPtr calcArpeggiatedTieToNote(std::optional<bool>* isTiedOver = nullptr) const;
 
 private:
     /// @brief Returns true if the two notes represent the same concert pitch or

@@ -2097,6 +2097,38 @@ bool EntryInfoPtr::calcIsGlissToGraceEntry() const
     return false;
 }
 
+bool EntryInfoPtr::iterateStartingSmartShapes(std::function<bool(const MusxInstance<others::SmartShape>&)> callback, bool findExact) const
+{
+    const auto staffId = getStaff();
+    const auto measId = getMeasure();
+    const auto entry = (*this)->getEntry();
+    const auto entryNumber = entry->getEntryNumber();
+    const auto doc = entry->getDocument();
+    const auto partId = getFrame()->getRequestedPartId();
+    const auto measShapeAssigns = doc->getOthers()->getArray<others::SmartShapeMeasureAssign>(partId, measId);
+    for (const auto& assign : measShapeAssigns) {
+        if (const auto shape = doc->getOthers()->get<others::SmartShape>(partId, assign->shapeNum)) {
+            const auto& startPoint = *shape->startTermSeg->endPoint;
+            if (startPoint.entryNumber == entryNumber) {
+                if (!callback(shape)) {
+                    return false;
+                }
+                continue;
+            }
+            if (startPoint.staffId != staffId || startPoint.measId != measId) {
+                continue;
+            }
+            const auto startEntry = startPoint.calcAssociatedEntry(partId, findExact);
+            if (startEntry.isSameEntry(*this)) {
+                if (!callback(shape)) {
+                    return false;
+                }
+            }
+        }
+    }
+    return true;
+}
+
 // *********************************************
 // ***** EntryInfoPtr::InterpretedIterator *****
 // *********************************************
@@ -2865,6 +2897,37 @@ bool NoteInfoPtr::calcIsIncludedInVoicing() const
         return partVoicing->calcShowsNote(*this);
     }
     return true;
+}
+
+NoteInfoPtr NoteInfoPtr::calcArpeggiatedTieToNote(std::optional<bool>* isTiedOver) const
+{
+    const auto entryInfoPtr = getEntryInfo();
+    const auto entry = entryInfoPtr->getEntry();
+    if (entry->notes.size() != 1 || !entry->isNote) {
+        return {};
+    }
+    auto result = NoteInfoPtr{};
+    if (isTiedOver) {
+        *isTiedOver = std::nullopt;
+    }
+    entryInfoPtr.iterateStartingSmartShapes([&](const MusxInstance<others::SmartShape>& shape) {
+        result = shape->calcArpeggiatedTieToNote(entryInfoPtr);
+        using ST = others::SmartShape::ShapeType;
+        if (isTiedOver && result) {
+            switch (shape->shapeType) {
+            case ST::SlurUp:
+                *isTiedOver = true;
+                break;
+            case ST::SlurDown:
+                *isTiedOver = false;
+                break;
+            default:
+                *isTiedOver = std::nullopt;
+            }
+        }
+        return !result; // keep searching until we find a result
+    });
+    return result;
 }
 
 } // namespace dom

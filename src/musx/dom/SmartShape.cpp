@@ -376,7 +376,7 @@ NoteInfoPtr others::SmartShape::calcArpeggiatedTieToNote(const EntryInfoPtr& for
     if (entry->notes.size() != 1) {
         return {};
     }
-    const auto endEntry = endTermSeg->endPoint->calcAssociatedEntry(getRequestedPartId());
+    const auto endEntry = endTermSeg->endPoint->calcAssociatedEntry(getRequestedPartId(), /*findExact*/false);
     MUSX_ASSERT_IF(!endEntry) {
         throw std::logic_error("calcIsPotentialForwardTie was true but endEntry did not exist.");
     }
