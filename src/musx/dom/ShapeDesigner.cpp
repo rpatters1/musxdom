@@ -368,8 +368,8 @@ static std::pair<double, double> computeSlurYBounds(const ShapeDefInstruction::S
             (3.0 * nt * t * t * (startY + c2y)) +
             (t * t * t * (startY + endY));
 
-        minY = std::min(minY, sampleY);
-        maxY = std::max(maxY, sampleY);
+        minY = (std::min)(minY, sampleY);
+        maxY = (std::max)(maxY, sampleY);
     }
 
     if (!std::isfinite(minY) || !std::isfinite(maxY)) {
@@ -760,16 +760,16 @@ std::optional<Evpu> ShapeDef::calcWidth() const
         return Evpu{0};
     }
 
-    Evpu minLeft = std::numeric_limits<Evpu>::max();
+    Evpu minLeft = (std::numeric_limits<Evpu>::max)();
     Evpu maxRight = std::numeric_limits<Evpu>::lowest();
     bool hasBounds = false;
     bool unsupported = false;
 
     const auto updateBounds = [&](Evpu left, Evpu right) {
-        const Evpu normalizedLeft = std::min(left, right);
-        const Evpu normalizedRight = std::max(left, right);
-        minLeft = hasBounds ? std::min(minLeft, normalizedLeft) : normalizedLeft;
-        maxRight = hasBounds ? std::max(maxRight, normalizedRight) : normalizedRight;
+        const Evpu normalizedLeft = (std::min)(left, right);
+        const Evpu normalizedRight = (std::max)(left, right);
+        minLeft = hasBounds ? (std::min)(minLeft, normalizedLeft) : normalizedLeft;
+        maxRight = hasBounds ? (std::max)(maxRight, normalizedRight) : normalizedRight;
         hasBounds = true;
     };
 
@@ -783,10 +783,10 @@ std::optional<Evpu> ShapeDef::calcWidth() const
         case ShapeDefInstructionType::StartObject: {
             const auto* data = std::get_if<ShapeDefInstruction::StartObject>(&inst.data);
             if (data) {
-                if (data->left == std::numeric_limits<Evpu>::min() ||
-                    data->right == std::numeric_limits<Evpu>::min() ||
-                    data->left == std::numeric_limits<Evpu>::max() ||
-                    data->right == std::numeric_limits<Evpu>::max()) {
+                if (data->left == (std::numeric_limits<Evpu>::min)() ||
+                    data->right == (std::numeric_limits<Evpu>::min)() ||
+                    data->left == (std::numeric_limits<Evpu>::max)() ||
+                    data->right == (std::numeric_limits<Evpu>::max)()) {
                     unsupported = true;
                     return false;
                 }
@@ -797,10 +797,10 @@ std::optional<Evpu> ShapeDef::calcWidth() const
         case ShapeDefInstructionType::StartGroup: {
             const auto* data = std::get_if<ShapeDefInstruction::StartGroup>(&inst.data);
             if (data) {
-                if (data->left == std::numeric_limits<Evpu>::min() ||
-                    data->right == std::numeric_limits<Evpu>::min() ||
-                    data->left == std::numeric_limits<Evpu>::max() ||
-                    data->right == std::numeric_limits<Evpu>::max()) {
+                if (data->left == (std::numeric_limits<Evpu>::min)() ||
+                    data->right == (std::numeric_limits<Evpu>::min)() ||
+                    data->left == (std::numeric_limits<Evpu>::max)() ||
+                    data->right == (std::numeric_limits<Evpu>::max)()) {
                     unsupported = true;
                     return false;
                 }
