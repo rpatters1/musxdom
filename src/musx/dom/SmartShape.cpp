@@ -422,7 +422,7 @@ bool others::SmartShape::calcIsUsedAsTieEnd(const EntryInfoPtr& forStartEntry) c
     }
     // end may be left of the EDU position, but not more than one space to the right.
     // start must be at least one space to the left.
-    constexpr int MAX_LEFT = -3 * EVPU_PER_SPACE; // adjust value if necessary
+    constexpr auto MAX_LEFT = -3 * EVPU_PER_SPACE; // adjust value if necessary
     return endOffset <= EVPU_PER_SPACE && endOffset >= MAX_LEFT  && startOffset <= -EVPU_PER_SPACE;
 }
 

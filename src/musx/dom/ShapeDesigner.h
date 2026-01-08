@@ -510,9 +510,9 @@ public:
         Clef = 9            ///< Corresponds to "clef" in XML.
     };
 
-    Cmper instructionList;  ///< Instruction list @ref Cmper. (xml node is `<instList>`)
-    Cmper dataList;         ///< Instruction data list @ref Cmper.
-    ShapeType shapeType;    ///< Shape type (specifies which type of entity this shape pertains to)
+    Cmper instructionList{};    ///< Instruction list @ref Cmper. (xml node is `<instList>`)
+    Cmper dataList{};           ///< Instruction data list @ref Cmper.
+    ShapeType shapeType{};      ///< Shape type (specifies which type of entity this shape pertains to)
 
     /// @brief Returns true if this shape does not draw anything.
     bool isBlank() const
