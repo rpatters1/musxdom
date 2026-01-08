@@ -472,9 +472,9 @@ public:
     static const xml::XmlElementArray<Entry>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 
 private:
-    EntryNumber m_entnum;   ///< Entry number.
-    EntryNumber m_prev;     ///< Previous entry number in the list. (0 if none)
-    EntryNumber m_next;     ///< Next entry number in the list. (0 if none)
+    EntryNumber m_entnum{}; ///< Entry number.
+    EntryNumber m_prev{};   ///< Previous entry number in the list. (0 if none)
+    EntryNumber m_next{};   ///< Next entry number in the list. (0 if none)
 };
 
 class EntryInfo;

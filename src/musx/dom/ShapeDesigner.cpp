@@ -831,6 +831,10 @@ std::optional<Evpu> ShapeDef::calcWidth() const
 
 bool ShapeDef::iterateInstructions(std::function<bool(ShapeDefInstructionType, std::vector<int>)> callback) const
 {
+    if (instructionList == 0 && dataList == 0) {
+        return true; // nothing to do if no data
+    }
+
     auto insts = getDocument()->getOthers()->get<ShapeInstructionList>(getRequestedPartId(), instructionList);
     auto data = getDocument()->getOthers()->get<ShapeData>(getRequestedPartId(), dataList);
     bool result = true;
