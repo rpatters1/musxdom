@@ -505,6 +505,57 @@ int EntryInfoPtr::getVoice() const
     return int((*this)->getEntry()->voice2) + 1;
 }
 
+bool EntryInfoPtr::calcContainsPitchContent(const EntryInfoPtr& src, bool compareConcert) const
+{
+    if (!*this || !src) {
+        return false;
+    }
+    if (isSameEntry(src)) {
+        return true;
+    }
+    if (calcDisplaysAsRest() || src.calcDisplaysAsRest()) {
+        return false;
+    }
+
+    const auto entryThis = (*this)->getEntry();
+    const auto entrySrc  = src->getEntry();
+
+    if (entrySrc->notes.size() > entryThis->notes.size()) {
+        return false;
+    }
+
+    const bool sameKeys = this->getFrame()->keySignature->key == src.getFrame()->keySignature->key;
+
+    size_t thisIndex = 0;
+    for (size_t srcIndex = 0; srcIndex < entrySrc->notes.size(); ++srcIndex) {
+        const auto noteSrc = NoteInfoPtr(src, srcIndex);
+        bool found = false;
+
+        for (; thisIndex < entryThis->notes.size(); ++thisIndex) {
+            const auto noteThis = NoteInfoPtr(*this, thisIndex);
+            if (sameKeys || !compareConcert) {
+                if (noteThis->harmLev == noteSrc->harmLev && noteThis->harmAlt == noteSrc->harmAlt) {
+                    found = true;
+                    ++thisIndex;
+                    break;
+                }
+            } else {
+                auto [noteTypeThis, octaveThis, alterThis, staffLineThis] = noteThis.calcNotePropertiesConcert(true);
+                auto [noteTypeSrc, octaveSrc, alterSrc, staffLineSrc] = noteSrc.calcNotePropertiesConcert(true);
+                if (noteTypeThis == noteTypeSrc && octaveThis == octaveSrc && alterThis == alterSrc) {
+                    found = true;
+                    ++thisIndex;
+                    break;
+                }
+            }
+        }
+        if (!found) {
+            return false;
+        }
+    }
+    return true;
+}
+
 bool EntryInfoPtr::calcIsSamePitchContent(const EntryInfoPtr& src, bool compareConcert) const
 {
     if (!*this || !src) {
@@ -1952,6 +2003,27 @@ int EntryInfoPtr::calcCrossStaffDirectionForAll(DeferredReference<MusxInstanceLi
     return crossStaffDirectionFound;
 }
 
+std::optional<StaffCmper> EntryInfoPtr::calcCrossedStaffForAll() const
+{
+    auto entry = (*this)->getEntry();
+    if (!entry->isNote) {
+        return std::nullopt;
+    }
+    std::optional<StaffCmper> result;
+    for (size_t x = 0; x < entry->notes.size(); x++) {
+        if (!entry->notes[x]->crossStaff) {
+            return std::nullopt; // at least one note is not crossed.
+        }
+        StaffCmper noteStaff =  NoteInfoPtr(*this, x).calcStaff();
+        if (!result) {
+            result = noteStaff;
+        } else if (result != noteStaff) {
+            return std::nullopt; // not all notes crossed to same staff.
+        }
+    }
+    return result;
+}
+
 bool EntryInfoPtr::calcIsSingletonGrace() const
 {
     if ((*this)->getEntry()->graceNote) {
@@ -2023,6 +2095,38 @@ bool EntryInfoPtr::calcIsGlissToGraceEntry() const
         }
     }
     return false;
+}
+
+bool EntryInfoPtr::iterateStartingSmartShapes(std::function<bool(const MusxInstance<others::SmartShape>&)> callback, bool findExact) const
+{
+    const auto staffId = getStaff();
+    const auto measId = getMeasure();
+    const auto entry = (*this)->getEntry();
+    const auto entryNumber = entry->getEntryNumber();
+    const auto doc = entry->getDocument();
+    const auto partId = getFrame()->getRequestedPartId();
+    const auto measShapeAssigns = doc->getOthers()->getArray<others::SmartShapeMeasureAssign>(partId, measId);
+    for (const auto& assign : measShapeAssigns) {
+        if (const auto shape = doc->getOthers()->get<others::SmartShape>(partId, assign->shapeNum)) {
+            const auto& startPoint = *shape->startTermSeg->endPoint;
+            if (startPoint.entryNumber == entryNumber) {
+                if (!callback(shape)) {
+                    return false;
+                }
+                continue;
+            }
+            if (startPoint.staffId != staffId || startPoint.measId != measId) {
+                continue;
+            }
+            const auto startEntry = startPoint.calcAssociatedEntry(partId, findExact);
+            if (startEntry.isSameEntry(*this)) {
+                if (!callback(shape)) {
+                    return false;
+                }
+            }
+        }
+    }
+    return true;
 }
 
 // *********************************************
@@ -2628,9 +2732,10 @@ StaffCmper NoteInfoPtr::calcStaff() const
 {
     if ((*this)->crossStaff) {
         const auto entry = m_entry->getEntry();
-        const auto noteRestOptions = entry->getDocument()->getOptions()->get<options::NoteRestOptions>();
+        const auto doc = entry->getDocument();
+        const auto noteRestOptions = doc->getOptions()->get<options::NoteRestOptions>();
         if (!noteRestOptions || noteRestOptions->doCrossStaffNotes) {
-            if (auto crossStaff = entry->getDocument()->getDetails()->getForNote<details::CrossStaff>(*this)) {
+            if (auto crossStaff = doc->getDetails()->getForNote<details::CrossStaff>(*this)) {
                 return crossStaff->staff;
             }
         }
@@ -2792,6 +2897,37 @@ bool NoteInfoPtr::calcIsIncludedInVoicing() const
         return partVoicing->calcShowsNote(*this);
     }
     return true;
+}
+
+NoteInfoPtr NoteInfoPtr::calcArpeggiatedTieToNote(std::optional<bool>* isTiedOver) const
+{
+    const auto entryInfoPtr = getEntryInfo();
+    const auto entry = entryInfoPtr->getEntry();
+    if (entry->notes.size() != 1 || !entry->isNote) {
+        return {};
+    }
+    auto result = NoteInfoPtr{};
+    if (isTiedOver) {
+        *isTiedOver = std::nullopt;
+    }
+    entryInfoPtr.iterateStartingSmartShapes([&](const MusxInstance<others::SmartShape>& shape) {
+        result = shape->calcArpeggiatedTieToNote(entryInfoPtr);
+        using ST = others::SmartShape::ShapeType;
+        if (isTiedOver && result) {
+            switch (shape->shapeType) {
+            case ST::SlurUp:
+                *isTiedOver = true;
+                break;
+            case ST::SlurDown:
+                *isTiedOver = false;
+                break;
+            default:
+                *isTiedOver = std::nullopt;
+            }
+        }
+        return !result; // keep searching until we find a result
+    });
+    return result;
 }
 
 } // namespace dom

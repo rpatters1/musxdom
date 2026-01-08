@@ -508,6 +508,17 @@ public:
         );
         return result / Edu(NoteType::Whole);
     }
+    
+    /// @brief Returns the beat value (duration) at the given EDU position.
+    ///
+    /// Each TimeSigComponent is treated as a run of identical beats:
+    /// - The beat value is the sum of comp.units (in EDU).
+    /// - The number of beats is the sum of comp.counts (as util::Fraction).
+    ///
+    /// @param eduPosition Position from the start of the measure, in EDU.
+    /// @return Beat value at @p eduPosition as a fraction of a whole note.
+    ///         Returns 0 if no beat information is available.
+    util::Fraction calcBeatValueAt(Edu eduPosition) const;
 
     /// @brief returns whether the two time signatures represent the same time signature
     bool isSame(const TimeSignature& src) const;

@@ -130,6 +130,14 @@ public:
     /// @brief Calculates the global position of the endpoint within its measure, based on whether it is measure- or entry-attached
     util::Fraction calcGlobalPosition() const;
 
+    /// @brief Compares the metric position of two endpoints.
+    /// @param other The endpoint to compare.
+    /// @return Integer value where
+    ///         - negative (-1) means this is before @p other.
+    ///         - 0 means the endpoints have the same metric position.
+    ///         - positive (+1) means this is after @p other.
+    int compareMetricPosition(const EndPoint& other) const;
+
     /// @brief Calculates the entry associated with the endpoint.
     /// @note This function does not check for an actual assignment. It simply returns an entry the endpoint would be associated
     /// with if it were assigned. Use #calcIsAssigned to determine if the endpoint is actually assigned.
@@ -164,6 +172,19 @@ public:
     DirectionType contextDir{};             ///< The direction type for this adjustment.
     EntryConnectionType contextEntCnct{};   ///< The entry conntection type for this adjustment.
 
+    /// @brief Returns the effective horizontal offset, taking into account whether the endpoint is active.
+    Evpu calcHorzOffset() const
+    { return active ? horzOffset : 0; }
+
+    /// @brief Returns the effective vertical offset, taking into account whether the endpoint is active.
+    Evpu calcVertOffset() const
+    { return active ? vertOffset : 0; }
+
+    /// @brief Returns true if the two intances of @ref EndPointAdjustment have connection types that allow
+    /// their vertical offsets to be compared.
+    /// @param other The @ref EndPointAdjustment to compare.
+    bool calcHasVerticalEquivalentConnection(const EndPointAdjustment& other) const;
+
     static const xml::XmlElementArray<EndPointAdjustment>& xmlMappingArray();    ///< Required for musx::factory::FieldPopulator.
 };
 
@@ -179,6 +200,13 @@ namespace others {
  */
 class SmartShape : public OthersBase
 {
+private:
+    /// @brief Calculates if this smart shape is potentially being used as a tie.
+    bool calcIsPotentialTie(const EntryInfoPtr& forStartEntry) const;
+
+    /// @brief Calculates if this smart shape is potentially being used as a forward tie.
+    bool calcIsPotentialForwardTie(const EntryInfoPtr& forStartEntry) const;
+
 public:
     /** @brief Constructor function */
     explicit SmartShape(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
@@ -355,6 +383,23 @@ public:
     /// @brief Creates a music range for the SmartShape in global EDUs.
     /// @return The created music range.
     MusicRange createGlobalMusicRange() const;
+
+    /// @brief Returns the tied-to note if this slur is being used as an arpeggiated tie on the specified entry.
+    ///
+    /// - The start entry must consist only of a single note.
+    /// - There must be no note that the start entry's note could be tied to.
+    /// @param forStartEntry The entry to check.
+    /// @return The NoteInfoPtr that is the tied-to note for this note, or null if none.
+    NoteInfoPtr calcArpeggiatedTieToNote(const EntryInfoPtr& forStartEntry) const;
+
+    /// @brief Returns true if this slur is being used as a laissez vibrer tie on the specified entry.
+    /// It is used by #EntryInfoPtr::calcHasLaissezVibrerTie, which imposes additional rules and checks.
+    /// @param forStartEntry The entry to check.
+    bool calcIsLaissezVibrerTie(const EntryInfoPtr& forStartEntry) const;
+
+    /// @brief Returns true if this slur is being used as a tie end (for example, on a 2nd ending.)
+    /// @param forStartEntry The entry to check.
+    bool calcIsUsedAsTieEnd(const EntryInfoPtr& forStartEntry) const;
 
     /// @brief Iterates all the entries that start within the staves and music range defined by the SmartShape. It iterates by staff and then measure.
     /// @param iterator The iterator function. Return `false` from this function to stop iterating.

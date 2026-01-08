@@ -181,3 +181,68 @@ TEST(ShapeDefTest, InterateInstructions)
     EXPECT_EQ(nextIndex, shapeList->instructions.size()) << "iteration value " << nextIndex
         << " does not equal number of instructions " << shapeList->instructions.size();
 }
+
+TEST(ShapeDefTest, RecognizeShapes)
+{
+    std::vector<char> enigmaXml;
+    musxtest::readFile(musxtest::getInputPath() / "shape_recognize.enigmaxml", enigmaXml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(enigmaXml);
+    ASSERT_TRUE(doc);
+
+    constexpr size_t EXPECTED_VALUES = 11;
+    constexpr std::array<Cmper, EXPECTED_VALUES> expectedCmpers = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 };
+    constexpr std::array<std::optional<KnownShapeDefType>, EXPECTED_VALUES> expectedTypes =
+    {
+        std::nullopt,
+        std::nullopt,
+        std::nullopt,
+        std::nullopt,
+        KnownShapeDefType::TenutoMark,
+        KnownShapeDefType::Blank,
+        KnownShapeDefType::SlurTieCurveRight,
+        KnownShapeDefType::SlurTieCurveLeft,
+        std::nullopt,
+        std::nullopt,
+        std::nullopt,
+    };
+
+    auto shapes = doc->getOthers()->getArray<others::ShapeDef>(SCORE_PARTID);
+    ASSERT_EQ(shapes.size(), EXPECTED_VALUES);
+    size_t x = 0;
+    for (const auto& shape : shapes) {
+        ASSERT_LT(x, shapes.size());
+        EXPECT_EQ(shape->getCmper(), expectedCmpers[x]) << "shape cmper " << shape->getCmper() << " is not expected value " << expectedCmpers[x];
+        EXPECT_EQ(shape->recognize(), expectedTypes[x]) << "recognized shape type is not the expected value for cmper " << shape->getCmper();
+        x++;
+    }
+}
+
+TEST(ShapeDefTest, CalculateWidths)
+{
+    std::vector<char> enigmaXml;
+    musxtest::readFile(musxtest::getInputPath() / "shape_recognize.enigmaxml", enigmaXml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(enigmaXml);
+    ASSERT_TRUE(doc);
+
+    auto shapes = doc->getOthers()->getArray<others::ShapeDef>(SCORE_PARTID);
+    ASSERT_EQ(shapes.size(), 11);
+
+    constexpr std::array<std::optional<Evpu>, 11> expectedWidths = {
+        std::nullopt,          // cmper 1: text shape
+        std::nullopt,          // cmper 2: text shape
+        std::nullopt,          // cmper 3: no bounding box
+        std::nullopt,          // cmper 4: text shape
+        Evpu{28},              // cmper 5: tenuto
+        Evpu{0},               // cmper 6: blank shape
+        Evpu{60},              // cmper 7: tie slur right
+        Evpu{60},              // cmper 8: tie slur left
+        Evpu{170},             // cmper 9: scaled slur
+        Evpu{142},             // cmper 10: leftward slur
+        Evpu{56},              // cmper 11: line too wide to be tenuto
+    };
+
+    for (size_t i = 0; i < shapes.size(); ++i) {
+        const auto width = shapes[i]->calcWidth();
+        EXPECT_EQ(width, expectedWidths[i]) << "width mismatch for cmper " << shapes[i]->getCmper();
+    }
+}

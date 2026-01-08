@@ -1505,7 +1505,7 @@ public:
     std::string suffix;         ///< Text suffix for measure numbers (encoded UTF-8).
 
     bool countFromOne{};        ///< Start counting from 1 rather than 0, e.g., "1, 2, 3, 4" numbering style (in conjuction with base 10)
-    bool noZero;                ///< Indicates the base has no zero value: true for alpha sequences and false for numeric sequences
+    bool noZero{};              ///< Indicates the base has no zero value: true for alpha sequences and false for numeric sequences
     bool doubleUp{};            ///< Indicates "a, b, c...aa, bb, cc" number style: the symbols are repeated when they exceed the base.
     bool time{};                ///< Display real time sequences rather than numbers or letters.
     bool includeHours{};        ///< Display hours (when showing real time measure numbers)
@@ -2700,7 +2700,7 @@ public:
     Evpu extraStartSystemSpace{};   ///< Extra space at the start of the staff system in Evpu.
     Evpu extraEndSystemSpace{};     ///< Extra space at the end of the staff system in Evpu.
 
-    PageCmper pageId;               ///< The page this system is on. This values is not in the xml but is computed by the factory.
+    PageCmper pageId{};             ///< The page this system is on. This values is not in the xml but is computed by the factory.
 
     /// @brief Encapsulates the weird Finale fact that #endMeas is actually one past the end of the system
     /// @return The actual last measure on the system.
@@ -2828,7 +2828,7 @@ public:
                                     ///< The xml provides one of two nodes for this field: `<relativeRatio>` or `<absoluteRatio>`.
     Edu eduPosition{};              ///< The position within the measure. (xml node is `<eldur>`)
     int unit{};                     ///< Hardware ticks/sec. For Macs this is 1000.
-    bool isRelative;                ///< A computed value that determines if #ratio is relative or absolute.
+    bool isRelative{};              ///< A computed value that determines if #ratio is relative or absolute.
                                     ///< This value is not represented in the xml but instead captures whether the #ratio
                                     ///< property was populated from `<relativeRatio>` or `<absoluteRatio>`.
 
@@ -2928,8 +2928,8 @@ public:
     Cmper execShape{};                              ///< Executable shape Cmper for playback (@ref ShapeDef)
     int auxData1{};                                 ///< Auxiliary data for the expression. (xml node is "auxdata1")
     int playPass{};                                 ///< "Play Only on Pass" value.
-    bool hideMeasureNum;                            ///< "Hide Measure Numbers" (used on Rehearsal Marks)
-    bool matchPlayback;                             ///< "Match Playback to Metronome Marking Text"
+    bool hideMeasureNum{};                          ///< "Hide Measure Numbers" (used on Rehearsal Marks)
+    bool matchPlayback{};                           ///< "Match Playback to Metronome Marking Text"
     bool useAuxData{};                              ///< Whether auxiliary data is used.
     bool hasEnclosure{};                            ///< Whether the text expression has an enclosure. (xml node is "newEnclosure")
     bool breakMmRest{};                             ///< Whether the text breaks multimeasure rests.

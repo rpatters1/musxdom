@@ -41,6 +41,7 @@ namespace others {
 class Frame;
 class PartVoicing;
 class PercussionNoteInfo;
+class SmartShape;
 class Staff;
 class StaffComposite;
 class StaffUsed;
@@ -471,9 +472,9 @@ public:
     static const xml::XmlElementArray<Entry>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 
 private:
-    EntryNumber m_entnum;   ///< Entry number.
-    EntryNumber m_prev;     ///< Previous entry number in the list. (0 if none)
-    EntryNumber m_next;     ///< Next entry number in the list. (0 if none)
+    EntryNumber m_entnum{}; ///< Entry number.
+    EntryNumber m_prev{};   ///< Previous entry number in the list. (0 if none)
+    EntryNumber m_next{};   ///< Next entry number in the list. (0 if none)
 };
 
 class EntryInfo;
@@ -562,6 +563,21 @@ public:
     /// @return true if both pointers are non-null and all required properties match; false otherwise.
     [[nodiscard]]
     bool calcIsSamePitchContentAndDuration(const EntryInfoPtr& src, bool compareConcert = true, bool requireSameVoice = true, bool requireSameGraceElapsedDura = false) const;
+
+    /// @brief Returns whether @p src represent the same notated value.
+    ///
+    /// This function performs the same pitch comparison as #calcIsSamePitchContent but only requires that
+    /// the pitches in @p src be included in this entry. This entry may contain other pitches.
+    ///
+    /// @note Returns false if either entry displays as a rest.
+    ///
+    /// @param src The EntryInfoPtr to compare.
+    /// @param compareConcert If true, compares concert pitches. If false, compares scale degrees
+    ///        relative to the prevailing key.
+    ///
+    /// @return true if both pointers are non-null and all required properties match; false otherwise.
+    [[nodiscard]]
+    bool calcContainsPitchContent(const EntryInfoPtr& src, bool compareConcert = true) const;
 
     /// @brief Returns the frame.
     [[nodiscard]] std::shared_ptr<const EntryFrame> getFrame() const { return m_entryFrame; }
@@ -674,7 +690,8 @@ public:
     [[nodiscard]] EntryInfoPtr getPreviousInBeamGroupAcrossBars(BeamIterationMode beamIterationMode = BeamIterationMode::Normal) const;
 
     /// @brief Calculates if an entry displays as a rest.
-    /// @todo Eventually calcDisplaysAsRest should take into account voiced parts.
+    ///
+    /// This function takes voiced parts into account if the document's #PartVoicingPolicy applies part voicing. 
     [[nodiscard]] bool calcDisplaysAsRest() const;
 
     /// @brief Calculates the top and bottom staff positions of the entry, taking into account percussion notes. This function must not
@@ -851,6 +868,11 @@ public:
     ///   - **−1** if all cross-staffed notes cross downward to a lower staff.
     [[nodiscard]] int calcCrossStaffDirectionForAll(DeferredReference<MusxInstanceList<others::StaffUsed>> staffList = {}) const;
 
+    /// @brief Calculates all the notes in this entry are crossed to the same staff. 
+    /// @return The crossed staffId if all notes are crossed to it. If no crossed notes, or if no all cross notes are crossed
+    ///         to the same staff, returns std::nullopt.
+    [[nodiscard]] std::optional<StaffCmper> calcCrossedStaffForAll() const;
+
     /// @brief Return true if this entry is a grace note and the only grace in the sequence at this location.
     [[nodiscard]] bool calcIsSingletonGrace() const;
 
@@ -902,7 +924,25 @@ public:
     /// is not a grace note.
     [[nodiscard]] EntryInfoPtr findMainEntryForGraceNote(bool ignoreRests = false) const;
 
-    /// @brief Explicit operator< for std::map
+    /// @brief Iterates all smart shapes whose start anchor resolves to this entry.
+    ///
+    /// Invokes the supplied predicate for each @ref others::SmartShape whose *starting*
+    /// attachment is determined to be associated with this entry. This includes smart
+    /// shapes that explicitly start on this entry as well as beat-attached shapes whose
+    /// anchor does not directly reference the entry but is resolved to it using
+    /// #smartshape::EndPoint::calcAssociatedEntry.
+    ///
+    /// Iteration stops early if the predicate returns false.
+    ///
+    /// @param callback Function invoked for each matching smart shape. Returning
+    ///        false aborts iteration.
+    /// @param findExact If true, only match beat-attached shapes that match the entry's exact
+    ///        position. This defaults to false.
+    /// @return True if iteration completed normally; false if terminated early by
+    ///         the callback.
+    bool iterateStartingSmartShapes(std::function<bool(const MusxInstance<others::SmartShape>&)> callback, bool findExact = false) const;
+        
+        /// @brief Explicit operator< for std::map
     bool operator<(const EntryInfoPtr& other) const
     {
         if (m_entryFrame != other.m_entryFrame)
@@ -1643,6 +1683,15 @@ public:
     /// even if the document's `PartVoicingPolicy` is to ignore part voicing.
     [[nodiscard]]
     bool calcIsIncludedInVoicing() const;
+
+    /// @brief If this note has a smart shape acting as an arpeggio tie, return the tied-to note. If this note
+    /// is part of a chord, the function always returns null.
+    /// @param [out] isTiedOver An option out parameter returning whether the ties if force over (true),
+    ///         forced under (false) or unspecified (std::nullopt).
+    /// @return If the arpeggio tie slur exists return true. Null if it does not or if this note is part of
+    /// a chord.
+    [[nodiscard]]
+    NoteInfoPtr calcArpeggiatedTieToNote(std::optional<bool>* isTiedOver = nullptr) const;
 
 private:
     /// @brief Returns true if the two notes represent the same concert pitch or
