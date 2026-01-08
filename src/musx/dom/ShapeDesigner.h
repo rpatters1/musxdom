@@ -189,81 +189,81 @@ struct ShapeDefInstruction
 
     /// @brief Holds the parsed data for a Bracket instruction.
     struct Bracket {
-        details::Bracket::BracketStyle bracketStyle; ///< The style of bracket being created.
+        details::Bracket::BracketStyle bracketStyle{}; ///< The style of bracket being created.
     };
 
     /// @brief Holds the parsed data for a CloneChar instruction.
     struct CloneChar {
-        Evpu dx;            ///< The X coordinate of the endpoint (relative to current point).
-        Evpu dy;            ///< The Y coordinate of the endpoint (currently ignored).
-        int unused2;        ///< Unused/undocumented field at index 2.
-        int  baselineShift; ///< Baseline shift in EMs (1/1000 of current point size).
-        char32_t codePoint; ///< The 32-bit codepoint of the character to clone.
+        Evpu dx{};            ///< The X coordinate of the endpoint (relative to current point).
+        Evpu dy{};            ///< The Y coordinate of the endpoint (currently ignored).
+        int unused2{};        ///< Unused/undocumented field at index 2.
+        int  baselineShift{}; ///< Baseline shift in EMs (1/1000 of current point size).
+        char32_t codePoint{}; ///< The 32-bit codepoint of the character to clone.
     };
 
     /// @brief Holds the parsed data for a CurveTo instruction.
     struct CurveTo {
-        Evpu c1dx; ///< Relative X offset of the first control point.
-        Evpu c1dy; ///< Relative Y offset of the first control point.
-        Evpu c2dx; ///< Relative X offset of the second control point.
-        Evpu c2dy; ///< Relative Y offset of the second control point.
-        Evpu edx;  ///< Relative X offset of the end point.
-        Evpu edy;  ///< Relative Y offset of the end point.
+        Evpu c1dx{}; ///< Relative X offset of the first control point.
+        Evpu c1dy{}; ///< Relative Y offset of the first control point.
+        Evpu c2dx{}; ///< Relative X offset of the second control point.
+        Evpu c2dy{}; ///< Relative Y offset of the second control point.
+        Evpu edx{};  ///< Relative X offset of the end point.
+        Evpu edy{};  ///< Relative Y offset of the end point.
     };
 
     /// @brief Holds the parsed data for a DrawChar instruction.
     struct DrawChar {
-        char32_t codePoint; ///< The 32-bit codepoint of the character to draw.
+        char32_t codePoint{}; ///< The 32-bit codepoint of the character to draw.
     };
 
     /// @brief Holds the parsed data for an Ellipse instruction.
     struct Ellipse {
-        Evpu width;  ///< The width of the bounding rectangle.
-        Evpu height; ///< The height of the bounding rectangle.
+        Evpu width{};  ///< The width of the bounding rectangle.
+        Evpu height{}; ///< The height of the bounding rectangle.
     };
 
     /// @brief Holds the parsed data for an ExternalGraphic instruction.
     struct ExternalGraphic {
-        Evpu width;   ///< The width of the placed graphic.
-        Evpu height;  ///< The height of the placed graphic.
-        Cmper cmper;  ///< The cmper of the graphic. See #others::PageGraphicAssign::graphicCmper for explanation.
+        Evpu width{};   ///< The width of the placed graphic.
+        Evpu height{};  ///< The height of the placed graphic.
+        Cmper cmper{};  ///< The cmper of the graphic. See #others::PageGraphicAssign::graphicCmper for explanation.
     };
 
     /// @brief Holds the parsed data for a LineWidth instruction.
     struct LineWidth {
-        Efix efix; ///< The line width in Efix units.
+        Efix efix{}; ///< The line width in Efix units.
     };
 
     /// @brief Holds the parsed data for a Rectangle instruction.
     struct Rectangle {
-        Evpu width;  ///< The width of the rectangle.
-        Evpu height; ///< The height of the rectangle.
+        Evpu width{};  ///< The width of the rectangle.
+        Evpu height{}; ///< The height of the rectangle.
     };
 
     /// @brief Holds the parsed data for an RLineTo instruction.
     struct RLineTo {
-        Evpu dx; ///< The relative X coordinate delta in Evpu.
-        Evpu dy; ///< The relative Y coordinate delta in Evpu.
+        Evpu dx{}; ///< The relative X coordinate delta in Evpu.
+        Evpu dy{}; ///< The relative Y coordinate delta in Evpu.
     };
 
     /// @brief Holds the parsed data for an RMoveTo instruction.
     struct RMoveTo {
-        Evpu dx; ///< The relative X coordinate delta in Evpu.
-        Evpu dy; ///< The relative Y coordinate delta in Evpu.
+        Evpu dx{}; ///< The relative X coordinate delta in Evpu.
+        Evpu dy{}; ///< The relative Y coordinate delta in Evpu.
     };
 
     /// @brief Holds the parsed data for a SetArrowhead instruction.
     struct SetArrowhead {
-        int startArrowId; ///< Identifier of the start arrowhead.
-        int endArrowId;   ///< Identifier of the end arrowhead.
-        int startFlags;   ///< Flags for the start arrowhead (built-in vs custom, etc.).
-        int endFlags;     ///< Flags for the end arrowhead (built-in vs custom, etc.).
+        int startArrowId{}; ///< Identifier of the start arrowhead.
+        int endArrowId{};   ///< Identifier of the end arrowhead.
+        int startFlags{};   ///< Flags for the start arrowhead (built-in vs custom, etc.).
+        int endFlags{};     ///< Flags for the end arrowhead (built-in vs custom, etc.).
     };
 
     /// @brief Holds the parsed data for a SetDash instruction.
     struct SetDash {
-        Efix dashLength;  ///< Length of each dash segment.
-        Efix spaceLength; ///< Space between dashes.
+        Efix dashLength{};  ///< Length of each dash segment.
+        Efix spaceLength{}; ///< Space between dashes.
     };
 
     /// @brief Holds the parsed data for a SetFont instruction.
@@ -276,50 +276,50 @@ struct ShapeDefInstruction
 
     /// @brief Holds the parsed data for a SetGray instruction.
     struct SetGray {
-        int gray; ///< Gray value between 0 (black) and 100 (white).
+        int gray{}; ///< Gray value between 0 (black) and 100 (white).
     };
 
     /// @brief Holds the parsed data for a Slur instruction.
     /// @details Same data layout as CurveTo, but rendered using the slur thickness settings.
     /// @note Finale stores these deltas in 1/16 Evpu units.
     struct Slur {
-        Evpu16ths c1dx; ///< Relative X offset of the first control point (1/16 Evpu units).
-        Evpu16ths c1dy; ///< Relative Y offset of the first control point (1/16 Evpu units).
-        Evpu16ths c2dx; ///< Relative X offset of the second control point (1/16 Evpu units).
-        Evpu16ths c2dy; ///< Relative Y offset of the second control point (1/16 Evpu units).
-        Evpu16ths edx;  ///< Relative X offset of the end point (1/16 Evpu units).
-        Evpu16ths edy;  ///< Relative Y offset of the end point (1/16 Evpu units).
+        Evpu16ths c1dx{}; ///< Relative X offset of the first control point (1/16 Evpu units).
+        Evpu16ths c1dy{}; ///< Relative Y offset of the first control point (1/16 Evpu units).
+        Evpu16ths c2dx{}; ///< Relative X offset of the second control point (1/16 Evpu units).
+        Evpu16ths c2dy{}; ///< Relative Y offset of the second control point (1/16 Evpu units).
+        Evpu16ths edx{};  ///< Relative X offset of the end point (1/16 Evpu units).
+        Evpu16ths edy{};  ///< Relative Y offset of the end point (1/16 Evpu units).
     };
 
     /// @brief Holds the parsed data for a StartObject instruction.
     struct StartObject {
-        Evpu originX;  ///< X coordinate of the origin point.
-        Evpu originY;  ///< Y coordinate of the origin point.
-        Evpu left;     ///< Left of the bounding rectangle.
-        Evpu top;      ///< Top of the bounding rectangle.
-        Evpu right;    ///< Right of the bounding rectangle.
-        Evpu bottom;   ///< Bottom of the bounding rectangle.
-        int  scaleX;   ///< X scale transform (scale ratio * 1000).
-        int  scaleY;   ///< Y scale transform (scale ratio * 1000).
-        int  rotation; ///< Rotation transform.
-        int  unused9;  ///< Undocumented/unused field at index 9.
-        int  unused10; ///< Undocumented/unused field at index 10.
+        Evpu originX{};  ///< X coordinate of the origin point.
+        Evpu originY{};  ///< Y coordinate of the origin point.
+        Evpu left{};     ///< Left of the bounding rectangle.
+        Evpu top{};      ///< Top of the bounding rectangle.
+        Evpu right{};    ///< Right of the bounding rectangle.
+        Evpu bottom{};   ///< Bottom of the bounding rectangle.
+        int  scaleX{};   ///< X scale transform (scale ratio * 1000).
+        int  scaleY{};   ///< Y scale transform (scale ratio * 1000).
+        int  rotation{}; ///< Rotation transform.
+        int  unused9{};  ///< Undocumented/unused field at index 9.
+        int  unused10{}; ///< Undocumented/unused field at index 10.
     };
 
     /// @brief Holds the parsed data for a StartGroup instruction.
     /// @details Uses the same layout as StartObject.
     struct StartGroup {
-        Evpu originX;  ///< X coordinate of the origin point.
-        Evpu originY;  ///< Y coordinate of the origin point.
-        Evpu left;     ///< Left of the bounding rectangle.
-        Evpu top;      ///< Top of the bounding rectangle.
-        Evpu right;    ///< Right of the bounding rectangle.
-        Evpu bottom;   ///< Bottom of the bounding rectangle.
-        int  scaleX;   ///< X scale transform (scale ratio * 1000).
-        int  scaleY;   ///< Y scale transform (scale ratio * 1000).
-        int  rotation; ///< Rotation transform.
-        int  unused9;  ///< Undocumented/unused field at index 9.
-        int  unused10; ///< Undocumented/unused field at index 10.
+        Evpu originX{};  ///< X coordinate of the origin point.
+        Evpu originY{};  ///< Y coordinate of the origin point.
+        Evpu left{};     ///< Left of the bounding rectangle.
+        Evpu top{};      ///< Top of the bounding rectangle.
+        Evpu right{};    ///< Right of the bounding rectangle.
+        Evpu bottom{};   ///< Bottom of the bounding rectangle.
+        int  scaleX{};   ///< X scale transform (scale ratio * 1000).
+        int  scaleY{};   ///< Y scale transform (scale ratio * 1000).
+        int  rotation{}; ///< Rotation transform.
+        int  unused9{};  ///< Undocumented/unused field at index 9.
+        int  unused10{}; ///< Undocumented/unused field at index 10.
     };
 
     /// @brief Pen vertical alignment modes for the VerticalMode instruction.
