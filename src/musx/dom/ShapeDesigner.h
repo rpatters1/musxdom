@@ -523,10 +523,16 @@ public:
     /// @return true if all instructions were iterated. False if the callback function exited early.
     bool iterateInstructions(std::function<bool(const ShapeDefInstruction::Decoded&)> callback) const;
 
-
     /// @brief Determine if this is a recognized shape type
     /// @return If the shape is recognized, return its known type. Otherwise return std::nullopt.
     std::optional<KnownShapeDefType> recognize() const;
+
+    /// @brief Possible slur contour orientations.
+    enum class SlurContourDirection
+    {
+        Up,
+        Down
+    };
 
     /// @brief Calculate the width of the shape in Evpu, if it can be determined.
     /// @details The width is derived from stored StartObject/StartGroup bounding boxes.
@@ -535,6 +541,11 @@ public:
     /// require replaying the drawing instructions with Finale's rendering context.
     /// @return The width in Evpu or std::nullopt if it cannot be computed.
     std::optional<Evpu> calcWidth() const;
+
+    /// @brief Determine the slur contour orientation, if this shape is a slur/tie.
+    /// @details Uses StartObject bounding boxes to determine whether the contour arches upward or downward.
+    /// Returns std::nullopt if the instructions do not represent a slur/tie or if Finale's sentinel bounds appear.
+    std::optional<SlurContourDirection> calcSlurContour() const;
 
     constexpr static std::string_view XmlNodeName = "shapeDef"; ///< The XML node name for this type.
     static const xml::XmlElementArray<ShapeDef>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
