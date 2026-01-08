@@ -299,10 +299,50 @@ CategoryStaffListSet MeasureExprAssign::createStaffListSet() const
     return CategoryStaffListSet(getDocument(), getRequestedPartId(), staffList);
 }
 
+std::optional<HorizontalMeasExprAlign> MeasureExprAssign::calcEntryAlignmentType() const
+{
+    auto checkAlign = [](const auto& def) -> std::optional<HorizontalMeasExprAlign> {
+        using InstanceType = std::remove_cv_t<std::remove_reference_t<decltype(def)>>;
+        using ElementType = typename InstanceType::element_type;
+        using Def = std::remove_const_t<ElementType>;
+        static_assert(std::is_same_v<Def, TextExpressionDef> || std::is_same_v<Def, ShapeExpressionDef>,
+            "Def must be an expression definition.");
+        if (!def) {
+            return std::nullopt; // allows direct pass-in of getTextExpression and getShapeExpression.
+        }
+        const HorizontalMeasExprAlign val = def->horzMeasExprAlign;
+        switch(val)
+        {
+            case HorizontalMeasExprAlign::Manual:
+            case HorizontalMeasExprAlign::LeftOfAllNoteheads:
+            case HorizontalMeasExprAlign::LeftOfPrimaryNotehead:
+            case HorizontalMeasExprAlign::Stem:
+            case HorizontalMeasExprAlign::CenterPrimaryNotehead:
+            case HorizontalMeasExprAlign::CenterAllNoteheads:
+            case HorizontalMeasExprAlign::RightOfAllNoteheads:
+                return val;
+
+            default:
+                break;
+        }
+        return std::nullopt;
+    };
+
+    if (textExprId) {
+        return checkAlign(getTextExpression());
+    } else if (shapeExprId) {
+        return checkAlign(getShapeExpression());
+    }
+    return std::nullopt;
+}
+
 EntryInfoPtr MeasureExprAssign::calcAssociatedEntry() const
 {
     constexpr bool findExact = true;
     if (staffAssign > 0) {
+        if (!calcEntryAlignmentType()) {
+            return {};
+        }
         if (auto gfHold = details::GFrameHoldContext(getDocument(), getRequestedPartId(), staffAssign, getCmper())) {
             const auto matchLayer = layer ? std::make_optional(LayerIndex(layer - 1)) : std::nullopt;
             return gfHold.calcNearestEntry(util::Fraction::fromEdu(eduPosition), findExact, matchLayer, voice2);
@@ -364,6 +404,36 @@ bool MeasureExprAssign::calcIsHiddenByAlternateNotation() const
     } else {
         return staff->altHideOtherExpressions;
     }
+}
+
+std::optional<KnownShapeDefType> MeasureExprAssign::calcShapeType() const
+{
+    const auto shapeExp = getShapeExpression();
+    if (!shapeExp || shapeExp->shapeDef == 0) {
+        return std::nullopt;
+    }
+    const auto doc = getDocument();
+    auto shape = doc->getOthers()->get<others::ShapeDef>(getRequestedPartId(), shapeExp->shapeDef);
+    if (!shape) {
+        return std::nullopt;
+    }
+    return shape->recognize();
+}
+
+bool MeasureExprAssign::calcIsPotentialForwardTie(const EntryInfoPtr& forStartEntry) const
+{
+    using Align = HorizontalMeasExprAlign;
+    auto alignmentType = calcEntryAlignmentType();
+    if (!alignmentType || alignmentType == Align::LeftOfAllNoteheads || alignmentType == Align::Stem) {
+        return false;
+    }
+    if (calcShapeType() != KnownShapeDefType::SlurTieCurveRight) {
+        return false;
+    }
+    if (alignmentType == Align::RightOfAllNoteheads) {
+        return true;
+    }
+    return horzEvpuOff >= -EVPU_PER_SPACE;
 }
 
 // *******************************

@@ -45,6 +45,8 @@ namespace dom {
 class Entry;
 class NoteInfoPtr;
 
+enum class KnownShapeDefType;
+
 namespace details {
 class FretboardDiagram;
 class GFrameHold;
@@ -1297,6 +1299,16 @@ public:
  */
 class MeasureExprAssign : public OthersBase
 {
+private:
+    /// @brief Calculates the entry alignment type or std::nullopt if it does not align with entries.
+    [[nodiscard]] std::optional<HorizontalMeasExprAlign> calcEntryAlignmentType() const;
+
+    /// @brief Calculates the shape type of a shape expression if it is known.
+    [[nodiscard]] std::optional<KnownShapeDefType> calcShapeType() const;
+
+    /// @brief Calculates if this smart shape is potentially being used as a forward tie.
+    [[nodiscard]] bool calcIsPotentialForwardTie(const EntryInfoPtr& forStartEntry) const;
+
 public:
     /** @brief Constructor function */
     explicit MeasureExprAssign(const DocumentWeakPtr& document, Cmper ID, ShareMode shareMode, Cmper cmper, Inci inci)
@@ -2413,7 +2425,8 @@ public:
  *
  * This class is identified by the XML node name "shapeExprDef".
  */
-class ShapeExpressionDef : public OthersBase {
+class ShapeExpressionDef : public OthersBase
+{
 public:
     /**
      * @brief Constructor.
