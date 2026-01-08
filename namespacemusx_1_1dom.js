@@ -897,7 +897,9 @@ var namespacemusx_1_1dom =
     ] ],
     [ "KnownShapeDefType", "namespacemusx_1_1dom.html#a16d85e8ed9439b9a2ef071d38ffa0fd7", [
       [ "Blank", "namespacemusx_1_1dom.html#a16d85e8ed9439b9a2ef071d38ffa0fd7ae4ef81cce7e4e10033ebb10962dfdd5e", null ],
-      [ "TenutoMark", "namespacemusx_1_1dom.html#a16d85e8ed9439b9a2ef071d38ffa0fd7ac6cdf96e9804915f9f5c6771802805fd", null ]
+      [ "TenutoMark", "namespacemusx_1_1dom.html#a16d85e8ed9439b9a2ef071d38ffa0fd7ac6cdf96e9804915f9f5c6771802805fd", null ],
+      [ "SlurTieCurveRight", "namespacemusx_1_1dom.html#a16d85e8ed9439b9a2ef071d38ffa0fd7a98500bea154c4887dd3006c8001d0845", null ],
+      [ "SlurTieCurveLeft", "namespacemusx_1_1dom.html#a16d85e8ed9439b9a2ef071d38ffa0fd7aced4f5dff90dcb0f3434fa6e12cedbaa", null ]
     ] ],
     [ "LyricTextType", "namespacemusx_1_1dom.html#a15ce5f78a9bdae32abc605711086c991", [
       [ "Verse", "namespacemusx_1_1dom.html#a15ce5f78a9bdae32abc605711086c991a98cc99adc12166c3d8f086c0ccc2cde9", null ],

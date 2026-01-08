@@ -14,8 +14,10 @@ var classmusx_1_1dom_1_1EntryInfoPtr =
     [ "calcBeamMustStartHere", "classmusx_1_1dom_1_1EntryInfoPtr.html#a09ad33c9878ef3faf3795842f12f3182", null ],
     [ "calcBeamStubIsLeft", "classmusx_1_1dom_1_1EntryInfoPtr.html#adf09eb8a3925a1799ff4dad693ed7c5e", null ],
     [ "calcCanBeBeamed", "classmusx_1_1dom_1_1EntryInfoPtr.html#a0fe390fb7610741365bd69eef0f6a768", null ],
+    [ "calcContainsPitchContent", "classmusx_1_1dom_1_1EntryInfoPtr.html#a32be4982c899aa9232fa353654cb3a92", null ],
     [ "calcCreatesSingletonBeamLeft", "classmusx_1_1dom_1_1EntryInfoPtr.html#a9d1b60e641bfa618a7f8fe6b982aac66", null ],
     [ "calcCreatesSingletonBeamRight", "classmusx_1_1dom_1_1EntryInfoPtr.html#adb48db1bf8c0191d200259066363759a", null ],
+    [ "calcCrossedStaffForAll", "classmusx_1_1dom_1_1EntryInfoPtr.html#ac7ca81e419c833fc4e3c896c9a430041", null ],
     [ "calcCrossStaffDirectionForAll", "classmusx_1_1dom_1_1EntryInfoPtr.html#ab3bc2e754d93395c71759df365142d8e", null ],
     [ "calcDisplaysAsRest", "classmusx_1_1dom_1_1EntryInfoPtr.html#a91dd4f09e8c863732cfa52f13275995b", null ],
     [ "calcEntrySize", "classmusx_1_1dom_1_1EntryInfoPtr.html#aad8efac3646d0cfc7b3c193691b003e7", null ],
@@ -78,6 +80,7 @@ var classmusx_1_1dom_1_1EntryInfoPtr =
     [ "getStaff", "classmusx_1_1dom_1_1EntryInfoPtr.html#aa8b16c8007cbdbf5602207f581e26c30", null ],
     [ "getVoice", "classmusx_1_1dom_1_1EntryInfoPtr.html#a88dfe9aea6bce2d27557ea6e31e653ee", null ],
     [ "isSameEntry", "classmusx_1_1dom_1_1EntryInfoPtr.html#a45d85e3e02c2ce8fe6b5a891a9a0c795", null ],
+    [ "iterateStartingSmartShapes", "classmusx_1_1dom_1_1EntryInfoPtr.html#a26f97bd814099c2cbac95479de6dc8f3", null ],
     [ "operator bool", "classmusx_1_1dom_1_1EntryInfoPtr.html#af7ccc316e270150a457743bfdf30f28d", null ],
     [ "operator->", "classmusx_1_1dom_1_1EntryInfoPtr.html#acbc874af2cdeb4ad7e8a706ea8f85285", null ],
     [ "operator<", "classmusx_1_1dom_1_1EntryInfoPtr.html#aa247de0fb2eb2be22aaa12cf14266768", null ]

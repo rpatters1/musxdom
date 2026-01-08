@@ -24,7 +24,7 @@ var searchData=
   ['formatdate_21',['formatDate',['../structmusx_1_1util_1_1DateTime.html#a60abca6a57d6aa3b05f8675cae49ceb4',1,'musx::util::DateTime']]],
   ['formattime_22',['formatTime',['../structmusx_1_1util_1_1DateTime.html#ac53c15b2cc28f2c6d62fce70701f52b1',1,'musx::util::DateTime']]],
   ['found_23',['found',['../structmusx_1_1dom_1_1Entry_1_1EntryLocation.html#a3ffd38b57681d5cce3de07a2c1d8bb08',1,'musx::dom::Entry::EntryLocation']]],
-  ['fraction_24',['fraction',['../classmusx_1_1util_1_1Fraction.html#a53148c96102e3c9063815698642f2f0c',1,'musx::util::Fraction::Fraction(int num, int den)'],['../classmusx_1_1util_1_1Fraction.html#ab3a1097731acab882bcd033b6ca84df6',1,'musx::util::Fraction::Fraction(int value)']]],
+  ['fraction_24',['fraction',['../classmusx_1_1util_1_1Fraction.html#a4380cb4a60014e18f4d78fa75066e778',1,'musx::util::Fraction::Fraction(int num, int den)'],['../classmusx_1_1util_1_1Fraction.html#ab3a1097731acab882bcd033b6ca84df6',1,'musx::util::Fraction::Fraction(int value)']]],
   ['frame_25',['Frame',['../classmusx_1_1dom_1_1others_1_1Frame.html#a264bdcc5b32fb5a8455e0d5ecfd6783b',1,'musx::dom::others::Frame']]],
   ['fretboarddiagram_26',['FretboardDiagram',['../classmusx_1_1dom_1_1details_1_1FretboardDiagram.html#aa71e0fbfbceb4c0592fd218fdd5500cc',1,'musx::dom::details::FretboardDiagram']]],
   ['fretboardgroup_27',['FretboardGroup',['../classmusx_1_1dom_1_1others_1_1FretboardGroup.html#ad4256ed3f569f6959c69075e8685c444',1,'musx::dom::others::FretboardGroup']]],

@@ -4,6 +4,7 @@ var classmusx_1_1dom_1_1smartshape_1_1EndPoint =
     [ "calcGlobalPosition", "classmusx_1_1dom_1_1smartshape_1_1EndPoint.html#a00d74b5dfaf87ddf5cd91b0d34922332", null ],
     [ "calcIsAssigned", "classmusx_1_1dom_1_1smartshape_1_1EndPoint.html#a2c28929d9431c956a87929a94b0f6e2c", null ],
     [ "calcPosition", "classmusx_1_1dom_1_1smartshape_1_1EndPoint.html#a323e31a14fcd66725881171714e04cf4", null ],
+    [ "compareMetricPosition", "classmusx_1_1dom_1_1smartshape_1_1EndPoint.html#a347640f292abaa7ead07973429b082eb", null ],
     [ "ContainedClassBase", "classmusx_1_1dom_1_1smartshape_1_1EndPoint.html#a53872e9c0b07633f81f5780d7ba13b9f", null ],
     [ "getEntryAssignment", "classmusx_1_1dom_1_1smartshape_1_1EndPoint.html#a5f694a701652dfd17256512b02e6c77f", null ],
     [ "getMeasureAssignment", "classmusx_1_1dom_1_1smartshape_1_1EndPoint.html#a6348bd306404e772e995dc0ef1820cd4", null ],

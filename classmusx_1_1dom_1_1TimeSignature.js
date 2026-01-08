@@ -1,6 +1,7 @@
 var classmusx_1_1dom_1_1TimeSignature =
 [
     [ "TimeSigComponent", "structmusx_1_1dom_1_1TimeSignature_1_1TimeSigComponent.html", "structmusx_1_1dom_1_1TimeSignature_1_1TimeSigComponent" ],
+    [ "calcBeatValueAt", "classmusx_1_1dom_1_1TimeSignature.html#a48022ad07cad561f28c12b775428b5c3", null ],
     [ "calcSimplified", "classmusx_1_1dom_1_1TimeSignature.html#ae650d3d6438b2ecdeb178235277da0cf", null ],
     [ "calcTotalDuration", "classmusx_1_1dom_1_1TimeSignature.html#a9f7a4dc4f0448257da332c0e789a6af4", null ],
     [ "createComponent", "classmusx_1_1dom_1_1TimeSignature.html#ac1b0d656ba8893cc415fb2f8cab89cb7", null ],

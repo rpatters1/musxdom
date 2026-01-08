@@ -152,6 +152,9 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>getVoice</b> () const<
 <tr class="memitem:a8a3212f5b3f06487fc8e80616c98d672" id="r_a8a3212f5b3f06487fc8e80616c98d672"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#a8a3212f5b3f06487fc8e80616c98d672">calcIsSamePitchContentAndDuration</a> (const <a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a> &amp;src, bool compareConcert=true, bool requireSameVoice=true, bool requireSameGraceElapsedDura=false) const</td></tr>
 <tr class="memdesc:a8a3212f5b3f06487fc8e80616c98d672"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns whether this entry and <code>src</code> represent the same notated value.  <br /></td></tr>
 <tr class="separator:a8a3212f5b3f06487fc8e80616c98d672"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a32be4982c899aa9232fa353654cb3a92" id="r_a32be4982c899aa9232fa353654cb3a92"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#a32be4982c899aa9232fa353654cb3a92">calcContainsPitchContent</a> (const <a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a> &amp;src, bool compareConcert=true) const</td></tr>
+<tr class="memdesc:a32be4982c899aa9232fa353654cb3a92"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns whether <code>src</code> represent the same notated value.  <br /></td></tr>
+<tr class="separator:a32be4982c899aa9232fa353654cb3a92"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a87802553e72c2d71f8e23f4cb01f6a56" id="r_a87802553e72c2d71f8e23f4cb01f6a56"><td class="memItemLeft" align="right" valign="top"><a id="a87802553e72c2d71f8e23f4cb01f6a56" name="a87802553e72c2d71f8e23f4cb01f6a56"></a>
 std::shared_ptr&lt; const <a class="el" href="classmusx_1_1dom_1_1EntryFrame.html">EntryFrame</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getFrame</b> () const</td></tr>
 <tr class="memdesc:a87802553e72c2d71f8e23f4cb01f6a56"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the frame. <br /></td></tr>
@@ -353,6 +356,9 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>calcBeamMustStartHere
 <tr class="memitem:ab3bc2e754d93395c71759df365142d8e" id="r_ab3bc2e754d93395c71759df365142d8e"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#ab3bc2e754d93395c71759df365142d8e">calcCrossStaffDirectionForAll</a> (<a class="el" href="classmusx_1_1dom_1_1DeferredReference.html">DeferredReference</a>&lt; <a class="el" href="classmusx_1_1dom_1_1MusxInstanceList.html">MusxInstanceList</a>&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1StaffUsed.html">others::StaffUsed</a> &gt; &gt; staffList={}) const</td></tr>
 <tr class="memdesc:ab3bc2e754d93395c71759df365142d8e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates if this entry has cross-staffed notes all in a single direction.  <br /></td></tr>
 <tr class="separator:ab3bc2e754d93395c71759df365142d8e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac7ca81e419c833fc4e3c896c9a430041" id="r_ac7ca81e419c833fc4e3c896c9a430041"><td class="memItemLeft" align="right" valign="top">std::optional&lt; <a class="el" href="namespacemusx_1_1dom.html#ada2c0787f5b7cb764d2a344d491ab99c">StaffCmper</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#ac7ca81e419c833fc4e3c896c9a430041">calcCrossedStaffForAll</a> () const</td></tr>
+<tr class="memdesc:ac7ca81e419c833fc4e3c896c9a430041"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates all the notes in this entry are crossed to the same staff.  <br /></td></tr>
+<tr class="separator:ac7ca81e419c833fc4e3c896c9a430041"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7734e3bd5c6129f3a3ebd60ec7bbc11e" id="r_a7734e3bd5c6129f3a3ebd60ec7bbc11e"><td class="memItemLeft" align="right" valign="top"><a id="a7734e3bd5c6129f3a3ebd60ec7bbc11e" name="a7734e3bd5c6129f3a3ebd60ec7bbc11e"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>calcIsSingletonGrace</b> () const</td></tr>
 <tr class="memdesc:a7734e3bd5c6129f3a3ebd60ec7bbc11e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return true if this entry is a grace note and the only grace in the sequence at this location. <br /></td></tr>
@@ -375,6 +381,9 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>calcIsSingletonGrace<
 <tr class="memitem:a11a03b83916995c156d7f6dcdb60a49a" id="r_a11a03b83916995c156d7f6dcdb60a49a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#a11a03b83916995c156d7f6dcdb60a49a">findMainEntryForGraceNote</a> (bool ignoreRests=false) const</td></tr>
 <tr class="memdesc:a11a03b83916995c156d7f6dcdb60a49a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Finds the main entry for a grace note, taking into account hidden entries for beams over barlines.  <br /></td></tr>
 <tr class="separator:a11a03b83916995c156d7f6dcdb60a49a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a26f97bd814099c2cbac95479de6dc8f3" id="r_a26f97bd814099c2cbac95479de6dc8f3"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#a26f97bd814099c2cbac95479de6dc8f3">iterateStartingSmartShapes</a> (std::function&lt; bool(const <a class="el" href="namespacemusx_1_1dom.html#a4223cd531120dbef7acd854c3d2631b8">MusxInstance</a>&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1SmartShape.html">others::SmartShape</a> &gt; &amp;)&gt; callback, bool findExact=false) const</td></tr>
+<tr class="memdesc:a26f97bd814099c2cbac95479de6dc8f3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Iterates all smart shapes whose start anchor resolves to this entry.  <br /></td></tr>
+<tr class="separator:a26f97bd814099c2cbac95479de6dc8f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa247de0fb2eb2be22aaa12cf14266768" id="r_aa247de0fb2eb2be22aaa12cf14266768"><td class="memItemLeft" align="right" valign="top"><a id="aa247de0fb2eb2be22aaa12cf14266768" name="aa247de0fb2eb2be22aaa12cf14266768"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator&lt;</b> (const <a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a> &amp;other) const</td></tr>
 <tr class="memdesc:aa247de0fb2eb2be22aaa12cf14266768"><td class="mdescLeft">&#160;</td><td class="mdescRight">Explicit operator&lt; for std::map. <br /></td></tr>
@@ -557,6 +566,66 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="a32be4982c899aa9232fa353654cb3a92" name="a32be4982c899aa9232fa353654cb3a92"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a32be4982c899aa9232fa353654cb3a92">&#9670;&#160;</a></span>calcContainsPitchContent()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool musx::dom::EntryInfoPtr::calcContainsPitchContent </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a> &amp;&#160;</td>
+          <td class="paramname"><em>src</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>compareConcert</em> = <code>true</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns whether <code>src</code> represent the same notated value. </p>
+<p>This function performs the same pitch comparison as <a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#a606b477e5b5fea34498fb35af7073f45" title="Returns whether this entry and src contain the same pitch content or rest value.">calcIsSamePitchContent</a> but only requires that the pitches in <code>src</code> be included in this entry. This entry may contain other pitches.</p>
+<dl class="section note"><dt>Note</dt><dd>Returns false if either entry displays as a rest.</dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">src</td><td>The <a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html" title="Wraps a frame of shared_ptr&lt;const EntryInfo&gt; and an index for per entry access. This class manages ow...">EntryInfoPtr</a> to compare. </td></tr>
+    <tr><td class="paramname">compareConcert</td><td>If true, compares concert pitches. If false, compares scale degrees relative to the prevailing key.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true if both pointers are non-null and all required properties match; false otherwise. </dd></dl>
+
+</div>
+</div>
+<a id="ac7ca81e419c833fc4e3c896c9a430041" name="ac7ca81e419c833fc4e3c896c9a430041"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac7ca81e419c833fc4e3c896c9a430041">&#9670;&#160;</a></span>calcCrossedStaffForAll()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::optional&lt; <a class="el" href="namespacemusx_1_1dom.html#ada2c0787f5b7cb764d2a344d491ab99c">StaffCmper</a> &gt; musx::dom::EntryInfoPtr::calcCrossedStaffForAll </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Calculates all the notes in this entry are crossed to the same staff. </p>
+<dl class="section return"><dt>Returns</dt><dd>The crossed staffId if all notes are crossed to it. If no crossed notes, or if no all cross notes are crossed to the same staff, returns std::nullopt. </dd></dl>
+
+</div>
+</div>
 <a id="ab3bc2e754d93395c71759df365142d8e" name="ab3bc2e754d93395c71759df365142d8e"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ab3bc2e754d93395c71759df365142d8e">&#9670;&#160;</a></span>calcCrossStaffDirectionForAll()</h2>
 
@@ -605,7 +674,8 @@ Static Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Calculates if an entry displays as a rest. </p>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000004">Todo:</a></b></dt><dd>Eventually calcDisplaysAsRest should take into account voiced parts. </dd></dl>
+<p>This function takes voiced parts into account if the document's <a class="el" href="namespacemusx_1_1dom.html#a8ff59967b46549e150ea4f524c00de95" title="Controls whether Finale-style part voicing is applied when iterating entries via musx::dom::details::...">PartVoicingPolicy</a> applies part voicing. <br  />
+ </p>
 
 </div>
 </div>
@@ -1567,6 +1637,46 @@ Static Public Member Functions</h2></td></tr>
 
 <p>Returns whether the input and the current instance refer to the same entry. </p>
 <dl class="section return"><dt>Returns</dt><dd>false if either this or src is null and true if they are both non null and refer to the same entry. </dd></dl>
+
+</div>
+</div>
+<a id="a26f97bd814099c2cbac95479de6dc8f3" name="a26f97bd814099c2cbac95479de6dc8f3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a26f97bd814099c2cbac95479de6dc8f3">&#9670;&#160;</a></span>iterateStartingSmartShapes()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool musx::dom::EntryInfoPtr::iterateStartingSmartShapes </td>
+          <td>(</td>
+          <td class="paramtype">std::function&lt; bool(const <a class="el" href="namespacemusx_1_1dom.html#a4223cd531120dbef7acd854c3d2631b8">MusxInstance</a>&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1SmartShape.html">others::SmartShape</a> &gt; &amp;)&gt;&#160;</td>
+          <td class="paramname"><em>callback</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>findExact</em> = <code>false</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Iterates all smart shapes whose start anchor resolves to this entry. </p>
+<p>Invokes the supplied predicate for each <a class="el" href="classmusx_1_1dom_1_1others_1_1SmartShape.html">others::SmartShape</a> whose <em>starting</em> attachment is determined to be associated with this entry. This includes smart shapes that explicitly start on this entry as well as beat-attached shapes whose anchor does not directly reference the entry but is resolved to it using <a class="el" href="classmusx_1_1dom_1_1smartshape_1_1EndPoint.html#a6fafc34d9ae9fe64231166a647bd703c" title="Calculates the entry associated with the endpoint.">smartshape::EndPoint::calcAssociatedEntry</a>.</p>
+<p>Iteration stops early if the predicate returns false.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">callback</td><td>Function invoked for each matching smart shape. Returning false aborts iteration. </td></tr>
+    <tr><td class="paramname">findExact</td><td>If true, only match beat-attached shapes that match the entry's exact position. This defaults to false. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True if iteration completed normally; false if terminated early by the callback. </dd></dl>
 
 </div>
 </div>

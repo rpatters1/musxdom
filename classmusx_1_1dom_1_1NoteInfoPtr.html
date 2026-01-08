@@ -186,6 +186,9 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>calcIsEnharmonicRespe
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>calcIsIncludedInVoicing</b> () const</td></tr>
 <tr class="memdesc:aa078714d4ad095bd9be5da204e9bc438"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if this note is included in the part voicing. This function returns the correct value even if the document's <code>PartVoicingPolicy</code> is to ignore part voicing. <br /></td></tr>
 <tr class="separator:aa078714d4ad095bd9be5da204e9bc438"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a634185f56bf40899a8b0fbd6046bfa09" id="r_a634185f56bf40899a8b0fbd6046bfa09"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html">NoteInfoPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html#a634185f56bf40899a8b0fbd6046bfa09">calcArpeggiatedTieToNote</a> (std::optional&lt; bool &gt; *isTiedOver=nullptr) const</td></tr>
+<tr class="memdesc:a634185f56bf40899a8b0fbd6046bfa09"><td class="mdescLeft">&#160;</td><td class="mdescRight">If this note has a smart shape acting as an arpeggio tie, return the tied-to note. If this note is part of a chord, the function always returns null.  <br /></td></tr>
+<tr class="separator:a634185f56bf40899a8b0fbd6046bfa09"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Wraps an <a class="el" href="classmusx_1_1dom_1_1EntryInfo.html">EntryInfo</a> instance and a note index. </p>
@@ -236,6 +239,33 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>calcIsIncludedInVoici
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="a634185f56bf40899a8b0fbd6046bfa09" name="a634185f56bf40899a8b0fbd6046bfa09"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a634185f56bf40899a8b0fbd6046bfa09">&#9670;&#160;</a></span>calcArpeggiatedTieToNote()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html">NoteInfoPtr</a> musx::dom::NoteInfoPtr::calcArpeggiatedTieToNote </td>
+          <td>(</td>
+          <td class="paramtype">std::optional&lt; bool &gt; *&#160;</td>
+          <td class="paramname"><em>isTiedOver</em> = <code>nullptr</code></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>If this note has a smart shape acting as an arpeggio tie, return the tied-to note. If this note is part of a chord, the function always returns null. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[out]</td><td class="paramname">isTiedOver</td><td>An option out parameter returning whether the ties if force over (true), forced under (false) or unspecified (std::nullopt). </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>If the arpeggio tie slur exists return true. Null if it does not or if this note is part of a chord. </dd></dl>
+
+</div>
+</div>
 <a id="aad11d0055ca42686bfb5d5f8dfa98247" name="aad11d0055ca42686bfb5d5f8dfa98247"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aad11d0055ca42686bfb5d5f8dfa98247">&#9670;&#160;</a></span>calcCrossStaffDirection()</h2>
 

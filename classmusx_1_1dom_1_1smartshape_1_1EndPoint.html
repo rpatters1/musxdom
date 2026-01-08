@@ -128,6 +128,9 @@ Public Member Functions</h2></td></tr>
 <a class="el" href="classmusx_1_1util_1_1Fraction.html">util::Fraction</a>&#160;</td><td class="memItemRight" valign="bottom"><b>calcGlobalPosition</b> () const</td></tr>
 <tr class="memdesc:a00d74b5dfaf87ddf5cd91b0d34922332"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the global position of the endpoint within its measure, based on whether it is measure- or entry-attached. <br /></td></tr>
 <tr class="separator:a00d74b5dfaf87ddf5cd91b0d34922332"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a347640f292abaa7ead07973429b082eb" id="r_a347640f292abaa7ead07973429b082eb"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1smartshape_1_1EndPoint.html#a347640f292abaa7ead07973429b082eb">compareMetricPosition</a> (const <a class="el" href="classmusx_1_1dom_1_1smartshape_1_1EndPoint.html">EndPoint</a> &amp;other) const</td></tr>
+<tr class="memdesc:a347640f292abaa7ead07973429b082eb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compares the metric position of two endpoints.  <br /></td></tr>
+<tr class="separator:a347640f292abaa7ead07973429b082eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6fafc34d9ae9fe64231166a647bd703c" id="r_a6fafc34d9ae9fe64231166a647bd703c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1smartshape_1_1EndPoint.html#a6fafc34d9ae9fe64231166a647bd703c">calcAssociatedEntry</a> (<a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> forPartId, bool findExact=true) const</td></tr>
 <tr class="memdesc:a6fafc34d9ae9fe64231166a647bd703c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the entry associated with the endpoint.  <br /></td></tr>
 <tr class="separator:a6fafc34d9ae9fe64231166a647bd703c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -284,6 +287,38 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>SharedNodes</b> = st
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The entry if the endpoint is entry-attached or measure-attached within 1 Edu of an entry. Null if not. </dd></dl>
+
+</div>
+</div>
+<a id="a347640f292abaa7ead07973429b082eb" name="a347640f292abaa7ead07973429b082eb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a347640f292abaa7ead07973429b082eb">&#9670;&#160;</a></span>compareMetricPosition()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int musx::dom::smartshape::EndPoint::compareMetricPosition </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classmusx_1_1dom_1_1smartshape_1_1EndPoint.html">EndPoint</a> &amp;&#160;</td>
+          <td class="paramname"><em>other</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Compares the metric position of two endpoints. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">other</td><td>The endpoint to compare. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Integer value where<ul>
+<li>negative (-1) means this is before <code>other</code>.</li>
+<li>0 means the endpoints have the same metric position.</li>
+<li>positive (+1) means this is after <code>other</code>. </li>
+</ul>
+</dd></dl>
 
 </div>
 </div>

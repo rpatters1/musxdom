@@ -2,6 +2,7 @@ var classmusx_1_1dom_1_1NoteInfoPtr =
 [
     [ "NoteInfoPtr", "classmusx_1_1dom_1_1NoteInfoPtr.html#af96307ed369138a67d004695055e894d", null ],
     [ "NoteInfoPtr", "classmusx_1_1dom_1_1NoteInfoPtr.html#abafc8ded0db6f072316ecfee838eaa38", null ],
+    [ "calcArpeggiatedTieToNote", "classmusx_1_1dom_1_1NoteInfoPtr.html#a634185f56bf40899a8b0fbd6046bfa09", null ],
     [ "calcCrossStaffDirection", "classmusx_1_1dom_1_1NoteInfoPtr.html#aad11d0055ca42686bfb5d5f8dfa98247", null ],
     [ "calcDefaultEnharmonic", "classmusx_1_1dom_1_1NoteInfoPtr.html#aabb32c50345e151d488956b4f61f99b1", null ],
     [ "calcIsEnharmonicRespell", "classmusx_1_1dom_1_1NoteInfoPtr.html#aaa7136caca4301202a455a113f136553", null ],

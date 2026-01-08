@@ -134,6 +134,9 @@ Public Member Functions</h2></td></tr>
 <a class="el" href="classmusx_1_1util_1_1Fraction.html">util::Fraction</a>&#160;</td><td class="memItemRight" valign="bottom"><b>calcTotalDuration</b> () const</td></tr>
 <tr class="memdesc:a9f7a4dc4f0448257da332c0e789a6af4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the total duration of the time signature as a fraction of a whole note. <br /></td></tr>
 <tr class="separator:a9f7a4dc4f0448257da332c0e789a6af4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a48022ad07cad561f28c12b775428b5c3" id="r_a48022ad07cad561f28c12b775428b5c3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1util_1_1Fraction.html">util::Fraction</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1TimeSignature.html#a48022ad07cad561f28c12b775428b5c3">calcBeatValueAt</a> (<a class="el" href="namespacemusx_1_1dom.html#a907ef641c247f1a5dbe75bbc972661f5">Edu</a> eduPosition) const</td></tr>
+<tr class="memdesc:a48022ad07cad561f28c12b775428b5c3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the beat value (duration) at the given EDU position.  <br /></td></tr>
+<tr class="separator:a48022ad07cad561f28c12b775428b5c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2cf2ed8240bce33ef314790e57db3fbc" id="r_a2cf2ed8240bce33ef314790e57db3fbc"><td class="memItemLeft" align="right" valign="top"><a id="a2cf2ed8240bce33ef314790e57db3fbc" name="a2cf2ed8240bce33ef314790e57db3fbc"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>isSame</b> (const <a class="el" href="classmusx_1_1dom_1_1TimeSignature.html">TimeSignature</a> &amp;src) const</td></tr>
 <tr class="memdesc:a2cf2ed8240bce33ef314790e57db3fbc"><td class="mdescLeft">&#160;</td><td class="mdescRight">returns whether the two time signatures represent the same time signature <br /></td></tr>
@@ -251,6 +254,37 @@ const <a class="el" href="classmusx_1_1dom_1_1Base.html#a8ef0ccef928154f1865d1f6
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Shared time signature class that is derived from other classes. (See <a class="el" href="classmusx_1_1dom_1_1others_1_1Measure.html">others::Measure</a>) </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="a48022ad07cad561f28c12b775428b5c3" name="a48022ad07cad561f28c12b775428b5c3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a48022ad07cad561f28c12b775428b5c3">&#9670;&#160;</a></span>calcBeatValueAt()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classmusx_1_1util_1_1Fraction.html">util::Fraction</a> musx::dom::TimeSignature::calcBeatValueAt </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespacemusx_1_1dom.html#a907ef641c247f1a5dbe75bbc972661f5">Edu</a>&#160;</td>
+          <td class="paramname"><em>eduPosition</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the beat value (duration) at the given EDU position. </p>
+<p>Each <a class="el" href="structmusx_1_1dom_1_1TimeSignature_1_1TimeSigComponent.html" title="A single time signature component.">TimeSigComponent</a> is treated as a run of identical beats:</p><ul>
+<li>The beat value is the sum of comp.units (in EDU).</li>
+<li>The number of beats is the sum of comp.counts (as <a class="el" href="classmusx_1_1util_1_1Fraction.html" title="A class to represent fractions with integer m_numerator and m_denominator, automatically reduced to s...">util::Fraction</a>).</li>
+</ul>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">eduPosition</td><td>Position from the start of the measure, in EDU. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Beat value at <code>eduPosition</code> as a fraction of a whole note. Returns 0 if no beat information is available. </dd></dl>
+
+</div>
+</div>
 <a id="ae650d3d6438b2ecdeb178235277da0cf" name="ae650d3d6438b2ecdeb178235277da0cf"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ae650d3d6438b2ecdeb178235277da0cf">&#9670;&#160;</a></span>calcSimplified()</h2>
 
