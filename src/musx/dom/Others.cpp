@@ -423,11 +423,21 @@ std::optional<KnownShapeDefType> MeasureExprAssign::calcShapeType() const
 bool MeasureExprAssign::calcIsPotentialForwardTie(const EntryInfoPtr& forStartEntry) const
 {
     using Align = HorizontalMeasExprAlign;
+    if (!forStartEntry || forStartEntry.calcDisplaysAsRest()) {
+        return false;
+    }
+    const auto entry = forStartEntry->getEntry();
+    if (!entry || entry->notes.empty()) {
+        return false;
+    }
     auto alignmentType = calcEntryAlignmentType();
     if (!alignmentType || alignmentType == Align::LeftOfAllNoteheads || alignmentType == Align::Stem) {
         return false;
     }
     if (calcShapeType() != KnownShapeDefType::SlurTieCurveRight) {
+        return false;
+    }
+    if (!forStartEntry.isSameEntry(calcAssociatedEntry())) {
         return false;
     }
     if (alignmentType == Align::RightOfAllNoteheads) {

@@ -261,7 +261,7 @@ public:
     bool autoHorz{};                               ///< Whether horizontal auto-positioning is enabled.
     bool autoVert{};                               ///< Whether vertical auto-positioning is enabled.
     AutoVerticalMode autoVertMode{};               ///< Auto vertical positioning mode.
-    bool outsideStaff{};                           ///< Whether the articulation is outside the staff.
+    bool outsideStaff{};                           ///< Whether the articulation is forced outside the staff.
     bool aboveSymbolAlt{};                         ///< Whether the alternate symbol is used above. (Otherwise main symbol is used.)
     bool belowSymbolAlt{};                         ///< Whether the alternate symbol is used below. (Otherwise main symbol is used.)
     bool insideSlur{};                             ///< Whether the articulation is inside a slur. (Used *in addition* to #SlurInteractionMode::InsideSlur)

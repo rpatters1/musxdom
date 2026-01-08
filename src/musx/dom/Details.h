@@ -132,6 +132,9 @@ public:
     bool avoidSlur{};               ///< Whether the articulation should avoid slurs.
     int numSlursAvoided{};          ///< Number of slurs avoided. Used internally by Finale's stacking algorithm.
 
+    /// @brief Calculates if this articulation might be serving as a forward tie surrogate.
+    [[nodiscard]] bool calcIsPotentialForwardTie(const EntryInfoPtr& forStartEntry) const;
+
     static const xml::XmlElementArray<ArticulationAssign>& xmlMappingArray();   ///< Required for musx::factory::FieldPopulator.
     constexpr static std::string_view XmlNodeName = "articAssign"; ///< The XML node name for this type.
 };

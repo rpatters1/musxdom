@@ -67,6 +67,86 @@ MusxInstance<EDBASE> EntryDetailsBase::getStemDependentDetail(const EntryInfoPtr
 
 namespace details {
 
+// ******************************
+// ***** ArticulationAssign *****
+// ******************************
+
+bool details::ArticulationAssign::calcIsPotentialForwardTie(const EntryInfoPtr& forStartEntry) const
+{
+    if (!forStartEntry || !articDef || forStartEntry.calcDisplaysAsRest()) {
+        return false;
+    }
+
+    const auto entry = forStartEntry->getEntry();
+    if (!entry || entry->notes.empty()) {
+        return false;
+    }
+
+    const auto doc = getDocument();
+    auto def = doc->getOthers()->get<others::ArticulationDef>(getRequestedPartId(), articDef);
+    if (!def) {
+        return false;
+    }
+
+    using AD = others::ArticulationDef;
+    if (def->copyMode != AD::CopyMode::None || def->centerOnStem) {
+        return false;
+    }
+    if (def->autoVert && def->autoVertMode == AD::AutoVerticalMode::AlwaysOnStem) {
+        return false;
+    }
+
+    const bool stemUp = forStartEntry.calcUpStem();
+    auto calcPlacementAbove = [&]() -> bool {
+        if (overridePlacement) {
+            return aboveEntry;
+        }
+        if (!def->autoVert) {
+            if (def->defVertPos > 0) {
+                return true;
+            }
+            if (def->defVertPos < 0) {
+                return false;
+            }
+            return stemUp;
+        }
+        switch (def->autoVertMode) {
+        case AD::AutoVerticalMode::AboveEntry:
+            return true;
+        case AD::AutoVerticalMode::BelowEntry:
+            return false;
+        default:
+            return stemUp;
+        }
+    };
+    const bool placeAbove = calcPlacementAbove();
+
+    auto symbolOffsetIfTie = [&](bool useAlt) -> std::optional<Evpu> {
+        const bool usesShape = useAlt ? def->altIsShape : def->mainIsShape;
+        if (!usesShape) {
+            return std::nullopt;
+        }
+        const auto shapeId = useAlt ? def->altShape : def->mainShape;
+        if (!shapeId) {
+            return std::nullopt;
+        }
+        auto shape = doc->getOthers()->get<others::ShapeDef>(getRequestedPartId(), shapeId);
+        if (!shape) {
+            return std::nullopt;
+        }
+        auto knownType = shape->recognize();
+        if (!knownType || *knownType != KnownShapeDefType::SlurTieCurveRight) {
+            return std::nullopt;
+        }
+        return (useAlt ? def->xOffsetAlt : def->xOffsetMain) + horzOffset;
+    };
+
+    constexpr Evpu MIN_OFFSET = -EVPU_PER_SPACE;
+    const bool useAltSymbol = placeAbove ? def->aboveSymbolAlt : def->belowSymbolAlt;
+    auto offset = symbolOffsetIfTie(useAltSymbol);
+    return offset && *offset >= MIN_OFFSET;
+}
+
 // ***************************
 // ***** BeamAlterations *****
 // ***************************
