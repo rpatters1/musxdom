@@ -299,8 +299,9 @@ CategoryStaffListSet MeasureExprAssign::createStaffListSet() const
     return CategoryStaffListSet(getDocument(), getRequestedPartId(), staffList);
 }
 
-EntryInfoPtr MeasureExprAssign::calcAssociatedEntry(bool findExact) const
+EntryInfoPtr MeasureExprAssign::calcAssociatedEntry() const
 {
+    constexpr bool findExact = true;
     if (staffAssign > 0) {
         if (auto gfHold = details::GFrameHoldContext(getDocument(), getRequestedPartId(), staffAssign, getCmper())) {
             const auto matchLayer = layer ? std::make_optional(LayerIndex(layer - 1)) : std::nullopt;

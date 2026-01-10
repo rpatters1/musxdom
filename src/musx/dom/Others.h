@@ -1379,10 +1379,9 @@ public:
     MusxInstance<StaffComposite> createCurrentStaff(bool forPageView = true) const;
 
     /// @brief Calculates the entry associated with the the measure expression. This is the entry that Finale uses for auto-positioning.
-    /// The entry must match the #voice2 setting for the assignment as well as the layer, if layer is specified.
-    /// @param findExact If true, only find an entry that matches to within 1 evpu. Otherwise find the closest entry in the measure.
-    /// @return The entry if the expression assignment has an associated entry. Null if not.
-    EntryInfoPtr calcAssociatedEntry(bool findExact = true) const;
+    /// The entry must match the elapsed position, #voice2 setting, and the layer (when specified). No fuzzy search is performed.
+    /// @return The entry if the assignment's target entry exists; otherwise nullptr.
+    EntryInfoPtr calcAssociatedEntry() const;
 
     /// @brief Calculates if this assignment is assigned in the current part or score, based on the requested part ID of the current instance and #showStaffList.
     bool calcIsAssignedInRequestedPart() const;

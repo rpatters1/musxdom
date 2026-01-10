@@ -32,9 +32,15 @@ namespace dom {
 // ***** EndPoint *****
 // ********************
 
-EntryInfoPtr smartshape::EndPoint::calcAssociatedEntry(Cmper forPartId, bool findExact) const
+EntryInfoPtr smartshape::EndPoint::calcAssociatedEntry(bool findExact) const
 {
     const auto doc = getDocument();
+    auto shapeParent = getParent<others::SmartShape>();
+    MUSX_ASSERT_IF (!shapeParent) {
+        throw std::logic_error("Unknown parent type for SmartShape::EndPoint.");
+    }
+    const Cmper forPartId = shapeParent->getRequestedPartId();
+
     EntryInfoPtr result;
     if (entryNumber != 0) {
         result = EntryInfoPtr::fromEntryNumber(doc, forPartId, entryNumber);
@@ -130,11 +136,7 @@ util::Fraction smartshape::EndPoint::calcPosition() const
     if (!entryNumber) {
         return util::Fraction::fromEdu(eduPosition);
     }
-    auto shapeParent = getParent<others::SmartShape>();
-    MUSX_ASSERT_IF (!shapeParent) {
-        throw std::logic_error("Unknown parent type for SmartShape::EndPoint.");
-    }
-    if (auto entryInfo = calcAssociatedEntry(shapeParent->getRequestedPartId())) {
+    if (auto entryInfo = calcAssociatedEntry()) {
         return entryInfo->elapsedDuration;
     }
     return 0;
@@ -153,7 +155,7 @@ util::Fraction smartshape::EndPoint::calcGlobalPosition() const
         }
         return rawPosition;
     }
-    if (auto entryInfo = calcAssociatedEntry(shapeParent->getRequestedPartId())) {
+    if (auto entryInfo = calcAssociatedEntry()) {
         return entryInfo.calcGlobalElapsedDuration();
     }
     return 0;
@@ -324,13 +326,13 @@ bool others::SmartShape::calcIsPotentialTie(const EntryInfoPtr& forStartEntry) c
         if (startTermSeg->endPoint->staffId != endTermSeg->endPoint->staffId) {
             return false;
         }
-        const auto thisStartEntry = startTermSeg->endPoint->calcAssociatedEntry(getRequestedPartId(), /*findExact*/false);
+        const auto thisStartEntry = startTermSeg->endPoint->calcAssociatedEntry();
         if (!forStartEntry.isSameEntry(thisStartEntry)) {
             return false;
         }
     }
     // both ends must match up with an equivalent entry for beat-attached
-    auto endEntry = endTermSeg->endPoint->calcAssociatedEntry(getRequestedPartId(), /*findExact*/false);
+    auto endEntry = endTermSeg->endPoint->calcAssociatedEntry();
     if (!endEntry) {
         return false;
     }
@@ -376,7 +378,7 @@ NoteInfoPtr others::SmartShape::calcArpeggiatedTieToNote(const EntryInfoPtr& for
     if (entry->notes.size() != 1) {
         return {};
     }
-    const auto endEntry = endTermSeg->endPoint->calcAssociatedEntry(getRequestedPartId(), /*findExact*/false);
+    const auto endEntry = endTermSeg->endPoint->calcAssociatedEntry();
     MUSX_ASSERT_IF(!endEntry) {
         throw std::logic_error("calcIsPotentialForwardTie was true but endEntry did not exist.");
     }

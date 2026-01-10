@@ -473,11 +473,6 @@ TEST(ExpressionAssignments, CalcAssociatedEntry)
         } else if (expr->textExprId == 2) { // piano
             auto entryInfo = expr->calcAssociatedEntry();
             EXPECT_FALSE(entryInfo) << "no Layer 2 entry at 3rd triplet position";
-            entryInfo = expr->calcAssociatedEntry(/*findExact*/ false);
-            ASSERT_TRUE(entryInfo);
-            EXPECT_EQ(entryInfo.getLayerIndex(), 1);
-            EXPECT_EQ(entryInfo.getIndexInFrame(), 1);
-            EXPECT_EQ(entryInfo->elapsedDuration, musx::util::Fraction(1, 6));
         } else if (expr->textExprId == 3) { // mezzopiano
             auto entryInfo = expr->calcAssociatedEntry();
             ASSERT_TRUE(entryInfo);
