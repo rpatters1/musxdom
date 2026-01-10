@@ -2118,7 +2118,7 @@ bool EntryInfoPtr::iterateStartingSmartShapes(std::function<bool(const MusxInsta
             if (startPoint.staffId != staffId || startPoint.measId != measId) {
                 continue;
             }
-            const auto startEntry = startPoint.calcAssociatedEntry(partId, findExact);
+            const auto startEntry = startPoint.calcAssociatedEntry(findExact);
             if (startEntry.isSameEntry(*this)) {
                 if (!callback(shape)) {
                     return false;
@@ -2505,11 +2505,25 @@ bool details::GFrameHoldContext::calcIsCuesOnly(bool includeVisibleInScore) cons
 EntryInfoPtr details::GFrameHoldContext::calcNearestEntry(util::Fraction position, bool findExact, std::optional<LayerIndex> matchLayer,
     std::optional<bool> matchVoice2, util::Fraction atGraceNoteDuration) const
 {
+    EntryInfoPtr bestResult;
+    util::Fraction bestDiff = (std::numeric_limits<util::Fraction>::max)();
+
     LayerIndex startLayer = matchLayer.value_or(0);
     for (LayerIndex layerIndex = startLayer; layerIndex < m_hold->frames.size(); layerIndex++) {
         if (auto entryFrame = createEntryFrame(layerIndex)) {
             if (auto result = entryFrame->calcNearestEntry(position, findExact, matchVoice2, atGraceNoteDuration)) {
-                return result;
+                if (findExact) {
+                    return result;
+                }
+                using std::abs;
+                auto posDiff = abs(position - result->elapsedDuration);
+                if (!bestResult || posDiff < bestDiff) {
+                    bestDiff = posDiff;
+                    bestResult = result;
+                    if (posDiff == 0) {
+                        return bestResult; // can't get any closer than exact position match
+                    }
+                }
             }
         }
         if (matchLayer.has_value()) {
@@ -2517,7 +2531,7 @@ EntryInfoPtr details::GFrameHoldContext::calcNearestEntry(util::Fraction positio
         }
     }
 
-    return {};
+    return bestResult;
 }
 
 util::Fraction details::GFrameHoldContext::calcMinLegacyPickupSpacer() const

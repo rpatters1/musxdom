@@ -445,7 +445,7 @@ EntryInfoPtr LyricAssign::calcWordExtensionEndpoint() const
     for (const auto& assign : wordExtShapeAssigns) {
         if (auto shape = doc->getOthers()->get<others::SmartShape>(getRequestedPartId(), assign->shapeNum)) {
             if (shape->shapeType == others::SmartShape::ShapeType::WordExtension && shape->startLyricType == getLyricTextType() && shape->startLyricNum == lyricNumber) {
-                return shape->endTermSeg->endPoint->calcAssociatedEntry(getRequestedPartId());
+                return shape->endTermSeg->endPoint->calcAssociatedEntry();
             }
         }
     }

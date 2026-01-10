@@ -141,10 +141,11 @@ public:
     /// @brief Calculates the entry associated with the endpoint.
     /// @note This function does not check for an actual assignment. It simply returns an entry the endpoint would be associated
     /// with if it were assigned. Use #calcIsAssigned to determine if the endpoint is actually assigned.
-    /// @param forPartId The linked part or score for which to create the @ref EntryInfoPtr.
-    /// @param findExact If true, only find an entry that matches to within 1 evpu. Otherwise find the closest entry in the measure.
+    /// @param findExact If true, only return an entry whose horizontal position matches the endpoint
+    /// within 1 EVPU. No fallback search is performed. If false, return the closest entry in the measure,
+    /// provided it lies within a quarter-beat of the endpoint.
     /// @return The entry if the endpoint is entry-attached or measure-attached within 1 Edu of an entry. Null if not.
-    EntryInfoPtr calcAssociatedEntry(Cmper forPartId, bool findExact = true) const;
+    EntryInfoPtr calcAssociatedEntry(bool findExact = false) const;
 
     /// @brief Gets the measure assignment for this endpoint or null if none.
     MusxInstance<others::SmartShapeMeasureAssign> getMeasureAssignment() const;

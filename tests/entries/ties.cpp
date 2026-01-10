@@ -353,7 +353,7 @@ TEST(TieDetection, ShapeTies)
     for (const auto& smartShape : smartShapes) {
         ASSERT_LT(x, EXPECTED_ELEMENTS);
         EXPECT_EQ(smartShape->getCmper(), expectedCmpers[x]) << "expected cmper " << expectedCmpers[x] << " but got " << smartShape->getCmper();
-        auto startEntry = smartShape->startTermSeg->endPoint->calcAssociatedEntry(SCORE_PARTID, /*findExact*/ false);
+        auto startEntry = smartShape->startTermSeg->endPoint->calcAssociatedEntry();
         ASSERT_TRUE(startEntry) << "start entry not found";
         EXPECT_EQ(startEntry.getIndexInFrame(), expectedEntryIdx[x]) << "start entry is not expected entry";
         EXPECT_EQ(smartShape->calcIsLaissezVibrerTie(startEntry), expectedLv[x]) << "lv tie value not the expected value for " << smartShape->getCmper();

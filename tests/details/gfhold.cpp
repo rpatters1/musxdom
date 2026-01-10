@@ -970,3 +970,33 @@ TEST(GFrameHold, MaxElapsedEntryTest)
         EXPECT_EQ(frame->maxElapsedStaffDuration, musx::util::Fraction(5, 4));
     }
 }
+
+TEST(GFrameHold, CalcNearestEntryNoExactLayer)
+{
+    // confirms that calcNearestEntry finds the nearest entry *in any layer*
+    std::vector<char> xml;
+    musxtest::readFile(musxtest::getInputPath() / "expr_floatlayer.enigmaxml", xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml);
+    ASSERT_TRUE(doc);
+
+    auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 1);
+    ASSERT_TRUE(gfhold);
+    {
+        auto entryInfo = gfhold.calcNearestEntry(musx::util::Fraction(1, 2), /*findExact*/false); // no match layer
+        ASSERT_TRUE(entryInfo);
+        EXPECT_EQ(entryInfo.getFrame()->getLayerIndex(), 1);
+        EXPECT_EQ(entryInfo.getIndexInFrame(), 2);
+    }
+    {
+        auto entryInfo = gfhold.calcNearestEntry(musx::util::Fraction(1, 2), /*findExact*/false, /*matchLayer*/0);
+        ASSERT_TRUE(entryInfo);
+        EXPECT_EQ(entryInfo.getFrame()->getLayerIndex(), 0);
+        EXPECT_EQ(entryInfo.getIndexInFrame(), 0);
+    }
+    {
+        auto entryInfo = gfhold.calcNearestEntry(musx::util::Fraction(1, 2), /*findExact*/false, /*matchLayer*/1);
+        ASSERT_TRUE(entryInfo);
+        EXPECT_EQ(entryInfo.getFrame()->getLayerIndex(), 1);
+        EXPECT_EQ(entryInfo.getIndexInFrame(), 2);
+    }
+}
