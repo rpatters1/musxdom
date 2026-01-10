@@ -1686,12 +1686,22 @@ public:
 
     /// @brief If this note has a smart shape acting as an arpeggio tie, return the tied-to note. If this note
     /// is part of a chord, the function always returns null.
-    /// @param [out] isTiedOver An option out parameter returning whether the ties if force over (true),
+    /// @param [out] isTiedOver An option out parameter returning whether the tie is force over (true),
     ///         forced under (false) or unspecified (std::nullopt).
     /// @return If the arpeggio tie slur exists return true. Null if it does not or if this note is part of
     /// a chord.
     [[nodiscard]]
     NoteInfoPtr calcArpeggiatedTieToNote(std::optional<bool>* isTiedOver = nullptr) const;
+
+    /// @brief Calculates if this note has a smart shape, shape expression, or shape articulation acting as
+    /// a laissez vibrer tie. For any of these to count, the entry must have a number of these stand-in
+    /// items equal to the number of notes in the entry.
+    /// @param [out] isTiedOver An option out parameter returning whether the tie is force over (true),
+    ///         forced under (false) or unspecified (std::nullopt).
+    /// @return If the arpeggio tie slur exists return true. Null if it does not or if this note is part of
+    /// a chord.
+    [[nodiscard]]
+    bool calcHasPseudoLvTie(std::optional<bool>* isTiedOver = nullptr) const;
 
 private:
     /// @brief Returns true if the two notes represent the same concert pitch or

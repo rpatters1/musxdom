@@ -393,6 +393,11 @@ public:
     /// @return The NoteInfoPtr that is the tied-to note for this note, or null if none.
     NoteInfoPtr calcArpeggiatedTieToNote(const EntryInfoPtr& forStartEntry) const;
 
+    /// @brief Determines if this smart shape type has a fixed direction (up or down) or floats automatically.
+    /// @return `true` if the type is always drawn up, `false` if always down, or `std::nullopt` if floating.
+    [[nodiscard]]
+    std::optional<bool> calcFixedDirection() const;
+
     /// @brief Returns true if this slur is being used as a laissez vibrer tie on the specified entry.
     /// It is used by #EntryInfoPtr::calcHasLaissezVibrerTie, which imposes additional rules and checks.
     /// @param forStartEntry The entry to check.

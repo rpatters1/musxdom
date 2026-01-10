@@ -19,6 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+#include <algorithm>
 #include <cstdlib>
 #include <exception>
 #include <limits>
@@ -2915,33 +2916,84 @@ bool NoteInfoPtr::calcIsIncludedInVoicing() const
 
 NoteInfoPtr NoteInfoPtr::calcArpeggiatedTieToNote(std::optional<bool>* isTiedOver) const
 {
+    if (isTiedOver) {
+        *isTiedOver = std::nullopt;
+    }
+
     const auto entryInfoPtr = getEntryInfo();
     const auto entry = entryInfoPtr->getEntry();
     if (entry->notes.size() != 1 || !entry->isNote) {
         return {};
     }
+
     auto result = NoteInfoPtr{};
-    if (isTiedOver) {
-        *isTiedOver = std::nullopt;
-    }
     entryInfoPtr.iterateStartingSmartShapes([&](const MusxInstance<others::SmartShape>& shape) {
         result = shape->calcArpeggiatedTieToNote(entryInfoPtr);
-        using ST = others::SmartShape::ShapeType;
         if (isTiedOver && result) {
-            switch (shape->shapeType) {
-            case ST::SlurUp:
-                *isTiedOver = true;
-                break;
-            case ST::SlurDown:
-                *isTiedOver = false;
-                break;
-            default:
-                *isTiedOver = std::nullopt;
-            }
+            *isTiedOver = shape->calcFixedDirection();
         }
         return !result; // keep searching until we find a result
     });
     return result;
+}
+
+bool NoteInfoPtr::calcHasPseudoLvTie(std::optional<bool>* isTiedOver) const
+{
+    const bool needDirection = (isTiedOver != nullptr);
+    if (needDirection) {
+        *isTiedOver = std::nullopt;
+    }
+
+    const auto entryInfoPtr = getEntryInfo();
+    const auto entry = entryInfoPtr->getEntry();
+    if (entry->notes.empty() || !entry->isNote) {
+        return {};
+    }
+
+    std::vector<MusxInstance<others::SmartShape>> shapeLvs;
+    entryInfoPtr.iterateStartingSmartShapes([&](const MusxInstance<others::SmartShape>& shape) {
+        if (shape->calcIsLaissezVibrerTie(entryInfoPtr)) {
+            shapeLvs.push_back(shape);
+        }
+        return true;
+    });
+    if (shapeLvs.size() == entry->notes.size()) {
+        if (needDirection && shapeLvs.size() > 1) {
+            const auto adjustmentsComparable = [&]() {
+                for (size_t i = 0; i < shapeLvs.size(); ++i) {
+                    const auto& lhsAdj = shapeLvs[i]->startTermSeg->endPointAdj;
+                    for (size_t j = i + 1; j < shapeLvs.size(); ++j) {
+                        const auto& rhsAdj = shapeLvs[j]->startTermSeg->endPointAdj;
+                        if (!lhsAdj->calcHasVerticalEquivalentConnection(*rhsAdj)) {
+                            return false;
+                        }
+                    }
+                }
+                return true;
+                }();
+            if (!adjustmentsComparable) {
+                return true;
+            }
+            const bool hasFloatingShape = std::any_of(shapeLvs.begin(), shapeLvs.end(), [](const auto& shape) {
+                return !shape->calcFixedDirection().has_value();
+            });
+            if (hasFloatingShape) {
+                return true;
+            }
+            std::sort(shapeLvs.begin(), shapeLvs.end(), [](const auto& lhs, const auto& rhs) {
+                return lhs->startTermSeg->endPointAdj->calcVertOffset() < rhs->startTermSeg->endPointAdj->calcVertOffset();
+            });
+        }
+        if (needDirection) {
+            *isTiedOver = shapeLvs[getNoteIndex()]->calcFixedDirection();
+        }
+        return true;
+    }
+
+    /// @todo Check shape expressions
+    /// @todo Check shape articulations
+
+    return false;
 }
 
 } // namespace dom
