@@ -654,7 +654,8 @@ public:
  * @class StaffStyleAssign
  * @brief Represents an assignment
  *
- * @note Staff style assignments use staff EDU ranges.
+ * @note Staff style assignments use staff EDU ranges. They end measure can be greater than
+ * the number of measures in the document.
  *
  * The cmper is the staff ID. This class is identified by the XML node name "staffStyleAssign".
  */
