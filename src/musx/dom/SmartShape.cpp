@@ -345,8 +345,10 @@ bool others::SmartShape::calcIsPotentialTie(const EntryInfoPtr& forStartEntry) c
     }
     // if either endpoint is inactive, we can't compare the vertical positions, so just permissively allow them
     // for now.
-    if (!startTermSeg->endPointAdj->active || !endTermSeg->endPointAdj->active) {
-        return startTermSeg->endPointAdj->calcHasVerticalEquivalentConnection(*endTermSeg->endPointAdj);
+    if (entryBased) {
+        if (!startTermSeg->endPointAdj->active || !endTermSeg->endPointAdj->active) {
+            return true;
+        }
     }
     const Evpu vertDiff = startTermSeg->endPointAdj->calcVertOffset() - endTermSeg->endPointAdj->calcVertOffset();
     return std::abs(vertDiff) < HORIZONTAL_THRESHOLD;

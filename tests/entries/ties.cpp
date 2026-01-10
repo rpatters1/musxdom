@@ -368,3 +368,56 @@ TEST(TieDetection, ShapeTies)
         x++;
     }
 }
+
+TEST(TieDetection, SlursAsLvTies)
+{
+    std::vector<char> xml;
+    musxtest::readFile(musxtest::getInputPath() / "lvslurs.enigmaxml", xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
+    ASSERT_TRUE(doc);
+
+    {
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 1);
+        ASSERT_TRUE(gfhold) << " gfhold not found for 1, 1";
+        auto entryFrame = gfhold.createEntryFrame(0);
+        ASSERT_TRUE(entryFrame);
+        auto entryInfo = EntryInfoPtr(entryFrame, 1);
+        ASSERT_TRUE(entryInfo);
+        ASSERT_EQ(entryInfo->getEntry()->notes.size(), 3);
+        std::optional<bool> tieIsOver;
+        EXPECT_TRUE((NoteInfoPtr(entryInfo, 0)).calcHasPseudoLvTie(&tieIsOver));
+        EXPECT_EQ(tieIsOver, false);
+        EXPECT_TRUE((NoteInfoPtr(entryInfo, 1)).calcHasPseudoLvTie(&tieIsOver));
+        EXPECT_EQ(tieIsOver, true);
+        EXPECT_TRUE((NoteInfoPtr(entryInfo, 2)).calcHasPseudoLvTie(&tieIsOver));
+        EXPECT_EQ(tieIsOver, true);
+    }
+    {
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 2);
+        ASSERT_TRUE(gfhold) << " gfhold not found for 1, 2";
+        auto entryFrame = gfhold.createEntryFrame(0);
+        ASSERT_TRUE(entryFrame);
+        auto entryInfo = EntryInfoPtr(entryFrame, 0);
+        ASSERT_TRUE(entryInfo);
+        ASSERT_EQ(entryInfo->getEntry()->notes.size(), 1);
+        std::optional<bool> tieIsOver = true;
+        EXPECT_TRUE((NoteInfoPtr(entryInfo, 0)).calcHasPseudoLvTie(&tieIsOver));
+        EXPECT_EQ(tieIsOver, std::nullopt);
+    }
+    {
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 3);
+        ASSERT_TRUE(gfhold) << " gfhold not found for 1, 3";
+        auto entryFrame = gfhold.createEntryFrame(0);
+        ASSERT_TRUE(entryFrame);
+        auto entryInfo = EntryInfoPtr(entryFrame, 0);
+        ASSERT_TRUE(entryInfo);
+        ASSERT_EQ(entryInfo->getEntry()->notes.size(), 3);
+        std::optional<bool> tieIsOver = true;
+        EXPECT_FALSE((NoteInfoPtr(entryInfo, 0)).calcHasPseudoLvTie(&tieIsOver));
+        EXPECT_EQ(tieIsOver, std::nullopt);
+        EXPECT_FALSE((NoteInfoPtr(entryInfo, 0)).calcHasPseudoLvTie(&tieIsOver));
+        EXPECT_EQ(tieIsOver, std::nullopt);
+        EXPECT_FALSE((NoteInfoPtr(entryInfo, 0)).calcHasPseudoLvTie(&tieIsOver));
+        EXPECT_EQ(tieIsOver, std::nullopt);
+    }
+}
