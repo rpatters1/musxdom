@@ -180,9 +180,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:add8ad39ad4bd23c5a2e559cc832e8e6e" id="r_add8ad39ad4bd23c5a2e559cc832e8e6e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemusx_1_1dom.html#a4223cd531120dbef7acd854c3d2631b8">MusxInstance</a>&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1StaffComposite.html">StaffComposite</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1MeasureExprAssign.html#add8ad39ad4bd23c5a2e559cc832e8e6e">createCurrentStaff</a> (bool forPageView=true) const</td></tr>
 <tr class="memdesc:add8ad39ad4bd23c5a2e559cc832e8e6e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates the current staff for this assignment.  <br /></td></tr>
 <tr class="separator:add8ad39ad4bd23c5a2e559cc832e8e6e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae8b82295580a2a0ef1cb16f52707a1e0" id="r_ae8b82295580a2a0ef1cb16f52707a1e0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1MeasureExprAssign.html#ae8b82295580a2a0ef1cb16f52707a1e0">calcAssociatedEntry</a> (bool findExact=true) const</td></tr>
-<tr class="memdesc:ae8b82295580a2a0ef1cb16f52707a1e0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the entry associated with the the measure expression. This is the entry that Finale uses for auto-positioning. The entry must match the <a class="el" href="classmusx_1_1dom_1_1others_1_1MeasureExprAssign.html#aeac79b2ed22028a68b2c3add6081c3e4">voice2</a> setting for the assignment as well as the layer, if layer is specified.  <br /></td></tr>
-<tr class="separator:ae8b82295580a2a0ef1cb16f52707a1e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a307b837142c18dac102591f5d6acaa0c" id="r_a307b837142c18dac102591f5d6acaa0c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1MeasureExprAssign.html#a307b837142c18dac102591f5d6acaa0c">calcAssociatedEntry</a> () const</td></tr>
+<tr class="memdesc:a307b837142c18dac102591f5d6acaa0c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the entry associated with the the measure expression. This is the entry that Finale uses for auto-positioning. The entry must match the elapsed position, <a class="el" href="classmusx_1_1dom_1_1others_1_1MeasureExprAssign.html#aeac79b2ed22028a68b2c3add6081c3e4">voice2</a> setting, and the layer (when specified). No fuzzy search is performed.  <br /></td></tr>
+<tr class="separator:a307b837142c18dac102591f5d6acaa0c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae9e90e4549792cff809a44eeabc8435c" id="r_ae9e90e4549792cff809a44eeabc8435c"><td class="memItemLeft" align="right" valign="top"><a id="ae9e90e4549792cff809a44eeabc8435c" name="ae9e90e4549792cff809a44eeabc8435c"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>calcIsAssignedInRequestedPart</b> () const</td></tr>
 <tr class="memdesc:ae9e90e4549792cff809a44eeabc8435c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates if this assignment is assigned in the current part or score, based on the requested part ID of the current instance and <a class="el" href="classmusx_1_1dom_1_1others_1_1MeasureExprAssign.html#a11ed0e75e9db218768bd46f0b9adc7a6" title="&quot;Show On Score and Part(s)|Score Only|Part(s) Only&quot;.">showStaffList</a>. <br /></td></tr>
@@ -526,8 +526,8 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a id="ae8b82295580a2a0ef1cb16f52707a1e0" name="ae8b82295580a2a0ef1cb16f52707a1e0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae8b82295580a2a0ef1cb16f52707a1e0">&#9670;&#160;</a></span>calcAssociatedEntry()</h2>
+<a id="a307b837142c18dac102591f5d6acaa0c" name="a307b837142c18dac102591f5d6acaa0c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a307b837142c18dac102591f5d6acaa0c">&#9670;&#160;</a></span>calcAssociatedEntry()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -535,21 +535,14 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="memname"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a> musx::dom::others::MeasureExprAssign::calcAssociatedEntry </td>
           <td>(</td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>findExact</em> = <code>true</code></td><td>)</td>
+          <td class="paramname"></td><td>)</td>
           <td> const</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Calculates the entry associated with the the measure expression. This is the entry that Finale uses for auto-positioning. The entry must match the <a class="el" href="classmusx_1_1dom_1_1others_1_1MeasureExprAssign.html#aeac79b2ed22028a68b2c3add6081c3e4">voice2</a> setting for the assignment as well as the layer, if layer is specified. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">findExact</td><td>If true, only find an entry that matches to within 1 evpu. Otherwise find the closest entry in the measure. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>The entry if the expression assignment has an associated entry. Null if not. </dd></dl>
+<p>Calculates the entry associated with the the measure expression. This is the entry that Finale uses for auto-positioning. The entry must match the elapsed position, <a class="el" href="classmusx_1_1dom_1_1others_1_1MeasureExprAssign.html#aeac79b2ed22028a68b2c3add6081c3e4">voice2</a> setting, and the layer (when specified). No fuzzy search is performed. </p>
+<dl class="section return"><dt>Returns</dt><dd>The entry if the assignment's target entry exists; otherwise nullptr. </dd></dl>
 
 </div>
 </div>
