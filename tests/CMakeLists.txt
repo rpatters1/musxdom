@@ -50,7 +50,6 @@ add_executable(musxdomtests
     entries/cues.cpp
     entries/entries.cpp
     entries/keysigs.cpp
-    entries/part_voicing.cpp
     entries/ties.cpp
     # options
     options/accidental_options.cpp
