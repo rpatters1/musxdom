@@ -836,8 +836,8 @@ CurveContourDirection ShapeDef::calcSlurContour() const
     }
 
     auto isSentinel = [](Evpu value) {
-        return value == std::numeric_limits<Evpu>::min() ||
-            value == std::numeric_limits<Evpu>::max();
+        return value == (std::numeric_limits<Evpu>::min)() ||
+            value == (std::numeric_limits<Evpu>::max)();
     };
 
     auto boundsValid = [&](const ShapeDefInstruction::StartObject& obj) {

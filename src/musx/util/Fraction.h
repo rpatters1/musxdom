@@ -398,12 +398,12 @@ public:
 
     // Smallest positive normalized value (not necessarily lowest)
     static constexpr musx::util::Fraction min() noexcept {
-        return musx::util::Fraction(1, std::numeric_limits<int>::max());
+        return musx::util::Fraction(1, (std::numeric_limits<int>::max)());
     }
 
     // Largest representable positive fraction
     static constexpr musx::util::Fraction max() noexcept {
-        return musx::util::Fraction(std::numeric_limits<int>::max());
+        return musx::util::Fraction((std::numeric_limits<int>::max)());
     }
 
     // Most negative representable fraction
@@ -422,7 +422,7 @@ public:
     static constexpr bool has_signaling_NaN = false;
 
     static constexpr musx::util::Fraction epsilon() noexcept {
-        return musx::util::Fraction(1, std::numeric_limits<int>::max());
+        return musx::util::Fraction(1, (std::numeric_limits<int>::max)());
     }
 
     static constexpr musx::util::Fraction round_error() noexcept {
@@ -454,7 +454,6 @@ struct hash<musx::util::Fraction>
         return seed;
     }
 };
-
 } // namespace std
-#endif // DOXYGEN_SHOULD_IGNORE_THIS
 
+#endif // DOXYGEN_SHOULD_IGNORE_THIS
