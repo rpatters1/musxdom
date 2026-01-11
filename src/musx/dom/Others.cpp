@@ -299,10 +299,50 @@ CategoryStaffListSet MeasureExprAssign::createStaffListSet() const
     return CategoryStaffListSet(getDocument(), getRequestedPartId(), staffList);
 }
 
+std::optional<HorizontalMeasExprAlign> MeasureExprAssign::calcEntryAlignmentType() const
+{
+    auto checkAlign = [](const auto& def) -> std::optional<HorizontalMeasExprAlign> {
+        using InstanceType = std::remove_cv_t<std::remove_reference_t<decltype(def)>>;
+        using ElementType = typename InstanceType::element_type;
+        using Def = std::remove_const_t<ElementType>;
+        static_assert(std::is_same_v<Def, TextExpressionDef> || std::is_same_v<Def, ShapeExpressionDef>,
+            "Def must be an expression definition.");
+        if (!def) {
+            return std::nullopt; // allows direct pass-in of getTextExpression and getShapeExpression.
+        }
+        const HorizontalMeasExprAlign val = def->horzMeasExprAlign;
+        switch(val)
+        {
+            case HorizontalMeasExprAlign::Manual:
+            case HorizontalMeasExprAlign::LeftOfAllNoteheads:
+            case HorizontalMeasExprAlign::LeftOfPrimaryNotehead:
+            case HorizontalMeasExprAlign::Stem:
+            case HorizontalMeasExprAlign::CenterPrimaryNotehead:
+            case HorizontalMeasExprAlign::CenterAllNoteheads:
+            case HorizontalMeasExprAlign::RightOfAllNoteheads:
+                return val;
+
+            default:
+                break;
+        }
+        return std::nullopt;
+    };
+
+    if (textExprId) {
+        return checkAlign(getTextExpression());
+    } else if (shapeExprId) {
+        return checkAlign(getShapeExpression());
+    }
+    return std::nullopt;
+}
+
 EntryInfoPtr MeasureExprAssign::calcAssociatedEntry() const
 {
     constexpr bool findExact = true;
     if (staffAssign > 0) {
+        if (!calcEntryAlignmentType()) {
+            return {};
+        }
         if (auto gfHold = details::GFrameHoldContext(getDocument(), getRequestedPartId(), staffAssign, getCmper())) {
             const auto matchLayer = layer ? std::make_optional(LayerIndex(layer - 1)) : std::nullopt;
             return gfHold.calcNearestEntry(util::Fraction::fromEdu(eduPosition), findExact, matchLayer, voice2);
@@ -364,6 +404,72 @@ bool MeasureExprAssign::calcIsHiddenByAlternateNotation() const
     } else {
         return staff->altHideOtherExpressions;
     }
+}
+
+std::optional<utils::PseudoTieShapeInfo> MeasureExprAssign::calcPseudoTieShape() const
+{
+    const auto shapeExp = getShapeExpression();
+    if (!shapeExp || shapeExp->shapeDef == 0) {
+        return std::nullopt;
+    }
+    const auto shape = shapeExp->getShape();
+    if (!shape) {
+        return std::nullopt;
+    }
+    auto knownType = shape->recognize();
+    if (!knownType) {
+        return std::nullopt;
+    }
+    utils::PseudoTieShapeInfo info;
+    info.shape = shape;
+    info.shapeType = *knownType;
+    return info;
+}
+
+bool MeasureExprAssign::calcIsPseudoTie(utils::PseudoTieMode mode, const EntryInfoPtr& forStartEntry) const
+{
+    using Align = HorizontalMeasExprAlign;
+    if (!forStartEntry || forStartEntry.calcDisplaysAsRest()) {
+        return false;
+    }
+    const auto entry = forStartEntry->getEntry();
+    if (!entry || entry->notes.empty()) {
+        return false;
+    }
+    auto alignmentType = calcEntryAlignmentType();
+    if (!alignmentType || alignmentType == Align::LeftOfAllNoteheads || alignmentType == Align::Stem) {
+        return false;
+    }
+    auto shapeInfo = calcPseudoTieShape();
+    if (!shapeInfo || (shapeInfo->shapeType != KnownShapeDefType::SlurTieCurveRight
+        && shapeInfo->shapeType != KnownShapeDefType::SlurTieCurveLeft)) {
+        return false;
+    }
+    if (!forStartEntry.isSameEntry(calcAssociatedEntry())) {
+        return false;
+    }
+
+    if (mode == utils::PseudoTieMode::TieEnd && shapeInfo->shapeType == KnownShapeDefType::SlurTieCurveLeft) {
+        return true;
+    }
+    if (mode == utils::PseudoTieMode::LaissezVibrer && shapeInfo->shapeType != KnownShapeDefType::SlurTieCurveRight) {
+        return false;
+    }
+    if (mode == utils::PseudoTieMode::TieEnd && shapeInfo->shapeType != KnownShapeDefType::SlurTieCurveRight) {
+        return false;
+    }
+    if (alignmentType == Align::RightOfAllNoteheads) {
+        return mode == utils::PseudoTieMode::LaissezVibrer;
+    }
+    const auto startOffset = horzEvpuOff;
+    const auto endOffset = startOffset + shapeInfo->calcWidthOffset();
+    switch (mode) {
+    case utils::PseudoTieMode::LaissezVibrer:
+        return utils::calcIsPseudoForwardTie(startOffset, endOffset);
+    case utils::PseudoTieMode::TieEnd:
+        return utils::calcIsPseudoBackwardTie(startOffset, endOffset);
+    }
+    return false;
 }
 
 // *******************************
@@ -915,6 +1021,15 @@ std::string RepeatEndingStart::createEndingText() const
 RepeatStaffListSet RepeatEndingStart::createStaffListSet() const
 {
     return RepeatStaffListSet(getDocument(), getRequestedPartId(), staffList);
+}
+
+// ******************************
+// ***** ShapeExpressionDef *****
+// ******************************
+
+MusxInstance<ShapeDef> ShapeExpressionDef::getShape() const
+{
+    return getDocument()->getOthers()->get<others::ShapeDef>(getRequestedPartId(), shapeDef);
 }
 
 // ************************

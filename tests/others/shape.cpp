@@ -246,3 +246,34 @@ TEST(ShapeDefTest, CalculateWidths)
         EXPECT_EQ(width, expectedWidths[i]) << "width mismatch for cmper " << shapes[i]->getCmper();
     }
 }
+
+TEST(ShapeDefTest, CalculateSlurContourDirection)
+{
+    std::vector<char> enigmaXml;
+    musxtest::readFile(musxtest::getInputPath() / "shape_recognize.enigmaxml", enigmaXml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(enigmaXml);
+    ASSERT_TRUE(doc);
+
+    auto shapes = doc->getOthers()->getArray<others::ShapeDef>(SCORE_PARTID);
+    ASSERT_EQ(shapes.size(), 11);
+
+    using Contour = musx::dom::CurveContourDirection;
+    constexpr std::array<Contour, 11> expectedDirections = {
+        Contour::Auto,    // 1
+        Contour::Auto,    // 2
+        Contour::Auto,    // 3
+        Contour::Auto,    // 4
+        Contour::Auto,    // 5
+        Contour::Auto,    // 6
+        Contour::Up,      // 7
+        Contour::Down,    // 8
+        Contour::Up,      // 9
+        Contour::Down,    // 10
+        Contour::Auto     // 11
+    };
+
+    for (size_t i = 0; i < shapes.size(); ++i) {
+        const auto direction = shapes[i]->calcSlurContour();
+        EXPECT_EQ(direction, expectedDirections[i]) << "contour mismatch for cmper " << shapes[i]->getCmper();
+    }
+}

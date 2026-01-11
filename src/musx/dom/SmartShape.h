@@ -29,6 +29,10 @@
  // do not add other dom class dependencies. Use Implementations.cpp for implementations that need total class access.
 
 namespace musx {
+namespace utils {
+enum class PseudoTieMode;
+} // namespace utils
+
 namespace dom {
 
 class EntryInfoPtr;
@@ -393,14 +397,16 @@ public:
     /// @return The NoteInfoPtr that is the tied-to note for this note, or null if none.
     NoteInfoPtr calcArpeggiatedTieToNote(const EntryInfoPtr& forStartEntry) const;
 
-    /// @brief Returns true if this slur is being used as a laissez vibrer tie on the specified entry.
-    /// It is used by #EntryInfoPtr::calcHasLaissezVibrerTie, which imposes additional rules and checks.
-    /// @param forStartEntry The entry to check.
-    bool calcIsLaissezVibrerTie(const EntryInfoPtr& forStartEntry) const;
+    /// @brief Determines if this smart shape type has a fixed direction (up or down) or floats automatically.
+    /// @return The curve contour direction for fixed-direction shapes; `CurveContourDirection::Auto` if floating/automatic.
+    [[nodiscard]]
+    CurveContourDirection calcContourDirection() const;
 
-    /// @brief Returns true if this slur is being used as a tie end (for example, on a 2nd ending.)
+    /// @brief Returns true if this slur is being used as a pseudo tie for the specified mode.
+    /// It is used by #NoteInfoPtr::calcHasPseudoLvTie, which imposes additional rules and checks.
+    /// @param mode The pseudo tie mode to evaluate.
     /// @param forStartEntry The entry to check.
-    bool calcIsUsedAsTieEnd(const EntryInfoPtr& forStartEntry) const;
+    bool calcIsPseudoTie(utils::PseudoTieMode mode, const EntryInfoPtr& forStartEntry) const;
 
     /// @brief Iterates all the entries that start within the staves and music range defined by the SmartShape. It iterates by staff and then measure.
     /// @param iterator The iterator function. Return `false` from this function to stop iterating.

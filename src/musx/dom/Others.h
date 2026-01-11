@@ -32,6 +32,7 @@
 #include "musx/util/EnigmaString.h"
 #include "musx/util/Logger.h"
 #include "musx/util/Fraction.h"
+#include "musx/util/PseudoTieUtils.h"
 #include "musx/dom/PercussionNoteType.h"
 
 #include "BaseClasses.h"
@@ -40,10 +41,16 @@
  // do not add other dom class dependencies. Use Implementations.cpp for implementations that need total class access.
 
 namespace musx {
+namespace utils {
+enum class PseudoTieMode;
+} // namespace utils
+
 namespace dom {
 
 class Entry;
 class NoteInfoPtr;
+
+enum class KnownShapeDefType;
 
 namespace details {
 class FretboardDiagram;
@@ -58,6 +65,7 @@ class StaffGroup;
  */
 namespace others {
 
+class ShapeDef;
 class Staff;
 class StaffComposite;
 class StaffList;
@@ -259,7 +267,7 @@ public:
     bool autoHorz{};                               ///< Whether horizontal auto-positioning is enabled.
     bool autoVert{};                               ///< Whether vertical auto-positioning is enabled.
     AutoVerticalMode autoVertMode{};               ///< Auto vertical positioning mode.
-    bool outsideStaff{};                           ///< Whether the articulation is outside the staff.
+    bool outsideStaff{};                           ///< Whether the articulation is forced outside the staff.
     bool aboveSymbolAlt{};                         ///< Whether the alternate symbol is used above. (Otherwise main symbol is used.)
     bool belowSymbolAlt{};                         ///< Whether the alternate symbol is used below. (Otherwise main symbol is used.)
     bool insideSlur{};                             ///< Whether the articulation is inside a slur. (Used *in addition* to #SlurInteractionMode::InsideSlur)
@@ -1297,6 +1305,13 @@ public:
  */
 class MeasureExprAssign : public OthersBase
 {
+private:
+    /// @brief Calculates the entry alignment type or std::nullopt if it does not align with entries.
+    [[nodiscard]] std::optional<HorizontalMeasExprAlign> calcEntryAlignmentType() const;
+
+    /// @brief Calculates the pseudo-tie shape info for this shape expression if it is known.
+    [[nodiscard]] std::optional<utils::PseudoTieShapeInfo> calcPseudoTieShape() const;
+
 public:
     /** @brief Constructor function */
     explicit MeasureExprAssign(const DocumentWeakPtr& document, Cmper ID, ShareMode shareMode, Cmper cmper, Inci inci)
@@ -1356,6 +1371,9 @@ public:
                                             ///< There will be a separate #MeasureExprAssign instance for every staff in the staff list.
     int graceNoteIndex{};                   ///< 1-based index from leftmost grace note. 0 = main note.
     int rehearsalMarkOffset{};              ///< Restarts the rehearsal mark sequence at this 1-based sequence value. If this is zero, the sequence continues normally.
+
+    /// @brief Returns true if this shape expression is likely acting as a pseudo tie for the specified mode.
+    [[nodiscard]] bool calcIsPseudoTie(utils::PseudoTieMode mode, const EntryInfoPtr& forStartEntry) const;
 
     /// @brief Gets the assigned text expression.
     /// @return The text expression or nullptr if this assignment is for a shape expression or #textExprId not found.
@@ -2413,7 +2431,8 @@ public:
  *
  * This class is identified by the XML node name "shapeExprDef".
  */
-class ShapeExpressionDef : public OthersBase {
+class ShapeExpressionDef : public OthersBase
+{
 public:
     /**
      * @brief Constructor.
@@ -2444,6 +2463,9 @@ public:
     Evpu yAdjustBaseline{};                         ///< Vertical adjustment for baseline alignment.
     bool useCategoryPos{};                          ///< Whether to use category position.
     std::string description;                        ///< Description of the text expression. (xml node is "descStr")
+
+    /// @brief Get the shape for this shape expression
+    MusxInstance<ShapeDef> getShape() const;
 
     constexpr static std::string_view XmlNodeName = "shapeExprDef"; ///< The XML node name for this type.
     static const xml::XmlElementArray<ShapeExpressionDef>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.

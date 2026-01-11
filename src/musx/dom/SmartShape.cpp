@@ -345,8 +345,10 @@ bool others::SmartShape::calcIsPotentialTie(const EntryInfoPtr& forStartEntry) c
     }
     // if either endpoint is inactive, we can't compare the vertical positions, so just permissively allow them
     // for now.
-    if (!startTermSeg->endPointAdj->active || !endTermSeg->endPointAdj->active) {
-        return startTermSeg->endPointAdj->calcHasVerticalEquivalentConnection(*endTermSeg->endPointAdj);
+    if (entryBased) {
+        if (!startTermSeg->endPointAdj->active || !endTermSeg->endPointAdj->active) {
+            return true;
+        }
     }
     const Evpu vertDiff = startTermSeg->endPointAdj->calcVertOffset() - endTermSeg->endPointAdj->calcVertOffset();
     return std::abs(vertDiff) < HORIZONTAL_THRESHOLD;
@@ -363,7 +365,9 @@ bool others::SmartShape::calcIsPotentialForwardTie(const EntryInfoPtr& forStartE
     if (cmp) {
         return cmp < 0;
     }
-    return endTermSeg->endPointAdj->calcHorzOffset() > startTermSeg->endPointAdj->calcHorzOffset();
+    const auto startOffset = startTermSeg->endPointAdj->calcHorzOffset();
+    const auto endOffset = endTermSeg->endPointAdj->calcHorzOffset();
+    return utils::calcIsPseudoForwardTie(startOffset, endOffset);
 }
 
 NoteInfoPtr others::SmartShape::calcArpeggiatedTieToNote(const EntryInfoPtr& forStartEntry) const
@@ -397,35 +401,53 @@ NoteInfoPtr others::SmartShape::calcArpeggiatedTieToNote(const EntryInfoPtr& for
     return endNote;
 }
 
-bool others::SmartShape::calcIsLaissezVibrerTie(const EntryInfoPtr& forStartEntry) const
+CurveContourDirection others::SmartShape::calcContourDirection() const
 {
-    if (!calcIsPotentialForwardTie(forStartEntry)) {
-        return false;
+    using ST = ShapeType;
+    switch (shapeType) {
+    case ST::SlurUp:
+    case ST::DashSlurUp:
+    case ST::DashContourSlurUp:
+    case ST::OctaveUp:
+    case ST::TwoOctaveUp:
+        return CurveContourDirection::Up;
+
+    case ST::SlurDown:
+    case ST::DashSlurDown:
+    case ST::DashContourSlurDown:
+    case ST::OctaveDown:
+    case ST::TwoOctaveDown:
+        return CurveContourDirection::Down;
+
+    default:
+        return CurveContourDirection::Auto;
     }
-    if (startTermSeg->endPoint->compareMetricPosition(*endTermSeg->endPoint) != 0) {
-        return false;
-    }
-    const auto startOffset = startTermSeg->endPointAdj->calcHorzOffset();
-    return startOffset > -EVPU_PER_SPACE;
 }
 
-bool others::SmartShape::calcIsUsedAsTieEnd(const EntryInfoPtr& forStartEntry) const
+bool others::SmartShape::calcIsPseudoTie(utils::PseudoTieMode mode, const EntryInfoPtr& forStartEntry) const
 {
-    if (!calcIsPotentialTie(forStartEntry)) {
-        return false;
+    switch (mode) {
+    case utils::PseudoTieMode::LaissezVibrer:
+        if (!calcIsPotentialForwardTie(forStartEntry)) {
+            return false;
+        }
+        break;
+
+    case utils::PseudoTieMode::TieEnd:
+        if (!calcIsPotentialTie(forStartEntry)) {
+            return false;
+        }
+        {
+            const auto startOffset = startTermSeg->endPointAdj->calcHorzOffset();
+            const auto endOffset = endTermSeg->endPointAdj->calcHorzOffset();
+            if (!utils::calcIsPseudoBackwardTie(startOffset, endOffset)) {
+                return false;
+            }
+        }
+        break;
     }
-    if (startTermSeg->endPoint->compareMetricPosition(*endTermSeg->endPoint) != 0) {
-        return false;
-    }
-    const auto startOffset = startTermSeg->endPointAdj->calcHorzOffset();
-    const auto endOffset = endTermSeg->endPointAdj->calcHorzOffset();
-    if (endOffset < startOffset) {
-        return true;
-    }
-    // end may be left of the EDU position, but not more than one space to the right.
-    // start must be at least one space to the left.
-    constexpr auto MAX_LEFT = -3 * EVPU_PER_SPACE; // adjust value if necessary
-    return endOffset <= EVPU_PER_SPACE && endOffset >= MAX_LEFT  && startOffset <= -EVPU_PER_SPACE;
+
+    return startTermSeg->endPoint->compareMetricPosition(*endTermSeg->endPoint) == 0;
 }
 
 // ********************************

@@ -100,18 +100,21 @@ public:
      * @brief Gets the m_numerator of the fraction.
      * @return The m_numerator.
      */
+    [[nodiscard]]
     constexpr int numerator() const { return m_numerator; }
 
     /**
      * @brief Gets the m_denominator of the fraction.
      * @return The m_denominator.
      */
+    [[nodiscard]]
     constexpr int denominator() const { return m_denominator; }
 
     /**
      * @brief Returns the integer (whole number) part of the fraction.
      * @return The integer part of the fraction.
      */
+    [[nodiscard]]
     constexpr int quotient() const {
         return m_numerator / m_denominator;
     }
@@ -135,6 +138,7 @@ public:
      *        with 0.5 rounded away from zero, and saturated to the
      *        numeric range of dom::Edu.
      */
+    [[nodiscard]]
     constexpr dom::Edu calcEduDuration() const
     {
         using Edu = dom::Edu;
@@ -178,9 +182,9 @@ public:
     /**
      * @brief Converts the fraction to floating point double.
      */
-    constexpr double toDouble() const {
-        return double(m_numerator) / double(m_denominator);
-    }
+    [[nodiscard]]
+    constexpr double toDouble() const
+    { return double(m_numerator) / double(m_denominator); }
 
     /**
      * @brief Adds two fractions.
@@ -276,6 +280,7 @@ public:
      * @param other The other fraction to compare.
      * @return True if the fractions are equal, false otherwise.
      */
+    [[nodiscard]]
     constexpr bool operator==(const Fraction& other) const {
         return m_numerator == other.m_numerator && m_denominator == other.m_denominator;
     }
@@ -285,6 +290,7 @@ public:
      * @param other The other fraction to compare.
      * @return True if the fractions are not equal, false otherwise.
      */
+    [[nodiscard]]
     constexpr bool operator!=(const Fraction& other) const {
         return !(*this == other);
     }
@@ -294,6 +300,7 @@ public:
      * @param other The other fraction to compare.
      * @return True if this fraction is less than the other, false otherwise.
      */
+    [[nodiscard]]
     constexpr bool operator<(const Fraction& other) const {
         double lhs = static_cast<double>(m_numerator) / m_denominator;
         double rhs = static_cast<double>(other.m_numerator) / other.m_denominator;
@@ -305,6 +312,7 @@ public:
      * @param other The other fraction to compare.
      * @return True if this fraction is less than or equal to the other, false otherwise.
      */
+    [[nodiscard]]
     constexpr bool operator<=(const Fraction& other) const {
         return *this < other || *this == other;
     }
@@ -314,6 +322,7 @@ public:
      * @param other The other fraction to compare.
      * @return True if this fraction is greater than the other, false otherwise.
      */
+    [[nodiscard]]
     constexpr bool operator>(const Fraction& other) const {
         return !(*this <= other);
     }
@@ -323,6 +332,7 @@ public:
      * @param other The other fraction to compare.
      * @return True if this fraction is greater than or equal to the other, false otherwise.
      */
+    [[nodiscard]]
     constexpr bool operator>=(const Fraction& other) const {
         return !(*this < other);
     }
@@ -388,12 +398,12 @@ public:
 
     // Smallest positive normalized value (not necessarily lowest)
     static constexpr musx::util::Fraction min() noexcept {
-        return musx::util::Fraction(1, std::numeric_limits<int>::max());
+        return musx::util::Fraction(1, (std::numeric_limits<int>::max)());
     }
 
     // Largest representable positive fraction
     static constexpr musx::util::Fraction max() noexcept {
-        return musx::util::Fraction(std::numeric_limits<int>::max());
+        return musx::util::Fraction((std::numeric_limits<int>::max)());
     }
 
     // Most negative representable fraction
@@ -412,7 +422,7 @@ public:
     static constexpr bool has_signaling_NaN = false;
 
     static constexpr musx::util::Fraction epsilon() noexcept {
-        return musx::util::Fraction(1, std::numeric_limits<int>::max());
+        return musx::util::Fraction(1, (std::numeric_limits<int>::max)());
     }
 
     static constexpr musx::util::Fraction round_error() noexcept {
@@ -444,7 +454,6 @@ struct hash<musx::util::Fraction>
         return seed;
     }
 };
-
 } // namespace std
-#endif // DOXYGEN_SHOULD_IGNORE_THIS
 
+#endif // DOXYGEN_SHOULD_IGNORE_THIS

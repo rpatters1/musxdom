@@ -35,6 +35,10 @@ class Transposer;
 } // namespace music_theory
 
 namespace musx {
+namespace utils {
+enum class PseudoTieMode;
+} // namespace utils
+
 namespace dom {
 
 namespace others {
@@ -1686,14 +1690,47 @@ public:
 
     /// @brief If this note has a smart shape acting as an arpeggio tie, return the tied-to note. If this note
     /// is part of a chord, the function always returns null.
-    /// @param [out] isTiedOver An option out parameter returning whether the ties if force over (true),
-    ///         forced under (false) or unspecified (std::nullopt).
-    /// @return If the arpeggio tie slur exists return true. Null if it does not or if this note is part of
-    /// a chord.
+    /// @param [out] tieDirection Optional output parameter receiving the tie's curve contour direction. It is set to
+    ///         #CurveContourDirection::Down for under ties, #CurveContourDirection::Up for over ties, or
+    ///         #CurveContourDirection::Auto if the contour cannot be determined.
+    /// @return The arpeggio-tied note, or null if no such tie exists or this note is part of a chord.
     [[nodiscard]]
-    NoteInfoPtr calcArpeggiatedTieToNote(std::optional<bool>* isTiedOver = nullptr) const;
+    NoteInfoPtr calcArpeggiatedTieToNote(CurveContourDirection* tieDirection = nullptr) const;
+
+    /// @brief Calculates if this note has a smart shape, shape expression, or shape articulation acting as
+    /// a laissez vibrer tie. For any of these to count, the entry must have a number of these stand-in
+    /// items equal to the number of notes in the entry.
+    /// @param [out] tieDirection Optional output parameter receiving the tie's curve contour direction. It is set to
+    ///         #CurveContourDirection::Down for under ties, #CurveContourDirection::Up for over ties, or
+    ///         #CurveContourDirection::Auto if the contour cannot be determined.
+    /// @return True if a pseudo laissez vibrer tie exists; otherwise false.
+    [[nodiscard]]
+    bool calcHasPseudoLvTie(CurveContourDirection* tieDirection = nullptr) const;
+
+    /// @brief Calculates if this note has a smart shape, shape expression, or shape articulation acting as
+    /// a tie end. For any of these to count, the entry must have a number of these stand-in items equal
+    /// to the number of notes in the entry.
+    /// @param [out] tieDirection Optional output parameter receiving the tie's curve contour direction. It is set to
+    ///         #CurveContourDirection::Down for under ties, #CurveContourDirection::Up for over ties, or
+    ///         #CurveContourDirection::Auto if the contour cannot be determined.
+    /// @return True if a pseudo tie end exists; otherwise false.
+    [[nodiscard]]
+    bool calcHasPseudoTieEnd(CurveContourDirection* tieDirection = nullptr) const;
 
 private:
+    /// @brief Calculates pseudo tie behavior for the specified mode.
+    /// @param [out] tieDirection Optional output parameter receiving the tie's curve contour direction.
+    /// @param mode The pseudo tie mode to evaluate.
+    [[nodiscard]]
+    bool calcPseudoTieInternal(utils::PseudoTieMode mode, CurveContourDirection* tieDirection) const;
+
+    /// @brief Returns true if a pseudo tie condition is satisfied for the entry and optionally outputs a contour.
+    /// @param [in,out] tieDirection Optional output parameter receiving the tie's curve contour direction.
+    /// @param directions Contour directions gathered for this entry.
+    [[nodiscard]]
+    bool selectPseudoTieDirection(CurveContourDirection* tieDirection,
+        std::vector<CurveContourDirection>& directions) const;
+
     /// @brief Returns true if the two notes represent the same concert pitch or
     /// percussion note.
     /// @param src the value to compare with.

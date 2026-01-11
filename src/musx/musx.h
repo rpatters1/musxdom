@@ -70,6 +70,7 @@
 #include "util/Fraction.h"
 #include "util/DateTimeFormat.h"
 #include "util/EnigmaString.h"
+#include "util/PseudoTieUtils.h"
 #include "util/Logger.h"
 #include "util/TestSupport.h"
 #include "xml/XmlInterface.h"

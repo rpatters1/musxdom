@@ -829,6 +829,92 @@ std::optional<Evpu> ShapeDef::calcWidth() const
     return maxRight - minLeft;
 }
 
+CurveContourDirection ShapeDef::calcSlurContour() const
+{
+    if (isBlank()) {
+        return CurveContourDirection::Auto;
+    }
+
+    auto isSentinel = [](Evpu value) {
+        return value == (std::numeric_limits<Evpu>::min)() ||
+            value == (std::numeric_limits<Evpu>::max)();
+    };
+
+    auto boundsValid = [&](const ShapeDefInstruction::StartObject& obj) {
+        return !isSentinel(obj.top) && !isSentinel(obj.bottom);
+    };
+
+    std::optional<Evpu> maxTop;
+    std::optional<Evpu> minBottom;
+    bool hasSlur = false;
+    bool unsupported = false;
+    std::optional<ShapeDefInstruction::StartObject> currentStart;
+
+    iterateInstructions([&](const ShapeDefInstruction::Decoded& inst) {
+        if (!inst.valid()) {
+            unsupported = true;
+            return false;
+        }
+
+        switch (inst.type) {
+        case ShapeDefInstructionType::StartObject: {
+            const auto* data = std::get_if<ShapeDefInstruction::StartObject>(&inst.data);
+            if (!data || !boundsValid(*data)) {
+                unsupported = true;
+                return false;
+            }
+            currentStart = *data;
+            break;
+        }
+        case ShapeDefInstructionType::RMoveTo:
+        case ShapeDefInstructionType::SetDash:
+        case ShapeDefInstructionType::FillSolid:
+        case ShapeDefInstructionType::Stroke:
+            break;
+        case ShapeDefInstructionType::Slur: {
+            if (!currentStart) {
+                unsupported = true;
+                return false;
+            }
+            if (!std::get_if<ShapeDefInstruction::Slur>(&inst.data)) {
+                unsupported = true;
+                return false;
+            }
+
+            const Evpu top = currentStart->top;
+            const Evpu bottom = currentStart->bottom;
+            maxTop = maxTop ? (std::max)(*maxTop, top) : top;
+            minBottom = minBottom ? (std::min)(*minBottom, bottom) : bottom;
+            hasSlur = true;
+            currentStart.reset();
+            break;
+        }
+        case ShapeDefInstructionType::StartGroup:
+        case ShapeDefInstructionType::SetFont:
+        case ShapeDefInstructionType::DrawChar:
+        case ShapeDefInstructionType::CloneChar:
+        default:
+            unsupported = true;
+            return false;
+        }
+
+        return true;
+    });
+
+    if (unsupported || !hasSlur) {
+        return CurveContourDirection::Auto;
+    }
+
+    const Evpu topExtent = (maxTop && *maxTop > 0) ? *maxTop : Evpu{0};
+    const Evpu bottomExtent = (minBottom && *minBottom < 0) ? static_cast<Evpu>(-(*minBottom)) : Evpu{0};
+
+    if (topExtent == 0 && bottomExtent == 0) {
+        return CurveContourDirection::Auto;
+    }
+
+    return (topExtent >= bottomExtent) ? CurveContourDirection::Up : CurveContourDirection::Down;
+}
+
 bool ShapeDef::iterateInstructions(std::function<bool(ShapeDefInstructionType, std::vector<int>)> callback) const
 {
     if (instructionList == 0 && dataList == 0) {

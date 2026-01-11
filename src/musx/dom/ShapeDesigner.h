@@ -39,8 +39,8 @@ enum class KnownShapeDefType
 {
     Blank,                      ///< A blank shape containing no instructions.
     TenutoMark,                 ///< A horizontal tenuto mark, typically used as an articulation symbol.
-    SlurTieCurveRight,          ///< Horizontal slur-based tie curving toward the right.
-    SlurTieCurveLeft,           ///< Horizontal slur-based tie curving toward the left.
+    SlurTieCurveRight,          ///< Horizontal slur or tie shape curving toward the right.
+    SlurTieCurveLeft,           ///< Horizontal slur or tie shape curving toward the left.
 
     // Add more known types here
 };
@@ -523,7 +523,6 @@ public:
     /// @return true if all instructions were iterated. False if the callback function exited early.
     bool iterateInstructions(std::function<bool(const ShapeDefInstruction::Decoded&)> callback) const;
 
-
     /// @brief Determine if this is a recognized shape type
     /// @return If the shape is recognized, return its known type. Otherwise return std::nullopt.
     std::optional<KnownShapeDefType> recognize() const;
@@ -535,6 +534,12 @@ public:
     /// require replaying the drawing instructions with Finale's rendering context.
     /// @return The width in Evpu or std::nullopt if it cannot be computed.
     std::optional<Evpu> calcWidth() const;
+
+    /// @brief Determine the slur contour orientation, if this shape is a slur/tie.
+    /// @details Uses StartObject bounding boxes to determine whether the contour arches upward or downward.
+    /// Returns @ref CurveContourDirection::Down or ::Up when determinable, otherwise ::Auto when the instructions do not represent a
+    /// slur/tie or Finale's sentinel bounds appear.
+    CurveContourDirection calcSlurContour() const;
 
     constexpr static std::string_view XmlNodeName = "shapeDef"; ///< The XML node name for this type.
     static const xml::XmlElementArray<ShapeDef>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.

@@ -19,6 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+#include <algorithm>
 #include <cstdlib>
 #include <exception>
 #include <limits>
@@ -2913,35 +2914,126 @@ bool NoteInfoPtr::calcIsIncludedInVoicing() const
     return true;
 }
 
-NoteInfoPtr NoteInfoPtr::calcArpeggiatedTieToNote(std::optional<bool>* isTiedOver) const
+NoteInfoPtr NoteInfoPtr::calcArpeggiatedTieToNote(CurveContourDirection* tieDirection) const
 {
+    if (tieDirection) {
+        *tieDirection = CurveContourDirection::Auto;
+    }
+
     const auto entryInfoPtr = getEntryInfo();
     const auto entry = entryInfoPtr->getEntry();
     if (entry->notes.size() != 1 || !entry->isNote) {
         return {};
     }
+
     auto result = NoteInfoPtr{};
-    if (isTiedOver) {
-        *isTiedOver = std::nullopt;
-    }
     entryInfoPtr.iterateStartingSmartShapes([&](const MusxInstance<others::SmartShape>& shape) {
         result = shape->calcArpeggiatedTieToNote(entryInfoPtr);
-        using ST = others::SmartShape::ShapeType;
-        if (isTiedOver && result) {
-            switch (shape->shapeType) {
-            case ST::SlurUp:
-                *isTiedOver = true;
-                break;
-            case ST::SlurDown:
-                *isTiedOver = false;
-                break;
-            default:
-                *isTiedOver = std::nullopt;
-            }
+        if (tieDirection && result) {
+            *tieDirection = shape->calcContourDirection();
         }
         return !result; // keep searching until we find a result
     });
     return result;
+}
+
+bool NoteInfoPtr::calcHasPseudoLvTie(CurveContourDirection* tieDirection) const
+{
+    return calcPseudoTieInternal(utils::PseudoTieMode::LaissezVibrer, tieDirection);
+}
+
+bool NoteInfoPtr::calcHasPseudoTieEnd(CurveContourDirection* tieDirection) const
+{
+    return calcPseudoTieInternal(utils::PseudoTieMode::TieEnd, tieDirection);
+}
+
+bool NoteInfoPtr::calcPseudoTieInternal(utils::PseudoTieMode mode, CurveContourDirection* tieDirection) const
+{
+    const bool needDirection = (tieDirection != nullptr);
+    if (needDirection) {
+        *tieDirection = CurveContourDirection::Auto;
+    }
+
+    const auto entryInfoPtr = getEntryInfo();
+    const auto entry = entryInfoPtr->getEntry();    
+    if (entry->notes.empty() || !entry->isNote) {
+        return false;
+    }
+
+    std::vector<CurveContourDirection> tieDirections;
+
+    // check smart slurs
+    entryInfoPtr.iterateStartingSmartShapes([&](const MusxInstance<others::SmartShape>& shape) {
+        if (shape->calcIsPseudoTie(mode, entryInfoPtr)) {
+            tieDirections.push_back(shape->calcContourDirection());
+        }
+        return true;
+    });
+    if (selectPseudoTieDirection(tieDirection, tieDirections)) {
+        return true;
+    }
+
+    const auto doc = entry->getDocument();
+    const Cmper partId = entryInfoPtr.getFrame()->getRequestedPartId();
+
+    /// check shape expressions
+    tieDirections.clear();
+    auto measExpAssigns = doc->getOthers()->getArray<others::MeasureExprAssign>(partId, entryInfoPtr.getMeasure());
+    for (const auto& assign : measExpAssigns) {
+        if (assign->calcIsPseudoTie(mode, entryInfoPtr)) {
+            CurveContourDirection nextContour = CurveContourDirection::Auto;
+            if (needDirection) {
+                const auto shapeExp = assign->getShapeExpression();
+                MUSX_ASSERT_IF(!shapeExp) {
+                    throw std::logic_error("Shape expression def was null but calcIsPseudoTie was true.");
+                }
+                if (const auto shape = shapeExp->getShape()) {
+                    nextContour = shape->calcSlurContour();
+                }
+            }
+            tieDirections.push_back(nextContour);
+        }
+    }
+    if (selectPseudoTieDirection(tieDirection, tieDirections)) {
+        return true;
+    }
+
+    /// check shape articulations
+    tieDirections.clear();
+    auto articAssigns = doc->getDetails()->getArray<details::ArticulationAssign>(partId, entry->getEntryNumber());
+    for (const auto& assign : articAssigns) {
+        if (const auto shapeInfo = assign->calcIsPseudoTie(mode, entryInfoPtr)) {
+            tieDirections.push_back(shapeInfo->shape->calcSlurContour());
+        }
+    }
+    if (selectPseudoTieDirection(tieDirection, tieDirections)) {
+        return true;
+    }
+
+    return false;
+}
+
+bool NoteInfoPtr::selectPseudoTieDirection(CurveContourDirection* tieDirection,
+    std::vector<CurveContourDirection>& directions) const
+{
+    if (directions.size() != m_entry->getEntry()->notes.size()) {
+        return false;
+    }
+
+    if (tieDirection != nullptr) {
+        if (directions.size() > 1) {
+            // Sort by contour: Auto sorts first so we can bail when any direction is indeterminate,
+            // then Down (under) and Up (over) follow to approximate each note's "tie" order.
+            // Without a direct note-to-slur mapping this ordering acts as a proxy for the likely vertical stacking.
+            // We also avoid looking at the vertical offsets, because they are difficult to compare when there
+            // are different positioning options on each instance.
+            std::sort(directions.begin(), directions.end());
+        }
+        if (directions[0] != CurveContourDirection::Auto) { // if the first is not Auto, none are Auto
+            *tieDirection = directions[getNoteIndex()];
+        }
+    }
+    return true;
 }
 
 } // namespace dom

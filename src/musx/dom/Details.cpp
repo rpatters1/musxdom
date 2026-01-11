@@ -67,6 +67,122 @@ MusxInstance<EDBASE> EntryDetailsBase::getStemDependentDetail(const EntryInfoPtr
 
 namespace details {
 
+// ******************************
+// ***** ArticulationAssign *****
+// ******************************
+
+std::optional<details::ArticulationAssign::PseudoTieShapeContext>
+details::ArticulationAssign::calcPseudoTieShapeContext(const EntryInfoPtr& forStartEntry) const
+{
+    PseudoTieShapeContext result;
+    if (!forStartEntry || !articDef || forStartEntry.calcDisplaysAsRest()) {
+        return std::nullopt;
+    }
+
+    const auto entry = forStartEntry->getEntry();
+    if (!entry || entry->notes.empty()) {
+        return std::nullopt;
+    }
+
+    const auto doc = getDocument();
+    result.definition = doc->getOthers()->get<others::ArticulationDef>(getRequestedPartId(), articDef);
+    if (!result.definition) {
+        return std::nullopt;
+    }
+    const auto def = result.definition;
+
+    using AD = others::ArticulationDef;
+    if (def->copyMode != AD::CopyMode::None || def->centerOnStem) {
+        return std::nullopt;
+    }
+    if (def->autoVert && def->autoVertMode == AD::AutoVerticalMode::AlwaysOnStem) {
+        return std::nullopt;
+    }
+
+    const bool stemUp = forStartEntry.calcUpStem();
+    auto calcPlacementAbove = [&]() -> bool {
+        if (overridePlacement) {
+            return aboveEntry;
+        }
+        if (!def->autoVert) {
+            if (def->defVertPos > 0) {
+                return true;
+            }
+            if (def->defVertPos < 0) {
+                return false;
+            }
+            return stemUp;
+        }
+        switch (def->autoVertMode) {
+        case AD::AutoVerticalMode::AboveEntry:
+            return true;
+        case AD::AutoVerticalMode::BelowEntry:
+            return false;
+        default:
+            return stemUp;
+        }
+    };
+    result.placeAbove = calcPlacementAbove();
+    result.usesAlternateSymbol = result.placeAbove ? def->aboveSymbolAlt : def->belowSymbolAlt;
+
+    const bool usesShape = result.usesAlternateSymbol ? def->altIsShape : def->mainIsShape;
+    if (!usesShape) {
+        return std::nullopt;
+    }
+    const auto shapeId = result.usesAlternateSymbol ? def->altShape : def->mainShape;
+    if (!shapeId) {
+        return std::nullopt;
+    }
+    result.info.shape = doc->getOthers()->get<others::ShapeDef>(getRequestedPartId(), shapeId);
+    if (!result.info.shape) {
+        return std::nullopt;
+    }
+    auto knownType = result.info.shape->recognize();
+    if (!knownType || (*knownType != KnownShapeDefType::SlurTieCurveRight
+        && *knownType != KnownShapeDefType::SlurTieCurveLeft)) {
+        return std::nullopt;
+    }
+    result.info.shapeType = *knownType;
+
+    return result;
+}
+
+std::optional<utils::PseudoTieShapeInfo> details::ArticulationAssign::calcIsPseudoTie(
+    utils::PseudoTieMode mode, const EntryInfoPtr& forStartEntry) const
+{
+    using AD = others::ArticulationDef;
+
+    const auto tieShapeContext = calcPseudoTieShapeContext(forStartEntry);
+    if (!tieShapeContext) {
+        return std::nullopt;
+    }
+    const auto& tieShapeInfo = tieShapeContext->info;
+    if (mode == utils::PseudoTieMode::TieEnd && tieShapeInfo.shapeType == KnownShapeDefType::SlurTieCurveLeft) {
+        return tieShapeInfo;
+    }
+    if (tieShapeInfo.shapeType != KnownShapeDefType::SlurTieCurveRight) {
+        return std::nullopt;
+    }
+
+    const auto def = tieShapeContext->definition;
+    const auto offset = (tieShapeContext->usesAlternateSymbol ? def->xOffsetAlt : def->xOffsetMain) + horzOffset;
+    const auto endOffset = offset + tieShapeContext->info.calcWidthOffset();
+    switch (mode) {
+    case utils::PseudoTieMode::LaissezVibrer:
+        if (!utils::calcIsPseudoForwardTie(offset, endOffset)) {
+            return std::nullopt;
+        }
+        break;
+    case utils::PseudoTieMode::TieEnd:
+        if (!utils::calcIsPseudoBackwardTie(offset, endOffset)) {
+            return std::nullopt;
+        }
+        break;
+    }
+
+    return tieShapeInfo;
+}
+
 // ***************************
 // ***** BeamAlterations *****
 // ***************************

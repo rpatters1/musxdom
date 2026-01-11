@@ -29,6 +29,7 @@
 #include "music_theory/music_theory.hpp"
 
 #include "musx/util/EnigmaString.h"
+#include "musx/util/PseudoTieUtils.h"
 #include "MusxInstance.h"
 #include "BaseClasses.h"
 #include "CommonClasses.h"
@@ -108,6 +109,15 @@ public:
  */
 class ArticulationAssign : public EntryDetailsBase
 {
+private:
+    struct PseudoTieShapeContext
+    {
+        utils::PseudoTieShapeInfo info;
+        MusxInstance<others::ArticulationDef> definition;
+        bool placeAbove{};
+        bool usesAlternateSymbol{};
+    };
+
 public:
     /**
      * @brief Constructor function
@@ -132,8 +142,16 @@ public:
     bool avoidSlur{};               ///< Whether the articulation should avoid slurs.
     int numSlursAvoided{};          ///< Number of slurs avoided. Used internally by Finale's stacking algorithm.
 
+    /// @brief Calculates the pseudo-tie shape info if this articulation is acting as a pseudo tie for the specified mode.
+    /// @return The pseudo-tie shape info when a qualifying shape exists; otherwise std::nullopt.
+    [[nodiscard]] std::optional<utils::PseudoTieShapeInfo> calcIsPseudoTie(utils::PseudoTieMode mode,
+        const EntryInfoPtr& forStartEntry) const;
+
     static const xml::XmlElementArray<ArticulationAssign>& xmlMappingArray();   ///< Required for musx::factory::FieldPopulator.
     constexpr static std::string_view XmlNodeName = "articAssign"; ///< The XML node name for this type.
+
+private:
+    [[nodiscard]] std::optional<PseudoTieShapeContext> calcPseudoTieShapeContext(const EntryInfoPtr& forStartEntry) const;
 };
 
 /**
