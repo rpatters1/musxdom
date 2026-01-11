@@ -40,6 +40,10 @@
  // do not add other dom class dependencies. Use Implementations.cpp for implementations that need total class access.
 
 namespace musx {
+namespace utils {
+enum class PseudoTieMode;
+} // namespace utils
+
 namespace dom {
 
 class Entry;
@@ -1367,6 +1371,9 @@ public:
     int graceNoteIndex{};                   ///< 1-based index from leftmost grace note. 0 = main note.
     int rehearsalMarkOffset{};              ///< Restarts the rehearsal mark sequence at this 1-based sequence value. If this is zero, the sequence continues normally.
 
+    /// @brief Returns true if this shape expression is likely acting as a pseudo tie for the specified mode.
+    [[nodiscard]] bool calcIsPseudoTie(utils::PseudoTieMode mode, const EntryInfoPtr& forStartEntry) const;
+
     /// @brief Gets the assigned text expression.
     /// @return The text expression or nullptr if this assignment is for a shape expression or #textExprId not found.
     MusxInstance<TextExpressionDef> getTextExpression() const;
@@ -1402,9 +1409,6 @@ public:
 
     /// @brief Calculates if this assignment is hidden by alternate notation.
     bool calcIsHiddenByAlternateNotation() const;
-
-    /// @brief Calculates if this expression (which must be a shape expression) is potentially being used as a forward tie.
-    [[nodiscard]] bool calcIsPotentialForwardTie(const EntryInfoPtr& forStartEntry) const;
 
     void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
     {

@@ -332,6 +332,8 @@ TEST(TieDetection, AcrossKeyChange)
 
 TEST(TieDetection, ShapeTies)
 {
+    using PseudoTieMode = musx::utils::PseudoTieMode;
+
     std::vector<char> xml;
     musxtest::readFile(musxtest::getInputPath() / "slur_ties.enigmaxml", xml);
     auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
@@ -356,8 +358,10 @@ TEST(TieDetection, ShapeTies)
         auto startEntry = smartShape->startTermSeg->endPoint->calcAssociatedEntry();
         ASSERT_TRUE(startEntry) << "start entry not found";
         EXPECT_EQ(startEntry.getIndexInFrame(), expectedEntryIdx[x]) << "start entry is not expected entry";
-        EXPECT_EQ(smartShape->calcIsLaissezVibrerTie(startEntry), expectedLv[x]) << "lv tie value not the expected value for " << smartShape->getCmper();
-        EXPECT_EQ(bool(smartShape->calcIsUsedAsTieEnd(startEntry)), expectedTieEnd[x]) << "tie end value not the expected value for " << smartShape->getCmper();
+        EXPECT_EQ(smartShape->calcIsPseudoTie(PseudoTieMode::LaissezVibrer, startEntry), expectedLv[x])
+            << "lv tie value not the expected value for " << smartShape->getCmper();
+        EXPECT_EQ(smartShape->calcIsPseudoTie(PseudoTieMode::TieEnd, startEntry), expectedTieEnd[x])
+            << "tie end value not the expected value for " << smartShape->getCmper();
         auto arpTieEnd = smartShape->calcArpeggiatedTieToNote(startEntry);
         EXPECT_EQ(bool(arpTieEnd), expectedArp[x]) << "arppegio tie value not the expected value for " << smartShape->getCmper();
         if (arpTieEnd) {

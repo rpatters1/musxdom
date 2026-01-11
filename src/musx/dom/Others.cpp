@@ -418,7 +418,7 @@ std::optional<KnownShapeDefType> MeasureExprAssign::calcShapeType() const
     return std::nullopt;
 }
 
-bool MeasureExprAssign::calcIsPotentialForwardTie(const EntryInfoPtr& forStartEntry) const
+bool MeasureExprAssign::calcIsPseudoTie(utils::PseudoTieMode mode, const EntryInfoPtr& forStartEntry) const
 {
     using Align = HorizontalMeasExprAlign;
     if (!forStartEntry || forStartEntry.calcDisplaysAsRest()) {
@@ -443,7 +443,13 @@ bool MeasureExprAssign::calcIsPotentialForwardTie(const EntryInfoPtr& forStartEn
     }
     const auto startOffset = horzEvpuOff;
     const auto endOffset = startOffset + EVPU_PER_SPACE;
-    return utils::calcIsPseudoForwardTie(startOffset, endOffset);
+    switch (mode) {
+    case utils::PseudoTieMode::LaissezVibrer:
+        return utils::calcIsPseudoForwardTie(startOffset, endOffset);
+    case utils::PseudoTieMode::TieEnd:
+        return false;
+    }
+    return false;
 }
 
 // *******************************

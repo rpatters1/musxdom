@@ -22,7 +22,8 @@
 
 #include "musx/util/PseudoTieUtils.h"
 
-namespace musx::utils {
+namespace musx {
+namespace utils {
 
 bool calcIsPseudoBackwardTie(dom::Evpu startOffset, dom::Evpu endOffset)
 {
@@ -41,4 +42,5 @@ bool calcIsPseudoForwardTie(dom::Evpu startOffset, dom::Evpu endOffset)
     return endOffset > startOffset && startOffset > -dom::EVPU_PER_SPACE;
 }
 
-} // namespace musx::utils
+} // namespace utils
+} // namespace musx

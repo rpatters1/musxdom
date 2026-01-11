@@ -2939,6 +2939,11 @@ NoteInfoPtr NoteInfoPtr::calcArpeggiatedTieToNote(CurveContourDirection* tieDire
 
 bool NoteInfoPtr::calcHasPseudoLvTie(CurveContourDirection* tieDirection) const
 {
+    return calcPseudoTieInternal(utils::PseudoTieMode::LaissezVibrer, tieDirection);
+}
+
+bool NoteInfoPtr::calcPseudoTieInternal(utils::PseudoTieMode mode, CurveContourDirection* tieDirection) const
+{
     const bool needDirection = (tieDirection != nullptr);
     if (needDirection) {
         *tieDirection = CurveContourDirection::Auto;
@@ -2947,14 +2952,18 @@ bool NoteInfoPtr::calcHasPseudoLvTie(CurveContourDirection* tieDirection) const
     const auto entryInfoPtr = getEntryInfo();
     const auto entry = entryInfoPtr->getEntry();    
     if (entry->notes.empty() || !entry->isNote) {
-        return {};
+        return false;
+    }
+
+    if (mode != utils::PseudoTieMode::LaissezVibrer) {
+        return false;
     }
 
     std::vector<CurveContourDirection> lvDirections;
 
     // check smart slurs
     entryInfoPtr.iterateStartingSmartShapes([&](const MusxInstance<others::SmartShape>& shape) {
-        if (shape->calcIsLaissezVibrerTie(entryInfoPtr)) {
+        if (shape->calcIsPseudoTie(utils::PseudoTieMode::LaissezVibrer, entryInfoPtr)) {
             lvDirections.push_back(shape->calcContourDirection());
         }
         return true;
@@ -2970,12 +2979,12 @@ bool NoteInfoPtr::calcHasPseudoLvTie(CurveContourDirection* tieDirection) const
     lvDirections.clear();
     auto measExpAssigns = doc->getOthers()->getArray<others::MeasureExprAssign>(partId, entryInfoPtr.getMeasure());
     for (const auto& assign : measExpAssigns) {
-        if (assign->calcIsPotentialForwardTie(entryInfoPtr)) {
+        if (assign->calcIsPseudoTie(utils::PseudoTieMode::LaissezVibrer, entryInfoPtr)) {
             CurveContourDirection nextContour = CurveContourDirection::Auto;
             if (needDirection) {
                 const auto shapeExp = assign->getShapeExpression();
                 MUSX_ASSERT_IF(!shapeExp) {
-                    throw std::logic_error("Shape expression def was null but calcIsPotentialForwardTie was true.");
+                    throw std::logic_error("Shape expression def was null but calcIsPseudoTie was true.");
                 }
                 if (const auto shape = shapeExp->getShape()) {
                     nextContour = shape->calcSlurContour();
@@ -2992,7 +3001,7 @@ bool NoteInfoPtr::calcHasPseudoLvTie(CurveContourDirection* tieDirection) const
     lvDirections.clear();
     auto articAssigns = doc->getDetails()->getArray<details::ArticulationAssign>(partId, entry->getEntryNumber());
     for (const auto& assign : articAssigns) {
-        if (const auto shapeInfo = assign->calcForwardTieShapeInfo(entryInfoPtr)) {
+        if (const auto shapeInfo = assign->calcIsPseudoTie(utils::PseudoTieMode::LaissezVibrer, entryInfoPtr)) {
             lvDirections.push_back(shapeInfo->shape->calcSlurContour());
         }
     }

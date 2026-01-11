@@ -23,7 +23,19 @@
 
 #include "musx/dom/Fundamentals.h"
 
-namespace musx::utils {
+namespace musx {
+namespace utils {
+
+/// @enum PseudoTieMode
+/// @brief Specifies which pseudo tie behavior is being evaluated.
+/// @details A pseudo tie may be represented by either a shape definition (e.g., @ref musx::dom::others::ShapeDef) or a
+/// smart shape (@ref musx::dom::others::SmartShape). These helpers assume you have already determined that the
+/// candidate object is acting as a surrogate tie and are only responsible for evaluating its placement behavior.
+enum class PseudoTieMode
+{
+    LaissezVibrer,  ///< Pseudo laissez vibrer tie (forward surrogate).
+    TieEnd          ///< Pseudo tie end (backward or left-facing surrogate).
+};
 
 /// @brief Returns true if a forward tie surrogate is shifted backward to act as a tie end.
 /// @details A pseudo tie may be represented by either a shape definition (e.g., @ref musx::dom::others::ShapeDef) or a
@@ -39,4 +51,5 @@ namespace musx::utils {
 /// distinguish forward vs. backward usage.
 [[nodiscard]] bool calcIsPseudoForwardTie(dom::Evpu startOffset, dom::Evpu endOffset);
 
-} // namespace musx::utils
+} // namespace utils
+} // namespace musx

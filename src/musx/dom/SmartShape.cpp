@@ -424,28 +424,30 @@ CurveContourDirection others::SmartShape::calcContourDirection() const
     }
 }
 
-bool others::SmartShape::calcIsLaissezVibrerTie(const EntryInfoPtr& forStartEntry) const
+bool others::SmartShape::calcIsPseudoTie(utils::PseudoTieMode mode, const EntryInfoPtr& forStartEntry) const
 {
-    if (!calcIsPotentialForwardTie(forStartEntry)) {
-        return false;
-    }
-    if (startTermSeg->endPoint->compareMetricPosition(*endTermSeg->endPoint) != 0) {
-        return false;
-    }
-    return true;
-}
+    switch (mode) {
+    case utils::PseudoTieMode::LaissezVibrer:
+        if (!calcIsPotentialForwardTie(forStartEntry)) {
+            return false;
+        }
+        break;
 
-bool others::SmartShape::calcIsUsedAsTieEnd(const EntryInfoPtr& forStartEntry) const
-{
-    if (!calcIsPotentialTie(forStartEntry)) {
-        return false;
+    case utils::PseudoTieMode::TieEnd:
+        if (!calcIsPotentialTie(forStartEntry)) {
+            return false;
+        }
+        {
+            const auto startOffset = startTermSeg->endPointAdj->calcHorzOffset();
+            const auto endOffset = endTermSeg->endPointAdj->calcHorzOffset();
+            if (!utils::calcIsPseudoBackwardTie(startOffset, endOffset)) {
+                return false;
+            }
+        }
+        break;
     }
-    if (startTermSeg->endPoint->compareMetricPosition(*endTermSeg->endPoint) != 0) {
-        return false;
-    }
-    const auto startOffset = startTermSeg->endPointAdj->calcHorzOffset();
-    const auto endOffset = endTermSeg->endPointAdj->calcHorzOffset();
-    return utils::calcIsPseudoBackwardTie(startOffset, endOffset);
+
+    return startTermSeg->endPoint->compareMetricPosition(*endTermSeg->endPoint) == 0;
 }
 
 // ********************************

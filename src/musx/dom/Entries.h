@@ -35,6 +35,10 @@ class Transposer;
 } // namespace music_theory
 
 namespace musx {
+namespace utils {
+enum class PseudoTieMode;
+} // namespace utils
+
 namespace dom {
 
 namespace others {
@@ -1704,6 +1708,12 @@ public:
     bool calcHasPseudoLvTie(CurveContourDirection* tieDirection = nullptr) const;
 
 private:
+    /// @brief Calculates pseudo tie behavior for the specified mode.
+    /// @param [out] tieDirection Optional output parameter receiving the tie's curve contour direction.
+    /// @param mode The pseudo tie mode to evaluate.
+    [[nodiscard]]
+    bool calcPseudoTieInternal(utils::PseudoTieMode mode, CurveContourDirection* tieDirection) const;
+
     /// @brief Returns true if a pseudo tie condition is satisfied for the entry and optionally outputs a contour.
     /// @param [in,out] tieDirection Optional output parameter receiving the tie's curve contour direction.
     /// @param directions Contour directions gathered for this entry.

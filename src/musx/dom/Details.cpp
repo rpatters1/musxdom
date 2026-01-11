@@ -148,9 +148,13 @@ std::optional<ArticulationAssign::PseudoTieShapeInfo> ArticulationAssign::calcPs
     return result;
 }
 
-std::optional<details::ArticulationAssign::PseudoTieShapeInfo> details::ArticulationAssign::calcForwardTieShapeInfo(
-    const EntryInfoPtr& forStartEntry) const
+std::optional<details::ArticulationAssign::PseudoTieShapeInfo> details::ArticulationAssign::calcIsPseudoTie(
+    utils::PseudoTieMode mode, const EntryInfoPtr& forStartEntry) const
 {
+    if (mode != utils::PseudoTieMode::LaissezVibrer) {
+        return std::nullopt;
+    }
+
     const auto tieShapeInfo = calcPseudoTieShape(forStartEntry);
     if (!tieShapeInfo || tieShapeInfo->shapeType != KnownShapeDefType::SlurTieCurveRight) {
         return std::nullopt;

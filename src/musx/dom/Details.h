@@ -38,6 +38,10 @@
  // do not add other dom class dependencies. Use Implementations.h for implementations that need total class access.
 
 namespace musx {
+namespace utils {
+enum class PseudoTieMode;
+} // namespace utils
+
 namespace dom {
 
 class EntryInfoPtr;
@@ -146,9 +150,10 @@ public:
     /// @brief Calculates information about a shape-based articulation that could represent a pseudo tie.
     [[nodiscard]] std::optional<PseudoTieShapeInfo> calcPseudoTieShape(const EntryInfoPtr& forStartEntry) const;
 
-    /// @brief Calculates the pseudo-tie shape info if this articulation is acting as a forward tie surrogate.
+    /// @brief Calculates the pseudo-tie shape info if this articulation is acting as a pseudo tie for the specified mode.
     /// @return The pseudo-tie shape info when a qualifying shape exists; otherwise std::nullopt.
-    [[nodiscard]] std::optional<PseudoTieShapeInfo> calcForwardTieShapeInfo(const EntryInfoPtr& forStartEntry) const;
+    [[nodiscard]] std::optional<PseudoTieShapeInfo> calcIsPseudoTie(utils::PseudoTieMode mode,
+        const EntryInfoPtr& forStartEntry) const;
 
     static const xml::XmlElementArray<ArticulationAssign>& xmlMappingArray();   ///< Required for musx::factory::FieldPopulator.
     constexpr static std::string_view XmlNodeName = "articAssign"; ///< The XML node name for this type.
