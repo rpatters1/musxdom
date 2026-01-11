@@ -21,9 +21,20 @@
  */
 #pragma once
 
+#include <optional>
+
 #include "musx/dom/Fundamentals.h"
+#include "musx/dom/MusxInstance.h"
 
 namespace musx {
+namespace dom {
+enum class KnownShapeDefType;
+
+namespace others {
+class ShapeDef;
+} // namespace others
+} // namespace dom
+
 namespace utils {
 
 /// @enum PseudoTieMode
@@ -34,7 +45,15 @@ namespace utils {
 enum class PseudoTieMode
 {
     LaissezVibrer,  ///< Pseudo laissez vibrer tie (forward surrogate).
-    TieEnd          ///< Pseudo tie end (backward or left-facing surrogate).
+    TieEnd          ///< Pseudo tie-end (backward or left-shifted surrogate).
+};
+
+/// @struct PseudoTieShapeInfo
+/// @brief Information about a shape that could be used as a surrogate for a tie.
+struct PseudoTieShapeInfo
+{
+    dom::MusxInstance<dom::others::ShapeDef> shape;             ///< The resolved shape definition.
+    dom::KnownShapeDefType shapeType{};                         ///< The recognized shape category (e.g., SlurTieCurveRight/Left).
 };
 
 /// @brief Returns true if a forward tie surrogate is shifted backward to act as a tie end.

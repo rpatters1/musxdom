@@ -71,9 +71,10 @@ namespace details {
 // ***** ArticulationAssign *****
 // ******************************
 
-std::optional<ArticulationAssign::PseudoTieShapeInfo> ArticulationAssign::calcPseudoTieShape(const EntryInfoPtr& forStartEntry) const
+std::optional<details::ArticulationAssign::PseudoTieShapeContext>
+details::ArticulationAssign::calcPseudoTieShapeContext(const EntryInfoPtr& forStartEntry) const
 {
-    PseudoTieShapeInfo result;
+    PseudoTieShapeContext result;
     if (!forStartEntry || !articDef || forStartEntry.calcDisplaysAsRest()) {
         return std::nullopt;
     }
@@ -88,7 +89,7 @@ std::optional<ArticulationAssign::PseudoTieShapeInfo> ArticulationAssign::calcPs
     if (!result.definition) {
         return std::nullopt;
     }
-    auto def = result.definition;
+    const auto def = result.definition;
 
     using AD = others::ArticulationDef;
     if (def->copyMode != AD::CopyMode::None || def->centerOnStem) {
@@ -122,49 +123,61 @@ std::optional<ArticulationAssign::PseudoTieShapeInfo> ArticulationAssign::calcPs
         }
     };
     result.placeAbove = calcPlacementAbove();
+    result.usesAlternateSymbol = result.placeAbove ? def->aboveSymbolAlt : def->belowSymbolAlt;
 
-    const bool useAltSymbol = result.placeAbove ? def->aboveSymbolAlt : def->belowSymbolAlt;
-    result.usesAlternateSymbol = useAltSymbol;
-
-    const bool usesShape = useAltSymbol ? def->altIsShape : def->mainIsShape;
+    const bool usesShape = result.usesAlternateSymbol ? def->altIsShape : def->mainIsShape;
     if (!usesShape) {
         return std::nullopt;
     }
-    const auto shapeId = useAltSymbol ? def->altShape : def->mainShape;
+    const auto shapeId = result.usesAlternateSymbol ? def->altShape : def->mainShape;
     if (!shapeId) {
         return std::nullopt;
     }
-    result.shape = doc->getOthers()->get<others::ShapeDef>(getRequestedPartId(), shapeId);
-    if (!result.shape) {
+    result.info.shape = doc->getOthers()->get<others::ShapeDef>(getRequestedPartId(), shapeId);
+    if (!result.info.shape) {
         return std::nullopt;
     }
-    auto knownType = result.shape->recognize();
+    auto knownType = result.info.shape->recognize();
     if (!knownType || (*knownType != KnownShapeDefType::SlurTieCurveRight
         && *knownType != KnownShapeDefType::SlurTieCurveLeft)) {
         return std::nullopt;
     }
-    result.shapeType = *knownType;
+    result.info.shapeType = *knownType;
 
     return result;
 }
 
-std::optional<details::ArticulationAssign::PseudoTieShapeInfo> details::ArticulationAssign::calcIsPseudoTie(
+std::optional<utils::PseudoTieShapeInfo> details::ArticulationAssign::calcIsPseudoTie(
     utils::PseudoTieMode mode, const EntryInfoPtr& forStartEntry) const
 {
-    if (mode != utils::PseudoTieMode::LaissezVibrer) {
+    using AD = others::ArticulationDef;
+
+    const auto tieShapeContext = calcPseudoTieShapeContext(forStartEntry);
+    if (!tieShapeContext) {
+        return std::nullopt;
+    }
+    const auto& tieShapeInfo = tieShapeContext->info;
+    if (mode == utils::PseudoTieMode::TieEnd && tieShapeInfo.shapeType == KnownShapeDefType::SlurTieCurveLeft) {
+        return tieShapeInfo;
+    }
+    if (tieShapeInfo.shapeType != KnownShapeDefType::SlurTieCurveRight) {
         return std::nullopt;
     }
 
-    const auto tieShapeInfo = calcPseudoTieShape(forStartEntry);
-    if (!tieShapeInfo || tieShapeInfo->shapeType != KnownShapeDefType::SlurTieCurveRight) {
-        return std::nullopt;
-    }
-
-    const auto useAltSymbol = tieShapeInfo->usesAlternateSymbol;
-    const auto offset = (useAltSymbol ? tieShapeInfo->definition->xOffsetAlt : tieShapeInfo->definition->xOffsetMain) + horzOffset;
-    const auto endOffset = offset + EVPU_PER_SPACE;
-    if (!utils::calcIsPseudoForwardTie(offset, endOffset)) {
-        return std::nullopt;
+    const auto def = tieShapeContext->definition;
+    const auto offset = (tieShapeContext->usesAlternateSymbol ? def->xOffsetAlt : def->xOffsetMain) + horzOffset;
+    const auto endOffset = offset + tieShapeContext->info.shape->calcWidth().value_or(EVPU_PER_SPACE);
+    switch (mode) {
+    case utils::PseudoTieMode::LaissezVibrer:
+        if (!utils::calcIsPseudoForwardTie(offset, endOffset)) {
+            return std::nullopt;
+        }
+        break;
+    case utils::PseudoTieMode::TieEnd:
+        if (!utils::calcIsPseudoBackwardTie(offset, endOffset)) {
+            return std::nullopt;
+        }
+        break;
     }
 
     return tieShapeInfo;

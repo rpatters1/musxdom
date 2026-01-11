@@ -32,6 +32,7 @@
 #include "musx/util/EnigmaString.h"
 #include "musx/util/Logger.h"
 #include "musx/util/Fraction.h"
+#include "musx/util/PseudoTieUtils.h"
 #include "musx/dom/PercussionNoteType.h"
 
 #include "BaseClasses.h"
@@ -1308,8 +1309,8 @@ private:
     /// @brief Calculates the entry alignment type or std::nullopt if it does not align with entries.
     [[nodiscard]] std::optional<HorizontalMeasExprAlign> calcEntryAlignmentType() const;
 
-    /// @brief Calculates the shape type of a shape expression if it is known.
-    [[nodiscard]] std::optional<KnownShapeDefType> calcShapeType() const;
+    /// @brief Calculates the pseudo-tie shape info for this shape expression if it is known.
+    [[nodiscard]] std::optional<utils::PseudoTieShapeInfo> calcPseudoTieShape() const;
 
 public:
     /** @brief Constructor function */

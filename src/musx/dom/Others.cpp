@@ -406,16 +406,24 @@ bool MeasureExprAssign::calcIsHiddenByAlternateNotation() const
     }
 }
 
-std::optional<KnownShapeDefType> MeasureExprAssign::calcShapeType() const
+std::optional<utils::PseudoTieShapeInfo> MeasureExprAssign::calcPseudoTieShape() const
 {
     const auto shapeExp = getShapeExpression();
     if (!shapeExp || shapeExp->shapeDef == 0) {
         return std::nullopt;
     }
-    if (auto shape = shapeExp->getShape()) {
-        return shape->recognize();
+    const auto shape = shapeExp->getShape();
+    if (!shape) {
+        return std::nullopt;
     }
-    return std::nullopt;
+    auto knownType = shape->recognize();
+    if (!knownType) {
+        return std::nullopt;
+    }
+    utils::PseudoTieShapeInfo info;
+    info.shape = shape;
+    info.shapeType = *knownType;
+    return info;
 }
 
 bool MeasureExprAssign::calcIsPseudoTie(utils::PseudoTieMode mode, const EntryInfoPtr& forStartEntry) const
@@ -432,22 +440,34 @@ bool MeasureExprAssign::calcIsPseudoTie(utils::PseudoTieMode mode, const EntryIn
     if (!alignmentType || alignmentType == Align::LeftOfAllNoteheads || alignmentType == Align::Stem) {
         return false;
     }
-    if (calcShapeType() != KnownShapeDefType::SlurTieCurveRight) {
+    auto shapeInfo = calcPseudoTieShape();
+    if (!shapeInfo || (shapeInfo->shapeType != KnownShapeDefType::SlurTieCurveRight
+        && shapeInfo->shapeType != KnownShapeDefType::SlurTieCurveLeft)) {
         return false;
     }
     if (!forStartEntry.isSameEntry(calcAssociatedEntry())) {
         return false;
     }
-    if (alignmentType == Align::RightOfAllNoteheads) {
+
+    if (mode == utils::PseudoTieMode::TieEnd && shapeInfo->shapeType == KnownShapeDefType::SlurTieCurveLeft) {
         return true;
     }
+    if (mode == utils::PseudoTieMode::LaissezVibrer && shapeInfo->shapeType != KnownShapeDefType::SlurTieCurveRight) {
+        return false;
+    }
+    if (mode == utils::PseudoTieMode::TieEnd && shapeInfo->shapeType != KnownShapeDefType::SlurTieCurveRight) {
+        return false;
+    }
+    if (alignmentType == Align::RightOfAllNoteheads) {
+        return mode == utils::PseudoTieMode::LaissezVibrer;
+    }
     const auto startOffset = horzEvpuOff;
-    const auto endOffset = startOffset + EVPU_PER_SPACE;
+    const auto endOffset = startOffset + shapeInfo->shape->calcWidth().value_or(EVPU_PER_SPACE);
     switch (mode) {
     case utils::PseudoTieMode::LaissezVibrer:
         return utils::calcIsPseudoForwardTie(startOffset, endOffset);
     case utils::PseudoTieMode::TieEnd:
-        return false;
+        return utils::calcIsPseudoBackwardTie(startOffset, endOffset);
     }
     return false;
 }

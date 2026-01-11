@@ -1707,6 +1707,16 @@ public:
     [[nodiscard]]
     bool calcHasPseudoLvTie(CurveContourDirection* tieDirection = nullptr) const;
 
+    /// @brief Calculates if this note has a smart shape, shape expression, or shape articulation acting as
+    /// a tie end. For any of these to count, the entry must have a number of these stand-in items equal
+    /// to the number of notes in the entry.
+    /// @param [out] tieDirection Optional output parameter receiving the tie's curve contour direction. It is set to
+    ///         #CurveContourDirection::Down for under ties, #CurveContourDirection::Up for over ties, or
+    ///         #CurveContourDirection::Auto if the contour cannot be determined.
+    /// @return True if a pseudo tie end exists; otherwise false.
+    [[nodiscard]]
+    bool calcHasPseudoTieEnd(CurveContourDirection* tieDirection = nullptr) const;
+
 private:
     /// @brief Calculates pseudo tie behavior for the specified mode.
     /// @param [out] tieDirection Optional output parameter receiving the tie's curve contour direction.

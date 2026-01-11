@@ -2942,6 +2942,11 @@ bool NoteInfoPtr::calcHasPseudoLvTie(CurveContourDirection* tieDirection) const
     return calcPseudoTieInternal(utils::PseudoTieMode::LaissezVibrer, tieDirection);
 }
 
+bool NoteInfoPtr::calcHasPseudoTieEnd(CurveContourDirection* tieDirection) const
+{
+    return calcPseudoTieInternal(utils::PseudoTieMode::TieEnd, tieDirection);
+}
+
 bool NoteInfoPtr::calcPseudoTieInternal(utils::PseudoTieMode mode, CurveContourDirection* tieDirection) const
 {
     const bool needDirection = (tieDirection != nullptr);
@@ -2955,20 +2960,16 @@ bool NoteInfoPtr::calcPseudoTieInternal(utils::PseudoTieMode mode, CurveContourD
         return false;
     }
 
-    if (mode != utils::PseudoTieMode::LaissezVibrer) {
-        return false;
-    }
-
-    std::vector<CurveContourDirection> lvDirections;
+    std::vector<CurveContourDirection> tieDirections;
 
     // check smart slurs
     entryInfoPtr.iterateStartingSmartShapes([&](const MusxInstance<others::SmartShape>& shape) {
-        if (shape->calcIsPseudoTie(utils::PseudoTieMode::LaissezVibrer, entryInfoPtr)) {
-            lvDirections.push_back(shape->calcContourDirection());
+        if (shape->calcIsPseudoTie(mode, entryInfoPtr)) {
+            tieDirections.push_back(shape->calcContourDirection());
         }
         return true;
     });
-    if (selectPseudoTieDirection(tieDirection, lvDirections)) {
+    if (selectPseudoTieDirection(tieDirection, tieDirections)) {
         return true;
     }
 
@@ -2976,10 +2977,10 @@ bool NoteInfoPtr::calcPseudoTieInternal(utils::PseudoTieMode mode, CurveContourD
     const Cmper partId = entryInfoPtr.getFrame()->getRequestedPartId();
 
     /// check shape expressions
-    lvDirections.clear();
+    tieDirections.clear();
     auto measExpAssigns = doc->getOthers()->getArray<others::MeasureExprAssign>(partId, entryInfoPtr.getMeasure());
     for (const auto& assign : measExpAssigns) {
-        if (assign->calcIsPseudoTie(utils::PseudoTieMode::LaissezVibrer, entryInfoPtr)) {
+        if (assign->calcIsPseudoTie(mode, entryInfoPtr)) {
             CurveContourDirection nextContour = CurveContourDirection::Auto;
             if (needDirection) {
                 const auto shapeExp = assign->getShapeExpression();
@@ -2990,22 +2991,22 @@ bool NoteInfoPtr::calcPseudoTieInternal(utils::PseudoTieMode mode, CurveContourD
                     nextContour = shape->calcSlurContour();
                 }
             }
-            lvDirections.push_back(nextContour);
+            tieDirections.push_back(nextContour);
         }
     }
-    if (selectPseudoTieDirection(tieDirection, lvDirections)) {
+    if (selectPseudoTieDirection(tieDirection, tieDirections)) {
         return true;
     }
 
     /// check shape articulations
-    lvDirections.clear();
+    tieDirections.clear();
     auto articAssigns = doc->getDetails()->getArray<details::ArticulationAssign>(partId, entry->getEntryNumber());
     for (const auto& assign : articAssigns) {
-        if (const auto shapeInfo = assign->calcIsPseudoTie(utils::PseudoTieMode::LaissezVibrer, entryInfoPtr)) {
-            lvDirections.push_back(shapeInfo->shape->calcSlurContour());
+        if (const auto shapeInfo = assign->calcIsPseudoTie(mode, entryInfoPtr)) {
+            tieDirections.push_back(shapeInfo->shape->calcSlurContour());
         }
     }
-    if (selectPseudoTieDirection(tieDirection, lvDirections)) {
+    if (selectPseudoTieDirection(tieDirection, tieDirections)) {
         return true;
     }
 
