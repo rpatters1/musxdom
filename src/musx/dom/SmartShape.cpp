@@ -365,7 +365,9 @@ bool others::SmartShape::calcIsPotentialForwardTie(const EntryInfoPtr& forStartE
     if (cmp) {
         return cmp < 0;
     }
-    return endTermSeg->endPointAdj->calcHorzOffset() > startTermSeg->endPointAdj->calcHorzOffset();
+    const auto startOffset = startTermSeg->endPointAdj->calcHorzOffset();
+    const auto endOffset = endTermSeg->endPointAdj->calcHorzOffset();
+    return utils::calcIsPseudoForwardTie(startOffset, endOffset);
 }
 
 NoteInfoPtr others::SmartShape::calcArpeggiatedTieToNote(const EntryInfoPtr& forStartEntry) const
@@ -430,8 +432,7 @@ bool others::SmartShape::calcIsLaissezVibrerTie(const EntryInfoPtr& forStartEntr
     if (startTermSeg->endPoint->compareMetricPosition(*endTermSeg->endPoint) != 0) {
         return false;
     }
-    const auto startOffset = startTermSeg->endPointAdj->calcHorzOffset();
-    return startOffset > -EVPU_PER_SPACE;
+    return true;
 }
 
 bool others::SmartShape::calcIsUsedAsTieEnd(const EntryInfoPtr& forStartEntry) const
@@ -444,13 +445,7 @@ bool others::SmartShape::calcIsUsedAsTieEnd(const EntryInfoPtr& forStartEntry) c
     }
     const auto startOffset = startTermSeg->endPointAdj->calcHorzOffset();
     const auto endOffset = endTermSeg->endPointAdj->calcHorzOffset();
-    if (endOffset < startOffset) {
-        return true;
-    }
-    // end may be left of the EDU position, but not more than one space to the right.
-    // start must be at least one space to the left.
-    constexpr auto MAX_LEFT = -3 * EVPU_PER_SPACE; // adjust value if necessary
-    return endOffset <= EVPU_PER_SPACE && endOffset >= MAX_LEFT  && startOffset <= -EVPU_PER_SPACE;
+    return utils::calcIsPseudoBackwardTie(startOffset, endOffset);
 }
 
 // ********************************

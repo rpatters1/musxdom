@@ -441,7 +441,9 @@ bool MeasureExprAssign::calcIsPotentialForwardTie(const EntryInfoPtr& forStartEn
     if (alignmentType == Align::RightOfAllNoteheads) {
         return true;
     }
-    return horzEvpuOff >= -EVPU_PER_SPACE;
+    const auto startOffset = horzEvpuOff;
+    const auto endOffset = startOffset + EVPU_PER_SPACE;
+    return utils::calcIsPseudoForwardTie(startOffset, endOffset);
 }
 
 // *******************************

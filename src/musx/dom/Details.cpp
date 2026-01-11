@@ -151,7 +151,6 @@ std::optional<ArticulationAssign::PseudoTieShapeInfo> ArticulationAssign::calcPs
 std::optional<details::ArticulationAssign::PseudoTieShapeInfo> details::ArticulationAssign::calcForwardTieShapeInfo(
     const EntryInfoPtr& forStartEntry) const
 {
-    constexpr Evpu MIN_OFFSET = -EVPU_PER_SPACE;
     const auto tieShapeInfo = calcPseudoTieShape(forStartEntry);
     if (!tieShapeInfo || tieShapeInfo->shapeType != KnownShapeDefType::SlurTieCurveRight) {
         return std::nullopt;
@@ -159,7 +158,8 @@ std::optional<details::ArticulationAssign::PseudoTieShapeInfo> details::Articula
 
     const auto useAltSymbol = tieShapeInfo->usesAlternateSymbol;
     const auto offset = (useAltSymbol ? tieShapeInfo->definition->xOffsetAlt : tieShapeInfo->definition->xOffsetMain) + horzOffset;
-    if (offset < MIN_OFFSET) {
+    const auto endOffset = offset + EVPU_PER_SPACE;
+    if (!utils::calcIsPseudoForwardTie(offset, endOffset)) {
         return std::nullopt;
     }
 

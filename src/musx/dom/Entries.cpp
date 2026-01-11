@@ -2951,25 +2951,6 @@ bool NoteInfoPtr::calcHasPseudoLvTie(CurveContourDirection* tieDirection) const
     }
 
     std::vector<CurveContourDirection> lvDirections;
-    auto selectDirection = [&]() -> bool {
-        if (lvDirections.size() == entry->notes.size()) {
-            if (needDirection) {
-                if (lvDirections.size() > 1) {
-                    // Sort by contour: Auto sorts first so we can bail when any direction is indeterminate,
-                    // then Down (under) and Up (over) follow to approximate each note's "tie" order.
-                    // Without a direct note-to-slur mapping this ordering acts as a proxy for the likely vertical stacking.
-                    // We also avoid looking at the vertical offsets, because they are difficult to compare when there
-                    // are different positioning options on each instance.
-                    std::sort(lvDirections.begin(), lvDirections.end());
-                }
-                if (lvDirections[0] != CurveContourDirection::Auto) { // if the first is not Auto, none are Auto
-                    *tieDirection = lvDirections[getNoteIndex()];
-                }
-            }
-            return true;
-        }
-        return false;
-    };
 
     // check smart slurs
     entryInfoPtr.iterateStartingSmartShapes([&](const MusxInstance<others::SmartShape>& shape) {
@@ -2978,7 +2959,7 @@ bool NoteInfoPtr::calcHasPseudoLvTie(CurveContourDirection* tieDirection) const
         }
         return true;
     });
-    if (selectDirection()) {
+    if (selectPseudoTieDirection(tieDirection, lvDirections)) {
         return true;
     }
 
@@ -3003,7 +2984,7 @@ bool NoteInfoPtr::calcHasPseudoLvTie(CurveContourDirection* tieDirection) const
             lvDirections.push_back(nextContour);
         }
     }
-    if (selectDirection()) {
+    if (selectPseudoTieDirection(tieDirection, lvDirections)) {
         return true;
     }
 
@@ -3015,11 +2996,34 @@ bool NoteInfoPtr::calcHasPseudoLvTie(CurveContourDirection* tieDirection) const
             lvDirections.push_back(shapeInfo->shape->calcSlurContour());
         }
     }
-    if (selectDirection()) {
+    if (selectPseudoTieDirection(tieDirection, lvDirections)) {
         return true;
     }
 
     return false;
+}
+
+bool NoteInfoPtr::selectPseudoTieDirection(CurveContourDirection* tieDirection,
+    std::vector<CurveContourDirection>& directions) const
+{
+    if (directions.size() != m_entry->getEntry()->notes.size()) {
+        return false;
+    }
+
+    if (tieDirection != nullptr) {
+        if (directions.size() > 1) {
+            // Sort by contour: Auto sorts first so we can bail when any direction is indeterminate,
+            // then Down (under) and Up (over) follow to approximate each note's "tie" order.
+            // Without a direct note-to-slur mapping this ordering acts as a proxy for the likely vertical stacking.
+            // We also avoid looking at the vertical offsets, because they are difficult to compare when there
+            // are different positioning options on each instance.
+            std::sort(directions.begin(), directions.end());
+        }
+        if (directions[0] != CurveContourDirection::Auto) { // if the first is not Auto, none are Auto
+            *tieDirection = directions[getNoteIndex()];
+        }
+    }
+    return true;
 }
 
 } // namespace dom

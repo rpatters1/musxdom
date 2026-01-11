@@ -1704,6 +1704,13 @@ public:
     bool calcHasPseudoLvTie(CurveContourDirection* tieDirection = nullptr) const;
 
 private:
+    /// @brief Returns true if a pseudo tie condition is satisfied for the entry and optionally outputs a contour.
+    /// @param [in,out] tieDirection Optional output parameter receiving the tie's curve contour direction.
+    /// @param directions Contour directions gathered for this entry.
+    [[nodiscard]]
+    bool selectPseudoTieDirection(CurveContourDirection* tieDirection,
+        std::vector<CurveContourDirection>& directions) const;
+
     /// @brief Returns true if the two notes represent the same concert pitch or
     /// percussion note.
     /// @param src the value to compare with.
