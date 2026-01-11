@@ -883,8 +883,8 @@ CurveContourDirection ShapeDef::calcSlurContour() const
 
             const Evpu top = currentStart->top;
             const Evpu bottom = currentStart->bottom;
-            maxTop = maxTop ? std::max(*maxTop, top) : top;
-            minBottom = minBottom ? std::min(*minBottom, bottom) : bottom;
+            maxTop = maxTop ? (std::max)(*maxTop, top) : top;
+            minBottom = minBottom ? (std::min)(*minBottom, bottom) : bottom;
             hasSlur = true;
             currentStart.reset();
             break;
