@@ -374,6 +374,7 @@ var hierarchy =
     [ "musx::dom::OthersPool", "classmusx_1_1dom_1_1OthersPool.html", null ],
     [ "musx::dom::options::PageFormatOptions::PageFormat", "classmusx_1_1dom_1_1options_1_1PageFormatOptions_1_1PageFormat.html", null ],
     [ "musx::dom::percussion::PercussionNoteType", "structmusx_1_1dom_1_1percussion_1_1PercussionNoteType.html", null ],
+    [ "musx::utils::PseudoTieShapeInfo", "structmusx_1_1utils_1_1PseudoTieShapeInfo.html", null ],
     [ "musx::dom::ShapeDefInstruction::Rectangle", "structmusx_1_1dom_1_1ShapeDefInstruction_1_1Rectangle.html", null ],
     [ "musx::dom::ShapeDefInstruction::RLineTo", "structmusx_1_1dom_1_1ShapeDefInstruction_1_1RLineTo.html", null ],
     [ "musx::dom::ShapeDefInstruction::RMoveTo", "structmusx_1_1dom_1_1ShapeDefInstruction_1_1RMoveTo.html", null ],

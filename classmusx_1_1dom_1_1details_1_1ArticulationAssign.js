@@ -1,6 +1,7 @@
 var classmusx_1_1dom_1_1details_1_1ArticulationAssign =
 [
     [ "ArticulationAssign", "classmusx_1_1dom_1_1details_1_1ArticulationAssign.html#a045264b0f6ff881411fddbb01e546fa6", null ],
+    [ "calcIsPseudoTie", "classmusx_1_1dom_1_1details_1_1ArticulationAssign.html#ac539b3c2b381e0a2f50dc5324c00c49c", null ],
     [ "aboveEntry", "classmusx_1_1dom_1_1details_1_1ArticulationAssign.html#a7f5a314ada71b48df64a52ec81f429ea", null ],
     [ "articDef", "classmusx_1_1dom_1_1details_1_1ArticulationAssign.html#a087facae355f20a8bbfa519f78d76b4b", null ],
     [ "avoidSlur", "classmusx_1_1dom_1_1details_1_1ArticulationAssign.html#a5722e9b44fd91eacf5a64f76f5a1831f", null ],

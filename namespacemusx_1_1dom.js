@@ -870,6 +870,11 @@ var namespacemusx_1_1dom =
       [ "Right", "namespacemusx_1_1dom.html#ae1cc711919158f264a344a6a966f5d4ca92b09c7c48c520c3c55e497875da437c", null ],
       [ "Center", "namespacemusx_1_1dom.html#ae1cc711919158f264a344a6a966f5d4ca4f1f6016fc9f3f2353c0cc7c67b292bd", null ]
     ] ],
+    [ "CurveContourDirection", "namespacemusx_1_1dom.html#a0dc36a86e1ae0cadd7b7e4c624b07b55", [
+      [ "Auto", "namespacemusx_1_1dom.html#a0dc36a86e1ae0cadd7b7e4c624b07b55a06b9281e396db002010bde1de57262eb", null ],
+      [ "Down", "namespacemusx_1_1dom.html#a0dc36a86e1ae0cadd7b7e4c624b07b55a08a38277b0309070706f6652eeae9a53", null ],
+      [ "Up", "namespacemusx_1_1dom.html#a0dc36a86e1ae0cadd7b7e4c624b07b55a258f49887ef8d14ac268c92b02503aaa", null ]
+    ] ],
     [ "DateFormat", "namespacemusx_1_1dom.html#a6bd9f8875781e736128880418451040b", [
       [ "Short", "namespacemusx_1_1dom.html#a6bd9f8875781e736128880418451040ba30bb747c98bccdd11b3f89e644c4d0ad", null ],
       [ "Long", "namespacemusx_1_1dom.html#a6bd9f8875781e736128880418451040ba8394f0347c184cf156ac5924dccb773b", null ],

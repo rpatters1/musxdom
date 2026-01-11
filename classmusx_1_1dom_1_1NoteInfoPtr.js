@@ -2,9 +2,11 @@ var classmusx_1_1dom_1_1NoteInfoPtr =
 [
     [ "NoteInfoPtr", "classmusx_1_1dom_1_1NoteInfoPtr.html#af96307ed369138a67d004695055e894d", null ],
     [ "NoteInfoPtr", "classmusx_1_1dom_1_1NoteInfoPtr.html#abafc8ded0db6f072316ecfee838eaa38", null ],
-    [ "calcArpeggiatedTieToNote", "classmusx_1_1dom_1_1NoteInfoPtr.html#a634185f56bf40899a8b0fbd6046bfa09", null ],
+    [ "calcArpeggiatedTieToNote", "classmusx_1_1dom_1_1NoteInfoPtr.html#a86d9a28c8d013692c8e06d6624ae3bbf", null ],
     [ "calcCrossStaffDirection", "classmusx_1_1dom_1_1NoteInfoPtr.html#aad11d0055ca42686bfb5d5f8dfa98247", null ],
     [ "calcDefaultEnharmonic", "classmusx_1_1dom_1_1NoteInfoPtr.html#aabb32c50345e151d488956b4f61f99b1", null ],
+    [ "calcHasPseudoLvTie", "classmusx_1_1dom_1_1NoteInfoPtr.html#a8d126e1959435de5a8168c2713ff928d", null ],
+    [ "calcHasPseudoTieEnd", "classmusx_1_1dom_1_1NoteInfoPtr.html#affbcbf88341627f44eb678a36783a4ca", null ],
     [ "calcIsEnharmonicRespell", "classmusx_1_1dom_1_1NoteInfoPtr.html#aaa7136caca4301202a455a113f136553", null ],
     [ "calcIsEnharmonicRespellInAnyPart", "classmusx_1_1dom_1_1NoteInfoPtr.html#a84f3b5f320d4e1dd16a71d82a3db7a4a", null ],
     [ "calcIsIncludedInVoicing", "classmusx_1_1dom_1_1NoteInfoPtr.html#aa078714d4ad095bd9be5da204e9bc438", null ],

@@ -235,12 +235,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:afbbeca7ef4d9d32b9f2f4275bc62bdcd" id="r_afbbeca7ef4d9d32b9f2f4275bc62bdcd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html">NoteInfoPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1SmartShape.html#afbbeca7ef4d9d32b9f2f4275bc62bdcd">calcArpeggiatedTieToNote</a> (const <a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a> &amp;forStartEntry) const</td></tr>
 <tr class="memdesc:afbbeca7ef4d9d32b9f2f4275bc62bdcd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the tied-to note if this slur is being used as an arpeggiated tie on the specified entry.  <br /></td></tr>
 <tr class="separator:afbbeca7ef4d9d32b9f2f4275bc62bdcd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1c5e11c31682e2687efe7019944fb976" id="r_a1c5e11c31682e2687efe7019944fb976"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1SmartShape.html#a1c5e11c31682e2687efe7019944fb976">calcIsLaissezVibrerTie</a> (const <a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a> &amp;forStartEntry) const</td></tr>
-<tr class="memdesc:a1c5e11c31682e2687efe7019944fb976"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if this slur is being used as a laissez vibrer tie on the specified entry. It is used by #EntryInfoPtr::calcHasLaissezVibrerTie, which imposes additional rules and checks.  <br /></td></tr>
-<tr class="separator:a1c5e11c31682e2687efe7019944fb976"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a47ddf6d37bc1caf9d5d635d6dfba9f9b" id="r_a47ddf6d37bc1caf9d5d635d6dfba9f9b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1SmartShape.html#a47ddf6d37bc1caf9d5d635d6dfba9f9b">calcIsUsedAsTieEnd</a> (const <a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a> &amp;forStartEntry) const</td></tr>
-<tr class="memdesc:a47ddf6d37bc1caf9d5d635d6dfba9f9b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if this slur is being used as a tie end (for example, on a 2nd ending.)  <br /></td></tr>
-<tr class="separator:a47ddf6d37bc1caf9d5d635d6dfba9f9b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8e4270d6ae14b235f9df565782ee1e28" id="r_a8e4270d6ae14b235f9df565782ee1e28"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemusx_1_1dom.html#a0dc36a86e1ae0cadd7b7e4c624b07b55">CurveContourDirection</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1SmartShape.html#a8e4270d6ae14b235f9df565782ee1e28">calcContourDirection</a> () const</td></tr>
+<tr class="memdesc:a8e4270d6ae14b235f9df565782ee1e28"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines if this smart shape type has a fixed direction (up or down) or floats automatically.  <br /></td></tr>
+<tr class="separator:a8e4270d6ae14b235f9df565782ee1e28"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa75e75e4e9fb874b087354ab4e15bf5a" id="r_aa75e75e4e9fb874b087354ab4e15bf5a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1SmartShape.html#aa75e75e4e9fb874b087354ab4e15bf5a">calcIsPseudoTie</a> (utils::PseudoTieMode mode, const <a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a> &amp;forStartEntry) const</td></tr>
+<tr class="memdesc:aa75e75e4e9fb874b087354ab4e15bf5a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if this slur is being used as a pseudo tie for the specified mode. It is used by <a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html#a8d126e1959435de5a8168c2713ff928d" title="Calculates if this note has a smart shape, shape expression, or shape articulation acting as a laisse...">NoteInfoPtr::calcHasPseudoLvTie</a>, which imposes additional rules and checks.  <br /></td></tr>
+<tr class="separator:aa75e75e4e9fb874b087354ab4e15bf5a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a247e5ea76b94a8de228db134de7092c1" id="r_a247e5ea76b94a8de228db134de7092c1"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1SmartShape.html#a247e5ea76b94a8de228db134de7092c1">iterateEntries</a> (std::function&lt; bool(const <a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a> &amp;)&gt; iterator, <a class="el" href="classmusx_1_1dom_1_1DeferredReference.html">DeferredReference</a>&lt; <a class="el" href="classmusx_1_1dom_1_1MusxInstanceList.html">MusxInstanceList</a>&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1StaffUsed.html">StaffUsed</a> &gt; &gt; staffList={}) const</td></tr>
 <tr class="memdesc:a247e5ea76b94a8de228db134de7092c1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Iterates all the entries that start within the staves and music range defined by the <a class="el" href="classmusx_1_1dom_1_1others_1_1SmartShape.html" title="Represents a Finale smart shape.">SmartShape</a>. It iterates by staff and then measure.  <br /></td></tr>
 <tr class="separator:a247e5ea76b94a8de228db134de7092c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -696,51 +696,56 @@ Over System Break" in the Finale U.I. </p>
 
 </div>
 </div>
-<a id="a1c5e11c31682e2687efe7019944fb976" name="a1c5e11c31682e2687efe7019944fb976"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1c5e11c31682e2687efe7019944fb976">&#9670;&#160;</a></span>calcIsLaissezVibrerTie()</h2>
+<a id="a8e4270d6ae14b235f9df565782ee1e28" name="a8e4270d6ae14b235f9df565782ee1e28"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8e4270d6ae14b235f9df565782ee1e28">&#9670;&#160;</a></span>calcContourDirection()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">bool musx::dom::others::SmartShape::calcIsLaissezVibrerTie </td>
+          <td class="memname"><a class="el" href="namespacemusx_1_1dom.html#a0dc36a86e1ae0cadd7b7e4c624b07b55">CurveContourDirection</a> musx::dom::others::SmartShape::calcContourDirection </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a> &amp;&#160;</td>
-          <td class="paramname"><em>forStartEntry</em></td><td>)</td>
+          <td class="paramname"></td><td>)</td>
           <td> const</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Returns true if this slur is being used as a laissez vibrer tie on the specified entry. It is used by #EntryInfoPtr::calcHasLaissezVibrerTie, which imposes additional rules and checks. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">forStartEntry</td><td>The entry to check. </td></tr>
-  </table>
-  </dd>
-</dl>
+<p>Determines if this smart shape type has a fixed direction (up or down) or floats automatically. </p>
+<dl class="section return"><dt>Returns</dt><dd>The curve contour direction for fixed-direction shapes; <code><a class="el" href="namespacemusx_1_1dom.html#a0dc36a86e1ae0cadd7b7e4c624b07b55a06b9281e396db002010bde1de57262eb" title="contour is automatic, indeterminate, or does not apply">CurveContourDirection::Auto</a></code> if floating/automatic. </dd></dl>
 
 </div>
 </div>
-<a id="a47ddf6d37bc1caf9d5d635d6dfba9f9b" name="a47ddf6d37bc1caf9d5d635d6dfba9f9b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a47ddf6d37bc1caf9d5d635d6dfba9f9b">&#9670;&#160;</a></span>calcIsUsedAsTieEnd()</h2>
+<a id="aa75e75e4e9fb874b087354ab4e15bf5a" name="aa75e75e4e9fb874b087354ab4e15bf5a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa75e75e4e9fb874b087354ab4e15bf5a">&#9670;&#160;</a></span>calcIsPseudoTie()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">bool musx::dom::others::SmartShape::calcIsUsedAsTieEnd </td>
+          <td class="memname">bool musx::dom::others::SmartShape::calcIsPseudoTie </td>
           <td>(</td>
+          <td class="paramtype">utils::PseudoTieMode&#160;</td>
+          <td class="paramname"><em>mode</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
           <td class="paramtype">const <a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a> &amp;&#160;</td>
-          <td class="paramname"><em>forStartEntry</em></td><td>)</td>
-          <td> const</td>
+          <td class="paramname"><em>forStartEntry</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Returns true if this slur is being used as a tie end (for example, on a 2nd ending.) </p>
+<p>Returns true if this slur is being used as a pseudo tie for the specified mode. It is used by <a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html#a8d126e1959435de5a8168c2713ff928d" title="Calculates if this note has a smart shape, shape expression, or shape articulation acting as a laisse...">NoteInfoPtr::calcHasPseudoLvTie</a>, which imposes additional rules and checks. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
+    <tr><td class="paramname">mode</td><td>The pseudo tie mode to evaluate. </td></tr>
     <tr><td class="paramname">forStartEntry</td><td>The entry to check. </td></tr>
   </table>
   </dd>

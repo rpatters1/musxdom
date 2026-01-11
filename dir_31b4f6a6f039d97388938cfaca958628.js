@@ -4,5 +4,6 @@ var dir_31b4f6a6f039d97388938cfaca958628 =
     [ "EnigmaString.h", "EnigmaString_8h_source.html", null ],
     [ "Fraction.h", "Fraction_8h_source.html", null ],
     [ "Logger.h", "Logger_8h_source.html", null ],
+    [ "PseudoTieUtils.h", "PseudoTieUtils_8h_source.html", null ],
     [ "TestSupport.h", "TestSupport_8h_source.html", null ]
 ];

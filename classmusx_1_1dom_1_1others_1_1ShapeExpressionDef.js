@@ -1,6 +1,7 @@
 var classmusx_1_1dom_1_1others_1_1ShapeExpressionDef =
 [
     [ "ShapeExpressionDef", "classmusx_1_1dom_1_1others_1_1ShapeExpressionDef.html#ab0266e213ac598c09cd07c1faf308eaf", null ],
+    [ "getShape", "classmusx_1_1dom_1_1others_1_1ShapeExpressionDef.html#ab800c66f10dc1a38dd8b49287400dad2", null ],
     [ "auxData1", "classmusx_1_1dom_1_1others_1_1ShapeExpressionDef.html#a0a07cc9fa9bd3d839c1c978ccf364e62", null ],
     [ "breakMmRest", "classmusx_1_1dom_1_1others_1_1ShapeExpressionDef.html#a1971654a73f4d730511130a7a276cdac", null ],
     [ "categoryId", "classmusx_1_1dom_1_1others_1_1ShapeExpressionDef.html#a13f2061288fa15a54abef3cd212956f8", null ],
