@@ -462,7 +462,7 @@ bool MeasureExprAssign::calcIsPseudoTie(utils::PseudoTieMode mode, const EntryIn
         return mode == utils::PseudoTieMode::LaissezVibrer;
     }
     const auto startOffset = horzEvpuOff;
-    const auto endOffset = startOffset + shapeInfo->shape->calcWidth().value_or(EVPU_PER_SPACE);
+    const auto endOffset = startOffset + shapeInfo->calcWidthOffset();
     switch (mode) {
     case utils::PseudoTieMode::LaissezVibrer:
         return utils::calcIsPseudoForwardTie(startOffset, endOffset);

@@ -48,12 +48,16 @@ enum class PseudoTieMode
     TieEnd          ///< Pseudo tie-end (backward or left-shifted surrogate).
 };
 
+
 /// @struct PseudoTieShapeInfo
 /// @brief Information about a shape that could be used as a surrogate for a tie.
 struct PseudoTieShapeInfo
 {
     dom::MusxInstance<dom::others::ShapeDef> shape;             ///< The resolved shape definition.
     dom::KnownShapeDefType shapeType{};                         ///< The recognized shape category (e.g., SlurTieCurveRight/Left).
+
+    /// @brief Returns the signed width offset for this shape, falling back to a one-space offset.
+    [[nodiscard]] dom::Evpu calcWidthOffset() const;
 };
 
 /// @brief Returns true if a forward tie surrogate is shifted backward to act as a tie end.

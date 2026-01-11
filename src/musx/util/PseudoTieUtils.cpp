@@ -20,7 +20,9 @@
  * THE SOFTWARE.
  */
 
-#include "musx/util/PseudoTieUtils.h"
+#include <variant>
+
+#include "musx/musx.h"
 
 namespace musx {
 namespace utils {
@@ -40,6 +42,16 @@ bool calcIsPseudoBackwardTie(dom::Evpu startOffset, dom::Evpu endOffset)
 bool calcIsPseudoForwardTie(dom::Evpu startOffset, dom::Evpu endOffset)
 {
     return endOffset > startOffset && startOffset > -dom::EVPU_PER_SPACE;
+}
+
+dom::Evpu PseudoTieShapeInfo::calcWidthOffset() const
+{
+    constexpr dom::Evpu FALLBACK = static_cast<dom::Evpu>(dom::EVPU_PER_SPACE);
+    MUSX_ASSERT_IF(!shape) {
+        throw std::logic_error("PseudoTieShapeInfo::shape is null.");
+    }
+    const auto width = shape->calcWidth().value_or(FALLBACK);
+    return (shapeType == dom::KnownShapeDefType::SlurTieCurveLeft) ? -width : width;
 }
 
 } // namespace utils

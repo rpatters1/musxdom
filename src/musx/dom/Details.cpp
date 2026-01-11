@@ -166,7 +166,7 @@ std::optional<utils::PseudoTieShapeInfo> details::ArticulationAssign::calcIsPseu
 
     const auto def = tieShapeContext->definition;
     const auto offset = (tieShapeContext->usesAlternateSymbol ? def->xOffsetAlt : def->xOffsetMain) + horzOffset;
-    const auto endOffset = offset + tieShapeContext->info.shape->calcWidth().value_or(EVPU_PER_SPACE);
+    const auto endOffset = offset + tieShapeContext->info.calcWidthOffset();
     switch (mode) {
     case utils::PseudoTieMode::LaissezVibrer:
         if (!utils::calcIsPseudoForwardTie(offset, endOffset)) {
