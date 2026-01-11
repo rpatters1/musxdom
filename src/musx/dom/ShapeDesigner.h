@@ -39,8 +39,8 @@ enum class KnownShapeDefType
 {
     Blank,                      ///< A blank shape containing no instructions.
     TenutoMark,                 ///< A horizontal tenuto mark, typically used as an articulation symbol.
-    SlurTieCurveRight,          ///< Horizontal slur-based tie curving toward the right.
-    SlurTieCurveLeft,           ///< Horizontal slur-based tie curving toward the left.
+    SlurTieCurveRight,          ///< Horizontal slur or tie shape curving toward the right.
+    SlurTieCurveLeft,           ///< Horizontal slur or tie shape curving toward the left.
 
     // Add more known types here
 };
