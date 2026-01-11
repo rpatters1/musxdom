@@ -829,10 +829,10 @@ std::optional<Evpu> ShapeDef::calcWidth() const
     return maxRight - minLeft;
 }
 
-std::optional<ShapeDef::SlurContourDirection> ShapeDef::calcSlurContour() const
+CurveContourDirection ShapeDef::calcSlurContour() const
 {
     if (isBlank()) {
-        return std::nullopt;
+        return CurveContourDirection::Auto;
     }
 
     auto isSentinel = [](Evpu value) {
@@ -902,20 +902,17 @@ std::optional<ShapeDef::SlurContourDirection> ShapeDef::calcSlurContour() const
     });
 
     if (unsupported || !hasSlur) {
-        return std::nullopt;
+        return CurveContourDirection::Auto;
     }
 
     const Evpu topExtent = (maxTop && *maxTop > 0) ? *maxTop : Evpu{0};
     const Evpu bottomExtent = (minBottom && *minBottom < 0) ? static_cast<Evpu>(-(*minBottom)) : Evpu{0};
 
     if (topExtent == 0 && bottomExtent == 0) {
-        return std::nullopt;
+        return CurveContourDirection::Auto;
     }
 
-    if (topExtent >= bottomExtent) {
-        return SlurContourDirection::Up;
-    }
-    return SlurContourDirection::Down;
+    return (topExtent >= bottomExtent) ? CurveContourDirection::Up : CurveContourDirection::Down;
 }
 
 bool ShapeDef::iterateInstructions(std::function<bool(ShapeDefInstructionType, std::vector<int>)> callback) const

@@ -257,19 +257,19 @@ TEST(ShapeDefTest, CalculateSlurContourDirection)
     auto shapes = doc->getOthers()->getArray<others::ShapeDef>(SCORE_PARTID);
     ASSERT_EQ(shapes.size(), 11);
 
-    using SlurDir = others::ShapeDef::SlurContourDirection;
-    constexpr std::array<std::optional<SlurDir>, 11> expectedDirections = {
-        std::nullopt,             // 1
-        std::nullopt,             // 2
-        std::nullopt,             // 3
-        std::nullopt,             // 4
-        std::nullopt,             // 5
-        std::nullopt,             // 6
-        SlurDir::Up,              // 7
-        SlurDir::Down,            // 8
-        SlurDir::Up,              // 9
-        SlurDir::Down,            // 10
-        std::nullopt              // 11
+    using Contour = musx::dom::CurveContourDirection;
+    constexpr std::array<Contour, 11> expectedDirections = {
+        Contour::Auto,    // 1
+        Contour::Auto,    // 2
+        Contour::Auto,    // 3
+        Contour::Auto,    // 4
+        Contour::Auto,    // 5
+        Contour::Auto,    // 6
+        Contour::Up,      // 7
+        Contour::Down,    // 8
+        Contour::Up,      // 9
+        Contour::Down,    // 10
+        Contour::Auto     // 11
     };
 
     for (size_t i = 0; i < shapes.size(); ++i) {

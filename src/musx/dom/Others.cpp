@@ -412,12 +412,10 @@ std::optional<KnownShapeDefType> MeasureExprAssign::calcShapeType() const
     if (!shapeExp || shapeExp->shapeDef == 0) {
         return std::nullopt;
     }
-    const auto doc = getDocument();
-    auto shape = doc->getOthers()->get<others::ShapeDef>(getRequestedPartId(), shapeExp->shapeDef);
-    if (!shape) {
-        return std::nullopt;
+    if (auto shape = shapeExp->getShape()) {
+        return shape->recognize();
     }
-    return shape->recognize();
+    return std::nullopt;
 }
 
 bool MeasureExprAssign::calcIsPotentialForwardTie(const EntryInfoPtr& forStartEntry) const
@@ -995,6 +993,15 @@ std::string RepeatEndingStart::createEndingText() const
 RepeatStaffListSet RepeatEndingStart::createStaffListSet() const
 {
     return RepeatStaffListSet(getDocument(), getRequestedPartId(), staffList);
+}
+
+// ******************************
+// ***** ShapeExpressionDef *****
+// ******************************
+
+MusxInstance<ShapeDef> ShapeExpressionDef::getShape() const
+{
+    return getDocument()->getOthers()->get<others::ShapeDef>(getRequestedPartId(), shapeDef);
 }
 
 // ************************

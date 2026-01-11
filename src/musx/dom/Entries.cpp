@@ -2914,10 +2914,10 @@ bool NoteInfoPtr::calcIsIncludedInVoicing() const
     return true;
 }
 
-NoteInfoPtr NoteInfoPtr::calcArpeggiatedTieToNote(std::optional<bool>* isTiedOver) const
+NoteInfoPtr NoteInfoPtr::calcArpeggiatedTieToNote(CurveContourDirection* tieDirection) const
 {
-    if (isTiedOver) {
-        *isTiedOver = std::nullopt;
+    if (tieDirection) {
+        *tieDirection = CurveContourDirection::Auto;
     }
 
     const auto entryInfoPtr = getEntryInfo();
@@ -2929,69 +2929,95 @@ NoteInfoPtr NoteInfoPtr::calcArpeggiatedTieToNote(std::optional<bool>* isTiedOve
     auto result = NoteInfoPtr{};
     entryInfoPtr.iterateStartingSmartShapes([&](const MusxInstance<others::SmartShape>& shape) {
         result = shape->calcArpeggiatedTieToNote(entryInfoPtr);
-        if (isTiedOver && result) {
-            *isTiedOver = shape->calcFixedDirection();
+        if (tieDirection && result) {
+            *tieDirection = shape->calcContourDirection();
         }
         return !result; // keep searching until we find a result
     });
     return result;
 }
 
-bool NoteInfoPtr::calcHasPseudoLvTie(std::optional<bool>* isTiedOver) const
+bool NoteInfoPtr::calcHasPseudoLvTie(CurveContourDirection* tieDirection) const
 {
-    const bool needDirection = (isTiedOver != nullptr);
+    const bool needDirection = (tieDirection != nullptr);
     if (needDirection) {
-        *isTiedOver = std::nullopt;
+        *tieDirection = CurveContourDirection::Auto;
     }
 
     const auto entryInfoPtr = getEntryInfo();
-    const auto entry = entryInfoPtr->getEntry();
+    const auto entry = entryInfoPtr->getEntry();    
     if (entry->notes.empty() || !entry->isNote) {
         return {};
     }
 
-    std::vector<MusxInstance<others::SmartShape>> shapeLvs;
+    std::vector<CurveContourDirection> lvDirections;
+    auto selectDirection = [&]() -> bool {
+        if (lvDirections.size() == entry->notes.size()) {
+            if (needDirection) {
+                if (lvDirections.size() > 1) {
+                    // Sort by contour: Auto sorts first so we can bail when any direction is indeterminate,
+                    // then Down (under) and Up (over) follow to approximate each note's "tie" order.
+                    // Without a direct note-to-slur mapping this ordering acts as a proxy for the likely vertical stacking.
+                    // We also avoid looking at the vertical offsets, because they are difficult to compare when there
+                    // are different positioning options on each instance.
+                    std::sort(lvDirections.begin(), lvDirections.end());
+                }
+                if (lvDirections[0] != CurveContourDirection::Auto) { // if the first is not Auto, none are Auto
+                    *tieDirection = lvDirections[getNoteIndex()];
+                }
+            }
+            return true;
+        }
+        return false;
+    };
+
+    // check smart slurs
     entryInfoPtr.iterateStartingSmartShapes([&](const MusxInstance<others::SmartShape>& shape) {
         if (shape->calcIsLaissezVibrerTie(entryInfoPtr)) {
-            shapeLvs.push_back(shape);
+            lvDirections.push_back(shape->calcContourDirection());
         }
         return true;
     });
-    if (shapeLvs.size() == entry->notes.size()) {
-        if (needDirection && shapeLvs.size() > 1) {
-            const auto adjustmentsComparable = [&]() {
-                for (size_t i = 0; i < shapeLvs.size(); ++i) {
-                    const auto& lhsAdj = shapeLvs[i]->startTermSeg->endPointAdj;
-                    for (size_t j = i + 1; j < shapeLvs.size(); ++j) {
-                        const auto& rhsAdj = shapeLvs[j]->startTermSeg->endPointAdj;
-                        if (!lhsAdj->calcHasVerticalEquivalentConnection(*rhsAdj)) {
-                            return false;
-                        }
-                    }
-                }
-                return true;
-                }();
-            if (!adjustmentsComparable) {
-                return true;
-            }
-            const bool hasFloatingShape = std::any_of(shapeLvs.begin(), shapeLvs.end(), [](const auto& shape) {
-                return !shape->calcFixedDirection().has_value();
-            });
-            if (hasFloatingShape) {
-                return true;
-            }
-            std::sort(shapeLvs.begin(), shapeLvs.end(), [](const auto& lhs, const auto& rhs) {
-                return lhs->startTermSeg->endPointAdj->calcVertOffset() < rhs->startTermSeg->endPointAdj->calcVertOffset();
-            });
-        }
-        if (needDirection) {
-            *isTiedOver = shapeLvs[getNoteIndex()]->calcFixedDirection();
-        }
+    if (selectDirection()) {
         return true;
     }
 
-    /// @todo Check shape expressions
-    /// @todo Check shape articulations
+    const auto doc = entry->getDocument();
+    const Cmper partId = entryInfoPtr.getFrame()->getRequestedPartId();
+
+    /// check shape expressions
+    lvDirections.clear();
+    auto measExpAssigns = doc->getOthers()->getArray<others::MeasureExprAssign>(partId, entryInfoPtr.getMeasure());
+    for (const auto& assign : measExpAssigns) {
+        if (assign->calcIsPotentialForwardTie(entryInfoPtr)) {
+            CurveContourDirection nextContour = CurveContourDirection::Auto;
+            if (needDirection) {
+                const auto shapeExp = assign->getShapeExpression();
+                MUSX_ASSERT_IF(!shapeExp) {
+                    throw std::logic_error("Shape expression def was null but calcIsPotentialForwardTie was true.");
+                }
+                if (const auto shape = shapeExp->getShape()) {
+                    nextContour = shape->calcSlurContour();
+                }
+            }
+            lvDirections.push_back(nextContour);
+        }
+    }
+    if (selectDirection()) {
+        return true;
+    }
+
+    /// check shape articulations
+    lvDirections.clear();
+    auto articAssigns = doc->getDetails()->getArray<details::ArticulationAssign>(partId, entry->getEntryNumber());
+    for (const auto& assign : articAssigns) {
+        if (const auto shapeInfo = assign->calcForwardTieShapeInfo(entryInfoPtr)) {
+            lvDirections.push_back(shapeInfo->shape->calcSlurContour());
+        }
+    }
+    if (selectDirection()) {
+        return true;
+    }
 
     return false;
 }

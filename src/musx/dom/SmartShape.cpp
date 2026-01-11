@@ -399,7 +399,7 @@ NoteInfoPtr others::SmartShape::calcArpeggiatedTieToNote(const EntryInfoPtr& for
     return endNote;
 }
 
-std::optional<bool> others::SmartShape::calcFixedDirection() const
+CurveContourDirection others::SmartShape::calcContourDirection() const
 {
     using ST = ShapeType;
     switch (shapeType) {
@@ -408,17 +408,17 @@ std::optional<bool> others::SmartShape::calcFixedDirection() const
     case ST::DashContourSlurUp:
     case ST::OctaveUp:
     case ST::TwoOctaveUp:
-        return true;
+        return CurveContourDirection::Up;
 
     case ST::SlurDown:
     case ST::DashSlurDown:
     case ST::DashContourSlurDown:
     case ST::OctaveDown:
     case ST::TwoOctaveDown:
-        return false;
+        return CurveContourDirection::Down;
 
     default:
-        return std::nullopt;
+        return CurveContourDirection::Auto;
     }
 }
 

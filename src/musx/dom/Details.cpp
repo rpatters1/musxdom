@@ -71,29 +71,31 @@ namespace details {
 // ***** ArticulationAssign *****
 // ******************************
 
-bool details::ArticulationAssign::calcIsPotentialForwardTie(const EntryInfoPtr& forStartEntry) const
+std::optional<ArticulationAssign::PseudoTieShapeInfo> ArticulationAssign::calcPseudoTieShape(const EntryInfoPtr& forStartEntry) const
 {
+    PseudoTieShapeInfo result;
     if (!forStartEntry || !articDef || forStartEntry.calcDisplaysAsRest()) {
-        return false;
+        return std::nullopt;
     }
 
     const auto entry = forStartEntry->getEntry();
     if (!entry || entry->notes.empty()) {
-        return false;
+        return std::nullopt;
     }
 
     const auto doc = getDocument();
-    auto def = doc->getOthers()->get<others::ArticulationDef>(getRequestedPartId(), articDef);
-    if (!def) {
-        return false;
+    result.definition = doc->getOthers()->get<others::ArticulationDef>(getRequestedPartId(), articDef);
+    if (!result.definition) {
+        return std::nullopt;
     }
+    auto def = result.definition;
 
     using AD = others::ArticulationDef;
     if (def->copyMode != AD::CopyMode::None || def->centerOnStem) {
-        return false;
+        return std::nullopt;
     }
     if (def->autoVert && def->autoVertMode == AD::AutoVerticalMode::AlwaysOnStem) {
-        return false;
+        return std::nullopt;
     }
 
     const bool stemUp = forStartEntry.calcUpStem();
@@ -119,32 +121,49 @@ bool details::ArticulationAssign::calcIsPotentialForwardTie(const EntryInfoPtr& 
             return stemUp;
         }
     };
-    const bool placeAbove = calcPlacementAbove();
+    result.placeAbove = calcPlacementAbove();
 
-    auto symbolOffsetIfTie = [&](bool useAlt) -> std::optional<Evpu> {
-        const bool usesShape = useAlt ? def->altIsShape : def->mainIsShape;
-        if (!usesShape) {
-            return std::nullopt;
-        }
-        const auto shapeId = useAlt ? def->altShape : def->mainShape;
-        if (!shapeId) {
-            return std::nullopt;
-        }
-        auto shape = doc->getOthers()->get<others::ShapeDef>(getRequestedPartId(), shapeId);
-        if (!shape) {
-            return std::nullopt;
-        }
-        auto knownType = shape->recognize();
-        if (!knownType || *knownType != KnownShapeDefType::SlurTieCurveRight) {
-            return std::nullopt;
-        }
-        return (useAlt ? def->xOffsetAlt : def->xOffsetMain) + horzOffset;
-    };
+    const bool useAltSymbol = result.placeAbove ? def->aboveSymbolAlt : def->belowSymbolAlt;
+    result.usesAlternateSymbol = useAltSymbol;
 
+    const bool usesShape = useAltSymbol ? def->altIsShape : def->mainIsShape;
+    if (!usesShape) {
+        return std::nullopt;
+    }
+    const auto shapeId = useAltSymbol ? def->altShape : def->mainShape;
+    if (!shapeId) {
+        return std::nullopt;
+    }
+    result.shape = doc->getOthers()->get<others::ShapeDef>(getRequestedPartId(), shapeId);
+    if (!result.shape) {
+        return std::nullopt;
+    }
+    auto knownType = result.shape->recognize();
+    if (!knownType || (*knownType != KnownShapeDefType::SlurTieCurveRight
+        && *knownType != KnownShapeDefType::SlurTieCurveLeft)) {
+        return std::nullopt;
+    }
+    result.shapeType = *knownType;
+
+    return result;
+}
+
+std::optional<details::ArticulationAssign::PseudoTieShapeInfo> details::ArticulationAssign::calcForwardTieShapeInfo(
+    const EntryInfoPtr& forStartEntry) const
+{
     constexpr Evpu MIN_OFFSET = -EVPU_PER_SPACE;
-    const bool useAltSymbol = placeAbove ? def->aboveSymbolAlt : def->belowSymbolAlt;
-    auto offset = symbolOffsetIfTie(useAltSymbol);
-    return offset && *offset >= MIN_OFFSET;
+    const auto tieShapeInfo = calcPseudoTieShape(forStartEntry);
+    if (!tieShapeInfo || tieShapeInfo->shapeType != KnownShapeDefType::SlurTieCurveRight) {
+        return std::nullopt;
+    }
+
+    const auto useAltSymbol = tieShapeInfo->usesAlternateSymbol;
+    const auto offset = (useAltSymbol ? tieShapeInfo->definition->xOffsetAlt : tieShapeInfo->definition->xOffsetMain) + horzOffset;
+    if (offset < MIN_OFFSET) {
+        return std::nullopt;
+    }
+
+    return tieShapeInfo;
 }
 
 // ***************************

@@ -33,6 +33,15 @@ enum class AlignJustify
     Center  ///< Center alignment.
 };
 
+/// @brief Curve contour direction for ties and slurs.
+enum class CurveContourDirection
+{
+    // NOTE: the order here is important for sorting instances. Do not change it.
+    Auto,       ///< contour is automatic, indeterminate, or does not apply
+    Down,       ///< contour is curved downward (tips face up)
+    Up          ///< contour is curved upward (tips face down)
+};
+
 /// @enum DateFormat
 /// @brief Date format options. This value is coded into the Enigma `date` insert when the page title is created.
 enum class DateFormat : int

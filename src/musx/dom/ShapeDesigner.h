@@ -527,13 +527,6 @@ public:
     /// @return If the shape is recognized, return its known type. Otherwise return std::nullopt.
     std::optional<KnownShapeDefType> recognize() const;
 
-    /// @brief Possible slur contour orientations.
-    enum class SlurContourDirection
-    {
-        Up,
-        Down
-    };
-
     /// @brief Calculate the width of the shape in Evpu, if it can be determined.
     /// @details The width is derived from stored StartObject/StartGroup bounding boxes.
     /// Shapes that include text instructions or Finale's sentinel bounding boxes
@@ -544,8 +537,9 @@ public:
 
     /// @brief Determine the slur contour orientation, if this shape is a slur/tie.
     /// @details Uses StartObject bounding boxes to determine whether the contour arches upward or downward.
-    /// Returns std::nullopt if the instructions do not represent a slur/tie or if Finale's sentinel bounds appear.
-    std::optional<SlurContourDirection> calcSlurContour() const;
+    /// Returns @ref CurveContourDirection::Down or ::Up when determinable, otherwise ::Auto when the instructions do not represent a
+    /// slur/tie or Finale's sentinel bounds appear.
+    CurveContourDirection calcSlurContour() const;
 
     constexpr static std::string_view XmlNodeName = "shapeDef"; ///< The XML node name for this type.
     static const xml::XmlElementArray<ShapeDef>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.

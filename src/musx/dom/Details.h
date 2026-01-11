@@ -109,6 +109,17 @@ public:
 class ArticulationAssign : public EntryDetailsBase
 {
 public:
+    /// @struct PseudoTieShapeInfo
+    /// @brief Information about an articulation shape that could be used as a surrogate for a tie.
+    struct PseudoTieShapeInfo
+    {
+        MusxInstance<others::ShapeDef> shape;                 ///< The resolved shape definition.
+        MusxInstance<others::ArticulationDef> definition;     ///< The articulation definition that owns the shape.
+        KnownShapeDefType shapeType{};                        ///< The recognized shape category (e.g., SlurTieCurveRight/Left).
+        bool placeAbove{};                                    ///< True if the shape is placed above the entry.
+        bool usesAlternateSymbol{};                           ///< True if the articulation uses its alternate symbol for this placement.
+    };
+
     /**
      * @brief Constructor function
      * @param document A weak pointer to the associated document.
@@ -132,8 +143,12 @@ public:
     bool avoidSlur{};               ///< Whether the articulation should avoid slurs.
     int numSlursAvoided{};          ///< Number of slurs avoided. Used internally by Finale's stacking algorithm.
 
-    /// @brief Calculates if this articulation might be serving as a forward tie surrogate.
-    [[nodiscard]] bool calcIsPotentialForwardTie(const EntryInfoPtr& forStartEntry) const;
+    /// @brief Calculates information about a shape-based articulation that could represent a pseudo tie.
+    [[nodiscard]] std::optional<PseudoTieShapeInfo> calcPseudoTieShape(const EntryInfoPtr& forStartEntry) const;
+
+    /// @brief Calculates the pseudo-tie shape info if this articulation is acting as a forward tie surrogate.
+    /// @return The pseudo-tie shape info when a qualifying shape exists; otherwise std::nullopt.
+    [[nodiscard]] std::optional<PseudoTieShapeInfo> calcForwardTieShapeInfo(const EntryInfoPtr& forStartEntry) const;
 
     static const xml::XmlElementArray<ArticulationAssign>& xmlMappingArray();   ///< Required for musx::factory::FieldPopulator.
     constexpr static std::string_view XmlNodeName = "articAssign"; ///< The XML node name for this type.

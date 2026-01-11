@@ -60,6 +60,7 @@ class StaffGroup;
  */
 namespace others {
 
+class ShapeDef;
 class Staff;
 class StaffComposite;
 class StaffList;
@@ -1306,9 +1307,6 @@ private:
     /// @brief Calculates the shape type of a shape expression if it is known.
     [[nodiscard]] std::optional<KnownShapeDefType> calcShapeType() const;
 
-    /// @brief Calculates if this smart shape is potentially being used as a forward tie.
-    [[nodiscard]] bool calcIsPotentialForwardTie(const EntryInfoPtr& forStartEntry) const;
-
 public:
     /** @brief Constructor function */
     explicit MeasureExprAssign(const DocumentWeakPtr& document, Cmper ID, ShareMode shareMode, Cmper cmper, Inci inci)
@@ -1404,6 +1402,9 @@ public:
 
     /// @brief Calculates if this assignment is hidden by alternate notation.
     bool calcIsHiddenByAlternateNotation() const;
+
+    /// @brief Calculates if this expression (which must be a shape expression) is potentially being used as a forward tie.
+    [[nodiscard]] bool calcIsPotentialForwardTie(const EntryInfoPtr& forStartEntry) const;
 
     void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
     {
@@ -2457,6 +2458,9 @@ public:
     Evpu yAdjustBaseline{};                         ///< Vertical adjustment for baseline alignment.
     bool useCategoryPos{};                          ///< Whether to use category position.
     std::string description;                        ///< Description of the text expression. (xml node is "descStr")
+
+    /// @brief Get the shape for this shape expression
+    MusxInstance<ShapeDef> getShape() const;
 
     constexpr static std::string_view XmlNodeName = "shapeExprDef"; ///< The XML node name for this type.
     static const xml::XmlElementArray<ShapeExpressionDef>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
