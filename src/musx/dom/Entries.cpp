@@ -344,7 +344,10 @@ bool EntryFrame::TupletInfo::calcIsTremolo() const
             return false;
         }
     }
-    return true;
+
+    // A feathered beam can look like a tremolo if on same note 
+    Evpu outLeftYScratch{}, outRightYScratch{};
+    return !EntryInfoPtr(frame, startIndex).calcIsFeatheredBeamStart(outLeftYScratch, outRightYScratch);
 }
 
 bool EntryFrame::TupletInfo::calcCreatesSingleton(bool left) const
