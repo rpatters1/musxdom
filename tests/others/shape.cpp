@@ -20,6 +20,8 @@
  * THE SOFTWARE.
 */
 
+#include <filesystem>
+
 #include "gtest/gtest.h"
 #include "musx/musx.h"
 #include "test_utils.h"
@@ -215,6 +217,48 @@ TEST(ShapeDefTest, RecognizeShapes)
         EXPECT_EQ(shape->recognize(), expectedTypes[x]) << "recognized shape type is not the expected value for cmper " << shape->getCmper();
         x++;
     }
+}
+
+namespace {
+void verifyPedalArrowheads(const std::filesystem::path& path)
+{
+    std::vector<char> enigmaXml;
+    musxtest::readFile(path, enigmaXml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(enigmaXml);
+    ASSERT_TRUE(doc) << "unable to parse " << path.string();
+
+    constexpr std::array<Cmper, 4> arrowCmpers = {91, 92, 93, 94};
+    constexpr std::array<KnownShapeDefType, 4> expectedTypes = {
+        KnownShapeDefType::PedalArrowheadDown,
+        KnownShapeDefType::PedalArrowheadUp,
+        KnownShapeDefType::PedalArrowheadShortUpDownLongUp,
+        KnownShapeDefType::PedalArrowheadLongUpDownShortUp,
+    };
+
+    for (size_t i = 0; i < arrowCmpers.size(); ++i) {
+        const auto shape = doc->getOthers()->get<others::ShapeDef>(SCORE_PARTID, arrowCmpers[i]);
+        ASSERT_TRUE(shape) << "missing arrowhead shapeDef " << arrowCmpers[i] << " in " << path.string();
+        EXPECT_EQ(shape->shapeType, others::ShapeDef::ShapeType::Arrowhead)
+            << "arrowhead shapeDef " << arrowCmpers[i] << " has unexpected type in " << path.string();
+        EXPECT_EQ(shape->recognize(), expectedTypes[i])
+            << "recognized arrowhead type mismatch for cmper " << arrowCmpers[i] << " in " << path.string();
+    }
+
+    constexpr std::array<Cmper, 4> nonArrowCmpers = {87, 88, 89, 90};
+    for (const auto cmper : nonArrowCmpers) {
+        const auto shape = doc->getOthers()->get<others::ShapeDef>(SCORE_PARTID, cmper);
+        ASSERT_TRUE(shape) << "missing non-arrowhead shapeDef " << cmper << " in " << path.string();
+        EXPECT_EQ(shape->recognize(), std::nullopt)
+            << "expected no recognized shape type for cmper " << cmper << " in " << path.string();
+    }
+}
+} // namespace
+
+TEST(ShapeDefTest, RecognizePedalArrowheads)
+{
+    const auto inputRoot = musxtest::getInputPath() / "reference";
+    verifyPedalArrowheads(inputRoot / "FinaleMaestroFontDefaultMac.enigmaxml");
+    verifyPedalArrowheads(inputRoot / "MaestroFontDefaultWin.enigmaxml");
 }
 
 TEST(ShapeDefTest, CalculateWidths)

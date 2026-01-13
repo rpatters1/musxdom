@@ -41,6 +41,10 @@ enum class KnownShapeDefType
     TenutoMark,                 ///< A horizontal tenuto mark, typically used as an articulation symbol.
     SlurTieCurveRight,          ///< Horizontal slur or tie shape curving toward the right.
     SlurTieCurveLeft,           ///< Horizontal slur or tie shape curving toward the left.
+    PedalArrowheadDown,         ///< Downward wedge used for pedal markings.
+    PedalArrowheadUp,           ///< Upward wedge used for pedal markings.
+    PedalArrowheadShortUpDownLongUp, ///< Pedal arrowhead: short up, down, long up.
+    PedalArrowheadLongUpDownShortUp, ///< Pedal arrowhead: long up, down, short up.
 
     // Add more known types here
 };

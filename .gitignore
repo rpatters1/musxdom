@@ -37,6 +37,7 @@ CMakeLists.txt.user
 *.swp
 *.swo
 *.pid
+denigma-logs/
 
 # Ignore IDE/editor-specific files
 .idea/
