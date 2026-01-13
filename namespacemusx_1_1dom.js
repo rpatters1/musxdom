@@ -870,6 +870,13 @@ var namespacemusx_1_1dom =
       [ "Right", "namespacemusx_1_1dom.html#ae1cc711919158f264a344a6a966f5d4ca92b09c7c48c520c3c55e497875da437c", null ],
       [ "Center", "namespacemusx_1_1dom.html#ae1cc711919158f264a344a6a966f5d4ca4f1f6016fc9f3f2353c0cc7c67b292bd", null ]
     ] ],
+    [ "ArrowheadPreset", "namespacemusx_1_1dom.html#a9da9d8587a1c6dbc6c8462bcc0e4e69d", [
+      [ "SmallFilled", "namespacemusx_1_1dom.html#a9da9d8587a1c6dbc6c8462bcc0e4e69da6af57fa4599fc7faa34a0a5c4dfcc196", null ],
+      [ "SmallOutline", "namespacemusx_1_1dom.html#a9da9d8587a1c6dbc6c8462bcc0e4e69da5507da96ef7b3cda711c43bff9f3b148", null ],
+      [ "SmallCurved", "namespacemusx_1_1dom.html#a9da9d8587a1c6dbc6c8462bcc0e4e69da377ff04d7fda7b8f81da92ae09eed72d", null ],
+      [ "LargeCurved", "namespacemusx_1_1dom.html#a9da9d8587a1c6dbc6c8462bcc0e4e69da16389d7891bf359091ac2ec878524d85", null ],
+      [ "MediumCurved", "namespacemusx_1_1dom.html#a9da9d8587a1c6dbc6c8462bcc0e4e69da93bc2c818e912b137cd163af412ca30d", null ]
+    ] ],
     [ "CurveContourDirection", "namespacemusx_1_1dom.html#a0dc36a86e1ae0cadd7b7e4c624b07b55", [
       [ "Auto", "namespacemusx_1_1dom.html#a0dc36a86e1ae0cadd7b7e4c624b07b55a06b9281e396db002010bde1de57262eb", null ],
       [ "Down", "namespacemusx_1_1dom.html#a0dc36a86e1ae0cadd7b7e4c624b07b55a08a38277b0309070706f6652eeae9a53", null ],
@@ -904,7 +911,11 @@ var namespacemusx_1_1dom =
       [ "Blank", "namespacemusx_1_1dom.html#a16d85e8ed9439b9a2ef071d38ffa0fd7ae4ef81cce7e4e10033ebb10962dfdd5e", null ],
       [ "TenutoMark", "namespacemusx_1_1dom.html#a16d85e8ed9439b9a2ef071d38ffa0fd7ac6cdf96e9804915f9f5c6771802805fd", null ],
       [ "SlurTieCurveRight", "namespacemusx_1_1dom.html#a16d85e8ed9439b9a2ef071d38ffa0fd7a98500bea154c4887dd3006c8001d0845", null ],
-      [ "SlurTieCurveLeft", "namespacemusx_1_1dom.html#a16d85e8ed9439b9a2ef071d38ffa0fd7aced4f5dff90dcb0f3434fa6e12cedbaa", null ]
+      [ "SlurTieCurveLeft", "namespacemusx_1_1dom.html#a16d85e8ed9439b9a2ef071d38ffa0fd7aced4f5dff90dcb0f3434fa6e12cedbaa", null ],
+      [ "PedalArrowheadDown", "namespacemusx_1_1dom.html#a16d85e8ed9439b9a2ef071d38ffa0fd7a19f4a97c0630dd7154455bab51c5e4fe", null ],
+      [ "PedalArrowheadUp", "namespacemusx_1_1dom.html#a16d85e8ed9439b9a2ef071d38ffa0fd7a59735bf84a9f0da1b032ed34bc0d6161", null ],
+      [ "PedalArrowheadShortUpDownLongUp", "namespacemusx_1_1dom.html#a16d85e8ed9439b9a2ef071d38ffa0fd7a088e918e332375bfeb20c4168e0196a5", null ],
+      [ "PedalArrowheadLongUpDownShortUp", "namespacemusx_1_1dom.html#a16d85e8ed9439b9a2ef071d38ffa0fd7a9bf7fd8cfe4d0efe1365f0666ef286b7", null ]
     ] ],
     [ "LyricTextType", "namespacemusx_1_1dom.html#a15ce5f78a9bdae32abc605711086c991", [
       [ "Verse", "namespacemusx_1_1dom.html#a15ce5f78a9bdae32abc605711086c991a98cc99adc12166c3d8f086c0ccc2cde9", null ],

@@ -4,6 +4,7 @@ var classmusx_1_1dom_1_1options_1_1MultimeasureRestOptions =
     [ "autoUpdateMmRests", "classmusx_1_1dom_1_1options_1_1MultimeasureRestOptions.html#a42910711b3e51e21083662e89bd19983", null ],
     [ "endAdjust", "classmusx_1_1dom_1_1options_1_1MultimeasureRestOptions.html#a361418a9dd78bbc1b60806fa9c731e30", null ],
     [ "measWidth", "classmusx_1_1dom_1_1options_1_1MultimeasureRestOptions.html#a5cf2e342781715b88cb0289f29cd0ef4", null ],
+    [ "noHorizontalStretch", "classmusx_1_1dom_1_1options_1_1MultimeasureRestOptions.html#a7e639bf925772e9aaeab9c21b2a09a72", null ],
     [ "numAdjX", "classmusx_1_1dom_1_1options_1_1MultimeasureRestOptions.html#a6d567a319b51dad23b443ac03429fe44", null ],
     [ "numAdjY", "classmusx_1_1dom_1_1options_1_1MultimeasureRestOptions.html#ae5046a1150b53942817647813b0ebc0f", null ],
     [ "numStart", "classmusx_1_1dom_1_1options_1_1MultimeasureRestOptions.html#ab6d157e089a94a4a63eefed7e58315e1", null ],

@@ -18,6 +18,7 @@ var classmusx_1_1dom_1_1others_1_1ShapeExpressionDef =
     [ "rehearsalMarkStyle", "classmusx_1_1dom_1_1others_1_1ShapeExpressionDef.html#a8bc04f437e50caf6290359bc3ff3c549", null ],
     [ "shapeDef", "classmusx_1_1dom_1_1others_1_1ShapeExpressionDef.html#a4f842e2e9c41060ed2ce04526e2bd478", null ],
     [ "useAuxData", "classmusx_1_1dom_1_1others_1_1ShapeExpressionDef.html#a51eda214dd890e253e0e56e4d5595b51", null ],
+    [ "useCategoryFonts", "classmusx_1_1dom_1_1others_1_1ShapeExpressionDef.html#a4564ccdea7021464d6ea2ac07f4e3d5c", null ],
     [ "useCategoryPos", "classmusx_1_1dom_1_1others_1_1ShapeExpressionDef.html#a915b5fd65f33a87b6d3ba0ed9616a448", null ],
     [ "value", "classmusx_1_1dom_1_1others_1_1ShapeExpressionDef.html#a2e2a1f41cad06f04e8981bbfdd81ace0", null ],
     [ "vertMeasExprAlign", "classmusx_1_1dom_1_1others_1_1ShapeExpressionDef.html#aa943461f2bcdc8ec5166b4de2abf2183", null ],
