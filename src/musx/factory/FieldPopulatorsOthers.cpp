@@ -1132,6 +1132,7 @@ MUSX_XML_ELEMENT_ARRAY(ShapeExpressionDef, {
     {"measXAdjust", [](const XmlElementPtr& e, const std::shared_ptr<ShapeExpressionDef>& i) { i->measXAdjust = e->getTextAs<Evpu>(); }},
     {"yAdjustEntry", [](const XmlElementPtr& e, const std::shared_ptr<ShapeExpressionDef>& i) { i->yAdjustEntry = e->getTextAs<Evpu>(); }},
     {"yAdjustBaseline", [](const XmlElementPtr& e, const std::shared_ptr<ShapeExpressionDef>& i) { i->yAdjustBaseline = e->getTextAs<Evpu>(); }},
+    {"useCategoryFonts", [](const XmlElementPtr& e, const std::shared_ptr<ShapeExpressionDef>& i) { i->useCategoryFonts = populateBoolean(e, i); }},
     {"useCategoryPos", [](const XmlElementPtr& e, const std::shared_ptr<ShapeExpressionDef>& i) { i->useCategoryPos = populateBoolean(e, i); }},
     {"descStr", [](const XmlElementPtr& e, const std::shared_ptr<ShapeExpressionDef>& i) { i->description = e->getText(); }},
 });

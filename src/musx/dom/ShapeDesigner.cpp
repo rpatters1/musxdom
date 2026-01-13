@@ -534,7 +534,7 @@ static ShapeRecognitionCandidate makePedalArrowheadRecognizer(
         std::visit([&](auto&& instData) {
             using T = std::decay_t<decltype(instData)>;
             if constexpr (std::is_same_v<T, ShapeDefInstruction::LineWidth>) {
-                valid = instData.efix == 141;
+                valid = instData.efix >= EFIX_PER_EVPU && instData.efix <= 4 * EFIX_PER_EVPU;
             }
         }, inst.data);
         return valid;
