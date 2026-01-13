@@ -618,6 +618,8 @@ MUSX_XML_ELEMENT_ARRAY(MiscOptions, {
     {"combineRestsAcrossLayers", [](const XmlElementPtr& e, const std::shared_ptr<MiscOptions>& i) { i->consolidateRestsAcrossLayers = populateBoolean(e, i); }},
     {"sdDashOn", [](const XmlElementPtr& e, const std::shared_ptr<MiscOptions>& i) {i->shapeDesignerDashLength = e->getTextAs<Evpu>();}},
     {"sdDashOff", [](const XmlElementPtr& e, const std::shared_ptr<MiscOptions>& i) {i->shapeDesignerDashSpace = e->getTextAs<Evpu>();}},
+    {"restWidthAdjust", [](const XmlElementPtr& e, const std::shared_ptr<MiscOptions>& i) {i->restWidthAdjust = e->getTextAs<Evpu>();}},
+    {"dblWholeVertAdjust", [](const XmlElementPtr& e, const std::shared_ptr<MiscOptions>& i) {i->dblWholeVertAdjust = e->getTextAs<Evpu>();}},
     {"drawMeasureNumbersOverBarlines", [](const XmlElementPtr& e, const std::shared_ptr<MiscOptions>& i) { i->alignMeasureNumbersWithBarlines = populateBoolean(e, i); }},
 });
 
@@ -632,6 +634,7 @@ MUSX_XML_ELEMENT_ARRAY(MultimeasureRestOptions, {
     {"startAdjust", [](const XmlElementPtr& e, const std::shared_ptr<MultimeasureRestOptions>& i) {i->startAdjust = e->getTextAs<Evpu>();}},
     {"endAdjust", [](const XmlElementPtr& e, const std::shared_ptr<MultimeasureRestOptions>& i) {i->endAdjust = e->getTextAs<Evpu>();}},
     {"useCharRestStyle", [](const XmlElementPtr& e, const std::shared_ptr<MultimeasureRestOptions>& i) { i->useSymbols = populateBoolean(e, i); }},
+    {"noHorizontalStretch", [](const XmlElementPtr& e, const std::shared_ptr<MultimeasureRestOptions>& i) { i->noHorizontalStretch = populateBoolean(e, i); }},
     {"autoUpdateMmRests", [](const XmlElementPtr& e, const std::shared_ptr<MultimeasureRestOptions>& i) { i->autoUpdateMmRests = populateBoolean(e, i); }},
 });
 

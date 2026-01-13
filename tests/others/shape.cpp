@@ -20,6 +20,9 @@
  * THE SOFTWARE.
 */
 
+#include <algorithm>
+#include <filesystem>
+
 #include "gtest/gtest.h"
 #include "musx/musx.h"
 #include "test_utils.h"
@@ -186,7 +189,7 @@ TEST(ShapeDefTest, RecognizeShapes)
 {
     std::vector<char> enigmaXml;
     musxtest::readFile(musxtest::getInputPath() / "shape_recognize.enigmaxml", enigmaXml);
-    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(enigmaXml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(enigmaXml);
     ASSERT_TRUE(doc);
 
     constexpr size_t EXPECTED_VALUES = 11;
@@ -214,6 +217,76 @@ TEST(ShapeDefTest, RecognizeShapes)
         EXPECT_EQ(shape->getCmper(), expectedCmpers[x]) << "shape cmper " << shape->getCmper() << " is not expected value " << expectedCmpers[x];
         EXPECT_EQ(shape->recognize(), expectedTypes[x]) << "recognized shape type is not the expected value for cmper " << shape->getCmper();
         x++;
+    }
+}
+
+namespace {
+struct PedalArrowheadNegativeCase
+{
+    std::filesystem::path path;
+    std::array<Cmper, 4> arrowCmpers;
+    std::array<Cmper, 3> cmpers;
+};
+
+void verifyPedalArrowheads(
+    const std::filesystem::path& path,
+    const std::array<Cmper, 4>& arrowCmpers,
+    const std::array<Cmper, 3>& negativeCmpers)
+{
+    std::vector<char> enigmaXml;
+    musxtest::readFile(path, enigmaXml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(enigmaXml);
+    ASSERT_TRUE(doc) << "unable to parse " << path.string();
+
+    constexpr std::array<KnownShapeDefType, 4> expectedTypes = {
+        KnownShapeDefType::PedalArrowheadDown,
+        KnownShapeDefType::PedalArrowheadUp,
+        KnownShapeDefType::PedalArrowheadShortUpDownLongUp,
+        KnownShapeDefType::PedalArrowheadLongUpDownShortUp,
+    };
+
+    std::vector<KnownShapeDefType> recognizedTypes;
+    recognizedTypes.reserve(arrowCmpers.size());
+    for (const auto cmper : arrowCmpers) {
+        const auto shape = doc->getOthers()->get<others::ShapeDef>(SCORE_PARTID, cmper);
+        ASSERT_TRUE(shape) << "missing arrowhead shapeDef " << cmper << " in " << path.string();
+        EXPECT_EQ(shape->shapeType, others::ShapeDef::ShapeType::Arrowhead)
+            << "arrowhead shapeDef " << cmper << " has unexpected type in " << path.string();
+        const auto recognized = shape->recognize();
+        ASSERT_TRUE(recognized) << "missing recognized type for cmper " << cmper << " in " << path.string();
+        recognizedTypes.push_back(*recognized);
+    }
+    std::sort(recognizedTypes.begin(), recognizedTypes.end());
+    std::array<KnownShapeDefType, 4> expectedSorted = expectedTypes;
+    std::sort(expectedSorted.begin(), expectedSorted.end());
+    EXPECT_EQ(recognizedTypes.size(), expectedSorted.size()) << "recognized arrowhead count mismatch in " << path.string();
+    for (size_t i = 0; i < expectedSorted.size(); ++i) {
+        EXPECT_EQ(recognizedTypes[i], expectedSorted[i]) << "recognized arrowhead set mismatch in " << path.string();
+    }
+
+    for (const auto cmper : negativeCmpers) {
+        const auto shape = doc->getOthers()->get<others::ShapeDef>(SCORE_PARTID, cmper);
+        ASSERT_TRUE(shape) << "missing non-arrowhead shapeDef " << cmper << " in " << path.string();
+        EXPECT_EQ(shape->recognize(), std::nullopt)
+            << "expected no recognized shape type for cmper " << cmper << " in " << path.string();
+    }
+}
+} // namespace
+
+TEST(ShapeDefTest, RecognizePedalArrowheads)
+{
+    const auto inputRoot = musxtest::getInputPath() / "reference";
+    const std::array<PedalArrowheadNegativeCase, 6> cases = {{
+        {inputRoot / "FinaleMaestroFontDefaultMac.enigmaxml", {91, 92, 93, 94}, {81, 82, 83}},
+        {inputRoot / "MaestroFontDefaultWin.enigmaxml", {91, 92, 93, 94}, {81, 82, 83}},
+        {inputRoot / "Finale Broadway Font Default.enigmaxml", {97, 98, 99, 100}, {87, 88, 89}},
+        {inputRoot / "Finale Jazz Font Default.enigmaxml", {44, 45, 46, 47}, {34, 35, 36}},
+        {inputRoot / "Handwritten Default.enigmaxml", {96, 97, 98, 99}, {86, 87, 88}},
+        {inputRoot / "Jazz Font Default.enigmaxml", {43, 44, 45, 46}, {33, 34, 35}},
+    }};
+
+    for (const auto& entry : cases) {
+        verifyPedalArrowheads(entry.path, entry.arrowCmpers, entry.cmpers);
     }
 }
 

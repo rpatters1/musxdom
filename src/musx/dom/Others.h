@@ -2461,6 +2461,7 @@ public:
     Evpu measXAdjust{};                             ///< Horizontal adjustment for measurement alignment.
     Evpu yAdjustEntry{};                            ///< Vertical adjustment for entry alignment.
     Evpu yAdjustBaseline{};                         ///< Vertical adjustment for baseline alignment.
+    bool useCategoryFonts{};                        ///< Whether to use category fonts (may not be meaningful shape expressions).
     bool useCategoryPos{};                          ///< Whether to use category position.
     std::string description;                        ///< Description of the text expression. (xml node is "descStr")
 

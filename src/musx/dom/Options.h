@@ -711,6 +711,8 @@ public:
     bool consolidateRestsAcrossLayers{};    ///< "Consolidate Rests Across Layers" (xml node is `<combineRestsAcrossLayers>`)
     Evpu shapeDesignerDashLength{};         ///< Shape Designer dash length in @ref Evpu. (xml node is `<sdDashOn>`)
     Evpu shapeDesignerDashSpace{};          ///< Shape Designer dash space in @ref Evpu. (xml node is `<sdDashOff>`)
+    Evpu restWidthAdjust{};                 ///< Purpose unknown.
+    Evpu dblWholeVertAdjust{};              ///< Purpose unknown.
     bool alignMeasureNumbersWithBarlines{}; ///< "Align Measure Numbers With Barlines" (xml node is `<drawMeasureNumbersOverBarlines>`)
 
     constexpr static std::string_view XmlNodeName = "miscOptions"; ///< The XML node name for this type.
@@ -739,6 +741,7 @@ public:
     Evpu startAdjust{};          ///< Start point adjustment for H-bar shape in @ref Evpu.
     Evpu endAdjust{};            ///< End point adjustment for H-bar shape in @ref Evpu.
     bool useSymbols{};           ///< Use character style for rests. (xml node is `<useCharRestStyle>`)
+    bool noHorizontalStretch{};  ///< Inverse of "Stretch Horizontally" option.
     bool autoUpdateMmRests{};    ///< Automatically update multimeasure rests when the user changes these options.
 
     constexpr static std::string_view XmlNodeName = "multimeasureRestOptions"; ///< The XML node name for this type.

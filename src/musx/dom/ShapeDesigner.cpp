@@ -25,6 +25,7 @@
 #include <cstdlib>
 #include <exception>
 #include <functional>
+#include <initializer_list>
 #include <limits>
 #include <memory>
 #include <string>
@@ -416,6 +417,21 @@ struct InstructionExpectation
 
 using InstructionExpectations = std::vector<InstructionExpectation>;
 
+static bool isZeroSpaceDash(const ShapeDefInstruction::Decoded& inst)
+{
+    if (inst.type != ShapeDefInstructionType::SetDash) {
+        return false;
+    }
+    bool valid = false;
+    std::visit([&](auto&& instData) {
+        using T = std::decay_t<decltype(instData)>;
+        if constexpr (std::is_same_v<T, ShapeDefInstruction::SetDash>) {
+            valid = instData.spaceLength == 0;
+        }
+    }, inst.data);
+    return valid;
+}
+
 static ShapeRecognitionCandidate makeSequenceRecognizer(
     KnownShapeDefType type,
     InstructionExpectations expectations,
@@ -469,7 +485,7 @@ static ShapeRecognitionCandidate makeSequenceRecognizer(
 static ShapeRecognitionCandidate makeTenutoRecognizer()
 {
     auto skipPredicate = [](const ShapeDefInstruction::Decoded& inst) {
-        return inst.type == ShapeDefInstructionType::SetDash;
+        return isZeroSpaceDash(inst);
     };
 
     auto lineWidthValidator = [](const ShapeDefInstruction::Decoded& inst) {
@@ -507,6 +523,62 @@ static ShapeRecognitionCandidate makeTenutoRecognizer()
         },
         skipPredicate
     );
+}
+
+static ShapeRecognitionCandidate makePedalArrowheadRecognizer(
+    KnownShapeDefType type,
+    std::initializer_list<std::pair<Evpu, Evpu>> segments)
+{
+    auto lineWidthValidator = [](const ShapeDefInstruction::Decoded& inst) {
+        bool valid = false;
+        std::visit([&](auto&& instData) {
+            using T = std::decay_t<decltype(instData)>;
+            if constexpr (std::is_same_v<T, ShapeDefInstruction::LineWidth>) {
+                valid = instData.efix >= EFIX_PER_EVPU && instData.efix <= 4 * EFIX_PER_EVPU;
+            }
+        }, inst.data);
+        return valid;
+    };
+
+    auto moveValidator = [](const ShapeDefInstruction::Decoded& inst) {
+        bool valid = false;
+        std::visit([&](auto&& instData) {
+            using T = std::decay_t<decltype(instData)>;
+            if constexpr (std::is_same_v<T, ShapeDefInstruction::RMoveTo>) {
+                valid = instData.dx == 0 && instData.dy == 0;
+            }
+        }, inst.data);
+        return valid;
+    };
+
+    auto skipPredicate = [](const ShapeDefInstruction::Decoded& inst) {
+        return isZeroSpaceDash(inst);
+    };
+
+    auto rLineToValidator = [](Evpu dx, Evpu dy) {
+        return [dx, dy](const ShapeDefInstruction::Decoded& inst) {
+            bool valid = false;
+            std::visit([&](auto&& instData) {
+                using T = std::decay_t<decltype(instData)>;
+                if constexpr (std::is_same_v<T, ShapeDefInstruction::RLineTo>) {
+                    valid = instData.dx == dx && instData.dy == dy;
+                }
+            }, inst.data);
+            return valid;
+        };
+    };
+
+    InstructionExpectations expectations;
+    expectations.reserve(5 + segments.size());
+    expectations.push_back({ShapeDefInstructionType::StartObject, nullptr});
+    expectations.push_back({ShapeDefInstructionType::LineWidth, lineWidthValidator});
+    expectations.push_back({ShapeDefInstructionType::RMoveTo, moveValidator});
+    for (const auto& segment : segments) {
+        expectations.push_back({ShapeDefInstructionType::RLineTo, rLineToValidator(segment.first, segment.second)});
+    }
+    expectations.push_back({ShapeDefInstructionType::Stroke, nullptr});
+
+    return makeSequenceRecognizer(type, std::move(expectations), skipPredicate);
 }
 
 struct SlurTieContour
@@ -611,8 +683,9 @@ static ShapeRecognitionCandidate makeSlurTieRecognizer(SlurTieDirection directio
         }
 
         case ShapeDefInstructionType::FillSolid:
-        case ShapeDefInstructionType::SetDash:
             return ShapeRecognitionStepResult::Continue;
+        case ShapeDefInstructionType::SetDash:
+            return isZeroSpaceDash(inst) ? ShapeRecognitionStepResult::Continue : ShapeRecognitionStepResult::Reject;
 
         default:
             return ShapeRecognitionStepResult::Reject;
@@ -682,12 +755,38 @@ static ShapeRecognitionCandidate makeSlurTieRecognizer(SlurTieDirection directio
     return candidate;
 }
 
-static ShapeRecognitionCandidates createShapeRecognizers(const ShapeDef&)
+static ShapeRecognitionCandidates createShapeRecognizers(const ShapeDef& shape)
 {
+    const auto allowsShapeType = [&](std::initializer_list<ShapeDef::ShapeType> allowedTypes) {
+        if (shape.shapeType == ShapeDef::ShapeType::Other) {
+            // legacy files do not use shape types, so we always need to check Other.
+            return true;
+        }
+        return std::find(allowedTypes.begin(), allowedTypes.end(), shape.shapeType) != allowedTypes.end();
+    };
+
     ShapeRecognitionCandidates candidates;
-    candidates.push_back(makeTenutoRecognizer());
-    candidates.push_back(makeSlurTieRecognizer(SlurTieDirection::CurveRight));
-    candidates.push_back(makeSlurTieRecognizer(SlurTieDirection::CurveLeft));
+    if (allowsShapeType({ShapeDef::ShapeType::Articulation})) {
+        candidates.push_back(makeTenutoRecognizer());
+    }
+    if (allowsShapeType({ShapeDef::ShapeType::Articulation, ShapeDef::ShapeType::Expression})) {
+        candidates.push_back(makeSlurTieRecognizer(SlurTieDirection::CurveRight));
+        candidates.push_back(makeSlurTieRecognizer(SlurTieDirection::CurveLeft));
+    }
+    if (allowsShapeType({ShapeDef::ShapeType::Arrowhead})) {
+        candidates.push_back(makePedalArrowheadRecognizer(
+            KnownShapeDefType::PedalArrowheadDown,
+            {{0, 0}, {12, -24}, {12, 24}}));
+        candidates.push_back(makePedalArrowheadRecognizer(
+            KnownShapeDefType::PedalArrowheadUp,
+            {{0, 0}, {12, 24}, {12, -24}}));
+        candidates.push_back(makePedalArrowheadRecognizer(
+            KnownShapeDefType::PedalArrowheadShortUpDownLongUp,
+            {{0, 0}, {9, 24}, {14, -36}, {13, 12}}));
+        candidates.push_back(makePedalArrowheadRecognizer(
+            KnownShapeDefType::PedalArrowheadLongUpDownShortUp,
+            {{0, 0}, {13, 12}, {14, -36}, {9, 24}, {0, 0}}));
+    }
     return candidates;
 }
 
