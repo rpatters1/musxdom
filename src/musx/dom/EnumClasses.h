@@ -33,6 +33,30 @@ enum class AlignJustify
     Center  ///< Center alignment.
 };
 
+/// @enum ArrowheadPreset
+/// @brief Finale-defined arrowhead presets.
+///
+/// These values correspond to a fixed set of arrowhead shapes built into Finale.
+/// The numeric values are significant and match Finale’s internal preset IDs.
+/// The same preset is used for both the start and end of a line: the arrowhead
+/// is automatically mirrored based on whether it appears at the line start or
+/// the line end.
+///
+/// The presets differ only by shape and scale. Their sizes are fixed and not
+/// user-adjustable:
+/// - Small arrowheads are just under 1 staff space tall.
+/// - The medium curved arrowhead is nearly 2.5 staff spaces tall.
+/// - The large curved arrowhead is roughly 4 staff spaces tall.
+/// In each case, the arrowhead length appears equal to its height.
+enum class ArrowheadPreset : int
+{
+    SmallFilled  = 1,  ///< Small filled arrowhead preset (≈1 staff space tall).
+    SmallOutline = 2,  ///< Small outlined arrowhead preset (≈1 staff space tall).
+    SmallCurved  = 3,  ///< Small curved-back arrowhead preset (≈1 staff space tall).
+    LargeCurved  = 4,  ///< Large curved-back arrowhead preset (≈4 staff spaces tall).
+    MediumCurved = 5   ///< Medium curved-back arrowhead preset (≈2.5 staff spaces tall).
+};
+
 /// @brief Curve contour direction for ties and slurs.
 enum class CurveContourDirection
 {

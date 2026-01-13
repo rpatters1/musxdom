@@ -505,8 +505,8 @@ public:
 
     LineCapType lineCapStartType{};                       ///< Line cap start type
     LineCapType lineCapEndType{};                         ///< Line cap end type
-    Cmper lineCapStartArrowId{};                          ///< Cmper of start arrowhead (preset or cmper of custom @ref ShapeDef). xml node is `<lineCapStartArrowID>`
-    Cmper lineCapEndArrowId{};                            ///< Cmper of end arrowhead (preset or cmper of custom @ref ShapeDef). xml node is `<lineCapStartArrowID>`
+    Cmper lineCapStartArrowId{};                          ///< Cmper of start arrowhead (#ArrowheadPreset or cmper of custom @ref ShapeDef). xml node is `<lineCapStartArrowID>`
+    Cmper lineCapEndArrowId{};                            ///< Cmper of end arrowhead (#ArrowheadPreset or cmper of custom @ref ShapeDef). xml node is `<lineCapStartArrowID>`
 
     bool makeHorz{};                                      ///< "Horizontal"
     bool lineAfterLeftStartText{};                        ///< Line adjustments "Start H: After Text"

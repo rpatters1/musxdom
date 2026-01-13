@@ -126,7 +126,8 @@ enum class ShapeDefInstructionType
 
     /// set arrowhead
     /// data items: (4) startArrowID, endArrowID, startFlags, endFlags
-    /// the meaning of the flags is currently untested, but they are likely only used to specify built-in vs. custom arrowhead
+    /// The meaning of the flags is currently untested, but they are likely used to specify
+    /// either a built-in #ArrowheadPreset or custom arrowhead (which is also a @ref others::ShapeDef).
     SetArrowhead,
 
     /// set black: equivalent to `SetGray(0)`
