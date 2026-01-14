@@ -21,6 +21,7 @@
  */
 #pragma once
 
+#include <functional>
 #include <map>
 #include <tuple>
 #include <utility>
@@ -1732,6 +1733,15 @@ public:
     std::vector<std::pair<NoteInfoPtr, CurveContourDirection>> calcJumpTieContinuationsFrom() const;
 
 private:
+    enum class TieFromSearchAction {
+        Continue,
+        Accept,
+        Stop,
+    };
+
+    static NoteInfoPtr findTieFromCandidate(const NoteInfoPtr& note, Cmper previousMeasure,
+        const std::function<TieFromSearchAction(const NoteInfoPtr&, bool)>& decide);
+
     /// @brief Calculates pseudo tie behavior for the specified mode.
     /// @param [out] tieDirection Optional output parameter receiving the tie's curve contour direction.
     /// @param mode The pseudo tie mode to evaluate.

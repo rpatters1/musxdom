@@ -2737,38 +2737,59 @@ NoteInfoPtr NoteInfoPtr::calcTieToWithNextMeasure(Cmper nextMeasure) const
     return NoteInfoPtr();
 }
 
-NoteInfoPtr NoteInfoPtr::calcTieFromWithPreviousMeasure(Cmper previousMeasure, bool requireTie) const
+NoteInfoPtr NoteInfoPtr::findTieFromCandidate(const NoteInfoPtr& note, Cmper previousMeasure,
+    const std::function<TieFromSearchAction(const NoteInfoPtr&, bool)>& decide)
 {
-    if (*this) {
-        // grace notes cannot tie backwards; only forwards (see grace note comment above)
-        auto thisRawEntry = m_entry->getEntry();
-        std::optional<Cmper> currPreviousMeasure = previousMeasure;
-        if (thisRawEntry->isNote && !thisRawEntry->graceNote) {
-            for (auto prev = m_entry.getPreviousInLayer(currPreviousMeasure); prev; prev = prev.getPreviousInLayer(currPreviousMeasure)) {
-                if (prev.getMeasure() < previousMeasure) {
-                    // only search measures at or after previousMeasure
-                    break;
-                }
-                if (prev.getMeasure() == previousMeasure) {
-                    currPreviousMeasure.reset();
-                }
-                auto prevEntry = prev->getEntry();
-                if (!prevEntry->isNote) {
-                    continue;
-                }
-                for (size_t noteIndex = 0; noteIndex < prevEntry->notes.size(); noteIndex++) {
-                    NoteInfoPtr tryFrom(prev, noteIndex);
-                    if (auto tryTiedTo = tryFrom.calcTieToWithNextMeasure(m_entry.getMeasure()); isSameNote(tryTiedTo)) {
-                        if (!requireTie || tryFrom->tieStart) {
-                            return tryFrom;
-                        }
-                        return NoteInfoPtr();
-                    }
-                }
+    if (!note) {
+        return {};
+    }
+    auto thisRawEntry = note.getEntryInfo()->getEntry();
+    if (!thisRawEntry->isNote || thisRawEntry->graceNote) {
+        return {};
+    }
+
+    std::optional<Cmper> currPreviousMeasure = previousMeasure;
+    for (auto prev = note.getEntryInfo().getPreviousInLayer(currPreviousMeasure);
+         prev; prev = prev.getPreviousInLayer(currPreviousMeasure)) {
+        if (prev.getMeasure() < previousMeasure) {
+            // only search measures at or after previousMeasure
+            break;
+        }
+        if (prev.getMeasure() == previousMeasure) {
+            currPreviousMeasure.reset();
+        }
+        auto prevEntry = prev->getEntry();
+        if (!prevEntry->isNote) {
+            continue;
+        }
+        for (size_t noteIndex = 0; noteIndex < prevEntry->notes.size(); noteIndex++) {
+            NoteInfoPtr tryFrom(prev, noteIndex);
+            auto tryTiedTo = tryFrom.calcTieToWithNextMeasure(note.getEntryInfo().getMeasure());
+            const bool tieMatches = note.isSameNote(tryTiedTo);
+            switch (decide(tryFrom, tieMatches)) {
+            case TieFromSearchAction::Accept:
+                return tryFrom;
+            case TieFromSearchAction::Stop:
+                return {};
+            case TieFromSearchAction::Continue:
+                break;
             }
         }
     }
-    return NoteInfoPtr();
+    return {};
+}
+
+NoteInfoPtr NoteInfoPtr::calcTieFromWithPreviousMeasure(Cmper previousMeasure, bool requireTie) const
+{
+    return findTieFromCandidate(*this, previousMeasure, [&](const NoteInfoPtr& tryFrom, bool tieMatches) {
+        if (!tieMatches) {
+            return TieFromSearchAction::Continue;
+        }
+        if (!requireTie || tryFrom->tieStart) {
+            return TieFromSearchAction::Accept;
+        }
+        return TieFromSearchAction::Stop;
+    });
 }
 
 NoteInfoPtr NoteInfoPtr::calcTieTo() const
@@ -3134,7 +3155,23 @@ std::vector<std::pair<NoteInfoPtr, CurveContourDirection>> NoteInfoPtr::calcJump
         if (previousPlaybackMeasure == currentMeasure) {
             continue;
         }
-        if (auto tieFrom = calcTieFromWithPreviousMeasure(previousPlaybackMeasure, true)) {
+        auto tieFrom = findTieFromCandidate(*this, previousPlaybackMeasure, [&](const NoteInfoPtr& tryFrom, bool tieMatches) {
+            if (tryFrom.getEntryInfo().getMeasure() != previousPlaybackMeasure) {
+                return TieFromSearchAction::Continue;
+            }
+            if (!isSamePitch(tryFrom)) {
+                return TieFromSearchAction::Continue;
+            }
+            if (tryFrom->tieStart) {
+                return TieFromSearchAction::Accept;
+            }
+            if (auto arpeggiatedTieTo = tryFrom.calcArpeggiatedTieToNote(); arpeggiatedTieTo && isSamePitch(arpeggiatedTieTo)) {
+                return TieFromSearchAction::Accept;
+            }
+            (void)tieMatches;
+            return TieFromSearchAction::Continue;
+        });
+        if (tieFrom) {
             results.emplace_back(tieFrom, tieDirection);
         }
     }
