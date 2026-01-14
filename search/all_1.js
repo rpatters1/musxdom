@@ -77,7 +77,7 @@ var searchData=
   ['bassmetallophone_74',['BassMetallophone',['../namespacemusx_1_1dom_1_1uuid.html#a0820fd316fc820556962a3398791b248',1,'musx::dom::uuid']]],
   ['bassoboe_75',['BassOboe',['../namespacemusx_1_1dom_1_1uuid.html#aa5d50e13372beda0c499510b94bc5121',1,'musx::dom::uuid']]],
   ['bassoon_76',['Bassoon',['../namespacemusx_1_1dom_1_1uuid.html#a225bb5e53c30235a0c270c20f4d49cd8',1,'musx::dom::uuid']]],
-  ['bassposition_77',['bassposition',['../classmusx_1_1dom_1_1details_1_1ChordAssign.html#a179be6cb886cae6fa2f5e24f87e084b5',1,'musx::dom::details::ChordAssign::BassPosition'],['../classmusx_1_1dom_1_1details_1_1ChordAssign.html#afe28c6478b19674453be92186bd6f127',1,'musx::dom::details::ChordAssign::bassPosition']]],
+  ['bassposition_77',['bassposition',['../classmusx_1_1dom_1_1details_1_1ChordAssign.html#afe28c6478b19674453be92186bd6f127',1,'musx::dom::details::ChordAssign::bassPosition'],['../classmusx_1_1dom_1_1details_1_1ChordAssign.html#a179be6cb886cae6fa2f5e24f87e084b5',1,'musx::dom::details::ChordAssign::BassPosition']]],
   ['bassrecorder_78',['BassRecorder',['../namespacemusx_1_1dom_1_1uuid.html#afb055366f8ba0debbabca38ffd9eb216',1,'musx::dom::uuid']]],
   ['basssax_79',['BassSax',['../namespacemusx_1_1dom_1_1uuid.html#aa55dd130ed97568119af0e33bbc874d6',1,'musx::dom::uuid']]],
   ['bassscalenum_80',['bassScaleNum',['../classmusx_1_1dom_1_1details_1_1ChordAssign.html#a878216656c731f619851a5c785afa974',1,'musx::dom::details::ChordAssign']]],

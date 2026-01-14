@@ -99,13 +99,19 @@ $(document).ready(function(){initNavTree('todo.html',''); initResizable(); });
 <dt>Member <a class="el" href="classmusx_1_1dom_1_1EntryFrame.html#a2cbd52ed27bd8b65673d4440e2cb2c4c">musx::dom::EntryFrame::calcAreAllEntriesHiddenInFrame</a>  () const</dt>
 <dd><a class="anchor" id="_todo000001"></a>check if the entry is hidden by voiced parts.  </dd>
 <dt>Member <a class="el" href="classmusx_1_1dom_1_1EntryFrame.html#af934596122cb5cd63787c096466d7b0e">musx::dom::EntryFrame::calcIsCueFrame</a>  (bool includeVisibleInScore=false) const</dt>
-<dd><a class="anchor" id="_todo000004"></a>Revisit this algorithm if needed. The current algorithm is chosen to be mostly accurate while being fast to compute when there is no cue.  </dd>
+<dd><a class="anchor" id="_todo000008"></a>Revisit this algorithm if needed. The current algorithm is chosen to be mostly accurate while being fast to compute when there is no cue.  </dd>
 <dt>Member <a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr_1_1InterpretedIterator.html#a7695a9be72a0454184fd406a0f86d7af">musx::dom::EntryInfoPtr::InterpretedIterator::getPrevious</a>  () const</dt>
 <dd><a class="anchor" id="_todo000003"></a>Currently m_iteratedEntry is the forward launcher only. However, when we incorporate mid-system beams it will become a backwards launcher as well, and then we will need to differentiate.  </dd>
+<dt>Member <a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html#a64c91416435f271ef0d99dbe10073cf9">musx::dom::NoteInfoPtr::calcJumpTieContinuationFrom</a>  (CurveContourDirection *tieDirection=nullptr) const</dt>
+<dd><p class="startdd"><a class="anchor" id="_todo000004"></a>if is the first bar of a 2nd or higher ending. Also maybe look if this is the first bar of a coda. </p>
+<p class="interdd"><a class="anchor" id="_todo000005"></a>return the last a matching note from the bar before the jump, if it is valid as a tie-from note Can't use calcTieFrom because that does not skip over the intervening measures. Must create a new function that without duplicating calcTieFrom code. </p>
+<p class="interdd"><a class="anchor" id="_todo000006"></a></p>
+<p class="enddd"><a class="anchor" id="_todo000007"></a>if tieEnd is true, search for TieEnd tie alts to find out if the tie direction is overridden.  </p>
+</dd>
 <dt>Member <a class="el" href="classmusx_1_1dom_1_1others_1_1PartDefinition.html#ad766742621a9d1e43a68c2779d30d7c8">musx::dom::others::PartDefinition::getNameRawTextCtx</a>  () const</dt>
-<dd><a class="anchor" id="_todo000005"></a>perhaps additional logic as in getName, but not until something is broken.  </dd>
+<dd><a class="anchor" id="_todo000009"></a>perhaps additional logic as in getName, but not until something is broken.  </dd>
 <dt>Member <a class="el" href="classmusx_1_1dom_1_1others_1_1StaffListSet.html#a881c319547c5309dda20863a1846a1b3">musx::dom::others::StaffListSet&lt; ScoreList, PartsList, ScoreForcedList, PartsForcedList &gt;::contains</a>  (StaffCmper staffId, const MusxInstanceList&lt; StaffUsed &gt; &amp;systemStaves, bool isHidden=false) const noexcept</dt>
-<dd><a class="anchor" id="_todo000006"></a>It may be necessary to add some fuzzy logic around StaffGroup here, at least for category staff lists. Finale includes a staff if it is the top staff in a group, when the top staff of a group is included. We defer this to another day. </dd>
+<dd><a class="anchor" id="_todo000010"></a>It may be necessary to add some fuzzy logic around StaffGroup here, at least for category staff lists. Finale includes a staff if it is the top staff in a group, when the top staff of a group is included. We defer this to another day. </dd>
 </dl>
 </div></div><!-- contents -->
 </div><!-- PageDoc -->

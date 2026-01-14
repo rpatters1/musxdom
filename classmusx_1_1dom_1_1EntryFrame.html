@@ -174,12 +174,12 @@ const std::vector&lt; std::shared_ptr&lt; const <a class="el" href="classmusx_1_
 void&#160;</td><td class="memItemRight" valign="bottom"><b>addEntry</b> (const std::shared_ptr&lt; const <a class="el" href="classmusx_1_1dom_1_1EntryInfo.html">EntryInfo</a> &gt; &amp;entry)</td></tr>
 <tr class="memdesc:a6352800f5a3791aa5cc988867ac1a5ad"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add an entry to the list. <br /></td></tr>
 <tr class="separator:a6352800f5a3791aa5cc988867ac1a5ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae5d4248fd27c94a55e3fed2eac44e667" id="r_ae5d4248fd27c94a55e3fed2eac44e667"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; const <a class="el" href="classmusx_1_1dom_1_1EntryFrame.html">EntryFrame</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryFrame.html#ae5d4248fd27c94a55e3fed2eac44e667">getNext</a> () const</td></tr>
-<tr class="memdesc:ae5d4248fd27c94a55e3fed2eac44e667"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the entry frame for the next measure with the same staff and layer.  <br /></td></tr>
-<tr class="separator:ae5d4248fd27c94a55e3fed2eac44e667"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5f259c0e47d82732e70eb471eccb14ce" id="r_a5f259c0e47d82732e70eb471eccb14ce"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; const <a class="el" href="classmusx_1_1dom_1_1EntryFrame.html">EntryFrame</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryFrame.html#a5f259c0e47d82732e70eb471eccb14ce">getPrevious</a> () const</td></tr>
-<tr class="memdesc:a5f259c0e47d82732e70eb471eccb14ce"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the entry frame for the previous measure with the same staff and layer.  <br /></td></tr>
-<tr class="separator:a5f259c0e47d82732e70eb471eccb14ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a96b5bbcac851be4d5dc58e374d1d1c7b" id="r_a96b5bbcac851be4d5dc58e374d1d1c7b"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; const <a class="el" href="classmusx_1_1dom_1_1EntryFrame.html">EntryFrame</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryFrame.html#a96b5bbcac851be4d5dc58e374d1d1c7b">getNext</a> (std::optional&lt; <a class="el" href="namespacemusx_1_1dom.html#a3d5af8a8174c235d3292c076def44817">MeasCmper</a> &gt; targetMeasure=std::nullopt) const</td></tr>
+<tr class="memdesc:a96b5bbcac851be4d5dc58e374d1d1c7b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the entry frame for the next measure with the same staff and layer.  <br /></td></tr>
+<tr class="separator:a96b5bbcac851be4d5dc58e374d1d1c7b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad07a9f61af6d01a02d2319bac9edfa65" id="r_ad07a9f61af6d01a02d2319bac9edfa65"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; const <a class="el" href="classmusx_1_1dom_1_1EntryFrame.html">EntryFrame</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryFrame.html#ad07a9f61af6d01a02d2319bac9edfa65">getPrevious</a> (std::optional&lt; <a class="el" href="namespacemusx_1_1dom.html#a3d5af8a8174c235d3292c076def44817">MeasCmper</a> &gt; targetMeasure=std::nullopt) const</td></tr>
+<tr class="memdesc:ad07a9f61af6d01a02d2319bac9edfa65"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the entry frame for the previous measure with the same staff and layer.  <br /></td></tr>
+<tr class="separator:ad07a9f61af6d01a02d2319bac9edfa65"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a294909532014b24a6931e457d6bd52e7" id="r_a294909532014b24a6931e457d6bd52e7"><td class="memItemLeft" align="right" valign="top"><a id="a294909532014b24a6931e457d6bd52e7" name="a294909532014b24a6931e457d6bd52e7"></a>
 <a class="el" href="namespacemusx_1_1dom.html#a4223cd531120dbef7acd854c3d2631b8">MusxInstance</a>&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1StaffComposite.html">others::StaffComposite</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getStartStaffInstance</b> () const</td></tr>
 <tr class="memdesc:a294909532014b24a6931e457d6bd52e7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the staff at eduPosition 0 without needing to create it again. <br /></td></tr>
@@ -322,7 +322,7 @@ Public Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Calculates if this entry frame is part of a cue. </p>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000004">Todo:</a></b></dt><dd>Revisit this algorithm if needed. The current algorithm is chosen to be mostly accurate while being fast to compute when there is no cue. </dd></dl>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000008">Todo:</a></b></dt><dd>Revisit this algorithm if needed. The current algorithm is chosen to be mostly accurate while being fast to compute when there is no cue. </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">includeVisibleInScore</td><td>If true, include cues that are visible in the score. </td></tr>
@@ -520,8 +520,8 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="ae5d4248fd27c94a55e3fed2eac44e667" name="ae5d4248fd27c94a55e3fed2eac44e667"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae5d4248fd27c94a55e3fed2eac44e667">&#9670;&#160;</a></span>getNext()</h2>
+<a id="a96b5bbcac851be4d5dc58e374d1d1c7b" name="a96b5bbcac851be4d5dc58e374d1d1c7b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a96b5bbcac851be4d5dc58e374d1d1c7b">&#9670;&#160;</a></span>getNext()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -529,19 +529,26 @@ Public Attributes</h2></td></tr>
         <tr>
           <td class="memname">std::shared_ptr&lt; const <a class="el" href="classmusx_1_1dom_1_1EntryFrame.html">EntryFrame</a> &gt; musx::dom::EntryFrame::getNext </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramtype">std::optional&lt; <a class="el" href="namespacemusx_1_1dom.html#a3d5af8a8174c235d3292c076def44817">MeasCmper</a> &gt;&#160;</td>
+          <td class="paramname"><em>targetMeasure</em> = <code>std::nullopt</code></td><td>)</td>
           <td> const</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 <p>Gets the entry frame for the next measure with the same staff and layer. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">targetMeasure</td><td>Optional measure number to jump to. </td></tr>
+  </table>
+  </dd>
+</dl>
 <dl class="section return"><dt>Returns</dt><dd>Frame or nullpter if the next measure has no matching frame. </dd></dl>
 
 </div>
 </div>
-<a id="a5f259c0e47d82732e70eb471eccb14ce" name="a5f259c0e47d82732e70eb471eccb14ce"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5f259c0e47d82732e70eb471eccb14ce">&#9670;&#160;</a></span>getPrevious()</h2>
+<a id="ad07a9f61af6d01a02d2319bac9edfa65" name="ad07a9f61af6d01a02d2319bac9edfa65"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad07a9f61af6d01a02d2319bac9edfa65">&#9670;&#160;</a></span>getPrevious()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -549,13 +556,20 @@ Public Attributes</h2></td></tr>
         <tr>
           <td class="memname">std::shared_ptr&lt; const <a class="el" href="classmusx_1_1dom_1_1EntryFrame.html">EntryFrame</a> &gt; musx::dom::EntryFrame::getPrevious </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramtype">std::optional&lt; <a class="el" href="namespacemusx_1_1dom.html#a3d5af8a8174c235d3292c076def44817">MeasCmper</a> &gt;&#160;</td>
+          <td class="paramname"><em>targetMeasure</em> = <code>std::nullopt</code></td><td>)</td>
           <td> const</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 <p>Gets the entry frame for the previous measure with the same staff and layer. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">targetMeasure</td><td>Optional measure number to jump to. </td></tr>
+  </table>
+  </dd>
+</dl>
 <dl class="section return"><dt>Returns</dt><dd>Frame or nullpter if the previous measure has no matching frame, </dd></dl>
 
 </div>

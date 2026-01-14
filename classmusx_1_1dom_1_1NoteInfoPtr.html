@@ -195,6 +195,9 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>calcIsIncludedInVoici
 <tr class="memitem:affbcbf88341627f44eb678a36783a4ca" id="r_affbcbf88341627f44eb678a36783a4ca"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html#affbcbf88341627f44eb678a36783a4ca">calcHasPseudoTieEnd</a> (<a class="el" href="namespacemusx_1_1dom.html#a0dc36a86e1ae0cadd7b7e4c624b07b55">CurveContourDirection</a> *tieDirection=nullptr) const</td></tr>
 <tr class="memdesc:affbcbf88341627f44eb678a36783a4ca"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates if this note has a smart shape, shape expression, or shape articulation acting as a tie end. For any of these to count, the entry must have a number of these stand-in items equal to the number of notes in the entry.  <br /></td></tr>
 <tr class="separator:affbcbf88341627f44eb678a36783a4ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a64c91416435f271ef0d99dbe10073cf9" id="r_a64c91416435f271ef0d99dbe10073cf9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html">NoteInfoPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html#a64c91416435f271ef0d99dbe10073cf9">calcJumpTieContinuationFrom</a> (<a class="el" href="namespacemusx_1_1dom.html#a0dc36a86e1ae0cadd7b7e4c624b07b55">CurveContourDirection</a> *tieDirection=nullptr) const</td></tr>
+<tr class="memdesc:a64c91416435f271ef0d99dbe10073cf9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the note in a prior measure that continues a "jump" tie into this note.  <br /></td></tr>
+<tr class="separator:a64c91416435f271ef0d99dbe10073cf9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Wraps an <a class="el" href="classmusx_1_1dom_1_1EntryInfo.html">EntryInfo</a> instance and a note index. </p>
@@ -408,6 +411,37 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>calcIsIncludedInVoici
 
 <p>Calculates if any linked part has this note enharmonically respelled. </p>
 <dl class="section return"><dt>Returns</dt><dd>True if a part exists with the note enharmonically respelled, otherwise false. </dd></dl>
+
+</div>
+</div>
+<a id="a64c91416435f271ef0d99dbe10073cf9" name="a64c91416435f271ef0d99dbe10073cf9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a64c91416435f271ef0d99dbe10073cf9">&#9670;&#160;</a></span>calcJumpTieContinuationFrom()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html">NoteInfoPtr</a> musx::dom::NoteInfoPtr::calcJumpTieContinuationFrom </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespacemusx_1_1dom.html#a0dc36a86e1ae0cadd7b7e4c624b07b55">CurveContourDirection</a> *&#160;</td>
+          <td class="paramname"><em>tieDirection</em> = <code>nullptr</code></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Calculates the note in a prior measure that continues a "jump" tie into this note. </p>
+<p>A jump tie is a tie that skips over intervening measures due to repeat or navigation (e.g., back to a prior bar or forward to a coda). The implementation should identify the source note that ties into this note by walking the playback path, not just the immediate previous measure. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[out]</td><td class="paramname">tieDirection</td><td>Optional output parameter receiving the tie's curve contour direction. It is set to <a class="el" href="namespacemusx_1_1dom.html#a0dc36a86e1ae0cadd7b7e4c624b07b55a08a38277b0309070706f6652eeae9a53" title="contour is curved downward (tips face up)">CurveContourDirection::Down</a> for under ties, <a class="el" href="namespacemusx_1_1dom.html#a0dc36a86e1ae0cadd7b7e4c624b07b55a258f49887ef8d14ac268c92b02503aaa" title="contour is curved upward (tips face down)">CurveContourDirection::Up</a> for over ties, or <a class="el" href="namespacemusx_1_1dom.html#a0dc36a86e1ae0cadd7b7e4c624b07b55a06b9281e396db002010bde1de57262eb" title="contour is automatic, indeterminate, or does not apply">CurveContourDirection::Auto</a> if the contour cannot be determined. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The tied-from note if a continuation is found; otherwise null. </dd></dl>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000004">Todo:</a></b></dt><dd>if is the first bar of a 2nd or higher ending. Also maybe look if this is the first bar of a coda. </dd></dl>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000005">Todo:</a></b></dt><dd>return the last a matching note from the bar before the jump, if it is valid as a tie-from note Can't use calcTieFrom because that does not skip over the intervening measures. Must create a new function that without duplicating calcTieFrom code. </dd></dl>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000006">Todo:</a></b></dt><dd></dd></dl>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000007">Todo:</a></b></dt><dd>if tieEnd is true, search for TieEnd tie alts to find out if the tie direction is overridden. </dd></dl>
 
 </div>
 </div>
