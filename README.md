@@ -33,13 +33,14 @@ void process(const std::vector<char>& xmlBuffer)
         for (const auto& measure : measures) {
             if (auto gfHold = details::GFrameHoldContext(document, SCORE_PARTID, staff->getCmper(), measure->getCmper())) {
                 for (LayerIndex layer; layer < MAX_LAYERS; layer++) {
-                    // create your own entry frame:
-                    auto entries = gfHold.createEntryFrame(layer, /*forWrittenPitch*/ false);
-                    // or let musxdom iterate the entries for you:
-                    gfHold->iterateEntries(layer, [&](const EntryInfoPtr& entryInfo) -> bool {
-                        // do something with the entry (which is a single note, a chord, or a rest)
-                        return true;
-                    });
+                    if (auto entryFrame = gfHold.createEntryFrame(layer)) {
+                        for (int voice = 1; voice <= 2; ++voice) { // Finale v1/v2
+                            for (auto result = entryFrame->getFirstInterpretedIterator(voice);
+                                 result; result = result.getNext()) {
+                                processEntryInfo(result);
+                            }
+                        }
+                    }
                 }
             }
         }
