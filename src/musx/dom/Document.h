@@ -209,15 +209,16 @@ public:
     [[nodiscard]]
     MusicRange calcEntireDocument() const;
 
-    /// @brief Calculates the measure from which playback jumped into @p currentMeasure.
+    /// @brief Calculates the measures from which playback jumped into @p currentMeasure.
     /// @details This function inspects repeat endings and text repeats to detect jumps that
     /// land on the specified measure. The result is the measure immediately preceding the
     /// jump origin, when determinable. It is intended for jump-aware tie continuation logic.
     /// @param partId The linked part to inspect (use #SCORE_PARTID for score).
     /// @param currentMeasure The measure that playback has jumped into.
-    /// @return The measure immediately preceding the jump origin, or std::nullopt if none applies.
+    /// @return A list of measures immediately preceding jump origins, ordered by preference
+    /// (forward jump origins first in ascending order, then backward origins in descending order).
     [[nodiscard]]
-    std::optional<MeasCmper> calcJumpFromMeasure(Cmper partId, MeasCmper currentMeasure) const;
+    std::vector<MeasCmper> calcJumpFromMeasures(Cmper partId, MeasCmper currentMeasure) const;
 
     /// @brief Iterate all entries in the document by staff and then measure. This function wraps MusxInstanceList<others::StaffUsed>::iterateEntries.
     /// @param partId The linked part id to iterate. (Use #SCORE_PARTID to iterate the score.)

@@ -2998,6 +2998,21 @@ bool NoteInfoPtr::calcPseudoTieInternal(utils::PseudoTieMode mode, CurveContourD
         return false;
     }
 
+    std::vector<size_t> eligibleNoteIndices;
+    if (mode == utils::PseudoTieMode::TieEnd) {
+        for (size_t noteIndex = 0; noteIndex < entry->notes.size(); ++noteIndex) {
+            if (!entry->notes[noteIndex]->tieEnd) {
+                eligibleNoteIndices.push_back(noteIndex);
+            }
+        }
+        if (eligibleNoteIndices.empty()) {
+            return false;
+        }
+        if (entry->notes[getNoteIndex()]->tieEnd) {
+            return false;
+        }
+    }
+
     std::vector<CurveContourDirection> tieDirections;
 
     // check smart slurs
@@ -3007,7 +3022,8 @@ bool NoteInfoPtr::calcPseudoTieInternal(utils::PseudoTieMode mode, CurveContourD
         }
         return true;
     });
-    if (selectPseudoTieDirection(tieDirection, tieDirections)) {
+    if (selectPseudoTieDirection(tieDirection, tieDirections,
+            mode == utils::PseudoTieMode::TieEnd ? &eligibleNoteIndices : nullptr)) {
         return true;
     }
 
@@ -3032,7 +3048,8 @@ bool NoteInfoPtr::calcPseudoTieInternal(utils::PseudoTieMode mode, CurveContourD
             tieDirections.push_back(nextContour);
         }
     }
-    if (selectPseudoTieDirection(tieDirection, tieDirections)) {
+    if (selectPseudoTieDirection(tieDirection, tieDirections,
+            mode == utils::PseudoTieMode::TieEnd ? &eligibleNoteIndices : nullptr)) {
         return true;
     }
 
@@ -3044,7 +3061,8 @@ bool NoteInfoPtr::calcPseudoTieInternal(utils::PseudoTieMode mode, CurveContourD
             tieDirections.push_back(shapeInfo->shape->calcSlurContour());
         }
     }
-    if (selectPseudoTieDirection(tieDirection, tieDirections)) {
+    if (selectPseudoTieDirection(tieDirection, tieDirections,
+            mode == utils::PseudoTieMode::TieEnd ? &eligibleNoteIndices : nullptr)) {
         return true;
     }
 
@@ -3052,9 +3070,11 @@ bool NoteInfoPtr::calcPseudoTieInternal(utils::PseudoTieMode mode, CurveContourD
 }
 
 bool NoteInfoPtr::selectPseudoTieDirection(CurveContourDirection* tieDirection,
-    std::vector<CurveContourDirection>& directions) const
+    std::vector<CurveContourDirection>& directions,
+    const std::vector<size_t>* eligibleNoteIndices) const
 {
-    if (directions.size() != m_entry->getEntry()->notes.size()) {
+    const size_t requiredCount = eligibleNoteIndices ? eligibleNoteIndices->size() : m_entry->getEntry()->notes.size();
+    if (requiredCount == 0 || directions.size() != requiredCount) {
         return false;
     }
 
@@ -3068,43 +3088,57 @@ bool NoteInfoPtr::selectPseudoTieDirection(CurveContourDirection* tieDirection,
             std::sort(directions.begin(), directions.end());
         }
         if (directions[0] != CurveContourDirection::Auto) { // if the first is not Auto, none are Auto
-            *tieDirection = directions[getNoteIndex()];
+            size_t directionIndex = getNoteIndex();
+            if (eligibleNoteIndices) {
+                const auto it = std::find(eligibleNoteIndices->begin(), eligibleNoteIndices->end(), directionIndex);
+                if (it == eligibleNoteIndices->end()) {
+                    return false;
+                }
+                directionIndex = static_cast<size_t>(std::distance(eligibleNoteIndices->begin(), it));
+            }
+            *tieDirection = directions[directionIndex];
         }
     }
     return true;
 }
 
-NoteInfoPtr NoteInfoPtr::calcJumpTieContinuationFrom(CurveContourDirection* tieDirection) const
+std::vector<std::pair<NoteInfoPtr, CurveContourDirection>> NoteInfoPtr::calcJumpTieContinuationsFrom() const
 {
-    if (tieDirection) {
-        *tieDirection = CurveContourDirection::Auto;
-    }
+    CurveContourDirection tieDirection = CurveContourDirection::Auto;
 
     if (getEntryInfo()->elapsedDuration != 0) {
         // entry must be at the beginning of a measure.
         return {};
     }
 
-    if (((*this)->tieEnd && !calcTieFrom()) || calcHasPseudoTieEnd(tieDirection)) {
-        const auto frame = m_entry.getFrame();
-        const auto document = frame->getDocument();
-        const auto partId = frame->getRequestedPartId();
-        const auto currentMeasure = frame->getMeasure();
-        const auto previousPlaybackMeasure = document->calcJumpFromMeasure(partId, currentMeasure);
-        if (!previousPlaybackMeasure || *previousPlaybackMeasure == currentMeasure) {
-            return {};
-        }
-        if ((*this)->tieEnd && tieDirection) {
-            if (const auto tieAlter = document->getDetails()->getForNote<details::TieAlterEnd>(*this, partId)) {
-                if (tieAlter->freezeDirection) {
-                    *tieDirection = tieAlter->down ? CurveContourDirection::Down : CurveContourDirection::Up;
-                }
-            }
-        }
-        return calcTieFromWithPreviousMeasure(*previousPlaybackMeasure, true);
+    if (!(*this)->tieEnd && !calcHasPseudoTieEnd(&tieDirection)) {
+        return {};
     }
 
-    return {};
+    const auto frame = m_entry.getFrame();
+    const auto document = frame->getDocument();
+    const auto partId = frame->getRequestedPartId();
+    const auto currentMeasure = frame->getMeasure();
+    if ((*this)->tieEnd) {
+        if (const auto tieAlter = document->getDetails()->getForNote<details::TieAlterEnd>(*this, partId)) {
+            if (tieAlter->freezeDirection) {
+                tieDirection = tieAlter->down ? CurveContourDirection::Down : CurveContourDirection::Up;
+            }
+        }
+    }
+
+    std::vector<std::pair<NoteInfoPtr, CurveContourDirection>> results;
+    const auto previousPlaybackMeasures = document->calcJumpFromMeasures(partId, currentMeasure);
+    results.reserve(previousPlaybackMeasures.size());
+    for (const auto previousPlaybackMeasure : previousPlaybackMeasures) {
+        if (previousPlaybackMeasure == currentMeasure) {
+            continue;
+        }
+        if (auto tieFrom = calcTieFromWithPreviousMeasure(previousPlaybackMeasure, true)) {
+            results.emplace_back(tieFrom, tieDirection);
+        }
+    }
+    return results;
 }
 
 } // namespace dom

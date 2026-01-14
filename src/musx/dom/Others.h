@@ -2207,6 +2207,12 @@ public:
     /// @return The created staff list set. If #staffList is zero, it will never find any staves for the staff list.
     RepeatStaffListSet createStaffListSet() const;
 
+    /// @brief Calculates the target measure for this repeat-back jump action, if any.
+    /// @details For JumpAuto, this resolves to the nearest preceding forward repeat bar.
+    /// Returns std::nullopt for actions that do not provide a concrete measure target.
+    /// @return The target measure for the jump, or std::nullopt if none applies.
+    std::optional<MeasCmper> calcTargetMeasure() const;
+
     constexpr static std::string_view XmlNodeName = "repeatBack"; ///< The XML node name for this type.
     static const xml::XmlElementArray<RepeatBack>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };

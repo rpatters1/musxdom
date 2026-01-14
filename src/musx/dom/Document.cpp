@@ -233,10 +233,18 @@ bool Document::calcHasVaryingSystemStaves(Cmper forPartId) const
     return false;
 }
 
-std::optional<MeasCmper> Document::calcJumpFromMeasure(Cmper partId, MeasCmper currentMeasure) const
+std::vector<MeasCmper> Document::calcJumpFromMeasures(Cmper partId, MeasCmper currentMeasure) const
 {
-    std::optional<MeasCmper> forwardJumpOrigin;
-    std::optional<MeasCmper> backwardJumpOrigin;
+    std::vector<MeasCmper> forwardJumpOrigins;
+    std::vector<MeasCmper> backwardJumpOrigins;
+
+    const auto addOrigin = [&](MeasCmper origin) {
+        if (origin > currentMeasure) {
+            forwardJumpOrigins.push_back(origin);
+        } else if (origin < currentMeasure) {
+            backwardJumpOrigins.push_back(origin);
+        }
+    };
 
     const auto endings = getOthers()->getArray<others::RepeatEndingStart>(partId);
     for (const auto& ending : endings) {
@@ -252,17 +260,19 @@ std::optional<MeasCmper> Document::calcJumpFromMeasure(Cmper partId, MeasCmper c
         const auto target = ending->calcTargetMeasure();
         if (target && *target == currentMeasure) {
             if (ending->getCmper() > 1) {
-                const auto origin = ending->getCmper() - 1;
-                if (ending->getCmper() > currentMeasure) {
-                    if (!forwardJumpOrigin || origin < *forwardJumpOrigin) {
-                        forwardJumpOrigin = origin;
-                    }
-                } else if (ending->getCmper() < currentMeasure) {
-                    if (!backwardJumpOrigin || origin > *backwardJumpOrigin) {
-                        backwardJumpOrigin = origin;
-                    }
-                }
+                addOrigin(ending->getCmper() - 1);
             }
+        }
+    }
+
+    const auto repeatBacks = getOthers()->getArray<others::RepeatBack>(partId);
+    for (const auto& repeatBack : repeatBacks) {
+        if (!repeatBack) {
+            continue;
+        }
+        const auto target = repeatBack->calcTargetMeasure();
+        if (target && *target == currentMeasure) {
+            addOrigin(repeatBack->getCmper());
         }
     }
 
@@ -273,23 +283,24 @@ std::optional<MeasCmper> Document::calcJumpFromMeasure(Cmper partId, MeasCmper c
         }
         const auto target = textRepeat->calcTargetMeasure();
         if (target && *target == currentMeasure) {
-            const auto origin = textRepeat->getCmper();
-            if (origin > currentMeasure) {
-                if (!forwardJumpOrigin || origin < *forwardJumpOrigin) {
-                    forwardJumpOrigin = origin;
-                }
-            } else if (origin < currentMeasure) {
-                if (!backwardJumpOrigin || origin > *backwardJumpOrigin) {
-                    backwardJumpOrigin = origin;
-                }
-            }
+            addOrigin(textRepeat->getCmper());
         }
     }
 
-    if (forwardJumpOrigin) {
-        return forwardJumpOrigin;
-    }
-    return backwardJumpOrigin;
+    std::sort(forwardJumpOrigins.begin(), forwardJumpOrigins.end());
+    forwardJumpOrigins.erase(std::unique(forwardJumpOrigins.begin(), forwardJumpOrigins.end()),
+        forwardJumpOrigins.end());
+
+    std::sort(backwardJumpOrigins.begin(), backwardJumpOrigins.end());
+    backwardJumpOrigins.erase(std::unique(backwardJumpOrigins.begin(), backwardJumpOrigins.end()),
+        backwardJumpOrigins.end());
+    std::reverse(backwardJumpOrigins.begin(), backwardJumpOrigins.end());
+
+    std::vector<MeasCmper> result;
+    result.reserve(forwardJumpOrigins.size() + backwardJumpOrigins.size());
+    result.insert(result.end(), forwardJumpOrigins.begin(), forwardJumpOrigins.end());
+    result.insert(result.end(), backwardJumpOrigins.begin(), backwardJumpOrigins.end());
+    return result;
 }
 
 bool Document::iterateEntries(Cmper partId, std::function<bool(const EntryInfoPtr&)> iterator) const

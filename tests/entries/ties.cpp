@@ -661,3 +661,72 @@ TEST(TieDetection, ShapesAsTieEnds)
         EXPECT_EQ(tieDirection, CurveContourDirection::Up);
     }
 }
+
+TEST(TieDetection, JumpTieContinuations)
+{
+    std::vector<char> xml;
+    musxtest::readFile(musxtest::getInputPath() / "crazy_jumps.enigmaxml", xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(xml);
+    ASSERT_TRUE(doc);
+
+    auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 3);
+    ASSERT_TRUE(gfhold) << " gfhold not found for 1, 3";
+
+    EntryInfoPtr startEntry;
+    for (LayerIndex layerIndex = 0; layerIndex < 4 && !startEntry; ++layerIndex) {
+        auto entryFrame = gfhold.createEntryFrame(layerIndex);
+        if (!entryFrame) {
+            continue;
+        }
+        for (size_t entryIndex = 0; entryIndex < entryFrame->getEntries().size(); ++entryIndex) {
+            EntryInfoPtr entryInfo(entryFrame, entryIndex);
+            if (!entryInfo || !entryInfo->getEntry()->isNote || entryInfo.getMeasure() != 3) {
+                continue;
+            }
+            if (entryInfo->elapsedDuration != musx::util::Fraction()) {
+                continue;
+            }
+            if (entryInfo->getEntry()->notes.size() >= 2) {
+                startEntry = entryInfo;
+                break;
+            }
+        }
+    }
+    ASSERT_TRUE(startEntry) << " chord entry not found at measure start";
+
+    auto findNoteByPitch = [&](int harmLev, int harmAlt) -> NoteInfoPtr {
+        const auto entry = startEntry->getEntry();
+        for (size_t noteIndex = 0; noteIndex < entry->notes.size(); ++noteIndex) {
+            if (entry->notes[noteIndex]->harmLev == harmLev && entry->notes[noteIndex]->harmAlt == harmAlt) {
+                return NoteInfoPtr(startEntry, noteIndex);
+            }
+        }
+        return {};
+    };
+
+    auto collectMeasures = [](const std::vector<std::pair<NoteInfoPtr, CurveContourDirection>>& results) {
+        std::vector<MeasCmper> measures;
+        measures.reserve(results.size());
+        for (const auto& [note, direction] : results) {
+            if (!note) {
+                ADD_FAILURE() << "null note in jump tie continuation results";
+                continue;
+            }
+            measures.push_back(note.getEntryInfo().getMeasure());
+            (void)direction;
+        }
+        return measures;
+    };
+
+    const auto cNote = findNoteByPitch(0, 0);
+    ASSERT_TRUE(cNote);
+    auto cResults = cNote.calcJumpTieContinuationsFrom();
+    std::vector<MeasCmper> expectedCMeasures{ 4, 5 };
+    EXPECT_EQ(collectMeasures(cResults), expectedCMeasures);
+
+    const auto eNote = findNoteByPitch(2, 0);
+    ASSERT_TRUE(eNote);
+    auto eResults = eNote.calcJumpTieContinuationsFrom();
+    std::vector<MeasCmper> expectedEMeasures{ 8, 2 };
+    EXPECT_EQ(collectMeasures(eResults), expectedEMeasures);
+}

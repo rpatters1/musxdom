@@ -920,6 +920,35 @@ RepeatStaffListSet RepeatBack::createStaffListSet() const
     return RepeatStaffListSet(getDocument(), getRequestedPartId(), staffList);
 }
 
+std::optional<MeasCmper> RepeatBack::calcTargetMeasure() const
+{
+    switch (jumpAction) {
+    case RepeatActionType::JumpAbsolute:
+        return (targetValue > 0) ? std::optional<MeasCmper>(targetValue) : std::nullopt;
+
+    case RepeatActionType::JumpRelative: {
+        const int target = static_cast<int>(getCmper()) + targetValue;
+        return (target > 0) ? std::optional<MeasCmper>(target) : std::nullopt;
+    }
+
+    case RepeatActionType::JumpAuto: {
+        for (MeasCmper meas = getCmper(); meas > 1; --meas) {
+            if (auto measure = getDocument()->getOthers()->get<Measure>(getRequestedPartId(), meas - 1)) {
+                if (measure->forwardRepeatBar) {
+                    return meas - 1;
+                }
+            } else {
+                break;
+            }
+        }
+        return MeasCmper{1};
+    }
+
+    default:
+        return std::nullopt;
+    }
+}
+
 // *****************************
 // ***** RepeatEndingStart *****
 // *****************************
@@ -963,15 +992,25 @@ int RepeatEndingStart::calcEndingLength() const
 std::optional<MeasCmper> RepeatEndingStart::calcTargetMeasure() const
 {
     switch (jumpAction) {
+    case RepeatActionType::JumpAbsolute:
+        return (targetValue > 0) ? std::optional<MeasCmper>(targetValue) : std::nullopt;
+
+    case RepeatActionType::JumpRelative: {
+        const int target = static_cast<int>(getCmper()) + targetValue;
+        return (target > 0) ? std::optional<MeasCmper>(target) : std::nullopt;
+    }
+
+    case RepeatActionType::JumpAuto: {
+        const auto target = getCmper() + calcEndingLength();
+        return (target > 0) ? std::optional<MeasCmper>(target) : std::nullopt;
+    }
+
     case RepeatActionType::JumpToMark:
     case RepeatActionType::Stop:
     case RepeatActionType::NoJump:
-        return std::nullopt;
     default:
-        break;
+        return std::nullopt;
     }
-    const auto target = getCmper() + calcEndingLength();
-    return (target > 0) ? std::optional<MeasCmper>(target) : std::nullopt;
 }
 
 bool RepeatEndingStart::calcIsOpen() const

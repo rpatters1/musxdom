@@ -20,9 +20,13 @@
  * THE SOFTWARE.
  */
 
+#include <algorithm>
+
 #include "gtest/gtest.h"
 #include "musx/musx.h"
 #include "test_utils.h"
+
+using namespace musx::dom;
 
 TEST(DocumentTest, DocumentFormation)
 {
@@ -236,4 +240,36 @@ TEST(DocumentText, UnknownXml)
         auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(unknownTag),
         musx::factory::unknown_xml_error
     );
+}
+
+TEST(DocumentTest, CalcJumpFromMeasures)
+{
+    std::vector<char> xml;
+    musxtest::readFile(musxtest::getInputPath() / "crazy_jumps.enigmaxml", xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(xml);
+    ASSERT_TRUE(doc);
+
+    {
+        auto ending = doc->getOthers()->get<musx::dom::others::RepeatEndingStart>(SCORE_PARTID, 5);
+        ASSERT_TRUE(ending);
+        EXPECT_EQ(ending->jumpAction, musx::dom::others::RepeatActionType::JumpAbsolute);
+        EXPECT_EQ(ending->targetValue, 3);
+        auto target = ending->calcTargetMeasure();
+        ASSERT_TRUE(target);
+        EXPECT_EQ(*target, 3);
+        auto passList = doc->getOthers()->get<musx::dom::others::RepeatPassList>(SCORE_PARTID, 5);
+        ASSERT_TRUE(passList);
+        EXPECT_TRUE(passList->containsValue(1));
+    }
+    {
+        auto endings = doc->getOthers()->getArray<musx::dom::others::RepeatEndingStart>(SCORE_PARTID);
+        ASSERT_FALSE(endings.empty());
+        const bool hasEndingFive = std::any_of(endings.begin(), endings.end(),
+            [](const auto& ending) { return ending && ending->getCmper() == 5; });
+        EXPECT_TRUE(hasEndingFive);
+    }
+
+    std::vector<MeasCmper> expected{ 4, 5, 8, 2 };
+    auto result = doc->calcJumpFromMeasures(SCORE_PARTID, 3);
+    EXPECT_EQ(result, expected);
 }
