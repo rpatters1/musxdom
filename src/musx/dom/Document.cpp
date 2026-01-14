@@ -19,6 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+#include <algorithm>
 #include <cstdlib>
 #include <exception>
 #include <limits>
@@ -230,6 +231,65 @@ bool Document::calcHasVaryingSystemStaves(Cmper forPartId) const
         }
     }
     return false;
+}
+
+std::optional<MeasCmper> Document::calcJumpFromMeasure(Cmper partId, MeasCmper currentMeasure) const
+{
+    std::optional<MeasCmper> forwardJumpOrigin;
+    std::optional<MeasCmper> backwardJumpOrigin;
+
+    const auto endings = getOthers()->getArray<others::RepeatEndingStart>(partId);
+    for (const auto& ending : endings) {
+        if (!ending) {
+            continue;
+        }
+        if (const auto passList = getOthers()->get<others::RepeatPassList>(partId, ending->getCmper())) {
+            // currently we only search first endings. if necessary we can get more complicated with other endings.
+            if (std::find(passList->values.begin(), passList->values.end(), 1) == passList->values.end()) {
+                continue;
+            }
+        }
+        const auto target = ending->calcTargetMeasure();
+        if (target && *target == currentMeasure) {
+            if (ending->getCmper() > 1) {
+                const auto origin = ending->getCmper() - 1;
+                if (ending->getCmper() > currentMeasure) {
+                    if (!forwardJumpOrigin || origin < *forwardJumpOrigin) {
+                        forwardJumpOrigin = origin;
+                    }
+                } else if (ending->getCmper() < currentMeasure) {
+                    if (!backwardJumpOrigin || origin > *backwardJumpOrigin) {
+                        backwardJumpOrigin = origin;
+                    }
+                }
+            }
+        }
+    }
+
+    const auto textRepeats = getOthers()->getArray<others::TextRepeatAssign>(partId);
+    for (const auto& textRepeat : textRepeats) {
+        if (!textRepeat) {
+            continue;
+        }
+        const auto target = textRepeat->calcTargetMeasure();
+        if (target && *target == currentMeasure) {
+            const auto origin = textRepeat->getCmper();
+            if (origin > currentMeasure) {
+                if (!forwardJumpOrigin || origin < *forwardJumpOrigin) {
+                    forwardJumpOrigin = origin;
+                }
+            } else if (origin < currentMeasure) {
+                if (!backwardJumpOrigin || origin > *backwardJumpOrigin) {
+                    backwardJumpOrigin = origin;
+                }
+            }
+        }
+    }
+
+    if (forwardJumpOrigin) {
+        return forwardJumpOrigin;
+    }
+    return backwardJumpOrigin;
 }
 
 bool Document::iterateEntries(Cmper partId, std::function<bool(const EntryInfoPtr&)> iterator) const

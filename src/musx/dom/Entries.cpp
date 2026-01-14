@@ -180,9 +180,6 @@ EntryInfoPtr::InterpretedIterator EntryFrame::getFirstInterpretedIterator(int vo
 std::shared_ptr<const EntryFrame> EntryFrame::getNext(std::optional<MeasCmper> targetMeasure) const
 {
     const auto nextMeasure = targetMeasure.value_or(getMeasure() + 1);
-    if (nextMeasure <= getMeasure()) {
-        return nullptr;
-    }
     if (auto gfhold = details::GFrameHoldContext(getDocument(), getRequestedPartId(), getStaff(), nextMeasure)) {
         return gfhold.createEntryFrame(m_layerIndex);
     }
@@ -192,7 +189,7 @@ std::shared_ptr<const EntryFrame> EntryFrame::getNext(std::optional<MeasCmper> t
 std::shared_ptr<const EntryFrame> EntryFrame::getPrevious(std::optional<MeasCmper> targetMeasure) const
 {
     const auto previousMeasure = targetMeasure.value_or(getMeasure() - 1);
-    if (previousMeasure >= getMeasure() || previousMeasure < 1) {
+    if (previousMeasure < 1) {
         return nullptr;
     }
     if (auto gfhold = details::GFrameHoldContext(getDocument(), getRequestedPartId(), getStaff(), previousMeasure)) {
@@ -2681,27 +2678,36 @@ NoteInfoPtr NoteInfoPtr::calcTieToWithNextMeasure(Cmper nextMeasure) const
 {
     if (m_entry->getEntry()->isNote) {
         auto nextEntry = m_entry;
+        std::optional<Cmper> currNextMeasure = nextMeasure;
+        auto advanceInLayer = [&](const EntryInfoPtr& entry) -> EntryInfoPtr {
+            auto result = entry.getNextInLayer(currNextMeasure);
+            if (result && result.getMeasure() == nextMeasure) {
+                currNextMeasure.reset();
+            }
+            return result;
+        };
         while (nextEntry) {
             if (nextEntry->getEntry()->v2Launch) {
                 nextEntry = nextEntry.getNextSameV();
                 if (!nextEntry) {
                     if (auto nextFrame = m_entry.getFrame()->getNext(nextMeasure)) {
                         nextEntry = nextFrame->getFirstInVoice(1); // v2Launch entries are always voice 1
+                        currNextMeasure.reset();
                     }
                 }
             } else if (m_entry->getEntry()->voice2) {
                 auto tryEntry = nextEntry.getNextSameV();
                 if (!tryEntry) { // if v2 sequence exhausted
                     auto nextDuration = m_entry->calcNextElapsedDuration();
-                    nextEntry = nextEntry.getNextInLayer(nextMeasure);
+                    nextEntry = advanceInLayer(nextEntry);
                     while (nextEntry && nextEntry.getMeasure() == m_entry.getMeasure() && nextEntry->elapsedDuration < nextDuration) {
-                        nextEntry = nextEntry.getNextInLayer(nextMeasure);
+                        nextEntry = advanceInLayer(nextEntry);
                     }
                 } else {
                     nextEntry = tryEntry;
                 }
             } else {
-                nextEntry = nextEntry.getNextInLayer(nextMeasure);
+                nextEntry = advanceInLayer(nextEntry);
             }
             if (!nextEntry) {
                 break;
@@ -2713,7 +2719,7 @@ NoteInfoPtr NoteInfoPtr::calcTieToWithNextMeasure(Cmper nextMeasure) const
                 return result;
             }
             if (nextEntry->getEntry()->v2Launch) {
-                nextEntry = nextEntry.getNextInLayer(nextMeasure);
+                nextEntry = advanceInLayer(nextEntry);
                 if (!nextEntry) {
                     return NoteInfoPtr();
                 }
@@ -2730,11 +2736,15 @@ NoteInfoPtr NoteInfoPtr::calcTieFromWithPreviousMeasure(Cmper previousMeasure, b
     if (*this) {
         // grace notes cannot tie backwards; only forwards (see grace note comment above)
         auto thisRawEntry = m_entry->getEntry();
+        std::optional<Cmper> currPreviousMeasure = previousMeasure;
         if (thisRawEntry->isNote && !thisRawEntry->graceNote) {
-            for (auto prev = m_entry.getPreviousInLayer(previousMeasure); prev; prev = prev.getPreviousInLayer(previousMeasure)) {
+            for (auto prev = m_entry.getPreviousInLayer(currPreviousMeasure); prev; prev = prev.getPreviousInLayer(currPreviousMeasure)) {
                 if (prev.getMeasure() < previousMeasure) {
                     // only search measures at or after previousMeasure
                     break;
+                }
+                if (prev.getMeasure() == previousMeasure) {
+                    currPreviousMeasure.reset();
                 }
                 auto prevEntry = prev->getEntry();
                 if (!prevEntry->isNote) {
@@ -3060,18 +3070,32 @@ bool NoteInfoPtr::selectPseudoTieDirection(CurveContourDirection* tieDirection,
 
 NoteInfoPtr NoteInfoPtr::calcJumpTieContinuationFrom(CurveContourDirection* tieDirection) const
 {
-    const bool needDirection = (tieDirection != nullptr);
-    if (needDirection) {
+    if (tieDirection) {
         *tieDirection = CurveContourDirection::Auto;
     }
 
-    /// @todo if is the first bar of a 2nd or higher ending. Also maybe look if this is the first bar of a coda.
+    if (getEntryInfo()->elapsedDuration != 0) {
+        // entry must be at the beginning of a measure.
+        return {};
+    }
 
     if (((*this)->tieEnd && !calcTieFrom()) || calcHasPseudoTieEnd(tieDirection)) {
-        /// @todo return the last a matching note from the bar before the jump, if it is valid as a tie-from note
-        /// Can't use calcTieFrom because that does not skip over the intervening measures. Must create a new function
-        /// that without duplicating calcTieFrom code.
-        /// @todo if tieEnd is true, search for TieEnd tie alts to find out if the tie direction is overridden.
+        const auto frame = m_entry.getFrame();
+        const auto document = frame->getDocument();
+        const auto partId = frame->getRequestedPartId();
+        const auto currentMeasure = frame->getMeasure();
+        const auto previousPlaybackMeasure = document->calcJumpFromMeasure(partId, currentMeasure);
+        if (!previousPlaybackMeasure || *previousPlaybackMeasure == currentMeasure) {
+            return {};
+        }
+        if ((*this)->tieEnd && tieDirection) {
+            if (const auto tieAlter = document->getDetails()->getForNote<details::TieAlterEnd>(*this, partId)) {
+                if (tieAlter->freezeDirection) {
+                    *tieDirection = tieAlter->down ? CurveContourDirection::Down : CurveContourDirection::Up;
+                }
+            }
+        }
+        return calcTieFromWithPreviousMeasure(*previousPlaybackMeasure, true);
     }
 
     return {};

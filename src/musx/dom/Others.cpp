@@ -960,6 +960,20 @@ int RepeatEndingStart::calcEndingLength() const
     return x - getCmper();
 }
 
+std::optional<MeasCmper> RepeatEndingStart::calcTargetMeasure() const
+{
+    switch (jumpAction) {
+    case RepeatActionType::JumpToMark:
+    case RepeatActionType::Stop:
+    case RepeatActionType::NoJump:
+        return std::nullopt;
+    default:
+        break;
+    }
+    const auto target = getCmper() + calcEndingLength();
+    return (target > 0) ? std::optional<MeasCmper>(target) : std::nullopt;
+}
+
 bool RepeatEndingStart::calcIsOpen() const
 {
     if (endLineVPos < 0) {
@@ -1259,6 +1273,33 @@ MusxInstance<RepeatIndividualPositioning> TextRepeatAssign::getIndividualPositio
 RepeatStaffListSet TextRepeatAssign::createStaffListSet() const
 {
     return RepeatStaffListSet(getDocument(), getRequestedPartId(), staffList);
+}
+
+std::optional<MeasCmper> TextRepeatAssign::calcTargetMeasure() const
+{
+    switch (jumpAction) {
+    case RepeatActionType::JumpAbsolute:
+        return (targetValue > 0) ? std::optional<MeasCmper>(targetValue) : std::nullopt;
+
+    case RepeatActionType::JumpRelative: {
+        const int target = static_cast<int>(getCmper()) + targetValue;
+        return (target > 0) ? std::optional<MeasCmper>(target) : std::nullopt;
+    }
+
+    case RepeatActionType::JumpToMark: {
+        const auto assigns = getDocument()->getOthers()->getArray<others::TextRepeatAssign>(getRequestedPartId());
+        const auto it = std::find_if(assigns.begin(), assigns.end(), [&](const auto& assign) {
+            return assign && assign->textRepeatId == targetValue;
+        });
+        if (it != assigns.end()) {
+            return (*it)->getCmper();
+        }
+        return std::nullopt;
+    }
+
+    default:
+        return std::nullopt;
+    }
 }
 
 } // namespace others
