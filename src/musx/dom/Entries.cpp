@@ -2690,7 +2690,7 @@ NoteInfoPtr NoteInfoPtr::calcTieToWithNextMeasure(Cmper nextMeasure) const
             if (nextEntry->getEntry()->v2Launch) {
                 nextEntry = nextEntry.getNextSameV();
                 if (!nextEntry) {
-                    if (auto nextFrame = m_entry.getFrame()->getNext(nextMeasure)) {
+                    if (auto nextFrame = m_entry.getFrame()->getNext(currNextMeasure)) {
                         nextEntry = nextFrame->getFirstInVoice(1); // v2Launch entries are always voice 1
                         currNextMeasure.reset();
                     }
