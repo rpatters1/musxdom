@@ -129,6 +129,9 @@ Public Member Functions</h2></td></tr>
 int&#160;</td><td class="memItemRight" valign="bottom"><b>calcEndingLength</b> () const</td></tr>
 <tr class="memdesc:ae5fe3bb711966475b784c1ad13d80e11"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the number of measures in the ending based on <a class="el" href="classmusx_1_1dom_1_1others_1_1RepeatEndingStart.html#acffb6ba9f840a266d33df76f154e9a3d" title="The jump action for this repeat ending. The automatic jump is to the next ending. (xml tag is &lt;action...">jumpAction</a>. <br /></td></tr>
 <tr class="separator:ae5fe3bb711966475b784c1ad13d80e11"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a71a2210d65a48c42c5ec2d6c2f5f18e8" id="r_a71a2210d65a48c42c5ec2d6c2f5f18e8"><td class="memItemLeft" align="right" valign="top">std::optional&lt; <a class="el" href="namespacemusx_1_1dom.html#a3d5af8a8174c235d3292c076def44817">MeasCmper</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1RepeatEndingStart.html#a71a2210d65a48c42c5ec2d6c2f5f18e8">calcTargetMeasure</a> () const</td></tr>
+<tr class="memdesc:a71a2210d65a48c42c5ec2d6c2f5f18e8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the target measure for the ending's jump action, if any.  <br /></td></tr>
+<tr class="separator:a71a2210d65a48c42c5ec2d6c2f5f18e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6618cedd712507d7c23636c548e20afe" id="r_a6618cedd712507d7c23636c548e20afe"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1RepeatEndingStart.html#a6618cedd712507d7c23636c548e20afe">calcIsOpen</a> () const</td></tr>
 <tr class="memdesc:a6618cedd712507d7c23636c548e20afe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates if the ending is open or closed, based on a number of factors.  <br /></td></tr>
 <tr class="separator:a6618cedd712507d7c23636c548e20afe"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -337,6 +340,26 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>SharedNodes</b> = st
 
 <p>Calculates if the ending is open or closed, based on a number of factors. </p>
 <p>Openness is a visual feature. If true, it means that the ending bracket has no downward stroke on the right. </p>
+
+</div>
+</div>
+<a id="a71a2210d65a48c42c5ec2d6c2f5f18e8" name="a71a2210d65a48c42c5ec2d6c2f5f18e8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a71a2210d65a48c42c5ec2d6c2f5f18e8">&#9670;&#160;</a></span>calcTargetMeasure()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::optional&lt; <a class="el" href="namespacemusx_1_1dom.html#a3d5af8a8174c235d3292c076def44817">MeasCmper</a> &gt; musx::dom::others::RepeatEndingStart::calcTargetMeasure </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Calculates the target measure for the ending's jump action, if any. </p>
+<p>Returns the measure immediately following the ending when the action is a normal jump (automatic, relative, or absolute). Returns std::nullopt for actions that do not specify a concrete target (e.g., JumpToMark, Stop, NoJump). </p><dl class="section return"><dt>Returns</dt><dd>The target measure for the jump, or std::nullopt if none applies. </dd></dl>
 
 </div>
 </div>

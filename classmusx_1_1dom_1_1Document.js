@@ -2,6 +2,7 @@ var classmusx_1_1dom_1_1Document =
 [
     [ "calcEntireDocument", "classmusx_1_1dom_1_1Document.html#addda2caaa580246270bcbd1622bde086", null ],
     [ "calcHasVaryingSystemStaves", "classmusx_1_1dom_1_1Document.html#abf79aabe5f131018df3561b9302b3585", null ],
+    [ "calcJumpFromMeasures", "classmusx_1_1dom_1_1Document.html#a8380a5d30f4df6b6464e8898a7172e1f", null ],
     [ "calcPageFromMeasure", "classmusx_1_1dom_1_1Document.html#a3b1cdc185b66bf8fa55be29d36280e66", null ],
     [ "calcScrollViewCmper", "classmusx_1_1dom_1_1Document.html#a8ea1ce4314627bcd01d5dcd48d279c94", null ],
     [ "calcSystemFromMeasure", "classmusx_1_1dom_1_1Document.html#a58c106af9d550b67ae51bafca0987a6c", null ],

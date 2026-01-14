@@ -10,7 +10,7 @@ var classmusx_1_1dom_1_1NoteInfoPtr =
     [ "calcIsEnharmonicRespell", "classmusx_1_1dom_1_1NoteInfoPtr.html#aaa7136caca4301202a455a113f136553", null ],
     [ "calcIsEnharmonicRespellInAnyPart", "classmusx_1_1dom_1_1NoteInfoPtr.html#a84f3b5f320d4e1dd16a71d82a3db7a4a", null ],
     [ "calcIsIncludedInVoicing", "classmusx_1_1dom_1_1NoteInfoPtr.html#aa078714d4ad095bd9be5da204e9bc438", null ],
-    [ "calcJumpTieContinuationFrom", "classmusx_1_1dom_1_1NoteInfoPtr.html#a64c91416435f271ef0d99dbe10073cf9", null ],
+    [ "calcJumpTieContinuationsFrom", "classmusx_1_1dom_1_1NoteInfoPtr.html#a351043be4712ae30b3b2371ac0f05ce2", null ],
     [ "calcNoteProperties", "classmusx_1_1dom_1_1NoteInfoPtr.html#a1d28b1b7789468004b3d08cb50d36b0a", null ],
     [ "calcNotePropertiesConcert", "classmusx_1_1dom_1_1NoteInfoPtr.html#a7ae784a48f045641dac1434223fd593f", null ],
     [ "calcNotePropertiesInView", "classmusx_1_1dom_1_1NoteInfoPtr.html#aacb76820577ceef2195da88bfbe37435", null ],
