@@ -2680,6 +2680,9 @@ NoteInfoPtr NoteInfoPtr::calcTieToWithNextMeasure(Cmper nextMeasure) const
         auto nextEntry = m_entry;
         std::optional<Cmper> currNextMeasure = nextMeasure;
         auto advanceInLayer = [&](const EntryInfoPtr& entry) -> EntryInfoPtr {
+            if (!currNextMeasure) {
+                return entry.getNextInFrame();
+            }
             auto result = entry.getNextInLayer(currNextMeasure);
             if (result && result.getMeasure() == nextMeasure) {
                 currNextMeasure.reset();
@@ -2690,6 +2693,9 @@ NoteInfoPtr NoteInfoPtr::calcTieToWithNextMeasure(Cmper nextMeasure) const
             if (nextEntry->getEntry()->v2Launch) {
                 nextEntry = nextEntry.getNextSameV();
                 if (!nextEntry) {
+                    if (!currNextMeasure) {
+                        return NoteInfoPtr();
+                    }
                     if (auto nextFrame = m_entry.getFrame()->getNext(currNextMeasure)) {
                         nextEntry = nextFrame->getFirstInVoice(1); // v2Launch entries are always voice 1
                         currNextMeasure.reset();

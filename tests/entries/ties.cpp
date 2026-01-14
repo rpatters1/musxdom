@@ -310,6 +310,24 @@ TEST(TieDetection, V2toV1Special)
     checkTie(createNoteInfo(entryFrame1, 13, 1), createNoteInfo(entryFrame2, 0, 1));
 }
 
+TEST(TieDetection, GraceTieToEmptyMeasure)
+{
+    std::vector<char> xml;
+    musxtest::readFile(musxtest::getInputPath() / "grace_tie_to_nothing.enigmaxml", xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml);
+    ASSERT_TRUE(doc);
+
+    auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 1);
+    ASSERT_TRUE(gfhold) << " gfhold not found for 1, 1";
+    auto entryFrame = gfhold.createEntryFrame(0);
+    ASSERT_TRUE(entryFrame);
+
+    checkTie(createNoteInfo(entryFrame, 2, 0), NoteInfoPtr());
+    checkTie(createNoteInfo(entryFrame, 3, 0), NoteInfoPtr());
+    checkTie(createNoteInfo(entryFrame, 4, 0), NoteInfoPtr());
+    checkTie(createNoteInfo(entryFrame, 5, 0), NoteInfoPtr());
+}
+
 TEST(TieDetection, AcrossKeyChange)
 {
     std::vector<char> xml;
