@@ -2207,6 +2207,12 @@ public:
     /// @return The created staff list set. If #staffList is zero, it will never find any staves for the staff list.
     RepeatStaffListSet createStaffListSet() const;
 
+    /// @brief Calculates the target measure for this repeat-back jump action, if any.
+    /// @details For JumpAuto, this resolves to the nearest preceding forward repeat bar.
+    /// Returns std::nullopt for actions that do not provide a concrete measure target.
+    /// @return The target measure for the jump, or std::nullopt if none applies.
+    std::optional<MeasCmper> calcTargetMeasure() const;
+
     constexpr static std::string_view XmlNodeName = "repeatBack"; ///< The XML node name for this type.
     static const xml::XmlElementArray<RepeatBack>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
@@ -2248,6 +2254,13 @@ public:
 
     /// @brief Calculates the number of measures in the ending based on #jumpAction.
     int calcEndingLength() const;
+
+    /// @brief Calculates the target measure for the ending's jump action, if any.
+    /// @details Returns the measure immediately following the ending when the action is a normal
+    /// jump (automatic, relative, or absolute). Returns std::nullopt for actions that do not
+    /// specify a concrete target (e.g., JumpToMark, Stop, NoJump).
+    /// @return The target measure for the jump, or std::nullopt if none applies.
+    std::optional<MeasCmper> calcTargetMeasure() const;
 
     /// @brief Calculates if the ending is open or closed, based on a number of factors.
     ///
@@ -3042,6 +3055,13 @@ public:
     /// @brief Create a @ref StaffListSet for the given instance. This can be used to interrogate whether a staff appears in the staff set.
     /// @return The created staff list set. If #staffList is zero, it will never find any staves for the staff list.
     RepeatStaffListSet createStaffListSet() const;
+
+    /// @brief Calculates the target measure for this text repeat assignment, if any.
+    /// @details Returns the explicit or relative target when the action specifies a concrete
+    /// measure. For JumpToMark, it resolves the target repeat ID to the referenced assignment.
+    /// Returns std::nullopt for actions that do not provide a measure target.
+    /// @return The target measure for the jump, or std::nullopt if none applies.
+    std::optional<MeasCmper> calcTargetMeasure() const;
 
     constexpr static std::string_view XmlNodeName = "textRepeatAssign"; ///< The XML node name for this type.
     static const xml::XmlElementArray<TextRepeatAssign>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.

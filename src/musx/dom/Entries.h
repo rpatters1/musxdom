@@ -21,8 +21,10 @@
  */
 #pragma once
 
-#include <tuple>
+#include <functional>
 #include <map>
+#include <tuple>
+#include <utility>
 
 #include "musx/util/Fraction.h"
 #include "BaseClasses.h"
@@ -1721,19 +1723,25 @@ public:
     [[nodiscard]]
     bool calcHasPseudoTieEnd(CurveContourDirection* tieDirection = nullptr) const;
 
-    /// @brief Calculates the note in a prior measure that continues a "jump" tie into this note.
+    /// @brief Calculates the notes in prior measures that continue a "jump" tie into this note.
     /// @details A jump tie is a tie that skips over intervening measures due to repeat or navigation
     /// (e.g., back to a prior bar or forward to a coda). The implementation should identify the
     /// source note that ties into this note by walking the playback path, not just the immediate
     /// previous measure.
-    /// @param [out] tieDirection Optional output parameter receiving the tie's curve contour direction. It is set to
-    ///         #CurveContourDirection::Down for under ties, #CurveContourDirection::Up for over ties, or
-    ///         #CurveContourDirection::Auto if the contour cannot be determined.
-    /// @return The tied-from note if a continuation is found; otherwise null.
+    /// @return A list of tied-from notes and their contour directions if any continuations are found; otherwise empty.
     [[nodiscard]]
-    NoteInfoPtr calcJumpTieContinuationFrom(CurveContourDirection* tieDirection = nullptr) const;
+    std::vector<std::pair<NoteInfoPtr, CurveContourDirection>> calcJumpTieContinuationsFrom() const;
 
 private:
+    enum class TieFromSearchAction {
+        Continue,
+        Accept,
+        Stop,
+    };
+
+    static NoteInfoPtr findTieFromCandidate(const NoteInfoPtr& note, Cmper previousMeasure,
+        const std::function<TieFromSearchAction(const NoteInfoPtr&, bool)>& decide);
+
     /// @brief Calculates pseudo tie behavior for the specified mode.
     /// @param [out] tieDirection Optional output parameter receiving the tie's curve contour direction.
     /// @param mode The pseudo tie mode to evaluate.
@@ -1745,7 +1753,8 @@ private:
     /// @param directions Contour directions gathered for this entry.
     [[nodiscard]]
     bool selectPseudoTieDirection(CurveContourDirection* tieDirection,
-        std::vector<CurveContourDirection>& directions) const;
+        std::vector<CurveContourDirection>& directions,
+        const std::vector<size_t>* eligibleNoteIndices = nullptr) const;
 
     /// @brief Returns true if the two notes represent the same concert pitch or
     /// percussion note.

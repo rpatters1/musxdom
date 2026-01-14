@@ -920,6 +920,35 @@ RepeatStaffListSet RepeatBack::createStaffListSet() const
     return RepeatStaffListSet(getDocument(), getRequestedPartId(), staffList);
 }
 
+std::optional<MeasCmper> RepeatBack::calcTargetMeasure() const
+{
+    switch (jumpAction) {
+    case RepeatActionType::JumpAbsolute:
+        return (targetValue > 0) ? std::optional<MeasCmper>(targetValue) : std::nullopt;
+
+    case RepeatActionType::JumpRelative: {
+        const int target = static_cast<int>(getCmper()) + targetValue;
+        return (target > 0) ? std::optional<MeasCmper>(target) : std::nullopt;
+    }
+
+    case RepeatActionType::JumpAuto: {
+        for (MeasCmper meas = getCmper(); meas > 1; --meas) {
+            if (auto measure = getDocument()->getOthers()->get<Measure>(getRequestedPartId(), meas - 1)) {
+                if (measure->forwardRepeatBar) {
+                    return meas - 1;
+                }
+            } else {
+                break;
+            }
+        }
+        return MeasCmper{1};
+    }
+
+    default:
+        return std::nullopt;
+    }
+}
+
 // *****************************
 // ***** RepeatEndingStart *****
 // *****************************
@@ -958,6 +987,30 @@ int RepeatEndingStart::calcEndingLength() const
         x++;
     }
     return x - getCmper();
+}
+
+std::optional<MeasCmper> RepeatEndingStart::calcTargetMeasure() const
+{
+    switch (jumpAction) {
+    case RepeatActionType::JumpAbsolute:
+        return (targetValue > 0) ? std::optional<MeasCmper>(targetValue) : std::nullopt;
+
+    case RepeatActionType::JumpRelative: {
+        const int target = static_cast<int>(getCmper()) + targetValue;
+        return (target > 0) ? std::optional<MeasCmper>(target) : std::nullopt;
+    }
+
+    case RepeatActionType::JumpAuto: {
+        const auto target = getCmper() + calcEndingLength();
+        return (target > 0) ? std::optional<MeasCmper>(target) : std::nullopt;
+    }
+
+    case RepeatActionType::JumpToMark:
+    case RepeatActionType::Stop:
+    case RepeatActionType::NoJump:
+    default:
+        return std::nullopt;
+    }
 }
 
 bool RepeatEndingStart::calcIsOpen() const
@@ -1259,6 +1312,33 @@ MusxInstance<RepeatIndividualPositioning> TextRepeatAssign::getIndividualPositio
 RepeatStaffListSet TextRepeatAssign::createStaffListSet() const
 {
     return RepeatStaffListSet(getDocument(), getRequestedPartId(), staffList);
+}
+
+std::optional<MeasCmper> TextRepeatAssign::calcTargetMeasure() const
+{
+    switch (jumpAction) {
+    case RepeatActionType::JumpAbsolute:
+        return (targetValue > 0) ? std::optional<MeasCmper>(targetValue) : std::nullopt;
+
+    case RepeatActionType::JumpRelative: {
+        const int target = static_cast<int>(getCmper()) + targetValue;
+        return (target > 0) ? std::optional<MeasCmper>(target) : std::nullopt;
+    }
+
+    case RepeatActionType::JumpToMark: {
+        const auto assigns = getDocument()->getOthers()->getArray<others::TextRepeatAssign>(getRequestedPartId());
+        const auto it = std::find_if(assigns.begin(), assigns.end(), [&](const auto& assign) {
+            return assign && assign->textRepeatId == targetValue;
+        });
+        if (it != assigns.end()) {
+            return (*it)->getCmper();
+        }
+        return std::nullopt;
+    }
+
+    default:
+        return std::nullopt;
+    }
 }
 
 } // namespace others

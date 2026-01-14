@@ -19,6 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+#include <algorithm>
 #include <cstdlib>
 #include <exception>
 #include <limits>
@@ -230,6 +231,76 @@ bool Document::calcHasVaryingSystemStaves(Cmper forPartId) const
         }
     }
     return false;
+}
+
+std::vector<MeasCmper> Document::calcJumpFromMeasures(Cmper partId, MeasCmper currentMeasure) const
+{
+    std::vector<MeasCmper> forwardJumpOrigins;
+    std::vector<MeasCmper> backwardJumpOrigins;
+
+    const auto addOrigin = [&](MeasCmper origin) {
+        if (origin > currentMeasure) {
+            forwardJumpOrigins.push_back(origin);
+        } else if (origin < currentMeasure) {
+            backwardJumpOrigins.push_back(origin);
+        }
+    };
+
+    const auto endings = getOthers()->getArray<others::RepeatEndingStart>(partId);
+    for (const auto& ending : endings) {
+        if (!ending) {
+            continue;
+        }
+        if (const auto passList = getOthers()->get<others::RepeatPassList>(partId, ending->getCmper())) {
+            // currently we only search first endings. if necessary we can get more complicated with other endings.
+            if (std::find(passList->values.begin(), passList->values.end(), 1) == passList->values.end()) {
+                continue;
+            }
+        }
+        const auto target = ending->calcTargetMeasure();
+        if (target && *target == currentMeasure) {
+            if (ending->getCmper() > 1) {
+                addOrigin(ending->getCmper() - 1);
+            }
+        }
+    }
+
+    const auto repeatBacks = getOthers()->getArray<others::RepeatBack>(partId);
+    for (const auto& repeatBack : repeatBacks) {
+        if (!repeatBack) {
+            continue;
+        }
+        const auto target = repeatBack->calcTargetMeasure();
+        if (target && *target == currentMeasure) {
+            addOrigin(repeatBack->getCmper());
+        }
+    }
+
+    const auto textRepeats = getOthers()->getArray<others::TextRepeatAssign>(partId);
+    for (const auto& textRepeat : textRepeats) {
+        if (!textRepeat) {
+            continue;
+        }
+        const auto target = textRepeat->calcTargetMeasure();
+        if (target && *target == currentMeasure) {
+            addOrigin(textRepeat->getCmper());
+        }
+    }
+
+    std::sort(forwardJumpOrigins.begin(), forwardJumpOrigins.end());
+    forwardJumpOrigins.erase(std::unique(forwardJumpOrigins.begin(), forwardJumpOrigins.end()),
+        forwardJumpOrigins.end());
+
+    std::sort(backwardJumpOrigins.begin(), backwardJumpOrigins.end());
+    backwardJumpOrigins.erase(std::unique(backwardJumpOrigins.begin(), backwardJumpOrigins.end()),
+        backwardJumpOrigins.end());
+    std::reverse(backwardJumpOrigins.begin(), backwardJumpOrigins.end());
+
+    std::vector<MeasCmper> result;
+    result.reserve(forwardJumpOrigins.size() + backwardJumpOrigins.size());
+    result.insert(result.end(), forwardJumpOrigins.begin(), forwardJumpOrigins.end());
+    result.insert(result.end(), backwardJumpOrigins.begin(), backwardJumpOrigins.end());
+    return result;
 }
 
 bool Document::iterateEntries(Cmper partId, std::function<bool(const EntryInfoPtr&)> iterator) const

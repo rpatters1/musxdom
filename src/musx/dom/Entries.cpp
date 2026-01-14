@@ -180,9 +180,6 @@ EntryInfoPtr::InterpretedIterator EntryFrame::getFirstInterpretedIterator(int vo
 std::shared_ptr<const EntryFrame> EntryFrame::getNext(std::optional<MeasCmper> targetMeasure) const
 {
     const auto nextMeasure = targetMeasure.value_or(getMeasure() + 1);
-    if (nextMeasure <= getMeasure()) {
-        return nullptr;
-    }
     if (auto gfhold = details::GFrameHoldContext(getDocument(), getRequestedPartId(), getStaff(), nextMeasure)) {
         return gfhold.createEntryFrame(m_layerIndex);
     }
@@ -192,7 +189,7 @@ std::shared_ptr<const EntryFrame> EntryFrame::getNext(std::optional<MeasCmper> t
 std::shared_ptr<const EntryFrame> EntryFrame::getPrevious(std::optional<MeasCmper> targetMeasure) const
 {
     const auto previousMeasure = targetMeasure.value_or(getMeasure() - 1);
-    if (previousMeasure >= getMeasure() || previousMeasure < 1) {
+    if (previousMeasure < 1) {
         return nullptr;
     }
     if (auto gfhold = details::GFrameHoldContext(getDocument(), getRequestedPartId(), getStaff(), previousMeasure)) {
@@ -2681,27 +2678,42 @@ NoteInfoPtr NoteInfoPtr::calcTieToWithNextMeasure(Cmper nextMeasure) const
 {
     if (m_entry->getEntry()->isNote) {
         auto nextEntry = m_entry;
+        std::optional<Cmper> currNextMeasure = nextMeasure;
+        auto advanceInLayer = [&](const EntryInfoPtr& entry) -> EntryInfoPtr {
+            if (!currNextMeasure) {
+                return entry.getNextInFrame();
+            }
+            auto result = entry.getNextInLayer(currNextMeasure);
+            if (result && result.getMeasure() == nextMeasure) {
+                currNextMeasure.reset();
+            }
+            return result;
+        };
         while (nextEntry) {
             if (nextEntry->getEntry()->v2Launch) {
                 nextEntry = nextEntry.getNextSameV();
                 if (!nextEntry) {
-                    if (auto nextFrame = m_entry.getFrame()->getNext(nextMeasure)) {
+                    if (!currNextMeasure) {
+                        return NoteInfoPtr();
+                    }
+                    if (auto nextFrame = m_entry.getFrame()->getNext(currNextMeasure)) {
                         nextEntry = nextFrame->getFirstInVoice(1); // v2Launch entries are always voice 1
+                        currNextMeasure.reset();
                     }
                 }
             } else if (m_entry->getEntry()->voice2) {
                 auto tryEntry = nextEntry.getNextSameV();
                 if (!tryEntry) { // if v2 sequence exhausted
                     auto nextDuration = m_entry->calcNextElapsedDuration();
-                    nextEntry = nextEntry.getNextInLayer(nextMeasure);
+                    nextEntry = advanceInLayer(nextEntry);
                     while (nextEntry && nextEntry.getMeasure() == m_entry.getMeasure() && nextEntry->elapsedDuration < nextDuration) {
-                        nextEntry = nextEntry.getNextInLayer(nextMeasure);
+                        nextEntry = advanceInLayer(nextEntry);
                     }
                 } else {
                     nextEntry = tryEntry;
                 }
             } else {
-                nextEntry = nextEntry.getNextInLayer(nextMeasure);
+                nextEntry = advanceInLayer(nextEntry);
             }
             if (!nextEntry) {
                 break;
@@ -2713,7 +2725,7 @@ NoteInfoPtr NoteInfoPtr::calcTieToWithNextMeasure(Cmper nextMeasure) const
                 return result;
             }
             if (nextEntry->getEntry()->v2Launch) {
-                nextEntry = nextEntry.getNextInLayer(nextMeasure);
+                nextEntry = advanceInLayer(nextEntry);
                 if (!nextEntry) {
                     return NoteInfoPtr();
                 }
@@ -2725,34 +2737,59 @@ NoteInfoPtr NoteInfoPtr::calcTieToWithNextMeasure(Cmper nextMeasure) const
     return NoteInfoPtr();
 }
 
-NoteInfoPtr NoteInfoPtr::calcTieFromWithPreviousMeasure(Cmper previousMeasure, bool requireTie) const
+NoteInfoPtr NoteInfoPtr::findTieFromCandidate(const NoteInfoPtr& note, Cmper previousMeasure,
+    const std::function<TieFromSearchAction(const NoteInfoPtr&, bool)>& decide)
 {
-    if (*this) {
-        // grace notes cannot tie backwards; only forwards (see grace note comment above)
-        auto thisRawEntry = m_entry->getEntry();
-        if (thisRawEntry->isNote && !thisRawEntry->graceNote) {
-            for (auto prev = m_entry.getPreviousInLayer(previousMeasure); prev; prev = prev.getPreviousInLayer(previousMeasure)) {
-                if (prev.getMeasure() < previousMeasure) {
-                    // only search measures at or after previousMeasure
-                    break;
-                }
-                auto prevEntry = prev->getEntry();
-                if (!prevEntry->isNote) {
-                    continue;
-                }
-                for (size_t noteIndex = 0; noteIndex < prevEntry->notes.size(); noteIndex++) {
-                    NoteInfoPtr tryFrom(prev, noteIndex);
-                    if (auto tryTiedTo = tryFrom.calcTieToWithNextMeasure(m_entry.getMeasure()); isSameNote(tryTiedTo)) {
-                        if (!requireTie || tryFrom->tieStart) {
-                            return tryFrom;
-                        }
-                        return NoteInfoPtr();
-                    }
-                }
+    if (!note) {
+        return {};
+    }
+    auto thisRawEntry = note.getEntryInfo()->getEntry();
+    if (!thisRawEntry->isNote || thisRawEntry->graceNote) {
+        return {};
+    }
+
+    std::optional<Cmper> currPreviousMeasure = previousMeasure;
+    for (auto prev = note.getEntryInfo().getPreviousInLayer(currPreviousMeasure);
+         prev; prev = prev.getPreviousInLayer(currPreviousMeasure)) {
+        if (prev.getMeasure() < previousMeasure) {
+            // only search measures at or after previousMeasure
+            break;
+        }
+        if (prev.getMeasure() == previousMeasure) {
+            currPreviousMeasure.reset();
+        }
+        auto prevEntry = prev->getEntry();
+        if (!prevEntry->isNote) {
+            continue;
+        }
+        for (size_t noteIndex = 0; noteIndex < prevEntry->notes.size(); noteIndex++) {
+            NoteInfoPtr tryFrom(prev, noteIndex);
+            auto tryTiedTo = tryFrom.calcTieToWithNextMeasure(note.getEntryInfo().getMeasure());
+            const bool tieMatches = note.isSameNote(tryTiedTo);
+            switch (decide(tryFrom, tieMatches)) {
+            case TieFromSearchAction::Accept:
+                return tryFrom;
+            case TieFromSearchAction::Stop:
+                return {};
+            case TieFromSearchAction::Continue:
+                break;
             }
         }
     }
-    return NoteInfoPtr();
+    return {};
+}
+
+NoteInfoPtr NoteInfoPtr::calcTieFromWithPreviousMeasure(Cmper previousMeasure, bool requireTie) const
+{
+    return findTieFromCandidate(*this, previousMeasure, [&](const NoteInfoPtr& tryFrom, bool tieMatches) {
+        if (!tieMatches) {
+            return TieFromSearchAction::Continue;
+        }
+        if (!requireTie || tryFrom->tieStart) {
+            return TieFromSearchAction::Accept;
+        }
+        return TieFromSearchAction::Stop;
+    });
 }
 
 NoteInfoPtr NoteInfoPtr::calcTieTo() const
@@ -2982,6 +3019,21 @@ bool NoteInfoPtr::calcPseudoTieInternal(utils::PseudoTieMode mode, CurveContourD
         return false;
     }
 
+    std::vector<size_t> eligibleNoteIndices;
+    if (mode == utils::PseudoTieMode::TieEnd) {
+        for (size_t noteIndex = 0; noteIndex < entry->notes.size(); ++noteIndex) {
+            if (!entry->notes[noteIndex]->tieEnd) {
+                eligibleNoteIndices.push_back(noteIndex);
+            }
+        }
+        if (eligibleNoteIndices.empty()) {
+            return false;
+        }
+        if (entry->notes[getNoteIndex()]->tieEnd) {
+            return false;
+        }
+    }
+
     std::vector<CurveContourDirection> tieDirections;
 
     // check smart slurs
@@ -2991,7 +3043,8 @@ bool NoteInfoPtr::calcPseudoTieInternal(utils::PseudoTieMode mode, CurveContourD
         }
         return true;
     });
-    if (selectPseudoTieDirection(tieDirection, tieDirections)) {
+    if (selectPseudoTieDirection(tieDirection, tieDirections,
+            mode == utils::PseudoTieMode::TieEnd ? &eligibleNoteIndices : nullptr)) {
         return true;
     }
 
@@ -3016,7 +3069,8 @@ bool NoteInfoPtr::calcPseudoTieInternal(utils::PseudoTieMode mode, CurveContourD
             tieDirections.push_back(nextContour);
         }
     }
-    if (selectPseudoTieDirection(tieDirection, tieDirections)) {
+    if (selectPseudoTieDirection(tieDirection, tieDirections,
+            mode == utils::PseudoTieMode::TieEnd ? &eligibleNoteIndices : nullptr)) {
         return true;
     }
 
@@ -3028,7 +3082,8 @@ bool NoteInfoPtr::calcPseudoTieInternal(utils::PseudoTieMode mode, CurveContourD
             tieDirections.push_back(shapeInfo->shape->calcSlurContour());
         }
     }
-    if (selectPseudoTieDirection(tieDirection, tieDirections)) {
+    if (selectPseudoTieDirection(tieDirection, tieDirections,
+            mode == utils::PseudoTieMode::TieEnd ? &eligibleNoteIndices : nullptr)) {
         return true;
     }
 
@@ -3036,9 +3091,11 @@ bool NoteInfoPtr::calcPseudoTieInternal(utils::PseudoTieMode mode, CurveContourD
 }
 
 bool NoteInfoPtr::selectPseudoTieDirection(CurveContourDirection* tieDirection,
-    std::vector<CurveContourDirection>& directions) const
+    std::vector<CurveContourDirection>& directions,
+    const std::vector<size_t>* eligibleNoteIndices) const
 {
-    if (directions.size() != m_entry->getEntry()->notes.size()) {
+    const size_t requiredCount = eligibleNoteIndices ? eligibleNoteIndices->size() : m_entry->getEntry()->notes.size();
+    if (requiredCount == 0 || directions.size() != requiredCount) {
         return false;
     }
 
@@ -3052,29 +3109,73 @@ bool NoteInfoPtr::selectPseudoTieDirection(CurveContourDirection* tieDirection,
             std::sort(directions.begin(), directions.end());
         }
         if (directions[0] != CurveContourDirection::Auto) { // if the first is not Auto, none are Auto
-            *tieDirection = directions[getNoteIndex()];
+            size_t directionIndex = getNoteIndex();
+            if (eligibleNoteIndices) {
+                const auto it = std::find(eligibleNoteIndices->begin(), eligibleNoteIndices->end(), directionIndex);
+                if (it == eligibleNoteIndices->end()) {
+                    return false;
+                }
+                directionIndex = static_cast<size_t>(std::distance(eligibleNoteIndices->begin(), it));
+            }
+            *tieDirection = directions[directionIndex];
         }
     }
     return true;
 }
 
-NoteInfoPtr NoteInfoPtr::calcJumpTieContinuationFrom(CurveContourDirection* tieDirection) const
+std::vector<std::pair<NoteInfoPtr, CurveContourDirection>> NoteInfoPtr::calcJumpTieContinuationsFrom() const
 {
-    const bool needDirection = (tieDirection != nullptr);
-    if (needDirection) {
-        *tieDirection = CurveContourDirection::Auto;
+    CurveContourDirection tieDirection = CurveContourDirection::Auto;
+
+    if (getEntryInfo()->elapsedDuration != 0) {
+        // entry must be at the beginning of a measure.
+        return {};
     }
 
-    /// @todo if is the first bar of a 2nd or higher ending. Also maybe look if this is the first bar of a coda.
-
-    if (((*this)->tieEnd && !calcTieFrom()) || calcHasPseudoTieEnd(tieDirection)) {
-        /// @todo return the last a matching note from the bar before the jump, if it is valid as a tie-from note
-        /// Can't use calcTieFrom because that does not skip over the intervening measures. Must create a new function
-        /// that without duplicating calcTieFrom code.
-        /// @todo if tieEnd is true, search for TieEnd tie alts to find out if the tie direction is overridden.
+    if (!(*this)->tieEnd && !calcHasPseudoTieEnd(&tieDirection)) {
+        return {};
     }
 
-    return {};
+    const auto frame = m_entry.getFrame();
+    const auto document = frame->getDocument();
+    const auto partId = frame->getRequestedPartId();
+    const auto currentMeasure = frame->getMeasure();
+    if ((*this)->tieEnd) {
+        if (const auto tieAlter = document->getDetails()->getForNote<details::TieAlterEnd>(*this, partId)) {
+            if (tieAlter->freezeDirection) {
+                tieDirection = tieAlter->down ? CurveContourDirection::Down : CurveContourDirection::Up;
+            }
+        }
+    }
+
+    std::vector<std::pair<NoteInfoPtr, CurveContourDirection>> results;
+    const auto previousPlaybackMeasures = document->calcJumpFromMeasures(partId, currentMeasure);
+    results.reserve(previousPlaybackMeasures.size());
+    for (const auto previousPlaybackMeasure : previousPlaybackMeasures) {
+        if (previousPlaybackMeasure == currentMeasure) {
+            continue;
+        }
+        auto tieFrom = findTieFromCandidate(*this, previousPlaybackMeasure, [&](const NoteInfoPtr& tryFrom, bool tieMatches) {
+            if (tryFrom.getEntryInfo().getMeasure() != previousPlaybackMeasure) {
+                return TieFromSearchAction::Continue;
+            }
+            if (!isSamePitch(tryFrom)) {
+                return TieFromSearchAction::Continue;
+            }
+            if (tryFrom->tieStart) {
+                return TieFromSearchAction::Accept;
+            }
+            if (auto arpeggiatedTieTo = tryFrom.calcArpeggiatedTieToNote(); arpeggiatedTieTo && isSamePitch(arpeggiatedTieTo)) {
+                return TieFromSearchAction::Accept;
+            }
+            (void)tieMatches;
+            return TieFromSearchAction::Continue;
+        });
+        if (tieFrom) {
+            results.emplace_back(tieFrom, tieDirection);
+        }
+    }
+    return results;
 }
 
 } // namespace dom
