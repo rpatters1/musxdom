@@ -627,8 +627,9 @@ public:
     [[nodiscard]] EntryInfoPtr getNextInFrame() const;
 
     /// @brief Get the next entry in the same layer and staff. This can be in the next measure.
+    /// @param targetMeasure Optional measure number to jump to once the current measure is exhausted.
     /// @return  The next continguous entry. Returns nullptr if it encounters an empty frame or end of file.
-    [[nodiscard]] EntryInfoPtr getNextInLayer() const;
+    [[nodiscard]] EntryInfoPtr getNextInLayer(std::optional<MeasCmper> targetMeasure = std::nullopt) const;
 
     /// @brief Get the next entry in the frame in the same voice.
     ///
@@ -640,8 +641,9 @@ public:
     [[nodiscard]] EntryInfoPtr getNextSameVNoGrace() const;
 
     /// @brief Get the previous entry in the same layer and staff. This can be in the previous measure.
+    /// @param targetMeasure Optional measure number to jump to once the current measure is exhausted.
     /// @return  The previous continguous entry. Returns nullptr if it encounters an empty frame or the beginning of the file.
-    [[nodiscard]] EntryInfoPtr getPreviousInLayer() const;
+    [[nodiscard]] EntryInfoPtr getPreviousInLayer(std::optional<MeasCmper> targetMeasure = std::nullopt) const;
 
     /// @brief Get the previous entry in the frame
     [[nodiscard]] EntryInfoPtr getPreviousInFrame() const;
@@ -1381,14 +1383,16 @@ public:
     { m_entries.emplace_back(entry); }
 
     /// @brief Gets the entry frame for the next measure with the same staff and layer.
+    /// @param targetMeasure Optional measure number to jump to.
     /// @return Frame or nullpter if the next measure has no matching frame.
     [[nodiscard]]
-    std::shared_ptr<const EntryFrame> getNext() const;
+    std::shared_ptr<const EntryFrame> getNext(std::optional<MeasCmper> targetMeasure = std::nullopt) const;
 
     /// @brief Gets the entry frame for the previous measure with the same staff and layer.
+    /// @param targetMeasure Optional measure number to jump to.
     /// @return Frame or nullpter if the previous measure has no matching frame,
     [[nodiscard]]
-    std::shared_ptr<const EntryFrame> getPrevious() const;
+    std::shared_ptr<const EntryFrame> getPrevious(std::optional<MeasCmper> targetMeasure = std::nullopt) const;
 
     /// @brief Gets the staff at eduPosition 0 without needing to create it again.
     [[nodiscard]]
@@ -1717,6 +1721,18 @@ public:
     [[nodiscard]]
     bool calcHasPseudoTieEnd(CurveContourDirection* tieDirection = nullptr) const;
 
+    /// @brief Calculates the note in a prior measure that continues a "jump" tie into this note.
+    /// @details A jump tie is a tie that skips over intervening measures due to repeat or navigation
+    /// (e.g., back to a prior bar or forward to a coda). The implementation should identify the
+    /// source note that ties into this note by walking the playback path, not just the immediate
+    /// previous measure.
+    /// @param [out] tieDirection Optional output parameter receiving the tie's curve contour direction. It is set to
+    ///         #CurveContourDirection::Down for under ties, #CurveContourDirection::Up for over ties, or
+    ///         #CurveContourDirection::Auto if the contour cannot be determined.
+    /// @return The tied-from note if a continuation is found; otherwise null.
+    [[nodiscard]]
+    NoteInfoPtr calcJumpTieContinuationFrom(CurveContourDirection* tieDirection = nullptr) const;
+
 private:
     /// @brief Calculates pseudo tie behavior for the specified mode.
     /// @param [out] tieDirection Optional output parameter receiving the tie's curve contour direction.
@@ -1742,6 +1758,17 @@ private:
     /// @param src the value to compare with.
     [[nodiscard]]
     bool isSamePitchValues(const NoteInfoPtr& src) const;
+
+    /// @brief Calculates the tie continuation target, stopping once entries exceed @p nextMeasure.
+    /// @param nextMeasure The next measure boundary to consider.
+    [[nodiscard]]
+    NoteInfoPtr calcTieToWithNextMeasure(Cmper nextMeasure) const;
+
+    /// @brief Calculates the tie source, stopping once entries precede @p previousMeasure.
+    /// @param previousMeasure The previous measure boundary to consider.
+    /// @param requireTie Whether the source note must have tieStart set.
+    [[nodiscard]]
+    NoteInfoPtr calcTieFromWithPreviousMeasure(Cmper previousMeasure, bool requireTie) const;
 
     EntryInfoPtr m_entry;
     size_t m_noteIndex;

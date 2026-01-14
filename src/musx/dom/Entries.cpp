@@ -177,20 +177,26 @@ EntryInfoPtr::InterpretedIterator EntryFrame::getFirstInterpretedIterator(int vo
     return {};
 }
 
-std::shared_ptr<const EntryFrame> EntryFrame::getNext() const
+std::shared_ptr<const EntryFrame> EntryFrame::getNext(std::optional<MeasCmper> targetMeasure) const
 {
-    if (auto gfhold = details::GFrameHoldContext(getDocument(), getRequestedPartId(), getStaff(), getMeasure() + 1)) {
+    const auto nextMeasure = targetMeasure.value_or(getMeasure() + 1);
+    if (nextMeasure <= getMeasure()) {
+        return nullptr;
+    }
+    if (auto gfhold = details::GFrameHoldContext(getDocument(), getRequestedPartId(), getStaff(), nextMeasure)) {
         return gfhold.createEntryFrame(m_layerIndex);
     }
     return nullptr;
 }
 
-std::shared_ptr<const EntryFrame> EntryFrame::getPrevious() const
+std::shared_ptr<const EntryFrame> EntryFrame::getPrevious(std::optional<MeasCmper> targetMeasure) const
 {
-    if (getMeasure() > 1) {
-        if (auto gfhold = details::GFrameHoldContext(getDocument(), getRequestedPartId(), getStaff(), getMeasure() - 1)) {
-            return gfhold.createEntryFrame(m_layerIndex);
-        }
+    const auto previousMeasure = targetMeasure.value_or(getMeasure() - 1);
+    if (previousMeasure >= getMeasure() || previousMeasure < 1) {
+        return nullptr;
+    }
+    if (auto gfhold = details::GFrameHoldContext(getDocument(), getRequestedPartId(), getStaff(), previousMeasure)) {
+        return gfhold.createEntryFrame(m_layerIndex);
     }
     return nullptr;
 }
@@ -718,12 +724,12 @@ std::optional<size_t> EntryInfoPtr::calcNextTupletIndex(std::optional<size_t> cu
     return std::nullopt;
 }
 
-EntryInfoPtr EntryInfoPtr::getNextInLayer() const
+EntryInfoPtr EntryInfoPtr::getNextInLayer(std::optional<MeasCmper> targetMeasure) const
 {
     if (auto resultInFrame = getNextInFrame()) {
         return resultInFrame;
     }
-    if (auto nextFrame = m_entryFrame->getNext()) {
+    if (auto nextFrame = m_entryFrame->getNext(targetMeasure)) {
         return EntryInfoPtr(nextFrame, 0);
     }
     return EntryInfoPtr();
@@ -765,12 +771,12 @@ EntryInfoPtr EntryInfoPtr::getNextSameVNoGrace() const
     return {};
 }
 
-EntryInfoPtr EntryInfoPtr::getPreviousInLayer() const
+EntryInfoPtr EntryInfoPtr::getPreviousInLayer(std::optional<MeasCmper> targetMeasure) const
 {
     if (auto resultInFrame = getPreviousInFrame()) {
         return resultInFrame;
     }
-    if (auto prevFrame = m_entryFrame->getPrevious()) {
+    if (auto prevFrame = m_entryFrame->getPrevious(targetMeasure)) {
         return EntryInfoPtr(prevFrame, prevFrame->getEntries().size() - 1);
     }
     return EntryInfoPtr();
@@ -2671,7 +2677,7 @@ NoteInfoPtr NoteInfoPtr::findEqualPitch(const EntryInfoPtr& entry) const
     return NoteInfoPtr();
 }
 
-NoteInfoPtr NoteInfoPtr::calcTieTo() const
+NoteInfoPtr NoteInfoPtr::calcTieToWithNextMeasure(Cmper nextMeasure) const
 {
     if (m_entry->getEntry()->isNote) {
         auto nextEntry = m_entry;
@@ -2679,7 +2685,7 @@ NoteInfoPtr NoteInfoPtr::calcTieTo() const
             if (nextEntry->getEntry()->v2Launch) {
                 nextEntry = nextEntry.getNextSameV();
                 if (!nextEntry) {
-                    if (auto nextFrame = m_entry.getFrame()->getNext()) {
+                    if (auto nextFrame = m_entry.getFrame()->getNext(nextMeasure)) {
                         nextEntry = nextFrame->getFirstInVoice(1); // v2Launch entries are always voice 1
                     }
                 }
@@ -2687,15 +2693,15 @@ NoteInfoPtr NoteInfoPtr::calcTieTo() const
                 auto tryEntry = nextEntry.getNextSameV();
                 if (!tryEntry) { // if v2 sequence exhausted
                     auto nextDuration = m_entry->calcNextElapsedDuration();
-                    nextEntry = nextEntry.getNextInLayer();
+                    nextEntry = nextEntry.getNextInLayer(nextMeasure);
                     while (nextEntry && nextEntry.getMeasure() == m_entry.getMeasure() && nextEntry->elapsedDuration < nextDuration) {
-                        nextEntry = nextEntry.getNextInLayer();
+                        nextEntry = nextEntry.getNextInLayer(nextMeasure);
                     }
                 } else {
                     nextEntry = tryEntry;
                 }
             } else {
-                nextEntry = nextEntry.getNextInLayer();
+                nextEntry = nextEntry.getNextInLayer(nextMeasure);
             }
             if (!nextEntry) {
                 break;
@@ -2707,7 +2713,10 @@ NoteInfoPtr NoteInfoPtr::calcTieTo() const
                 return result;
             }
             if (nextEntry->getEntry()->v2Launch) {
-                nextEntry = nextEntry.getNextInLayer();
+                nextEntry = nextEntry.getNextInLayer(nextMeasure);
+                if (!nextEntry) {
+                    return NoteInfoPtr();
+                }
                 return findEqualPitch(nextEntry);
             }
             break;
@@ -2716,15 +2725,15 @@ NoteInfoPtr NoteInfoPtr::calcTieTo() const
     return NoteInfoPtr();
 }
 
-NoteInfoPtr NoteInfoPtr::calcTieFrom(bool requireTie) const
+NoteInfoPtr NoteInfoPtr::calcTieFromWithPreviousMeasure(Cmper previousMeasure, bool requireTie) const
 {
     if (*this) {
         // grace notes cannot tie backwards; only forwards (see grace note comment above)
         auto thisRawEntry = m_entry->getEntry();
         if (thisRawEntry->isNote && !thisRawEntry->graceNote) {
-            for (auto prev = m_entry.getPreviousInLayer(); prev; prev = prev.getPreviousInLayer()) {
-                if (prev.getMeasure() < m_entry.getMeasure() - 1) {
-                    // only search 1 measure previous
+            for (auto prev = m_entry.getPreviousInLayer(previousMeasure); prev; prev = prev.getPreviousInLayer(previousMeasure)) {
+                if (prev.getMeasure() < previousMeasure) {
+                    // only search measures at or after previousMeasure
                     break;
                 }
                 auto prevEntry = prev->getEntry();
@@ -2733,7 +2742,7 @@ NoteInfoPtr NoteInfoPtr::calcTieFrom(bool requireTie) const
                 }
                 for (size_t noteIndex = 0; noteIndex < prevEntry->notes.size(); noteIndex++) {
                     NoteInfoPtr tryFrom(prev, noteIndex);
-                    if (auto tryTiedTo = tryFrom.calcTieTo(); isSameNote(tryTiedTo)) {
+                    if (auto tryTiedTo = tryFrom.calcTieToWithNextMeasure(m_entry.getMeasure()); isSameNote(tryTiedTo)) {
                         if (!requireTie || tryFrom->tieStart) {
                             return tryFrom;
                         }
@@ -2744,6 +2753,16 @@ NoteInfoPtr NoteInfoPtr::calcTieFrom(bool requireTie) const
         }
     }
     return NoteInfoPtr();
+}
+
+NoteInfoPtr NoteInfoPtr::calcTieTo() const
+{
+    return calcTieToWithNextMeasure(m_entry.getMeasure() + 1);
+}
+
+NoteInfoPtr NoteInfoPtr::calcTieFrom(bool requireTie) const
+{
+    return calcTieFromWithPreviousMeasure(m_entry.getMeasure() - 1, requireTie);
 }
 
 StaffCmper NoteInfoPtr::calcStaff() const
@@ -3037,6 +3056,25 @@ bool NoteInfoPtr::selectPseudoTieDirection(CurveContourDirection* tieDirection,
         }
     }
     return true;
+}
+
+NoteInfoPtr NoteInfoPtr::calcJumpTieContinuationFrom(CurveContourDirection* tieDirection) const
+{
+    const bool needDirection = (tieDirection != nullptr);
+    if (needDirection) {
+        *tieDirection = CurveContourDirection::Auto;
+    }
+
+    /// @todo if is the first bar of a 2nd or higher ending. Also maybe look if this is the first bar of a coda.
+
+    if (((*this)->tieEnd && !calcTieFrom()) || calcHasPseudoTieEnd(tieDirection)) {
+        /// @todo return the last a matching note from the bar before the jump, if it is valid as a tie-from note
+        /// Can't use calcTieFrom because that does not skip over the intervening measures. Must create a new function
+        /// that without duplicating calcTieFrom code.
+        /// @todo if tieEnd is true, search for TieEnd tie alts to find out if the tie direction is overridden.
+    }
+
+    return {};
 }
 
 } // namespace dom
