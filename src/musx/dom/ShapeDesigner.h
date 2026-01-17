@@ -37,6 +37,7 @@ namespace dom {
 /// @brief Enumerates the shape types we can recognize semantically.
 enum class KnownShapeDefType
 {
+    Unrecognized,               ///< Fallback when recognition fails.
     Blank,                      ///< A blank shape containing no instructions.
     TenutoMark,                 ///< A horizontal tenuto mark, typically used as an articulation symbol.
     SlurTieCurveRight,          ///< Horizontal slur or tie shape curving toward the right.
@@ -529,8 +530,8 @@ public:
     bool iterateInstructions(std::function<bool(const ShapeDefInstruction::Decoded&)> callback) const;
 
     /// @brief Determine if this is a recognized shape type
-    /// @return If the shape is recognized, return its known type. Otherwise return std::nullopt.
-    std::optional<KnownShapeDefType> recognize() const;
+    /// @return The recognized type, or KnownShapeDefType::Unrecognized when no match is found.
+    KnownShapeDefType recognize() const;
 
     /// @brief Calculate the width of the shape in Evpu, if it can be determined.
     /// @details The width is derived from stored StartObject/StartGroup bounding boxes.

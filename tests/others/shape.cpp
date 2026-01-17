@@ -194,19 +194,19 @@ TEST(ShapeDefTest, RecognizeShapes)
 
     constexpr size_t EXPECTED_VALUES = 11;
     constexpr std::array<Cmper, EXPECTED_VALUES> expectedCmpers = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 };
-    constexpr std::array<std::optional<KnownShapeDefType>, EXPECTED_VALUES> expectedTypes =
+    constexpr std::array<KnownShapeDefType, EXPECTED_VALUES> expectedTypes =
     {
-        std::nullopt,
-        std::nullopt,
-        std::nullopt,
-        std::nullopt,
+        KnownShapeDefType::Unrecognized,
+        KnownShapeDefType::Unrecognized,
+        KnownShapeDefType::Unrecognized,
+        KnownShapeDefType::Unrecognized,
         KnownShapeDefType::TenutoMark,
         KnownShapeDefType::Blank,
         KnownShapeDefType::SlurTieCurveRight,
         KnownShapeDefType::SlurTieCurveLeft,
-        std::nullopt,
-        std::nullopt,
-        std::nullopt,
+        KnownShapeDefType::Unrecognized,
+        KnownShapeDefType::Unrecognized,
+        KnownShapeDefType::Unrecognized,
     };
 
     auto shapes = doc->getOthers()->getArray<others::ShapeDef>(SCORE_PARTID);
@@ -253,8 +253,7 @@ void verifyPedalArrowheads(
         EXPECT_EQ(shape->shapeType, others::ShapeDef::ShapeType::Arrowhead)
             << "arrowhead shapeDef " << cmper << " has unexpected type in " << path.string();
         const auto recognized = shape->recognize();
-        ASSERT_TRUE(recognized) << "missing recognized type for cmper " << cmper << " in " << path.string();
-        recognizedTypes.push_back(*recognized);
+        recognizedTypes.push_back(recognized);
     }
     std::sort(recognizedTypes.begin(), recognizedTypes.end());
     std::array<KnownShapeDefType, 4> expectedSorted = expectedTypes;
@@ -267,7 +266,7 @@ void verifyPedalArrowheads(
     for (const auto cmper : negativeCmpers) {
         const auto shape = doc->getOthers()->get<others::ShapeDef>(SCORE_PARTID, cmper);
         ASSERT_TRUE(shape) << "missing non-arrowhead shapeDef " << cmper << " in " << path.string();
-        EXPECT_EQ(shape->recognize(), std::nullopt)
+        EXPECT_EQ(shape->recognize(), KnownShapeDefType::Unrecognized)
             << "expected no recognized shape type for cmper " << cmper << " in " << path.string();
     }
 }

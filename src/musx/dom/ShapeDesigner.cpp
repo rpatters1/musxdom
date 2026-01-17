@@ -798,7 +798,7 @@ static ShapeRecognitionCandidates createShapeRecognizers(const ShapeDef& shape)
 // ***** ShapeDef *****
 // ********************
 
-std::optional<KnownShapeDefType> ShapeDef::recognize() const
+KnownShapeDefType ShapeDef::recognize() const
 {
     if (isBlank()) {
         return KnownShapeDefType::Blank;
@@ -806,10 +806,10 @@ std::optional<KnownShapeDefType> ShapeDef::recognize() const
 
     auto recognizers = createShapeRecognizers(*this);
     if (recognizers.empty()) {
-        return std::nullopt;
+        return KnownShapeDefType::Unrecognized;
     }
 
-    std::optional<KnownShapeDefType> recognized;
+    auto recognized = KnownShapeDefType::Unrecognized;
     iterateInstructions([&](const ShapeDefInstruction::Decoded& inst) {
         bool anyActive = false;
 
@@ -840,7 +840,7 @@ std::optional<KnownShapeDefType> ShapeDef::recognize() const
         return true;
     });
 
-    if (recognized) {
+    if (recognized != KnownShapeDefType::Unrecognized) {
         return recognized;
     }
 
@@ -850,7 +850,7 @@ std::optional<KnownShapeDefType> ShapeDef::recognize() const
         }
     }
 
-    return std::nullopt;
+    return KnownShapeDefType::Unrecognized;
 }
 
 std::optional<Evpu> ShapeDef::calcWidth() const

@@ -417,12 +417,12 @@ std::optional<utils::PseudoTieShapeInfo> MeasureExprAssign::calcPseudoTieShape()
         return std::nullopt;
     }
     auto knownType = shape->recognize();
-    if (!knownType) {
+    if (knownType == KnownShapeDefType::Unrecognized) {
         return std::nullopt;
     }
     utils::PseudoTieShapeInfo info;
     info.shape = shape;
-    info.shapeType = *knownType;
+    info.shapeType = knownType;
     return info;
 }
 
