@@ -138,11 +138,11 @@ details::ArticulationAssign::calcPseudoTieShapeContext(const EntryInfoPtr& forSt
         return std::nullopt;
     }
     auto knownType = result.info.shape->recognize();
-    if (!knownType || (*knownType != KnownShapeDefType::SlurTieCurveRight
-        && *knownType != KnownShapeDefType::SlurTieCurveLeft)) {
+    if (knownType != KnownShapeDefType::SlurTieCurveRight
+        && knownType != KnownShapeDefType::SlurTieCurveLeft) {
         return std::nullopt;
     }
-    result.info.shapeType = *knownType;
+    result.info.shapeType = knownType;
 
     return result;
 }
