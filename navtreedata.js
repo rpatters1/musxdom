@@ -86,12 +86,12 @@ var NAVTREEINDEX =
 "classmusx_1_1dom_1_1others_1_1TextExpressionDef.html#a760183a3d6e13d8fa84d7e4da65e7415",
 "classmusx_1_1factory_1_1HeaderFactory.html",
 "functions_func.html",
-"namespacemusx_1_1dom.html#a86d8f1c0b9cc21018e4d1257c193f67faca4103a5e6809c7e14ec7f4fcf676bb5",
-"namespacemusx_1_1dom_1_1uuid.html#a1e6dbbb89524f274d1f882947df22190",
-"namespacemusx_1_1dom_1_1uuid.html#a6c56e0dbc1462a3635e978fd61097cc5",
-"namespacemusx_1_1dom_1_1uuid.html#abc5fe384c01979609eb9db116189229a",
-"structmusx_1_1dom_1_1Entry_1_1EntryLocation.html#a3ffd38b57681d5cce3de07a2c1d8bb08",
-"structmusx_1_1dom_1_1header_1_1FileInfo.html#a9670c8dbeb9c9633427b459db92f9aac"
+"namespacemusx_1_1dom.html#a86d8f1c0b9cc21018e4d1257c193f67faba4b1cdf6f54d4295f4107fcf1ef6ecb",
+"namespacemusx_1_1dom_1_1uuid.html#a1d9b97947c29232b5dfd0f4a91fb0363",
+"namespacemusx_1_1dom_1_1uuid.html#a6c5423e4745b059c47b889b6eb54b6dd",
+"namespacemusx_1_1dom_1_1uuid.html#abc4abc6c34b8f65df401490dd7a3385c",
+"structmusx_1_1dom_1_1Entry_1_1EntryLocation.html#a20a2369d78fd99d56b61ce477f37945c",
+"structmusx_1_1dom_1_1header_1_1FileInfo.html#a7bbff7d1ddd77dd367185b5732d4c280"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

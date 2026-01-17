@@ -908,6 +908,7 @@ var namespacemusx_1_1dom =
       [ "Tab2", "namespacemusx_1_1dom.html#a86d8f1c0b9cc21018e4d1257c193f67fad4c2a0228d8e808f1ca012f63f429a38", null ]
     ] ],
     [ "KnownShapeDefType", "namespacemusx_1_1dom.html#a16d85e8ed9439b9a2ef071d38ffa0fd7", [
+      [ "Unrecognized", "namespacemusx_1_1dom.html#a16d85e8ed9439b9a2ef071d38ffa0fd7a7f5f743ac34344aeb26849015b4b3dae", null ],
       [ "Blank", "namespacemusx_1_1dom.html#a16d85e8ed9439b9a2ef071d38ffa0fd7ae4ef81cce7e4e10033ebb10962dfdd5e", null ],
       [ "TenutoMark", "namespacemusx_1_1dom.html#a16d85e8ed9439b9a2ef071d38ffa0fd7ac6cdf96e9804915f9f5c6771802805fd", null ],
       [ "SlurTieCurveRight", "namespacemusx_1_1dom.html#a16d85e8ed9439b9a2ef071d38ffa0fd7a98500bea154c4887dd3006c8001d0845", null ],
