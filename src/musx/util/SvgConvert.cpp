@@ -19,8 +19,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-#include "musx/util/SvgConvert.h"
-
 #include <algorithm>
 #include <cmath>
 #include <cstdint>
@@ -32,10 +30,7 @@
 #include <variant>
 #include <vector>
 
-#include "musx/dom/CommonClasses.h"
-#include "musx/dom/EnumClasses.h"
-#include "musx/dom/Fundamentals.h"
-#include "musx/dom/ShapeDesigner.h"
+#include "musx/musx.h"
 
 namespace musx {
 namespace util {
@@ -75,6 +70,17 @@ struct Bounds
         include(b);
         include({a.x, b.y});
         include({b.x, a.y});
+    }
+
+    void expand(double delta)
+    {
+        if (!hasValue) {
+            return;
+        }
+        minX -= delta;
+        minY -= delta;
+        maxX += delta;
+        maxY += delta;
     }
 
     bool hasValue{};
@@ -217,6 +223,8 @@ struct Transform
     }
 };
 
+const Transform kFlipY{1.0, 0.0, 0.0, -1.0, 0.0, 0.0};
+
 double toEvpuDouble(dom::Evpu value)
 {
     return static_cast<double>(value);
@@ -277,6 +285,14 @@ Transform makeRotate(double radians)
     t.c = -s;
     t.d = c;
     return t;
+}
+
+Transform makeTranslateRotateScale(const Point& translate, double sx, double sy, double radians)
+{
+    Transform scale = makeScale(sx, sy);
+    Transform rotate = makeRotate(radians);
+    Transform translateTransform = makeTranslate(translate.x, translate.y);
+    return multiplyTransforms(translateTransform, multiplyTransforms(rotate, scale));
 }
 
 Transform makePivotTransform(const Point& pivot, double sx, double sy, double radians)
@@ -486,6 +502,7 @@ std::string SvgConvert::toSvg(const dom::MusxInstance<dom::others::ShapeDef>& sh
         if (geometry.path.empty()) {
             return;
         }
+        Transform outputTransform = multiplyTransforms(kFlipY, currentTransform);
         std::ostringstream element;
         element << "<path d=\"" << geometry.path << "\"";
         if (outline) {
@@ -496,15 +513,18 @@ std::string SvgConvert::toSvg(const dom::MusxInstance<dom::others::ShapeDef>& sh
             element << " fill=\"" << grayToRgb(paint.gray) << "\"";
             element << " stroke=\"none\"";
         }
-        if (!currentTransform.isIdentity()) {
-            element << " transform=\"matrix(" << currentTransform.a << ' ' << currentTransform.b << ' '
-                    << currentTransform.c << ' ' << currentTransform.d << ' ' << currentTransform.tx << ' '
-                    << currentTransform.ty << ")\"";
+        if (!outputTransform.isIdentity()) {
+            element << " transform=\"matrix(" << outputTransform.a << ' ' << outputTransform.b << ' '
+                    << outputTransform.c << ' ' << outputTransform.d << ' ' << outputTransform.tx << ' '
+                    << outputTransform.ty << ")\"";
         }
         element << "/>";
         elements.push_back(element.str());
 
-        Bounds transformed = transformBounds(geometry.bounds, currentTransform);
+        Bounds transformed = transformBounds(geometry.bounds, outputTransform);
+        if (outline) {
+            transformed.expand(paint.strokeWidth / 2.0);
+        }
         if (transformed.hasValue) {
             bounds.include({transformed.minX, transformed.minY});
             bounds.include({transformed.maxX, transformed.maxY});
@@ -516,6 +536,7 @@ std::string SvgConvert::toSvg(const dom::MusxInstance<dom::others::ShapeDef>& sh
             return;
         }
 
+        Transform outputTransform = multiplyTransforms(kFlipY, currentTransform);
         std::ostringstream element;
         element << "<path d=\"" << path.str() << "\"";
         if (fill) {
@@ -537,15 +558,18 @@ std::string SvgConvert::toSvg(const dom::MusxInstance<dom::others::ShapeDef>& sh
             element << " stroke=\"none\"";
         }
 
-        if (!currentTransform.isIdentity()) {
-            element << " transform=\"matrix(" << currentTransform.a << ' ' << currentTransform.b << ' '
-                    << currentTransform.c << ' ' << currentTransform.d << ' ' << currentTransform.tx << ' '
-                    << currentTransform.ty << ")\"";
+        if (!outputTransform.isIdentity()) {
+            element << " transform=\"matrix(" << outputTransform.a << ' ' << outputTransform.b << ' '
+                    << outputTransform.c << ' ' << outputTransform.d << ' ' << outputTransform.tx << ' '
+                    << outputTransform.ty << ")\"";
         }
 
         element << "/>";
         elements.push_back(element.str());
-        Bounds transformed = transformBounds(pathBounds, currentTransform);
+        Bounds transformed = transformBounds(pathBounds, outputTransform);
+        if (stroke) {
+            transformed.expand(paint.strokeWidth / 2.0);
+        }
         if (transformed.hasValue) {
             bounds.include({transformed.minX, transformed.minY});
             bounds.include({transformed.maxX, transformed.maxY});
@@ -622,17 +646,18 @@ std::string SvgConvert::toSvg(const dom::MusxInstance<dom::others::ShapeDef>& sh
             beginDrawing();
             const auto* data = std::get_if<dom::ShapeDefInstruction::StartObject>(&inst.data);
             if (data) {
-                origin = {toEvpuDouble(data->originX), toEvpuDouble(data->originY)};
+                origin = {};
                 double sx = static_cast<double>(data->scaleX) / 1000.0;
                 double sy = static_cast<double>(data->scaleY) / 1000.0;
                 double radians = decodeRotationRadians(data->rotation);
-                Transform localTransform = makePivotTransform(origin, sx, sy, radians);
+                Point translate{toEvpuDouble(data->originX), toEvpuDouble(data->originY)};
+                Transform localTransform = makeTranslateRotateScale(translate, sx, sy, radians);
                 currentTransform = multiplyTransforms(groupTransform, localTransform);
             } else {
                 origin = {};
                 currentTransform = groupTransform;
             }
-            current = origin;
+            current = {};
             start = current;
             path.clear();
             pathBounds.clear();
@@ -648,18 +673,19 @@ std::string SvgConvert::toSvg(const dom::MusxInstance<dom::others::ShapeDef>& sh
             groupTransformStack.push_back(groupTransform);
             const auto* data = std::get_if<dom::ShapeDefInstruction::StartGroup>(&inst.data);
             if (data) {
-                origin = {toEvpuDouble(data->originX), toEvpuDouble(data->originY)};
+                origin = {};
                 double sx = static_cast<double>(data->scaleX) / 1000.0;
                 double sy = static_cast<double>(data->scaleY) / 1000.0;
                 double radians = decodeRotationRadians(data->rotation);
-                Transform localTransform = makePivotTransform(origin, sx, sy, radians);
+                Point translate{toEvpuDouble(data->originX), toEvpuDouble(data->originY)};
+                Transform localTransform = makeTranslateRotateScale(translate, sx, sy, radians);
                 groupTransform = multiplyTransforms(groupTransform, localTransform);
                 currentTransform = groupTransform;
             } else {
                 origin = {};
                 currentTransform = groupTransform;
             }
-            current = origin;
+            current = {};
             start = current;
             path.clear();
             pathBounds.clear();
@@ -781,10 +807,16 @@ std::string SvgConvert::toSvg(const dom::MusxInstance<dom::others::ShapeDef>& sh
             const auto* data = std::get_if<dom::ShapeDefInstruction::CurveTo>(&inst.data);
             if (data) {
                 Point startPoint = current;
-                Point c1{current.x + toEvpuDouble(data->c1dx), current.y + toEvpuDouble(data->c1dy)};
-                Point c2{current.x + toEvpuDouble(data->c2dx), current.y + toEvpuDouble(data->c2dy)};
-                current.x += toEvpuDouble(data->edx);
-                current.y += toEvpuDouble(data->edy);
+                double c1dx = toEvpuDouble(data->c1dx);
+                double c1dy = toEvpuDouble(data->c1dy);
+                double c2dx = toEvpuDouble(data->c2dx);
+                double c2dy = toEvpuDouble(data->c2dy);
+                double edx = toEvpuDouble(data->edx);
+                double edy = toEvpuDouble(data->edy);
+                Point c1{current.x + c1dx, current.y + c1dy};
+                Point c2{current.x + c1dx + c2dx, current.y + c1dy + c2dy};
+                current.x += c1dx + c2dx + edx;
+                current.y += c1dy + c2dy + edy;
                 if (path.empty()) {
                     path.moveTo(startPoint);
                     pathBounds.include(startPoint);
@@ -812,10 +844,16 @@ std::string SvgConvert::toSvg(const dom::MusxInstance<dom::others::ShapeDef>& sh
             const auto* data = std::get_if<dom::ShapeDefInstruction::Slur>(&inst.data);
             if (data) {
                 Point startPoint = current;
-                Point c1{current.x + toEvpuDouble16ths(data->c1dx), current.y + toEvpuDouble16ths(data->c1dy)};
-                Point c2{current.x + toEvpuDouble16ths(data->c2dx), current.y + toEvpuDouble16ths(data->c2dy)};
-                current.x += toEvpuDouble16ths(data->edx);
-                current.y += toEvpuDouble16ths(data->edy);
+                double c1dx = toEvpuDouble16ths(data->c1dx);
+                double c1dy = toEvpuDouble16ths(data->c1dy);
+                double c2dx = toEvpuDouble16ths(data->c2dx);
+                double c2dy = toEvpuDouble16ths(data->c2dy);
+                double edx = toEvpuDouble16ths(data->edx);
+                double edy = toEvpuDouble16ths(data->edy);
+                Point c1{current.x + c1dx, current.y + c1dy};
+                Point c2{current.x + c1dx + c2dx, current.y + c1dy + c2dy};
+                current.x += c1dx + c2dx + edx;
+                current.y += c1dy + c2dy + edy;
                 if (path.empty()) {
                     path.moveTo(startPoint);
                     pathBounds.include(startPoint);
@@ -952,21 +990,22 @@ std::string SvgConvert::toSvg(const dom::MusxInstance<dom::others::ShapeDef>& sh
             double x = current.x;
             double y = current.y - height;
             std::string encoded = base64Encode(payload->bytes);
+            Transform outputTransform = multiplyTransforms(kFlipY, currentTransform);
             std::ostringstream element;
             element << "<image x=\"" << x << "\" y=\"" << y << "\" width=\"" << width
                     << "\" height=\"" << height << "\" href=\"data:" << payload->mimeType
                     << ";base64," << encoded << "\"";
-            if (!currentTransform.isIdentity()) {
-                element << " transform=\"matrix(" << currentTransform.a << ' ' << currentTransform.b << ' '
-                        << currentTransform.c << ' ' << currentTransform.d << ' ' << currentTransform.tx << ' '
-                        << currentTransform.ty << ")\"";
+            if (!outputTransform.isIdentity()) {
+                element << " transform=\"matrix(" << outputTransform.a << ' ' << outputTransform.b << ' '
+                        << outputTransform.c << ' ' << outputTransform.d << ' ' << outputTransform.tx << ' '
+                        << outputTransform.ty << ")\"";
             }
             element << "/>";
             elements.push_back(element.str());
 
             Bounds localBounds;
             localBounds.includeRect({x, y}, {x + width, y + height});
-            Bounds transformed = transformBounds(localBounds, currentTransform);
+            Bounds transformed = transformBounds(localBounds, outputTransform);
             if (transformed.hasValue) {
                 bounds.include({transformed.minX, transformed.minY});
                 bounds.include({transformed.maxX, transformed.maxY});
@@ -1021,10 +1060,11 @@ std::string SvgConvert::toSvg(const dom::MusxInstance<dom::others::ShapeDef>& sh
                 element << " text-decoration=\"none\"";
             }
             element << " fill=\"" << grayToRgb(paint.gray) << "\"";
-            if (!currentTransform.isIdentity()) {
-                element << " transform=\"matrix(" << currentTransform.a << ' ' << currentTransform.b << ' '
-                        << currentTransform.c << ' ' << currentTransform.d << ' ' << currentTransform.tx << ' '
-                        << currentTransform.ty << ")\"";
+            Transform outputTransform = multiplyTransforms(kFlipY, currentTransform);
+            if (!outputTransform.isIdentity()) {
+                element << " transform=\"matrix(" << outputTransform.a << ' ' << outputTransform.b << ' '
+                        << outputTransform.c << ' ' << outputTransform.d << ' ' << outputTransform.tx << ' '
+                        << outputTransform.ty << ")\"";
             }
             element << ">";
             element << utf8FromCodePoint(data->codePoint);
@@ -1032,7 +1072,7 @@ std::string SvgConvert::toSvg(const dom::MusxInstance<dom::others::ShapeDef>& sh
             elements.push_back(element.str());
 
             Bounds localBounds = makeTextBounds(anchor, fontSizeEvpu, advanceEvpu);
-            Bounds transformed = transformBounds(localBounds, currentTransform);
+            Bounds transformed = transformBounds(localBounds, outputTransform);
             if (transformed.hasValue) {
                 bounds.include({transformed.minX, transformed.minY});
                 bounds.include({transformed.maxX, transformed.maxY});
@@ -1096,21 +1136,22 @@ std::string SvgConvert::toSvg(const dom::MusxInstance<dom::others::ShapeDef>& sh
             } else {
                 element << " text-decoration=\"none\"";
             }
-                element << " fill=\"" << grayToRgb(paint.gray) << "\"";
-                if (!currentTransform.isIdentity()) {
-                    element << " transform=\"matrix(" << currentTransform.a << ' ' << currentTransform.b << ' '
-                            << currentTransform.c << ' ' << currentTransform.d << ' ' << currentTransform.tx << ' '
-                            << currentTransform.ty << ")\"";
-                }
-                element << ">" << glyph << "</text>";
-                elements.push_back(element.str());
+            element << " fill=\"" << grayToRgb(paint.gray) << "\"";
+            Transform outputTransform = multiplyTransforms(kFlipY, currentTransform);
+            if (!outputTransform.isIdentity()) {
+                element << " transform=\"matrix(" << outputTransform.a << ' ' << outputTransform.b << ' '
+                        << outputTransform.c << ' ' << outputTransform.d << ' ' << outputTransform.tx << ' '
+                        << outputTransform.ty << ")\"";
+            }
+            element << ">" << glyph << "</text>";
+            elements.push_back(element.str());
 
-                Bounds localBounds = makeTextBounds(anchor, fontSizeEvpu, advanceEvpu);
-                Bounds transformed = transformBounds(localBounds, currentTransform);
-                if (transformed.hasValue) {
-                    bounds.include({transformed.minX, transformed.minY});
-                    bounds.include({transformed.maxX, transformed.maxY});
-                }
+            Bounds localBounds = makeTextBounds(anchor, fontSizeEvpu, advanceEvpu);
+            Bounds transformed = transformBounds(localBounds, outputTransform);
+            if (transformed.hasValue) {
+                bounds.include({transformed.minX, transformed.minY});
+                bounds.include({transformed.maxX, transformed.maxY});
+            }
             }
 
             current.x += toEvpuDouble(data->dx);
@@ -1143,10 +1184,14 @@ std::string SvgConvert::toSvg(const dom::MusxInstance<dom::others::ShapeDef>& sh
 
     std::ostringstream svg;
     if (bounds.hasValue) {
-        double width = bounds.maxX - bounds.minX;
-        double height = bounds.maxY - bounds.minY;
+        double minX = std::floor(bounds.minX);
+        double minY = std::floor(bounds.minY);
+        double maxX = std::ceil(bounds.maxX);
+        double maxY = std::ceil(bounds.maxY);
+        double width = maxX - minX;
+        double height = maxY - minY;
         svg << "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\""
-            << bounds.minX << ' ' << bounds.minY << ' ' << width << ' ' << height << "\"";
+            << minX << ' ' << minY << ' ' << width << ' ' << height << "\"";
         if (width > 0.0 && height > 0.0) {
             svg << " width=\"" << width << "\" height=\"" << height << "\"";
         }

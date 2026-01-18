@@ -127,6 +127,7 @@ add_executable(musxdomtests
     music_theory/transpose.cpp
     # util
     util/fraction.cpp
+    util/svg_convert.cpp
 )
 
 # Enable Unity/Jumbo build for this target
