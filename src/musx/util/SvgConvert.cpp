@@ -389,6 +389,115 @@ Point computeLineOffset(const Point& start, const Point& end,
     return {nx * halfWidth * sign, ny * halfWidth * sign};
 }
 
+void includeLineStrokeBounds(Bounds& bounds, const Point& start, const Point& end, double halfWidth)
+{
+    if (halfWidth <= 0.0) {
+        bounds.include(start);
+        bounds.include(end);
+        return;
+    }
+    double dx = end.x - start.x;
+    double dy = end.y - start.y;
+    double length = std::hypot(dx, dy);
+    if (length == 0.0) {
+        bounds.include({start.x - halfWidth, start.y - halfWidth});
+        bounds.include({start.x + halfWidth, start.y + halfWidth});
+        return;
+    }
+    double nx = -dy / length;
+    double ny = dx / length;
+    Point offset{nx * halfWidth, ny * halfWidth};
+    bounds.include({start.x + offset.x, start.y + offset.y});
+    bounds.include({start.x - offset.x, start.y - offset.y});
+    bounds.include({end.x + offset.x, end.y + offset.y});
+    bounds.include({end.x - offset.x, end.y - offset.y});
+}
+
+Bounds computeCubicBounds(const Point& p0, const Point& p1, const Point& p2, const Point& p3)
+{
+    auto evaluate = [](double p0v, double p1v, double p2v, double p3v, double t) {
+        double mt = 1.0 - t;
+        return mt * mt * mt * p0v
+            + 3.0 * mt * mt * t * p1v
+            + 3.0 * mt * t * t * p2v
+            + t * t * t * p3v;
+    };
+
+    auto extrema = [&](double p0v, double p1v, double p2v, double p3v) {
+        std::vector<double> values;
+        values.reserve(4);
+        values.push_back(p0v);
+        values.push_back(p3v);
+
+        double a = -p0v + 3.0 * p1v - 3.0 * p2v + p3v;
+        double b = 3.0 * p0v - 6.0 * p1v + 3.0 * p2v;
+        double c = -3.0 * p0v + 3.0 * p1v;
+        constexpr double kEpsilon = 1e-9;
+        if (std::abs(a) < kEpsilon) {
+            if (std::abs(b) >= kEpsilon) {
+                double t = -c / (2.0 * b);
+                if (t > 0.0 && t < 1.0) {
+                    values.push_back(evaluate(p0v, p1v, p2v, p3v, t));
+                }
+            }
+        } else {
+            double disc = b * b - 3.0 * a * c;
+            if (disc >= 0.0) {
+                double sqrtDisc = std::sqrt(disc);
+                double t1 = (-b + sqrtDisc) / (3.0 * a);
+                double t2 = (-b - sqrtDisc) / (3.0 * a);
+                if (t1 > 0.0 && t1 < 1.0) {
+                    values.push_back(evaluate(p0v, p1v, p2v, p3v, t1));
+                }
+                if (t2 > 0.0 && t2 < 1.0) {
+                    values.push_back(evaluate(p0v, p1v, p2v, p3v, t2));
+                }
+            }
+        }
+        auto [minIt, maxIt] = std::minmax_element(values.begin(), values.end());
+        return std::pair<double, double>(*minIt, *maxIt);
+    };
+
+    Bounds result;
+    auto [minX, maxX] = extrema(p0.x, p1.x, p2.x, p3.x);
+    auto [minY, maxY] = extrema(p0.y, p1.y, p2.y, p3.y);
+    result.include({minX, minY});
+    result.include({maxX, maxY});
+    return result;
+}
+
+Point evaluateCubic(const Point& p0, const Point& p1, const Point& p2, const Point& p3, double t)
+{
+    double mt = 1.0 - t;
+    double mt2 = mt * mt;
+    double t2 = t * t;
+    double a = mt2 * mt;
+    double b = 3.0 * mt2 * t;
+    double c = 3.0 * mt * t2;
+    double d = t2 * t;
+    return {
+        a * p0.x + b * p1.x + c * p2.x + d * p3.x,
+        a * p0.y + b * p1.y + c * p2.y + d * p3.y
+    };
+}
+
+double averageScaleForStroke(const Transform& transform)
+{
+    double sx = std::hypot(transform.a, transform.b);
+    double sy = std::hypot(transform.c, transform.d);
+    constexpr double kEpsilon = 1e-9;
+    if (sx < kEpsilon && sy < kEpsilon) {
+        return 1.0;
+    }
+    if (sx < kEpsilon) {
+        return sy;
+    }
+    if (sy < kEpsilon) {
+        return sx;
+    }
+    return 0.5 * (sx + sy);
+}
+
 Point normalize(const Point& vector)
 {
     double length = std::hypot(vector.x, vector.y);
@@ -463,6 +572,7 @@ std::string SvgConvert::toSvg(const dom::MusxInstance<dom::others::ShapeDef>& sh
     Bounds bounds;
     PathBuilder path;
     Bounds pathBounds;
+    Bounds strokeBounds;
     PaintState paint;
     TextState text(shape->getDocument());
     PenState pen;
@@ -487,6 +597,7 @@ std::string SvgConvert::toSvg(const dom::MusxInstance<dom::others::ShapeDef>& sh
         if (pathRendered) {
             path.clear();
             pathBounds.clear();
+            strokeBounds.clear();
             pathRendered = false;
             hasDrawCurrent = false;
             pathDirection = {};
@@ -508,7 +619,14 @@ std::string SvgConvert::toSvg(const dom::MusxInstance<dom::others::ShapeDef>& sh
         if (outline) {
             element << " fill=\"none\"";
             element << " stroke=\"" << grayToRgb(paint.gray) << "\"";
-            element << " stroke-width=\"" << paint.strokeWidth << "\"";
+            double strokeWidth = paint.strokeWidth;
+            if (!outputTransform.isIdentity()) {
+                double scale = averageScaleForStroke(outputTransform);
+                if (scale > 1e-9) {
+                    strokeWidth = paint.strokeWidth / scale;
+                }
+            }
+            element << " stroke-width=\"" << strokeWidth << "\"";
         } else {
             element << " fill=\"" << grayToRgb(paint.gray) << "\"";
             element << " stroke=\"none\"";
@@ -550,9 +668,19 @@ std::string SvgConvert::toSvg(const dom::MusxInstance<dom::others::ShapeDef>& sh
 
         if (stroke) {
             element << " stroke=\"" << grayToRgb(paint.gray) << "\"";
-            element << " stroke-width=\"" << paint.strokeWidth << "\"";
+            double strokeWidth = paint.strokeWidth;
+            double dashScale = 1.0;
+            if (!outputTransform.isIdentity()) {
+                double scale = averageScaleForStroke(outputTransform);
+                if (scale > 1e-9) {
+                    strokeWidth = paint.strokeWidth / scale;
+                    dashScale = scale;
+                }
+            }
+            element << " stroke-width=\"" << strokeWidth << "\"";
             if (paint.dash && (paint.dash->first > 0.0 || paint.dash->second > 0.0)) {
-                element << " stroke-dasharray=\"" << paint.dash->first << ' ' << paint.dash->second << "\"";
+                element << " stroke-dasharray=\"" << (paint.dash->first / dashScale)
+                        << ' ' << (paint.dash->second / dashScale) << "\"";
             }
         } else {
             element << " stroke=\"none\"";
@@ -568,7 +696,11 @@ std::string SvgConvert::toSvg(const dom::MusxInstance<dom::others::ShapeDef>& sh
         elements.push_back(element.str());
         Bounds transformed = transformBounds(pathBounds, outputTransform);
         if (stroke) {
-            transformed.expand(paint.strokeWidth / 2.0);
+            Bounds stroked = transformBounds(strokeBounds, outputTransform);
+            if (stroked.hasValue) {
+                transformed.include({stroked.minX, stroked.minY});
+                transformed.include({stroked.maxX, stroked.maxY});
+            }
         }
         if (transformed.hasValue) {
             bounds.include({transformed.minX, transformed.minY});
@@ -661,6 +793,7 @@ std::string SvgConvert::toSvg(const dom::MusxInstance<dom::others::ShapeDef>& sh
             start = current;
             path.clear();
             pathBounds.clear();
+            strokeBounds.clear();
             pathRendered = false;
             pathDirection = {};
             break;
@@ -689,6 +822,7 @@ std::string SvgConvert::toSvg(const dom::MusxInstance<dom::others::ShapeDef>& sh
             start = current;
             path.clear();
             pathBounds.clear();
+            strokeBounds.clear();
             pathRendered = false;
             pathDirection = {};
             break;
@@ -714,6 +848,7 @@ std::string SvgConvert::toSvg(const dom::MusxInstance<dom::others::ShapeDef>& sh
             currentTransform = groupTransform;
             path.clear();
             pathBounds.clear();
+            strokeBounds.clear();
             pathRendered = false;
             pathDirection = {};
             break;
@@ -724,6 +859,7 @@ std::string SvgConvert::toSvg(const dom::MusxInstance<dom::others::ShapeDef>& sh
             start = current;
             path.moveTo(current);
             pathBounds.include(current);
+            strokeBounds.include(current);
             drawCurrent = current;
             hasDrawCurrent = true;
             pathDirection = {};
@@ -737,6 +873,7 @@ std::string SvgConvert::toSvg(const dom::MusxInstance<dom::others::ShapeDef>& sh
             current = start;
             path.moveTo(current);
             pathBounds.include(current);
+            strokeBounds.include(current);
             drawCurrent = current;
             hasDrawCurrent = true;
             pathDirection = {};
@@ -754,6 +891,7 @@ std::string SvgConvert::toSvg(const dom::MusxInstance<dom::others::ShapeDef>& sh
                 start = current;
                 path.moveTo(current);
                 pathBounds.include(current);
+                strokeBounds.include(current);
                 drawCurrent = current;
                 hasDrawCurrent = true;
                 pathDirection = {};
@@ -777,6 +915,7 @@ std::string SvgConvert::toSvg(const dom::MusxInstance<dom::others::ShapeDef>& sh
                 if (path.empty() || !hasDrawCurrent) {
                     path.moveTo(drawStart);
                     pathBounds.include(drawStart);
+                    strokeBounds.include(drawStart);
                     drawCurrent = drawStart;
                     hasDrawCurrent = true;
                 } else {
@@ -784,11 +923,13 @@ std::string SvgConvert::toSvg(const dom::MusxInstance<dom::others::ShapeDef>& sh
                     if (delta > 1e-6) {
                         path.moveTo(drawStart);
                         pathBounds.include(drawStart);
+                        strokeBounds.include(drawStart);
                         drawCurrent = drawStart;
                     }
                 }
                 path.lineTo(drawEnd);
                 pathBounds.include(drawEnd);
+                includeLineStrokeBounds(strokeBounds, drawStart, drawEnd, paint.strokeWidth / 2.0);
                 drawCurrent = drawEnd;
                 pathDirection.hasSubpath = true;
                 if (!pathDirection.hasStartDir) {
@@ -820,11 +961,22 @@ std::string SvgConvert::toSvg(const dom::MusxInstance<dom::others::ShapeDef>& sh
                 if (path.empty()) {
                     path.moveTo(startPoint);
                     pathBounds.include(startPoint);
+                    strokeBounds.include(startPoint);
                 }
                 path.curveTo(c1, c2, current);
-                pathBounds.include(c1);
-                pathBounds.include(c2);
-                pathBounds.include(current);
+                Bounds curveBounds = computeCubicBounds(startPoint, c1, c2, current);
+                pathBounds.include({curveBounds.minX, curveBounds.minY});
+                pathBounds.include({curveBounds.maxX, curveBounds.maxY});
+                {
+                    constexpr int kCurveSamples = 24;
+                    Point prev = startPoint;
+                    for (int i = 1; i <= kCurveSamples; ++i) {
+                        double t = static_cast<double>(i) / static_cast<double>(kCurveSamples);
+                        Point next = evaluateCubic(startPoint, c1, c2, current, t);
+                        includeLineStrokeBounds(strokeBounds, prev, next, paint.strokeWidth / 2.0);
+                        prev = next;
+                    }
+                }
                 drawCurrent = current;
                 hasDrawCurrent = true;
                 pathDirection.hasSubpath = true;
@@ -857,11 +1009,22 @@ std::string SvgConvert::toSvg(const dom::MusxInstance<dom::others::ShapeDef>& sh
                 if (path.empty()) {
                     path.moveTo(startPoint);
                     pathBounds.include(startPoint);
+                    strokeBounds.include(startPoint);
                 }
                 path.curveTo(c1, c2, current);
-                pathBounds.include(c1);
-                pathBounds.include(c2);
-                pathBounds.include(current);
+                Bounds curveBounds = computeCubicBounds(startPoint, c1, c2, current);
+                pathBounds.include({curveBounds.minX, curveBounds.minY});
+                pathBounds.include({curveBounds.maxX, curveBounds.maxY});
+                {
+                    constexpr int kCurveSamples = 24;
+                    Point prev = startPoint;
+                    for (int i = 1; i <= kCurveSamples; ++i) {
+                        double t = static_cast<double>(i) / static_cast<double>(kCurveSamples);
+                        Point next = evaluateCubic(startPoint, c1, c2, current, t);
+                        includeLineStrokeBounds(strokeBounds, prev, next, paint.strokeWidth / 2.0);
+                        prev = next;
+                    }
+                }
                 drawCurrent = current;
                 hasDrawCurrent = true;
                 pathDirection.hasSubpath = true;
@@ -890,6 +1053,13 @@ std::string SvgConvert::toSvg(const dom::MusxInstance<dom::others::ShapeDef>& sh
                 path.lineTo(p3);
                 path.closePath();
                 pathBounds.includeRect(p0, p2);
+                {
+                    Bounds rectBounds;
+                    rectBounds.includeRect(p0, p2);
+                    rectBounds.expand(paint.strokeWidth / 2.0);
+                    strokeBounds.include({rectBounds.minX, rectBounds.minY});
+                    strokeBounds.include({rectBounds.maxX, rectBounds.maxY});
+                }
                 current = p0;
                 start = p0;
                 drawCurrent = p0;
@@ -916,6 +1086,14 @@ std::string SvgConvert::toSvg(const dom::MusxInstance<dom::others::ShapeDef>& sh
                 path.closePath();
                 pathBounds.include({center.x - rx, center.y - ry});
                 pathBounds.include({center.x + rx, center.y + ry});
+                {
+                    Bounds ellipseBounds;
+                    ellipseBounds.include({center.x - rx, center.y - ry});
+                    ellipseBounds.include({center.x + rx, center.y + ry});
+                    ellipseBounds.expand(paint.strokeWidth / 2.0);
+                    strokeBounds.include({ellipseBounds.minX, ellipseBounds.minY});
+                    strokeBounds.include({ellipseBounds.maxX, ellipseBounds.maxY});
+                }
                 current = startPt;
                 start = startPt;
                 drawCurrent = startPt;
@@ -1184,10 +1362,10 @@ std::string SvgConvert::toSvg(const dom::MusxInstance<dom::others::ShapeDef>& sh
 
     std::ostringstream svg;
     if (bounds.hasValue) {
-        double minX = std::floor(bounds.minX);
+        double minX = std::round(bounds.minX);
         double minY = std::floor(bounds.minY);
-        double maxX = std::ceil(bounds.maxX);
-        double maxY = std::ceil(bounds.maxY);
+        double maxX = std::round(bounds.maxX);
+        double maxY = (bounds.maxY < 0.0) ? std::floor(bounds.maxY) : std::ceil(bounds.maxY);
         double width = maxX - minX;
         double height = maxY - minY;
         svg << "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\""
