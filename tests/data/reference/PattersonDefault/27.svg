@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generator: MakeMusic 27.4.1.146 -->
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="21.000" height="19.000" viewBox="1.000 -17.000 21.000 19.000" xml:space="preserve">
+<g id="Music">
+	<ellipse cx="18.000" cy="-2.000" rx="4.000" ry="4.000" stroke="none" fill="rgb(0,0,0)" />
+	<ellipse cx="5.000" cy="-2.000" rx="4.000" ry="4.000" stroke="none" fill="rgb(0,0,0)" />
+	<path stroke="none" fill="rgb(0,0,0)" d="M1.000,-10.000C6.256,-19.344 16.768,-19.344 22.024,-10.000L21.152,-9.510C16.768,-11.344 6.256,-11.344 1.872,-9.510L1.000,-10.000z" />
+</g>
+</svg>

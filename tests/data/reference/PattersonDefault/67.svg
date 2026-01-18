@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generator: MakeMusic 27.4.1.146 -->
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="19.000" height="21.000" viewBox="-10.000 -10.000 19.000 21.000" xml:space="preserve">
+<font horiz-adv-x="1000">
+<!-- Copyright 2003, MakeMusic! Inc. -->
+<font-face font-family="'Jazz'" units-per-em="1000" underline-position="-133.000000" underline-thickness="20.000000">
+<font-face-src><font-face-name name="Jazz"/></font-face-src></font-face>
+<missing-glyph horiz-adv-x="0" />
+<glyph unicode="|" horiz-adv-x="436.000" d="M436,332L435,274C414,242 378,196 326,137C287,93 247,49 208,5C107,80 37,124 -2,136L-2,201L114,339C162,398 196,447 215,485C273,436 308,407 320,398C366,363 405,341 436,332L436,332M362,272C323,292 279,325 229,371C212,344 162,284 78,193L146,146C176,125 198,109 213,98C245,138 295,196 362,272L362,272z" />
+</font>
+<g id="Music">
+	<text font-family="'Jazz'" transform="translate(-10.000,11.000)" font-size="44.000000" fill="rgb(0,0,0)" xml:space="preserve">|</text>
+</g>
+</svg>
