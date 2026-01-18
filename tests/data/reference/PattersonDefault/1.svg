@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generator: MakeMusic 27.4.1.146 -->
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="290.000" height="48.000" viewBox="-145.000 -24.000 290.000 48.000" xml:space="preserve">
+<g id="Music">
+	<path stroke="rgb(0,0,0)" fill="none" d="M-144.000,0.000L144.000,0.000" stroke-width="12.000" />
+	<path stroke="rgb(0,0,0)" fill="none" d="M-144.000,24.000L-144.000,-24.000" stroke-width="1.844" />
+	<path stroke="rgb(0,0,0)" fill="none" d="M144.000,24.000L144.000,-24.000" stroke-width="1.844" />
+</g>
+</svg>
