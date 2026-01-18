@@ -169,7 +169,7 @@ enum class ShapeDefInstructionType
     /// - 0, 1: origin point (x, y)
     /// - 2..5: bounding rect (left, top, right, bottom)
     /// - 6, 7: x and y transform (scale ratio * 1000)
-    /// - 8:    rotation transform
+    /// - 8:    rotation transform (binary angle, 2^32 units per full circle)
     /// - 9,10: unused/undocumented
     StartObject,
 
@@ -307,7 +307,7 @@ struct ShapeDefInstruction
         Evpu bottom{};   ///< Bottom of the bounding rectangle.
         int  scaleX{};   ///< X scale transform (scale ratio * 1000).
         int  scaleY{};   ///< Y scale transform (scale ratio * 1000).
-        int  rotation{}; ///< Rotation transform.
+        int  rotation{}; ///< Rotation transform (binary angle, 2^32 units per full circle).
         int  unused9{};  ///< Undocumented/unused field at index 9.
         int  unused10{}; ///< Undocumented/unused field at index 10.
     };
@@ -323,7 +323,7 @@ struct ShapeDefInstruction
         Evpu bottom{};   ///< Bottom of the bounding rectangle.
         int  scaleX{};   ///< X scale transform (scale ratio * 1000).
         int  scaleY{};   ///< Y scale transform (scale ratio * 1000).
-        int  rotation{}; ///< Rotation transform.
+        int  rotation{}; ///< Rotation transform (binary angle, 2^32 units per full circle).
         int  unused9{};  ///< Undocumented/unused field at index 9.
         int  unused10{}; ///< Undocumented/unused field at index 10.
     };
