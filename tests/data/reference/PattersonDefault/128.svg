@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generator: MakeMusic 27.4.1.146 -->
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="680.000" height="361.000" viewBox="-326.000 -198.000 680.000 361.000" xml:space="preserve">
+<g id="Music">
+	<ellipse cx="-193.000" cy="-145.000" rx="133.000" ry="53.000" stroke="rgb(0,0,0)" fill="none" stroke-width="8.000" />
+	<path stroke="rgb(0,0,0)" fill="none" d="M2.000,2.000C49.574,-69.080 168.227,-92.587 239.308,-45.014" stroke-width="8.000" />
+	<path stroke="none" fill="rgb(0,0,0)" d="M-174.000,110.000C-174.000,110.000 -174.000,110.000 -174.000,110.000L-174.000,109.000C-174.000,118.000 -174.000,118.000 -174.000,111.000L-174.000,110.000z" />
+	<path stroke="none" fill="rgb(0,0,0)" d="M-174.000,110.000C-89.472,180.440 79.584,180.440 164.112,110.000L163.472,109.232C79.584,172.440 -89.472,172.440 -173.360,109.232L-174.000,110.000z" />
+	<path stroke="rgb(0,0,0)" fill="none" d="M-186.000,-26.000L-70.000,44.000L-58.000,-4.000L-76.000,-42.000L-110.000,-54.000L-186.000,-26.000z" stroke-width="8.000" />
+	<rect x="212.000" y="18.000" width="142.000" height="82.000" stroke="rgb(0,0,0)" fill="none" stroke-width="8.000" />
+</g>
+</svg>

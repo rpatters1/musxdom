@@ -61,7 +61,7 @@
       <modified>
         <year>2026</year>
         <month>1</month>
-        <day>18</day>
+        <day>19</day>
         <modifiedBy/>
         <enigmaVersion>
           <major>27</major>
@@ -587,8 +587,8 @@
     <miscOptions>
       <retainOctaveTransInConcertPitch/>
       <combineRestsAcrossLayers/>
-      <sdDashOn>18</sdDashOn>
-      <sdDashOff>18</sdDashOff>
+      <sdDashOn>24</sdDashOn>
+      <sdDashOff>12</sdDashOff>
       <drawMeasureNumbersOverBarlines/>
     </miscOptions>
     <multimeasureRestOptions>
@@ -13259,34 +13259,6 @@
       <family>0</family>
       <name>Symbol</name>
     </fontName>
-    <fontName cmper="30">
-      <charsetBank>Mac</charsetBank>
-      <charsetVal>0</charsetVal>
-      <pitch>0</pitch>
-      <family>0</family>
-      <name>Arial Bold</name>
-    </fontName>
-    <fontName cmper="31">
-      <charsetBank>Mac</charsetBank>
-      <charsetVal>0</charsetVal>
-      <pitch>0</pitch>
-      <family>0</family>
-      <name>Helvetica Bold</name>
-    </fontName>
-    <fontName cmper="32">
-      <charsetBank>Mac</charsetBank>
-      <charsetVal>0</charsetVal>
-      <pitch>0</pitch>
-      <family>0</family>
-      <name>Times Roman</name>
-    </fontName>
-    <fontName cmper="33">
-      <charsetBank>Mac</charsetBank>
-      <charsetVal>0</charsetVal>
-      <pitch>0</pitch>
-      <family>0</family>
-      <name>Times Bold Italic</name>
-    </fontName>
     <frameSpec cmper="1" inci="0">
       <startEntry>1</startEntry>
       <endEntry>4</endEntry>
@@ -18861,6 +18833,125 @@
       <data>0</data>
       <data>0</data>
       <data>21</data>
+    </shapeData>
+    <shapeData cmper="21">
+      <data>-326</data>
+      <data>198</data>
+      <data>-330</data>
+      <data>202</data>
+      <data>-56</data>
+      <data>88</data>
+      <data>924</data>
+      <data>-368</data>
+      <data>0</data>
+      <data>0</data>
+      <data>0</data>
+      <data>512</data>
+      <data>24</data>
+      <data>12</data>
+      <data>288</data>
+      <data>288</data>
+      <data>2</data>
+      <data>-2</data>
+      <data>-1</data>
+      <data>74</data>
+      <data>242</data>
+      <data>-4</data>
+      <data>840</data>
+      <data>840</data>
+      <data>199</data>
+      <data>0</data>
+      <data>0</data>
+      <data>0</data>
+      <data>0</data>
+      <data>512</data>
+      <data>24</data>
+      <data>12</data>
+      <data>72</data>
+      <data>72</data>
+      <data>144</data>
+      <data>0</data>
+      <data>72</data>
+      <data>-72</data>
+      <data>-174</data>
+      <data>-110</data>
+      <data>-174</data>
+      <data>-109</data>
+      <data>-174</data>
+      <data>-116</data>
+      <data>0</data>
+      <data>0</data>
+      <data>0</data>
+      <data>0</data>
+      <data>0</data>
+      <data>0</data>
+      <data>0</data>
+      <data>72</data>
+      <data>72</data>
+      <data>144</data>
+      <data>0</data>
+      <data>72</data>
+      <data>-72</data>
+      <data>-174</data>
+      <data>-110</data>
+      <data>-174</data>
+      <data>-109</data>
+      <data>164</data>
+      <data>-163</data>
+      <data>1174</data>
+      <data>1174</data>
+      <data>0</data>
+      <data>0</data>
+      <data>0</data>
+      <data>0</data>
+      <data>0</data>
+      <data>72</data>
+      <data>-60</data>
+      <data>144</data>
+      <data>0</data>
+      <data>72</data>
+      <data>60</data>
+      <data>-186</data>
+      <data>26</data>
+      <data>-195</data>
+      <data>58</data>
+      <data>-54</data>
+      <data>-50</data>
+      <data>1000</data>
+      <data>1000</data>
+      <data>0</data>
+      <data>0</data>
+      <data>0</data>
+      <data>0</data>
+      <data>0</data>
+      <data>512</data>
+      <data>24</data>
+      <data>12</data>
+      <data>116</data>
+      <data>-70</data>
+      <data>12</data>
+      <data>48</data>
+      <data>-18</data>
+      <data>38</data>
+      <data>-34</data>
+      <data>12</data>
+      <data>212</data>
+      <data>-18</data>
+      <data>208</data>
+      <data>-14</data>
+      <data>358</data>
+      <data>-104</data>
+      <data>493</data>
+      <data>-285</data>
+      <data>0</data>
+      <data>0</data>
+      <data>0</data>
+      <data>512</data>
+      <data>24</data>
+      <data>12</data>
+      <data>288</data>
+      <data>288</data>
+      <data>12</data>
     </shapeData>
     <shapeData cmper="22">
       <data>1</data>
@@ -28039,6 +28130,11 @@
       <dataList>19</dataList>
       <shapeType>expression</shapeType>
     </shapeDef>
+    <shapeDef cmper="128">
+      <instList>21</instList>
+      <dataList>21</dataList>
+      <shapeType>expression</shapeType>
+    </shapeDef>
     <shapeList cmper="1">
       <instruct>
         <numData>11</numData>
@@ -29325,6 +29421,137 @@
       </instruct>
       <instruct>
         <tag>endGroup</tag>
+      </instruct>
+    </shapeList>
+    <shapeList cmper="21">
+      <instruct>
+        <numData>11</numData>
+        <tag>startObject</tag>
+      </instruct>
+      <instruct>
+        <numData>1</numData>
+        <tag>lineWidth</tag>
+      </instruct>
+      <instruct>
+        <numData>2</numData>
+        <tag>setDash</tag>
+      </instruct>
+      <instruct>
+        <numData>2</numData>
+        <tag>ellipse</tag>
+      </instruct>
+      <instruct>
+        <tag>stroke</tag>
+      </instruct>
+      <instruct>
+        <numData>11</numData>
+        <tag>startObject</tag>
+      </instruct>
+      <instruct>
+        <numData>2</numData>
+        <tag>rMoveTo</tag>
+      </instruct>
+      <instruct>
+        <numData>1</numData>
+        <tag>lineWidth</tag>
+      </instruct>
+      <instruct>
+        <numData>2</numData>
+        <tag>setDash</tag>
+      </instruct>
+      <instruct>
+        <numData>6</numData>
+        <tag>curveTo</tag>
+      </instruct>
+      <instruct>
+        <tag>stroke</tag>
+      </instruct>
+      <instruct>
+        <numData>11</numData>
+        <tag>startObject</tag>
+      </instruct>
+      <instruct>
+        <numData>2</numData>
+        <tag>rMoveTo</tag>
+      </instruct>
+      <instruct>
+        <numData>6</numData>
+        <tag>slur</tag>
+      </instruct>
+      <instruct>
+        <tag>fillSolid</tag>
+      </instruct>
+      <instruct>
+        <numData>11</numData>
+        <tag>startObject</tag>
+      </instruct>
+      <instruct>
+        <numData>2</numData>
+        <tag>rMoveTo</tag>
+      </instruct>
+      <instruct>
+        <numData>6</numData>
+        <tag>slur</tag>
+      </instruct>
+      <instruct>
+        <tag>fillSolid</tag>
+      </instruct>
+      <instruct>
+        <numData>11</numData>
+        <tag>startObject</tag>
+      </instruct>
+      <instruct>
+        <numData>2</numData>
+        <tag>rMoveTo</tag>
+      </instruct>
+      <instruct>
+        <numData>1</numData>
+        <tag>lineWidth</tag>
+      </instruct>
+      <instruct>
+        <numData>2</numData>
+        <tag>setDash</tag>
+      </instruct>
+      <instruct>
+        <numData>2</numData>
+        <tag>rLineTo</tag>
+      </instruct>
+      <instruct>
+        <numData>2</numData>
+        <tag>rLineTo</tag>
+      </instruct>
+      <instruct>
+        <numData>2</numData>
+        <tag>rLineTo</tag>
+      </instruct>
+      <instruct>
+        <numData>2</numData>
+        <tag>rLineTo</tag>
+      </instruct>
+      <instruct>
+        <tag>closePath</tag>
+      </instruct>
+      <instruct>
+        <tag>stroke</tag>
+      </instruct>
+      <instruct>
+        <numData>11</numData>
+        <tag>startObject</tag>
+      </instruct>
+      <instruct>
+        <numData>1</numData>
+        <tag>lineWidth</tag>
+      </instruct>
+      <instruct>
+        <numData>2</numData>
+        <tag>setDash</tag>
+      </instruct>
+      <instruct>
+        <numData>2</numData>
+        <tag>rectangle</tag>
+      </instruct>
+      <instruct>
+        <tag>stroke</tag>
       </instruct>
     </shapeList>
     <shapeList cmper="22">
