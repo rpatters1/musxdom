@@ -61,7 +61,7 @@
       <modified>
         <year>2026</year>
         <month>1</month>
-        <day>17</day>
+        <day>18</day>
         <modifiedBy/>
         <enigmaVersion>
           <major>27</major>
@@ -13259,6 +13259,34 @@
       <family>0</family>
       <name>Symbol</name>
     </fontName>
+    <fontName cmper="30">
+      <charsetBank>Mac</charsetBank>
+      <charsetVal>0</charsetVal>
+      <pitch>0</pitch>
+      <family>0</family>
+      <name>Arial Bold</name>
+    </fontName>
+    <fontName cmper="31">
+      <charsetBank>Mac</charsetBank>
+      <charsetVal>0</charsetVal>
+      <pitch>0</pitch>
+      <family>0</family>
+      <name>Helvetica Bold</name>
+    </fontName>
+    <fontName cmper="32">
+      <charsetBank>Mac</charsetBank>
+      <charsetVal>0</charsetVal>
+      <pitch>0</pitch>
+      <family>0</family>
+      <name>Times Roman</name>
+    </fontName>
+    <fontName cmper="33">
+      <charsetBank>Mac</charsetBank>
+      <charsetVal>0</charsetVal>
+      <pitch>0</pitch>
+      <family>0</family>
+      <name>Times Bold Italic</name>
+    </fontName>
     <frameSpec cmper="1" inci="0">
       <startEntry>1</startEntry>
       <endEntry>4</endEntry>
@@ -18688,6 +18716,104 @@
       <data>21</data>
       <data>0</data>
       <data>0</data>
+    </shapeData>
+    <shapeData cmper="19">
+      <data>0</data>
+      <data>0</data>
+      <data>0</data>
+      <data>21</data>
+      <data>32</data>
+      <data>-13</data>
+      <data>1000</data>
+      <data>1000</data>
+      <data>0</data>
+      <data>0</data>
+      <data>0</data>
+      <data>1</data>
+      <data>1</data>
+      <data>0</data>
+      <data>21</data>
+      <data>22</data>
+      <data>0</data>
+      <data>1000</data>
+      <data>1000</data>
+      <data>0</data>
+      <data>0</data>
+      <data>0</data>
+      <data>0</data>
+      <data>0</data>
+      <data>256</data>
+      <data>18</data>
+      <data>0</data>
+      <data>20</data>
+      <data>19</data>
+      <data>10</data>
+      <data>-12</data>
+      <data>9</data>
+      <data>9</data>
+      <data>32</data>
+      <data>-13</data>
+      <data>1000</data>
+      <data>1000</data>
+      <data>0</data>
+      <data>0</data>
+      <data>0</data>
+      <data>0</data>
+      <data>0</data>
+      <data>256</data>
+      <data>18</data>
+      <data>0</data>
+      <data>21</data>
+      <data>20</data>
+      <data>0</data>
+      <data>0</data>
+      <data>-68</data>
+      <data>39</data>
+      <data>-31</data>
+      <data>-54</data>
+      <data>1000</data>
+      <data>1000</data>
+      <data>0</data>
+      <data>0</data>
+      <data>0</data>
+      <data>-52</data>
+      <data>39</data>
+      <data>-68</data>
+      <data>39</data>
+      <data>-50</data>
+      <data>-54</data>
+      <data>1000</data>
+      <data>1000</data>
+      <data>0</data>
+      <data>0</data>
+      <data>0</data>
+      <data>0</data>
+      <data>0</data>
+      <data>256</data>
+      <data>18</data>
+      <data>18</data>
+      <data>-14</data>
+      <data>-93</data>
+      <data>-33</data>
+      <data>34</data>
+      <data>-47</data>
+      <data>34</data>
+      <data>-31</data>
+      <data>-50</data>
+      <data>1000</data>
+      <data>1000</data>
+      <data>0</data>
+      <data>0</data>
+      <data>0</data>
+      <data>0</data>
+      <data>0</data>
+      <data>256</data>
+      <data>18</data>
+      <data>18</data>
+      <data>-12</data>
+      <data>-84</data>
+      <data>18</data>
+      <data>-12</data>
     </shapeData>
     <shapeData cmper="20">
       <data>0</data>
@@ -27908,6 +28034,11 @@
       <dataList>17</dataList>
       <shapeType>expression</shapeType>
     </shapeDef>
+    <shapeDef cmper="127">
+      <instList>19</instList>
+      <dataList>19</dataList>
+      <shapeType>expression</shapeType>
+    </shapeDef>
     <shapeList cmper="1">
       <instruct>
         <numData>11</numData>
@@ -29035,6 +29166,114 @@
       </instruct>
       <instruct>
         <tag>stroke</tag>
+      </instruct>
+    </shapeList>
+    <shapeList cmper="19">
+      <instruct>
+        <numData>11</numData>
+        <tag>startGroup</tag>
+      </instruct>
+      <instruct>
+        <numData>11</numData>
+        <tag>startObject</tag>
+      </instruct>
+      <instruct>
+        <numData>2</numData>
+        <tag>rMoveTo</tag>
+      </instruct>
+      <instruct>
+        <numData>1</numData>
+        <tag>lineWidth</tag>
+      </instruct>
+      <instruct>
+        <numData>2</numData>
+        <tag>setDash</tag>
+      </instruct>
+      <instruct>
+        <numData>2</numData>
+        <tag>rLineTo</tag>
+      </instruct>
+      <instruct>
+        <tag>stroke</tag>
+      </instruct>
+      <instruct>
+        <numData>11</numData>
+        <tag>startObject</tag>
+      </instruct>
+      <instruct>
+        <numData>2</numData>
+        <tag>rMoveTo</tag>
+      </instruct>
+      <instruct>
+        <numData>1</numData>
+        <tag>lineWidth</tag>
+      </instruct>
+      <instruct>
+        <numData>2</numData>
+        <tag>setDash</tag>
+      </instruct>
+      <instruct>
+        <numData>2</numData>
+        <tag>rLineTo</tag>
+      </instruct>
+      <instruct>
+        <tag>stroke</tag>
+      </instruct>
+      <instruct>
+        <tag>endGroup</tag>
+      </instruct>
+      <instruct>
+        <numData>11</numData>
+        <tag>startGroup</tag>
+      </instruct>
+      <instruct>
+        <numData>11</numData>
+        <tag>startObject</tag>
+      </instruct>
+      <instruct>
+        <numData>2</numData>
+        <tag>rMoveTo</tag>
+      </instruct>
+      <instruct>
+        <numData>1</numData>
+        <tag>lineWidth</tag>
+      </instruct>
+      <instruct>
+        <numData>2</numData>
+        <tag>setDash</tag>
+      </instruct>
+      <instruct>
+        <numData>2</numData>
+        <tag>rLineTo</tag>
+      </instruct>
+      <instruct>
+        <tag>stroke</tag>
+      </instruct>
+      <instruct>
+        <numData>11</numData>
+        <tag>startObject</tag>
+      </instruct>
+      <instruct>
+        <numData>2</numData>
+        <tag>rMoveTo</tag>
+      </instruct>
+      <instruct>
+        <numData>1</numData>
+        <tag>lineWidth</tag>
+      </instruct>
+      <instruct>
+        <numData>2</numData>
+        <tag>setDash</tag>
+      </instruct>
+      <instruct>
+        <numData>2</numData>
+        <tag>rLineTo</tag>
+      </instruct>
+      <instruct>
+        <tag>stroke</tag>
+      </instruct>
+      <instruct>
+        <tag>endGroup</tag>
       </instruct>
     </shapeList>
     <shapeList cmper="20">

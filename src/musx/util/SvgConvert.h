@@ -63,24 +63,34 @@ public:
         dom::Cmper cmper{}; ///< Cmper matching #dom::others::PageGraphicAssign::graphicCmper.
     };
 
-    /// @brief Convert a ShapeDef into an SVG string buffer.
-    /// @param glyphAdvance Optional callback that returns the glyph advance in EVPU units.
+    /// @brief Metrics for sizing SVG text bounds.
+    struct GlyphMetrics
+    {
+        /// @brief The advance width of the text in EVPU units.
+        double advance{};
+        /// @brief The ascent above the baseline in EVPU units.
+        double ascent{};
+        /// @brief The descent below the baseline in EVPU units (positive value).
+        double descent{};
+    };
+
+    /// @brief Optional callback that returns glyph metrics in EVPU units.
     /// @note The callback receives the resolved font and the glyph(s) to measure.
-    /// @note If an external graphic is encountered and cannot be resolved, this returns an empty string.
-    using GlyphAdvanceFn = std::function<double(const dom::FontInfo&, std::u32string_view)>;
+    /// @note Return std::nullopt to fall back to heuristic metrics.
+    using GlyphMetricsFn = std::function<std::optional<GlyphMetrics>(const dom::FontInfo&, std::u32string_view)>;
 
     /// @brief Optional callback that resolves external graphics to a MIME type and byte buffer.
     using ExternalGraphicFn = std::function<std::optional<ExternalGraphicPayload>(const ExternalGraphicInfo&)>;
 
     /// @brief Convert a ShapeDef into an SVG string buffer.
     /// @param shape The shape definition to convert.
-    /// @param glyphAdvance Optional callback that returns the glyph advance in EVPU units.
+    /// @param glyphMetrics Optional callback that returns glyph metrics in EVPU units.
     /// @param externalGraphicResolver Optional callback that resolves external graphics to bytes and MIME types.
     /// @return An SVG buffer encoded as a string.
     /// @note The glyph callback receives the resolved font and the glyph(s) to measure.
     /// @note If an external graphic is encountered and cannot be resolved, this returns an empty string.
     static std::string toSvg(const dom::MusxInstance<dom::others::ShapeDef>& shape,
-                             GlyphAdvanceFn glyphAdvance = nullptr,
+                             GlyphMetricsFn glyphMetrics = nullptr,
                              ExternalGraphicFn externalGraphicResolver = nullptr);
 };
 
