@@ -21,9 +21,10 @@
  */
 #include <algorithm>
 #include <filesystem>
+#include <fstream>
+#include <optional>
 #include <regex>
 #include <sstream>
-#include <fstream>
 #include <string>
 #include <vector>
 
@@ -48,6 +49,13 @@ struct PathInfo
     double scaleX{1.0};
     double scaleY{1.0};
     bool valid{};
+};
+
+struct TextInfo
+{
+    double x{};
+    double y{};
+    std::string text;
 };
 
 std::string readFileText(const std::filesystem::path& path)
@@ -117,6 +125,21 @@ std::vector<PathInfo> parsePathInfo(const std::string& svg)
         paths.push_back(info);
     }
     return paths;
+}
+
+std::vector<TextInfo> parseTextInfo(const std::string& svg)
+{
+    std::vector<TextInfo> texts;
+    std::regex textRegex("<text[^>]*transform=\\\"translate\\(([^,]+),([^\\)]+)\\)\\\"[^>]*>([\\s\\S]*?)</text>");
+
+    for (std::sregex_iterator it(svg.begin(), svg.end(), textRegex), end; it != end; ++it) {
+        TextInfo info;
+        info.x = std::stod((*it)[1].str());
+        info.y = std::stod((*it)[2].str());
+        info.text = (*it)[3].str();
+        texts.push_back(info);
+    }
+    return texts;
 }
 
 bool containsAny(const std::string& svg, const std::vector<std::string>& needles)
@@ -251,6 +274,182 @@ TEST(SvgConvertTest, PattersonDefaultMatchesReferenceViewBox)
         std::filesystem::remove_all(svgOut, ec);
         ASSERT_FALSE(ec) << "Failed to remove directory: " << svgOut;
         ASSERT_FALSE(std::filesystem::exists(svgOut));
+    }
+}
+
+TEST(SvgConvertTest, PattersonDefaultTextMetricsMatchesReference7)
+{
+    const auto inputRoot = getInputPath() / "reference";
+    const auto xmlPath = inputRoot / "PattersonDefault.enigmaxml";
+    std::vector<char> enigmaXml;
+    readFile(xmlPath, enigmaXml);
+
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(enigmaXml);
+    ASSERT_TRUE(doc);
+
+    const auto svgRoot = inputRoot / "PattersonDefault";
+
+    auto metrics = [](const musx::dom::FontInfo& font,
+                      std::u32string_view text) -> std::optional<musx::util::SvgConvert::GlyphMetrics> {
+        if (text.empty()) {
+            return std::nullopt;
+        }
+        std::string name;
+        try {
+            name = font.getName();
+        } catch (...) {
+            name.clear();
+        }
+        bool isTimesNewRoman = name.find("Times New Roman") != std::string::npos;
+        bool isHelvetica = name.find("Helvetica") != std::string::npos;
+        bool isArial = name.find("Arial") != std::string::npos;
+        bool isTimes = !isTimesNewRoman && name.find("Times") != std::string::npos;
+        EXPECT_TRUE(isHelvetica || isArial || isTimes || isTimesNewRoman) << "Unexpected font: " << name;
+        if (isHelvetica || isTimes) {
+            EXPECT_TRUE(font.fontSize == 12) << "Unexpected font size: " << font.fontSize;
+        } else if (isArial || isTimesNewRoman) {
+            EXPECT_TRUE(font.fontSize == 9) << "Unexpected font size: " << font.fontSize;
+        }
+        if (isHelvetica || isArial) {
+            EXPECT_TRUE(font.bold) << "Expected bold font";
+            EXPECT_FALSE(font.italic) << "Expected non-italic font";
+        }
+        if (isTimes || isTimesNewRoman) {
+            EXPECT_FALSE(font.bold) << "Expected non-bold font";
+            EXPECT_FALSE(font.italic) << "Expected non-italic font";
+        }
+        if (isHelvetica) {
+            EXPECT_TRUE(font.bold) << "Expected Helvetica bold";
+            EXPECT_FALSE(font.italic) << "Expected Helvetica non-italic";
+        }
+        musx::util::SvgConvert::GlyphMetrics result;
+
+        char32_t codePoint = text.front();
+        if (isHelvetica) {
+            switch (codePoint) {
+            case U'F': result.advance = 29.3203125; break;
+            case U'O': result.advance = 37.3359375; break;
+            case U'R': result.advance = 34.6640625; break;
+            case U'T': result.advance = 29.3203125; break;
+            case U'A': result.advance = 34.6640625; break;
+            case U'B': result.advance = 34.6640625; break;
+            default:
+                ADD_FAILURE() << "Unexpected Helvetica glyph: " << static_cast<std::uint32_t>(codePoint);
+                result.advance = 0.0;
+                break;
+            }
+            result.ascent = 37.0;
+            result.descent = 11.0;
+        } else if (isArial) {
+            switch (codePoint) {
+            case U'T': result.advance = 21.990234375; break;
+            case U'A': result.advance = 25.998046875; break;
+            case U'B': result.advance = 25.998046875; break;
+            default:
+                ADD_FAILURE() << "Unexpected Arial glyph: " << static_cast<std::uint32_t>(codePoint);
+                result.advance = 0.0;
+                break;
+            }
+            result.ascent = 26.140625;
+            result.descent = 0.125;
+        } else if (isTimes) {
+            if (codePoint == U' ') {
+                result.advance = 12.0;
+                result.ascent = 36.0;
+                result.descent = 12.0;
+            } else {
+                ADD_FAILURE() << "Unexpected Times glyph: " << static_cast<std::uint32_t>(codePoint);
+                result.advance = 0.0;
+                result.ascent = 0.0;
+                result.descent = 0.0;
+            }
+        } else if (isTimesNewRoman) {
+            switch (codePoint) {
+            case U'T':
+                result.advance = 21.990234375;
+                result.ascent = 23.765625;
+                result.descent = 0.125;
+                break;
+            case U'A':
+                result.advance = 25.998046875;
+                result.ascent = 24.3125;
+                result.descent = 0.125;
+                break;
+            case U'B':
+                result.advance = 24.01171875;
+                result.ascent = 23.765625;
+                result.descent = 0.125;
+                break;
+            default:
+                ADD_FAILURE() << "Unexpected Times New Roman glyph: " << static_cast<std::uint32_t>(codePoint);
+                result.advance = 0.0;
+                result.ascent = 0.0;
+                result.descent = 0.0;
+                break;
+            }
+        } else {
+            ADD_FAILURE() << "Unexpected font family for glyph: " << static_cast<std::uint32_t>(codePoint);
+            result.advance = 0.0;
+            result.ascent = 0.0;
+            result.descent = 0.0;
+        }
+        return result;
+    };
+
+    const auto svgOut = getOutputPath() / "PattersonDefault";
+    std::error_code ec;
+    std::filesystem::create_directories(svgOut, ec);
+    ASSERT_FALSE(ec) << "Failed to create output directory: " << svgOut;
+
+    const std::vector<int> textShapeIds{2, 3, 7};
+    std::vector<std::filesystem::path> outputs;
+    constexpr double kTextTolerance = 0.05;
+    constexpr double kViewBoxTolerance = 0.25;
+
+    for (int shapeId : textShapeIds) {
+        auto shape = doc->getOthers()->get<musx::dom::others::ShapeDef>(musx::dom::SCORE_PARTID, shapeId);
+        ASSERT_TRUE(shape);
+        const auto refPath = svgRoot / (std::to_string(shapeId) + ".svg");
+        const std::string referenceSvg = readFileText(refPath);
+        ASSERT_FALSE(referenceSvg.empty());
+
+        const std::string ourSvg = musx::util::SvgConvert::toSvg(shape, metrics);
+        ASSERT_FALSE(ourSvg.empty());
+
+        const auto outPath = svgOut / (std::to_string(shapeId) + "_text.svg");
+        std::ofstream out(outPath, std::ios::binary);
+        ASSERT_TRUE(out.is_open()) << "Failed to open file for writing: " << outPath;
+        out << ourSvg;
+        out.close();
+        outputs.push_back(outPath);
+
+        const auto refTexts = parseTextInfo(referenceSvg);
+        const auto ourTexts = parseTextInfo(ourSvg);
+        ASSERT_EQ(refTexts.size(), ourTexts.size()) << "Text count mismatch for ShapeDef " << shapeId;
+        for (size_t i = 0; i < refTexts.size(); ++i) {
+            EXPECT_NEAR(refTexts[i].x, ourTexts[i].x, kTextTolerance)
+                << "text x mismatch for ShapeDef " << shapeId << " index " << i;
+            EXPECT_NEAR(refTexts[i].y, ourTexts[i].y, kTextTolerance)
+                << "text y mismatch for ShapeDef " << shapeId << " index " << i;
+        }
+
+        ViewBox refBox = parseViewBox(referenceSvg);
+        ViewBox ourBox = parseViewBox(ourSvg);
+        ASSERT_TRUE(refBox.valid);
+        ASSERT_TRUE(ourBox.valid);
+        EXPECT_TRUE(viewBoxEncloses(ourBox, refBox, kViewBoxTolerance))
+            << "viewBox mismatch for ShapeDef " << shapeId
+            << " ours=(" << ourBox.minX << ", " << ourBox.minY << ", "
+            << ourBox.width << ", " << ourBox.height << ")"
+            << " ref=(" << refBox.minX << ", " << refBox.minY << ", "
+            << refBox.width << ", " << refBox.height << ")";
+    }
+
+    if (std::getenv("MUSX_KEEP_SVG_OUTPUT") == nullptr) {
+        for (const auto& outPath : outputs) {
+            std::filesystem::remove(outPath, ec);
+            ASSERT_FALSE(ec) << "Failed to remove file: " << outPath;
+        }
     }
 }
 
