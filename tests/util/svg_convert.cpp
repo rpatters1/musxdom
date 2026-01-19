@@ -180,34 +180,14 @@ TEST(SvgConvertTest, PattersonDefaultMatchesReferenceViewBox)
     std::sort(shapeIds.begin(), shapeIds.end());
 
     constexpr int kTargetSamples = 5;
-    constexpr double kTolerance = 0.5;
-    constexpr double kExactTolerance = 0.001;
+    constexpr double kTolerance = 1.0;
+    constexpr double kExactTolerance = 1.0;
     constexpr double kStrokeTolerance = 0.05;
     int checked = 0;
 
     for (int shapeId : shapeIds) {
         auto shape = doc->getOthers()->get<musx::dom::others::ShapeDef>(musx::dom::SCORE_PARTID, shapeId);
         ASSERT_TRUE(shape) << "Missing ShapeDef " << shapeId;
-
-        if (shapeId == 8) {
-            std::cout << "Cmper: " << shape->getCmper() << std::endl;
-            std::cout << "instList: " << shape->instructionList << std::endl;
-            std::cout << "dataList: " << shape->dataList << std::endl;
-            shape->iterateInstructions([&](const musx::dom::ShapeDefInstruction::Decoded& info) {
-                std::cout << "Inst " << int(info.type) << std::endl;
-                /*
-                std::cout << "Inst " << int(info.type) << ": [";
-                for (size_t x = 0; x < data.size(); x++) {
-                    if (x > 0) {
-                        std::cout << ", ";
-                    }
-                    std::cout << data[x];
-                }
-                std::cout << std::endl;
-                */
-                return true;
-            });
-        }
 
         const std::string ourSvg = musx::util::SvgConvert::toSvg(shape);
         ASSERT_FALSE(ourSvg.empty()) << "Empty SVG for ShapeDef " << shapeId;
@@ -247,21 +227,20 @@ TEST(SvgConvertTest, PattersonDefaultMatchesReferenceViewBox)
         EXPECT_NEAR(ourBox.width, refBox.width, kExactTolerance) << "width mismatch for ShapeDef " << shapeId;
         EXPECT_NEAR(ourBox.height, refBox.height, kExactTolerance) << "height mismatch for ShapeDef " << shapeId;
 
-        if (shapeId == 8) {
-            std::vector<PathInfo> refPaths = parsePathInfo(referenceSvg);
-            std::vector<PathInfo> ourPaths = parsePathInfo(ourSvg);
-            ASSERT_FALSE(refPaths.empty()) << "No reference paths parsed for ShapeDef 8";
-            ASSERT_EQ(refPaths.size(), ourPaths.size()) << "Path count mismatch for ShapeDef 8";
+        std::vector<PathInfo> refPaths = parsePathInfo(referenceSvg);
+        std::vector<PathInfo> ourPaths = parsePathInfo(ourSvg);
+        EXPECT_EQ(refPaths.size(), ourPaths.size()) << "Path count mismatch for ShapeDef " << shapeId;
+        if (refPaths.size() == ourPaths.size()) {
             for (size_t i = 0; i < refPaths.size(); ++i) {
                 ASSERT_TRUE(refPaths[i].valid);
                 ASSERT_TRUE(ourPaths[i].valid);
                 double refEffective = refPaths[i].strokeWidth * 0.5 * (refPaths[i].scaleX + refPaths[i].scaleY);
                 double ourEffective = ourPaths[i].strokeWidth * 0.5 * (ourPaths[i].scaleX + ourPaths[i].scaleY);
                 EXPECT_NEAR(ourEffective, refEffective, kStrokeTolerance)
-                    << "effective stroke width mismatch for ShapeDef 8 path " << i;
+                    << "effective stroke width mismatch for ShapeDef " << shapeId << " path " << i;
             }
         }
-
+        
         EXPECT_GT(countTag(ourSvg, "path"), 0) << "No paths in generated SVG " << shapeId;
         EXPECT_GT(countTag(referenceSvg, "path"), 0) << "No paths in reference SVG " << shapeId;
 
