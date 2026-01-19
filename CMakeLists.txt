@@ -58,6 +58,7 @@ set(MUSX_SRC_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/src/musx/factory/FieldPopulatorsOthers.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/musx/util/EnigmaString.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/musx/util/PseudoTieUtils.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/musx/util/ShapeRecognize.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/musx/util/TestSupport.cpp
 )
 
