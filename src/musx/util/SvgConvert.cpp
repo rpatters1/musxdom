@@ -621,7 +621,7 @@ std::string SvgConvert::toSvg(const dom::MusxInstance<dom::others::ShapeDef>& sh
         return {};
     }
     const int debugShapeId = shape->getCmper();
-    const bool debugShape = (debugShapeId == 9 || debugShapeId == 113);
+    const bool debugShape = (debugShapeId == 9 || debugShapeId == 113 || debugShapeId == 128);
 
     std::vector<std::string> elements;
     Bounds bounds;
@@ -801,7 +801,7 @@ std::string SvgConvert::toSvg(const dom::MusxInstance<dom::others::ShapeDef>& sh
                 };
                 double sx = (data->scaleX == 0) ? 1.0 : (static_cast<double>(data->scaleX) / 1000.0);
                 double sy = (data->scaleY == 0) ? 1.0 : (static_cast<double>(data->scaleY) / 1000.0);
-                double radians = decodeRotationRadians(data->rotation);
+                double radians = -decodeRotationRadians(data->rotation);
                 currentRotationRadians = radians;
                 Point translate{toEvpuDouble(data->originX), toEvpuDouble(data->originY)};
                 if (debugShape) {
@@ -865,7 +865,7 @@ std::string SvgConvert::toSvg(const dom::MusxInstance<dom::others::ShapeDef>& sh
                 origin = {};
                 double sx = (data->scaleX == 0) ? 1.0 : (static_cast<double>(data->scaleX) / 1000.0);
                 double sy = (data->scaleY == 0) ? 1.0 : (static_cast<double>(data->scaleY) / 1000.0);
-                double radians = decodeRotationRadians(data->rotation);
+                double radians = -decodeRotationRadians(data->rotation);
                 Point translate{toEvpuDouble(data->originX), toEvpuDouble(data->originY)};
                 if (debugShape) {
                     std::cout << "[Shape " << debugShapeId << "] StartGroup origin=(" << data->originX << "," << data->originY
@@ -1265,6 +1265,12 @@ std::string SvgConvert::toSvg(const dom::MusxInstance<dom::others::ShapeDef>& sh
                 Point worldCenter = toWorld(center);
                 double worldRx = rx * std::hypot(currentTransform.a, currentTransform.b);
                 double worldRy = ry * std::hypot(currentTransform.c, currentTransform.d);
+                if (debugShape) {
+                    std::cout << "[Shape " << debugShapeId << "] Ellipse width=" << width
+                              << " height=" << height << " center=(" << center.x << "," << center.y << ")"
+                              << " worldCenter=(" << worldCenter.x << "," << worldCenter.y << ")"
+                              << " worldRx=" << worldRx << " worldRy=" << worldRy << '\n';
+                }
 
                 auto isSentinel = [](dom::Evpu value) {
                     return value == (std::numeric_limits<dom::Evpu>::min)()
@@ -1282,12 +1288,18 @@ std::string SvgConvert::toSvg(const dom::MusxInstance<dom::others::ShapeDef>& sh
                         double right = obj.maxX;
                         double bottom = obj.minY;
                         double top = obj.maxY;
-                        double objWidth = right - left + 1.0;
-                        double objHeight = top - bottom + 1.0;
+                        double objWidth = right - left;
+                        double objHeight = top - bottom;
                         Point objCenter{(left + right) / 2.0, (top + bottom) / 2.0};
                         worldCenter = {objCenter.x, -objCenter.y};
                         worldRx = objWidth / 2.0;
                         worldRy = objHeight / 2.0;
+                        if (debugShape) {
+                            std::cout << "[Shape " << debugShapeId << "] Ellipse bounds override left=" << left
+                                      << " top=" << top << " right=" << right << " bottom=" << bottom
+                                      << " worldCenter=(" << worldCenter.x << "," << worldCenter.y << ")"
+                                      << " worldRx=" << worldRx << " worldRy=" << worldRy << '\n';
+                        }
                     }
                 }
                 pendingEllipse = EllipseState{worldCenter, worldRx, worldRy};
@@ -1343,6 +1355,10 @@ std::string SvgConvert::toSvg(const dom::MusxInstance<dom::others::ShapeDef>& sh
                     strokeElement << " fill=\"none\"";
                     strokeElement << " stroke=\"" << grayToRgb(0) << "\"";
                     strokeElement << " stroke-width=\"" << paint.strokeWidth << "\"";
+                    if (paint.dash && paint.dash->first > 0.0 && paint.dash->second > 0.0) {
+                        strokeElement << " stroke-dasharray=\"" << paint.dash->first << ' ' << paint.dash->second
+                                      << "\"";
+                    }
                     strokeElement << "/>";
                     elements.push_back(strokeElement.str());
                 }
@@ -1384,6 +1400,10 @@ std::string SvgConvert::toSvg(const dom::MusxInstance<dom::others::ShapeDef>& sh
                     strokeElement << " fill=\"none\"";
                     strokeElement << " stroke=\"" << grayToRgb(0) << "\"";
                     strokeElement << " stroke-width=\"" << paint.strokeWidth << "\"";
+                    if (paint.dash && paint.dash->first > 0.0 && paint.dash->second > 0.0) {
+                        strokeElement << " stroke-dasharray=\"" << paint.dash->first << ' ' << paint.dash->second
+                                      << "\"";
+                    }
                     strokeElement << "/>";
                     elements.push_back(strokeElement.str());
                 }
@@ -1410,6 +1430,10 @@ std::string SvgConvert::toSvg(const dom::MusxInstance<dom::others::ShapeDef>& sh
                 strokeElement << " fill=\"none\"";
                 strokeElement << " stroke=\"" << grayToRgb(paint.gray) << "\"";
                 strokeElement << " stroke-width=\"" << paint.strokeWidth << "\"";
+                if (paint.dash && paint.dash->first > 0.0 && paint.dash->second > 0.0) {
+                    strokeElement << " stroke-dasharray=\"" << paint.dash->first << ' ' << paint.dash->second
+                                  << "\"";
+                }
                 strokeElement << "/>";
                 elements.push_back(strokeElement.str());
 

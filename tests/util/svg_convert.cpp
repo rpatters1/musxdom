@@ -100,7 +100,7 @@ int countTag(const std::string& svg, const std::string& tag)
 std::vector<PathInfo> parsePathInfo(const std::string& svg)
 {
     std::vector<PathInfo> paths;
-    std::regex pathRegex("<path[^>]*>");
+    std::regex pathRegex("<(?:path|rect|ellipse)[^>]*>");
     std::regex strokeRegex("stroke-width=\\\"([^\\\"]+)\\\"");
     std::regex transformRegex("transform=\\\"matrix\\(([^\\\"]+)\\)\\\"");
 
@@ -263,11 +263,6 @@ TEST(SvgConvertTest, MatchesViewBoxAndPathsAndStrokes)
         int refDrawable = countTag(referenceSvg, "path") + countTag(referenceSvg, "ellipse");
         EXPECT_GT(ourDrawable, 0) << "No drawable elements in generated SVG " << shapeId;
         EXPECT_GT(refDrawable, 0) << "No drawable elements in reference SVG " << shapeId;
-
-        if (shapeId == 127) {
-            int x = 0;
-            static_cast<void>(x);
-        }
     }
 
     if (std::getenv("MUSX_KEEP_SVG_OUTPUT") == nullptr) {
