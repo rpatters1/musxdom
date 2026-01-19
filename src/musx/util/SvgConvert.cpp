@@ -23,6 +23,7 @@
 #include <cmath>
 #include <cstdint>
 #include <functional>
+#include <limits>
 #include <optional>
 #include <sstream>
 #include <string>
@@ -168,8 +169,15 @@ private:
 struct PaintState
 {
     int gray{0};
-    double strokeWidth{1.0};
+    double strokeWidth{4.0};
     std::optional<std::pair<double, double>> dash;
+};
+
+struct EllipseState
+{
+    Point center;
+    double rx{};
+    double ry{};
 };
 
 struct TextState
@@ -331,10 +339,15 @@ Bounds transformBounds(const Bounds& bounds, const Transform& transform)
 
 double decodeRotationRadians(int rotationValue)
 {
-    constexpr double kTwoPi = 6.28318530717958647692;
-    constexpr double kAngleUnits = 4294967296.0;
+    constexpr double kPi = 3.14159265358979323846;
     uint32_t raw = static_cast<uint32_t>(rotationValue);
-    return (static_cast<double>(raw) * kTwoPi) / kAngleUnits;
+    uint32_t quadrant = raw >> 30;
+    uint32_t fine = raw & 0x3FFFFFFFu;
+    double degrees = static_cast<double>(quadrant) * 90.0;
+    if (fine != 0) {
+        degrees -= static_cast<double>(fine) / 16.0;
+    }
+    return degrees * (kPi / 180.0);
 }
 
 std::string utf8FromCodePoint(char32_t codePoint)
@@ -355,17 +368,6 @@ std::string utf8FromCodePoint(char32_t codePoint)
         result.push_back(static_cast<char>(0x80 | ((codePoint >> 6) & 0x3F)));
         result.push_back(static_cast<char>(0x80 | (codePoint & 0x3F)));
     }
-    return result;
-}
-
-Bounds makeTextBounds(const Point& anchor, double fontSizeEvpu, double advanceEvpu)
-{
-    Bounds result;
-    double width = advanceEvpu;
-    double top = anchor.y + fontSizeEvpu * 0.8;
-    double bottom = anchor.y - fontSizeEvpu * 0.2;
-    result.include({anchor.x, bottom});
-    result.include({anchor.x + width, top});
     return result;
 }
 
@@ -411,6 +413,57 @@ void includeLineStrokeBounds(Bounds& bounds, const Point& start, const Point& en
     bounds.include({start.x - offset.x, start.y - offset.y});
     bounds.include({end.x + offset.x, end.y + offset.y});
     bounds.include({end.x - offset.x, end.y - offset.y});
+}
+
+void includeLineJoinBounds(Bounds& bounds,
+                           const Point& prevStart,
+                           const Point& prevEnd,
+                           const Point& nextEnd,
+                           const Point& center,
+                           double halfWidth)
+{
+    Point v0{prevEnd.x - prevStart.x, prevEnd.y - prevStart.y};
+    Point v1{nextEnd.x - prevEnd.x, nextEnd.y - prevEnd.y};
+    double len0 = std::hypot(v0.x, v0.y);
+    double len1 = std::hypot(v1.x, v1.y);
+    if (len0 == 0.0 || len1 == 0.0) {
+        return;
+    }
+    v0.x /= len0;
+    v0.y /= len0;
+    v1.x /= len1;
+    v1.y /= len1;
+    Point n0{-v0.y, v0.x};
+    Point n1{-v1.y, v1.x};
+    Point miter{n0.x + n1.x, n0.y + n1.y};
+    double miterLen = std::hypot(miter.x, miter.y);
+    if (miterLen == 0.0) {
+        return;
+    }
+    miter.x /= miterLen;
+    miter.y /= miterLen;
+    Point toCenter{center.x - prevEnd.x, center.y - prevEnd.y};
+    if ((miter.x * toCenter.x + miter.y * toCenter.y) > 0.0) {
+        miter.x = -miter.x;
+        miter.y = -miter.y;
+    }
+    double denom = miter.x * n1.x + miter.y * n1.y;
+    if (std::abs(denom) < 1e-6) {
+        return;
+    }
+    double length = halfWidth / denom;
+    constexpr double kMiterLimit = 14.0;
+    double maxLength = halfWidth * kMiterLimit;
+    if (length > maxLength) {
+        length = maxLength;
+    } else if (length < -maxLength) {
+        length = -maxLength;
+    }
+    length = std::abs(length);
+    if (length <= halfWidth) {
+        return;
+    }
+    bounds.include({prevEnd.x + miter.x * length, prevEnd.y + miter.y * length});
 }
 
 Bounds computeCubicBounds(const Point& p0, const Point& p1, const Point& p2, const Point& p3)
@@ -561,27 +614,40 @@ ArrowheadGeometry makeArrowheadPath(const Point& tip, const Point& direction, do
 } // namespace
 
 std::string SvgConvert::toSvg(const dom::MusxInstance<dom::others::ShapeDef>& shape,
-                              GlyphAdvanceFn glyphAdvance,
+                              GlyphMetricsFn glyphMetrics,
                               ExternalGraphicFn externalGraphicResolver)
 {
     if (!shape) {
         return {};
     }
-    const bool debugShape = shape->getCmper() == 9;
+    const int debugShapeId = shape->getCmper();
+    const bool debugShape = (debugShapeId == 9 || debugShapeId == 113);
 
     std::vector<std::string> elements;
     Bounds bounds;
     PaintState paint;
-    TextState text(shape->getDocument());
+    auto document = shape->getDocument();
+    TextState text(document);
     PenState pen;
+    bool lineWidthSet = false;
 
     PathBuilder path;
+    std::optional<dom::ShapeDefInstruction::StartObject> lastStartObject;
+    std::optional<dom::ShapeDefInstruction::RMoveTo> lastMove;
+    std::optional<int> currentRawScaleX;
+    std::optional<int> currentRawScaleY;
     Bounds pathBounds;
     Bounds strokeBounds;
     bool pathRendered = false;
+    std::optional<Point> firstLineStartWorld;
+    std::optional<Point> firstLineEndWorld;
+    std::optional<Point> lastLineStartWorld;
+    std::optional<Point> lastLineEndWorld;
+    std::optional<EllipseState> pendingEllipse;
 
     Point current{};
     Point start{};
+    double textLineStartX = 0.0;
     Point origin{};
 
     std::vector<Point> originStack;
@@ -606,7 +672,22 @@ std::string SvgConvert::toSvg(const dom::MusxInstance<dom::others::ShapeDef>& sh
             pathBounds.clear();
             strokeBounds.clear();
             pathRendered = false;
+            firstLineStartWorld.reset();
+            firstLineEndWorld.reset();
+            lastLineStartWorld.reset();
+            lastLineEndWorld.reset();
         }
+    };
+
+    auto resetLineTracking = [&]() {
+        firstLineStartWorld.reset();
+        firstLineEndWorld.reset();
+        lastLineStartWorld.reset();
+        lastLineEndWorld.reset();
+    };
+
+    auto resetEllipse = [&]() {
+        pendingEllipse.reset();
     };
 
     auto emitPath = [&](bool fill, bool evenOdd, bool stroke) {
@@ -645,15 +726,20 @@ std::string SvgConvert::toSvg(const dom::MusxInstance<dom::others::ShapeDef>& sh
         pathRendered = true;
     };
 
-    auto resolveAdvance = [&](const dom::FontInfo& font, char32_t codePoint, double fontSizeEvpu) -> double {
-        if (glyphAdvance) {
+    auto resolveMetrics = [&](const dom::FontInfo& font,
+                              char32_t codePoint,
+                              double fontSizeEvpu) -> GlyphMetrics {
+        if (glyphMetrics) {
             char32_t buffer[1] = { codePoint };
-            double advance = glyphAdvance(font, std::u32string_view(buffer, 1));
-            if (advance > 0.0) {
-                return advance;
+            if (auto metrics = glyphMetrics(font, std::u32string_view(buffer, 1)); metrics) {
+                return *metrics;
             }
         }
-        return fontSizeEvpu * 0.6;
+        GlyphMetrics fallback;
+        fallback.advance = fontSizeEvpu * 0.6;
+        fallback.ascent = fontSizeEvpu * 0.8;
+        fallback.descent = fontSizeEvpu * 0.2;
+        return fallback;
     };
 
     bool unresolvedExternalGraphic = false;
@@ -692,19 +778,31 @@ std::string SvgConvert::toSvg(const dom::MusxInstance<dom::others::ShapeDef>& sh
     shape->iterateInstructions([&](const dom::ShapeDefInstruction::Decoded& inst) -> bool {
         using IT = dom::ShapeDefInstructionType;
 
+        if (debugShape) {
+            std::cout << "[Shape " << debugShapeId << "] Inst type=" << static_cast<int>(inst.type) << '\n';
+        }
+
         switch (inst.type) {
         case IT::StartObject: {
             beginDrawing();
             const auto* data = std::get_if<dom::ShapeDefInstruction::StartObject>(&inst.data);
             if (data) {
+                lastStartObject = *data;
+                lastMove.reset();
+                currentRawScaleX = data->scaleX;
+                currentRawScaleY = data->scaleY;
                 origin = {};
-                double sx = static_cast<double>(data->scaleX) / 1000.0;
-                double sy = static_cast<double>(data->scaleY) / 1000.0;
+                auto isSentinel = [](dom::Evpu value) {
+                    return value == (std::numeric_limits<dom::Evpu>::min)()
+                        || value == (std::numeric_limits<dom::Evpu>::max)();
+                };
+                double sx = (data->scaleX == 0) ? 1.0 : (static_cast<double>(data->scaleX) / 1000.0);
+                double sy = (data->scaleY == 0) ? 1.0 : (static_cast<double>(data->scaleY) / 1000.0);
                 double radians = decodeRotationRadians(data->rotation);
                 currentRotationRadians = radians;
                 Point translate{toEvpuDouble(data->originX), toEvpuDouble(data->originY)};
                 if (debugShape) {
-                    std::cout << "[Shape 9] StartObject origin=(" << data->originX << "," << data->originY
+                    std::cout << "[Shape " << debugShapeId << "] StartObject origin=(" << data->originX << "," << data->originY
                               << ") bounds=(" << data->left << "," << data->top << "," << data->right << ","
                               << data->bottom << ") scale=(" << data->scaleX << "," << data->scaleY
                               << ") rotation=" << data->rotation << " radians=" << radians << '\n';
@@ -712,11 +810,26 @@ std::string SvgConvert::toSvg(const dom::MusxInstance<dom::others::ShapeDef>& sh
                 Transform localTransform = makeTranslateRotateScale(translate, sx, sy, radians);
                 currentTransform = multiplyTransforms(groupTransform, localTransform);
                 currentGroupTransform = groupTransform;
-                Bounds objBounds;
-                objBounds.include({toEvpuDouble(data->left), toEvpuDouble(data->bottom)});
-                objBounds.include({toEvpuDouble(data->right), toEvpuDouble(data->top)});
-                currentObjectBounds = objBounds.hasValue ? std::optional<Bounds>(objBounds) : std::nullopt;
+                if (debugShape) {
+                    std::cout << "[Shape " << debugShapeId << "] StartObject transform"
+                              << " a=" << currentTransform.a << " b=" << currentTransform.b
+                              << " c=" << currentTransform.c << " d=" << currentTransform.d
+                              << " tx=" << currentTransform.tx << " ty=" << currentTransform.ty << '\n';
+                }
+                if (isSentinel(data->left) || isSentinel(data->right)
+                    || isSentinel(data->top) || isSentinel(data->bottom)) {
+                    currentObjectBounds.reset();
+                } else {
+                    Bounds objBounds;
+                    objBounds.include({toEvpuDouble(data->left), toEvpuDouble(data->bottom)});
+                    objBounds.include({toEvpuDouble(data->right), toEvpuDouble(data->top)});
+                    currentObjectBounds = objBounds.hasValue ? std::optional<Bounds>(objBounds) : std::nullopt;
+                }
             } else {
+                lastStartObject.reset();
+                lastMove.reset();
+                currentRawScaleX.reset();
+                currentRawScaleY.reset();
                 origin = {};
                 currentTransform = groupTransform;
                 currentGroupTransform = groupTransform;
@@ -724,10 +837,14 @@ std::string SvgConvert::toSvg(const dom::MusxInstance<dom::others::ShapeDef>& sh
             }
             current = {};
             start = current;
+            textLineStartX = current.x;
+            lineWidthSet = false;
             path.clear();
             pathBounds.clear();
             strokeBounds.clear();
             pathRendered = false;
+            resetLineTracking();
+            resetEllipse();
             break;
         }
         case IT::StartGroup: {
@@ -736,13 +853,23 @@ std::string SvgConvert::toSvg(const dom::MusxInstance<dom::others::ShapeDef>& sh
             currentStack.push_back(current);
             startStack.push_back(start);
             groupTransformStack.push_back(groupTransform);
+            lastStartObject.reset();
+            lastMove.reset();
+            currentRawScaleX.reset();
+            currentRawScaleY.reset();
             const auto* data = std::get_if<dom::ShapeDefInstruction::StartGroup>(&inst.data);
             if (data) {
                 origin = {};
-                double sx = static_cast<double>(data->scaleX) / 1000.0;
-                double sy = static_cast<double>(data->scaleY) / 1000.0;
+                double sx = (data->scaleX == 0) ? 1.0 : (static_cast<double>(data->scaleX) / 1000.0);
+                double sy = (data->scaleY == 0) ? 1.0 : (static_cast<double>(data->scaleY) / 1000.0);
                 double radians = decodeRotationRadians(data->rotation);
                 Point translate{toEvpuDouble(data->originX), toEvpuDouble(data->originY)};
+                if (debugShape) {
+                    std::cout << "[Shape " << debugShapeId << "] StartGroup origin=(" << data->originX << "," << data->originY
+                              << ") bounds=(" << data->left << "," << data->top << "," << data->right << ","
+                              << data->bottom << ") scale=(" << data->scaleX << "," << data->scaleY
+                              << ") rotation=" << data->rotation << " radians=" << radians << '\n';
+                }
                 Transform localTransform = makeTranslateRotateScale(translate, sx, sy, radians);
                 groupTransform = multiplyTransforms(groupTransform, localTransform);
                 currentTransform = groupTransform;
@@ -752,10 +879,14 @@ std::string SvgConvert::toSvg(const dom::MusxInstance<dom::others::ShapeDef>& sh
             }
             current = {};
             start = current;
+            textLineStartX = current.x;
+            lineWidthSet = false;
             path.clear();
             pathBounds.clear();
             strokeBounds.clear();
             pathRendered = false;
+            resetLineTracking();
+            resetEllipse();
             break;
         }
         case IT::EndGroup: {
@@ -781,38 +912,68 @@ std::string SvgConvert::toSvg(const dom::MusxInstance<dom::others::ShapeDef>& sh
             pathBounds.clear();
             strokeBounds.clear();
             pathRendered = false;
+            textLineStartX = current.x;
+            lineWidthSet = false;
+            resetLineTracking();
+            resetEllipse();
+            lastStartObject.reset();
+            lastMove.reset();
+            currentRawScaleX.reset();
+            currentRawScaleY.reset();
             break;
         }
         case IT::GoToOrigin: {
             beginDrawing();
             current = origin;
             start = current;
+            textLineStartX = current.x;
             Point world = toWorld(current);
             path.moveTo(world);
             pathBounds.include(world);
             strokeBounds.include(world);
+            resetLineTracking();
+            resetEllipse();
+            lastMove.reset();
+            if (debugShape) {
+                std::cout << "[Shape " << debugShapeId << "] GoToOrigin world=(" << world.x << "," << world.y << ")\n";
+            }
             break;
         }
         case IT::GoToStart: {
             beginDrawing();
             current = start;
+            textLineStartX = current.x;
             Point world = toWorld(current);
             path.moveTo(world);
             pathBounds.include(world);
             strokeBounds.include(world);
+            resetLineTracking();
+            resetEllipse();
+            lastMove.reset();
+            if (debugShape) {
+                std::cout << "[Shape " << debugShapeId << "] GoToStart world=(" << world.x << "," << world.y << ")\n";
+            }
             break;
         }
         case IT::RMoveTo: {
             beginDrawing();
             const auto* data = std::get_if<dom::ShapeDefInstruction::RMoveTo>(&inst.data);
             if (data) {
+                lastMove = *data;
                 current.x += toEvpuDouble(data->dx);
                 current.y += toEvpuDouble(data->dy);
                 start = current;
+                textLineStartX = current.x;
                 Point world = toWorld(current);
                 path.moveTo(world);
                 pathBounds.include(world);
                 strokeBounds.include(world);
+                resetLineTracking();
+                resetEllipse();
+                if (debugShape) {
+                    std::cout << "[Shape " << debugShapeId << "] RMoveTo dx=" << data->dx << " dy=" << data->dy
+                              << " world=(" << world.x << "," << world.y << ")\n";
+                }
             }
             break;
         }
@@ -833,10 +994,31 @@ std::string SvgConvert::toSvg(const dom::MusxInstance<dom::others::ShapeDef>& sh
                     path.moveTo(worldStart);
                     pathBounds.include(worldStart);
                     strokeBounds.include(worldStart);
+                    resetLineTracking();
                 }
                 path.lineTo(worldEnd);
                 pathBounds.include(worldEnd);
                 includeLineStrokeBounds(strokeBounds, worldStart, worldEnd, paint.strokeWidth / 2.0);
+                double segmentLen = std::hypot(worldEnd.x - worldStart.x, worldEnd.y - worldStart.y);
+                if (segmentLen > 0.0) {
+                if (pathBounds.hasValue && lastLineStartWorld && lastLineEndWorld) {
+                    Point center{(pathBounds.minX + pathBounds.maxX) / 2.0,
+                                 (pathBounds.minY + pathBounds.maxY) / 2.0};
+                    includeLineJoinBounds(strokeBounds, *lastLineStartWorld, *lastLineEndWorld, worldEnd,
+                                          center, paint.strokeWidth / 2.0);
+                }
+                    if (!firstLineStartWorld || !firstLineEndWorld) {
+                        firstLineStartWorld = worldStart;
+                        firstLineEndWorld = worldEnd;
+                    }
+                    lastLineStartWorld = worldStart;
+                    lastLineEndWorld = worldEnd;
+                }
+                if (debugShape) {
+                    std::cout << "[Shape " << debugShapeId << "] RLineTo dx=" << data->dx << " dy=" << data->dy
+                              << " worldStart=(" << worldStart.x << "," << worldStart.y
+                              << ") worldEnd=(" << worldEnd.x << "," << worldEnd.y << ")\n";
+                }
             }
             break;
         }
@@ -844,6 +1026,11 @@ std::string SvgConvert::toSvg(const dom::MusxInstance<dom::others::ShapeDef>& sh
             beginDrawing();
             const auto* data = std::get_if<dom::ShapeDefInstruction::CurveTo>(&inst.data);
             if (data) {
+                if (debugShape) {
+                    std::cout << "[Shape " << debugShapeId << "] Curve raw c1=(" << data->c1dx << "," << data->c1dy
+                              << ") c2=(" << data->c2dx << "," << data->c2dy << ") end=("
+                              << data->edx << "," << data->edy << ")\n";
+                }
                 Point startPoint = current;
                 double c1dx = toEvpuDouble(data->c1dx);
                 double c1dy = toEvpuDouble(data->c1dy);
@@ -864,9 +1051,9 @@ std::string SvgConvert::toSvg(const dom::MusxInstance<dom::others::ShapeDef>& sh
                     double dy = worldEnd.y - worldStart.y;
                     double endAngle = std::atan2(dy, dx);
                     double delta = endAngle + currentRotationRadians;
-                    std::cout << "[Shape 9] Curve endAngle=" << endAngle
+                    std::cout << "[Shape " << debugShapeId << "] Curve endAngle=" << endAngle
                               << " delta=" << delta << '\n';
-                    std::cout << "[Shape 9] Curve start=(" << worldStart.x << "," << worldStart.y
+                    std::cout << "[Shape " << debugShapeId << "] Curve start=(" << worldStart.x << "," << worldStart.y
                               << ") end=(" << worldEnd.x << "," << worldEnd.y << ") c1=(" << worldC1.x << ","
                               << worldC1.y << ") c2=(" << worldC2.x << "," << worldC2.y << ")\n";
                 }
@@ -894,37 +1081,144 @@ std::string SvgConvert::toSvg(const dom::MusxInstance<dom::others::ShapeDef>& sh
             beginDrawing();
             const auto* data = std::get_if<dom::ShapeDefInstruction::Slur>(&inst.data);
             if (data) {
+                if (debugShape) {
+                    std::cout << "[Shape " << debugShapeId << "] Slur raw c1=(" << data->c1dx << "," << data->c1dy
+                              << ") c2=(" << data->c2dx << "," << data->c2dy << ") end=("
+                              << data->edx << "," << data->edy << ")\n";
+                }
                 Point startPoint = current;
-                double c1dx = toEvpuDouble16ths(data->c1dx);
-                double c1dy = toEvpuDouble16ths(data->c1dy);
-                double c2dx = toEvpuDouble16ths(data->c2dx);
-                double c2dy = toEvpuDouble16ths(data->c2dy);
-                double edx = toEvpuDouble16ths(data->edx);
-                double edy = toEvpuDouble16ths(data->edy);
+                double c1dx = toEvpuDouble(data->c1dx);
+                double c1dy = toEvpuDouble(data->c1dy);
+                double c2dx = toEvpuDouble(data->c2dx);
+                double c2dy = toEvpuDouble(data->c2dy);
+                double edx = toEvpuDouble(data->edx);
+                double edy = toEvpuDouble(data->edy);
+                if (currentRawScaleX && currentRawScaleY
+                    && (currentRawScaleX.value() == 0 || currentRawScaleY.value() == 0)
+                    && currentObjectBounds && currentObjectBounds->hasValue) {
+                    const auto& obj = *currentObjectBounds;
+                    double rawMinX = 0.0;
+                    double rawMaxX = c1dx + c2dx + edx;
+                    double rawMinY = 0.0;
+                    double rawMaxY = c1dy + c2dy + edy;
+                    double rawEndX = c1dx + c2dx + edx;
+                    double rawEndY = c1dy + c2dy + edy;
+                    rawMinX = (std::min)(rawMinX, c1dx);
+                    rawMinX = (std::min)(rawMinX, c1dx + c2dx);
+                    rawMinX = (std::min)(rawMinX, rawEndX);
+                    rawMaxX = (std::max)(rawMaxX, c1dx);
+                    rawMaxX = (std::max)(rawMaxX, c1dx + c2dx);
+                    rawMaxX = (std::max)(rawMaxX, rawEndX);
+                    rawMinY = (std::min)(rawMinY, c1dy);
+                    rawMinY = (std::min)(rawMinY, c1dy + c2dy);
+                    rawMinY = (std::min)(rawMinY, rawEndY);
+                    rawMaxY = (std::max)(rawMaxY, c1dy);
+                    rawMaxY = (std::max)(rawMaxY, c1dy + c2dy);
+                    rawMaxY = (std::max)(rawMaxY, rawEndY);
+                    double rawWidth = rawMaxX - rawMinX;
+                    double rawHeight = rawMaxY - rawMinY;
+                    double boundsWidth = obj.maxX - obj.minX;
+                    double boundsHeight = obj.maxY - obj.minY;
+                    double sx = 1.0;
+                    double sy = 1.0;
+                    if (currentRawScaleX.value() == 0) {
+                        sx = (boundsWidth == 0.0) ? 0.0 : ((rawWidth != 0.0) ? (boundsWidth / rawWidth) : 1.0);
+                    }
+                    if (currentRawScaleY.value() == 0) {
+                        sy = (boundsHeight == 0.0) ? 0.0 : ((rawHeight != 0.0) ? (boundsHeight / rawHeight) : 1.0);
+                    }
+                    c1dx *= sx;
+                    c2dx *= sx;
+                    edx *= sx;
+                    c1dy *= sy;
+                    c2dy *= sy;
+                    edy *= sy;
+                }
                 Point c1{current.x + c1dx, current.y + c1dy};
                 Point c2{current.x + c1dx + c2dx, current.y + c1dy + c2dy};
                 current.x += c1dx + c2dx + edx;
                 current.y += c1dy + c2dy + edy;
+                Point endPoint = current;
+
+                const auto options = document ? document->getOptions()->get<dom::options::SmartShapeOptions>() : nullptr;
+                const double tipWidth = 1.0;
+                const double cp1x = options ? toEvpuDouble(options->slurThicknessCp1X) : 0.0;
+                const double cp1y = options ? toEvpuDouble(options->slurThicknessCp1Y) : 8.0;
+                const double cp2x = options ? toEvpuDouble(options->slurThicknessCp2X) : 0.0;
+                const double cp2y = options ? toEvpuDouble(options->slurThicknessCp2Y) : 8.0;
+                if (debugShape && options) {
+                    std::cout << "[Shape " << debugShapeId << "] Slur options tipWidth=" << options->smartSlurTipWidth
+                              << " cp1=(" << options->slurThicknessCp1X << "," << options->slurThicknessCp1Y
+                              << ") cp2=(" << options->slurThicknessCp2X << "," << options->slurThicknessCp2Y
+                              << ")\n";
+                }
+
                 Point worldStart = toWorld(startPoint);
                 Point worldC1 = toWorld(c1);
                 Point worldC2 = toWorld(c2);
-                Point worldEnd = toWorld(current);
+                Point worldEnd = toWorld(endPoint);
+
+                Point chord{worldEnd.x - worldStart.x, worldEnd.y - worldStart.y};
+                double chordLen = std::hypot(chord.x, chord.y);
+                Point unit{0.0, 0.0};
+                Point normal{0.0, 0.0};
+                if (chordLen > 0.0) {
+                    unit = {chord.x / chordLen, chord.y / chordLen};
+                    normal = {-unit.y, unit.x};
+                }
+                double bulge = (worldC1.y - worldStart.y) + (worldC2.y - worldStart.y);
+                double offsetSign = (bulge >= 0.0) ? -1.0 : 1.0;
+                constexpr double kInvSqrt2 = 0.7071067811865476;
+                double tipScale = tipWidth * kInvSqrt2;
+
+                Point worldOffsetStart{
+                    worldStart.x + unit.x * tipScale + normal.x * tipScale * offsetSign,
+                    worldStart.y + unit.y * tipScale + normal.y * tipScale * offsetSign
+                };
+                Point worldOffsetEnd{
+                    worldEnd.x - unit.x * tipScale + normal.x * tipScale * offsetSign,
+                    worldEnd.y - unit.y * tipScale + normal.y * tipScale * offsetSign
+                };
+                Point worldOffsetC1{
+                    worldC1.x + unit.x * cp1x + normal.x * cp1y * offsetSign,
+                    worldC1.y + unit.y * cp1x + normal.y * cp1y * offsetSign
+                };
+                Point worldOffsetC2{
+                    worldC2.x + unit.x * cp2x + normal.x * cp2y * offsetSign,
+                    worldC2.y + unit.y * cp2x + normal.y * cp2y * offsetSign
+                };
+
+                if (debugShape) {
+                    std::cout << "[Shape " << debugShapeId << "] Slur start=(" << worldStart.x << "," << worldStart.y
+                              << ") end=(" << worldEnd.x << "," << worldEnd.y << ") c1=(" << worldC1.x << ","
+                              << worldC1.y << ") c2=(" << worldC2.x << "," << worldC2.y << ")\n";
+                }
                 if (path.empty()) {
                     path.moveTo(worldStart);
                     pathBounds.include(worldStart);
                     strokeBounds.include(worldStart);
                 }
                 path.curveTo(worldC1, worldC2, worldEnd);
-                Bounds curveBounds = computeCubicBounds(worldStart, worldC1, worldC2, worldEnd);
-                pathBounds.include({curveBounds.minX, curveBounds.minY});
-                pathBounds.include({curveBounds.maxX, curveBounds.maxY});
-                constexpr int kCurveSamples = 24;
-                Point prev = worldStart;
-                for (int i = 1; i <= kCurveSamples; ++i) {
-                    double t = static_cast<double>(i) / static_cast<double>(kCurveSamples);
-                    Point next = evaluateCubic(worldStart, worldC1, worldC2, worldEnd, t);
-                    includeLineStrokeBounds(strokeBounds, prev, next, paint.strokeWidth / 2.0);
-                    prev = next;
+                path.lineTo(worldOffsetEnd);
+                path.curveTo(worldOffsetC2, worldOffsetC1, worldOffsetStart);
+                path.closePath();
+
+                bool suppressBounds = false;
+                if (currentRawScaleX && currentRawScaleY
+                    && currentRawScaleX.value() == 0
+                    && currentRawScaleY.value() == 0
+                    && currentObjectBounds && currentObjectBounds->hasValue) {
+                    const double objWidth = currentObjectBounds->maxX - currentObjectBounds->minX;
+                    const double objHeight = currentObjectBounds->maxY - currentObjectBounds->minY;
+                    suppressBounds = (objWidth == 0.0 || objHeight == 0.0);
+                }
+                if (!suppressBounds) {
+                    Bounds curveBounds = computeCubicBounds(worldStart, worldC1, worldC2, worldEnd);
+                    pathBounds.include({curveBounds.minX, curveBounds.minY});
+                    pathBounds.include({curveBounds.maxX, curveBounds.maxY});
+                    Bounds offsetBounds = computeCubicBounds(worldOffsetEnd, worldOffsetC2, worldOffsetC1, worldOffsetStart);
+                    pathBounds.include({offsetBounds.minX, offsetBounds.minY});
+                    pathBounds.include({offsetBounds.maxX, offsetBounds.maxY});
                 }
             }
             break;
@@ -969,35 +1263,31 @@ std::string SvgConvert::toSvg(const dom::MusxInstance<dom::others::ShapeDef>& sh
                 double worldRx = rx * std::hypot(currentTransform.a, currentTransform.b);
                 double worldRy = ry * std::hypot(currentTransform.c, currentTransform.d);
 
+                auto isSentinel = [](dom::Evpu value) {
+                    return value == (std::numeric_limits<dom::Evpu>::min)()
+                        || value == (std::numeric_limits<dom::Evpu>::max)();
+                };
+
                 if (currentObjectBounds && currentObjectBounds->hasValue
                     && currentGroupTransform.b == 0.0 && currentGroupTransform.c == 0.0) {
                     const auto& obj = *currentObjectBounds;
-                    double left = obj.minX;
-                    double right = obj.maxX;
-                    double bottom = obj.minY;
-                    double top = obj.maxY;
-                    double objWidth = right - left + 1.0;
-                    double objHeight = top - bottom + 1.0;
-                    Point objCenter{(left + right) / 2.0, (top + bottom) / 2.0};
-                    worldCenter = {objCenter.x, -objCenter.y};
-                    worldRx = objWidth / 2.0;
-                    worldRy = objHeight / 2.0;
+                    if (!isSentinel(static_cast<dom::Evpu>(obj.minX))
+                        && !isSentinel(static_cast<dom::Evpu>(obj.maxX))
+                        && !isSentinel(static_cast<dom::Evpu>(obj.minY))
+                        && !isSentinel(static_cast<dom::Evpu>(obj.maxY))) {
+                        double left = obj.minX;
+                        double right = obj.maxX;
+                        double bottom = obj.minY;
+                        double top = obj.maxY;
+                        double objWidth = right - left + 1.0;
+                        double objHeight = top - bottom + 1.0;
+                        Point objCenter{(left + right) / 2.0, (top + bottom) / 2.0};
+                        worldCenter = {objCenter.x, -objCenter.y};
+                        worldRx = objWidth / 2.0;
+                        worldRy = objHeight / 2.0;
+                    }
                 }
-
-                std::ostringstream element;
-                element << "<ellipse cx=\"" << worldCenter.x << "\" cy=\"" << worldCenter.y
-                        << "\" rx=\"" << worldRx << "\" ry=\"" << worldRy << "\"";
-                element << " fill=\"none\"";
-                element << " stroke=\"" << grayToRgb(paint.gray) << "\"";
-                element << " stroke-width=\"" << paint.strokeWidth << "\"";
-                element << "/>";
-                elements.push_back(element.str());
-
-                Bounds ellipseBounds;
-                ellipseBounds.include({worldCenter.x - worldRx, worldCenter.y - worldRy});
-                ellipseBounds.include({worldCenter.x + worldRx, worldCenter.y + worldRy});
-                bounds.include({ellipseBounds.minX, ellipseBounds.minY});
-                bounds.include({ellipseBounds.maxX, ellipseBounds.maxY});
+                pendingEllipse = EllipseState{worldCenter, worldRx, worldRy};
 
                 Point startPt{center.x + rx, center.y};
                 current = startPt;
@@ -1007,22 +1297,137 @@ std::string SvgConvert::toSvg(const dom::MusxInstance<dom::others::ShapeDef>& sh
         }
         case IT::ClosePath:
             beginDrawing();
+            if (pathBounds.hasValue && lastLineStartWorld && lastLineEndWorld && firstLineStartWorld && firstLineEndWorld) {
+                Point center{(pathBounds.minX + pathBounds.maxX) / 2.0,
+                             (pathBounds.minY + pathBounds.maxY) / 2.0};
+                includeLineStrokeBounds(strokeBounds, *lastLineEndWorld, *firstLineStartWorld,
+                                        paint.strokeWidth / 2.0);
+                includeLineJoinBounds(strokeBounds, *lastLineStartWorld, *lastLineEndWorld, *firstLineStartWorld,
+                                      center, paint.strokeWidth / 2.0);
+                includeLineJoinBounds(strokeBounds, *lastLineEndWorld, *firstLineStartWorld, *firstLineEndWorld,
+                                      center, paint.strokeWidth / 2.0);
+            }
             path.closePath();
             current = start;
+            if (debugShape) {
+                std::cout << "[Shape " << debugShapeId << "] ClosePath\n";
+            }
             break;
         case IT::FillSolid:
+            if (debugShape) {
+                std::cout << "[Shape " << debugShapeId << "] FillSolid\n";
+            }
+            if (pendingEllipse) {
+                const auto ellipse = *pendingEllipse;
+                std::ostringstream element;
+                element << "<ellipse cx=\"" << ellipse.center.x << "\" cy=\"" << ellipse.center.y
+                        << "\" rx=\"" << ellipse.rx << "\" ry=\"" << ellipse.ry << "\"";
+                element << " fill=\"" << grayToRgb(paint.gray) << "\"";
+                element << " stroke=\"none\"";
+                element << "/>";
+                elements.push_back(element.str());
+
+                Bounds ellipseBounds;
+                ellipseBounds.include({ellipse.center.x - ellipse.rx, ellipse.center.y - ellipse.ry});
+                ellipseBounds.include({ellipse.center.x + ellipse.rx, ellipse.center.y + ellipse.ry});
+                bounds.include({ellipseBounds.minX, ellipseBounds.minY});
+                bounds.include({ellipseBounds.maxX, ellipseBounds.maxY});
+
+                if (lineWidthSet && paint.strokeWidth > 0.0) {
+                    std::ostringstream strokeElement;
+                    strokeElement << "<ellipse cx=\"" << ellipse.center.x << "\" cy=\"" << ellipse.center.y
+                                  << "\" rx=\"" << ellipse.rx << "\" ry=\"" << ellipse.ry << "\"";
+                    strokeElement << " fill=\"none\"";
+                    strokeElement << " stroke=\"" << grayToRgb(0) << "\"";
+                    strokeElement << " stroke-width=\"" << paint.strokeWidth << "\"";
+                    strokeElement << "/>";
+                    elements.push_back(strokeElement.str());
+                }
+
+                pendingEllipse.reset();
+            }
             emitPath(true, false, false);
+            if (lineWidthSet && paint.strokeWidth > 0.0) {
+                int savedGray = paint.gray;
+                paint.gray = 0;
+                emitPath(false, false, true);
+                paint.gray = savedGray;
+            }
             break;
         case IT::FillAlt:
+            if (debugShape) {
+                std::cout << "[Shape " << debugShapeId << "] FillAlt\n";
+            }
+            if (pendingEllipse) {
+                const auto ellipse = *pendingEllipse;
+                std::ostringstream element;
+                element << "<ellipse cx=\"" << ellipse.center.x << "\" cy=\"" << ellipse.center.y
+                        << "\" rx=\"" << ellipse.rx << "\" ry=\"" << ellipse.ry << "\"";
+                element << " fill=\"" << grayToRgb(paint.gray) << "\"";
+                element << " stroke=\"none\"";
+                element << "/>";
+                elements.push_back(element.str());
+
+                Bounds ellipseBounds;
+                ellipseBounds.include({ellipse.center.x - ellipse.rx, ellipse.center.y - ellipse.ry});
+                ellipseBounds.include({ellipse.center.x + ellipse.rx, ellipse.center.y + ellipse.ry});
+                bounds.include({ellipseBounds.minX, ellipseBounds.minY});
+                bounds.include({ellipseBounds.maxX, ellipseBounds.maxY});
+
+                if (lineWidthSet && paint.strokeWidth > 0.0) {
+                    std::ostringstream strokeElement;
+                    strokeElement << "<ellipse cx=\"" << ellipse.center.x << "\" cy=\"" << ellipse.center.y
+                                  << "\" rx=\"" << ellipse.rx << "\" ry=\"" << ellipse.ry << "\"";
+                    strokeElement << " fill=\"none\"";
+                    strokeElement << " stroke=\"" << grayToRgb(0) << "\"";
+                    strokeElement << " stroke-width=\"" << paint.strokeWidth << "\"";
+                    strokeElement << "/>";
+                    elements.push_back(strokeElement.str());
+                }
+
+                pendingEllipse.reset();
+            }
             emitPath(true, true, false);
+            if (lineWidthSet && paint.strokeWidth > 0.0) {
+                int savedGray = paint.gray;
+                paint.gray = 0;
+                emitPath(false, false, true);
+                paint.gray = savedGray;
+            }
             break;
         case IT::Stroke:
+            if (debugShape) {
+                std::cout << "[Shape " << debugShapeId << "] Stroke\n";
+            }
+            if (pendingEllipse) {
+                const auto ellipse = *pendingEllipse;
+                std::ostringstream strokeElement;
+                strokeElement << "<ellipse cx=\"" << ellipse.center.x << "\" cy=\"" << ellipse.center.y
+                              << "\" rx=\"" << ellipse.rx << "\" ry=\"" << ellipse.ry << "\"";
+                strokeElement << " fill=\"none\"";
+                strokeElement << " stroke=\"" << grayToRgb(paint.gray) << "\"";
+                strokeElement << " stroke-width=\"" << paint.strokeWidth << "\"";
+                strokeElement << "/>";
+                elements.push_back(strokeElement.str());
+
+                Bounds ellipseBounds;
+                ellipseBounds.include({ellipse.center.x - ellipse.rx, ellipse.center.y - ellipse.ry});
+                ellipseBounds.include({ellipse.center.x + ellipse.rx, ellipse.center.y + ellipse.ry});
+                bounds.include({ellipseBounds.minX, ellipseBounds.minY});
+                bounds.include({ellipseBounds.maxX, ellipseBounds.maxY});
+                pendingEllipse.reset();
+            }
             emitPath(false, false, true);
             break;
         case IT::LineWidth: {
             const auto* data = std::get_if<dom::ShapeDefInstruction::LineWidth>(&inst.data);
             if (data) {
                 paint.strokeWidth = toEvpuFromEfix(data->efix);
+                lineWidthSet = true;
+                if (debugShape) {
+                    std::cout << "[Shape " << debugShapeId << "] LineWidth efix=" << data->efix
+                              << " strokeWidth=" << paint.strokeWidth << '\n';
+                }
             }
             break;
         }
@@ -1082,6 +1487,14 @@ std::string SvgConvert::toSvg(const dom::MusxInstance<dom::others::ShapeDef>& sh
             if (!data || (text.hasFont && text.font.hidden)) {
                 break;
             }
+            if (data->codePoint == U'\n' || data->codePoint == U'\r') {
+                int fontSizePoints = text.font.fontSize > 0 ? text.font.fontSize : 12;
+                double fontSizeEvpu = fontSizePoints * dom::EVPU_PER_POINT;
+                current.x = textLineStartX;
+                current.y -= fontSizeEvpu;
+                start = current;
+                break;
+            }
             dom::FontInfo currentFont = text.font;
             std::string fontName;
             try {
@@ -1092,7 +1505,7 @@ std::string SvgConvert::toSvg(const dom::MusxInstance<dom::others::ShapeDef>& sh
             int fontSizePoints = currentFont.fontSize > 0 ? currentFont.fontSize : 12;
             double fontSizeEvpu = fontSizePoints * dom::EVPU_PER_POINT;
             Point anchor = toWorld(current);
-            double advanceEvpu = resolveAdvance(currentFont, data->codePoint, fontSizeEvpu);
+            GlyphMetrics metrics = resolveMetrics(currentFont, data->codePoint, fontSizeEvpu);
             std::ostringstream element;
             element << "<text";
             if (!fontName.empty()) {
@@ -1118,17 +1531,29 @@ std::string SvgConvert::toSvg(const dom::MusxInstance<dom::others::ShapeDef>& sh
                 element << " text-decoration=\"none\"";
             }
             element << " fill=\"" << grayToRgb(paint.gray) << "\"";
+            element << " xml:space=\"preserve\"";
             element << ">" << utf8FromCodePoint(data->codePoint) << "</text>";
             elements.push_back(element.str());
 
-            Bounds localBounds = makeTextBounds(anchor, fontSizeEvpu, advanceEvpu);
+            Bounds localBounds;
+            localBounds.include({anchor.x, anchor.y + metrics.descent});
+            localBounds.include({anchor.x + metrics.advance, anchor.y - metrics.ascent});
             bounds.include({localBounds.minX, localBounds.minY});
             bounds.include({localBounds.maxX, localBounds.maxY});
+            current.x += metrics.advance;
             break;
         }
         case IT::CloneChar: {
             const auto* data = std::get_if<dom::ShapeDefInstruction::CloneChar>(&inst.data);
             if (!data || (text.hasFont && text.font.hidden)) {
+                break;
+            }
+            if (data->codePoint == U'\n' || data->codePoint == U'\r') {
+                int fontSizePoints = text.font.fontSize > 0 ? text.font.fontSize : 12;
+                double fontSizeEvpu = fontSizePoints * dom::EVPU_PER_POINT;
+                current.x = textLineStartX;
+                current.y -= fontSizeEvpu;
+                start = current;
                 break;
             }
             dom::FontInfo currentFont = text.font;
@@ -1145,8 +1570,8 @@ std::string SvgConvert::toSvg(const dom::MusxInstance<dom::others::ShapeDef>& sh
             double dx = toEvpuDouble(data->dx);
             double dy = toEvpuDouble(data->dy);
             double length = std::hypot(dx, dy);
-            double advanceEvpu = resolveAdvance(currentFont, data->codePoint, fontSizeEvpu);
-            double step = advanceEvpu;
+            GlyphMetrics metrics = resolveMetrics(currentFont, data->codePoint, fontSizeEvpu);
+            double step = metrics.advance;
             if (step <= 0.0) {
                 step = length;
             }
@@ -1185,10 +1610,13 @@ std::string SvgConvert::toSvg(const dom::MusxInstance<dom::others::ShapeDef>& sh
                     element << " text-decoration=\"none\"";
                 }
                 element << " fill=\"" << grayToRgb(paint.gray) << "\"";
+                element << " xml:space=\"preserve\"";
                 element << ">" << glyph << "</text>";
                 elements.push_back(element.str());
 
-                Bounds localBounds = makeTextBounds(anchor, fontSizeEvpu, advanceEvpu);
+                Bounds localBounds;
+                localBounds.include({anchor.x, anchor.y + metrics.descent});
+                localBounds.include({anchor.x + metrics.advance, anchor.y - metrics.ascent});
                 bounds.include({localBounds.minX, localBounds.minY});
                 bounds.include({localBounds.maxX, localBounds.maxY});
             }
