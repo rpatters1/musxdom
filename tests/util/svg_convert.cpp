@@ -166,7 +166,7 @@ bool viewBoxEncloses(const ViewBox& outer, const ViewBox& inner, double toleranc
 
 } // namespace
 
-TEST(SvgConvertTest, PattersonDefaultMatchesReferenceViewBox)
+TEST(SvgConvertTest, MatchesViewBoxAndPathsAndStrokes)
 {
     const auto inputRoot = getInputPath() / "reference";
     const auto xmlPath = inputRoot / "PattersonDefault.enigmaxml";
@@ -213,7 +213,7 @@ TEST(SvgConvertTest, PattersonDefaultMatchesReferenceViewBox)
         const std::string ourSvg = musx::util::SvgConvert::toSvg(shape);
         ASSERT_FALSE(ourSvg.empty()) << "Empty SVG for ShapeDef " << shapeId;
 
-        const auto outPath = svgOut / (std::to_string(shapeId) + ".svg");
+        const auto outPath = svgOut / (std::to_string(shapeId) + "_test.svg");
         std::ofstream out(outPath, std::ios::binary);
         ASSERT_TRUE(out.is_open()) << "Failed to open file for writing: " << outPath;
         out << ourSvg;
@@ -264,7 +264,7 @@ TEST(SvgConvertTest, PattersonDefaultMatchesReferenceViewBox)
         EXPECT_GT(ourDrawable, 0) << "No drawable elements in generated SVG " << shapeId;
         EXPECT_GT(refDrawable, 0) << "No drawable elements in reference SVG " << shapeId;
 
-        if (shapeId == 93 || shapeId == 94) {
+        if (shapeId == 127) {
             int x = 0;
             static_cast<void>(x);
         }
@@ -277,7 +277,7 @@ TEST(SvgConvertTest, PattersonDefaultMatchesReferenceViewBox)
     }
 }
 
-TEST(SvgConvertTest, PattersonDefaultTextMetricsMatchesReference7)
+TEST(SvgConvertTest, TextMetricsMatches)
 {
     const auto inputRoot = getInputPath() / "reference";
     const auto xmlPath = inputRoot / "PattersonDefault.enigmaxml";

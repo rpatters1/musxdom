@@ -268,8 +268,8 @@ struct ShapeDefInstruction
 
     /// @brief Holds the parsed data for a SetDash instruction.
     struct SetDash {
-        Efix dashLength{};  ///< Length of each dash segment.
-        Efix spaceLength{}; ///< Space between dashes.
+        Evpu dashLength{};  ///< Length of each dash segment in Evpu.
+        Evpu spaceLength{}; ///< Space between dashes in Evpu.
     };
 
     /// @brief Holds the parsed data for a SetFont instruction.
