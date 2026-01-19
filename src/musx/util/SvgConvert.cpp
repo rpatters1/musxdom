@@ -708,6 +708,9 @@ std::string SvgConvert::toSvg(const dom::MusxInstance<dom::others::ShapeDef>& sh
         if (stroke) {
             element << " stroke=\"" << grayToRgb(paint.gray) << "\"";
             element << " stroke-width=\"" << paint.strokeWidth << "\"";
+            if (paint.dash && paint.dash->first > 0.0 && paint.dash->second > 0.0) {
+                element << " stroke-dasharray=\"" << paint.dash->first << ' ' << paint.dash->second << "\"";
+            }
         } else {
             element << " stroke=\"none\"";
         }
@@ -1432,6 +1435,25 @@ std::string SvgConvert::toSvg(const dom::MusxInstance<dom::others::ShapeDef>& sh
             break;
         }
         case IT::SetDash:
+            if (const auto* data = std::get_if<dom::ShapeDefInstruction::SetDash>(&inst.data)) {
+                double dash = toEvpuDouble(data->dashLength);
+                double space = toEvpuDouble(data->spaceLength);
+                if (dash > 0.0 && space > 0.0) {
+                    paint.dash = std::make_pair(dash, space);
+                } else {
+                    paint.dash.reset();
+                }
+                if (debugShape) {
+                    std::cout << "[Shape " << debugShapeId << "] SetDash evpu dash=" << dash
+                              << " space=" << space << '\n';
+                }
+            }
+            if (debugShape) {
+                if (const auto* data = std::get_if<dom::ShapeDefInstruction::SetDash>(&inst.data)) {
+                    std::cout << "[Shape " << debugShapeId << "] SetDash efix dash="
+                              << data->dashLength << " space=" << data->spaceLength << '\n';
+                }
+            }
             break;
         case IT::VerticalMode: {
             const auto* data = std::get_if<dom::ShapeDefInstruction::VerticalMode>(&inst.data);
