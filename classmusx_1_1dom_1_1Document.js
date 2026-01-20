@@ -7,6 +7,7 @@ var classmusx_1_1dom_1_1Document =
     [ "calcScrollViewCmper", "classmusx_1_1dom_1_1Document.html#a8ea1ce4314627bcd01d5dcd48d279c94", null ],
     [ "calcSystemFromMeasure", "classmusx_1_1dom_1_1Document.html#a58c106af9d550b67ae51bafca0987a6c", null ],
     [ "createInstrumentMap", "classmusx_1_1dom_1_1Document.html#ad7512a1daf902e8580a8b4418a31ded8", null ],
+    [ "getCachedShapeRecognition", "classmusx_1_1dom_1_1Document.html#a47127c636306813c211180c392e8ef7d", null ],
     [ "getDetails", "classmusx_1_1dom_1_1Document.html#ae5cc504ac90381247c976fddfbf8f6a7", null ],
     [ "getDetails", "classmusx_1_1dom_1_1Document.html#a9c2d300cb8b2da41a34601235b41d963", null ],
     [ "getEntries", "classmusx_1_1dom_1_1Document.html#af81dc03185013ac23c53e5a5f2da3b30", null ],
@@ -25,5 +26,6 @@ var classmusx_1_1dom_1_1Document =
     [ "getStudioViewStaves", "classmusx_1_1dom_1_1Document.html#a8007e3abd2fde240fe374c81c82e1065", null ],
     [ "getTexts", "classmusx_1_1dom_1_1Document.html#ac1bf9233c31c0ef654d2cead254f7ae7", null ],
     [ "getTexts", "classmusx_1_1dom_1_1Document.html#a2c77b6f1a626b8ce48552d4b58f72446", null ],
-    [ "iterateEntries", "classmusx_1_1dom_1_1Document.html#a284ebc5093ab40aaa65ba82696003160", null ]
+    [ "iterateEntries", "classmusx_1_1dom_1_1Document.html#a284ebc5093ab40aaa65ba82696003160", null ],
+    [ "setCachedShapeRecognition", "classmusx_1_1dom_1_1Document.html#ac3c4cbf7a6cd9a856ee56b04443a4474", null ]
 ];
