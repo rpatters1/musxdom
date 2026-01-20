@@ -313,7 +313,18 @@ namespace others {
 
 KnownShapeDefType ShapeDef::recognize() const
 {
-    return musx::util::recognizeShape(*this);
+    const auto doc = getDocument();
+    if (!doc) {
+        return KnownShapeDefType::Unrecognized;
+    }
+
+    if (auto cached = doc->getCachedShapeRecognition(getCmper())) {
+        return *cached;
+    }
+
+    const auto recognized = musx::util::recognizeShape(*this);
+    doc->setCachedShapeRecognition(getCmper(), recognized);
+    return recognized;
 }
 
 std::optional<Evpu> ShapeDef::calcWidth() const
