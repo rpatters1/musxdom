@@ -210,7 +210,7 @@ TEST(SvgConvertTest, MatchesViewBoxAndPathsAndStrokes)
         auto shape = doc->getOthers()->get<musx::dom::others::ShapeDef>(musx::dom::SCORE_PARTID, shapeId);
         ASSERT_TRUE(shape) << "Missing ShapeDef " << shapeId;
 
-        const std::string ourSvg = musx::util::SvgConvert::toSvg(shape);
+        const std::string ourSvg = musx::util::SvgConvert::toSvg(*shape);
         ASSERT_FALSE(ourSvg.empty()) << "Empty SVG for ShapeDef " << shapeId;
 
         const auto outPath = svgOut / (std::to_string(shapeId) + "_test.svg");
@@ -408,7 +408,7 @@ TEST(SvgConvertTest, TextMetricsMatches)
         const std::string referenceSvg = readFileText(refPath);
         ASSERT_FALSE(referenceSvg.empty());
 
-        const std::string ourSvg = musx::util::SvgConvert::toSvg(shape, metrics);
+        const std::string ourSvg = musx::util::SvgConvert::toSvg(*shape, metrics);
         ASSERT_FALSE(ourSvg.empty());
 
         const auto outPath = svgOut / (std::to_string(shapeId) + "_text.svg");

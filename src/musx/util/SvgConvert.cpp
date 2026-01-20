@@ -613,20 +613,17 @@ ArrowheadGeometry makeArrowheadPath(const Point& tip, const Point& direction, do
 
 } // namespace
 
-std::string SvgConvert::toSvg(const dom::MusxInstance<dom::others::ShapeDef>& shape,
+std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape,
                               GlyphMetricsFn glyphMetrics,
                               ExternalGraphicFn externalGraphicResolver)
 {
-    if (!shape) {
-        return {};
-    }
-    const int debugShapeId = shape->getCmper();
-    const bool debugShape = (debugShapeId == 9 || debugShapeId == 113 || debugShapeId == 128);
+    const int debugShapeId = shape.getCmper();
+    const bool debugShape = (debugShapeId == 9 || debugShapeId == 113 || debugShapeId == 128 || debugShapeId == 129);
 
     std::vector<std::string> elements;
     Bounds bounds;
     PaintState paint;
-    auto document = shape->getDocument();
+    auto document = shape.getDocument();
     TextState text(document);
     PenState pen;
     bool lineWidthSet = false;
@@ -778,7 +775,7 @@ std::string SvgConvert::toSvg(const dom::MusxInstance<dom::others::ShapeDef>& sh
         return output;
     };
 
-    shape->iterateInstructions([&](const dom::ShapeDefInstruction::Decoded& inst) -> bool {
+    shape.iterateInstructions([&](const dom::ShapeDefInstruction::Decoded& inst) -> bool {
         using IT = dom::ShapeDefInstructionType;
 
         if (debugShape) {

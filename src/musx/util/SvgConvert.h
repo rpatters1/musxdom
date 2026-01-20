@@ -90,7 +90,7 @@ public:
     /// @note The glyph callback receives the resolved font and the glyph(s) to measure.
     /// @note If an external graphic is encountered and cannot be resolved, this returns an empty string.
     /// @todo External graphic handling has not been tested yet.
-    static std::string toSvg(const dom::MusxInstance<dom::others::ShapeDef>& shape,
+    static std::string toSvg(const dom::others::ShapeDef& shape,
                              GlyphMetricsFn glyphMetrics = nullptr,
                              ExternalGraphicFn externalGraphicResolver = nullptr);
 };
