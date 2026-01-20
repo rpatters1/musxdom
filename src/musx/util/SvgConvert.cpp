@@ -345,7 +345,7 @@ double decodeRotationRadians(int rotationValue)
     uint32_t fine = raw & 0x3FFFFFFFu;
     double degrees = static_cast<double>(quadrant) * 90.0;
     if (fine != 0) {
-        degrees -= static_cast<double>(fine) / 16.0;
+        degrees += static_cast<double>(fine) / 16.0;
     }
     return degrees * (kPi / 180.0);
 }
@@ -798,14 +798,15 @@ std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape,
                 };
                 double sx = (data->scaleX == 0) ? 1.0 : (static_cast<double>(data->scaleX) / 1000.0);
                 double sy = (data->scaleY == 0) ? 1.0 : (static_cast<double>(data->scaleY) / 1000.0);
-                double radians = -decodeRotationRadians(data->rotation);
+                double radians = decodeRotationRadians(data->rotation);
                 currentRotationRadians = radians;
                 Point translate{toEvpuDouble(data->originX), toEvpuDouble(data->originY)};
                 if (debugShape) {
                     std::cout << "[Shape " << debugShapeId << "] StartObject origin=(" << data->originX << "," << data->originY
                               << ") bounds=(" << data->left << "," << data->top << "," << data->right << ","
                               << data->bottom << ") scale=(" << data->scaleX << "," << data->scaleY
-                              << ") rotation=" << data->rotation << " radians=" << radians << '\n';
+                              << ") rotation=0x" << std::hex << data->rotation << std::dec
+                              << " (" << data->rotation << ") radians=" << radians << '\n';
                 }
                 Transform localTransform = makeTranslateRotateScale(translate, sx, sy, radians);
                 currentTransform = multiplyTransforms(groupTransform, localTransform);
@@ -862,13 +863,14 @@ std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape,
                 origin = {};
                 double sx = (data->scaleX == 0) ? 1.0 : (static_cast<double>(data->scaleX) / 1000.0);
                 double sy = (data->scaleY == 0) ? 1.0 : (static_cast<double>(data->scaleY) / 1000.0);
-                double radians = -decodeRotationRadians(data->rotation);
+                double radians = decodeRotationRadians(data->rotation);
                 Point translate{toEvpuDouble(data->originX), toEvpuDouble(data->originY)};
                 if (debugShape) {
                     std::cout << "[Shape " << debugShapeId << "] StartGroup origin=(" << data->originX << "," << data->originY
                               << ") bounds=(" << data->left << "," << data->top << "," << data->right << ","
                               << data->bottom << ") scale=(" << data->scaleX << "," << data->scaleY
-                              << ") rotation=" << data->rotation << " radians=" << radians << '\n';
+                              << ") rotation=0x" << std::hex << data->rotation << std::dec
+                              << " (" << data->rotation << ") radians=" << radians << '\n';
                 }
                 Transform localTransform = makeTranslateRotateScale(translate, sx, sy, radians);
                 groupTransform = multiplyTransforms(groupTransform, localTransform);
