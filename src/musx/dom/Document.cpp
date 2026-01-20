@@ -51,6 +51,20 @@ MusxInstanceList<others::StaffUsed> Document::getStudioViewStaves(Cmper partId) 
     return getOthers()->getArray<others::StaffUsed>(partId, studioViewCmper);
 }
 
+std::optional<KnownShapeDefType> Document::getCachedShapeRecognition(Cmper shapeCmper) const
+{
+    auto it = m_shapeRecognitionCache.find(shapeCmper);
+    if (it != m_shapeRecognitionCache.end()) {
+        return it->second;
+    }
+    return std::nullopt;
+}
+
+void Document::setCachedShapeRecognition(Cmper shapeCmper, KnownShapeDefType type) const
+{
+    m_shapeRecognitionCache[shapeCmper] = type;
+}
+
 MusxInstance<others::Page> Document::calcPageFromMeasure(Cmper partId, MeasCmper measureId) const
 {
     MusxInstance<others::Page> result;

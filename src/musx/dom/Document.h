@@ -49,6 +49,7 @@ namespace dom {
 using namespace header;
 
 struct InstrumentInfo;
+enum class KnownShapeDefType;
 using InstrumentMap = std::unordered_map<StaffCmper, InstrumentInfo>; ///< A list of instruments, which may be single- or multi-staff
 /// @class InstrumentInfo
 /// @brief Represents information about each instrument in the document. This is calculated from the staves,
@@ -159,6 +160,13 @@ public:
     [[nodiscard]]
     MusxInstanceList<others::StaffUsed> getStudioViewStaves(Cmper partId) const;
 
+    /// @brief Retrieves a cached shape recognition result, if available.
+    [[nodiscard]]
+    std::optional<KnownShapeDefType> getCachedShapeRecognition(Cmper shapeCmper) const;
+
+    /// @brief Stores a shape recognition result in the cache.
+    void setCachedShapeRecognition(Cmper shapeCmper, KnownShapeDefType type) const;
+
     /// @brief Searches pages to find the page that contains the measure.
     /// @param partId the linked part to search
     /// @param measureId the measure to find
@@ -245,6 +253,8 @@ private:
                                 ///< This computed by the factory.
 
     PartVoicingPolicy m_partVoicingPolicy{};    ///< The part voicing policy in effect for this document.
+
+    mutable std::unordered_map<Cmper, KnownShapeDefType> m_shapeRecognitionCache; ///< Cache of ShapeDef recognitions.
 
     // Grant the factory class access to the private constructor
     friend class musx::factory::DocumentFactory;
