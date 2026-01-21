@@ -150,8 +150,6 @@ details::ArticulationAssign::calcPseudoTieShapeContext(const EntryInfoPtr& forSt
 std::optional<utils::PseudoTieShapeInfo> details::ArticulationAssign::calcIsPseudoTie(
     utils::PseudoTieMode mode, const EntryInfoPtr& forStartEntry) const
 {
-    using AD = others::ArticulationDef;
-
     const auto tieShapeContext = calcPseudoTieShapeContext(forStartEntry);
     if (!tieShapeContext) {
         return std::nullopt;
