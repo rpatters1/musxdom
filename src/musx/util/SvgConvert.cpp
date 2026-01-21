@@ -341,13 +341,19 @@ double decodeRotationRadians(int rotationValue)
 {
     constexpr double kPi = 3.14159265358979323846;
     uint32_t raw = static_cast<uint32_t>(rotationValue);
-    uint32_t quadrant = raw >> 30;
+    bool bit180 = (raw & 0x80000000u) != 0;
+    bool belowXAxis = (raw & 0x40000000u) != 0;
     uint32_t fine = raw & 0x3FFFFFFFu;
-    double degrees = static_cast<double>(quadrant) * 90.0;
-    if (fine != 0) {
-        degrees += static_cast<double>(fine) / 16.0;
+    // fine ticks are pi/2048 per tick, stored 0..1024 (covers 90 degrees)
+    double fineAngle = static_cast<double>(fine) * (kPi / 2048.0);
+
+    if (bit180) {
+        // Angles referenced from 180: above axis subtract fine; below axis add fine.
+        return belowXAxis ? (kPi + fineAngle) : (kPi - fineAngle);
     }
-    return degrees * (kPi / 180.0);
+
+    // Angles referenced from 0: above axis add fine; below axis subtract fine.
+    return belowXAxis ? -fineAngle : fineAngle;
 }
 
 std::string utf8FromCodePoint(char32_t codePoint)
@@ -618,7 +624,9 @@ std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape,
                               ExternalGraphicFn externalGraphicResolver)
 {
     const int debugShapeId = shape.getCmper();
-    const bool debugShape = (debugShapeId == 9 || debugShapeId == 113 || debugShapeId == 128 || debugShapeId == 129);
+    const bool debugShape = (debugShapeId == 8 || debugShapeId == 9 || debugShapeId == 113
+        || debugShapeId == 128 || debugShapeId == 129
+        || (debugShapeId >= 134 && debugShapeId <= 141));
 
     std::vector<std::string> elements;
     Bounds bounds;
@@ -1040,6 +1048,12 @@ std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape,
                 double c2dy = toEvpuDouble(data->c2dy);
                 double edx = toEvpuDouble(data->edx);
                 double edy = toEvpuDouble(data->edy);
+                bool flipX = (static_cast<uint32_t>(lastStartObject ? lastStartObject->rotation : 0) & 0x80000000u) != 0;
+                if (flipX) {
+                    c1dx = -c1dx;
+                    c2dx = -c2dx;
+                    edx = -edx;
+                }
                 Point c1{current.x + c1dx, current.y + c1dy};
                 Point c2{current.x + c1dx + c2dx, current.y + c1dy + c2dy};
                 current.x += c1dx + c2dx + edx;
@@ -1058,6 +1072,9 @@ std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape,
                     std::cout << "[Shape " << debugShapeId << "] Curve start=(" << worldStart.x << "," << worldStart.y
                               << ") end=(" << worldEnd.x << "," << worldEnd.y << ") c1=(" << worldC1.x << ","
                               << worldC1.y << ") c2=(" << worldC2.x << "," << worldC2.y << ")\n";
+                    std::cout << "[Shape " << debugShapeId << "] Curve rotationRadians=" << currentRotationRadians
+                              << " rotationDegrees=" << (currentRotationRadians * 180.0 / 3.14159265358979323846)
+                              << '\n';
                 }
                 if (path.empty()) {
                     path.moveTo(worldStart);
@@ -1141,6 +1158,12 @@ std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape,
                 current.x += c1dx + c2dx + edx;
                 current.y += c1dy + c2dy + edy;
                 Point endPoint = current;
+                bool flipX = (static_cast<uint32_t>(lastStartObject ? lastStartObject->rotation : 0) & 0x80000000u) != 0;
+                if (flipX) {
+                    c1dx = -c1dx;
+                    c2dx = -c2dx;
+                    edx = -edx;
+                }
 
                 const auto options = document ? document->getOptions()->get<dom::options::SmartShapeOptions>() : nullptr;
                 const double tipWidth = 1.0;

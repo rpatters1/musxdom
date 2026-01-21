@@ -13259,6 +13259,34 @@
       <family>0</family>
       <name>Symbol</name>
     </fontName>
+    <fontName cmper="30">
+      <charsetBank>Mac</charsetBank>
+      <charsetVal>0</charsetVal>
+      <pitch>0</pitch>
+      <family>0</family>
+      <name>Arial Bold</name>
+    </fontName>
+    <fontName cmper="31">
+      <charsetBank>Mac</charsetBank>
+      <charsetVal>0</charsetVal>
+      <pitch>0</pitch>
+      <family>0</family>
+      <name>Helvetica Bold</name>
+    </fontName>
+    <fontName cmper="32">
+      <charsetBank>Mac</charsetBank>
+      <charsetVal>0</charsetVal>
+      <pitch>0</pitch>
+      <family>0</family>
+      <name>Times Roman</name>
+    </fontName>
+    <fontName cmper="33">
+      <charsetBank>Mac</charsetBank>
+      <charsetVal>0</charsetVal>
+      <pitch>0</pitch>
+      <family>0</family>
+      <name>Times Bold Italic</name>
+    </fontName>
     <frameSpec cmper="1" inci="0">
       <startEntry>1</startEntry>
       <endEntry>4</endEntry>
@@ -20196,6 +20224,32 @@
       <data>1</data>
       <data>66</data>
     </shapeData>
+    <shapeData cmper="51">
+      <data>8</data>
+      <data>4</data>
+      <data>7</data>
+      <data>118</data>
+      <data>538</data>
+      <data>3</data>
+      <data>1837</data>
+      <data>1837</data>
+      <data>46</data>
+      <data>0</data>
+      <data>0</data>
+      <data>0</data>
+      <data>0</data>
+      <data>256</data>
+      <data>18</data>
+      <data>0</data>
+      <data>72</data>
+      <data>72</data>
+      <data>144</data>
+      <data>0</data>
+      <data>72</data>
+      <data>-72</data>
+      <data>0</data>
+      <data>72</data>
+    </shapeData>
     <shapeData cmper="52">
       <data>0</data>
       <data>0</data>
@@ -25445,6 +25499,188 @@
       <data>0</data>
       <data>24</data>
     </shapeData>
+    <shapeData cmper="203">
+      <data>4</data>
+      <data>-8</data>
+      <data>-81</data>
+      <data>345</data>
+      <data>5</data>
+      <data>-10</data>
+      <data>1226</data>
+      <data>1226</data>
+      <data>-2147482628</data>
+      <data>0</data>
+      <data>0</data>
+      <data>0</data>
+      <data>0</data>
+      <data>256</data>
+      <data>18</data>
+      <data>0</data>
+      <data>72</data>
+      <data>72</data>
+      <data>144</data>
+      <data>0</data>
+      <data>72</data>
+      <data>-72</data>
+      <data>0</data>
+      <data>72</data>
+    </shapeData>
+    <shapeData cmper="204">
+      <data>0</data>
+      <data>4</data>
+      <data>-521</data>
+      <data>5</data>
+      <data>1</data>
+      <data>-102</data>
+      <data>1806</data>
+      <data>1806</data>
+      <data>-1073741800</data>
+      <data>0</data>
+      <data>0</data>
+      <data>0</data>
+      <data>0</data>
+      <data>256</data>
+      <data>18</data>
+      <data>0</data>
+      <data>72</data>
+      <data>72</data>
+      <data>144</data>
+      <data>0</data>
+      <data>72</data>
+      <data>-72</data>
+      <data>0</data>
+      <data>72</data>
+    </shapeData>
+    <shapeData cmper="205">
+      <data>8</data>
+      <data>-4</data>
+      <data>7</data>
+      <data>-3</data>
+      <data>92</data>
+      <data>-433</data>
+      <data>1486</data>
+      <data>1486</data>
+      <data>1073742848</data>
+      <data>0</data>
+      <data>0</data>
+      <data>0</data>
+      <data>0</data>
+      <data>256</data>
+      <data>18</data>
+      <data>0</data>
+      <data>72</data>
+      <data>72</data>
+      <data>144</data>
+      <data>0</data>
+      <data>72</data>
+      <data>-72</data>
+      <data>0</data>
+      <data>72</data>
+    </shapeData>
+    <shapeData cmper="206">
+      <data>0</data>
+      <data>0</data>
+      <data>-1</data>
+      <data>19</data>
+      <data>90</data>
+      <data>-1</data>
+      <data>306</data>
+      <data>306</data>
+      <data>0</data>
+      <data>0</data>
+      <data>0</data>
+      <data>0</data>
+      <data>0</data>
+      <data>256</data>
+      <data>18</data>
+      <data>0</data>
+      <data>72</data>
+      <data>72</data>
+      <data>144</data>
+      <data>0</data>
+      <data>72</data>
+      <data>-72</data>
+      <data>0</data>
+      <data>72</data>
+    </shapeData>
+    <shapeData cmper="207">
+      <data>0</data>
+      <data>0</data>
+      <data>-9</data>
+      <data>37</data>
+      <data>1</data>
+      <data>-1</data>
+      <data>125</data>
+      <data>125</data>
+      <data>1024</data>
+      <data>0</data>
+      <data>0</data>
+      <data>0</data>
+      <data>0</data>
+      <data>256</data>
+      <data>18</data>
+      <data>0</data>
+      <data>72</data>
+      <data>72</data>
+      <data>144</data>
+      <data>0</data>
+      <data>72</data>
+      <data>-72</data>
+      <data>0</data>
+      <data>72</data>
+    </shapeData>
+    <shapeData cmper="208">
+      <data>0</data>
+      <data>0</data>
+      <data>-45</data>
+      <data>1</data>
+      <data>1</data>
+      <data>-10</data>
+      <data>153</data>
+      <data>153</data>
+      <data>-2147483648</data>
+      <data>0</data>
+      <data>0</data>
+      <data>0</data>
+      <data>0</data>
+      <data>256</data>
+      <data>18</data>
+      <data>0</data>
+      <data>72</data>
+      <data>72</data>
+      <data>144</data>
+      <data>0</data>
+      <data>72</data>
+      <data>-72</data>
+      <data>0</data>
+      <data>72</data>
+    </shapeData>
+    <shapeData cmper="209">
+      <data>0</data>
+      <data>0</data>
+      <data>-1</data>
+      <data>1</data>
+      <data>7</data>
+      <data>-31</data>
+      <data>101</data>
+      <data>101</data>
+      <data>-1073740800</data>
+      <data>0</data>
+      <data>0</data>
+      <data>0</data>
+      <data>0</data>
+      <data>256</data>
+      <data>18</data>
+      <data>0</data>
+      <data>72</data>
+      <data>72</data>
+      <data>144</data>
+      <data>0</data>
+      <data>72</data>
+      <data>-72</data>
+      <data>0</data>
+      <data>72</data>
+    </shapeData>
     <shapeData cmper="213">
       <data>0</data>
       <data>0</data>
@@ -28356,6 +28592,46 @@
       <dataList>49</dataList>
       <shapeType>expression</shapeType>
     </shapeDef>
+    <shapeDef cmper="134">
+      <instList>51</instList>
+      <dataList>51</dataList>
+      <shapeType>expression</shapeType>
+    </shapeDef>
+    <shapeDef cmper="135">
+      <instList>203</instList>
+      <dataList>203</dataList>
+      <shapeType>expression</shapeType>
+    </shapeDef>
+    <shapeDef cmper="136">
+      <instList>204</instList>
+      <dataList>204</dataList>
+      <shapeType>expression</shapeType>
+    </shapeDef>
+    <shapeDef cmper="137">
+      <instList>205</instList>
+      <dataList>205</dataList>
+      <shapeType>expression</shapeType>
+    </shapeDef>
+    <shapeDef cmper="138">
+      <instList>206</instList>
+      <dataList>206</dataList>
+      <shapeType>expression</shapeType>
+    </shapeDef>
+    <shapeDef cmper="139">
+      <instList>207</instList>
+      <dataList>207</dataList>
+      <shapeType>expression</shapeType>
+    </shapeDef>
+    <shapeDef cmper="140">
+      <instList>208</instList>
+      <dataList>208</dataList>
+      <shapeType>expression</shapeType>
+    </shapeDef>
+    <shapeDef cmper="141">
+      <instList>209</instList>
+      <dataList>209</dataList>
+      <shapeType>expression</shapeType>
+    </shapeDef>
     <shapeList cmper="1">
       <instruct>
         <numData>11</numData>
@@ -31199,6 +31475,31 @@
       <instruct>
         <numData>1</numData>
         <tag>drawChar</tag>
+      </instruct>
+      <instruct>
+        <tag>stroke</tag>
+      </instruct>
+    </shapeList>
+    <shapeList cmper="51">
+      <instruct>
+        <numData>11</numData>
+        <tag>startObject</tag>
+      </instruct>
+      <instruct>
+        <numData>2</numData>
+        <tag>rMoveTo</tag>
+      </instruct>
+      <instruct>
+        <numData>1</numData>
+        <tag>lineWidth</tag>
+      </instruct>
+      <instruct>
+        <numData>2</numData>
+        <tag>setDash</tag>
+      </instruct>
+      <instruct>
+        <numData>6</numData>
+        <tag>curveTo</tag>
       </instruct>
       <instruct>
         <tag>stroke</tag>
@@ -36982,6 +37283,181 @@
       <instruct>
         <numData>2</numData>
         <tag>rLineTo</tag>
+      </instruct>
+      <instruct>
+        <tag>stroke</tag>
+      </instruct>
+    </shapeList>
+    <shapeList cmper="203">
+      <instruct>
+        <numData>11</numData>
+        <tag>startObject</tag>
+      </instruct>
+      <instruct>
+        <numData>2</numData>
+        <tag>rMoveTo</tag>
+      </instruct>
+      <instruct>
+        <numData>1</numData>
+        <tag>lineWidth</tag>
+      </instruct>
+      <instruct>
+        <numData>2</numData>
+        <tag>setDash</tag>
+      </instruct>
+      <instruct>
+        <numData>6</numData>
+        <tag>curveTo</tag>
+      </instruct>
+      <instruct>
+        <tag>stroke</tag>
+      </instruct>
+    </shapeList>
+    <shapeList cmper="204">
+      <instruct>
+        <numData>11</numData>
+        <tag>startObject</tag>
+      </instruct>
+      <instruct>
+        <numData>2</numData>
+        <tag>rMoveTo</tag>
+      </instruct>
+      <instruct>
+        <numData>1</numData>
+        <tag>lineWidth</tag>
+      </instruct>
+      <instruct>
+        <numData>2</numData>
+        <tag>setDash</tag>
+      </instruct>
+      <instruct>
+        <numData>6</numData>
+        <tag>curveTo</tag>
+      </instruct>
+      <instruct>
+        <tag>stroke</tag>
+      </instruct>
+    </shapeList>
+    <shapeList cmper="205">
+      <instruct>
+        <numData>11</numData>
+        <tag>startObject</tag>
+      </instruct>
+      <instruct>
+        <numData>2</numData>
+        <tag>rMoveTo</tag>
+      </instruct>
+      <instruct>
+        <numData>1</numData>
+        <tag>lineWidth</tag>
+      </instruct>
+      <instruct>
+        <numData>2</numData>
+        <tag>setDash</tag>
+      </instruct>
+      <instruct>
+        <numData>6</numData>
+        <tag>curveTo</tag>
+      </instruct>
+      <instruct>
+        <tag>stroke</tag>
+      </instruct>
+    </shapeList>
+    <shapeList cmper="206">
+      <instruct>
+        <numData>11</numData>
+        <tag>startObject</tag>
+      </instruct>
+      <instruct>
+        <numData>2</numData>
+        <tag>rMoveTo</tag>
+      </instruct>
+      <instruct>
+        <numData>1</numData>
+        <tag>lineWidth</tag>
+      </instruct>
+      <instruct>
+        <numData>2</numData>
+        <tag>setDash</tag>
+      </instruct>
+      <instruct>
+        <numData>6</numData>
+        <tag>curveTo</tag>
+      </instruct>
+      <instruct>
+        <tag>stroke</tag>
+      </instruct>
+    </shapeList>
+    <shapeList cmper="207">
+      <instruct>
+        <numData>11</numData>
+        <tag>startObject</tag>
+      </instruct>
+      <instruct>
+        <numData>2</numData>
+        <tag>rMoveTo</tag>
+      </instruct>
+      <instruct>
+        <numData>1</numData>
+        <tag>lineWidth</tag>
+      </instruct>
+      <instruct>
+        <numData>2</numData>
+        <tag>setDash</tag>
+      </instruct>
+      <instruct>
+        <numData>6</numData>
+        <tag>curveTo</tag>
+      </instruct>
+      <instruct>
+        <tag>stroke</tag>
+      </instruct>
+    </shapeList>
+    <shapeList cmper="208">
+      <instruct>
+        <numData>11</numData>
+        <tag>startObject</tag>
+      </instruct>
+      <instruct>
+        <numData>2</numData>
+        <tag>rMoveTo</tag>
+      </instruct>
+      <instruct>
+        <numData>1</numData>
+        <tag>lineWidth</tag>
+      </instruct>
+      <instruct>
+        <numData>2</numData>
+        <tag>setDash</tag>
+      </instruct>
+      <instruct>
+        <numData>6</numData>
+        <tag>curveTo</tag>
+      </instruct>
+      <instruct>
+        <tag>stroke</tag>
+      </instruct>
+    </shapeList>
+    <shapeList cmper="209">
+      <instruct>
+        <numData>11</numData>
+        <tag>startObject</tag>
+      </instruct>
+      <instruct>
+        <numData>2</numData>
+        <tag>rMoveTo</tag>
+      </instruct>
+      <instruct>
+        <numData>1</numData>
+        <tag>lineWidth</tag>
+      </instruct>
+      <instruct>
+        <numData>2</numData>
+        <tag>setDash</tag>
+      </instruct>
+      <instruct>
+        <numData>6</numData>
+        <tag>curveTo</tag>
       </instruct>
       <instruct>
         <tag>stroke</tag>
