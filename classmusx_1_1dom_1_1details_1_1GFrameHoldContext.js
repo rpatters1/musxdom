@@ -1,6 +1,7 @@
 var classmusx_1_1dom_1_1details_1_1GFrameHoldContext =
 [
     [ "GFrameHoldContext", "classmusx_1_1dom_1_1details_1_1GFrameHoldContext.html#a981066205691c56fd4b0963c0ac243dd", null ],
+    [ "GFrameHoldContext", "classmusx_1_1dom_1_1details_1_1GFrameHoldContext.html#a16afc3c00643ca4cc37d3c8e5b2816dd", null ],
     [ "calcClefIndexAt", "classmusx_1_1dom_1_1details_1_1GFrameHoldContext.html#af7dfee19597fcc58f5a0e518a9cb58d1", null ],
     [ "calcClefIndexAt", "classmusx_1_1dom_1_1details_1_1GFrameHoldContext.html#a8fff05d40b94995cc544370b58f59af3", null ],
     [ "calcIsCuesOnly", "classmusx_1_1dom_1_1details_1_1GFrameHoldContext.html#aa0e3d30b4a276c376b3e4b3a18d5d25d", null ],
@@ -17,5 +18,6 @@ var classmusx_1_1dom_1_1details_1_1GFrameHoldContext =
     [ "iterateEntries", "classmusx_1_1dom_1_1details_1_1GFrameHoldContext.html#aa0771d8bedc1c79956eae58291052d92", null ],
     [ "iterateEntries", "classmusx_1_1dom_1_1details_1_1GFrameHoldContext.html#a634eded7bba5bdfd9b61385c933f7782", null ],
     [ "operator bool", "classmusx_1_1dom_1_1details_1_1GFrameHoldContext.html#aaabfe703ecfc3d56496efc9995e5bbbe", null ],
-    [ "operator->", "classmusx_1_1dom_1_1details_1_1GFrameHoldContext.html#a200ea257e62dd6fb5c5f820d70febd49", null ]
+    [ "operator->", "classmusx_1_1dom_1_1details_1_1GFrameHoldContext.html#a200ea257e62dd6fb5c5f820d70febd49", null ],
+    [ "snapLocationToEntryOrKeep", "classmusx_1_1dom_1_1details_1_1GFrameHoldContext.html#a885e37dc1384cdf2dcb26680d5fcd142", null ]
 ];

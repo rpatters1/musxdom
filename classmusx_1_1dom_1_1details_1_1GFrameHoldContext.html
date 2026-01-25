@@ -109,6 +109,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a981066205691c56fd4b0963c0ac243dd" id="r_a981066205691c56fd4b0963c0ac243dd"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1details_1_1GFrameHoldContext.html#a981066205691c56fd4b0963c0ac243dd">GFrameHoldContext</a> (const <a class="el" href="namespacemusx_1_1dom.html#ac52edbaa60f81ba3df76ee77b37e95fd">DocumentPtr</a> &amp;document, <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> partId, <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> staffId, <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> measureId, <a class="el" href="classmusx_1_1util_1_1Fraction.html">util::Fraction</a> timeOffset=0)</td></tr>
 <tr class="memdesc:a981066205691c56fd4b0963c0ac243dd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a context-aware <a class="el" href="classmusx_1_1dom_1_1details_1_1GFrameHold.html">GFrameHold</a> wrapper.  <br /></td></tr>
 <tr class="separator:a981066205691c56fd4b0963c0ac243dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a16afc3c00643ca4cc37d3c8e5b2816dd" id="r_a16afc3c00643ca4cc37d3c8e5b2816dd"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1details_1_1GFrameHoldContext.html#a16afc3c00643ca4cc37d3c8e5b2816dd">GFrameHoldContext</a> (const <a class="el" href="namespacemusx_1_1dom.html#a4223cd531120dbef7acd854c3d2631b8">MusxInstance</a>&lt; <a class="el" href="classmusx_1_1dom_1_1details_1_1GFrameHold.html">GFrameHold</a> &gt; &amp;gfHold, <a class="el" href="classmusx_1_1util_1_1Fraction.html">util::Fraction</a> timeOffset=0)</td></tr>
+<tr class="memdesc:a16afc3c00643ca4cc37d3c8e5b2816dd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a context-aware <a class="el" href="classmusx_1_1dom_1_1details_1_1GFrameHold.html">GFrameHold</a> wrapper from an existing <a class="el" href="classmusx_1_1dom_1_1details_1_1GFrameHold.html">GFrameHold</a>.  <br /></td></tr>
+<tr class="separator:a16afc3c00643ca4cc37d3c8e5b2816dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acff7329c626f98038fffe6cfff7ee880" id="r_acff7329c626f98038fffe6cfff7ee880"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1details_1_1GFrameHoldContext.html#acff7329c626f98038fffe6cfff7ee880">getRequestedPartId</a> () const</td></tr>
 <tr class="memdesc:acff7329c626f98038fffe6cfff7ee880"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the requested part ID associated with this context.  <br /></td></tr>
 <tr class="separator:acff7329c626f98038fffe6cfff7ee880"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -148,6 +151,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a53b422e2450b764129e8bc524f5f2e55" id="r_a53b422e2450b764129e8bc524f5f2e55"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1details_1_1GFrameHoldContext.html#a53b422e2450b764129e8bc524f5f2e55">calcNearestEntry</a> (<a class="el" href="classmusx_1_1util_1_1Fraction.html">util::Fraction</a> position, bool findExact=true, std::optional&lt; <a class="el" href="namespacemusx_1_1dom.html#a58ecc2c31e1c1ff88267f87f028b5981">LayerIndex</a> &gt; matchLayer=std::nullopt, std::optional&lt; bool &gt; matchVoice2=std::nullopt, <a class="el" href="classmusx_1_1util_1_1Fraction.html">util::Fraction</a> atGraceNoteDuration=0) const</td></tr>
 <tr class="memdesc:a53b422e2450b764129e8bc524f5f2e55"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the nearest non-grace-note entry at the given <code>position</code>.  <br /></td></tr>
 <tr class="separator:a53b422e2450b764129e8bc524f5f2e55"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a885e37dc1384cdf2dcb26680d5fcd142" id="r_a885e37dc1384cdf2dcb26680d5fcd142"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1util_1_1Fraction.html">util::Fraction</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1details_1_1GFrameHoldContext.html#a885e37dc1384cdf2dcb26680d5fcd142">snapLocationToEntryOrKeep</a> (<a class="el" href="classmusx_1_1util_1_1Fraction.html">util::Fraction</a> location, bool findExact=true) const</td></tr>
+<tr class="memdesc:a885e37dc1384cdf2dcb26680d5fcd142"><td class="mdescLeft">&#160;</td><td class="mdescRight">Snaps a measure position to the nearest entry if possible.  <br /></td></tr>
+<tr class="separator:a885e37dc1384cdf2dcb26680d5fcd142"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a904e4afe0ed1e60e508d488f00b2fff4" id="r_a904e4afe0ed1e60e508d488f00b2fff4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1util_1_1Fraction.html">util::Fraction</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1details_1_1GFrameHoldContext.html#a904e4afe0ed1e60e508d488f00b2fff4">calcMinLegacyPickupSpacer</a> () const</td></tr>
 <tr class="memdesc:a904e4afe0ed1e60e508d488f00b2fff4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the minimum legacy pickup spacer, if any.  <br /></td></tr>
 <tr class="separator:a904e4afe0ed1e60e508d488f00b2fff4"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -168,7 +174,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>calcPolicyVoicingIncl
 <p>This class retrieves the appropriate <a class="el" href="classmusx_1_1dom_1_1details_1_1GFrameHold.html">GFrameHold</a> from a <a class="el" href="classmusx_1_1dom_1_1Document.html" title="Represents a document object that encapsulates the entire EnigmaXML structure.">Document</a> using part, instrument, and measure IDs, and enables part-aware operations like iterating over <a class="el" href="classmusx_1_1dom_1_1EntryFrame.html" title="Represents a vector of EntryInfo instances for a given frame, along with computed information.">EntryFrame</a> objects. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a981066205691c56fd4b0963c0ac243dd" name="a981066205691c56fd4b0963c0ac243dd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a981066205691c56fd4b0963c0ac243dd">&#9670;&#160;</a></span>GFrameHoldContext()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a981066205691c56fd4b0963c0ac243dd">&#9670;&#160;</a></span>GFrameHoldContext() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -218,6 +224,43 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>calcPolicyVoicingIncl
     <tr><td class="paramname">partId</td><td>The requested part ID. </td></tr>
     <tr><td class="paramname">staffId</td><td>The instrument ID for. </td></tr>
     <tr><td class="paramname">measureId</td><td>The measure ID for. </td></tr>
+    <tr><td class="paramname">timeOffset</td><td>Subtract this amount from elapsed durations in created entry frames. A common usage might be to pass in here the value returned by <a class="el" href="classmusx_1_1dom_1_1others_1_1Measure.html#a7292509dd15a52901b8b7e27b1c0fa1e" title="Calculates the legacy pickup spacer, if any.">others::Measure::calcMinLegacyPickupSpacer</a>. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a16afc3c00643ca4cc37d3c8e5b2816dd" name="a16afc3c00643ca4cc37d3c8e5b2816dd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a16afc3c00643ca4cc37d3c8e5b2816dd">&#9670;&#160;</a></span>GFrameHoldContext() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">musx::dom::details::GFrameHoldContext::GFrameHoldContext </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="namespacemusx_1_1dom.html#a4223cd531120dbef7acd854c3d2631b8">MusxInstance</a>&lt; <a class="el" href="classmusx_1_1dom_1_1details_1_1GFrameHold.html">GFrameHold</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>gfHold</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classmusx_1_1util_1_1Fraction.html">util::Fraction</a>&#160;</td>
+          <td class="paramname"><em>timeOffset</em> = <code>0</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Constructs a context-aware <a class="el" href="classmusx_1_1dom_1_1details_1_1GFrameHold.html">GFrameHold</a> wrapper from an existing <a class="el" href="classmusx_1_1dom_1_1details_1_1GFrameHold.html">GFrameHold</a>. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">gfHold</td><td>The source <a class="el" href="classmusx_1_1dom_1_1details_1_1GFrameHold.html">GFrameHold</a> to wrap. </td></tr>
     <tr><td class="paramname">timeOffset</td><td>Subtract this amount from elapsed durations in created entry frames. A common usage might be to pass in here the value returned by <a class="el" href="classmusx_1_1dom_1_1others_1_1Measure.html#a7292509dd15a52901b8b7e27b1c0fa1e" title="Calculates the legacy pickup spacer, if any.">others::Measure::calcMinLegacyPickupSpacer</a>. </td></tr>
   </table>
   </dd>
@@ -680,6 +723,44 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>calcPolicyVoicingIncl
 
 <p>Provides const pointer-style access to the underlying <a class="el" href="classmusx_1_1dom_1_1details_1_1GFrameHold.html">GFrameHold</a>. </p>
 <dl class="section return"><dt>Returns</dt><dd>A const pointer to <a class="el" href="classmusx_1_1dom_1_1details_1_1GFrameHold.html">GFrameHold</a>. </dd></dl>
+
+</div>
+</div>
+<a id="a885e37dc1384cdf2dcb26680d5fcd142" name="a885e37dc1384cdf2dcb26680d5fcd142"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a885e37dc1384cdf2dcb26680d5fcd142">&#9670;&#160;</a></span>snapLocationToEntryOrKeep()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classmusx_1_1util_1_1Fraction.html">util::Fraction</a> musx::dom::details::GFrameHoldContext::snapLocationToEntryOrKeep </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classmusx_1_1util_1_1Fraction.html">util::Fraction</a>&#160;</td>
+          <td class="paramname"><em>location</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>findExact</em> = <code>true</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Snaps a measure position to the nearest entry if possible. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">position</td><td>The measure position to snap. </td></tr>
+    <tr><td class="paramname">findExact</td><td>If true, only snap to an entry that matches to within 1 evpu. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>If an entry lies within the matching tolerance of <code>position</code>, returns the entry position. Otherwise returns <code>position</code> unchanged. If <code>position</code> is zero, zero is alwsy returned. </dd></dl>
 
 </div>
 </div>
