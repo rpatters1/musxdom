@@ -2270,6 +2270,14 @@ details::GFrameHoldContext::GFrameHoldContext(const DocumentPtr& document, Cmper
     m_honorPartVoicing = document->getPartVoicingPolicy() == PartVoicingPolicy::Apply;
 }
 
+details::GFrameHoldContext::GFrameHoldContext(const MusxInstance<details::GFrameHold>& gfHold, util::Fraction timeOffset)
+    : m_hold(gfHold), m_requestedPartId(gfHold->getRequestedPartId()), m_timeOffset(timeOffset)
+{
+    const auto document = m_hold->getDocument();
+    m_partVoicing = document->getOthers()->get<others::PartVoicing>(m_requestedPartId, m_hold->getStaff());
+    m_honorPartVoicing = document->getPartVoicingPolicy() == PartVoicingPolicy::Apply;
+}
+
 #ifndef DOXYGEN_SHOULD_IGNORE_THIS
 struct TupletState
 {
@@ -2539,6 +2547,17 @@ EntryInfoPtr details::GFrameHoldContext::calcNearestEntry(util::Fraction positio
     }
 
     return bestResult;
+}
+
+util::Fraction details::GFrameHoldContext::snapLocationToEntryOrKeep(util::Fraction location, bool findExact) const
+{
+    if (location == 0) {
+        return 0;
+    }
+    if (auto entryInfo = calcNearestEntry(location, findExact)) {
+        return entryInfo->elapsedDuration;
+    }
+    return location;
 }
 
 util::Fraction details::GFrameHoldContext::calcMinLegacyPickupSpacer() const

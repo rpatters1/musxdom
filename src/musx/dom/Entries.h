@@ -79,6 +79,15 @@ public:
     GFrameHoldContext(const DocumentPtr& document, Cmper partId, Cmper staffId, Cmper measureId, util::Fraction timeOffset = 0);
 
     /**
+     * @brief Constructs a context-aware @ref GFrameHold wrapper from an existing @ref GFrameHold.
+     *
+     * @param gfHold The source @ref GFrameHold to wrap.
+     * @param timeOffset Subtract this amount from elapsed durations in created entry frames. A common usage might be to pass in here the
+     * value returned by #others::Measure::calcMinLegacyPickupSpacer.
+     */
+    GFrameHoldContext(const MusxInstance<GFrameHold>& gfHold, util::Fraction timeOffset = 0);
+
+    /**
      * @brief Returns the requested part ID associated with this context.
      *
      * @return The requested part ID.
@@ -175,6 +184,14 @@ public:
     [[nodiscard]]
     EntryInfoPtr calcNearestEntry(util::Fraction position, bool findExact = true, std::optional<LayerIndex> matchLayer = std::nullopt,
         std::optional<bool> matchVoice2 = std::nullopt, util::Fraction atGraceNoteDuration = 0) const;
+
+    /// @brief Snaps a measure position to the nearest entry if possible.
+    /// @param position The measure position to snap.
+    /// @param findExact If true, only snap to an entry that matches to within 1 evpu.
+    /// @return If an entry lies within the matching tolerance of @p position,
+    ///         returns the entry position. Otherwise returns @p position unchanged.
+    ///         If @p position is zero, zero is alwsy returned.
+    util::Fraction snapLocationToEntryOrKeep(util::Fraction location, bool findExact = true) const;
 
     /// @brief Calculates the minimum legacy pickup spacer, if any.
     ///
