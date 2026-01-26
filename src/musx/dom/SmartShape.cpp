@@ -389,11 +389,13 @@ NoteInfoPtr others::SmartShape::calcArpeggiatedTieToNote(const EntryInfoPtr& for
     if (forStartEntry.isSameEntry(endEntry)) {
         return {}; // must be a different entry.
     }
+
     const auto noteInfoPtr = NoteInfoPtr(forStartEntry, 0);
-    if (noteInfoPtr.calcTieTo()) {
+    if ((noteInfoPtr->tieStart || forStartEntry.calcIsImmediatelyFollowedBy(endEntry)) && noteInfoPtr.calcTieTo()) {
         // If Finale already provides a real tie target, this smart shape is not a stand-in.
         return {};
     }
+
     auto endNote = noteInfoPtr.findEqualPitch(endEntry);
     MUSX_ASSERT_IF(!endNote) {
         throw std::logic_error("calcIsPotentialForwardTie was true but no matching pitch was found in endEntry.");
