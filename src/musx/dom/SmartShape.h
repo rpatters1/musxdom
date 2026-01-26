@@ -373,6 +373,9 @@ public:
     std::optional<LyricTextType> endLyricType;      ///< The type of lyrics block for #endLyricNum. The speculative comments at #endLyricNum also apply here.
                                                     ///< This value has never been seen to be different than #startLyricNum unless endLyricNum is zero. (xml node is `<endLyricTag>`)
 
+    /// @brief Returns true if this smart shape is a type of slur.
+    bool calcIsSlur() const;
+
     /// @brief Calculates if the smart shape applies to the specified entry.
     ///
     /// This function is most useful for shape types like ottavas and hairpins. It does
@@ -397,10 +400,16 @@ public:
     /// @return The NoteInfoPtr that is the tied-to note for this note, or null if none.
     NoteInfoPtr calcArpeggiatedTieToNote(const EntryInfoPtr& forStartEntry) const;
 
-    /// @brief Determines if this smart shape type has a fixed direction (up or down) or floats automatically.
+    /// @brief Determines if a smart shape slur or curve has a fixed direction (up or down) or floats automatically.
+    /// @note If the smart shape is not a slur or curve, the return value is `CurveContourDirection::Auto`.
     /// @return The curve contour direction for fixed-direction shapes; `CurveContourDirection::Auto` if floating/automatic.
     [[nodiscard]]
     CurveContourDirection calcContourDirection() const;
+    
+    /// @brief Returns true if the smart shape's #ShapeType uses a dashed line style.
+    /// @return True when the shape type is dashed; false otherwise.
+    [[nodiscard]]
+    bool calcIsDashed() const;
 
     /// @brief Returns true if this slur is being used as a pseudo tie for the specified mode.
     /// It is used by #NoteInfoPtr::calcHasPseudoLvTie, which imposes additional rules and checks.
