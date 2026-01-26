@@ -403,6 +403,26 @@ NoteInfoPtr others::SmartShape::calcArpeggiatedTieToNote(const EntryInfoPtr& for
     return endNote;
 }
 
+bool others::SmartShape::calcIsSlur() const
+{
+    using ST = ShapeType;
+    switch (shapeType) {
+    default:
+        break;
+    case ST::SlurAuto:
+    case ST::SlurUp:
+    case ST::SlurDown:
+    case ST::DashSlurAuto:
+    case ST::DashSlurUp:
+    case ST::DashSlurDown:
+    case ST::DashContourSlurAuto:
+    case ST::DashContourSlurUp:
+    case ST::DashContourSlurDown:
+        return true;
+    }
+    return false;
+}
+
 CurveContourDirection others::SmartShape::calcContourDirection() const
 {
     using ST = ShapeType;
@@ -410,19 +430,54 @@ CurveContourDirection others::SmartShape::calcContourDirection() const
     case ST::SlurUp:
     case ST::DashSlurUp:
     case ST::DashContourSlurUp:
-    case ST::OctaveUp:
-    case ST::TwoOctaveUp:
         return CurveContourDirection::Up;
 
     case ST::SlurDown:
     case ST::DashSlurDown:
     case ST::DashContourSlurDown:
-    case ST::OctaveDown:
-    case ST::TwoOctaveDown:
         return CurveContourDirection::Down;
+
+    case ST::SlurAuto:
+    case ST::DashContourSlurAuto:
+    case ST::DashSlurAuto:
+        if (entryBased) {
+            if (const auto startEntryInfoPtr = startTermSeg->endPoint->calcAssociatedEntry()) {
+                auto [freezeStem, upStem] = startEntryInfoPtr.calcEntryStemSettings();
+                if (freezeStem) {
+                    // Finale freezes slurs in the direction of a frozen stem on the launch entry.
+                    return upStem ? CurveContourDirection::Up : CurveContourDirection::Down;
+                }
+            }
+        }
+        return CurveContourDirection::Auto;
 
     default:
         return CurveContourDirection::Auto;
+    }
+}
+
+bool others::SmartShape::calcIsDashed() const
+{
+    using ST = ShapeType;
+    switch (shapeType) {
+    case ST::DashLineUp:
+    case ST::DashLineDown:
+    case ST::DashSlurDown:
+    case ST::DashSlurUp:
+    case ST::DashLine:
+    case ST::DashSlurAuto:
+    case ST::DashLineDownBoth:
+    case ST::DashLineUpBoth:
+    case ST::DashLineUpLeft:
+    case ST::DashLineDownLeft:
+    case ST::DashLineUpDown:
+    case ST::DashLineDownUp:
+    case ST::DashContourSlurDown:
+    case ST::DashContourSlurUp:
+    case ST::DashContourSlurAuto:
+        return true;
+    default:
+        return false;
     }
 }
 
