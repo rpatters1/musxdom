@@ -842,6 +842,14 @@ public:
     /// @brief Calculates the actual duration in global edu, removing any time stretch due to independent time signature
     [[nodiscard]] util::Fraction calcGlobalActualDuration() const;
 
+    /// @brief Returns true if @p nextEntry starts immediately after (or at) the end of this entry in time.
+    ///
+    /// The comparison is done in staff time for the same staff, allowing for the next
+    /// measure only when this entry ends at the measure duration or greater and the next entry starts
+    /// at elapsed duration 0 of the following measure.
+    [[nodiscard]]
+    bool calcIsImmediatelyFollowedBy(const EntryInfoPtr& nextEntry) const;
+
     /// @brief Determines if this entry can be beamed.
     [[nodiscard]] bool calcCanBeBeamed() const;
 

@@ -768,6 +768,33 @@ EntryInfoPtr EntryInfoPtr::getNextSameVNoGrace() const
     return {};
 }
 
+bool EntryInfoPtr::calcIsImmediatelyFollowedBy(const EntryInfoPtr& nextEntry) const
+{
+    if (!nextEntry) {
+        return false;
+    }
+    // Require same staff.
+    if (getStaff() != nextEntry.getStaff()) {
+        return false;
+    }
+
+    const auto thisEnd = (*this)->calcNextElapsedDuration();
+
+    // Same-measure adjacency.
+    if (nextEntry.getMeasure() == getMeasure()) {
+        return nextEntry->elapsedDuration == thisEnd;
+    }
+
+    // Next-measure adjacency when this entry ends at or after the barline.
+    if (nextEntry.getMeasure() == getMeasure() + 1) {
+        if (thisEnd >= getFrame()->measureStaffDuration) {
+            return nextEntry->elapsedDuration == 0;
+        }
+    }
+
+    return false;
+}
+
 EntryInfoPtr EntryInfoPtr::getPreviousInLayer(std::optional<MeasCmper> targetMeasure) const
 {
     if (auto resultInFrame = getPreviousInFrame()) {

@@ -801,3 +801,24 @@ TEST(TieDetection, JumpTieTargetTypes)
     std::vector<MeasCmper> expectedCMeasures{ 2 };
     EXPECT_EQ(collectMeasures(cResults), expectedCMeasures);
 }
+
+TEST(TieDetection, ArpeggioTieAcrossGap)
+{
+    std::vector<char> xml;
+    musxtest::readFile(musxtest::getInputPath() / "tie_across_gap.enigmaxml", xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(xml);
+    ASSERT_TRUE(doc);
+
+    auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 2, 1);
+    ASSERT_TRUE(gfhold) << " gfhold not found for 2, 1";
+    auto entryFrame = gfhold.createEntryFrame(0);
+    ASSERT_TRUE(entryFrame);
+    {
+        auto noteInfo = NoteInfoPtr(EntryInfoPtr(entryFrame, 2), 0);
+        EXPECT_TRUE(noteInfo.calcArpeggiatedTieToNote());
+    }
+    {
+        auto noteInfo = NoteInfoPtr(EntryInfoPtr(entryFrame, 3), 0);
+        EXPECT_TRUE(noteInfo.calcArpeggiatedTieToNote());
+    }
+}
