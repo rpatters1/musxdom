@@ -34,6 +34,7 @@ var classmusx_1_1dom_1_1EntryInfoPtr =
     [ "calcIsFeatheredBeamStart", "classmusx_1_1dom_1_1EntryInfoPtr.html#afe092ac6f686263ca7b26d6ca0d4b6ee", null ],
     [ "calcIsFullMeasureRest", "classmusx_1_1dom_1_1EntryInfoPtr.html#aee6b5524df00cd1f2bbb41ebf760b58d", null ],
     [ "calcIsGlissToGraceEntry", "classmusx_1_1dom_1_1EntryInfoPtr.html#ae8a320e15a3426a63b142b35003a922e", null ],
+    [ "calcIsImmediatelyFollowedBy", "classmusx_1_1dom_1_1EntryInfoPtr.html#a39f633d815707c82adb75eb34f2b556c", null ],
     [ "calcIsSamePitchContent", "classmusx_1_1dom_1_1EntryInfoPtr.html#a606b477e5b5fea34498fb35af7073f45", null ],
     [ "calcIsSamePitchContentAndDuration", "classmusx_1_1dom_1_1EntryInfoPtr.html#a8a3212f5b3f06487fc8e80616c98d672", null ],
     [ "calcIsSingletonGrace", "classmusx_1_1dom_1_1EntryInfoPtr.html#a7734e3bd5c6129f3a3ebd60ec7bbc11e", null ],

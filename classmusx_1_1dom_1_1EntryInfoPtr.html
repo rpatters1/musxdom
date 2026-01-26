@@ -324,6 +324,9 @@ unsigned&#160;</td><td class="memItemRight" valign="bottom"><b>calcNumberOfBeams
 <a class="el" href="classmusx_1_1util_1_1Fraction.html">util::Fraction</a>&#160;</td><td class="memItemRight" valign="bottom"><b>calcGlobalActualDuration</b> () const</td></tr>
 <tr class="memdesc:aefab62e48990cb691af5a4975e102989"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the actual duration in global edu, removing any time stretch due to independent time signature. <br /></td></tr>
 <tr class="separator:aefab62e48990cb691af5a4975e102989"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a39f633d815707c82adb75eb34f2b556c" id="r_a39f633d815707c82adb75eb34f2b556c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#a39f633d815707c82adb75eb34f2b556c">calcIsImmediatelyFollowedBy</a> (const <a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a> &amp;nextEntry) const</td></tr>
+<tr class="memdesc:a39f633d815707c82adb75eb34f2b556c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if <code>nextEntry</code> starts immediately after (or at) the end of this entry in time.  <br /></td></tr>
+<tr class="separator:a39f633d815707c82adb75eb34f2b556c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0fe390fb7610741365bd69eef0f6a768" id="r_a0fe390fb7610741365bd69eef0f6a768"><td class="memItemLeft" align="right" valign="top"><a id="a0fe390fb7610741365bd69eef0f6a768" name="a0fe390fb7610741365bd69eef0f6a768"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>calcCanBeBeamed</b> () const</td></tr>
 <tr class="memdesc:a0fe390fb7610741365bd69eef0f6a768"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines if this entry can be beamed. <br /></td></tr>
@@ -933,6 +936,27 @@ Static Public Member Functions</h2></td></tr>
 <li>The entry must be the terminator for one of the standard entry-attached SmartShape gliss lines.</li>
 </ul>
 <p>Only the standard SmartShape gliss lines are checked. Other CustomLine values do no qualify. </p>
+
+</div>
+</div>
+<a id="a39f633d815707c82adb75eb34f2b556c" name="a39f633d815707c82adb75eb34f2b556c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a39f633d815707c82adb75eb34f2b556c">&#9670;&#160;</a></span>calcIsImmediatelyFollowedBy()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool musx::dom::EntryInfoPtr::calcIsImmediatelyFollowedBy </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a> &amp;&#160;</td>
+          <td class="paramname"><em>nextEntry</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns true if <code>nextEntry</code> starts immediately after (or at) the end of this entry in time. </p>
+<p>The comparison is done in staff time for the same staff, allowing for the next measure only when this entry ends at the measure duration or greater and the next entry starts at elapsed duration 0 of the following measure. </p>
 
 </div>
 </div>
