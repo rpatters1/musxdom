@@ -1,5 +1,9 @@
 var NAVTREEINDEX34 =
 {
+"structmusx_1_1dom_1_1TimeSignature_1_1TimeSigComponent.html#af1f390f711bf9fd8c715655bb2cb9b31":[2,0,1,0,50,0,0],
+"structmusx_1_1dom_1_1TimeSignature_1_1TimeSigComponent.html#af1f390f711bf9fd8c715655bb2cb9b31":[1,0,1,0,49,0,0],
+"structmusx_1_1dom_1_1header_1_1FileInfo.html":[1,0,1,0,1,0],
+"structmusx_1_1dom_1_1header_1_1FileInfo.html":[2,0,1,0,1,0],
 "structmusx_1_1dom_1_1header_1_1FileInfo.html#a09b2a944931220a3960278706582562b":[1,0,1,0,1,0,9],
 "structmusx_1_1dom_1_1header_1_1FileInfo.html#a09b2a944931220a3960278706582562b":[2,0,1,0,1,0,9],
 "structmusx_1_1dom_1_1header_1_1FileInfo.html#a24999456fa493ce72ab44d6b0ffc29cc":[1,0,1,0,1,0,6],

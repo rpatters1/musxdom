@@ -223,6 +223,10 @@ Public Member Functions</h2></td></tr>
 &#160;</td><td class="memItemRight" valign="bottom"><b>SmartShape</b> (const <a class="el" href="namespacemusx_1_1dom.html#aa76356b1ad3580081294898c79615c4d">DocumentWeakPtr</a> &amp;document, <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> partId, <a class="el" href="classmusx_1_1dom_1_1Base.html#ac50192040fe22fca9805ae4af5d88b4d">ShareMode</a> shareMode, <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> cmper)</td></tr>
 <tr class="memdesc:a20fcbbb1d0ad5796cbd5f9ffca84c82a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor function. <br /></td></tr>
 <tr class="separator:a20fcbbb1d0ad5796cbd5f9ffca84c82a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1ef3af1cb9ad01fb49cf3fc8fe395025" id="r_a1ef3af1cb9ad01fb49cf3fc8fe395025"><td class="memItemLeft" align="right" valign="top"><a id="a1ef3af1cb9ad01fb49cf3fc8fe395025" name="a1ef3af1cb9ad01fb49cf3fc8fe395025"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>calcIsSlur</b> () const</td></tr>
+<tr class="memdesc:a1ef3af1cb9ad01fb49cf3fc8fe395025"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if this smart shape is a type of slur. <br /></td></tr>
+<tr class="separator:a1ef3af1cb9ad01fb49cf3fc8fe395025"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a43ee2d11faa58c363117cc0cdd843b7c" id="r_a43ee2d11faa58c363117cc0cdd843b7c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1SmartShape.html#a43ee2d11faa58c363117cc0cdd843b7c">calcAppliesTo</a> (const <a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a> &amp;entryInfo) const</td></tr>
 <tr class="memdesc:a43ee2d11faa58c363117cc0cdd843b7c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates if the smart shape applies to the specified entry.  <br /></td></tr>
 <tr class="separator:a43ee2d11faa58c363117cc0cdd843b7c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -236,8 +240,11 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:afbbeca7ef4d9d32b9f2f4275bc62bdcd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the tied-to note if this slur is being used as an arpeggiated tie on the specified entry.  <br /></td></tr>
 <tr class="separator:afbbeca7ef4d9d32b9f2f4275bc62bdcd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8e4270d6ae14b235f9df565782ee1e28" id="r_a8e4270d6ae14b235f9df565782ee1e28"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemusx_1_1dom.html#a0dc36a86e1ae0cadd7b7e4c624b07b55">CurveContourDirection</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1SmartShape.html#a8e4270d6ae14b235f9df565782ee1e28">calcContourDirection</a> () const</td></tr>
-<tr class="memdesc:a8e4270d6ae14b235f9df565782ee1e28"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines if this smart shape type has a fixed direction (up or down) or floats automatically.  <br /></td></tr>
+<tr class="memdesc:a8e4270d6ae14b235f9df565782ee1e28"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines if a smart shape slur or curve has a fixed direction (up or down) or floats automatically.  <br /></td></tr>
 <tr class="separator:a8e4270d6ae14b235f9df565782ee1e28"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a27ec6e0d4e4d57258c9fe40aabd67870" id="r_a27ec6e0d4e4d57258c9fe40aabd67870"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1SmartShape.html#a27ec6e0d4e4d57258c9fe40aabd67870">calcIsDashed</a> () const</td></tr>
+<tr class="memdesc:a27ec6e0d4e4d57258c9fe40aabd67870"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if the smart shape's <a class="el" href="classmusx_1_1dom_1_1others_1_1SmartShape.html#a7b869b52ed9d931b235b79d2c4ed1e6f" title="All the smart shape types supported by Finale.">ShapeType</a> uses a dashed line style.  <br /></td></tr>
+<tr class="separator:a27ec6e0d4e4d57258c9fe40aabd67870"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa75e75e4e9fb874b087354ab4e15bf5a" id="r_aa75e75e4e9fb874b087354ab4e15bf5a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1SmartShape.html#aa75e75e4e9fb874b087354ab4e15bf5a">calcIsPseudoTie</a> (utils::PseudoTieMode mode, const <a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a> &amp;forStartEntry) const</td></tr>
 <tr class="memdesc:aa75e75e4e9fb874b087354ab4e15bf5a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if this slur is being used as a pseudo tie for the specified mode. It is used by <a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html#a8d126e1959435de5a8168c2713ff928d" title="Calculates if this note has a smart shape, shape expression, or shape articulation acting as a laisse...">NoteInfoPtr::calcHasPseudoLvTie</a>, which imposes additional rules and checks.  <br /></td></tr>
 <tr class="separator:aa75e75e4e9fb874b087354ab4e15bf5a"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -711,8 +718,29 @@ Over System Break" in the Finale U.I. </p>
       </table>
 </div><div class="memdoc">
 
-<p>Determines if this smart shape type has a fixed direction (up or down) or floats automatically. </p>
+<p>Determines if a smart shape slur or curve has a fixed direction (up or down) or floats automatically. </p>
+<dl class="section note"><dt>Note</dt><dd>If the smart shape is not a slur or curve, the return value is <code><a class="el" href="namespacemusx_1_1dom.html#a0dc36a86e1ae0cadd7b7e4c624b07b55a06b9281e396db002010bde1de57262eb" title="contour is automatic, indeterminate, or does not apply">CurveContourDirection::Auto</a></code>. </dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>The curve contour direction for fixed-direction shapes; <code><a class="el" href="namespacemusx_1_1dom.html#a0dc36a86e1ae0cadd7b7e4c624b07b55a06b9281e396db002010bde1de57262eb" title="contour is automatic, indeterminate, or does not apply">CurveContourDirection::Auto</a></code> if floating/automatic. </dd></dl>
+
+</div>
+</div>
+<a id="a27ec6e0d4e4d57258c9fe40aabd67870" name="a27ec6e0d4e4d57258c9fe40aabd67870"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a27ec6e0d4e4d57258c9fe40aabd67870">&#9670;&#160;</a></span>calcIsDashed()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool musx::dom::others::SmartShape::calcIsDashed </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns true if the smart shape's <a class="el" href="classmusx_1_1dom_1_1others_1_1SmartShape.html#a7b869b52ed9d931b235b79d2c4ed1e6f" title="All the smart shape types supported by Finale.">ShapeType</a> uses a dashed line style. </p>
+<dl class="section return"><dt>Returns</dt><dd>True when the shape type is dashed; false otherwise. </dd></dl>
 
 </div>
 </div>
