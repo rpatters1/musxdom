@@ -18,6 +18,7 @@ var classmusx_1_1dom_1_1NoteInfoPtr =
     [ "calcStaff", "classmusx_1_1dom_1_1NoteInfoPtr.html#a47410cd12a40e392c789ffc3c265b264", null ],
     [ "calcStaffPosition", "classmusx_1_1dom_1_1NoteInfoPtr.html#a1bd7cd06f7ed01f976e9e35de673d486", null ],
     [ "calcTieFrom", "classmusx_1_1dom_1_1NoteInfoPtr.html#a8d4472ff1bfd27358ea69f33a3e82d18", null ],
+    [ "calcTieIsUp", "classmusx_1_1dom_1_1NoteInfoPtr.html#a2921208ba456fb0c541e68e84ba10abf", null ],
     [ "calcTieTo", "classmusx_1_1dom_1_1NoteInfoPtr.html#ac535914f03c0ac61fe184134c1584d9b", null ],
     [ "createTransposer", "classmusx_1_1dom_1_1NoteInfoPtr.html#afc49802bc77032c3e6990acb8c3a9f9d", null ],
     [ "findEqualPitch", "classmusx_1_1dom_1_1NoteInfoPtr.html#aed537f60968794044f42f4b6de7488c4", null ],

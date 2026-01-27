@@ -156,6 +156,9 @@ size_t&#160;</td><td class="memItemRight" valign="bottom"><b>getNoteIndex</b> ()
 <tr class="memitem:a8d4472ff1bfd27358ea69f33a3e82d18" id="r_a8d4472ff1bfd27358ea69f33a3e82d18"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html">NoteInfoPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html#a8d4472ff1bfd27358ea69f33a3e82d18">calcTieFrom</a> (bool requireTie=true) const</td></tr>
 <tr class="memdesc:a8d4472ff1bfd27358ea69f33a3e82d18"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the note that this note could tie from.  <br /></td></tr>
 <tr class="separator:a8d4472ff1bfd27358ea69f33a3e82d18"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2921208ba456fb0c541e68e84ba10abf" id="r_a2921208ba456fb0c541e68e84ba10abf"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html#a2921208ba456fb0c541e68e84ba10abf">calcTieIsUp</a> (bool forTieEnd=false) const</td></tr>
+<tr class="memdesc:a2921208ba456fb0c541e68e84ba10abf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the direction for a tie on this note.  <br /></td></tr>
+<tr class="separator:a2921208ba456fb0c541e68e84ba10abf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a47410cd12a40e392c789ffc3c265b264" id="r_a47410cd12a40e392c789ffc3c265b264"><td class="memItemLeft" align="right" valign="top"><a id="a47410cd12a40e392c789ffc3c265b264" name="a47410cd12a40e392c789ffc3c265b264"></a>
 <a class="el" href="namespacemusx_1_1dom.html#ada2c0787f5b7cb764d2a344d491ab99c">StaffCmper</a>&#160;</td><td class="memItemRight" valign="bottom"><b>calcStaff</b> () const</td></tr>
 <tr class="memdesc:a47410cd12a40e392c789ffc3c265b264"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the staff number, taking into account cross staffing. <br /></td></tr>
@@ -591,6 +594,33 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>calcIsIncludedInVoici
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The candidate note or an empty <a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html" title="Wraps an EntryInfo instance and a note index.">NoteInfoPtr</a> if no candidate was found. </dd></dl>
+
+</div>
+</div>
+<a id="a2921208ba456fb0c541e68e84ba10abf" name="a2921208ba456fb0c541e68e84ba10abf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2921208ba456fb0c541e68e84ba10abf">&#9670;&#160;</a></span>calcTieIsUp()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool musx::dom::NoteInfoPtr::calcTieIsUp </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>forTieEnd</em> = <code>false</code></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Calculates the direction for a tie on this note. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">forTieEnd</td><td>If <code>forTieEnd</code> is true, the direction for the tie ending on this note is returned. Else the direction for the tie starting on this note is returned. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true if the given tie faces upwards, false if not. </dd></dl>
 
 </div>
 </div>
