@@ -348,7 +348,7 @@ bool EntryFrame::TupletInfo::calcIsTremolo() const
         }
     }
 
-    // A feathered beam can look like a tremolo if on same note 
+    // A feathered beam can look like a tremolo if on same note
     Evpu outLeftYScratch{}, outRightYScratch{};
     return !EntryInfoPtr(frame, startIndex).calcIsFeatheredBeamStart(outLeftYScratch, outRightYScratch);
 }
@@ -2848,6 +2848,112 @@ NoteInfoPtr NoteInfoPtr::calcTieFrom(bool requireTie) const
     return calcTieFromWithPreviousMeasure(m_entry.getMeasure() - 1, requireTie);
 }
 
+bool NoteInfoPtr::calcTieIsUp(bool forTieEnd) const
+{
+    if (forTieEnd) {
+        if (!calcTieFrom()) {
+            return false;
+        }
+    } else {
+        if (!(*this)->tieStart) {
+            return false;
+        }
+    }
+
+    const auto entryInfo = getEntryInfo();
+    const auto entryFrame = entryInfo.getFrame();
+
+    // Inherit the stem direction for frozen layers
+    if (const auto layerInfo = entryFrame->getLayerAttributes()) {
+        if (layerInfo->freezeLayer && entryInfo.calcIfLayerSettingsApply()) {
+            return layerInfo->freezeStemsUp == layerInfo->freezTiesToStems;
+        }
+    }
+
+    // For cross-staff notes: Match the stem direction
+    const auto scrollViewStaves = entryFrame->getDocument()->getScrollViewStaves(entryFrame->getRequestedPartId());
+    const int crossStaffDir = calcCrossStaffDirection(scrollViewStaves);
+    if (crossStaffDir != 0) {
+        return crossStaffDir > 0;
+    }
+
+    const auto tieOptions = entryFrame->getDocument()->getOptions()->get<options::TieOptions>();
+    size_t noteCount = entryInfo->getEntry()->notes.size();
+    int stemDir = entryInfo.calcUpStem() ? 1 : -1;
+
+    if (noteCount > 1) {
+        // Notes in entry are assumed to be sorted from lowest to highest
+        size_t noteIndex = getNoteIndex();
+
+        // Outer notes ignore tie preferences
+        if (noteIndex == 0) {
+            return false;
+        }
+        if (noteIndex + 1 == noteCount) {
+            return true;
+        }
+
+        // Angle seconds away from each other, if present and if specified
+        if (tieOptions->secondsPlacement == options::TieOptions::SecondsPlacement::ShiftForSeconds) {
+            if (!(*this)->upStemSecond && (*this)->downStemSecond) {
+                return false;
+            }
+            if ((*this)->upStemSecond && !(*this)->downStemSecond) {
+                return true;
+            }
+        }
+
+        if (tieOptions->chordTieDirType != options::TieOptions::ChordTieDirType::StemReversal) {
+            if (noteIndex < noteCount / 2) {
+                return false;
+            }
+            if (noteIndex >= (noteCount + 1) / 2) {
+                return true;
+            }
+
+            if (tieOptions->chordTieDirType == options::TieOptions::ChordTieDirType::OutsideInside) {
+                return (stemDir > 0) ? false : true;
+            }
+        }
+
+        // int staffPos = calcStaffPosition(); not implemented
+        const int staffPos = std::get<3>(calcNotePropertiesInView(/*alwaysUseEntryStaff*/ true));
+        const auto staff = entryInfo.createCurrentStaff();
+        int stemReversalPos = staff->stemReversal;
+        return (staffPos < stemReversalPos) ? false : true;
+    } else {
+        int adjacentStemDir = 0;
+
+        if (forTieEnd) {
+            if (NoteInfoPtr startNote = calcTieFrom()) {
+                adjacentStemDir = startNote.getEntryInfo().calcUpStem() ? 1 : -1;
+            }
+        } else {
+            if (NoteInfoPtr endNote = calcTieTo()) {
+                adjacentStemDir = endNote.getEntryInfo().calcUpStem() ? 1 : -1;
+            } else {
+                auto nextEntry = entryInfo.getNextInLayer();
+                if (nextEntry && !nextEntry.calcDisplaysAsRest()) {
+                    adjacentStemDir = nextEntry.calcUpStem() ? 1 : -1;
+                    auto [freezeStem, freezeDir] = nextEntry.calcEntryStemSettings();
+                    if (!freezeStem && nextEntry->getEntry()->v2Launch && adjacentStemDir == stemDir) {
+                        nextEntry = nextEntry.getNextInLayer();
+                        if (nextEntry) {
+                            adjacentStemDir = nextEntry.calcUpStem() ? 1 : -1;
+                        }
+                    }
+                }
+            }
+        }
+
+        if (adjacentStemDir != 0 && adjacentStemDir != stemDir) {
+            return tieOptions->mixedStemDirection == options::TieOptions::MixedStemDirection::Over;
+        }
+    }
+
+    return (stemDir > 0) ? false : true;
+}
+
 StaffCmper NoteInfoPtr::calcStaff() const
 {
     if ((*this)->crossStaff) {
@@ -3060,7 +3166,7 @@ bool NoteInfoPtr::calcPseudoTieInternal(utils::PseudoTieMode mode, CurveContourD
     }
 
     const auto entryInfoPtr = getEntryInfo();
-    const auto entry = entryInfoPtr->getEntry();    
+    const auto entry = entryInfoPtr->getEntry();
     if (entry->notes.empty() || !entry->isNote) {
         return false;
     }

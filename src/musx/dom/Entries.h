@@ -716,7 +716,7 @@ public:
 
     /// @brief Calculates if an entry displays as a rest.
     ///
-    /// This function takes voiced parts into account if the document's #PartVoicingPolicy applies part voicing. 
+    /// This function takes voiced parts into account if the document's #PartVoicingPolicy applies part voicing.
     [[nodiscard]] bool calcDisplaysAsRest() const;
 
     /// @brief Calculates the top and bottom staff positions of the entry, taking into account percussion notes. This function must not
@@ -901,7 +901,7 @@ public:
     ///   - **−1** if all cross-staffed notes cross downward to a lower staff.
     [[nodiscard]] int calcCrossStaffDirectionForAll(DeferredReference<MusxInstanceList<others::StaffUsed>> staffList = {}) const;
 
-    /// @brief Calculates all the notes in this entry are crossed to the same staff. 
+    /// @brief Calculates all the notes in this entry are crossed to the same staff.
     /// @return The crossed staffId if all notes are crossed to it. If no crossed notes, or if no all cross notes are crossed
     ///         to the same staff, returns std::nullopt.
     [[nodiscard]] std::optional<StaffCmper> calcCrossedStaffForAll() const;
@@ -974,7 +974,7 @@ public:
     /// @return True if iteration completed normally; false if terminated early by
     ///         the callback.
     bool iterateStartingSmartShapes(std::function<bool(const MusxInstance<others::SmartShape>&)> callback, bool findExact = false) const;
-        
+
         /// @brief Explicit operator< for std::map
     bool operator<(const EntryInfoPtr& other) const
     {
@@ -1648,6 +1648,13 @@ public:
     /// @return The candidate note or an empty NoteInfoPtr if no candidate was found.
     [[nodiscard]]
     NoteInfoPtr calcTieFrom(bool requireTie = true) const;
+
+    /// @brief Calculates the direction for a tie on this note.
+    /// @param forTieEnd If @p forTieEnd is true, the direction for the tie ending on this note is returned.
+    /// Else the direction for the tie starting on this note is returned.
+    /// @return true if the given tie faces upwards, false if not.
+    [[nodiscard]]
+    bool calcTieIsUp(bool forTieEnd = false) const;
 
     /// @brief Calculates the staff number, taking into account cross staffing
     [[nodiscard]]
