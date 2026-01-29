@@ -340,20 +340,52 @@ Bounds transformBounds(const Bounds& bounds, const Transform& transform)
 double decodeRotationRadians(int rotationValue)
 {
     constexpr double kPi = 3.14159265358979323846;
-    uint32_t raw = static_cast<uint32_t>(rotationValue);
-    bool bit180 = (raw & 0x80000000u) != 0;
-    bool belowXAxis = (raw & 0x40000000u) != 0;
-    uint32_t fine = raw & 0x3FFFFFFFu;
-    // fine ticks are pi/2048 per tick, stored 0..1024 (covers 90 degrees)
-    double fineAngle = static_cast<double>(fine) * (kPi / 2048.0);
 
-    if (bit180) {
-        // Angles referenced from 180: above axis subtract fine; below axis add fine.
-        return belowXAxis ? (kPi + fineAngle) : (kPi - fineAngle);
+    const uint32_t raw = static_cast<uint32_t>(rotationValue);
+
+    // Canonical boundary aliases observed in Finale:
+    //   0°   -> 0x00000000
+    //   90°  -> 0x00000400
+    //   180° -> 0x80000000
+    //   270° -> 0x40000400  (preferred alias)
+    switch (raw) {
+        case 0x00000000u: return 0.0;
+        case 0x00000400u: return 0.5 * kPi;
+        case 0x80000000u: return 1.0 * kPi;
+        case 0x40000400u: return 1.5 * kPi;
+        default: break;
     }
 
-    // Angles referenced from 0: above axis add fine; below axis subtract fine.
-    return belowXAxis ? -fineAngle : fineAngle;
+    const bool bit180     = (raw & 0x80000000u) != 0;
+    const bool belowXAxis = (raw & 0x40000000u) != 0;
+
+    // Magnitude is stored in ticks of (pi/2048). Within a quadrant it's 0..0x3FF.
+    // (0x400 only appears as a boundary alias handled above.)
+    const uint32_t ticks = raw & 0x3FFu;
+    const double a = static_cast<double>(ticks) * (kPi / 2048.0);
+
+    // Decode per the quadrant model verified by Lua animation:
+    //   q0 (0..90):          raw = 0x00000000 | ticks
+    //   q1 (90..180):        raw = 0x80000000 | (0x400 - ticks)
+    //   q2 (180..270):       raw = 0xC0000000 | ticks
+    //   q3 (270..360):       raw = 0x40000000 | (0x400 - ticks)
+    //
+    // Returned angle is in [0, 2pi).
+    if (!bit180 && !belowXAxis) {
+        // q0: 0 + a
+        return a;
+    }
+    if (bit180 && !belowXAxis) {
+        // q1: pi - a
+        return kPi - a;
+    }
+    if (bit180 && belowXAxis) {
+        // q2: pi + a
+        return kPi + a;
+    }
+
+    // q3: 2pi - a
+    return (2.0 * kPi) - a;
 }
 
 std::string utf8FromCodePoint(char32_t codePoint)
