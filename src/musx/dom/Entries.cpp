@@ -2295,7 +2295,7 @@ details::GFrameHoldContext::GFrameHoldContext(const DocumentPtr& document, Cmper
     m_honorPartVoicing = document->getPartVoicingPolicy() == PartVoicingPolicy::Apply;
 }
 
-details::GFrameHoldContext::GFrameHoldContext(const MusxInstance<details::GFrameHold>& gfHold, util::Fraction timeOffset)
+details::GFrameHoldContext::GFrameHoldContext(const MusxInstance<GFrameHold>& gfHold, util::Fraction timeOffset)
     : m_hold(gfHold), m_requestedPartId(gfHold->getRequestedPartId()), m_timeOffset(timeOffset)
 {
     const auto document = m_hold->getDocument();

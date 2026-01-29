@@ -186,11 +186,11 @@ public:
         std::optional<bool> matchVoice2 = std::nullopt, util::Fraction atGraceNoteDuration = 0) const;
 
     /// @brief Snaps a measure position to the nearest entry if possible.
-    /// @param position The measure position to snap.
+    /// @param location The measure location to snap.
     /// @param findExact If true, only snap to an entry that matches to within 1 evpu.
-    /// @return If an entry lies within the matching tolerance of @p position,
-    ///         returns the entry position. Otherwise returns @p position unchanged.
-    ///         If @p position is zero, zero is alwsy returned.
+    /// @return If an entry lies within the matching tolerance of @p location,
+    ///         returns the entry position. Otherwise returns @p location unchanged.
+    ///         If @p location is zero, zero is alwsy returned.
     util::Fraction snapLocationToEntryOrKeep(util::Fraction location, bool findExact = true) const;
 
     /// @brief Calculates the minimum legacy pickup spacer, if any.
