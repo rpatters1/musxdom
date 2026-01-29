@@ -1000,8 +1000,6 @@ bool EntryInfoPtr::calcUpStemDefault() const
 
 bool EntryInfoPtr::calcUpStemImpl() const
 {
-    /// @todo Add cross-staff support some day?
-
     //stem direction is determined by the beam a note or rest is part of, if any, so
     //we must always look for a beam to calculate direction.
     auto beamStart = findBeamStartOrCurrent();
