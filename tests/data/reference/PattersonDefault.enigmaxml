@@ -61,7 +61,7 @@
       <modified>
         <year>2026</year>
         <month>1</month>
-        <day>20</day>
+        <day>29</day>
         <modifiedBy/>
         <enigmaVersion>
           <major>27</major>
@@ -13259,34 +13259,6 @@
       <family>0</family>
       <name>Symbol</name>
     </fontName>
-    <fontName cmper="30">
-      <charsetBank>Mac</charsetBank>
-      <charsetVal>0</charsetVal>
-      <pitch>0</pitch>
-      <family>0</family>
-      <name>Arial Bold</name>
-    </fontName>
-    <fontName cmper="31">
-      <charsetBank>Mac</charsetBank>
-      <charsetVal>0</charsetVal>
-      <pitch>0</pitch>
-      <family>0</family>
-      <name>Helvetica Bold</name>
-    </fontName>
-    <fontName cmper="32">
-      <charsetBank>Mac</charsetBank>
-      <charsetVal>0</charsetVal>
-      <pitch>0</pitch>
-      <family>0</family>
-      <name>Times Roman</name>
-    </fontName>
-    <fontName cmper="33">
-      <charsetBank>Mac</charsetBank>
-      <charsetVal>0</charsetVal>
-      <pitch>0</pitch>
-      <family>0</family>
-      <name>Times Bold Italic</name>
-    </fontName>
     <frameSpec cmper="1" inci="0">
       <startEntry>1</startEntry>
       <endEntry>4</endEntry>
@@ -25681,6 +25653,32 @@
       <data>0</data>
       <data>72</data>
     </shapeData>
+    <shapeData cmper="210">
+      <data>352</data>
+      <data>212</data>
+      <data>40</data>
+      <data>212</data>
+      <data>354</data>
+      <data>-347</data>
+      <data>2215</data>
+      <data>2215</data>
+      <data>-1073740931</data>
+      <data>0</data>
+      <data>0</data>
+      <data>0</data>
+      <data>0</data>
+      <data>256</data>
+      <data>18</data>
+      <data>0</data>
+      <data>69</data>
+      <data>27</data>
+      <data>192</data>
+      <data>44</data>
+      <data>27</data>
+      <data>-71</data>
+      <data>44</data>
+      <data>27</data>
+    </shapeData>
     <shapeData cmper="213">
       <data>0</data>
       <data>0</data>
@@ -28630,6 +28628,11 @@
     <shapeDef cmper="141">
       <instList>209</instList>
       <dataList>209</dataList>
+      <shapeType>expression</shapeType>
+    </shapeDef>
+    <shapeDef cmper="142">
+      <instList>210</instList>
+      <dataList>210</dataList>
       <shapeType>expression</shapeType>
     </shapeDef>
     <shapeList cmper="1">
@@ -37439,6 +37442,31 @@
       </instruct>
     </shapeList>
     <shapeList cmper="209">
+      <instruct>
+        <numData>11</numData>
+        <tag>startObject</tag>
+      </instruct>
+      <instruct>
+        <numData>2</numData>
+        <tag>rMoveTo</tag>
+      </instruct>
+      <instruct>
+        <numData>1</numData>
+        <tag>lineWidth</tag>
+      </instruct>
+      <instruct>
+        <numData>2</numData>
+        <tag>setDash</tag>
+      </instruct>
+      <instruct>
+        <numData>6</numData>
+        <tag>curveTo</tag>
+      </instruct>
+      <instruct>
+        <tag>stroke</tag>
+      </instruct>
+    </shapeList>
+    <shapeList cmper="210">
       <instruct>
         <numData>11</numData>
         <tag>startObject</tag>

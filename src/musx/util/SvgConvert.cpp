@@ -658,7 +658,7 @@ std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape,
     const int debugShapeId = shape.getCmper();
     const bool debugShape = (debugShapeId == 8 || debugShapeId == 9 || debugShapeId == 113
         || debugShapeId == 128 || debugShapeId == 129
-        || (debugShapeId >= 134 && debugShapeId <= 141));
+        || (debugShapeId >= 134 && debugShapeId <= 142));
 
     std::vector<std::string> elements;
     Bounds bounds;
