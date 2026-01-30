@@ -2879,21 +2879,21 @@ CurveContourDirection NoteInfoPtr::calcDefaultTieDirection(bool forTieEnd) const
     size_t noteCount = entryInfo->getEntry()->notes.size();
     const bool upStem = entryInfo.calcUpStem();
 
-    const bool opposingSeconds = tieOptions->chordTieDirOpposingSeconds;
-    auto applyOpposingSeconds = [&](CurveContourDirection direction) {
-        if (!opposingSeconds || direction == CurveContourDirection::Unspecified) {
-            return direction;
-        }
-        if (direction == CurveContourDirection::Up && !thisNote->upStemSecond && thisNote->downStemSecond) {
-            return CurveContourDirection::Down;
-        }
-        if (direction == CurveContourDirection::Down && thisNote->upStemSecond && !thisNote->downStemSecond) {
-            return CurveContourDirection::Up;
-        }
-        return direction;
-    };
-
     if (noteCount > 1) {
+        const bool opposingSeconds = tieOptions->chordTieDirOpposingSeconds;
+        auto applyOpposingSeconds = [&](CurveContourDirection direction) {
+            if (!opposingSeconds || direction == CurveContourDirection::Unspecified) {
+                return direction;
+            }
+            if (direction == CurveContourDirection::Up && !thisNote->upStemSecond && thisNote->downStemSecond) {
+                return CurveContourDirection::Down;
+            }
+            if (direction == CurveContourDirection::Down && thisNote->upStemSecond && !thisNote->downStemSecond) {
+                return CurveContourDirection::Up;
+            }
+            return direction;
+        };
+
         // Notes in entry are sorted from lowest to highest
         size_t noteIndex = getNoteIndex();
 
@@ -2903,16 +2903,6 @@ CurveContourDirection NoteInfoPtr::calcDefaultTieDirection(bool forTieEnd) const
         }
         if (noteIndex + 1 == noteCount) {
             return CurveContourDirection::Up;
-        }
-
-        // Angle seconds away from each other, if present and if specified
-        if (tieOptions->secondsPlacement == options::TieOptions::SecondsPlacement::ShiftForSeconds) {
-            if (!thisNote->upStemSecond && thisNote->downStemSecond) {
-                return applyOpposingSeconds(CurveContourDirection::Down);
-            }
-            if (thisNote->upStemSecond && !thisNote->downStemSecond) {
-                return applyOpposingSeconds(CurveContourDirection::Up);
-            }
         }
 
         if (tieOptions->chordTieDirType != options::TieOptions::ChordTieDirType::StemReversal) {
