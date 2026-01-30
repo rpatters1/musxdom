@@ -2866,7 +2866,7 @@ CurveContourDirection NoteInfoPtr::calcDefaultTieDirection(bool forTieEnd) const
     const auto thisNote = operator->();
 
     if (forTieEnd) {
-        if (!calcTieFrom()) {
+        if (!thisNote->tieEnd) {
             return CurveContourDirection::Unspecified;
         }
     } else {
@@ -2895,9 +2895,6 @@ CurveContourDirection NoteInfoPtr::calcDefaultTieDirection(bool forTieEnd) const
         };
 
         // Notes in entry are sorted from lowest to highest
-        size_t noteIndex = getNoteIndex();
-
-        // Outer notes ignore tie preferences
         if (noteIndex == 0) {
             return CurveContourDirection::Down;
         }
