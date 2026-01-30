@@ -2025,7 +2025,8 @@ public:
     }
 
     /// @brief Gets the the @ref TieAlterStart or @ref TieAlterEnd for this note, based on the input boolean.
-    /// @param forTieEnd If @p forTieEnd is true, get the @ref TieAlterStart. Otherwise get the @TieAlterEnd.
+    /// @param noteInfoPtr The note for which to get the specified tie alteration record.
+    /// @param forTieEnd If @p forTieEnd is true, get the @ref TieAlterStart. Otherwise get the @ref TieAlterEnd.
     static MusxInstance<TieAlterBase> fromNoteInfo(const NoteInfoPtr& noteInfoPtr, bool forTieEnd = false);
 
     /**
