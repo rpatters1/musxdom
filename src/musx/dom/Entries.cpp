@@ -2861,6 +2861,14 @@ NoteInfoPtr NoteInfoPtr::calcTieFrom(bool requireTie) const
 
 CurveContourDirection NoteInfoPtr::calcDefaultTieDirection(bool forTieEnd) const
 {
+    // This routine is based completely on observed behavior of Finale 2K. If the
+    // program's behavior changes, this code may no longer work. Barf.
+    //
+    // This routine applies only to Tie Starts. Tie Ends should find their Tie Starts
+    // and use that.
+    //
+    // In this implementation we allow tie ends to resolve to their tie start before
+    // invoking the shared logic above.
     const auto entryInfo = getEntryInfo();
     const auto entryFrame = entryInfo.getFrame();
     const auto thisNote = operator->();
@@ -2879,6 +2887,53 @@ CurveContourDirection NoteInfoPtr::calcDefaultTieDirection(bool forTieEnd) const
     size_t noteCount = entryInfo->getEntry()->notes.size();
     const bool upStem = entryInfo.calcUpStem();
 
+    auto tryMixedStemDirection = [&]() -> std::optional<CurveContourDirection> {
+        std::optional<bool> adjacentUpStem;
+        if (forTieEnd) {
+            // There seems to be a "bug" in how Finale (as of Finale2000) determines mixed-stem values for Tie-Ends.
+            // It looks at the stem direction of the immediately preceding entry, even if that entry
+            // is not the entry that started the tie. Therefore, do not use calcTieFrom() to
+            // get the stem direction.
+            if (EntryInfoPtr prevEntry = entryInfo.getPreviousInLayer()) {
+                adjacentUpStem = prevEntry.calcUpStem();
+            }
+        } else {
+            if (NoteInfoPtr endNote = calcTieTo()) {
+                adjacentUpStem = endNote.getEntryInfo().calcUpStem();
+            } else {
+                // Finale (as of Finale 2000) has the following observed behavior. When no Tie-To note exists,
+                // it determines the mixed stem value based on
+                //      1. If the next entry is a rest, then adjacentUpStem is indeterminate.
+                //      2. If the next entry is a note with its stem frozen, use it
+                //      3. If the next entry floats, but it has a V2Launch, then if EITHER the V1 or
+                //              the V2 has a stem in the opposite direction, use it.
+                auto nextEntry = entryInfo.getNextInLayer();
+                if (nextEntry && !nextEntry.calcDisplaysAsRest()) {
+                    auto nextStem = nextEntry.calcUpStem();
+                    auto [freezeStem, freezeDir] = nextEntry.calcEntryStemSettings();
+                    if (!freezeStem && nextEntry->getEntry()->v2Launch && nextStem == upStem) {
+                        nextEntry = nextEntry.getNextInLayer();
+                        if (nextEntry) {
+                            nextStem = nextEntry.calcUpStem();
+                        }
+                    }
+                    adjacentUpStem = nextStem;
+                }
+            }
+        }
+        if (!adjacentUpStem.has_value()) {
+            return std::nullopt;
+        }
+        if (tieOptions->mixedStemDirection == options::TieOptions::MixedStemDirection::OppositeFirst) {
+            return std::nullopt;
+        }
+        if (*adjacentUpStem == upStem) {
+            return std::nullopt;
+        }
+        const bool tieUp = tieOptions->mixedStemDirection == options::TieOptions::MixedStemDirection::Over;
+        return tieUp ? CurveContourDirection::Up : CurveContourDirection::Down;
+    };
+
     if (noteCount > 1) {
         const bool opposingSeconds = tieOptions->chordTieDirOpposingSeconds;
         auto applyOpposingSeconds = [&](CurveContourDirection direction) {
@@ -2894,11 +2949,19 @@ CurveContourDirection NoteInfoPtr::calcDefaultTieDirection(bool forTieEnd) const
             return direction;
         };
 
-        // Notes in entry are sorted from lowest to highest
+        // Notes in entries are always sorted from lowest to highest
+        const size_t noteIndex = getNoteIndex();
+
         if (noteIndex == 0) {
+            if (auto mixed = tryMixedStemDirection()) {
+                return *mixed;
+            }
             return CurveContourDirection::Down;
         }
         if (noteIndex + 1 == noteCount) {
+            if (auto mixed = tryMixedStemDirection()) {
+                return *mixed;
+            }
             return CurveContourDirection::Up;
         }
 
@@ -2914,48 +2977,17 @@ CurveContourDirection NoteInfoPtr::calcDefaultTieDirection(bool forTieEnd) const
             }
         }
 
-        // int staffPos = calcStaffPosition(); not implemented
         const int staffPos = std::get<3>(calcNotePropertiesInView(/*alwaysUseEntryStaff*/ true));
         const auto staff = entryInfo.createCurrentStaff();
         int stemReversalPos = staff->stemReversal;
         return applyOpposingSeconds((staffPos < stemReversalPos) ? CurveContourDirection::Down : CurveContourDirection::Up);
     }
     
-    std::optional<bool> adjacentUpStem;
-    if (forTieEnd) {
-        // There seems to be a "bug" in how Finale determines mixed-stem values for Tie-Ends.
-        // It looks at the stem direction of the immediately preceding entry, even if that entry
-        // is not the entry that started the tie. Therefore, do not use calcTieFrom to
-        // get the stem direction.
-        if (EntryInfoPtr prevEntry = entryInfo.getPreviousInLayer()) {
-            adjacentUpStem = prevEntry.calcUpStem();
-        }
-    } else {
-        if (NoteInfoPtr endNote = calcTieTo()) {
-            adjacentUpStem = endNote.getEntryInfo().calcUpStem();
-        } else {
-            // Finale (as of Finale2000) has the following observed behavior. When no Tie-To note exists,
-            // it determines the mixed stem value based on
-            //		1. If the next entry is a rest, the adjStemDir is indeterminate so use stemDir (i.e., fall thru to bottom)
-            //		2. If the next entry is a note with its stem frozen, use it
-            //		3. If the next entry floats, but it has a V2Launch, then if EITHER the V1 or
-            //				the V2 has a stem in the opposite direction, use it.
-            auto nextEntry = entryInfo.getNextInLayer();
-            if (nextEntry && !nextEntry.calcDisplaysAsRest()) {
-                adjacentUpStem = nextEntry.calcUpStem();
-                auto [freezeStem, freezeDir] = nextEntry.calcEntryStemSettings();
-                if (!freezeStem && nextEntry->getEntry()->v2Launch && adjacentUpStem.value_or(upStem) == upStem) {
-                    nextEntry = nextEntry.getNextInLayer();
-                    if (nextEntry) {
-                        adjacentUpStem = nextEntry.calcUpStem();
-                    }
-                }
-            }
-        }
-    }
-    if (adjacentUpStem.has_value() && *adjacentUpStem != upStem) {
-        const bool tieUp = tieOptions->mixedStemDirection == options::TieOptions::MixedStemDirection::Over;
-        return tieUp ? CurveContourDirection::Up : CurveContourDirection::Down;
+    // Finale’s mixed-stem logic looks ahead/back for an adjacent entry whose stem direction
+    // differs from the current stem. We replicate that by checking for adjacent stems before
+    // relying on the fallback direction below.
+    if (auto mixed = tryMixedStemDirection()) {
+        return *mixed;
     }
 
     return upStem ? CurveContourDirection::Down : CurveContourDirection::Up;
