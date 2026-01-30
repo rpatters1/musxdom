@@ -178,12 +178,13 @@ public:
     /// @param position The measure position to find.
     /// @param findExact If true, only find an entry that matches to within 1 evpu. Otherwise find the closest entry in the measure.
     /// @param matchLayer If specified, only find entries in this 0-based layer index. (Values 0..3)
-    /// @param matchVoice2 If specified, the value of #Entry::voice2 must match the specified value.
+    /// @param matchVoice Determines which voice(s) are candidates. Use #MatchVoice::Any (the default) to accept either voice,
+    /// #MatchVoice::Voice1 for voice 1 only, or #MatchVoice::Voice2 for voice 2 only.
     /// @param atGraceNoteDuration Match on this grace note duration. When it is zero, grace notes are skipped.
     /// @return The entry if found, otherwise `nullptr`.
     [[nodiscard]]
     EntryInfoPtr calcNearestEntry(util::Fraction position, bool findExact = true, std::optional<LayerIndex> matchLayer = std::nullopt,
-        std::optional<bool> matchVoice2 = std::nullopt, util::Fraction atGraceNoteDuration = 0) const;
+        MatchVoice matchVoice = MatchVoice::Any, util::Fraction atGraceNoteDuration = 0) const;
 
     /// @brief Snaps a measure position to the nearest entry if possible.
     /// @param location The measure location to snap.
@@ -1455,11 +1456,12 @@ public:
     /// @brief Calculates the nearest non-grace-note entry at the given @p position.
     /// @param position The measure position to find.
     /// @param findExact If true, only find an entry that matches to within 1 evpu. Otherwise find the closest entry in the measure.
-    /// @param matchVoice2 If specified, the value of #Entry::voice2 must match the specified value.
+    /// @param matchVoice Determines which voice(s) are candidates. Use #MatchVoice::Any (the default) to accept either voice,
+    /// #MatchVoice::Voice1 for voice 1 only, or #MatchVoice::Voice2 for voice 2 only.
     /// @param atGraceNoteDuration Match on this grace note duration. When it is zero, grace notes are skipped.
     /// @return The entry if found, otherwise `nullptr`.
     [[nodiscard]]
-    EntryInfoPtr calcNearestEntry(util::Fraction position, bool findExact = true, std::optional<bool> matchVoice2 = std::nullopt,
+    EntryInfoPtr calcNearestEntry(util::Fraction position, bool findExact = true, MatchVoice matchVoice = MatchVoice::Any,
         util::Fraction atGraceNoteDuration = 0) const;
 
     /// @brief Iterates the entries for the specified layer in this EntryFrame from left to right.

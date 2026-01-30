@@ -239,7 +239,7 @@ bool EntryFrame::calcAreAllEntriesHiddenInFrame() const
     return true;
 }
 
-EntryInfoPtr EntryFrame::calcNearestEntry(util::Fraction position, bool findExact, std::optional<bool> matchVoice2, util::Fraction atGraceNoteDuration) const
+EntryInfoPtr EntryFrame::calcNearestEntry(util::Fraction position, bool findExact, MatchVoice matchVoice, util::Fraction atGraceNoteDuration) const
 {
     EntryInfoPtr result;
     util::Fraction bestDiff = (std::numeric_limits<util::Fraction>::max)();
@@ -248,8 +248,21 @@ EntryInfoPtr EntryFrame::calcNearestEntry(util::Fraction position, bool findExac
         if (entryInfo.calcGraceElapsedDuration() != atGraceNoteDuration) {
             return true; // iterate past non-matching grace notes
         }
-        if (matchVoice2.has_value() && entryInfo->getEntry()->voice2 != *matchVoice2) {
-            return true; // iterate past non-matching v1v2 values
+        const bool entryVoice2 = entryInfo->getEntry()->voice2;
+        bool matchesVoice = true;
+        switch (matchVoice) {
+            case MatchVoice::Any:
+                matchesVoice = true;
+                break;
+            case MatchVoice::Voice1:
+                matchesVoice = !entryVoice2;
+                break;
+            case MatchVoice::Voice2:
+                matchesVoice = entryVoice2;
+                break;
+        }
+        if (!matchesVoice) {
+            return true; // iterate past non-matching v1/v2 values
         }
         using std::abs;
         auto posDiff = abs(position - entryInfo->elapsedDuration);
@@ -2543,7 +2556,7 @@ bool details::GFrameHoldContext::calcIsCuesOnly(bool includeVisibleInScore) cons
 }
 
 EntryInfoPtr details::GFrameHoldContext::calcNearestEntry(util::Fraction position, bool findExact, std::optional<LayerIndex> matchLayer,
-    std::optional<bool> matchVoice2, util::Fraction atGraceNoteDuration) const
+    MatchVoice matchVoice, util::Fraction atGraceNoteDuration) const
 {
     EntryInfoPtr bestResult;
     util::Fraction bestDiff = (std::numeric_limits<util::Fraction>::max)();
@@ -2551,7 +2564,7 @@ EntryInfoPtr details::GFrameHoldContext::calcNearestEntry(util::Fraction positio
     LayerIndex startLayer = matchLayer.value_or(0);
     for (LayerIndex layerIndex = startLayer; layerIndex < m_hold->frames.size(); layerIndex++) {
         if (auto entryFrame = createEntryFrame(layerIndex)) {
-            if (auto result = entryFrame->calcNearestEntry(position, findExact, matchVoice2, atGraceNoteDuration)) {
+            if (auto result = entryFrame->calcNearestEntry(position, findExact, matchVoice, atGraceNoteDuration)) {
                 if (findExact) {
                     return result;
                 }
