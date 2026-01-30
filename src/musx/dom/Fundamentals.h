@@ -106,6 +106,8 @@ constexpr int MAX_CUE_PERCENTAGE = 90; ///< Arbitrary value that determines the 
 namespace smulf_glyph {
 // Use namespace instead of enum class due to comparison ugliness with enum class.
 constexpr char32_t unpitchedPercussionClef2 = 0xE06A;   ///< glyph "unpitchedPercussionClef2" (standard)
+constexpr char32_t timeSigCommon = 0xE08A;              ///< glyph "timeSigCommon" (standard)
+constexpr char32_t timeSigCutCommon = 0xE08B;           ///< glyph "timeSigCutCommon" (standard)
 constexpr char32_t sixStringTabClefSerif = 0xF40B;      ///< glyph "6stringTabClefSerif" (from Finale optional set)
 constexpr char32_t fourStringTabClefSerif = 0xF40D;     ///< glyph "4stringTabClefSerif" (from Finale optional set)
 } //namespace smulf_glyph

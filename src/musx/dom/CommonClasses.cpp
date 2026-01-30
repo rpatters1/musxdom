@@ -486,8 +486,8 @@ bool MusicRange::contains(const EntryInfoPtr& entryInfo) const
 // ***** TimeSignature *****
 // *************************
 
-TimeSignature::TimeSignature(const DocumentWeakPtr& document, int beats, Edu unit, bool hasCompositeTop, bool hasCompositeBottom, std::optional<bool> abbreviate)
-    : CommonClassBase(document), m_abbreviate(abbreviate)
+TimeSignature::TimeSignature(const DocumentWeakPtr& document, int beats, Edu unit, bool hasCompositeTop, bool hasCompositeBottom, Abbreviation abbreviate)
+    : CommonClassBase(document), m_abbreviation(abbreviate)
 {
     auto tops = [&]() -> std::vector<std::vector<util::Fraction>> {
         if (hasCompositeTop) {
@@ -538,18 +538,23 @@ TimeSignature::TimeSignature(const DocumentWeakPtr& document, int beats, Edu uni
 std::optional<char32_t> TimeSignature::getAbbreviatedSymbol() const
 {
     auto musicChars = getDocument()->getOptions()->get<options::MusicSymbolOptions>();
-    const char32_t commonTimeSymbol = musicChars ? musicChars->timeSigAbrvCommon : U'\U0000E08A';   // SMuFL common time symbol default
-    const char32_t cutTimeSymbol = musicChars ? musicChars->timeSigAbrvCut : U'\U0000E08B';         // SMuFL cut time symbol default
-    if (m_abbreviate.has_value()) {
-        if (m_abbreviate.value()) {
+    const char32_t commonTimeSymbol = musicChars ? musicChars->timeSigAbrvCommon : smulf_glyph::timeSigCommon;
+    const char32_t cutTimeSymbol = musicChars ? musicChars->timeSigAbrvCut : smulf_glyph::timeSigCutCommon;
+    switch (m_abbreviation) {
+        case Abbreviation::Abbreviated:
             if (isCutTime()) {
                 return cutTimeSymbol;
             } else if (isCommonTime()) {
                 return commonTimeSymbol;
             }
-        }
-    } else if (auto options = getDocument()->getOptions()->get<options::TimeSignatureOptions>()) {
-        if (options->timeSigDoAbrvCut && isCutTime()) {
+            return std::nullopt;
+        case Abbreviation::Numeric:
+            return std::nullopt;
+        case Abbreviation::NotApplicable:
+            break;
+    }
+    if (auto options = getDocument()->getOptions()->get<options::TimeSignatureOptions>()) {
+        if (options->timeSigDoAbrvCut && isCutTime  ()) {
             return cutTimeSymbol;
         } else if (options->timeSigDoAbrvCommon && isCommonTime()) {
             return commonTimeSymbol;

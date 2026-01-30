@@ -207,7 +207,8 @@ MusxInstance<TimeSignature> Measure::createDisplayTimeSignature(const std::optio
     if (!useDisplayTimesig) {
         return createTimeSignature(forStaff);
     }
-    return MusxInstance<TimeSignature>(new TimeSignature(getDocument(), dispBeats, dispDivbeat, compositeDispNumerator, compositeDispDenominator, abbrvTime));
+    return MusxInstance<TimeSignature>(new TimeSignature(getDocument(), dispBeats, dispDivbeat, compositeDispNumerator, compositeDispDenominator,
+        abbrvTime ? TimeSignature::Abbreviation::Abbreviated : TimeSignature::Abbreviation::Numeric));
 }
 
 util::Fraction Measure::calcMinLegacyPickupSpacer(StaffCmper forStaffId) const

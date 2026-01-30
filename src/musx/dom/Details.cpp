@@ -498,7 +498,8 @@ MusxInstance<TimeSignature> IndependentStaffDetails::createDisplayTimeSignature(
     if (!hasDispTime) {
         return createTimeSignature();
     }
-    return MusxInstance<TimeSignature>(new TimeSignature(getDocument(), dispBeats, dispDivBeat, displayAltNumTsig, displayAltDenTsig, displayAbbrvTime));
+    return MusxInstance<TimeSignature>(new TimeSignature(getDocument(), dispBeats, dispDivBeat, displayAltNumTsig, displayAltDenTsig,
+        displayAbbrvTime ? TimeSignature::Abbreviation::Abbreviated : TimeSignature::Abbreviation::Numeric));
 }
 
 // ************************

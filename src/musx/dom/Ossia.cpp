@@ -40,7 +40,8 @@ MusxInstance<TimeSignature> OssiaHeader::createTimeSignature() const
     // - remove the `false` parameter, which will cause it to come from TimeSignatureOptions, or
     // - calculate the the abbreviated value and pass it instead of `false`.
     // However, as observed in F27.4, even setting the value in TimeSignatureOptions does not cause 2/2 to be abbreviated to cut time.
-    return MusxInstance<TimeSignature>(new TimeSignature(getDocument(), beats, divBeat, compositeNumerator, compositeDenominator, false));
+    return MusxInstance<TimeSignature>(new TimeSignature(getDocument(), beats, divBeat, compositeNumerator, compositeDenominator,
+        TimeSignature::Abbreviation::Numeric));
 }
 
 MusxInstanceList<details::Bracket> OssiaHeader::getBrackets() const
