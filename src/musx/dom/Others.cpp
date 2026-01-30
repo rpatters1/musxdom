@@ -207,7 +207,8 @@ MusxInstance<TimeSignature> Measure::createDisplayTimeSignature(const std::optio
     if (!useDisplayTimesig) {
         return createTimeSignature(forStaff);
     }
-    return MusxInstance<TimeSignature>(new TimeSignature(getDocument(), dispBeats, dispDivbeat, compositeDispNumerator, compositeDispDenominator, abbrvTime));
+    return MusxInstance<TimeSignature>(new TimeSignature(getDocument(), dispBeats, dispDivbeat, compositeDispNumerator, compositeDispDenominator,
+        abbrvTime ? TimeSignature::Abbreviation::Abbreviated : TimeSignature::Abbreviation::Numeric));
 }
 
 util::Fraction Measure::calcMinLegacyPickupSpacer(StaffCmper forStaffId) const
@@ -345,7 +346,8 @@ EntryInfoPtr MeasureExprAssign::calcAssociatedEntry() const
         }
         if (auto gfHold = details::GFrameHoldContext(getDocument(), getRequestedPartId(), staffAssign, getCmper())) {
             const auto matchLayer = layer ? std::make_optional(LayerIndex(layer - 1)) : std::nullopt;
-            return gfHold.calcNearestEntry(util::Fraction::fromEdu(eduPosition), findExact, matchLayer, voice2);
+            const auto matchVoice = voice2 ? MatchVoice::Voice2 : MatchVoice::Voice1;
+            return gfHold.calcNearestEntry(util::Fraction::fromEdu(eduPosition), findExact, matchLayer, matchVoice);
         }
     }
     return {};

@@ -178,12 +178,13 @@ public:
     /// @param position The measure position to find.
     /// @param findExact If true, only find an entry that matches to within 1 evpu. Otherwise find the closest entry in the measure.
     /// @param matchLayer If specified, only find entries in this 0-based layer index. (Values 0..3)
-    /// @param matchVoice2 If specified, the value of #Entry::voice2 must match the specified value.
+    /// @param matchVoice Determines which voice(s) are candidates. Use #MatchVoice::Any (the default) to accept either voice,
+    /// #MatchVoice::Voice1 for voice 1 only, or #MatchVoice::Voice2 for voice 2 only.
     /// @param atGraceNoteDuration Match on this grace note duration. When it is zero, grace notes are skipped.
     /// @return The entry if found, otherwise `nullptr`.
     [[nodiscard]]
     EntryInfoPtr calcNearestEntry(util::Fraction position, bool findExact = true, std::optional<LayerIndex> matchLayer = std::nullopt,
-        std::optional<bool> matchVoice2 = std::nullopt, util::Fraction atGraceNoteDuration = 0) const;
+        MatchVoice matchVoice = MatchVoice::Any, util::Fraction atGraceNoteDuration = 0) const;
 
     /// @brief Snaps a measure position to the nearest entry if possible.
     /// @param location The measure location to snap.
@@ -1455,11 +1456,12 @@ public:
     /// @brief Calculates the nearest non-grace-note entry at the given @p position.
     /// @param position The measure position to find.
     /// @param findExact If true, only find an entry that matches to within 1 evpu. Otherwise find the closest entry in the measure.
-    /// @param matchVoice2 If specified, the value of #Entry::voice2 must match the specified value.
+    /// @param matchVoice Determines which voice(s) are candidates. Use #MatchVoice::Any (the default) to accept either voice,
+    /// #MatchVoice::Voice1 for voice 1 only, or #MatchVoice::Voice2 for voice 2 only.
     /// @param atGraceNoteDuration Match on this grace note duration. When it is zero, grace notes are skipped.
     /// @return The entry if found, otherwise `nullptr`.
     [[nodiscard]]
-    EntryInfoPtr calcNearestEntry(util::Fraction position, bool findExact = true, std::optional<bool> matchVoice2 = std::nullopt,
+    EntryInfoPtr calcNearestEntry(util::Fraction position, bool findExact = true, MatchVoice matchVoice = MatchVoice::Any,
         util::Fraction atGraceNoteDuration = 0) const;
 
     /// @brief Iterates the entries for the specified layer in this EntryFrame from left to right.
@@ -1597,13 +1599,14 @@ public:
      * @note In Finale, the default whole rest staff position is the middle staff line. Other music notation systems
      * frequently expect the standard whole rest staff position to be the second line from the top. You may need to interpolate
      * the staff position returned by #calcNoteProperties for whole rests.
-     * @param enharmonicRespell If supplied, return the default enharmonic respelling based on this value. If omitted,
-     * this value is calculated automatically based on the score or part settings. Normally you will omit it.
+     * @param enharmonicOverride Overrides the enharmonic respelling behavior. Use #EnharmonicOverride::None to defer
+     * to the score/part data (default), #EnharmonicOverride::Respell to force respelling, or #EnharmonicOverride::NoRespell
+     * to prevent respelling even if the part would otherwise respell.
      * @param alwaysUseEntryStaff If true, the entry is not checked for cross-staff staffing. Normally you omit this.
      * @return #Note::NoteProperties
      */
     [[nodiscard]]
-    Note::NoteProperties calcNoteProperties(const std::optional<bool>& enharmonicRespell = std::nullopt, bool alwaysUseEntryStaff = false) const;
+    Note::NoteProperties calcNoteProperties(EnharmonicOverride enharmonicOverride = EnharmonicOverride::None, bool alwaysUseEntryStaff = false) const;
 
     /**
      * @brief Calculates the note name, octave number, actual alteration, and staff position for the concert pitch of the note. This function does
@@ -1649,12 +1652,21 @@ public:
     [[nodiscard]]
     NoteInfoPtr calcTieFrom(bool requireTie = true) const;
 
-    /// @brief Calculates the direction for a tie on this note.
-    /// @param forTieEnd If @p forTieEnd is true, the direction for the tie ending on this note is returned.
-    /// Else the direction for the tie starting on this note is returned.
-    /// @return true if the given tie faces upwards, false if not.
+    /// @brief Calculates the default tie direction for this note.
+    /// @param forTieEnd If @p forTieEnd is true, the direction for the tie-end stub on this note is returned.
+    /// Otherwise the direction for the tie starting on this note is returned.
+    /// @return The contour direction that applies to the tie, or
+    ///         #CurveContourDirection::Unspecified when the contour cannot be determined.
     [[nodiscard]]
-    bool calcTieIsUp(bool forTieEnd = false) const;
+    CurveContourDirection calcDefaultTieDirection(bool forTieEnd = false) const;
+
+    /// @brief Calculates the effective tie direction for this note, taking into account all options and overrides.
+    /// @param forTieEnd If @p forTieEnd is true, the direction for the tie-end stub on this note is returned.
+    /// Otherwise the direction for the tie starting on this note is returned.
+    /// @return The contour direction that applies to the tie, or
+    ///         #CurveContourDirection::Unspecified when the contour cannot be determined.
+    [[nodiscard]]
+    CurveContourDirection calcEffectiveTieDirection(bool forTieEnd = false) const;
 
     /// @brief Calculates the staff number, taking into account cross staffing
     [[nodiscard]]
@@ -1730,7 +1742,7 @@ public:
     /// is part of a chord, the function always returns null.
     /// @param [out] tieDirection Optional output parameter receiving the tie's curve contour direction. It is set to
     ///         #CurveContourDirection::Down for under ties, #CurveContourDirection::Up for over ties, or
-    ///         #CurveContourDirection::Auto if the contour cannot be determined.
+    ///         #CurveContourDirection::Unspecified if the contour cannot be determined.
     /// @return The arpeggio-tied note, or null if no such tie exists or this note is part of a chord.
     [[nodiscard]]
     NoteInfoPtr calcArpeggiatedTieToNote(CurveContourDirection* tieDirection = nullptr) const;
@@ -1740,7 +1752,7 @@ public:
     /// items equal to the number of notes in the entry.
     /// @param [out] tieDirection Optional output parameter receiving the tie's curve contour direction. It is set to
     ///         #CurveContourDirection::Down for under ties, #CurveContourDirection::Up for over ties, or
-    ///         #CurveContourDirection::Auto if the contour cannot be determined.
+    ///         #CurveContourDirection::Unspecified if the contour cannot be determined.
     /// @return True if a pseudo laissez vibrer tie exists; otherwise false.
     [[nodiscard]]
     bool calcHasPseudoLvTie(CurveContourDirection* tieDirection = nullptr) const;
@@ -1750,7 +1762,7 @@ public:
     /// to the number of notes in the entry.
     /// @param [out] tieDirection Optional output parameter receiving the tie's curve contour direction. It is set to
     ///         #CurveContourDirection::Down for under ties, #CurveContourDirection::Up for over ties, or
-    ///         #CurveContourDirection::Auto if the contour cannot be determined.
+    ///         #CurveContourDirection::Unspecified if the contour cannot be determined.
     /// @return True if a pseudo tie end exists; otherwise false.
     [[nodiscard]]
     bool calcHasPseudoTieEnd(CurveContourDirection* tieDirection = nullptr) const;

@@ -52,11 +52,11 @@ ClefOptions::ClefInfo ClefOptions::ClefDef::calcInfo(const MusxInstance<others::
     auto calcPercType = [&]() -> music_theory::ClefType {
         if (auto clefFont = calcFont()) {
             if (clefFont->calcIsSMuFL()) {
-                if (clefChar == 0xE06A) { // SMuFL `unpitchedPercussionClef2`
+                if (clefChar == smulf_glyph::unpitchedPercussionClef2) {
                     return music_theory::ClefType::Percussion2;
                 }
             } else if (clefFont->calcIsSymbolFont()) {
-                if (clefChar == 214) {
+                if (clefChar == symbol_glyph::unpitchedPercussionClef2) {
                     return music_theory::ClefType::Percussion2;
                 }
             }
@@ -81,10 +81,10 @@ ClefOptions::ClefInfo ClefOptions::ClefDef::calcInfo(const MusxInstance<others::
             }
             return result;
         }
-        // 0xF40D is "4stringTabClefSerif" and 0xF40B is "6stringTabClefSerif"
-        // They are both optional glyphs from the MakeMusic extended glyph set defined in glyphnamesFinale.json.
-        if (calcFont()->calcIsSMuFL() && (clefChar == 0xF40D || clefChar == 0xF40B)) {
-            result = music_theory::ClefType::TabSerif;
+        if (auto clefFont = calcFont(); clefFont && clefFont->calcIsSMuFL()) {
+            if (clefChar == smulf_glyph::fourStringTabClefSerif || clefChar == smulf_glyph::sixStringTabClefSerif) {
+                result = music_theory::ClefType::TabSerif;
+            }
         }
         return result;
     };

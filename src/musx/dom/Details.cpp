@@ -498,7 +498,8 @@ MusxInstance<TimeSignature> IndependentStaffDetails::createDisplayTimeSignature(
     if (!hasDispTime) {
         return createTimeSignature();
     }
-    return MusxInstance<TimeSignature>(new TimeSignature(getDocument(), dispBeats, dispDivBeat, displayAltNumTsig, displayAltDenTsig, displayAbbrvTime));
+    return MusxInstance<TimeSignature>(new TimeSignature(getDocument(), dispBeats, dispDivBeat, displayAltNumTsig, displayAltDenTsig,
+        displayAbbrvTime ? TimeSignature::Abbreviation::Abbreviated : TimeSignature::Abbreviation::Numeric));
 }
 
 // ************************
@@ -694,6 +695,19 @@ std::vector<StaffGroupInfo> StaffGroupInfo::getGroupsAtMeasure(MeasCmper measure
         }
     }
     return retval;
+}
+
+// ************************
+// ***** TieAlterBase *****
+// ************************
+
+MusxInstance<TieAlterBase> TieAlterBase::fromNoteInfo(const NoteInfoPtr& noteInfoPtr, bool forTieEnd)
+{
+    const auto entry = noteInfoPtr.getEntryInfo()->getEntry();
+    if (forTieEnd) {
+        return entry->getDocument()->getDetails()->getForNote<TieAlterEnd>(noteInfoPtr);
+    }
+    return entry->getDocument()->getDetails()->getForNote<TieAlterStart>(noteInfoPtr);
 }
 
 } // namespace details

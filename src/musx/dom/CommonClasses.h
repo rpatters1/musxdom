@@ -468,6 +468,14 @@ public:
 class TimeSignature : public CommonClassBase
 {
 public:
+    /// @enum Abbreviation
+    /// @brief Specifies whether a time signature is displayed in numeric or abbreviated form.
+    enum class Abbreviation
+    {
+        NotApplicable, ///< The time signature is not for display, so abbreviation is inapplicable. (Default)
+        Numeric,       ///< Display the numeric time signature (e.g., 4/4 or 2/2).
+        Abbreviated    ///< Display the abbreviated time signature when available (i.e., common time or cut time).
+    };
 
     /// @brief A single time signature component
     struct TimeSigComponent
@@ -529,7 +537,7 @@ public:
     MusxInstance<TimeSignature> createComponent(size_t index) const
     {
         checkIndex(index);
-        return MusxInstance<TimeSignature>(new TimeSignature(getDocument(), components[index], m_abbreviate));
+        return MusxInstance<TimeSignature>(new TimeSignature(getDocument(), components[index], m_abbreviation));
     }
 
     /// @brief Returns the abbreviated symbol (code point) for this time signature, or std::nullopt if none.
@@ -552,24 +560,18 @@ private:
         }
     }
 
-    /**
-     * @brief Constructor for measures and independent time signature records.
-     * @param measure An instance of
-     */
+    /// @brief Constructor for measures and independent time signature records.
     explicit TimeSignature(const DocumentWeakPtr& document, int beats, Edu unit, bool hasCompositeTop, bool hasCompositeBottom,
-        std::optional<bool> abbreviate = std::nullopt);
+        Abbreviation abbreviate = {});
 
-    /**
-     * @brief Constructor for components
-     * @param measure An instance of
-     */
-    explicit TimeSignature(const DocumentWeakPtr& document, const TimeSigComponent& timeSigUnit, std::optional<bool> abbreviate)
-        : CommonClassBase(document), m_abbreviate(abbreviate)
+    /// @brief Constructor for components.
+    explicit TimeSignature(const DocumentWeakPtr& document, const TimeSigComponent& timeSigUnit, Abbreviation abbreviate = {})
+        : CommonClassBase(document), m_abbreviation(abbreviate)
     {
         components.push_back(timeSigUnit);
     }
 
-    std::optional<bool> m_abbreviate;
+    Abbreviation m_abbreviation{};
 
     friend class others::Measure;
     friend class others::OssiaHeader;

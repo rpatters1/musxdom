@@ -256,11 +256,11 @@ TEST(EntryTest, UnlinkedEnharmonicSpelling)
     ASSERT_TRUE(details);
 
     auto checkEntry = [](bool forWrittenPitch, const EntryInfoPtr& entryInfo, music_theory::NoteName expectedNoteName, int expectedOctave, int expectedAlteration,
-                            const std::optional<bool>& enharmonicRespell = std::nullopt) {
+                            EnharmonicOverride enharmonicOverride = EnharmonicOverride::None) {
         NoteInfoPtr noteInfo(entryInfo, 0); // assume 1st note
         ASSERT_TRUE(noteInfo);
         auto [noteName, octave, alteration, staffLine] = forWrittenPitch
-                                                       ? noteInfo.calcNoteProperties(enharmonicRespell)
+                                                       ? noteInfo.calcNoteProperties(enharmonicOverride)
                                                        : noteInfo.calcNotePropertiesConcert();
         EXPECT_EQ(noteName, expectedNoteName);
         EXPECT_EQ(octave, expectedOctave);
@@ -298,8 +298,8 @@ TEST(EntryTest, UnlinkedEnharmonicSpelling)
         noteAlts = details->getForNote<details::NoteAlterations>(firstNote, 1);
         ASSERT_TRUE(noteAlts);
         EXPECT_TRUE(noteAlts->enharmonic) << "Part is enharmonically respelled";
-        checkEntry(true, firstNote.getEntryInfo(), music_theory::NoteName::F, 4, 2, false);
-        checkEntry(true, firstNote.getEntryInfo(), music_theory::NoteName::G, 4, 0, true);
+        checkEntry(true, firstNote.getEntryInfo(), music_theory::NoteName::F, 4, 2, EnharmonicOverride::NoRespell);
+        checkEntry(true, firstNote.getEntryInfo(), music_theory::NoteName::G, 4, 0, EnharmonicOverride::Respell);
     }
 }
 

@@ -331,17 +331,17 @@ TEST(ShapeDefTest, CalculateSlurContourDirection)
 
     using Contour = musx::dom::CurveContourDirection;
     constexpr std::array<Contour, 11> expectedDirections = {
-        Contour::Auto,    // 1
-        Contour::Auto,    // 2
-        Contour::Auto,    // 3
-        Contour::Auto,    // 4
-        Contour::Auto,    // 5
-        Contour::Auto,    // 6
-        Contour::Up,      // 7
-        Contour::Down,    // 8
-        Contour::Up,      // 9
-        Contour::Down,    // 10
-        Contour::Auto     // 11
+        Contour::Unspecified,   // 1
+        Contour::Unspecified,   // 2
+        Contour::Unspecified,   // 3
+        Contour::Unspecified,   // 4
+        Contour::Unspecified,   // 5
+        Contour::Unspecified,   // 6
+        Contour::Up,            // 7
+        Contour::Down,          // 8
+        Contour::Up,            // 9
+        Contour::Down,          // 10
+        Contour::Unspecified    // 11
     };
 
     for (size_t i = 0; i < shapes.size(); ++i) {
