@@ -2859,47 +2859,6 @@ NoteInfoPtr NoteInfoPtr::calcTieFrom(bool requireTie) const
     return calcTieFromWithPreviousMeasure(m_entry.getMeasure() - 1, requireTie);
 }
 
-CurveContourDirection NoteInfoPtr::calcEffectiveTieDirection(bool forTieEnd) const
-{
-    if (const auto tieAlter = details::TieAlterBase::fromNoteInfo(*this, forTieEnd)) {
-        if (tieAlter->freezeDirection) {
-            return tieAlter->down ? CurveContourDirection::Down : CurveContourDirection::Up;
-        }
-    }
-
-    const auto entryInfo = getEntryInfo();
-    const auto entryFrame = entryInfo.getFrame();
-    const auto entry = entryInfo->getEntry();
-
-    if (entry->splitStem) {
-        return (*this)->upSplitStem ? CurveContourDirection::Up : CurveContourDirection::Down;
-    }
-
-    if (const auto layerInfo = entryFrame->getLayerAttributes()) {
-        if (layerInfo->freezeLayer && entryInfo.calcIfLayerSettingsApply()) {
-            const bool tieUp = layerInfo->freezeStemsUp == layerInfo->freezTiesToStems;
-            return tieUp ? CurveContourDirection::Up : CurveContourDirection::Down;
-        }
-    }
-
-    if (entry->v2Launch || entry->voice2) {
-        return entryInfo.calcUpStem() ? CurveContourDirection::Up : CurveContourDirection::Down;
-    }
-
-    if (entry->flipTie) {
-        return entryInfo.calcUpStem() ? CurveContourDirection::Up : CurveContourDirection::Down;
-    }
-
-    // For cross-staff notes: match the stem direction
-    const auto scrollViewStaves = entryFrame->getDocument()->getScrollViewStaves(entryFrame->getRequestedPartId());
-    const int crossStaffDir = calcCrossStaffDirection(scrollViewStaves);
-    if (crossStaffDir != 0) {
-        return (crossStaffDir > 0) ? CurveContourDirection::Up : CurveContourDirection::Down;
-    }
-
-    return calcDefaultTieDirection(forTieEnd);
-}
-
 CurveContourDirection NoteInfoPtr::calcDefaultTieDirection(bool forTieEnd) const
 {
     const auto entryInfo = getEntryInfo();
@@ -3013,6 +2972,47 @@ CurveContourDirection NoteInfoPtr::calcDefaultTieDirection(bool forTieEnd) const
     }
 
     return upStem ? CurveContourDirection::Down : CurveContourDirection::Up;
+}
+
+CurveContourDirection NoteInfoPtr::calcEffectiveTieDirection(bool forTieEnd) const
+{
+    if (const auto tieAlter = details::TieAlterBase::fromNoteInfo(*this, forTieEnd)) {
+        if (tieAlter->freezeDirection) {
+            return tieAlter->down ? CurveContourDirection::Down : CurveContourDirection::Up;
+        }
+    }
+
+    const auto entryInfo = getEntryInfo();
+    const auto entryFrame = entryInfo.getFrame();
+    const auto entry = entryInfo->getEntry();
+
+    if (entry->splitStem) {
+        return (*this)->upSplitStem ? CurveContourDirection::Up : CurveContourDirection::Down;
+    }
+
+    if (const auto layerInfo = entryFrame->getLayerAttributes()) {
+        if (layerInfo->freezeLayer && entryInfo.calcIfLayerSettingsApply()) {
+            const bool tieUp = layerInfo->freezeStemsUp == layerInfo->freezTiesToStems;
+            return tieUp ? CurveContourDirection::Up : CurveContourDirection::Down;
+        }
+    }
+
+    if (entry->v2Launch || entry->voice2) {
+        return entryInfo.calcUpStem() ? CurveContourDirection::Up : CurveContourDirection::Down;
+    }
+
+    if (entry->flipTie) {
+        return entryInfo.calcUpStem() ? CurveContourDirection::Up : CurveContourDirection::Down;
+    }
+
+    // For cross-staff notes: match the stem direction
+    const auto scrollViewStaves = entryFrame->getDocument()->getScrollViewStaves(entryFrame->getRequestedPartId());
+    const int crossStaffDir = calcCrossStaffDirection(scrollViewStaves);
+    if (crossStaffDir != 0) {
+        return (crossStaffDir > 0) ? CurveContourDirection::Up : CurveContourDirection::Down;
+    }
+
+    return calcDefaultTieDirection(forTieEnd);
 }
 
 StaffCmper NoteInfoPtr::calcStaff() const
