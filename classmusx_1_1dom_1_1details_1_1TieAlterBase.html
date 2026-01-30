@@ -248,6 +248,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>addUnlinkedNode</b> (
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
+<tr class="memitem:a6c27ad99d5bcab254c21716a3594fe5b" id="r_a6c27ad99d5bcab254c21716a3594fe5b"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="namespacemusx_1_1dom.html#a4223cd531120dbef7acd854c3d2631b8">MusxInstance</a>&lt; <a class="el" href="classmusx_1_1dom_1_1details_1_1TieAlterBase.html">TieAlterBase</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1details_1_1TieAlterBase.html#a6c27ad99d5bcab254c21716a3594fe5b">fromNoteInfo</a> (const <a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html">NoteInfoPtr</a> &amp;noteInfoPtr, bool forTieEnd=false)</td></tr>
+<tr class="memdesc:a6c27ad99d5bcab254c21716a3594fe5b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the the <a class="el" href="classmusx_1_1dom_1_1details_1_1TieAlterStart.html">TieAlterStart</a> or <a class="el" href="classmusx_1_1dom_1_1details_1_1TieAlterEnd.html">TieAlterEnd</a> for this note, based on the input boolean.  <br /></td></tr>
+<tr class="separator:a6c27ad99d5bcab254c21716a3594fe5b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab71df5593ca0908296eea4f146e453a9" id="r_ab71df5593ca0908296eea4f146e453a9"><td class="memItemLeft" align="right" valign="top"><a id="ab71df5593ca0908296eea4f146e453a9" name="ab71df5593ca0908296eea4f146e453a9"></a>
 static const <a class="el" href="namespacemusx_1_1xml.html#a39bb6e9f7fd9e4cdc090566309a8dfe8">xml::XmlElementArray</a>&lt; <a class="el" href="classmusx_1_1dom_1_1details_1_1TieAlterBase.html">TieAlterBase</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>xmlMappingArray</b> ()</td></tr>
 <tr class="memdesc:ab71df5593ca0908296eea4f146e453a9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Required for musx::factory::FieldPopulator. <br /></td></tr>
@@ -536,6 +539,51 @@ Additional Inherited Members</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="a6c27ad99d5bcab254c21716a3594fe5b" name="a6c27ad99d5bcab254c21716a3594fe5b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6c27ad99d5bcab254c21716a3594fe5b">&#9670;&#160;</a></span>fromNoteInfo()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacemusx_1_1dom.html#a4223cd531120dbef7acd854c3d2631b8">MusxInstance</a>&lt; <a class="el" href="classmusx_1_1dom_1_1details_1_1TieAlterBase.html">TieAlterBase</a> &gt; musx::dom::details::TieAlterBase::fromNoteInfo </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html">NoteInfoPtr</a> &amp;&#160;</td>
+          <td class="paramname"><em>noteInfoPtr</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>forTieEnd</em> = <code>false</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Gets the the <a class="el" href="classmusx_1_1dom_1_1details_1_1TieAlterStart.html">TieAlterStart</a> or <a class="el" href="classmusx_1_1dom_1_1details_1_1TieAlterEnd.html">TieAlterEnd</a> for this note, based on the input boolean. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">noteInfoPtr</td><td>The note for which to get the specified tie alteration record. </td></tr>
+    <tr><td class="paramname">forTieEnd</td><td>If <code>forTieEnd</code> is true, get the <a class="el" href="classmusx_1_1dom_1_1details_1_1TieAlterStart.html">TieAlterStart</a>. Otherwise get the <a class="el" href="classmusx_1_1dom_1_1details_1_1TieAlterEnd.html">TieAlterEnd</a>. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a id="a32610382c8a6ff5be9d7e8f92d7150e8" name="a32610382c8a6ff5be9d7e8f92d7150e8"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a32610382c8a6ff5be9d7e8f92d7150e8">&#9670;&#160;</a></span>getNoteId()</h2>
 

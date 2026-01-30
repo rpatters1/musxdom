@@ -5,7 +5,7 @@ var classmusx_1_1dom_1_1EntryFrame =
     [ "addEntry", "classmusx_1_1dom_1_1EntryFrame.html#a6352800f5a3791aa5cc988867ac1a5ad", null ],
     [ "calcAreAllEntriesHiddenInFrame", "classmusx_1_1dom_1_1EntryFrame.html#a2cbd52ed27bd8b65673d4440e2cb2c4c", null ],
     [ "calcIsCueFrame", "classmusx_1_1dom_1_1EntryFrame.html#af934596122cb5cd63787c096466d7b0e", null ],
-    [ "calcNearestEntry", "classmusx_1_1dom_1_1EntryFrame.html#a5b488dbb2033dc832754a73c38594e06", null ],
+    [ "calcNearestEntry", "classmusx_1_1dom_1_1EntryFrame.html#a346fbc908a31207a048e9c2c3b3dac12", null ],
     [ "createCurrentStaff", "classmusx_1_1dom_1_1EntryFrame.html#a984b76de66196dafab22040ec90efbde", null ],
     [ "getContext", "classmusx_1_1dom_1_1EntryFrame.html#ac80fbc599223150820d8ab656787f6c4", null ],
     [ "getDocument", "classmusx_1_1dom_1_1EntryFrame.html#acfc09385cdd5a627483229c232e05bcc", null ],

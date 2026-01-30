@@ -9,10 +9,11 @@ var searchData=
   ['unknown5_6',['Unknown5',['../classmusx_1_1dom_1_1details_1_1Bracket.html#a94b9ba6a2a06355200a730432e7788c2a9438fee56697232b35b5fddd839f5557',1,'musx::dom::details::Bracket']]],
   ['unknown7_7',['Unknown7',['../classmusx_1_1dom_1_1details_1_1Bracket.html#a94b9ba6a2a06355200a730432e7788c2a5d0feb5e862d1330b3932ebc38be7d40',1,'musx::dom::details::Bracket']]],
   ['unrecognized_8',['Unrecognized',['../namespacemusx_1_1dom.html#a16d85e8ed9439b9a2ef071d38ffa0fd7a7f5f743ac34344aeb26849015b4b3dae',1,'musx::dom']]],
-  ['untilpass_9',['UntilPass',['../namespacemusx_1_1dom_1_1others.html#aeecd954125aace2233c1d1320a910f3cae70900d6d341d1555b4f9430522537e2',1,'musx::dom::others']]],
-  ['up_10',['Up',['../namespacemusx_1_1dom.html#a0dc36a86e1ae0cadd7b7e4c624b07b55a258f49887ef8d14ac268c92b02503aaa',1,'musx::dom']]],
-  ['upstem_11',['UpStem',['../classmusx_1_1dom_1_1EntryDetailsBase.html#a91249025ef9184270efb1e8a749727caa5deef8e71f8782a0ad03157838cf6b56',1,'musx::dom::EntryDetailsBase']]],
-  ['usemultiplelayers_12',['UseMultipleLayers',['../classmusx_1_1dom_1_1others_1_1PartVoicing.html#a648ab1f3aab46486b429653ec46cb996a6816d1b8f2ced4932bf87776b46e8233',1,'musx::dom::others::PartVoicing']]],
-  ['useratio_13',['UseRatio',['../classmusx_1_1dom_1_1options_1_1TupletOptions.html#aceb460d1216337d6419b5662a2d0afcda666510feb75ef4c847b2d40839699ba1',1,'musx::dom::options::TupletOptions']]],
-  ['usesinglelayer_14',['UseSingleLayer',['../classmusx_1_1dom_1_1others_1_1PartVoicing.html#a648ab1f3aab46486b429653ec46cb996a205181b9b154d27146ce86dd8c3d0c43',1,'musx::dom::others::PartVoicing']]]
+  ['unspecified_9',['Unspecified',['../namespacemusx_1_1dom.html#a0dc36a86e1ae0cadd7b7e4c624b07b55a6fcdc090caeade09d0efd6253932b6f5',1,'musx::dom']]],
+  ['untilpass_10',['UntilPass',['../namespacemusx_1_1dom_1_1others.html#aeecd954125aace2233c1d1320a910f3cae70900d6d341d1555b4f9430522537e2',1,'musx::dom::others']]],
+  ['up_11',['Up',['../namespacemusx_1_1dom.html#a0dc36a86e1ae0cadd7b7e4c624b07b55a258f49887ef8d14ac268c92b02503aaa',1,'musx::dom']]],
+  ['upstem_12',['UpStem',['../classmusx_1_1dom_1_1EntryDetailsBase.html#a91249025ef9184270efb1e8a749727caa5deef8e71f8782a0ad03157838cf6b56',1,'musx::dom::EntryDetailsBase']]],
+  ['usemultiplelayers_13',['UseMultipleLayers',['../classmusx_1_1dom_1_1others_1_1PartVoicing.html#a648ab1f3aab46486b429653ec46cb996a6816d1b8f2ced4932bf87776b46e8233',1,'musx::dom::others::PartVoicing']]],
+  ['useratio_14',['UseRatio',['../classmusx_1_1dom_1_1options_1_1TupletOptions.html#aceb460d1216337d6419b5662a2d0afcda666510feb75ef4c847b2d40839699ba1',1,'musx::dom::options::TupletOptions']]],
+  ['usesinglelayer_15',['UseSingleLayer',['../classmusx_1_1dom_1_1others_1_1PartVoicing.html#a648ab1f3aab46486b429653ec46cb996a205181b9b154d27146ce86dd8c3d0c43',1,'musx::dom::others::PartVoicing']]]
 ];

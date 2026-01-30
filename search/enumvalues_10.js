@@ -9,13 +9,14 @@ var searchData=
   ['repeatid_6',['RepeatID',['../classmusx_1_1dom_1_1others_1_1TextRepeatDef.html#a24e2fea767899e030dd840a541248473a4f6e09de22aaa13c053f0864ff1cf344',1,'musx::dom::others::TextRepeatDef']]],
   ['reptdots_7',['ReptDots',['../classmusx_1_1dom_1_1options_1_1FontOptions.html#a794a0a1c04e4b92a27daee007bd5694aa201a47966d65218185a0cf51904d2e46',1,'musx::dom::options::FontOptions']]],
   ['resettoentry_8',['ResetToEntry',['../classmusx_1_1dom_1_1options_1_1MusicSpacingOptions.html#a3d5fb29e48c2b11a942457e49d5d9a8ba82f9a79f487eb4b98a114e8fe1057259',1,'musx::dom::options::MusicSpacingOptions']]],
-  ['restrikekeys_9',['RestrikeKeys',['../namespacemusx_1_1dom_1_1others.html#a8ca1afe21691e4db1cdfd8b62344ecfea76b1198fe1650d24f792cb886bf3345e',1,'musx::dom::others']]],
-  ['rests_10',['Rests',['../classmusx_1_1dom_1_1options_1_1FontOptions.html#a794a0a1c04e4b92a27daee007bd5694aa7904ec4d979d5fe9b4a61bc691359cf1',1,'musx::dom::options::FontOptions']]],
-  ['rhythmic_11',['Rhythmic',['../classmusx_1_1dom_1_1others_1_1Staff.html#a0a3bc01d0f78962930fc34ea6fb31bb9ad79c32de1167803cb967f13f23a7c87d',1,'musx::dom::others::Staff']]],
-  ['right_12',['right',['../classmusx_1_1dom_1_1options_1_1TextOptions.html#af6f614ae053143877dcf70e44023feb3a92b09c7c48c520c3c55e497875da437c',1,'musx::dom::options::TextOptions::Right'],['../namespacemusx_1_1dom.html#ae1cc711919158f264a344a6a966f5d4ca92b09c7c48c520c3c55e497875da437c',1,'musx::dom::Right'],['../structmusx_1_1dom_1_1ShapeDefInstruction.html#a88ea001d415764ce8c52d01b7b96503ba92b09c7c48c520c3c55e497875da437c',1,'musx::dom::ShapeDefInstruction::Right']]],
-  ['rightbarline_13',['RightBarline',['../namespacemusx_1_1dom_1_1others.html#a2a5fff566977d572109c7b3256120e8ea1c1d38f2cecf469e41f461d784f6d82c',1,'musx::dom::others']]],
-  ['rightofallnoteheads_14',['RightOfAllNoteheads',['../namespacemusx_1_1dom_1_1others.html#a2a5fff566977d572109c7b3256120e8ea482795a43e0653dca29409b8940ebfee',1,'musx::dom::others']]],
-  ['rlineto_15',['RLineTo',['../namespacemusx_1_1dom.html#a93764339b56e531ea37af5181b20b113ad418b7f2f60278313e8e0655f0ef3703',1,'musx::dom']]],
-  ['rmoveto_16',['RMoveTo',['../namespacemusx_1_1dom.html#a93764339b56e531ea37af5181b20b113af4ec75d018e53ff16859e88f21c36352',1,'musx::dom']]],
-  ['romansuffix_17',['RomanSuffix',['../classmusx_1_1dom_1_1others_1_1Staff.html#a03805868cff56f8b8e45afcb891e81e1abf27d2294ec0049a7e41a1f9fe296e97',1,'musx::dom::others::Staff']]]
+  ['respell_9',['Respell',['../namespacemusx_1_1dom.html#a58a07f9a8e6c45605a8dab47d3b70d7faaadf30377ea3d55f6efd59235c959e76',1,'musx::dom']]],
+  ['restrikekeys_10',['RestrikeKeys',['../namespacemusx_1_1dom_1_1others.html#a8ca1afe21691e4db1cdfd8b62344ecfea76b1198fe1650d24f792cb886bf3345e',1,'musx::dom::others']]],
+  ['rests_11',['Rests',['../classmusx_1_1dom_1_1options_1_1FontOptions.html#a794a0a1c04e4b92a27daee007bd5694aa7904ec4d979d5fe9b4a61bc691359cf1',1,'musx::dom::options::FontOptions']]],
+  ['rhythmic_12',['Rhythmic',['../classmusx_1_1dom_1_1others_1_1Staff.html#a0a3bc01d0f78962930fc34ea6fb31bb9ad79c32de1167803cb967f13f23a7c87d',1,'musx::dom::others::Staff']]],
+  ['right_13',['right',['../structmusx_1_1dom_1_1ShapeDefInstruction.html#a88ea001d415764ce8c52d01b7b96503ba92b09c7c48c520c3c55e497875da437c',1,'musx::dom::ShapeDefInstruction::Right'],['../namespacemusx_1_1dom.html#ae1cc711919158f264a344a6a966f5d4ca92b09c7c48c520c3c55e497875da437c',1,'musx::dom::Right'],['../classmusx_1_1dom_1_1options_1_1TextOptions.html#af6f614ae053143877dcf70e44023feb3a92b09c7c48c520c3c55e497875da437c',1,'musx::dom::options::TextOptions::Right']]],
+  ['rightbarline_14',['RightBarline',['../namespacemusx_1_1dom_1_1others.html#a2a5fff566977d572109c7b3256120e8ea1c1d38f2cecf469e41f461d784f6d82c',1,'musx::dom::others']]],
+  ['rightofallnoteheads_15',['RightOfAllNoteheads',['../namespacemusx_1_1dom_1_1others.html#a2a5fff566977d572109c7b3256120e8ea482795a43e0653dca29409b8940ebfee',1,'musx::dom::others']]],
+  ['rlineto_16',['RLineTo',['../namespacemusx_1_1dom.html#a93764339b56e531ea37af5181b20b113ad418b7f2f60278313e8e0655f0ef3703',1,'musx::dom']]],
+  ['rmoveto_17',['RMoveTo',['../namespacemusx_1_1dom.html#a93764339b56e531ea37af5181b20b113af4ec75d018e53ff16859e88f21c36352',1,'musx::dom']]],
+  ['romansuffix_18',['RomanSuffix',['../classmusx_1_1dom_1_1others_1_1Staff.html#a03805868cff56f8b8e45afcb891e81e1abf27d2294ec0049a7e41a1f9fe296e97',1,'musx::dom::others::Staff']]]
 ];

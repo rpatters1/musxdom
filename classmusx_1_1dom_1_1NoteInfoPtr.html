@@ -135,9 +135,9 @@ Public Member Functions</h2></td></tr>
 size_t&#160;</td><td class="memItemRight" valign="bottom"><b>getNoteIndex</b> () const</td></tr>
 <tr class="memdesc:a160ca8678250695a224f1665b9c7a1c0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the note index for this note. <br /></td></tr>
 <tr class="separator:a160ca8678250695a224f1665b9c7a1c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1d28b1b7789468004b3d08cb50d36b0a" id="r_a1d28b1b7789468004b3d08cb50d36b0a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1dom_1_1Note.html#abbde1ac182d8dc432c6aab9a8c08cf68">Note::NoteProperties</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html#a1d28b1b7789468004b3d08cb50d36b0a">calcNoteProperties</a> (const std::optional&lt; bool &gt; &amp;enharmonicRespell=std::nullopt, bool alwaysUseEntryStaff=false) const</td></tr>
-<tr class="memdesc:a1d28b1b7789468004b3d08cb50d36b0a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the note name, octave number, actual alteration, and staff position. This function does not take into account percussion notes and their staff position override. To get the staff position taking into account percussion notes, use <a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html#a1bd7cd06f7ed01f976e9e35de673d486" title="Calculates the staff position for this note, taking into account percussion notes.">calcStaffPosition</a>.  <br /></td></tr>
-<tr class="separator:a1d28b1b7789468004b3d08cb50d36b0a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aff1513549d85b77ca2bd2013287e3ef1" id="r_aff1513549d85b77ca2bd2013287e3ef1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1dom_1_1Note.html#abbde1ac182d8dc432c6aab9a8c08cf68">Note::NoteProperties</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html#aff1513549d85b77ca2bd2013287e3ef1">calcNoteProperties</a> (<a class="el" href="namespacemusx_1_1dom.html#a58a07f9a8e6c45605a8dab47d3b70d7f">EnharmonicOverride</a> enharmonicOverride=<a class="el" href="namespacemusx_1_1dom.html#a58a07f9a8e6c45605a8dab47d3b70d7fa6adf97f83acf6453d4a6a4b1070f3754">EnharmonicOverride::None</a>, bool alwaysUseEntryStaff=false) const</td></tr>
+<tr class="memdesc:aff1513549d85b77ca2bd2013287e3ef1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the note name, octave number, actual alteration, and staff position. This function does not take into account percussion notes and their staff position override. To get the staff position taking into account percussion notes, use <a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html#a1bd7cd06f7ed01f976e9e35de673d486" title="Calculates the staff position for this note, taking into account percussion notes.">calcStaffPosition</a>.  <br /></td></tr>
+<tr class="separator:aff1513549d85b77ca2bd2013287e3ef1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7ae784a48f045641dac1434223fd593f" id="r_a7ae784a48f045641dac1434223fd593f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1dom_1_1Note.html#abbde1ac182d8dc432c6aab9a8c08cf68">Note::NoteProperties</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html#a7ae784a48f045641dac1434223fd593f">calcNotePropertiesConcert</a> (bool alwaysUseEntryStaff=false) const</td></tr>
 <tr class="memdesc:a7ae784a48f045641dac1434223fd593f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the note name, octave number, actual alteration, and staff position for the concert pitch of the note. This function does not take into account percussion notes and their staff position override. To discover if a note is a percussion note, call <a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html#a2c725e14e257f68e2c7600a8540b7457" title="Calculates the percussion note info for this note, if any.">calcPercussionNoteInfo</a>. If it returns non-null, use that for staff position instead of this function.  <br /></td></tr>
 <tr class="separator:a7ae784a48f045641dac1434223fd593f"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -156,9 +156,12 @@ size_t&#160;</td><td class="memItemRight" valign="bottom"><b>getNoteIndex</b> ()
 <tr class="memitem:a8d4472ff1bfd27358ea69f33a3e82d18" id="r_a8d4472ff1bfd27358ea69f33a3e82d18"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html">NoteInfoPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html#a8d4472ff1bfd27358ea69f33a3e82d18">calcTieFrom</a> (bool requireTie=true) const</td></tr>
 <tr class="memdesc:a8d4472ff1bfd27358ea69f33a3e82d18"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the note that this note could tie from.  <br /></td></tr>
 <tr class="separator:a8d4472ff1bfd27358ea69f33a3e82d18"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2921208ba456fb0c541e68e84ba10abf" id="r_a2921208ba456fb0c541e68e84ba10abf"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html#a2921208ba456fb0c541e68e84ba10abf">calcTieIsUp</a> (bool forTieEnd=false) const</td></tr>
-<tr class="memdesc:a2921208ba456fb0c541e68e84ba10abf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the direction for a tie on this note.  <br /></td></tr>
-<tr class="separator:a2921208ba456fb0c541e68e84ba10abf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa850aaccc99a73cbd2dc1c9a473bb7eb" id="r_aa850aaccc99a73cbd2dc1c9a473bb7eb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemusx_1_1dom.html#a0dc36a86e1ae0cadd7b7e4c624b07b55">CurveContourDirection</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html#aa850aaccc99a73cbd2dc1c9a473bb7eb">calcDefaultTieDirection</a> (bool forTieEnd=false) const</td></tr>
+<tr class="memdesc:aa850aaccc99a73cbd2dc1c9a473bb7eb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the default tie direction for this note.  <br /></td></tr>
+<tr class="separator:aa850aaccc99a73cbd2dc1c9a473bb7eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a654c741b643fecacb1be670e79c729f1" id="r_a654c741b643fecacb1be670e79c729f1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemusx_1_1dom.html#a0dc36a86e1ae0cadd7b7e4c624b07b55">CurveContourDirection</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html#a654c741b643fecacb1be670e79c729f1">calcEffectiveTieDirection</a> (bool forTieEnd=false) const</td></tr>
+<tr class="memdesc:a654c741b643fecacb1be670e79c729f1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the effective tie direction for this note, taking into account all options and overrides.  <br /></td></tr>
+<tr class="separator:a654c741b643fecacb1be670e79c729f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a47410cd12a40e392c789ffc3c265b264" id="r_a47410cd12a40e392c789ffc3c265b264"><td class="memItemLeft" align="right" valign="top"><a id="a47410cd12a40e392c789ffc3c265b264" name="a47410cd12a40e392c789ffc3c265b264"></a>
 <a class="el" href="namespacemusx_1_1dom.html#ada2c0787f5b7cb764d2a344d491ab99c">StaffCmper</a>&#160;</td><td class="memItemRight" valign="bottom"><b>calcStaff</b> () const</td></tr>
 <tr class="memdesc:a47410cd12a40e392c789ffc3c265b264"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the staff number, taking into account cross staffing. <br /></td></tr>
@@ -270,7 +273,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>calcIsIncludedInVoici
 <p>If this note has a smart shape acting as an arpeggio tie, return the tied-to note. If this note is part of a chord, the function always returns null. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[out]</td><td class="paramname">tieDirection</td><td>Optional output parameter receiving the tie's curve contour direction. It is set to <a class="el" href="namespacemusx_1_1dom.html#a0dc36a86e1ae0cadd7b7e4c624b07b55a08a38277b0309070706f6652eeae9a53" title="contour is curved downward (tips face up)">CurveContourDirection::Down</a> for under ties, <a class="el" href="namespacemusx_1_1dom.html#a0dc36a86e1ae0cadd7b7e4c624b07b55a258f49887ef8d14ac268c92b02503aaa" title="contour is curved upward (tips face down)">CurveContourDirection::Up</a> for over ties, or <a class="el" href="namespacemusx_1_1dom.html#a0dc36a86e1ae0cadd7b7e4c624b07b55a06b9281e396db002010bde1de57262eb" title="contour is automatic, indeterminate, or does not apply">CurveContourDirection::Auto</a> if the contour cannot be determined. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">tieDirection</td><td>Optional output parameter receiving the tie's curve contour direction. It is set to <a class="el" href="namespacemusx_1_1dom.html#a0dc36a86e1ae0cadd7b7e4c624b07b55a08a38277b0309070706f6652eeae9a53" title="contour is curved downward (tips face up)">CurveContourDirection::Down</a> for under ties, <a class="el" href="namespacemusx_1_1dom.html#a0dc36a86e1ae0cadd7b7e4c624b07b55a258f49887ef8d14ac268c92b02503aaa" title="contour is curved upward (tips face down)">CurveContourDirection::Up</a> for over ties, or <a class="el" href="namespacemusx_1_1dom.html#a0dc36a86e1ae0cadd7b7e4c624b07b55a6fcdc090caeade09d0efd6253932b6f5" title="contour is automatic, indeterminate, or does not apply">CurveContourDirection::Unspecified</a> if the contour cannot be determined. </td></tr>
   </table>
   </dd>
 </dl>
@@ -334,12 +337,66 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>calcIsIncludedInVoici
 </div><div class="memdoc">
 
 <p>Calculates the default enharmonic equivalent of this note. This is the value that Finale uses when <a class="el" href="classmusx_1_1dom_1_1details_1_1NoteAlterations.html#ada5b4983856d57d4e17d8806368778be">details::NoteAlterations::enharmonic</a> is true. </p>
-<p>Normally you do not have to call this function directly. It is called inside <a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html#a1d28b1b7789468004b3d08cb50d36b0a" title="Calculates the note name, octave number, actual alteration, and staff position. This function does no...">calcNoteProperties</a>. But the function is available if you need it.</p>
+<p>Normally you do not have to call this function directly. It is called inside <a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html#aff1513549d85b77ca2bd2013287e3ef1" title="Calculates the note name, octave number, actual alteration, and staff position. This function does no...">calcNoteProperties</a>. But the function is available if you need it.</p>
 <dl class="section return"><dt>Returns</dt><dd>A std::pair containing<ul>
 <li>int: the enharmonic equivalent's displacement value relative to the tonic.</li>
 <li>int: the enharmonic equivalent's alteration value relative to the key signature. </li>
 </ul>
 </dd></dl>
+
+</div>
+</div>
+<a id="aa850aaccc99a73cbd2dc1c9a473bb7eb" name="aa850aaccc99a73cbd2dc1c9a473bb7eb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa850aaccc99a73cbd2dc1c9a473bb7eb">&#9670;&#160;</a></span>calcDefaultTieDirection()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacemusx_1_1dom.html#a0dc36a86e1ae0cadd7b7e4c624b07b55">CurveContourDirection</a> musx::dom::NoteInfoPtr::calcDefaultTieDirection </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>forTieEnd</em> = <code>false</code></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Calculates the default tie direction for this note. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">forTieEnd</td><td>If <code>forTieEnd</code> is true, the direction for the tie-end stub on this note is returned. Otherwise the direction for the tie starting on this note is returned. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The contour direction that applies to the tie, or <a class="el" href="namespacemusx_1_1dom.html#a0dc36a86e1ae0cadd7b7e4c624b07b55a6fcdc090caeade09d0efd6253932b6f5" title="contour is automatic, indeterminate, or does not apply">CurveContourDirection::Unspecified</a> when the contour cannot be determined. </dd></dl>
+
+</div>
+</div>
+<a id="a654c741b643fecacb1be670e79c729f1" name="a654c741b643fecacb1be670e79c729f1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a654c741b643fecacb1be670e79c729f1">&#9670;&#160;</a></span>calcEffectiveTieDirection()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacemusx_1_1dom.html#a0dc36a86e1ae0cadd7b7e4c624b07b55">CurveContourDirection</a> musx::dom::NoteInfoPtr::calcEffectiveTieDirection </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>forTieEnd</em> = <code>false</code></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Calculates the effective tie direction for this note, taking into account all options and overrides. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">forTieEnd</td><td>If <code>forTieEnd</code> is true, the direction for the tie-end stub on this note is returned. Otherwise the direction for the tie starting on this note is returned. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The contour direction that applies to the tie, or <a class="el" href="namespacemusx_1_1dom.html#a0dc36a86e1ae0cadd7b7e4c624b07b55a6fcdc090caeade09d0efd6253932b6f5" title="contour is automatic, indeterminate, or does not apply">CurveContourDirection::Unspecified</a> when the contour cannot be determined. </dd></dl>
 
 </div>
 </div>
@@ -362,7 +419,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>calcIsIncludedInVoici
 <p>Calculates if this note has a smart shape, shape expression, or shape articulation acting as a laissez vibrer tie. For any of these to count, the entry must have a number of these stand-in items equal to the number of notes in the entry. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[out]</td><td class="paramname">tieDirection</td><td>Optional output parameter receiving the tie's curve contour direction. It is set to <a class="el" href="namespacemusx_1_1dom.html#a0dc36a86e1ae0cadd7b7e4c624b07b55a08a38277b0309070706f6652eeae9a53" title="contour is curved downward (tips face up)">CurveContourDirection::Down</a> for under ties, <a class="el" href="namespacemusx_1_1dom.html#a0dc36a86e1ae0cadd7b7e4c624b07b55a258f49887ef8d14ac268c92b02503aaa" title="contour is curved upward (tips face down)">CurveContourDirection::Up</a> for over ties, or <a class="el" href="namespacemusx_1_1dom.html#a0dc36a86e1ae0cadd7b7e4c624b07b55a06b9281e396db002010bde1de57262eb" title="contour is automatic, indeterminate, or does not apply">CurveContourDirection::Auto</a> if the contour cannot be determined. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">tieDirection</td><td>Optional output parameter receiving the tie's curve contour direction. It is set to <a class="el" href="namespacemusx_1_1dom.html#a0dc36a86e1ae0cadd7b7e4c624b07b55a08a38277b0309070706f6652eeae9a53" title="contour is curved downward (tips face up)">CurveContourDirection::Down</a> for under ties, <a class="el" href="namespacemusx_1_1dom.html#a0dc36a86e1ae0cadd7b7e4c624b07b55a258f49887ef8d14ac268c92b02503aaa" title="contour is curved upward (tips face down)">CurveContourDirection::Up</a> for over ties, or <a class="el" href="namespacemusx_1_1dom.html#a0dc36a86e1ae0cadd7b7e4c624b07b55a6fcdc090caeade09d0efd6253932b6f5" title="contour is automatic, indeterminate, or does not apply">CurveContourDirection::Unspecified</a> if the contour cannot be determined. </td></tr>
   </table>
   </dd>
 </dl>
@@ -389,7 +446,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>calcIsIncludedInVoici
 <p>Calculates if this note has a smart shape, shape expression, or shape articulation acting as a tie end. For any of these to count, the entry must have a number of these stand-in items equal to the number of notes in the entry. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[out]</td><td class="paramname">tieDirection</td><td>Optional output parameter receiving the tie's curve contour direction. It is set to <a class="el" href="namespacemusx_1_1dom.html#a0dc36a86e1ae0cadd7b7e4c624b07b55a08a38277b0309070706f6652eeae9a53" title="contour is curved downward (tips face up)">CurveContourDirection::Down</a> for under ties, <a class="el" href="namespacemusx_1_1dom.html#a0dc36a86e1ae0cadd7b7e4c624b07b55a258f49887ef8d14ac268c92b02503aaa" title="contour is curved upward (tips face down)">CurveContourDirection::Up</a> for over ties, or <a class="el" href="namespacemusx_1_1dom.html#a0dc36a86e1ae0cadd7b7e4c624b07b55a06b9281e396db002010bde1de57262eb" title="contour is automatic, indeterminate, or does not apply">CurveContourDirection::Auto</a> if the contour cannot be determined. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">tieDirection</td><td>Optional output parameter receiving the tie's curve contour direction. It is set to <a class="el" href="namespacemusx_1_1dom.html#a0dc36a86e1ae0cadd7b7e4c624b07b55a08a38277b0309070706f6652eeae9a53" title="contour is curved downward (tips face up)">CurveContourDirection::Down</a> for under ties, <a class="el" href="namespacemusx_1_1dom.html#a0dc36a86e1ae0cadd7b7e4c624b07b55a258f49887ef8d14ac268c92b02503aaa" title="contour is curved upward (tips face down)">CurveContourDirection::Up</a> for over ties, or <a class="el" href="namespacemusx_1_1dom.html#a0dc36a86e1ae0cadd7b7e4c624b07b55a6fcdc090caeade09d0efd6253932b6f5" title="contour is automatic, indeterminate, or does not apply">CurveContourDirection::Unspecified</a> if the contour cannot be determined. </td></tr>
   </table>
   </dd>
 </dl>
@@ -437,8 +494,8 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>calcIsIncludedInVoici
 
 </div>
 </div>
-<a id="a1d28b1b7789468004b3d08cb50d36b0a" name="a1d28b1b7789468004b3d08cb50d36b0a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1d28b1b7789468004b3d08cb50d36b0a">&#9670;&#160;</a></span>calcNoteProperties()</h2>
+<a id="aff1513549d85b77ca2bd2013287e3ef1" name="aff1513549d85b77ca2bd2013287e3ef1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aff1513549d85b77ca2bd2013287e3ef1">&#9670;&#160;</a></span>calcNoteProperties()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -446,8 +503,8 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>calcIsIncludedInVoici
         <tr>
           <td class="memname"><a class="el" href="classmusx_1_1dom_1_1Note.html#abbde1ac182d8dc432c6aab9a8c08cf68">Note::NoteProperties</a> musx::dom::NoteInfoPtr::calcNoteProperties </td>
           <td>(</td>
-          <td class="paramtype">const std::optional&lt; bool &gt; &amp;&#160;</td>
-          <td class="paramname"><em>enharmonicRespell</em> = <code>std::nullopt</code>, </td>
+          <td class="paramtype"><a class="el" href="namespacemusx_1_1dom.html#a58a07f9a8e6c45605a8dab47d3b70d7f">EnharmonicOverride</a>&#160;</td>
+          <td class="paramname"><em>enharmonicOverride</em> = <code><a class="el" href="namespacemusx_1_1dom.html#a58a07f9a8e6c45605a8dab47d3b70d7fa6adf97f83acf6453d4a6a4b1070f3754">EnharmonicOverride::None</a></code>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -464,10 +521,10 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>calcIsIncludedInVoici
 </div><div class="memdoc">
 
 <p>Calculates the note name, octave number, actual alteration, and staff position. This function does not take into account percussion notes and their staff position override. To get the staff position taking into account percussion notes, use <a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html#a1bd7cd06f7ed01f976e9e35de673d486" title="Calculates the staff position for this note, taking into account percussion notes.">calcStaffPosition</a>. </p>
-<dl class="section note"><dt>Note</dt><dd>In Finale, the default whole rest staff position is the middle staff line. Other music notation systems frequently expect the standard whole rest staff position to be the second line from the top. You may need to interpolate the staff position returned by <a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html#a1d28b1b7789468004b3d08cb50d36b0a" title="Calculates the note name, octave number, actual alteration, and staff position. This function does no...">calcNoteProperties</a> for whole rests. </dd></dl>
+<dl class="section note"><dt>Note</dt><dd>In Finale, the default whole rest staff position is the middle staff line. Other music notation systems frequently expect the standard whole rest staff position to be the second line from the top. You may need to interpolate the staff position returned by <a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html#aff1513549d85b77ca2bd2013287e3ef1" title="Calculates the note name, octave number, actual alteration, and staff position. This function does no...">calcNoteProperties</a> for whole rests. </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">enharmonicRespell</td><td>If supplied, return the default enharmonic respelling based on this value. If omitted, this value is calculated automatically based on the score or part settings. Normally you will omit it. </td></tr>
+    <tr><td class="paramname">enharmonicOverride</td><td>Overrides the enharmonic respelling behavior. Use <a class="el" href="namespacemusx_1_1dom.html#a58a07f9a8e6c45605a8dab47d3b70d7fa6adf97f83acf6453d4a6a4b1070f3754" title="Do not override the existing enharmonic state. (Default)">EnharmonicOverride::None</a> to defer to the score/part data (default), <a class="el" href="namespacemusx_1_1dom.html#a58a07f9a8e6c45605a8dab47d3b70d7faaadf30377ea3d55f6efd59235c959e76" title="Apply enharmonic respelling.">EnharmonicOverride::Respell</a> to force respelling, or <a class="el" href="namespacemusx_1_1dom.html#a58a07f9a8e6c45605a8dab47d3b70d7fa0074882deee30ffbff3641c589b6a089" title="Do not apply enharmonic respelling, even if already respelled.">EnharmonicOverride::NoRespell</a> to prevent respelling even if the part would otherwise respell. </td></tr>
     <tr><td class="paramname">alwaysUseEntryStaff</td><td>If true, the entry is not checked for cross-staff staffing. Normally you omit this. </td></tr>
   </table>
   </dd>
@@ -594,33 +651,6 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>calcIsIncludedInVoici
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The candidate note or an empty <a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html" title="Wraps an EntryInfo instance and a note index.">NoteInfoPtr</a> if no candidate was found. </dd></dl>
-
-</div>
-</div>
-<a id="a2921208ba456fb0c541e68e84ba10abf" name="a2921208ba456fb0c541e68e84ba10abf"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2921208ba456fb0c541e68e84ba10abf">&#9670;&#160;</a></span>calcTieIsUp()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool musx::dom::NoteInfoPtr::calcTieIsUp </td>
-          <td>(</td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>forTieEnd</em> = <code>false</code></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Calculates the direction for a tie on this note. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">forTieEnd</td><td>If <code>forTieEnd</code> is true, the direction for the tie ending on this note is returned. Else the direction for the tie starting on this note is returned. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>true if the given tie faces upwards, false if not. </dd></dl>
 
 </div>
 </div>

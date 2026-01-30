@@ -32,7 +32,8 @@ var searchData=
   ['fretinstrument_29',['FretInstrument',['../classmusx_1_1dom_1_1others_1_1FretInstrument.html#ae923130111aab0502e86ac8ed7fa9519',1,'musx::dom::others::FretInstrument']]],
   ['fromedu_30',['fromEdu',['../classmusx_1_1util_1_1Fraction.html#a6b0c43a6ff364c44a37edc240c229281',1,'musx::util::Fraction']]],
   ['fromentrynumber_31',['fromEntryNumber',['../classmusx_1_1dom_1_1EntryInfoPtr.html#a2b8b400300cafe8e989285b0a96fea8a',1,'musx::dom::EntryInfoPtr']]],
-  ['frompercent_32',['fromPercent',['../classmusx_1_1util_1_1Fraction.html#a2154d703070b963f95896a11df847148',1,'musx::util::Fraction']]],
-  ['fromu8_33',['fromU8',['../classmusx_1_1util_1_1EnigmaString.html#a13ea76fa4dcd68196d8a3a973da01d9e',1,'musx::util::EnigmaString']]],
-  ['fullfraction_34',['fullFraction',['../classmusx_1_1dom_1_1others_1_1TimeCompositeUpper_1_1CompositeItem.html#a07269c830b58b748b808fabe7a5738e2',1,'musx::dom::others::TimeCompositeUpper::CompositeItem']]]
+  ['fromnoteinfo_32',['fromNoteInfo',['../classmusx_1_1dom_1_1details_1_1TieAlterBase.html#a6c27ad99d5bcab254c21716a3594fe5b',1,'musx::dom::details::TieAlterBase']]],
+  ['frompercent_33',['fromPercent',['../classmusx_1_1util_1_1Fraction.html#a2154d703070b963f95896a11df847148',1,'musx::util::Fraction']]],
+  ['fromu8_34',['fromU8',['../classmusx_1_1util_1_1EnigmaString.html#a13ea76fa4dcd68196d8a3a973da01d9e',1,'musx::util::EnigmaString']]],
+  ['fullfraction_35',['fullFraction',['../classmusx_1_1dom_1_1others_1_1TimeCompositeUpper_1_1CompositeItem.html#a07269c830b58b748b808fabe7a5738e2',1,'musx::dom::others::TimeCompositeUpper::CompositeItem']]]
 ];

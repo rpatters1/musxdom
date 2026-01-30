@@ -878,7 +878,7 @@ var namespacemusx_1_1dom =
       [ "MediumCurved", "namespacemusx_1_1dom.html#a9da9d8587a1c6dbc6c8462bcc0e4e69da93bc2c818e912b137cd163af412ca30d", null ]
     ] ],
     [ "CurveContourDirection", "namespacemusx_1_1dom.html#a0dc36a86e1ae0cadd7b7e4c624b07b55", [
-      [ "Auto", "namespacemusx_1_1dom.html#a0dc36a86e1ae0cadd7b7e4c624b07b55a06b9281e396db002010bde1de57262eb", null ],
+      [ "Unspecified", "namespacemusx_1_1dom.html#a0dc36a86e1ae0cadd7b7e4c624b07b55a6fcdc090caeade09d0efd6253932b6f5", null ],
       [ "Down", "namespacemusx_1_1dom.html#a0dc36a86e1ae0cadd7b7e4c624b07b55a08a38277b0309070706f6652eeae9a53", null ],
       [ "Up", "namespacemusx_1_1dom.html#a0dc36a86e1ae0cadd7b7e4c624b07b55a258f49887ef8d14ac268c92b02503aaa", null ]
     ] ],
@@ -907,6 +907,11 @@ var namespacemusx_1_1dom =
       [ "Tab1", "namespacemusx_1_1dom.html#a86d8f1c0b9cc21018e4d1257c193f67fa470e312cea82d45a9b100e1f0991e42f", null ],
       [ "Tab2", "namespacemusx_1_1dom.html#a86d8f1c0b9cc21018e4d1257c193f67fad4c2a0228d8e808f1ca012f63f429a38", null ]
     ] ],
+    [ "EnharmonicOverride", "namespacemusx_1_1dom.html#a58a07f9a8e6c45605a8dab47d3b70d7f", [
+      [ "None", "namespacemusx_1_1dom.html#a58a07f9a8e6c45605a8dab47d3b70d7fa6adf97f83acf6453d4a6a4b1070f3754", null ],
+      [ "Respell", "namespacemusx_1_1dom.html#a58a07f9a8e6c45605a8dab47d3b70d7faaadf30377ea3d55f6efd59235c959e76", null ],
+      [ "NoRespell", "namespacemusx_1_1dom.html#a58a07f9a8e6c45605a8dab47d3b70d7fa0074882deee30ffbff3641c589b6a089", null ]
+    ] ],
     [ "KnownShapeDefType", "namespacemusx_1_1dom.html#a16d85e8ed9439b9a2ef071d38ffa0fd7", [
       [ "Unrecognized", "namespacemusx_1_1dom.html#a16d85e8ed9439b9a2ef071d38ffa0fd7a7f5f743ac34344aeb26849015b4b3dae", null ],
       [ "Blank", "namespacemusx_1_1dom.html#a16d85e8ed9439b9a2ef071d38ffa0fd7ae4ef81cce7e4e10033ebb10962dfdd5e", null ],
@@ -922,6 +927,11 @@ var namespacemusx_1_1dom =
       [ "Verse", "namespacemusx_1_1dom.html#a15ce5f78a9bdae32abc605711086c991a98cc99adc12166c3d8f086c0ccc2cde9", null ],
       [ "Chorus", "namespacemusx_1_1dom.html#a15ce5f78a9bdae32abc605711086c991a9dcf77c2f2237c9e2013ea0175bf1745", null ],
       [ "Section", "namespacemusx_1_1dom.html#a15ce5f78a9bdae32abc605711086c991ad2c24d59e0baff4d0155fbdf62590867", null ]
+    ] ],
+    [ "MatchVoice", "namespacemusx_1_1dom.html#a2ce10a96e600e1368dd4b8cefdf12d5b", [
+      [ "Any", "namespacemusx_1_1dom.html#a2ce10a96e600e1368dd4b8cefdf12d5baed36a1ef76a59ee3f15180e0441188ad", null ],
+      [ "Voice1", "namespacemusx_1_1dom.html#a2ce10a96e600e1368dd4b8cefdf12d5baf5616200d2e5faff161ac8f5e1637559", null ],
+      [ "Voice2", "namespacemusx_1_1dom.html#a2ce10a96e600e1368dd4b8cefdf12d5ba5fbff2c65b52ee38781d1d81ff11ecb5", null ]
     ] ],
     [ "NoteType", "namespacemusx_1_1dom.html#a3c91ee84b72cc27a2899191d6baee312", [
       [ "Maxima", "namespacemusx_1_1dom.html#a3c91ee84b72cc27a2899191d6baee312abc3292567552688d69e5ddc95781245b", null ],
