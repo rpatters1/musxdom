@@ -405,7 +405,7 @@ std::optional<Evpu> ShapeDef::calcWidth() const
 CurveContourDirection ShapeDef::calcSlurContour() const
 {
     if (isBlank()) {
-        return CurveContourDirection::Auto;
+        return CurveContourDirection::Unspecified;
     }
 
     auto isSentinel = [](Evpu value) {
@@ -475,14 +475,14 @@ CurveContourDirection ShapeDef::calcSlurContour() const
     });
 
     if (unsupported || !hasSlur) {
-        return CurveContourDirection::Auto;
+        return CurveContourDirection::Unspecified;
     }
 
     const Evpu topExtent = (maxTop && *maxTop > 0) ? *maxTop : Evpu{0};
     const Evpu bottomExtent = (minBottom && *minBottom < 0) ? static_cast<Evpu>(-(*minBottom)) : Evpu{0};
 
     if (topExtent == 0 && bottomExtent == 0) {
-        return CurveContourDirection::Auto;
+        return CurveContourDirection::Unspecified;
     }
 
     return (topExtent >= bottomExtent) ? CurveContourDirection::Up : CurveContourDirection::Down;

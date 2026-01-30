@@ -61,9 +61,9 @@ enum class ArrowheadPreset : int
 enum class CurveContourDirection
 {
     // NOTE: the order here is important for sorting instances. Do not change it.
-    Auto,       ///< contour is automatic, indeterminate, or does not apply
-    Down,       ///< contour is curved downward (tips face up)
-    Up          ///< contour is curved upward (tips face down)
+    Unspecified,    ///< contour is automatic, indeterminate, or does not apply
+    Down,           ///< contour is curved downward (tips face up)
+    Up              ///< contour is curved upward (tips face down)
 };
 
 /// @enum DateFormat
@@ -102,15 +102,33 @@ enum class DefaultClefType : ClefIndex
     Tab2            = 17  ///< Tablature clef (5 lines, alternative style).
 };
 
+/// @enum EnharmonicOverride
+/// @brief Provides a three-state override option for enharmonic respelling.
+enum class EnharmonicOverride
+{
+    None,       ///< Do not override the existing enharmonic state. (Default)
+    Respell,    ///< Apply enharmonic respelling.
+    NoRespell   ///< Do not apply enharmonic respelling, even if already respelled.
+};
+
 /**
  * @enum LyricTextType
  * @brief The lyric text type if this is a lyrics smart shape.
  */
 enum class LyricTextType
 {
-    Verse,          ///< The assignment is to a Verse lyrics text block.
-    Chorus,         ///< The assignment is to a Chorus lyrics text block.
-    Section,        ///< The assignment is to a Section lyrics text block.
+    Verse,      ///< The assignment is to a Verse lyrics text block.
+    Chorus,     ///< The assignment is to a Chorus lyrics text block.
+    Section,    ///< The assignment is to a Section lyrics text block.
+};
+
+/// @enum MatchVoice
+/// @brief Specifies which voice(s) are considered when matching entries.
+enum class MatchVoice
+{
+    Any,        ///< Consider entries from either voice. (Default)
+    Voice1,     ///< Consider only entries where #Entry::voice2 is false.
+    Voice2      ///< Consider only entries where #Entry::voice2 is true.
 };
 
 /**

@@ -1730,7 +1730,7 @@ public:
     /// is part of a chord, the function always returns null.
     /// @param [out] tieDirection Optional output parameter receiving the tie's curve contour direction. It is set to
     ///         #CurveContourDirection::Down for under ties, #CurveContourDirection::Up for over ties, or
-    ///         #CurveContourDirection::Auto if the contour cannot be determined.
+    ///         #CurveContourDirection::Unspecified if the contour cannot be determined.
     /// @return The arpeggio-tied note, or null if no such tie exists or this note is part of a chord.
     [[nodiscard]]
     NoteInfoPtr calcArpeggiatedTieToNote(CurveContourDirection* tieDirection = nullptr) const;
@@ -1740,7 +1740,7 @@ public:
     /// items equal to the number of notes in the entry.
     /// @param [out] tieDirection Optional output parameter receiving the tie's curve contour direction. It is set to
     ///         #CurveContourDirection::Down for under ties, #CurveContourDirection::Up for over ties, or
-    ///         #CurveContourDirection::Auto if the contour cannot be determined.
+    ///         #CurveContourDirection::Unspecified if the contour cannot be determined.
     /// @return True if a pseudo laissez vibrer tie exists; otherwise false.
     [[nodiscard]]
     bool calcHasPseudoLvTie(CurveContourDirection* tieDirection = nullptr) const;
@@ -1750,7 +1750,7 @@ public:
     /// to the number of notes in the entry.
     /// @param [out] tieDirection Optional output parameter receiving the tie's curve contour direction. It is set to
     ///         #CurveContourDirection::Down for under ties, #CurveContourDirection::Up for over ties, or
-    ///         #CurveContourDirection::Auto if the contour cannot be determined.
+    ///         #CurveContourDirection::Unspecified if the contour cannot be determined.
     /// @return True if a pseudo tie end exists; otherwise false.
     [[nodiscard]]
     bool calcHasPseudoTieEnd(CurveContourDirection* tieDirection = nullptr) const;

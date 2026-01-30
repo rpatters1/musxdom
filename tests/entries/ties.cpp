@@ -406,7 +406,7 @@ TEST(TieDetection, SlursAsLvTies)
         auto entryInfo = EntryInfoPtr(entryFrame, 1);
         ASSERT_TRUE(entryInfo);
         ASSERT_EQ(entryInfo->getEntry()->notes.size(), 3);
-        CurveContourDirection tieDirection = CurveContourDirection::Auto;
+        CurveContourDirection tieDirection = CurveContourDirection::Unspecified;
         EXPECT_TRUE((NoteInfoPtr(entryInfo, 0)).calcHasPseudoLvTie(&tieDirection));
         EXPECT_EQ(tieDirection, CurveContourDirection::Down);
         EXPECT_TRUE((NoteInfoPtr(entryInfo, 1)).calcHasPseudoLvTie(&tieDirection));
@@ -424,7 +424,7 @@ TEST(TieDetection, SlursAsLvTies)
         ASSERT_EQ(entryInfo->getEntry()->notes.size(), 1);
         CurveContourDirection tieDirection = CurveContourDirection::Up;
         EXPECT_TRUE((NoteInfoPtr(entryInfo, 0)).calcHasPseudoLvTie(&tieDirection));
-        EXPECT_EQ(tieDirection, CurveContourDirection::Auto);
+        EXPECT_EQ(tieDirection, CurveContourDirection::Unspecified);
     }
     {
         auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 3);
@@ -436,11 +436,11 @@ TEST(TieDetection, SlursAsLvTies)
         ASSERT_EQ(entryInfo->getEntry()->notes.size(), 3);
         CurveContourDirection tieDirection = CurveContourDirection::Up;
         EXPECT_FALSE((NoteInfoPtr(entryInfo, 0)).calcHasPseudoLvTie(&tieDirection));
-        EXPECT_EQ(tieDirection, CurveContourDirection::Auto);
+        EXPECT_EQ(tieDirection, CurveContourDirection::Unspecified);
         EXPECT_FALSE((NoteInfoPtr(entryInfo, 0)).calcHasPseudoLvTie(&tieDirection));
-        EXPECT_EQ(tieDirection, CurveContourDirection::Auto);
+        EXPECT_EQ(tieDirection, CurveContourDirection::Unspecified);
         EXPECT_FALSE((NoteInfoPtr(entryInfo, 0)).calcHasPseudoLvTie(&tieDirection));
-        EXPECT_EQ(tieDirection, CurveContourDirection::Auto);
+        EXPECT_EQ(tieDirection, CurveContourDirection::Unspecified);
     }
 }
 
@@ -460,7 +460,7 @@ TEST(TieDetection, ShapesAsLvTies)
         auto entryInfo = EntryInfoPtr(entryFrame, 1);
         ASSERT_TRUE(entryInfo);
         ASSERT_EQ(entryInfo->getEntry()->notes.size(), 3);
-        CurveContourDirection tieDirection = CurveContourDirection::Auto;
+        CurveContourDirection tieDirection = CurveContourDirection::Unspecified;
         EXPECT_TRUE((NoteInfoPtr(entryInfo, 0)).calcHasPseudoLvTie(&tieDirection));
         EXPECT_EQ(tieDirection, CurveContourDirection::Down);
         EXPECT_TRUE((NoteInfoPtr(entryInfo, 1)).calcHasPseudoLvTie(&tieDirection));
@@ -477,7 +477,7 @@ TEST(TieDetection, ShapesAsLvTies)
         auto entryInfo = EntryInfoPtr(entryFrame, 0);
         ASSERT_TRUE(entryInfo);
         ASSERT_EQ(entryInfo->getEntry()->notes.size(), 1);
-        CurveContourDirection tieDirection = CurveContourDirection::Auto;
+        CurveContourDirection tieDirection = CurveContourDirection::Unspecified;
         EXPECT_TRUE((NoteInfoPtr(entryInfo, 0)).calcHasPseudoLvTie(&tieDirection));
         EXPECT_EQ(tieDirection, CurveContourDirection::Down);
     }
@@ -492,11 +492,11 @@ TEST(TieDetection, ShapesAsLvTies)
         ASSERT_EQ(entryInfo->getEntry()->notes.size(), 3);
         CurveContourDirection tieDirection = CurveContourDirection::Up;
         EXPECT_FALSE((NoteInfoPtr(entryInfo, 0)).calcHasPseudoLvTie(&tieDirection));
-        EXPECT_EQ(tieDirection, CurveContourDirection::Auto);
+        EXPECT_EQ(tieDirection, CurveContourDirection::Unspecified);
         EXPECT_FALSE((NoteInfoPtr(entryInfo, 0)).calcHasPseudoLvTie(&tieDirection));
-        EXPECT_EQ(tieDirection, CurveContourDirection::Auto);
+        EXPECT_EQ(tieDirection, CurveContourDirection::Unspecified);
         EXPECT_FALSE((NoteInfoPtr(entryInfo, 0)).calcHasPseudoLvTie(&tieDirection));
-        EXPECT_EQ(tieDirection, CurveContourDirection::Auto);
+        EXPECT_EQ(tieDirection, CurveContourDirection::Unspecified);
         // second chord has lv using articulations
         entryInfo = EntryInfoPtr(entryFrame, 2);
         ASSERT_TRUE(entryInfo);
@@ -517,9 +517,9 @@ TEST(TieDetection, ShapesAsLvTies)
         ASSERT_EQ(entryInfo->getEntry()->notes.size(), 2);
         CurveContourDirection tieDirection = CurveContourDirection::Up;
         EXPECT_FALSE((NoteInfoPtr(entryInfo, 0)).calcHasPseudoLvTie(&tieDirection));
-        EXPECT_EQ(tieDirection, CurveContourDirection::Auto);
+        EXPECT_EQ(tieDirection, CurveContourDirection::Unspecified);
         EXPECT_FALSE((NoteInfoPtr(entryInfo, 1)).calcHasPseudoLvTie(&tieDirection));
-        EXPECT_EQ(tieDirection, CurveContourDirection::Auto);
+        EXPECT_EQ(tieDirection, CurveContourDirection::Unspecified);
     }
     {
         auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 6);
@@ -532,9 +532,9 @@ TEST(TieDetection, ShapesAsLvTies)
         ASSERT_EQ(entryInfo->getEntry()->notes.size(), 2);
         CurveContourDirection tieDirection = CurveContourDirection::Up;
         EXPECT_FALSE((NoteInfoPtr(entryInfo, 0)).calcHasPseudoLvTie(&tieDirection));
-        EXPECT_EQ(tieDirection, CurveContourDirection::Auto);
+        EXPECT_EQ(tieDirection, CurveContourDirection::Unspecified);
         EXPECT_FALSE((NoteInfoPtr(entryInfo, 1)).calcHasPseudoLvTie(&tieDirection));
-        EXPECT_EQ(tieDirection, CurveContourDirection::Auto);
+        EXPECT_EQ(tieDirection, CurveContourDirection::Unspecified);
     }
     {
         auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 7);
@@ -547,9 +547,9 @@ TEST(TieDetection, ShapesAsLvTies)
         ASSERT_EQ(entryInfo->getEntry()->notes.size(), 2);
         CurveContourDirection tieDirection = CurveContourDirection::Up;
         EXPECT_FALSE((NoteInfoPtr(entryInfo, 0)).calcHasPseudoLvTie(&tieDirection));
-        EXPECT_EQ(tieDirection, CurveContourDirection::Auto);
+        EXPECT_EQ(tieDirection, CurveContourDirection::Unspecified);
         EXPECT_FALSE((NoteInfoPtr(entryInfo, 1)).calcHasPseudoLvTie(&tieDirection));
-        EXPECT_EQ(tieDirection, CurveContourDirection::Auto);
+        EXPECT_EQ(tieDirection, CurveContourDirection::Unspecified);
     }
 }
 
@@ -571,11 +571,11 @@ TEST(TieDetection, ShapesAsTieEnds)
         ASSERT_EQ(entryInfo->getEntry()->notes.size(), 3);
         CurveContourDirection tieDirection = CurveContourDirection::Up;
         EXPECT_FALSE((NoteInfoPtr(entryInfo, 0)).calcHasPseudoTieEnd(&tieDirection));
-        EXPECT_EQ(tieDirection, CurveContourDirection::Auto);
+        EXPECT_EQ(tieDirection, CurveContourDirection::Unspecified);
         EXPECT_FALSE((NoteInfoPtr(entryInfo, 1)).calcHasPseudoTieEnd(&tieDirection));
-        EXPECT_EQ(tieDirection, CurveContourDirection::Auto);
+        EXPECT_EQ(tieDirection, CurveContourDirection::Unspecified);
         EXPECT_FALSE((NoteInfoPtr(entryInfo, 2)).calcHasPseudoTieEnd(&tieDirection));
-        EXPECT_EQ(tieDirection, CurveContourDirection::Auto);
+        EXPECT_EQ(tieDirection, CurveContourDirection::Unspecified);
     }
     {
         auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 2);
@@ -588,7 +588,7 @@ TEST(TieDetection, ShapesAsTieEnds)
         ASSERT_EQ(entryInfo->getEntry()->notes.size(), 1);
         CurveContourDirection tieDirection = CurveContourDirection::Up;
         EXPECT_FALSE((NoteInfoPtr(entryInfo, 0)).calcHasPseudoTieEnd(&tieDirection));
-        EXPECT_EQ(tieDirection, CurveContourDirection::Auto);
+        EXPECT_EQ(tieDirection, CurveContourDirection::Unspecified);
     }
     {
         auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 3);
@@ -601,19 +601,19 @@ TEST(TieDetection, ShapesAsTieEnds)
         ASSERT_EQ(entryInfo->getEntry()->notes.size(), 3);
         CurveContourDirection tieDirection = CurveContourDirection::Up;
         EXPECT_FALSE((NoteInfoPtr(entryInfo, 0)).calcHasPseudoTieEnd(&tieDirection));
-        EXPECT_EQ(tieDirection, CurveContourDirection::Auto);
+        EXPECT_EQ(tieDirection, CurveContourDirection::Unspecified);
         EXPECT_FALSE((NoteInfoPtr(entryInfo, 1)).calcHasPseudoTieEnd(&tieDirection));
-        EXPECT_EQ(tieDirection, CurveContourDirection::Auto);
+        EXPECT_EQ(tieDirection, CurveContourDirection::Unspecified);
         EXPECT_FALSE((NoteInfoPtr(entryInfo, 2)).calcHasPseudoTieEnd(&tieDirection));
-        EXPECT_EQ(tieDirection, CurveContourDirection::Auto);
+        EXPECT_EQ(tieDirection, CurveContourDirection::Unspecified);
         // second chord has lv using articulations
         entryInfo = EntryInfoPtr(entryFrame, 2);
         ASSERT_TRUE(entryInfo);
         ASSERT_EQ(entryInfo->getEntry()->notes.size(), 2);
         EXPECT_FALSE((NoteInfoPtr(entryInfo, 0)).calcHasPseudoTieEnd(&tieDirection));
-        EXPECT_EQ(tieDirection, CurveContourDirection::Auto);
+        EXPECT_EQ(tieDirection, CurveContourDirection::Unspecified);
         EXPECT_FALSE((NoteInfoPtr(entryInfo, 1)).calcHasPseudoTieEnd(&tieDirection));
-        EXPECT_EQ(tieDirection, CurveContourDirection::Auto);
+        EXPECT_EQ(tieDirection, CurveContourDirection::Unspecified);
     }
     {
         auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 5);
@@ -624,7 +624,7 @@ TEST(TieDetection, ShapesAsTieEnds)
         auto entryInfo = EntryInfoPtr(entryFrame, 0);
         ASSERT_TRUE(entryInfo);
         ASSERT_EQ(entryInfo->getEntry()->notes.size(), 2);
-        CurveContourDirection tieDirection = CurveContourDirection::Auto;
+        CurveContourDirection tieDirection = CurveContourDirection::Unspecified;
         EXPECT_TRUE((NoteInfoPtr(entryInfo, 0)).calcHasPseudoTieEnd(&tieDirection));
         EXPECT_EQ(tieDirection, CurveContourDirection::Down);
         EXPECT_TRUE((NoteInfoPtr(entryInfo, 1)).calcHasPseudoTieEnd(&tieDirection));
@@ -639,7 +639,7 @@ TEST(TieDetection, ShapesAsTieEnds)
         auto entryInfo = EntryInfoPtr(entryFrame, 0);
         ASSERT_TRUE(entryInfo);
         ASSERT_EQ(entryInfo->getEntry()->notes.size(), 2);
-        CurveContourDirection tieDirection = CurveContourDirection::Auto;
+        CurveContourDirection tieDirection = CurveContourDirection::Unspecified;
         EXPECT_TRUE((NoteInfoPtr(entryInfo, 0)).calcHasPseudoTieEnd(&tieDirection));
         EXPECT_EQ(tieDirection, CurveContourDirection::Down);
         EXPECT_TRUE((NoteInfoPtr(entryInfo, 1)).calcHasPseudoTieEnd(&tieDirection));
@@ -654,7 +654,7 @@ TEST(TieDetection, ShapesAsTieEnds)
         auto entryInfo = EntryInfoPtr(entryFrame, 0);
         ASSERT_TRUE(entryInfo);
         ASSERT_EQ(entryInfo->getEntry()->notes.size(), 2);
-        CurveContourDirection tieDirection = CurveContourDirection::Auto;
+        CurveContourDirection tieDirection = CurveContourDirection::Unspecified;
         EXPECT_TRUE((NoteInfoPtr(entryInfo, 0)).calcHasPseudoTieEnd(&tieDirection));
         EXPECT_EQ(tieDirection, CurveContourDirection::Down);
         EXPECT_TRUE((NoteInfoPtr(entryInfo, 1)).calcHasPseudoTieEnd(&tieDirection));

@@ -449,10 +449,10 @@ CurveContourDirection others::SmartShape::calcContourDirection() const
                 }
             }
         }
-        return CurveContourDirection::Auto;
+        return CurveContourDirection::Unspecified;
 
     default:
-        return CurveContourDirection::Auto;
+        return CurveContourDirection::Unspecified;
     }
 }
 

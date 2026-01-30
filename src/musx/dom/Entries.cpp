@@ -3126,7 +3126,7 @@ bool NoteInfoPtr::calcIsIncludedInVoicing() const
 NoteInfoPtr NoteInfoPtr::calcArpeggiatedTieToNote(CurveContourDirection* tieDirection) const
 {
     if (tieDirection) {
-        *tieDirection = CurveContourDirection::Auto;
+        *tieDirection = CurveContourDirection::Unspecified;
     }
 
     const auto entryInfoPtr = getEntryInfo();
@@ -3160,7 +3160,7 @@ bool NoteInfoPtr::calcPseudoTieInternal(utils::PseudoTieMode mode, CurveContourD
 {
     const bool needDirection = (tieDirection != nullptr);
     if (needDirection) {
-        *tieDirection = CurveContourDirection::Auto;
+        *tieDirection = CurveContourDirection::Unspecified;
     }
 
     const auto entryInfoPtr = getEntryInfo();
@@ -3206,7 +3206,7 @@ bool NoteInfoPtr::calcPseudoTieInternal(utils::PseudoTieMode mode, CurveContourD
     auto measExpAssigns = doc->getOthers()->getArray<others::MeasureExprAssign>(partId, entryInfoPtr.getMeasure());
     for (const auto& assign : measExpAssigns) {
         if (assign->calcIsPseudoTie(mode, entryInfoPtr)) {
-            CurveContourDirection nextContour = CurveContourDirection::Auto;
+            CurveContourDirection nextContour = CurveContourDirection::Unspecified;
             if (needDirection) {
                 const auto shapeExp = assign->getShapeExpression();
                 MUSX_ASSERT_IF(!shapeExp) {
@@ -3258,7 +3258,7 @@ bool NoteInfoPtr::selectPseudoTieDirection(CurveContourDirection* tieDirection,
             // are different positioning options on each instance.
             std::sort(directions.begin(), directions.end());
         }
-        if (directions[0] != CurveContourDirection::Auto) { // if the first is not Auto, none are Auto
+        if (directions[0] != CurveContourDirection::Unspecified) { // if the first is not Auto, none are Auto
             size_t directionIndex = getNoteIndex();
             if (eligibleNoteIndices) {
                 const auto it = std::find(eligibleNoteIndices->begin(), eligibleNoteIndices->end(), directionIndex);
@@ -3275,7 +3275,7 @@ bool NoteInfoPtr::selectPseudoTieDirection(CurveContourDirection* tieDirection,
 
 std::vector<std::pair<NoteInfoPtr, CurveContourDirection>> NoteInfoPtr::calcJumpTieContinuationsFrom() const
 {
-    CurveContourDirection tieDirection = CurveContourDirection::Auto;
+    CurveContourDirection tieDirection = CurveContourDirection::Unspecified;
 
     if (getEntryInfo()->elapsedDuration != 0) {
         // entry must be at the beginning of a measure.

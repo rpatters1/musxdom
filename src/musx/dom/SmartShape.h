@@ -401,8 +401,8 @@ public:
     NoteInfoPtr calcArpeggiatedTieToNote(const EntryInfoPtr& forStartEntry) const;
 
     /// @brief Determines if a smart shape slur or curve has a fixed direction (up or down) or floats automatically.
-    /// @note If the smart shape is not a slur or curve, the return value is `CurveContourDirection::Auto`.
-    /// @return The curve contour direction for fixed-direction shapes; `CurveContourDirection::Auto` if floating/automatic.
+    /// @note If the smart shape is not a slur or curve, the return value is `CurveContourDirection::Unspecified`.
+    /// @return The curve contour direction for fixed-direction shapes; `CurveContourDirection::Unspecified` if floating/automatic.
     [[nodiscard]]
     CurveContourDirection calcContourDirection() const;
     
