@@ -2940,10 +2940,10 @@ CurveContourDirection NoteInfoPtr::calcDefaultTieDirection(bool forTieEnd) const
 
         // Outer notes ignore tie preferences
         if (noteIndex == 0) {
-            return applyOpposingSeconds(CurveContourDirection::Down);
+            return CurveContourDirection::Down;
         }
         if (noteIndex + 1 == noteCount) {
-            return applyOpposingSeconds(CurveContourDirection::Up);
+            return CurveContourDirection::Up;
         }
 
         // Angle seconds away from each other, if present and if specified
@@ -2973,45 +2973,43 @@ CurveContourDirection NoteInfoPtr::calcDefaultTieDirection(bool forTieEnd) const
         const auto staff = entryInfo.createCurrentStaff();
         int stemReversalPos = staff->stemReversal;
         return applyOpposingSeconds((staffPos < stemReversalPos) ? CurveContourDirection::Down : CurveContourDirection::Up);
+    }
+    
+    std::optional<bool> adjacentUpStem;
+    if (forTieEnd) {
+        // There seems to be a "bug" in how Finale determines mixed-stem values for Tie-Ends.
+        // It looks at the stem direction of the immediately preceding entry, even if that entry
+        // is not the entry that started the tie. Therefore, do not use calcTieFrom to
+        // get the stem direction.
+        if (EntryInfoPtr prevEntry = entryInfo.getPreviousInLayer()) {
+            adjacentUpStem = prevEntry.calcUpStem();
+        }
     } else {
-        std::optional<bool> adjacentUpStem;
-
-        if (forTieEnd) {
-            // There seems to be a "bug" in how Finale determines mixed-stem values for Tie-Ends.
-            // It looks at the stem direction of the immediately preceding entry, even if that entry
-            // is not the entry that started the tie. Therefore, do not use calcTieFrom to
-            // get the stem direction.
-            if (EntryInfoPtr prevEntry = entryInfo.getPreviousInLayer()) {
-                adjacentUpStem = prevEntry.calcUpStem();
-            }
+        if (NoteInfoPtr endNote = calcTieTo()) {
+            adjacentUpStem = endNote.getEntryInfo().calcUpStem();
         } else {
-            if (NoteInfoPtr endNote = calcTieTo()) {
-                adjacentUpStem = endNote.getEntryInfo().calcUpStem();
-            } else {
-                // Finale (as of Finale2000) has the following observed behavior. When no Tie-To note exists,
-                // it determines the mixed stem value based on
-                //		1. If the next entry is a rest, the adjStemDir is indeterminate so use stemDir (i.e., fall thru to bottom)
-                //		2. If the next entry is a note with its stem frozen, use it
-                //		3. If the next entry floats, but it has a V2Launch, then if EITHER the V1 or
-                //				the V2 has a stem in the opposite direction, use it.
-                auto nextEntry = entryInfo.getNextInLayer();
-                if (nextEntry && !nextEntry.calcDisplaysAsRest()) {
-                    adjacentUpStem = nextEntry.calcUpStem();
-                    auto [freezeStem, freezeDir] = nextEntry.calcEntryStemSettings();
-                    if (!freezeStem && nextEntry->getEntry()->v2Launch && adjacentUpStem.value_or(upStem) == upStem) {
-                        nextEntry = nextEntry.getNextInLayer();
-                        if (nextEntry) {
-                            adjacentUpStem = nextEntry.calcUpStem();
-                        }
+            // Finale (as of Finale2000) has the following observed behavior. When no Tie-To note exists,
+            // it determines the mixed stem value based on
+            //		1. If the next entry is a rest, the adjStemDir is indeterminate so use stemDir (i.e., fall thru to bottom)
+            //		2. If the next entry is a note with its stem frozen, use it
+            //		3. If the next entry floats, but it has a V2Launch, then if EITHER the V1 or
+            //				the V2 has a stem in the opposite direction, use it.
+            auto nextEntry = entryInfo.getNextInLayer();
+            if (nextEntry && !nextEntry.calcDisplaysAsRest()) {
+                adjacentUpStem = nextEntry.calcUpStem();
+                auto [freezeStem, freezeDir] = nextEntry.calcEntryStemSettings();
+                if (!freezeStem && nextEntry->getEntry()->v2Launch && adjacentUpStem.value_or(upStem) == upStem) {
+                    nextEntry = nextEntry.getNextInLayer();
+                    if (nextEntry) {
+                        adjacentUpStem = nextEntry.calcUpStem();
                     }
                 }
             }
         }
-
-        if (adjacentUpStem.has_value() && *adjacentUpStem != upStem) {
-            const bool tieUp = tieOptions->mixedStemDirection == options::TieOptions::MixedStemDirection::Over;
-            return tieUp ? CurveContourDirection::Up : CurveContourDirection::Down;
-        }
+    }
+    if (adjacentUpStem.has_value() && *adjacentUpStem != upStem) {
+        const bool tieUp = tieOptions->mixedStemDirection == options::TieOptions::MixedStemDirection::Over;
+        return tieUp ? CurveContourDirection::Up : CurveContourDirection::Down;
     }
 
     return upStem ? CurveContourDirection::Down : CurveContourDirection::Up;
