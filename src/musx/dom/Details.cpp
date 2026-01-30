@@ -697,6 +697,19 @@ std::vector<StaffGroupInfo> StaffGroupInfo::getGroupsAtMeasure(MeasCmper measure
     return retval;
 }
 
+// ************************
+// ***** TieAlterBase *****
+// ************************
+
+MusxInstance<TieAlterBase> TieAlterBase::fromNoteInfo(const NoteInfoPtr& noteInfoPtr, bool forTieEnd)
+{
+    const auto entry = noteInfoPtr.getEntryInfo()->getEntry();
+    if (forTieEnd) {
+        return entry->getDocument()->getDetails()->getForNote<TieAlterEnd>(noteInfoPtr);
+    }
+    return entry->getDocument()->getDetails()->getForNote<TieAlterStart>(noteInfoPtr);
+}
+
 } // namespace details
 } // namespace dom
 } // namespace musx

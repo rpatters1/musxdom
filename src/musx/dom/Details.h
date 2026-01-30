@@ -2024,6 +2024,10 @@ public:
     {
     }
 
+    /// @brief Gets the the @ref TieAlterStart or @ref TieAlterEnd for this note, based on the input boolean.
+    /// @param forTieEnd If @p forTieEnd is true, get the @ref TieAlterStart. Otherwise get the @TieAlterEnd.
+    static MusxInstance<TieAlterBase> fromNoteInfo(const NoteInfoPtr& noteInfoPtr, bool forTieEnd = false);
+
     /**
      * @enum ConnectionType
      * @brief Defines tie connection points for start and end attachment locations.

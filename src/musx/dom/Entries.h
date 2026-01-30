@@ -1652,12 +1652,21 @@ public:
     [[nodiscard]]
     NoteInfoPtr calcTieFrom(bool requireTie = true) const;
 
-    /// @brief Calculates the direction for a tie on this note.
-    /// @param forTieEnd If @p forTieEnd is true, the direction for the tie ending on this note is returned.
-    /// Else the direction for the tie starting on this note is returned.
-    /// @return true if the given tie faces upwards, false if not.
+    /// @brief Calculates the default tie direction for this note.
+    /// @param forTieEnd If @p forTieEnd is true, the direction for the tie-end stub on this note is returned.
+    /// Otherwise the direction for the tie starting on this note is returned.
+    /// @return The contour direction that applies to the tie, or
+    ///         #CurveContourDirection::Unspecified when the contour cannot be determined.
     [[nodiscard]]
-    bool calcTieIsUp(bool forTieEnd = false) const;
+    CurveContourDirection calcDefaultTieDirection(bool forTieEnd = false) const;
+
+    /// @brief Calculates the effective tie direction for this note, taking into account all options and overrides.
+    /// @param forTieEnd If @p forTieEnd is true, the direction for the tie-end stub on this note is returned.
+    /// Otherwise the direction for the tie starting on this note is returned.
+    /// @return The contour direction that applies to the tie, or
+    ///         #CurveContourDirection::Unspecified when the contour cannot be determined.
+    [[nodiscard]]
+    CurveContourDirection calcEffectiveTieDirection(bool forTieEnd = false) const;
 
     /// @brief Calculates the staff number, taking into account cross staffing
     [[nodiscard]]

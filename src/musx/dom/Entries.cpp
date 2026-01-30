@@ -2859,71 +2859,112 @@ NoteInfoPtr NoteInfoPtr::calcTieFrom(bool requireTie) const
     return calcTieFromWithPreviousMeasure(m_entry.getMeasure() - 1, requireTie);
 }
 
-bool NoteInfoPtr::calcTieIsUp(bool forTieEnd) const
+CurveContourDirection NoteInfoPtr::calcEffectiveTieDirection(bool forTieEnd) const
 {
-    if (forTieEnd) {
-        if (!calcTieFrom()) {
-            return false;
-        }
-    } else {
-        if (!(*this)->tieStart) {
-            return false;
+    if (const auto tieAlter = details::TieAlterBase::fromNoteInfo(*this, forTieEnd)) {
+        if (tieAlter->freezeDirection) {
+            return tieAlter->down ? CurveContourDirection::Down : CurveContourDirection::Up;
         }
     }
 
     const auto entryInfo = getEntryInfo();
     const auto entryFrame = entryInfo.getFrame();
+    const auto entry = entryInfo->getEntry();
 
-    // Inherit the stem direction for frozen layers
+    if (entry->splitStem) {
+        return (*this)->upSplitStem ? CurveContourDirection::Up : CurveContourDirection::Down;
+    }
+
     if (const auto layerInfo = entryFrame->getLayerAttributes()) {
         if (layerInfo->freezeLayer && entryInfo.calcIfLayerSettingsApply()) {
-            return layerInfo->freezeStemsUp == layerInfo->freezTiesToStems;
+            const bool tieUp = layerInfo->freezeStemsUp == layerInfo->freezTiesToStems;
+            return tieUp ? CurveContourDirection::Up : CurveContourDirection::Down;
         }
     }
 
-    // For cross-staff notes: Match the stem direction
+    if (entry->v2Launch || entry->voice2) {
+        return entryInfo.calcUpStem() ? CurveContourDirection::Up : CurveContourDirection::Down;
+    }
+
+    if (entry->flipTie) {
+        return entryInfo.calcUpStem() ? CurveContourDirection::Up : CurveContourDirection::Down;
+    }
+
+    // For cross-staff notes: match the stem direction
     const auto scrollViewStaves = entryFrame->getDocument()->getScrollViewStaves(entryFrame->getRequestedPartId());
     const int crossStaffDir = calcCrossStaffDirection(scrollViewStaves);
     if (crossStaffDir != 0) {
-        return crossStaffDir > 0;
+        return (crossStaffDir > 0) ? CurveContourDirection::Up : CurveContourDirection::Down;
+    }
+
+    return calcDefaultTieDirection(forTieEnd);
+}
+
+CurveContourDirection NoteInfoPtr::calcDefaultTieDirection(bool forTieEnd) const
+{
+    const auto entryInfo = getEntryInfo();
+    const auto entryFrame = entryInfo.getFrame();
+    const auto thisNote = operator->();
+
+    if (forTieEnd) {
+        if (!calcTieFrom()) {
+            return CurveContourDirection::Unspecified;
+        }
+    } else {
+        if (!thisNote->tieStart) {
+            return CurveContourDirection::Unspecified;
+        }
     }
 
     const auto tieOptions = entryFrame->getDocument()->getOptions()->get<options::TieOptions>();
     size_t noteCount = entryInfo->getEntry()->notes.size();
-    int stemDir = entryInfo.calcUpStem() ? 1 : -1;
+    const bool upStem = entryInfo.calcUpStem();
+
+    const bool opposingSeconds = tieOptions->chordTieDirOpposingSeconds;
+    auto applyOpposingSeconds = [&](CurveContourDirection direction) {
+        if (!opposingSeconds || direction == CurveContourDirection::Unspecified) {
+            return direction;
+        }
+        if (direction == CurveContourDirection::Up && !thisNote->upStemSecond && thisNote->downStemSecond) {
+            return CurveContourDirection::Down;
+        }
+        if (direction == CurveContourDirection::Down && thisNote->upStemSecond && !thisNote->downStemSecond) {
+            return CurveContourDirection::Up;
+        }
+        return direction;
+    };
 
     if (noteCount > 1) {
-        // Notes in entry are assumed to be sorted from lowest to highest
+        // Notes in entry are sorted from lowest to highest
         size_t noteIndex = getNoteIndex();
 
         // Outer notes ignore tie preferences
         if (noteIndex == 0) {
-            return false;
+            return applyOpposingSeconds(CurveContourDirection::Down);
         }
         if (noteIndex + 1 == noteCount) {
-            return true;
+            return applyOpposingSeconds(CurveContourDirection::Up);
         }
 
         // Angle seconds away from each other, if present and if specified
         if (tieOptions->secondsPlacement == options::TieOptions::SecondsPlacement::ShiftForSeconds) {
-            if (!(*this)->upStemSecond && (*this)->downStemSecond) {
-                return false;
+            if (!thisNote->upStemSecond && thisNote->downStemSecond) {
+                return applyOpposingSeconds(CurveContourDirection::Down);
             }
-            if ((*this)->upStemSecond && !(*this)->downStemSecond) {
-                return true;
+            if (thisNote->upStemSecond && !thisNote->downStemSecond) {
+                return applyOpposingSeconds(CurveContourDirection::Up);
             }
         }
 
         if (tieOptions->chordTieDirType != options::TieOptions::ChordTieDirType::StemReversal) {
             if (noteIndex < noteCount / 2) {
-                return false;
+                return applyOpposingSeconds(CurveContourDirection::Down);
             }
             if (noteIndex >= (noteCount + 1) / 2) {
-                return true;
+                return applyOpposingSeconds(CurveContourDirection::Up);
             }
-
             if (tieOptions->chordTieDirType == options::TieOptions::ChordTieDirType::OutsideInside) {
-                return (stemDir > 0) ? false : true;
+                return applyOpposingSeconds(upStem ? CurveContourDirection::Down : CurveContourDirection::Up);
             }
         }
 
@@ -2931,38 +2972,49 @@ bool NoteInfoPtr::calcTieIsUp(bool forTieEnd) const
         const int staffPos = std::get<3>(calcNotePropertiesInView(/*alwaysUseEntryStaff*/ true));
         const auto staff = entryInfo.createCurrentStaff();
         int stemReversalPos = staff->stemReversal;
-        return (staffPos < stemReversalPos) ? false : true;
+        return applyOpposingSeconds((staffPos < stemReversalPos) ? CurveContourDirection::Down : CurveContourDirection::Up);
     } else {
-        int adjacentStemDir = 0;
+        std::optional<bool> adjacentUpStem;
 
         if (forTieEnd) {
-            if (NoteInfoPtr startNote = calcTieFrom()) {
-                adjacentStemDir = startNote.getEntryInfo().calcUpStem() ? 1 : -1;
+            // There seems to be a "bug" in how Finale determines mixed-stem values for Tie-Ends.
+            // It looks at the stem direction of the immediately preceding entry, even if that entry
+            // is not the entry that started the tie. Therefore, do not use calcTieFrom to
+            // get the stem direction.
+            if (EntryInfoPtr prevEntry = entryInfo.getPreviousInLayer()) {
+                adjacentUpStem = prevEntry.calcUpStem();
             }
         } else {
             if (NoteInfoPtr endNote = calcTieTo()) {
-                adjacentStemDir = endNote.getEntryInfo().calcUpStem() ? 1 : -1;
+                adjacentUpStem = endNote.getEntryInfo().calcUpStem();
             } else {
+                // Finale (as of Finale2000) has the following observed behavior. When no Tie-To note exists,
+                // it determines the mixed stem value based on
+                //		1. If the next entry is a rest, the adjStemDir is indeterminate so use stemDir (i.e., fall thru to bottom)
+                //		2. If the next entry is a note with its stem frozen, use it
+                //		3. If the next entry floats, but it has a V2Launch, then if EITHER the V1 or
+                //				the V2 has a stem in the opposite direction, use it.
                 auto nextEntry = entryInfo.getNextInLayer();
                 if (nextEntry && !nextEntry.calcDisplaysAsRest()) {
-                    adjacentStemDir = nextEntry.calcUpStem() ? 1 : -1;
+                    adjacentUpStem = nextEntry.calcUpStem();
                     auto [freezeStem, freezeDir] = nextEntry.calcEntryStemSettings();
-                    if (!freezeStem && nextEntry->getEntry()->v2Launch && adjacentStemDir == stemDir) {
+                    if (!freezeStem && nextEntry->getEntry()->v2Launch && adjacentUpStem.value_or(upStem) == upStem) {
                         nextEntry = nextEntry.getNextInLayer();
                         if (nextEntry) {
-                            adjacentStemDir = nextEntry.calcUpStem() ? 1 : -1;
+                            adjacentUpStem = nextEntry.calcUpStem();
                         }
                     }
                 }
             }
         }
 
-        if (adjacentStemDir != 0 && adjacentStemDir != stemDir) {
-            return tieOptions->mixedStemDirection == options::TieOptions::MixedStemDirection::Over;
+        if (adjacentUpStem.has_value() && *adjacentUpStem != upStem) {
+            const bool tieUp = tieOptions->mixedStemDirection == options::TieOptions::MixedStemDirection::Over;
+            return tieUp ? CurveContourDirection::Up : CurveContourDirection::Down;
         }
     }
 
-    return (stemDir > 0) ? false : true;
+    return upStem ? CurveContourDirection::Down : CurveContourDirection::Up;
 }
 
 StaffCmper NoteInfoPtr::calcStaff() const
