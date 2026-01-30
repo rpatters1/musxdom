@@ -2980,7 +2980,7 @@ StaffCmper NoteInfoPtr::calcStaff() const
     return m_entry.getStaff();
 }
 
-Note::NoteProperties NoteInfoPtr::calcNoteProperties(const std::optional<bool>& enharmonicRespell, bool alwaysUseEntryStaff) const
+Note::NoteProperties NoteInfoPtr::calcNoteProperties(EnharmonicOverride enharmonicOverride, bool alwaysUseEntryStaff) const
 {
     StaffCmper staffId = getEntryInfo().getStaff();
     ClefIndex clefIndex = getEntryInfo()->clefIndex;
@@ -2992,8 +2992,19 @@ Note::NoteProperties NoteInfoPtr::calcNoteProperties(const std::optional<bool>& 
             }
         }
     }
-    return (*this)->calcNoteProperties(m_entry.getKeySignature(), KeySignature::KeyContext::Written, clefIndex, calcPercussionNoteInfo(), m_entry.createCurrentStaff(staffId),
-            enharmonicRespell.value_or(calcIsEnharmonicRespell()));
+    const bool respell = [&]() -> bool {
+        switch (enharmonicOverride) {
+        default:
+        case EnharmonicOverride::None:
+            return calcIsEnharmonicRespell();
+        case EnharmonicOverride::Respell:
+            return true;
+        case EnharmonicOverride::NoRespell:
+            return false;
+        }
+    }();
+    return (*this)->calcNoteProperties(m_entry.getKeySignature(), KeySignature::KeyContext::Written, clefIndex, calcPercussionNoteInfo(),
+                                       m_entry.createCurrentStaff(staffId), respell);
 }
 
 Note::NoteProperties NoteInfoPtr::calcNotePropertiesConcert(bool alwaysUseEntryStaff) const
@@ -3019,7 +3030,7 @@ Note::NoteProperties NoteInfoPtr::calcNotePropertiesInView(bool alwaysUseEntrySt
     if (auto partGlobals = entryFrame->getDocument()->getOthers()->get<others::PartGlobals>(entryFrame->getRequestedPartId(), MUSX_GLOBALS_CMPER)) {
         forWrittenPitch = partGlobals->showTransposed;
     }
-    return forWrittenPitch ? calcNoteProperties(std::nullopt, alwaysUseEntryStaff) : calcNotePropertiesConcert(alwaysUseEntryStaff);
+    return forWrittenPitch ? calcNoteProperties(EnharmonicOverride::None, alwaysUseEntryStaff) : calcNotePropertiesConcert(alwaysUseEntryStaff);
 }
 
 MusxInstance<others::PercussionNoteInfo> NoteInfoPtr::calcPercussionNoteInfo() const

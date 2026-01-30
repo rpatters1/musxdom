@@ -1599,13 +1599,14 @@ public:
      * @note In Finale, the default whole rest staff position is the middle staff line. Other music notation systems
      * frequently expect the standard whole rest staff position to be the second line from the top. You may need to interpolate
      * the staff position returned by #calcNoteProperties for whole rests.
-     * @param enharmonicRespell If supplied, return the default enharmonic respelling based on this value. If omitted,
-     * this value is calculated automatically based on the score or part settings. Normally you will omit it.
+     * @param enharmonicOverride Overrides the enharmonic respelling behavior. Use #EnharmonicOverride::None to defer
+     * to the score/part data (default), #EnharmonicOverride::Respell to force respelling, or #EnharmonicOverride::NoRespell
+     * to prevent respelling even if the part would otherwise respell.
      * @param alwaysUseEntryStaff If true, the entry is not checked for cross-staff staffing. Normally you omit this.
      * @return #Note::NoteProperties
      */
     [[nodiscard]]
-    Note::NoteProperties calcNoteProperties(const std::optional<bool>& enharmonicRespell = std::nullopt, bool alwaysUseEntryStaff = false) const;
+    Note::NoteProperties calcNoteProperties(EnharmonicOverride enharmonicOverride = EnharmonicOverride::None, bool alwaysUseEntryStaff = false) const;
 
     /**
      * @brief Calculates the note name, octave number, actual alteration, and staff position for the concert pitch of the note. This function does
