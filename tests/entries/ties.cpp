@@ -964,6 +964,9 @@ TEST(TieDetection, TieConnectStyleTypeForTiesToNowhere)
         ASSERT_TRUE(gfhold) << " gfhold not found for 1, 1";
         auto entryFrame = gfhold.createEntryFrame(0);
         ASSERT_TRUE(entryFrame);
-        checkTieConnectStyleType(NoteInfoPtr(EntryInfoPtr(entryFrame, 0), 0), TieConnectStyleType::UnderLowestNoteStartPosUnder, TieConnectStyleType::UnderLowestNoteStartPosUnder);
+        checkTieConnectStyleType(NoteInfoPtr(EntryInfoPtr(entryFrame, 0), 0), TieConnectStyleType::UnderLowestNoteStartPosUnder, TieConnectStyleType::UnderLowestNoteStemEndPosUnder);
+        checkTieConnectStyleType(NoteInfoPtr(EntryInfoPtr(entryFrame, 0), 1), TieConnectStyleType::UnderStartPosInner, TieConnectStyleType::UnderEndPosInner);
+        checkTieConnectStyleType(NoteInfoPtr(EntryInfoPtr(entryFrame, 0), 2), TieConnectStyleType::OverStartPosInner, TieConnectStyleType::OverEndPosInner);
+        checkTieConnectStyleType(NoteInfoPtr(EntryInfoPtr(entryFrame, 0), 3), TieConnectStyleType::OverHighestNoteStartPosOver, TieConnectStyleType::OverHighestNoteStemEndPosOver);
     }
 }
