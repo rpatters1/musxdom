@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generator: MakeMusic 27.4.1.146 -->
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="17.000" height="19.000" viewBox="-7.000 -9.000 17.000 19.000" xml:space="preserve">
+<font horiz-adv-x="1000">
+<!-- Copyright 2003, MakeMusic! Inc. -->
+<font-face font-family="'JazzPerc'" units-per-em="1000" underline-position="-133.000000" underline-thickness="20.000000">
+<font-face-src><font-face-name name="JazzPerc"/></font-face-src></font-face>
+<missing-glyph horiz-adv-x="500" />
+<glyph unicode="5" horiz-adv-x="270.000" d="M270,51C270,13 245,-32 196,-84C146,-135 102,-161 64,-161C46,-161 31,-152 18,-134C6,-118 0,-101 0,-82C0,-42 20,5 59,59C101,116 141,144 180,144C199,144 218,133 239,112C260,91 270,70 270,51L270,51z" />
+</font>
+<g id="Music">
+	<text font-family="'JazzPerc'" transform="translate(-7.000,0.000)" font-size="64.000000" fill="rgb(0,0,0)" xml:space="preserve">5</text>
+</g>
+</svg>

@@ -56,6 +56,9 @@ public:
 inline std::filesystem::path getInputPath()
 { return std::filesystem::current_path(); }
 
+inline std::filesystem::path getOutputPath()
+{ return std::filesystem::current_path() / "output"; }
+
 // STOOPID Google test can't ASSERT out of a non-void function
 void readFile(const std::filesystem::path& filePath, std::vector<char>& contents);
 

@@ -199,8 +199,8 @@ ShapeDefInstruction::parseSetDash(const std::vector<int>& data)
 {
     if (data.size() >= 2) {
         return SetDash{
-            Efix{data[0]}, // dashLength
-            Efix{data[1]}  // spaceLength
+            Evpu{data[0]}, // dashLength
+            Evpu{data[1]}  // spaceLength
         };
     }
     return std::nullopt;

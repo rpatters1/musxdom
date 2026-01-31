@@ -59,6 +59,7 @@ set(MUSX_SRC_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/src/musx/util/EnigmaString.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/musx/util/PseudoTieUtils.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/musx/util/ShapeRecognize.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/musx/util/SvgConvert.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/musx/util/TestSupport.cpp
 )
 

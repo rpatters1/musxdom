@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generator: MakeMusic 27.4.1.146 -->
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="241.000" height="100.000" viewBox="0.000 -97.000 241.000 100.000" xml:space="preserve">
+<font horiz-adv-x="1000">
+<!-- Copyright (c) 2021 by MakeMusic, Inc.. All rights reserved. -->
+<font-face font-family="'Finale Maestro'" units-per-em="1000" underline-position="-75.000000" underline-thickness="50.000000">
+<font-face-src><font-face-name name="Finale Maestro"/></font-face-src></font-face>
+<missing-glyph horiz-adv-x="0" />
+<glyph unicode="&#xE1D5;" horiz-adv-x="318.000" d="M318,889L298,889L298,90C279,112 247,126 206,126C114,126 0,55 0,-40C0,-93 43,-132 111,-132C206,-132 318,-56 318,35L318,889z" />
+<glyph unicode="&#xE1D7;" horiz-adv-x="562.000" d="M298,894L298,90C279,112 247,126 206,126C114,126 0,55 0,-40C0,-93 43,-132 111,-132C206,-132 318,-56 318,35L318,632C418,622 481,552 521,440C538,391 546,329 546,281C546,225 538,157 519,110L531,108C551,164 562,226 562,293C562,390 542,489 487,583C413,709 322,786 318,894L298,894z" />
+</font>
+<font horiz-adv-x="2048">
+<!-- © 1990-99 Apple Computer Inc. © 1981 Linotype AG  © 1990-91 Type Solutions Inc. © 1990-91 The Font Bureau Inc. -->
+<font-face font-family="'Times'" units-per-em="2048" underline-position="-155.000000" underline-thickness="101.000000">
+<font-face-src><font-face-name name="Times Roman"/></font-face-src></font-face>
+<missing-glyph horiz-adv-x="0" />
+<glyph unicode="=" horiz-adv-x="1155.000" d="M1095,381L1095,241L61,241L61,381L1095,381M1095,794L1095,654L61,654L61,794L1095,794z" />
+</font>
+<font horiz-adv-x="2048">
+<!-- © 1990-99 Apple Computer Inc. © 1981 Linotype AG  © 1990-91 Type Solutions Inc. © 1990-91 The Font Bureau Inc. -->
+<font-face font-family="'Times'" font-weight="bold" font-style="italic" units-per-em="2048" underline-position="-136.000000" underline-thickness="139.000000">
+<font-face-src><font-face-name name="Times Bold Italic"/></font-face-src></font-face>
+<missing-glyph horiz-adv-x="0" />
+<glyph unicode="3" horiz-adv-x="1024.000" d="M-34,138C-34,171 -23,198 -2,220C19,240 47,251 81,251C111,251 136,244 157,230C178,216 201,190 227,152L256,112C273,87 289,72 302,65C315,58 333,55 355,55C417,55 470,87 516,151C560,215 583,296 583,393C583,514 549,597 480,644C412,691 340,713 263,711L270,756C380,781 461,809 514,840C609,895 656,973 656,1073C656,1128 641,1172 612,1204C582,1237 540,1253 486,1253C437,1253 394,1240 356,1216C318,1190 280,1152 241,1099L199,1125C244,1192 287,1246 328,1285C404,1360 501,1398 618,1398C698,1398 769,1373 830,1324C891,1275 922,1207 922,1120C922,1057 901,1000 860,947C818,894 765,853 701,824L677,813C725,777 765,735 797,686C829,638 845,579 845,509C845,368 783,241 660,130C542,24 399,-29 232,-29C129,-29 55,-5 8,42C-20,71 -34,103 -34,138L-34,138z" />
+</font>
+<g id="Music">
+	<text font-family="'Finale Maestro'" transform="translate(0.000,-7.000)" font-size="72.000000" fill="rgb(0,0,0)" xml:space="preserve">&#xE1D5;</text>
+	<text font-family="'Finale Maestro'" transform="translate(56.000,-7.000)" font-size="72.000000" fill="rgb(0,0,0)" xml:space="preserve">&#xE1D5;</text>
+	<text font-family="'Finale Maestro'" transform="translate(133.000,-7.000)" font-size="72.000000" fill="rgb(0,0,0)" xml:space="preserve">&#xE1D5;</text>
+	<text font-family="'Finale Maestro'" transform="translate(196.000,-7.000)" font-size="72.000000" fill="rgb(0,0,0)" xml:space="preserve">&#xE1D7;</text>
+	<path stroke="rgb(0,0,0)" fill="none" d="M23.000,-66.000L78.000,-66.000" stroke-width="12.094" />
+	<text font-family="'Times'" font-weight="bold" font-style="italic" transform="translate(177.000,-75.000)" font-size="32.000000" fill="rgb(0,0,0)" xml:space="preserve">3</text>
+	<path stroke="rgb(0,0,0)" fill="none" d="M128.000,-74.000L128.000,-74.000L128.000,-86.000L172.000,-86.000" stroke-width="1.844" />
+	<path stroke="rgb(0,0,0)" fill="none" d="M240.000,-74.000L240.000,-74.000L240.000,-86.000L196.000,-86.000" stroke-width="1.844" />
+	<text font-family="'Times'" transform="translate(101.000,-13.000)" font-size="40.000000" fill="rgb(0,0,0)" xml:space="preserve">=</text>
+</g>
+</svg>
