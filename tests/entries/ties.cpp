@@ -905,7 +905,8 @@ TEST(TieDetection, TieDirectionOppositeStems)
     }
 }
 
-static void checkTieConnectStyleType(const NoteInfoPtr& startNote, TieConnectStyleType expectedStart, TieConnectStyleType expectedEnd)
+static void checkTieConnectStyleType(const NoteInfoPtr& startNote, TieConnectStyleType expectedStart,
+                                     TieConnectStyleType expectedEnd, bool forTieEnd = false)
 {
     ASSERT_TRUE(startNote);
     const auto entryInfo = startNote.getEntryInfo();
@@ -913,7 +914,7 @@ static void checkTieConnectStyleType(const NoteInfoPtr& startNote, TieConnectSty
         + " entryIdx " + std::to_string(entryInfo.getIndexInFrame())
         + " noteIdx " + std::to_string(startNote.getNoteIndex());
 
-    auto styles = musx::util::Tie::calcConnectStyleTypes(startNote, false);
+    auto styles = musx::util::Tie::calcConnectStyleTypes(startNote, forTieEnd);
     ASSERT_TRUE(styles) << tieLabel << " : connect styles missing (no tie?)";
     const auto& [startStyle, endStyle] = *styles;
     EXPECT_EQ(startStyle, expectedStart) << tieLabel << " : start connect style mismatch";
@@ -959,6 +960,7 @@ TEST(TieDetection, TieConnectStyleTypeForTiesToNowhere)
     musxtest::readFile(musxtest::getInputPath() / "ties_to_nowhere.enigmaxml", xml);
     auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(xml);
     ASSERT_TRUE(doc);
+    // the following results are verified to match the Lua library results, except as noted.
     {
         auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 1);
         ASSERT_TRUE(gfhold) << " gfhold not found for 1, 1";
@@ -967,6 +969,46 @@ TEST(TieDetection, TieConnectStyleTypeForTiesToNowhere)
         checkTieConnectStyleType(NoteInfoPtr(EntryInfoPtr(entryFrame, 0), 0), TieConnectStyleType::UnderLowestNoteStartPosUnder, TieConnectStyleType::UnderLowestNoteStemEndPosUnder);
         checkTieConnectStyleType(NoteInfoPtr(EntryInfoPtr(entryFrame, 0), 1), TieConnectStyleType::UnderStartPosInner, TieConnectStyleType::UnderEndPosInner);
         checkTieConnectStyleType(NoteInfoPtr(EntryInfoPtr(entryFrame, 0), 2), TieConnectStyleType::OverStartPosInner, TieConnectStyleType::OverEndPosInner);
-        checkTieConnectStyleType(NoteInfoPtr(EntryInfoPtr(entryFrame, 0), 3), TieConnectStyleType::OverHighestNoteStartPosOver, TieConnectStyleType::OverHighestNoteStemEndPosOver);
+        /// @todo the end type this result conflicts with a comment in the code, but matches Lua code, so it must be checked in Finale.
+        checkTieConnectStyleType(NoteInfoPtr(EntryInfoPtr(entryFrame, 0), 3), TieConnectStyleType::OverHighestNoteStartPosOver, TieConnectStyleType::OverHighestNoteEndPosOver);
+    }
+    {
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 2);
+        ASSERT_TRUE(gfhold) << " gfhold not found for 1, 2";
+        auto entryFrame = gfhold.createEntryFrame(0);
+        ASSERT_TRUE(entryFrame);
+        checkTieConnectStyleType(NoteInfoPtr(EntryInfoPtr(entryFrame, 1), 0), TieConnectStyleType::UnderLowestNoteStartPosUnder, TieConnectStyleType::UnderLowestNoteStemEndPosUnder);
+        checkTieConnectStyleType(NoteInfoPtr(EntryInfoPtr(entryFrame, 1), 1), TieConnectStyleType::UnderStartPosInner, TieConnectStyleType::UnderEndPosInner);
+        checkTieConnectStyleType(NoteInfoPtr(EntryInfoPtr(entryFrame, 1), 2), TieConnectStyleType::UnderStartPosInner, TieConnectStyleType::UnderEndPosInner);
+        /// @todo the end type for this result conflicts with a comment in the code *and* the Lua result.
+        checkTieConnectStyleType(NoteInfoPtr(EntryInfoPtr(entryFrame, 1), 3), TieConnectStyleType::OverHighestNoteStartPosOver, TieConnectStyleType::OverHighestNoteEndPosOver);
+    }
+    {
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 3);
+        ASSERT_TRUE(gfhold) << " gfhold not found for 1, 3";
+        auto entryFrame = gfhold.createEntryFrame(0);
+        ASSERT_TRUE(entryFrame);
+        checkTieConnectStyleType(NoteInfoPtr(EntryInfoPtr(entryFrame, 1), 0), TieConnectStyleType::UnderLowestNoteStartPosUnder, TieConnectStyleType::UnderLowestNoteEndPosUnder);
+        checkTieConnectStyleType(NoteInfoPtr(EntryInfoPtr(entryFrame, 1), 1), TieConnectStyleType::OverStartPosInner, TieConnectStyleType::OverEndPosInner);
+        checkTieConnectStyleType(NoteInfoPtr(EntryInfoPtr(entryFrame, 1), 2), TieConnectStyleType::OverHighestNoteStemStartPosOver, TieConnectStyleType::OverHighestNoteEndPosOver);
+    }
+    {
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 4);
+        ASSERT_TRUE(gfhold) << " gfhold not found for 1, 4";
+        auto entryFrame = gfhold.createEntryFrame(0);
+        ASSERT_TRUE(entryFrame);
+        checkTieConnectStyleType(NoteInfoPtr(EntryInfoPtr(entryFrame, 0), 0), TieConnectStyleType::UnderLowestNoteStartPosUnder, TieConnectStyleType::UnderLowestNoteEndPosUnder, true);
+        checkTieConnectStyleType(NoteInfoPtr(EntryInfoPtr(entryFrame, 0), 1), TieConnectStyleType::OverStartPosInner, TieConnectStyleType::OverEndPosInner, true);
+        checkTieConnectStyleType(NoteInfoPtr(EntryInfoPtr(entryFrame, 0), 2), TieConnectStyleType::OverHighestNoteStemStartPosOver, TieConnectStyleType::OverHighestNoteEndPosOver, true);
+    }
+    {
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 5);
+        ASSERT_TRUE(gfhold) << " gfhold not found for 1, 1";
+        auto entryFrame = gfhold.createEntryFrame(0);
+        ASSERT_TRUE(entryFrame);
+        checkTieConnectStyleType(NoteInfoPtr(EntryInfoPtr(entryFrame, 0), 0), TieConnectStyleType::UnderStartPosInner, TieConnectStyleType::UnderEndPosInner);
+        checkTieConnectStyleType(NoteInfoPtr(EntryInfoPtr(entryFrame, 0), 1), TieConnectStyleType::UnderStartPosInner, TieConnectStyleType::UnderEndPosInner);
+        checkTieConnectStyleType(NoteInfoPtr(EntryInfoPtr(entryFrame, 0), 2), TieConnectStyleType::OverStartPosInner, TieConnectStyleType::OverEndPosInner);
+        checkTieConnectStyleType(NoteInfoPtr(EntryInfoPtr(entryFrame, 0), 3), TieConnectStyleType::OverStartPosInner, TieConnectStyleType::OverEndPosInner);
     }
 }
