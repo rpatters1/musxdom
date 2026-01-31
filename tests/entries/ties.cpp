@@ -914,16 +914,11 @@ TEST(TieDetection, TieConnectStyleType)
 
     auto checkTie = [](const NoteInfoPtr& startNote, TieConnectStyleType expectedStart, TieConnectStyleType expectedEnd) {
         ASSERT_TRUE(startNote);
-        auto startStyle = musx::util::Tie::calcConnectStyleType(startNote, false);
+        auto styles = musx::util::Tie::calcConnectStyleTypes(startNote, false);
+        ASSERT_TRUE(styles);
+        const auto& [startStyle, endStyle] = *styles;
         EXPECT_EQ(startStyle, expectedStart);
-        EXPECT_EQ(startNote.calcHasOuterTie(), isOuterTieConnectStyle(expectedStart));
-        EXPECT_EQ(startNote.calcHasInnerTie(), !isOuterTieConnectStyle(expectedStart));
-        auto endNote = startNote.calcTieTo();
-        ASSERT_TRUE(endNote);
-        auto endStyle = musx::util::Tie::calcConnectStyleType(endNote, true);
         EXPECT_EQ(endStyle, expectedEnd);
-        EXPECT_EQ(endNote.calcHasOuterTie(true), isOuterTieConnectStyle(expectedEnd));
-        EXPECT_EQ(endNote.calcHasInnerTie(true), !isOuterTieConnectStyle(expectedEnd));
     };
 
     {

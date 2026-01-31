@@ -55,10 +55,16 @@ public:
     /// @brief Calculates the connect style types for both endpoints of a tie.
     /// @param noteInfo The note whose tie is being analyzed.
     /// @param forTieEnd True if the note represents a tie end; false for tie starts.
-    /// @returns A pair containing start and end connect style types.
+    /// @returns A pair containing start and end connect style types, or std::nullopt if no tie exists.
     [[nodiscard]]
-    static std::pair<dom::TieConnectStyleType, dom::TieConnectStyleType> calcConnectStyleTypes(
+    static std::optional<std::pair<dom::TieConnectStyleType, dom::TieConnectStyleType>> calcConnectStyleTypes(
         const dom::NoteInfoPtr& noteInfo, bool forTieEnd);
+
+    /// @brief Returns true if the connect style is an outer placement.
+    /// @param type The connect style to classify.
+    /// @returns True if @p type is an outer placement, otherwise false.
+    [[nodiscard]]
+    static bool calcIsOuterConnectStyle(dom::TieConnectStyleType type);
 
     /// @brief Calculates the default connection type for a tie endpoint.
     /// @param noteInfo The note whose endpoint is being analyzed.
@@ -71,14 +77,22 @@ public:
         const dom::NoteInfoPtr& noteInfo, bool forTieEnd, bool forEndPoint, bool forPageView = false);
 
 private:
-    /// @brief Calculates the connect style type for a single endpoint of a tie.
-    /// @param noteInfo The note whose tie is being analyzed.
+    /// @brief Calculates the connect style type for a single endpoint (placement_for_endpoint).
+    /// @param noteInfo The note whose tie endpoint is being analyzed.
     /// @param forTieEnd True if the note represents a tie end; false for tie starts.
+    /// @param direction The effective tie direction.
+    /// @param stemUp The stem direction for the endpoint's entry.
     /// @param forEndPoint True to calculate the end point; false for the start point.
-    /// @returns The calculated connection style type, or std::nullopt when no matching tie exists.
+    /// @param noteIndexOverride Optional override for the note index used to evaluate outer placement.
+    /// @param noteCountOverride Optional override for the note count used to evaluate outer placement.
+    /// @param upStemSecondOverride Optional override for the up-stem second flag.
+    /// @param downStemSecondOverride Optional override for the down-stem second flag.
+    /// @returns The calculated connection style type, or std::nullopt when the input is invalid.
     [[nodiscard]]
     static std::optional<dom::TieConnectStyleType> calcConnectStyleTypeAtEndPoint(
-        const dom::NoteInfoPtr& noteInfo, bool forTieEnd, bool forEndPoint);
+        const dom::NoteInfoPtr& noteInfo, bool forTieEnd, dom::CurveContourDirection direction, bool stemUp, bool forEndPoint,
+        std::optional<size_t> noteIndexOverride = std::nullopt, std::optional<size_t> noteCountOverride = std::nullopt,
+        std::optional<bool> upStemSecondOverride = std::nullopt, std::optional<bool> downStemSecondOverride = std::nullopt);
 };
 
 } // namespace util

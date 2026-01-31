@@ -188,19 +188,5 @@ enum class TieConnectStyleType
     UnderLowestNoteStemEndPosUnder
 };
 
-/// @brief Classfies @ref TieConnectStyleType as outer or inner placement
-constexpr bool isOuterTieConnectStyle(TieConnectStyleType type) noexcept
-{
-    switch (type) {
-        case TieConnectStyleType::OverStartPosInner:
-        case TieConnectStyleType::OverEndPosInner:
-        case TieConnectStyleType::UnderStartPosInner:
-        case TieConnectStyleType::UnderEndPosInner:
-            return false;
-        default:
-            return true;
-    }
-}
-
 } // namespace dom
 } // namespace musx
