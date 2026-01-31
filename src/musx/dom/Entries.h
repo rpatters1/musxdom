@@ -1652,14 +1652,6 @@ public:
     [[nodiscard]]
     NoteInfoPtr calcTieFrom(bool requireTie = true) const;
 
-    /// @brief Calculates the default tie direction for this note.
-    /// @param forTieEnd If @p forTieEnd is true, the direction for the tie-end stub on this note is returned.
-    /// Otherwise the direction for the tie starting on this note is returned.
-    /// @return The contour direction that applies to the tie, or
-    ///         #CurveContourDirection::Unspecified when the contour cannot be determined.
-    [[nodiscard]]
-    CurveContourDirection calcDefaultTieDirection(bool forTieEnd = false) const;
-
     /// @brief Calculates the effective tie direction for this note, taking into account all options and overrides.
     /// @param forTieEnd If @p forTieEnd is true, the direction for the tie-end stub on this note is returned.
     /// Otherwise the direction for the tie starting on this note is returned.
@@ -1667,13 +1659,6 @@ public:
     ///         #CurveContourDirection::Unspecified when the contour cannot be determined.
     [[nodiscard]]
     CurveContourDirection calcEffectiveTieDirection(bool forTieEnd = false) const;
-
-    /// @brief Returns the @ref TieConnectStyleType for this note.
-    /// @param forTieEnd If true, calculate the connect style for the tie end point; otherwise use the tie start.
-    /// @returns The calculated connection style type or std::nullopt if the note has no matching tie or tie-end.
-    [[nodiscard]]
-    std::optional<TieConnectStyleType> calcConnectStyleType(bool forTieEnd = false) const;
-
     /// @brief Determines whether this note has an outer tie at the specified endpoint.
     ///
     /// If the note does not participate in a tie at the specified endpoint,
@@ -1856,9 +1841,6 @@ private:
     /// @param requireTie Whether the source note must have tieStart set.
     [[nodiscard]]
     NoteInfoPtr calcTieFromWithPreviousMeasure(Cmper previousMeasure, bool requireTie) const;
-
-    [[nodiscard]]
-    CurveContourDirection calcEffectiveTieDirectionImpl(bool forTieEnd) const;
 
     EntryInfoPtr m_entry;
     size_t m_noteIndex;
