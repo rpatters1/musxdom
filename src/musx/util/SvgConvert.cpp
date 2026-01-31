@@ -59,10 +59,10 @@ struct Bounds
             hasValue = true;
             return;
         }
-        minX = std::min(minX, pt.x);
-        maxX = std::max(maxX, pt.x);
-        minY = std::min(minY, pt.y);
-        maxY = std::max(maxY, pt.y);
+        minX = (std::min)(minX, pt.x);
+        maxX = (std::max)(maxX, pt.x);
+        minY = (std::min)(minY, pt.y);
+        maxY = (std::max)(maxY, pt.y);
     }
 
     void includeRect(const Point& a, const Point& b)
@@ -375,7 +375,7 @@ double decodeRotationRadians(int rotationValue)
 
     // The low 11 bits encode |sin(theta)| scaled to 0..0x400.
     const uint32_t ticks = raw & 0x7FFu;
-    const double ratio = std::min(1.0, std::max(0.0, static_cast<double>(ticks) / 1024.0));
+    const double ratio = (std::min)(1.0, (std::max)(0.0, static_cast<double>(ticks) / 1024.0));
     const double a = std::asin(ratio);
 
     // Quadrant selection based on sign bits (bit180 = cos sign, belowXAxis = sin sign).
@@ -1587,7 +1587,7 @@ std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape,
             if (step <= 0.0) {
                 step = length;
             }
-            int repeats = (step > 0.0) ? std::max(1, static_cast<int>(std::floor(length / step)) + 1) : 1;
+            int repeats = (step > 0.0) ? (std::max)(1, static_cast<int>(std::floor(length / step)) + 1) : 1;
             double ux = length > 0.0 ? (dx / length) : 0.0;
             double uy = length > 0.0 ? (dy / length) : 0.0;
 
