@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['inci_0',['Inci',['../namespacemusx_1_1dom.html#a7e1523afa8705d91b1d694405c2feefb',1,'musx::dom']]],
-  ['instructiondata_1',['InstructionData',['../structmusx_1_1dom_1_1ShapeDefInstruction.html#ace9d9dd29f296c13c06a0473e065cf0b',1,'musx::dom::ShapeDefInstruction']]],
-  ['instrumentmap_2',['InstrumentMap',['../namespacemusx_1_1dom.html#af9192bccf9b3700caeb880975e768c69',1,'musx::dom']]]
+  ['headerptr_0',['HeaderPtr',['../namespacemusx_1_1dom_1_1header.html#a4f1801be003176c751bd1069c50d6e19',1,'musx::dom::header']]],
+  ['horizontalalignment_1',['horizontalalignment',['../classmusx_1_1dom_1_1others_1_1PageGraphicAssign.html#ab647210e09f07abf12718e152859c64e',1,'musx::dom::others::PageGraphicAssign::HorizontalAlignment'],['../classmusx_1_1dom_1_1others_1_1ShapeGraphicAssign.html#a988b0c672f7e441d9203f2bad836eb97',1,'musx::dom::others::ShapeGraphicAssign::HorizontalAlignment'],['../classmusx_1_1dom_1_1options_1_1TextOptions.html#a542fed587e97a0d5735e4ccde2f78737',1,'musx::dom::options::TextOptions::HorizontalAlignment'],['../classmusx_1_1dom_1_1others_1_1PageTextAssign.html#a315ccf6a90acaff5807ac9cab9e3024d',1,'musx::dom::others::PageTextAssign::HorizontalAlignment']]]
 ];

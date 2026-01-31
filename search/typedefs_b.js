@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['objectptr_0',['ObjectPtr',['../classmusx_1_1dom_1_1ObjectPool.html#ae26eae6f8358d93cb80b692680875176',1,'musx::dom::ObjectPool']]],
-  ['optionspoolptr_1',['OptionsPoolPtr',['../namespacemusx_1_1dom.html#a970ba333257a18f1f81abb356b3e6727',1,'musx::dom']]],
-  ['otherspoolptr_2',['OthersPoolPtr',['../namespacemusx_1_1dom.html#a18750060f2b1c2d29282ecea4adbe04e',1,'musx::dom']]]
+  ['notenumber_0',['NoteNumber',['../namespacemusx_1_1dom.html#ab7553a97242f576eaef75f3e2197d5be',1,'musx::dom']]],
+  ['noteproperties_1',['NoteProperties',['../classmusx_1_1dom_1_1Note.html#abbde1ac182d8dc432c6aab9a8c08cf68',1,'musx::dom::Note']]],
+  ['numberstyle_2',['NumberStyle',['../classmusx_1_1dom_1_1details_1_1TupletDef.html#a0673c89558c893162964c5ea4bd652d5',1,'musx::dom::details::TupletDef']]]
 ];

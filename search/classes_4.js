@@ -22,5 +22,7 @@ var searchData=
   ['entrypool_19',['EntryPool',['../classmusx_1_1dom_1_1EntryPool.html',1,'musx::dom']]],
   ['entrysize_20',['EntrySize',['../classmusx_1_1dom_1_1details_1_1EntrySize.html',1,'musx::dom::details']]],
   ['expressiontext_21',['ExpressionText',['../classmusx_1_1dom_1_1texts_1_1ExpressionText.html',1,'musx::dom::texts']]],
-  ['externalgraphic_22',['ExternalGraphic',['../structmusx_1_1dom_1_1ShapeDefInstruction_1_1ExternalGraphic.html',1,'musx::dom::ShapeDefInstruction']]]
+  ['externalgraphic_22',['ExternalGraphic',['../structmusx_1_1dom_1_1ShapeDefInstruction_1_1ExternalGraphic.html',1,'musx::dom::ShapeDefInstruction']]],
+  ['externalgraphicinfo_23',['ExternalGraphicInfo',['../structmusx_1_1util_1_1SvgConvert_1_1ExternalGraphicInfo.html',1,'musx::util::SvgConvert']]],
+  ['externalgraphicpayload_24',['ExternalGraphicPayload',['../structmusx_1_1util_1_1SvgConvert_1_1ExternalGraphicPayload.html',1,'musx::util::SvgConvert']]]
 ];

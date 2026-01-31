@@ -1,7 +1,4 @@
 var searchData=
 [
-  ['xmlelementarray_0',['XmlElementArray',['../namespacemusx_1_1xml.html#a39bb6e9f7fd9e4cdc090566309a8dfe8',1,'musx::xml']]],
-  ['xmlelementdescriptor_1',['XmlElementDescriptor',['../namespacemusx_1_1xml.html#a0e5401fa2c29d3ec62427c2b1dd9fab4',1,'musx::xml']]],
-  ['xmlelementpopulator_2',['XmlElementPopulator',['../namespacemusx_1_1xml.html#a79a1be853e423d5782896f9a9c44d9af',1,'musx::xml']]],
-  ['xmlelementptr_3',['XmlElementPtr',['../namespacemusx_1_1xml.html#a54b9e383b0a54d0c3ba00bb6c9ceff9e',1,'musx::xml']]]
+  ['verticalalignment_0',['verticalalignment',['../classmusx_1_1dom_1_1others_1_1PageGraphicAssign.html#a7483447fc5e2ad7e1138de514c2e43fe',1,'musx::dom::others::PageGraphicAssign::VerticalAlignment'],['../classmusx_1_1dom_1_1others_1_1ShapeGraphicAssign.html#ab15c2b263386213a594e5431403f0ec3',1,'musx::dom::others::ShapeGraphicAssign::VerticalAlignment'],['../classmusx_1_1dom_1_1others_1_1PageTextAssign.html#a3dab3092f50ab4137d2124f04c1f71c0',1,'musx::dom::others::PageTextAssign::VerticalAlignment']]]
 ];

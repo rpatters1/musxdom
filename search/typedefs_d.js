@@ -1,10 +1,7 @@
 var searchData=
 [
-  ['registereddetails_0',['RegisteredDetails',['../namespacemusx_1_1factory.html#a997e3b28e66a949e87c72c4e37e83d4c',1,'musx::factory']]],
-  ['registeredentries_1',['RegisteredEntries',['../namespacemusx_1_1factory.html#aac047b739d7dc0cf228a9e59b923390b',1,'musx::factory']]],
-  ['registeredoptions_2',['RegisteredOptions',['../namespacemusx_1_1factory.html#ac4d6063196d631d772cb30558913044c',1,'musx::factory']]],
-  ['registeredothers_3',['RegisteredOthers',['../namespacemusx_1_1factory.html#a71df86868e6c945b39f6eb15215dd3cf',1,'musx::factory']]],
-  ['registeredtexts_4',['RegisteredTexts',['../namespacemusx_1_1factory.html#ab4b3b01a07b2ca81d2786686aeb69dd5',1,'musx::factory']]],
-  ['repeatstafflistset_5',['RepeatStaffListSet',['../namespacemusx_1_1dom_1_1others.html#ac9d5626156658b3ae2d3313963311a37',1,'musx::dom::others']]],
-  ['resolver_6',['Resolver',['../classmusx_1_1factory_1_1ElementLinker.html#a0fbe9d4f8b3eda391d25f44d22713ee1',1,'musx::factory::ElementLinker']]]
+  ['pagecmper_0',['PageCmper',['../namespacemusx_1_1dom.html#af3051df2564d9f3cae82e214142eebb2',1,'musx::dom']]],
+  ['percussionnotetypeid_1',['PercussionNoteTypeId',['../namespacemusx_1_1dom.html#a2158a5e042da1a8511f2e3b604afaa7b',1,'musx::dom']]],
+  ['persystemtype_2',['persystemtype',['../classmusx_1_1dom_1_1details_1_1BaselineChords.html#a30ce336c638755662c5910c21dc7ddaf',1,'musx::dom::details::BaselineChords::PerSystemType'],['../classmusx_1_1dom_1_1details_1_1BaselineExpressionsAbove.html#a0834cb2ff1bc4686a71049ca05017daa',1,'musx::dom::details::BaselineExpressionsAbove::PerSystemType'],['../classmusx_1_1dom_1_1details_1_1BaselineExpressionsBelow.html#a2bd0a9c39240d84371bdf1a0a5452e57',1,'musx::dom::details::BaselineExpressionsBelow::PerSystemType'],['../classmusx_1_1dom_1_1details_1_1BaselineFretboards.html#ae5d07b686d05e0db8aa732c81c254801',1,'musx::dom::details::BaselineFretboards::PerSystemType'],['../classmusx_1_1dom_1_1details_1_1BaselineLyricsChorus.html#a8af79d505ba85baad00d55b0ea95d938',1,'musx::dom::details::BaselineLyricsChorus::PerSystemType'],['../classmusx_1_1dom_1_1details_1_1BaselineLyricsSection.html#ab40e8e6c911d9316b2a944fafa58a7e0',1,'musx::dom::details::BaselineLyricsSection::PerSystemType'],['../classmusx_1_1dom_1_1details_1_1BaselineLyricsVerse.html#a8ec4feb9c31970890ff21d91eac15bcb',1,'musx::dom::details::BaselineLyricsVerse::PerSystemType']]],
+  ['positioningstyle_3',['PositioningStyle',['../classmusx_1_1dom_1_1details_1_1TupletDef.html#a7ea2241fe5b7e1f7f50d5529bdce04ab',1,'musx::dom::details::TupletDef']]]
 ];

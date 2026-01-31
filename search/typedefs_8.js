@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['layerindex_0',['LayerIndex',['../namespacemusx_1_1dom.html#a58ecc2c31e1c1ff88267f87f028b5981',1,'musx::dom']]],
-  ['logcallback_1',['LogCallback',['../classmusx_1_1util_1_1Logger.html#a7c7ff88c411e54cab540382e213dd218',1,'musx::util::Logger']]]
+  ['inci_0',['Inci',['../namespacemusx_1_1dom.html#a7e1523afa8705d91b1d694405c2feefb',1,'musx::dom']]],
+  ['instructiondata_1',['InstructionData',['../structmusx_1_1dom_1_1ShapeDefInstruction.html#ace9d9dd29f296c13c06a0473e065cf0b',1,'musx::dom::ShapeDefInstruction']]],
+  ['instrumentmap_2',['InstrumentMap',['../namespacemusx_1_1dom.html#af9192bccf9b3700caeb880975e768c69',1,'musx::dom']]]
 ];

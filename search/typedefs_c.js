@@ -1,7 +1,6 @@
 var searchData=
 [
-  ['pagecmper_0',['PageCmper',['../namespacemusx_1_1dom.html#af3051df2564d9f3cae82e214142eebb2',1,'musx::dom']]],
-  ['percussionnotetypeid_1',['PercussionNoteTypeId',['../namespacemusx_1_1dom.html#a2158a5e042da1a8511f2e3b604afaa7b',1,'musx::dom']]],
-  ['persystemtype_2',['persystemtype',['../classmusx_1_1dom_1_1details_1_1BaselineChords.html#a30ce336c638755662c5910c21dc7ddaf',1,'musx::dom::details::BaselineChords::PerSystemType'],['../classmusx_1_1dom_1_1details_1_1BaselineExpressionsAbove.html#a0834cb2ff1bc4686a71049ca05017daa',1,'musx::dom::details::BaselineExpressionsAbove::PerSystemType'],['../classmusx_1_1dom_1_1details_1_1BaselineExpressionsBelow.html#a2bd0a9c39240d84371bdf1a0a5452e57',1,'musx::dom::details::BaselineExpressionsBelow::PerSystemType'],['../classmusx_1_1dom_1_1details_1_1BaselineFretboards.html#ae5d07b686d05e0db8aa732c81c254801',1,'musx::dom::details::BaselineFretboards::PerSystemType'],['../classmusx_1_1dom_1_1details_1_1BaselineLyricsChorus.html#a8af79d505ba85baad00d55b0ea95d938',1,'musx::dom::details::BaselineLyricsChorus::PerSystemType'],['../classmusx_1_1dom_1_1details_1_1BaselineLyricsSection.html#ab40e8e6c911d9316b2a944fafa58a7e0',1,'musx::dom::details::BaselineLyricsSection::PerSystemType'],['../classmusx_1_1dom_1_1details_1_1BaselineLyricsVerse.html#a8ec4feb9c31970890ff21d91eac15bcb',1,'musx::dom::details::BaselineLyricsVerse::PerSystemType']]],
-  ['positioningstyle_3',['PositioningStyle',['../classmusx_1_1dom_1_1details_1_1TupletDef.html#a7ea2241fe5b7e1f7f50d5529bdce04ab',1,'musx::dom::details::TupletDef']]]
+  ['objectptr_0',['ObjectPtr',['../classmusx_1_1dom_1_1ObjectPool.html#ae26eae6f8358d93cb80b692680875176',1,'musx::dom::ObjectPool']]],
+  ['optionspoolptr_1',['OptionsPoolPtr',['../namespacemusx_1_1dom.html#a970ba333257a18f1f81abb356b3e6727',1,'musx::dom']]],
+  ['otherspoolptr_2',['OthersPoolPtr',['../namespacemusx_1_1dom.html#a18750060f2b1c2d29282ecea4adbe04e',1,'musx::dom']]]
 ];

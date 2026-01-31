@@ -312,6 +312,8 @@ var hierarchy =
     [ "musx::dom::Entry::EntryLocation", "structmusx_1_1dom_1_1Entry_1_1EntryLocation.html", null ],
     [ "musx::dom::EntryPool", "classmusx_1_1dom_1_1EntryPool.html", null ],
     [ "musx::dom::ShapeDefInstruction::ExternalGraphic", "structmusx_1_1dom_1_1ShapeDefInstruction_1_1ExternalGraphic.html", null ],
+    [ "musx::util::SvgConvert::ExternalGraphicInfo", "structmusx_1_1util_1_1SvgConvert_1_1ExternalGraphicInfo.html", null ],
+    [ "musx::util::SvgConvert::ExternalGraphicPayload", "structmusx_1_1util_1_1SvgConvert_1_1ExternalGraphicPayload.html", null ],
     [ "musx::factory::FactoryBase", "classmusx_1_1factory_1_1FactoryBase.html", [
       [ "musx::factory::PoolFactory< DetailsFactory, dom::DetailsBase, dom::DetailsPool >", "classmusx_1_1factory_1_1PoolFactory.html", [
         [ "musx::factory::DetailsFactory", "classmusx_1_1factory_1_1DetailsFactory.html", null ]
@@ -339,6 +341,7 @@ var hierarchy =
     [ "musx::dom::header::FinaleVersion", "structmusx_1_1dom_1_1header_1_1FinaleVersion.html", null ],
     [ "musx::util::Fraction", "classmusx_1_1util_1_1Fraction.html", null ],
     [ "musx::dom::details::GFrameHoldContext", "classmusx_1_1dom_1_1details_1_1GFrameHoldContext.html", null ],
+    [ "musx::util::SvgConvert::GlyphMetrics", "structmusx_1_1util_1_1SvgConvert_1_1GlyphMetrics.html", null ],
     [ "musx::dom::header::Header", "structmusx_1_1dom_1_1header_1_1Header.html", null ],
     [ "musx::dom::others::ShapeInstructionList::InstructionInfo", "classmusx_1_1dom_1_1others_1_1ShapeInstructionList_1_1InstructionInfo.html", null ],
     [ "musx::dom::InstrumentInfo", "structmusx_1_1dom_1_1InstrumentInfo.html", null ],
@@ -396,6 +399,7 @@ var hierarchy =
     [ "musx::dom::options::StemOptions::StemConnection", "classmusx_1_1dom_1_1options_1_1StemOptions_1_1StemConnection.html", null ],
     [ "musx::dom::others::KeyMapArray::StepElement", "classmusx_1_1dom_1_1others_1_1KeyMapArray_1_1StepElement.html", null ],
     [ "musx::dom::others::FretInstrument::StringInfo", "classmusx_1_1dom_1_1others_1_1FretInstrument_1_1StringInfo.html", null ],
+    [ "musx::util::SvgConvert", "classmusx_1_1util_1_1SvgConvert.html", null ],
     [ "musx::dom::options::LyricOptions::SyllablePosStyle", "structmusx_1_1dom_1_1options_1_1LyricOptions_1_1SyllablePosStyle.html", null ],
     [ "musx::factory::RegisteredDetails::template is_registered_type", null, [
       [ "musx::dom::is_pool_type< DetailsPool, T >", "structmusx_1_1dom_1_1is__pool__type_3_01DetailsPool_00_01T_01_4.html", null ]

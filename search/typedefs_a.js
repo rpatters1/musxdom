@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['notenumber_0',['NoteNumber',['../namespacemusx_1_1dom.html#ab7553a97242f576eaef75f3e2197d5be',1,'musx::dom']]],
-  ['noteproperties_1',['NoteProperties',['../classmusx_1_1dom_1_1Note.html#abbde1ac182d8dc432c6aab9a8c08cf68',1,'musx::dom::Note']]],
-  ['numberstyle_2',['NumberStyle',['../classmusx_1_1dom_1_1details_1_1TupletDef.html#a0673c89558c893162964c5ea4bd652d5',1,'musx::dom::details::TupletDef']]]
+  ['meascmper_0',['MeasCmper',['../namespacemusx_1_1dom.html#a3d5af8a8174c235d3292c076def44817',1,'musx::dom']]],
+  ['musxinstance_1',['MusxInstance',['../namespacemusx_1_1dom.html#a4223cd531120dbef7acd854c3d2631b8',1,'musx::dom']]],
+  ['musxinstanceweak_2',['MusxInstanceWeak',['../namespacemusx_1_1dom.html#aee5506d8139b0409df00bff376061460',1,'musx::dom']]]
 ];

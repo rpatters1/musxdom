@@ -179,7 +179,7 @@ var searchData=
   ['sourcemeasureid_176',['sourceMeasureId',['../classmusx_1_1dom_1_1others_1_1OssiaMusic.html#ae74c3c5c36d838be51ebd30ab3818094',1,'musx::dom::others::OssiaMusic']]],
   ['sourcestaffid_177',['sourceStaffId',['../classmusx_1_1dom_1_1others_1_1OssiaMusic.html#ab7d76b32407381a203c54e422db45e31',1,'musx::dom::others::OssiaMusic']]],
   ['sousaphone_178',['Sousaphone',['../namespacemusx_1_1dom_1_1uuid.html#a798e4fce02c79d0194ebc04ebc1d98ad',1,'musx::dom::uuid']]],
-  ['spacelength_179',['spaceLength',['../structmusx_1_1dom_1_1ShapeDefInstruction_1_1SetDash.html#ae99ab46490c9a9f967203d46830ae47e',1,'musx::dom::ShapeDefInstruction::SetDash']]],
+  ['spacelength_179',['spaceLength',['../structmusx_1_1dom_1_1ShapeDefInstruction_1_1SetDash.html#a517cb9c5cc98746cb4a7388c0cff7702',1,'musx::dom::ShapeDefInstruction::SetDash']]],
   ['span_180',['span',['../structmusx_1_1dom_1_1options_1_1TieOptions_1_1ControlStyle.html#aef79db715a9c3dd86b613daaa73dc23b',1,'musx::dom::options::TieOptions::ControlStyle::span'],['../structmusx_1_1dom_1_1options_1_1SmartShapeOptions_1_1ControlStyle.html#ae8162b4c016df9cd1984991d5253162c',1,'musx::dom::options::SmartShapeOptions::ControlStyle::span']]],
   ['spanspace_181',['spanSpace',['../classmusx_1_1dom_1_1options_1_1BeamOptions.html#a548cf4a5c1c5c931a10cabed3b55d295',1,'musx::dom::options::BeamOptions']]],
   ['special_5fpart_5fextraction_5fsystem_5fid_182',['SPECIAL_PART_EXTRACTION_SYSTEM_ID',['../namespacemusx_1_1dom.html#af126d786c0d562de2e24d358782dea9e',1,'musx::dom']]],

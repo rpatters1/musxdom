@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['meascmper_0',['MeasCmper',['../namespacemusx_1_1dom.html#a3d5af8a8174c235d3292c076def44817',1,'musx::dom']]],
-  ['musxinstance_1',['MusxInstance',['../namespacemusx_1_1dom.html#a4223cd531120dbef7acd854c3d2631b8',1,'musx::dom']]],
-  ['musxinstanceweak_2',['MusxInstanceWeak',['../namespacemusx_1_1dom.html#aee5506d8139b0409df00bff376061460',1,'musx::dom']]]
+  ['layerindex_0',['LayerIndex',['../namespacemusx_1_1dom.html#a58ecc2c31e1c1ff88267f87f028b5981',1,'musx::dom']]],
+  ['logcallback_1',['LogCallback',['../classmusx_1_1util_1_1Logger.html#a7c7ff88c411e54cab540382e213dd218',1,'musx::util::Logger']]]
 ];
