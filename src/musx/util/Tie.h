@@ -82,6 +82,7 @@ private:
     /// @param forTieEnd True if the note represents a tie end; false for tie starts.
     /// @param direction The effective tie direction.
     /// @param stemUp The stem direction for the endpoint's entry.
+    /// @param tieAlterContext The note whose tie alterations should be consulted for overrides.
     /// @param forEndPoint True to calculate the end point; false for the start point.
     /// @param noteIndexOverride Optional override for the note index used to evaluate outer placement.
     /// @param noteCountOverride Optional override for the note count used to evaluate outer placement.
@@ -90,7 +91,8 @@ private:
     /// @returns The calculated connection style type, or std::nullopt when the input is invalid.
     [[nodiscard]]
     static std::optional<dom::TieConnectStyleType> calcConnectStyleTypeAtEndPoint(
-        const dom::NoteInfoPtr& noteInfo, bool forTieEnd, dom::CurveContourDirection direction, bool stemUp, bool forEndPoint,
+        const dom::NoteInfoPtr& noteInfo, bool forTieEnd, dom::CurveContourDirection direction, bool stemUp,
+        const dom::NoteInfoPtr& tieAlterContext, bool forEndPoint,
         std::optional<size_t> noteIndexOverride = std::nullopt, std::optional<size_t> noteCountOverride = std::nullopt,
         std::optional<bool> upStemSecondOverride = std::nullopt, std::optional<bool> downStemSecondOverride = std::nullopt);
 };

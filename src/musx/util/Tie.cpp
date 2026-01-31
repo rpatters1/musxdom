@@ -56,6 +56,17 @@ constexpr bool isInnerConnectStyle(TieConnectStyleType type) noexcept
     }
 }
 
+constexpr bool isOverInnerConnectStyle(TieConnectStyleType type) noexcept
+{
+    switch (type) {
+        case TieConnectStyleType::OverStartPosInner:
+        case TieConnectStyleType::OverEndPosInner:
+            return true;
+        default:
+            return false;
+    }
+}
+
 constexpr bool isOuterNoteConnectStyle(TieConnectStyleType type) noexcept
 {
     switch (type) {
@@ -123,10 +134,10 @@ bool calcNoteHasAccidental(const NoteInfoPtr& noteInfo)
     return note->showAcci;
 }
 
-bool calcUseAfterSingleDot(const NoteInfoPtr& noteInfo, bool forTieEnd)
+bool calcUseAfterSingleDot(const NoteInfoPtr& noteInfo, bool forTieEnd, const NoteInfoPtr& contextNote)
 {
     const auto entryFrame = noteInfo.getEntryInfo().getFrame();
-    if (auto tieAlter = details::TieAlterBase::fromNoteInfo(noteInfo, forTieEnd)) {
+    if (auto tieAlter = details::TieAlterBase::fromNoteInfo(contextNote ? contextNote : noteInfo, forTieEnd)) {
         if (tieAlter->afterSingleDotLocal) {
             return tieAlter->afterSingleDotOn;
         }
@@ -137,10 +148,10 @@ bool calcUseAfterSingleDot(const NoteInfoPtr& noteInfo, bool forTieEnd)
     return false;
 }
 
-bool calcUseAfterMultipleDots(const NoteInfoPtr& noteInfo, bool forTieEnd)
+bool calcUseAfterMultipleDots(const NoteInfoPtr& noteInfo, bool forTieEnd, const NoteInfoPtr& contextNote)
 {
     const auto entryFrame = noteInfo.getEntryInfo().getFrame();
-    if (auto tieAlter = details::TieAlterBase::fromNoteInfo(noteInfo, forTieEnd)) {
+    if (auto tieAlter = details::TieAlterBase::fromNoteInfo(contextNote ? contextNote : noteInfo, forTieEnd)) {
         if (tieAlter->afterMultiDotsLocal) {
             return tieAlter->afterMultiDotsOn;
         }
@@ -151,10 +162,10 @@ bool calcUseAfterMultipleDots(const NoteInfoPtr& noteInfo, bool forTieEnd)
     return false;
 }
 
-bool calcUseBeforeSingleAcci(const NoteInfoPtr& noteInfo, bool forTieEnd)
+bool calcUseBeforeSingleAcci(const NoteInfoPtr& noteInfo, bool forTieEnd, const NoteInfoPtr& contextNote)
 {
     const auto entryFrame = noteInfo.getEntryInfo().getFrame();
-    if (auto tieAlter = details::TieAlterBase::fromNoteInfo(noteInfo, forTieEnd)) {
+    if (auto tieAlter = details::TieAlterBase::fromNoteInfo(contextNote ? contextNote : noteInfo, forTieEnd)) {
         if (tieAlter->beforeSingleAcciLocal) {
             return tieAlter->beforeSingleAcciOn;
         }
@@ -165,10 +176,10 @@ bool calcUseBeforeSingleAcci(const NoteInfoPtr& noteInfo, bool forTieEnd)
     return false;
 }
 
-bool calcShiftForSeconds(const NoteInfoPtr& noteInfo, bool forTieEnd)
+bool calcShiftForSeconds(const NoteInfoPtr& noteInfo, bool forTieEnd, const NoteInfoPtr& contextNote)
 {
     const auto entryFrame = noteInfo.getEntryInfo().getFrame();
-    if (auto tieAlter = details::TieAlterBase::fromNoteInfo(noteInfo, forTieEnd)) {
+    if (auto tieAlter = details::TieAlterBase::fromNoteInfo(contextNote ? contextNote : noteInfo, forTieEnd)) {
         if (tieAlter->shiftForSecondsLocal) {
             return tieAlter->shiftForSecondsOn;
         }
@@ -179,10 +190,10 @@ bool calcShiftForSeconds(const NoteInfoPtr& noteInfo, bool forTieEnd)
     return false;
 }
 
-bool calcUseOuterPlacement(const NoteInfoPtr& noteInfo, bool forTieEnd)
+bool calcUseOuterPlacement(const NoteInfoPtr& noteInfo, bool forTieEnd, const NoteInfoPtr& contextNote)
 {
     const auto entryFrame = noteInfo.getEntryInfo().getFrame();
-    if (auto tieAlter = details::TieAlterBase::fromNoteInfo(noteInfo, forTieEnd)) {
+    if (auto tieAlter = details::TieAlterBase::fromNoteInfo(contextNote ? contextNote : noteInfo, forTieEnd)) {
         if (tieAlter->outerLocal) {
             return tieAlter->outerOn;
         }
@@ -402,7 +413,8 @@ CurveContourDirection Tie::calcEffectiveDirection(const dom::NoteInfoPtr& noteIn
 }
 
 std::optional<TieConnectStyleType> Tie::calcConnectStyleTypeAtEndPoint(
-    const dom::NoteInfoPtr& noteInfo, bool forTieEnd, CurveContourDirection direction, bool stemUp, bool forEndPoint,
+    const dom::NoteInfoPtr& noteInfo, bool forTieEnd, CurveContourDirection direction, bool stemUp,
+    const dom::NoteInfoPtr& tieAlterContext, bool forEndPoint,
     std::optional<size_t> noteIndexOverride, std::optional<size_t> noteCountOverride,
     std::optional<bool> upStemSecondOverride, std::optional<bool> downStemSecondOverride)
 {
@@ -421,7 +433,7 @@ std::optional<TieConnectStyleType> Tie::calcConnectStyleTypeAtEndPoint(
 
     if ((noteIndex == 0 && direction == CurveContourDirection::Down)
         || (noteIndex + 1 == noteCount && direction == CurveContourDirection::Up)) {
-        if (calcUseOuterPlacement(noteInfo, forTieEnd)) {
+        if (calcUseOuterPlacement(noteInfo, forTieEnd, tieAlterContext)) {
             if (entry->hasStem()) {
                 if (forEndPoint) {
                     if (!stemUp && direction == CurveContourDirection::Down && !downStemSecond) {
@@ -474,17 +486,17 @@ std::optional<std::pair<TieConnectStyleType, TieConnectStyleType>> Tie::calcConn
     }
 
     const bool stemUp = entryInfo.calcUpStem();
-    auto startStyle = calcConnectStyleTypeAtEndPoint(noteInfo, forTieEnd, direction, stemUp, false)
+    auto startStyle = calcConnectStyleTypeAtEndPoint(noteInfo, forTieEnd, direction, stemUp, noteInfo, false)
         .value_or(TieConnectStyleType::OverStartPosInner);
     auto endStyle = startStyle;
 
     if (forTieEnd) {
-        endStyle = calcConnectStyleTypeAtEndPoint(noteInfo, forTieEnd, direction, stemUp, true)
+        endStyle = calcConnectStyleTypeAtEndPoint(noteInfo, forTieEnd, direction, stemUp, noteInfo, true)
             .value_or(TieConnectStyleType::OverEndPosInner);
     } else {
         if (auto endNote = calcTiedTo(noteInfo, true)) {
             const bool endStemUp = endNote.getEntryInfo().calcUpStem();
-            endStyle = calcConnectStyleTypeAtEndPoint(endNote, forTieEnd, direction, endStemUp, true)
+            endStyle = calcConnectStyleTypeAtEndPoint(endNote, forTieEnd, direction, endStemUp, noteInfo, true)
                 .value_or(TieConnectStyleType::OverEndPosInner);
         } else {
             auto nextEntry = entryInfo.getNextInLayer();
@@ -498,7 +510,7 @@ std::optional<std::pair<TieConnectStyleType, TieConnectStyleType>> Tie::calcConn
                             endStyle = TieConnectStyleType::UnderEndPosInner;
                         } else {
                             const bool nextStemUp = nextEntry.calcUpStem();
-                            endStyle = calcConnectStyleTypeAtEndPoint(nextNote, forTieEnd, direction, nextStemUp, true)
+                            endStyle = calcConnectStyleTypeAtEndPoint(nextNote, forTieEnd, direction, nextStemUp, noteInfo, true)
                                 .value_or(TieConnectStyleType::UnderEndPosInner);
                         }
                     } else {
@@ -522,14 +534,14 @@ std::optional<std::pair<TieConnectStyleType, TieConnectStyleType>> Tie::calcConn
                                 nextStemUp = (direction == CurveContourDirection::Up);
                             }
                             endStyle = calcConnectStyleTypeAtEndPoint(
-                                nextNote, forTieEnd, direction, nextStemUp, true,
+                                nextNote, forTieEnd, direction, nextStemUp, noteInfo, true,
                                 nextNote.getNoteIndex(), nextEntryNoteCount, upStemSecond, downStemSecond)
                                 .value_or(TieConnectStyleType::OverEndPosInner);
                         }
                     }
                 } else {
                     const bool nextStemUp = (direction == CurveContourDirection::Up);
-                    endStyle = calcConnectStyleTypeAtEndPoint(noteInfo, forTieEnd, direction, nextStemUp, true,
+                    endStyle = calcConnectStyleTypeAtEndPoint(noteInfo, forTieEnd, direction, nextStemUp, noteInfo, true,
                         noteInfo.getNoteIndex(), entry->notes.size(), false, false)
                         .value_or(TieConnectStyleType::OverEndPosInner);
                 }
@@ -548,9 +560,13 @@ std::optional<std::pair<TieConnectStyleType, TieConnectStyleType>> Tie::calcConn
     }
 
     if (isInnerConnectStyle(startStyle)) {
-        endStyle = startStyle;
+        endStyle = isOverInnerConnectStyle(startStyle)
+            ? TieConnectStyleType::OverEndPosInner
+            : TieConnectStyleType::UnderEndPosInner;
     } else if (isInnerConnectStyle(endStyle)) {
-        startStyle = endStyle;
+        startStyle = isOverInnerConnectStyle(endStyle)
+            ? TieConnectStyleType::OverStartPosInner
+            : TieConnectStyleType::UnderStartPosInner;
     }
 
     return std::make_pair(startStyle, endStyle);
@@ -588,14 +604,21 @@ std::optional<details::TieAlterBase::ConnectionType> Tie::calcConnectionType(
     const bool upStem = entryInfo.calcUpStem();
     const bool noteIsNonAligned = calcNoteIsNonAlignedSecond(noteInfo, upStem);
     const bool hasNonAligned = calcEntryHasNonAlignedSecond(entryInfo);
-    const bool shiftForSeconds = calcShiftForSeconds(noteInfo, forTieEnd);
+    NoteInfoPtr tieAlterContext = noteInfo;
+    if (!forTieEnd && !noteInfo->tieStart && noteInfo->tieEnd) {
+        if (auto fromNote = noteInfo.calcTieFrom(true)) {
+            tieAlterContext = fromNote;
+        }
+    }
+    const bool shiftForSeconds = calcShiftForSeconds(noteInfo, forTieEnd, tieAlterContext);
 
     const bool tieOver = direction == CurveContourDirection::Up;
     const bool tieUnder = direction == CurveContourDirection::Down;
 
     if (isInnerConnectStyle(connectStyle)) {
         if (forEndPoint) {
-            if (calcUseBeforeSingleAcci(noteInfo, forTieEnd) && entry->notes.size() == 1 && calcNoteHasAccidental(noteInfo)) {
+            if (calcUseBeforeSingleAcci(noteInfo, forTieEnd, tieAlterContext) && entry->notes.size() == 1
+                && calcNoteHasAccidental(noteInfo)) {
                 return details::TieAlterBase::ConnectionType::AccidentalLeftNoteCenter;
             }
             if (shiftForSeconds && hasNonAligned) {
@@ -608,8 +631,8 @@ std::optional<details::TieAlterBase::ConnectionType> Tie::calcConnectionType(
 
         {
             const unsigned numDots = calcEntryDots(entryInfo);
-            if ((calcUseAfterSingleDot(noteInfo, forTieEnd) && numDots == 1)
-                || (calcUseAfterMultipleDots(noteInfo, forTieEnd) && numDots > 1)) {
+            if ((calcUseAfterSingleDot(noteInfo, forTieEnd, tieAlterContext) && numDots == 1)
+                || (calcUseAfterMultipleDots(noteInfo, forTieEnd, tieAlterContext) && numDots > 1)) {
                 return details::TieAlterBase::ConnectionType::DotRightNoteCenter;
             }
         }
