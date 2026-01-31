@@ -940,7 +940,7 @@ TEST(TieDetection, TieConnectStyleType)
         ASSERT_TRUE(gfhold) << " gfhold not found for 1, 3";
         auto entryFrame = gfhold.createEntryFrame(0);
         ASSERT_TRUE(entryFrame);
-        checkTie(NoteInfoPtr(EntryInfoPtr(entryFrame, 2), 0), TieConnectStyleType::UnderLowestNoteStartPosUnder, TieConnectStyleType::UnderLowestNoteEndPosUnder);
+        checkTie(NoteInfoPtr(EntryInfoPtr(entryFrame, 2), 0), TieConnectStyleType::UnderLowestNoteStartPosUnder, TieConnectStyleType::UnderLowestNoteStemEndPosUnder);
         checkTie(NoteInfoPtr(EntryInfoPtr(entryFrame, 2), 1), TieConnectStyleType::OverStartPosInner, TieConnectStyleType::OverEndPosInner);
         checkTie(NoteInfoPtr(EntryInfoPtr(entryFrame, 2), 2), TieConnectStyleType::OverStartPosInner, TieConnectStyleType::OverEndPosInner);
         checkTie(NoteInfoPtr(EntryInfoPtr(entryFrame, 2), 3), TieConnectStyleType::OverHighestNoteStartPosOver, TieConnectStyleType::OverHighestNoteEndPosOver);
