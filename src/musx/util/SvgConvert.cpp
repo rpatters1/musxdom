@@ -303,6 +303,18 @@ Transform makeTranslateRotateScale(const Point& translate, double sx, double sy,
     return multiplyTransforms(translateTransform, multiplyTransforms(rotate, scale));
 }
 
+Transform makeTranslateRotateScaleWithPivot(const Point& translate, double sx, double sy, double radians, const Point& pivot)
+{
+    Transform scale = makeScale(sx, sy);
+    Transform rotate = makeRotate(radians);
+    Point pivotScaled{pivot.x * sx, pivot.y * sy};
+    Transform toPivot = makeTranslate(pivotScaled.x, pivotScaled.y);
+    Transform fromPivot = makeTranslate(-pivotScaled.x, -pivotScaled.y);
+    Transform rotateAboutPivot = multiplyTransforms(toPivot, multiplyTransforms(rotate, fromPivot));
+    Transform translateTransform = makeTranslate(translate.x, translate.y);
+    return multiplyTransforms(translateTransform, multiplyTransforms(rotateAboutPivot, scale));
+}
+
 Transform makePivotTransform(const Point& pivot, double sx, double sy, double radians)
 {
     Transform translateToOrigin = makeTranslate(-pivot.x, -pivot.y);
@@ -347,29 +359,26 @@ double decodeRotationRadians(int rotationValue)
     //   0°   -> 0x00000000
     //   90°  -> 0x00000400
     //   180° -> 0x80000000
-    //   270° -> 0x40000400  (preferred alias)
+    //   270° -> 0x40000400  (preferred alias; 0xC0000400 also appears)
     switch (raw) {
         case 0x00000000u: return 0.0;
         case 0x00000400u: return 0.5 * kPi;
+        case 0x80000400u: return 0.5 * kPi;
         case 0x80000000u: return 1.0 * kPi;
         case 0x40000400u: return 1.5 * kPi;
+        case 0xC0000400u: return 1.5 * kPi;
         default: break;
     }
 
     const bool bit180     = (raw & 0x80000000u) != 0;
     const bool belowXAxis = (raw & 0x40000000u) != 0;
 
-    // Magnitude is stored in ticks of (pi/2048). Within a quadrant it's 0..0x3FF.
-    // (0x400 only appears as a boundary alias handled above.)
-    const uint32_t ticks = raw & 0x3FFu;
-    const double a = static_cast<double>(ticks) * (kPi / 2048.0);
+    // The low 11 bits encode |sin(theta)| scaled to 0..0x400.
+    const uint32_t ticks = raw & 0x7FFu;
+    const double ratio = std::min(1.0, std::max(0.0, static_cast<double>(ticks) / 1024.0));
+    const double a = std::asin(ratio);
 
-    // Decode per the quadrant model verified by Lua animation:
-    //   q0 (0..90):          raw = 0x00000000 | ticks
-    //   q1 (90..180):        raw = 0x80000000 | (0x400 - ticks)
-    //   q2 (180..270):       raw = 0xC0000000 | ticks
-    //   q3 (270..360):       raw = 0x40000000 | (0x400 - ticks)
-    //
+    // Quadrant selection based on sign bits (bit180 = cos sign, belowXAxis = sin sign).
     // Returned angle is in [0, 2pi).
     if (!bit180 && !belowXAxis) {
         // q0: 0 + a
@@ -655,11 +664,6 @@ std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape,
                               GlyphMetricsFn glyphMetrics,
                               ExternalGraphicFn externalGraphicResolver)
 {
-    const int debugShapeId = shape.getCmper();
-    const bool debugShape = (debugShapeId == 8 || debugShapeId == 9 || debugShapeId == 113
-        || debugShapeId == 128 || debugShapeId == 129
-        || (debugShapeId >= 134 && debugShapeId <= 142));
-
     std::vector<std::string> elements;
     Bounds bounds;
     PaintState paint;
@@ -696,9 +700,29 @@ std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape,
     Transform currentGroupTransform;
     std::optional<Bounds> currentObjectBounds;
     double currentRotationRadians = 0.0;
+    Point currentObjectTranslate{};
+    double currentObjectScaleX = 1.0;
+    double currentObjectScaleY = 1.0;
+    bool hasCurrentObjectTransform = false;
 
     auto toWorld = [&](const Point& local) {
         Point world = applyTransform(currentTransform, local);
+        world.y = -world.y;
+        return world;
+    };
+
+    auto toWorldCurve = [&](const Point& local, const Point& pivotLocal) {
+        if (!hasCurrentObjectTransform) {
+            return toWorld(local);
+        }
+        Transform localTransform = makeTranslateRotateScaleWithPivot(
+            currentObjectTranslate,
+            currentObjectScaleX,
+            currentObjectScaleY,
+            currentRotationRadians,
+            pivotLocal);
+        Transform curveTransform = multiplyTransforms(groupTransform, localTransform);
+        Point world = applyTransform(curveTransform, local);
         world.y = -world.y;
         return world;
     };
@@ -818,10 +842,6 @@ std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape,
     shape.iterateInstructions([&](const dom::ShapeDefInstruction::Decoded& inst) -> bool {
         using IT = dom::ShapeDefInstructionType;
 
-        if (debugShape) {
-            std::cout << "[Shape " << debugShapeId << "] Inst type=" << static_cast<int>(inst.type) << '\n';
-        }
-
         switch (inst.type) {
         case IT::StartObject: {
             beginDrawing();
@@ -841,22 +861,13 @@ std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape,
                 double radians = decodeRotationRadians(data->rotation);
                 currentRotationRadians = radians;
                 Point translate{toEvpuDouble(data->originX), toEvpuDouble(data->originY)};
-                if (debugShape) {
-                    std::cout << "[Shape " << debugShapeId << "] StartObject origin=(" << data->originX << "," << data->originY
-                              << ") bounds=(" << data->left << "," << data->top << "," << data->right << ","
-                              << data->bottom << ") scale=(" << data->scaleX << "," << data->scaleY
-                              << ") rotation=0x" << std::hex << data->rotation << std::dec
-                              << " (" << data->rotation << ") radians=" << radians << '\n';
-                }
+                currentObjectTranslate = translate;
+                currentObjectScaleX = sx;
+                currentObjectScaleY = sy;
+                hasCurrentObjectTransform = true;
                 Transform localTransform = makeTranslateRotateScale(translate, sx, sy, radians);
                 currentTransform = multiplyTransforms(groupTransform, localTransform);
                 currentGroupTransform = groupTransform;
-                if (debugShape) {
-                    std::cout << "[Shape " << debugShapeId << "] StartObject transform"
-                              << " a=" << currentTransform.a << " b=" << currentTransform.b
-                              << " c=" << currentTransform.c << " d=" << currentTransform.d
-                              << " tx=" << currentTransform.tx << " ty=" << currentTransform.ty << '\n';
-                }
                 if (isSentinel(data->left) || isSentinel(data->right)
                     || isSentinel(data->top) || isSentinel(data->bottom)) {
                     currentObjectBounds.reset();
@@ -872,6 +883,8 @@ std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape,
                 currentRawScaleX.reset();
                 currentRawScaleY.reset();
                 origin = {};
+                currentRotationRadians = 0.0;
+                hasCurrentObjectTransform = false;
                 currentTransform = groupTransform;
                 currentGroupTransform = groupTransform;
                 currentObjectBounds.reset();
@@ -898,6 +911,8 @@ std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape,
             lastMove.reset();
             currentRawScaleX.reset();
             currentRawScaleY.reset();
+            currentRotationRadians = 0.0;
+            hasCurrentObjectTransform = false;
             const auto* data = std::get_if<dom::ShapeDefInstruction::StartGroup>(&inst.data);
             if (data) {
                 origin = {};
@@ -905,13 +920,6 @@ std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape,
                 double sy = (data->scaleY == 0) ? 1.0 : (static_cast<double>(data->scaleY) / 1000.0);
                 double radians = decodeRotationRadians(data->rotation);
                 Point translate{toEvpuDouble(data->originX), toEvpuDouble(data->originY)};
-                if (debugShape) {
-                    std::cout << "[Shape " << debugShapeId << "] StartGroup origin=(" << data->originX << "," << data->originY
-                              << ") bounds=(" << data->left << "," << data->top << "," << data->right << ","
-                              << data->bottom << ") scale=(" << data->scaleX << "," << data->scaleY
-                              << ") rotation=0x" << std::hex << data->rotation << std::dec
-                              << " (" << data->rotation << ") radians=" << radians << '\n';
-                }
                 Transform localTransform = makeTranslateRotateScale(translate, sx, sy, radians);
                 groupTransform = multiplyTransforms(groupTransform, localTransform);
                 currentTransform = groupTransform;
@@ -962,6 +970,8 @@ std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape,
             lastMove.reset();
             currentRawScaleX.reset();
             currentRawScaleY.reset();
+            currentRotationRadians = 0.0;
+            hasCurrentObjectTransform = false;
             break;
         }
         case IT::GoToOrigin: {
@@ -976,10 +986,7 @@ std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape,
             resetLineTracking();
             resetEllipse();
             lastMove.reset();
-            if (debugShape) {
-                std::cout << "[Shape " << debugShapeId << "] GoToOrigin world=(" << world.x << "," << world.y << ")\n";
-            }
-            break;
+                break;
         }
         case IT::GoToStart: {
             beginDrawing();
@@ -992,10 +999,7 @@ std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape,
             resetLineTracking();
             resetEllipse();
             lastMove.reset();
-            if (debugShape) {
-                std::cout << "[Shape " << debugShapeId << "] GoToStart world=(" << world.x << "," << world.y << ")\n";
-            }
-            break;
+                break;
         }
         case IT::RMoveTo: {
             beginDrawing();
@@ -1012,10 +1016,6 @@ std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape,
                 strokeBounds.include(world);
                 resetLineTracking();
                 resetEllipse();
-                if (debugShape) {
-                    std::cout << "[Shape " << debugShapeId << "] RMoveTo dx=" << data->dx << " dy=" << data->dy
-                              << " world=(" << world.x << "," << world.y << ")\n";
-                }
             }
             break;
         }
@@ -1056,11 +1056,6 @@ std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape,
                     lastLineStartWorld = worldStart;
                     lastLineEndWorld = worldEnd;
                 }
-                if (debugShape) {
-                    std::cout << "[Shape " << debugShapeId << "] RLineTo dx=" << data->dx << " dy=" << data->dy
-                              << " worldStart=(" << worldStart.x << "," << worldStart.y
-                              << ") worldEnd=(" << worldEnd.x << "," << worldEnd.y << ")\n";
-                }
             }
             break;
         }
@@ -1068,11 +1063,6 @@ std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape,
             beginDrawing();
             const auto* data = std::get_if<dom::ShapeDefInstruction::CurveTo>(&inst.data);
             if (data) {
-                if (debugShape) {
-                    std::cout << "[Shape " << debugShapeId << "] Curve raw c1=(" << data->c1dx << "," << data->c1dy
-                              << ") c2=(" << data->c2dx << "," << data->c2dy << ") end=("
-                              << data->edx << "," << data->edy << ")\n";
-                }
                 Point startPoint = current;
                 double c1dx = toEvpuDouble(data->c1dx);
                 double c1dy = toEvpuDouble(data->c1dy);
@@ -1080,34 +1070,14 @@ std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape,
                 double c2dy = toEvpuDouble(data->c2dy);
                 double edx = toEvpuDouble(data->edx);
                 double edy = toEvpuDouble(data->edy);
-                bool flipX = (static_cast<uint32_t>(lastStartObject ? lastStartObject->rotation : 0) & 0x80000000u) != 0;
-                if (flipX) {
-                    c1dx = -c1dx;
-                    c2dx = -c2dx;
-                    edx = -edx;
-                }
                 Point c1{current.x + c1dx, current.y + c1dy};
                 Point c2{current.x + c1dx + c2dx, current.y + c1dy + c2dy};
                 current.x += c1dx + c2dx + edx;
                 current.y += c1dy + c2dy + edy;
-                Point worldStart = toWorld(startPoint);
-                Point worldC1 = toWorld(c1);
-                Point worldC2 = toWorld(c2);
-                Point worldEnd = toWorld(current);
-                if (debugShape) {
-                    double dx = worldEnd.x - worldStart.x;
-                    double dy = worldEnd.y - worldStart.y;
-                    double endAngle = std::atan2(dy, dx);
-                    double delta = endAngle + currentRotationRadians;
-                    std::cout << "[Shape " << debugShapeId << "] Curve endAngle=" << endAngle
-                              << " delta=" << delta << '\n';
-                    std::cout << "[Shape " << debugShapeId << "] Curve start=(" << worldStart.x << "," << worldStart.y
-                              << ") end=(" << worldEnd.x << "," << worldEnd.y << ") c1=(" << worldC1.x << ","
-                              << worldC1.y << ") c2=(" << worldC2.x << "," << worldC2.y << ")\n";
-                    std::cout << "[Shape " << debugShapeId << "] Curve rotationRadians=" << currentRotationRadians
-                              << " rotationDegrees=" << (currentRotationRadians * 180.0 / 3.14159265358979323846)
-                              << '\n';
-                }
+                Point worldStart = toWorldCurve(startPoint, startPoint);
+                Point worldC1 = toWorldCurve(c1, startPoint);
+                Point worldC2 = toWorldCurve(c2, startPoint);
+                Point worldEnd = toWorldCurve(current, startPoint);
                 if (path.empty()) {
                     path.moveTo(worldStart);
                     pathBounds.include(worldStart);
@@ -1132,11 +1102,6 @@ std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape,
             beginDrawing();
             const auto* data = std::get_if<dom::ShapeDefInstruction::Slur>(&inst.data);
             if (data) {
-                if (debugShape) {
-                    std::cout << "[Shape " << debugShapeId << "] Slur raw c1=(" << data->c1dx << "," << data->c1dy
-                              << ") c2=(" << data->c2dx << "," << data->c2dy << ") end=("
-                              << data->edx << "," << data->edy << ")\n";
-                }
                 Point startPoint = current;
                 double c1dx = toEvpuDouble(data->c1dx);
                 double c1dy = toEvpuDouble(data->c1dy);
@@ -1190,30 +1155,17 @@ std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape,
                 current.x += c1dx + c2dx + edx;
                 current.y += c1dy + c2dy + edy;
                 Point endPoint = current;
-                bool flipX = (static_cast<uint32_t>(lastStartObject ? lastStartObject->rotation : 0) & 0x80000000u) != 0;
-                if (flipX) {
-                    c1dx = -c1dx;
-                    c2dx = -c2dx;
-                    edx = -edx;
-                }
-
                 const auto options = document ? document->getOptions()->get<dom::options::SmartShapeOptions>() : nullptr;
                 const double tipWidth = 1.0;
                 const double cp1x = options ? toEvpuDouble(options->slurThicknessCp1X) : 0.0;
                 const double cp1y = options ? toEvpuDouble(options->slurThicknessCp1Y) : 8.0;
                 const double cp2x = options ? toEvpuDouble(options->slurThicknessCp2X) : 0.0;
                 const double cp2y = options ? toEvpuDouble(options->slurThicknessCp2Y) : 8.0;
-                if (debugShape && options) {
-                    std::cout << "[Shape " << debugShapeId << "] Slur options tipWidth=" << options->smartSlurTipWidth
-                              << " cp1=(" << options->slurThicknessCp1X << "," << options->slurThicknessCp1Y
-                              << ") cp2=(" << options->slurThicknessCp2X << "," << options->slurThicknessCp2Y
-                              << ")\n";
-                }
 
-                Point worldStart = toWorld(startPoint);
-                Point worldC1 = toWorld(c1);
-                Point worldC2 = toWorld(c2);
-                Point worldEnd = toWorld(endPoint);
+                Point worldStart = toWorldCurve(startPoint, startPoint);
+                Point worldC1 = toWorldCurve(c1, startPoint);
+                Point worldC2 = toWorldCurve(c2, startPoint);
+                Point worldEnd = toWorldCurve(endPoint, startPoint);
 
                 Point chord{worldEnd.x - worldStart.x, worldEnd.y - worldStart.y};
                 double chordLen = std::hypot(chord.x, chord.y);
@@ -1245,11 +1197,6 @@ std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape,
                     worldC2.y + unit.y * cp2x + normal.y * cp2y * offsetSign
                 };
 
-                if (debugShape) {
-                    std::cout << "[Shape " << debugShapeId << "] Slur start=(" << worldStart.x << "," << worldStart.y
-                              << ") end=(" << worldEnd.x << "," << worldEnd.y << ") c1=(" << worldC1.x << ","
-                              << worldC1.y << ") c2=(" << worldC2.x << "," << worldC2.y << ")\n";
-                }
                 if (path.empty()) {
                     path.moveTo(worldStart);
                     pathBounds.include(worldStart);
@@ -1319,12 +1266,7 @@ std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape,
                 Point worldCenter = toWorld(center);
                 double worldRx = rx * std::hypot(currentTransform.a, currentTransform.b);
                 double worldRy = ry * std::hypot(currentTransform.c, currentTransform.d);
-                if (debugShape) {
-                    std::cout << "[Shape " << debugShapeId << "] Ellipse width=" << width
-                              << " height=" << height << " center=(" << center.x << "," << center.y << ")"
-                              << " worldCenter=(" << worldCenter.x << "," << worldCenter.y << ")"
-                              << " worldRx=" << worldRx << " worldRy=" << worldRy << '\n';
-                }
+                
 
                 auto isSentinel = [](dom::Evpu value) {
                     return value == (std::numeric_limits<dom::Evpu>::min)()
@@ -1332,6 +1274,8 @@ std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape,
                 };
 
                 if (currentObjectBounds && currentObjectBounds->hasValue
+                    && currentRawScaleX && currentRawScaleY
+                    && (currentRawScaleX.value() == 0 || currentRawScaleY.value() == 0)
                     && currentGroupTransform.b == 0.0 && currentGroupTransform.c == 0.0) {
                     const auto& obj = *currentObjectBounds;
                     if (!isSentinel(static_cast<dom::Evpu>(obj.minX))
@@ -1348,12 +1292,6 @@ std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape,
                         worldCenter = {objCenter.x, -objCenter.y};
                         worldRx = objWidth / 2.0;
                         worldRy = objHeight / 2.0;
-                        if (debugShape) {
-                            std::cout << "[Shape " << debugShapeId << "] Ellipse bounds override left=" << left
-                                      << " top=" << top << " right=" << right << " bottom=" << bottom
-                                      << " worldCenter=(" << worldCenter.x << "," << worldCenter.y << ")"
-                                      << " worldRx=" << worldRx << " worldRy=" << worldRy << '\n';
-                        }
                     }
                 }
                 pendingEllipse = EllipseState{worldCenter, worldRx, worldRy};
@@ -1378,14 +1316,8 @@ std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape,
             }
             path.closePath();
             current = start;
-            if (debugShape) {
-                std::cout << "[Shape " << debugShapeId << "] ClosePath\n";
-            }
             break;
         case IT::FillSolid:
-            if (debugShape) {
-                std::cout << "[Shape " << debugShapeId << "] FillSolid\n";
-            }
             if (pendingEllipse) {
                 const auto ellipse = *pendingEllipse;
                 std::ostringstream element;
@@ -1428,9 +1360,6 @@ std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape,
             }
             break;
         case IT::FillAlt:
-            if (debugShape) {
-                std::cout << "[Shape " << debugShapeId << "] FillAlt\n";
-            }
             if (pendingEllipse) {
                 const auto ellipse = *pendingEllipse;
                 std::ostringstream element;
@@ -1473,9 +1402,6 @@ std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape,
             }
             break;
         case IT::Stroke:
-            if (debugShape) {
-                std::cout << "[Shape " << debugShapeId << "] Stroke\n";
-            }
             if (pendingEllipse) {
                 const auto ellipse = *pendingEllipse;
                 std::ostringstream strokeElement;
@@ -1505,10 +1431,6 @@ std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape,
             if (data) {
                 paint.strokeWidth = toEvpuFromEfix(data->efix);
                 lineWidthSet = true;
-                if (debugShape) {
-                    std::cout << "[Shape " << debugShapeId << "] LineWidth efix=" << data->efix
-                              << " strokeWidth=" << paint.strokeWidth << '\n';
-                }
             }
             break;
         }
@@ -1520,16 +1442,6 @@ std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape,
                     paint.dash = std::make_pair(dash, space);
                 } else {
                     paint.dash.reset();
-                }
-                if (debugShape) {
-                    std::cout << "[Shape " << debugShapeId << "] SetDash evpu dash=" << dash
-                              << " space=" << space << '\n';
-                }
-            }
-            if (debugShape) {
-                if (const auto* data = std::get_if<dom::ShapeDefInstruction::SetDash>(&inst.data)) {
-                    std::cout << "[Shape " << debugShapeId << "] SetDash efix dash="
-                              << data->dashLength << " space=" << data->spaceLength << '\n';
                 }
             }
             break;
