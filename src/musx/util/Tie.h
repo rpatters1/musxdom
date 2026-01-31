@@ -22,7 +22,9 @@
 #pragma once
 
 #include <optional>
+#include <utility>
 
+#include "musx/dom/Details.h"
 #include "musx/dom/EnumClasses.h"
 
 namespace musx {
@@ -50,12 +52,33 @@ public:
     [[nodiscard]]
     static dom::CurveContourDirection calcEffectiveDirection(const dom::NoteInfoPtr& noteInfo, bool forTieEnd);
 
-    /// @brief Chooses the connect style type that Finale would use for this tie point.
-    /// @param noteInfo The note whose tie endpoint is being analyzed.
-    /// @param forTieEnd True for the tie-end endpoint; false for the tie-start endpoint.
+    /// @brief Calculates the connect style types for both endpoints of a tie.
+    /// @param noteInfo The note whose tie is being analyzed.
+    /// @param forTieEnd True if the note represents a tie end; false for tie starts.
+    /// @returns A pair containing start and end connect style types.
+    [[nodiscard]]
+    static std::pair<dom::TieConnectStyleType, dom::TieConnectStyleType> calcConnectStyleTypes(
+        const dom::NoteInfoPtr& noteInfo, bool forTieEnd);
+
+    /// @brief Calculates the default connection type for a tie endpoint.
+    /// @param noteInfo The note whose endpoint is being analyzed.
+    /// @param forTieEnd True if the endpoint is for a tie end; false for a tie start.
+    /// @param forEndPoint True if calculating the end point; false for the start point.
+    /// @param forPageView True if calculating with page view system breaks, false for scroll/studio view.
+    /// @returns The connection type, or std::nullopt if no applicable tie exists.
+    [[nodiscard]]
+    static std::optional<dom::details::TieAlterBase::ConnectionType> calcConnectionType(
+        const dom::NoteInfoPtr& noteInfo, bool forTieEnd, bool forEndPoint, bool forPageView = false);
+
+private:
+    /// @brief Calculates the connect style type for a single endpoint of a tie.
+    /// @param noteInfo The note whose tie is being analyzed.
+    /// @param forTieEnd True if the note represents a tie end; false for tie starts.
+    /// @param forEndPoint True to calculate the end point; false for the start point.
     /// @returns The calculated connection style type, or std::nullopt when no matching tie exists.
     [[nodiscard]]
-    static std::optional<dom::TieConnectStyleType> calcConnectStyleType(const dom::NoteInfoPtr& noteInfo, bool forTieEnd);
+    static std::optional<dom::TieConnectStyleType> calcConnectStyleTypeAtEndPoint(
+        const dom::NoteInfoPtr& noteInfo, bool forTieEnd, bool forEndPoint);
 };
 
 } // namespace util

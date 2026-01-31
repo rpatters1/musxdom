@@ -2870,18 +2870,22 @@ CurveContourDirection NoteInfoPtr::calcEffectiveTieDirection(bool forTieEnd) con
 
 bool NoteInfoPtr::calcHasOuterTie(bool forTieEnd) const
 {
-    if (auto style = util::Tie::calcConnectStyleType(*this, forTieEnd)) {
-        return isOuterTieConnectStyle(*style);
+    if ((forTieEnd && !(*this)->tieEnd) || (!forTieEnd && !(*this)->tieStart)) {
+        return false;
     }
-    return false;
+    const auto styles = util::Tie::calcConnectStyleTypes(*this, forTieEnd);
+    const auto style = forTieEnd ? styles.second : styles.first;
+    return isOuterTieConnectStyle(style);
 }
 
 bool NoteInfoPtr::calcHasInnerTie(bool forTieEnd) const
 {
-    if (auto style = util::Tie::calcConnectStyleType(*this, forTieEnd)) {
-        return !isOuterTieConnectStyle(*style);
+    if ((forTieEnd && !(*this)->tieEnd) || (!forTieEnd && !(*this)->tieStart)) {
+        return false;
     }
-    return false;
+    const auto styles = util::Tie::calcConnectStyleTypes(*this, forTieEnd);
+    const auto style = forTieEnd ? styles.second : styles.first;
+    return !isOuterTieConnectStyle(style);
 }
 
 StaffCmper NoteInfoPtr::calcStaff() const
