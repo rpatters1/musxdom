@@ -1668,6 +1668,30 @@ public:
     [[nodiscard]]
     CurveContourDirection calcEffectiveTieDirection(bool forTieEnd = false) const;
 
+    /// @brief Returns the @ref TieConnectStyleType for this note.
+    /// @param forTieEnd If true, calculate the connect style for the tie end point; otherwise use the tie start.
+    /// @returns The calculated connection style type or std::nullopt if the note has no matching tie or tie-end.
+    [[nodiscard]]
+    std::optional<TieConnectStyleType> calcConnectStyleType(bool forTieEnd = false) const;
+
+    /// @brief Determines whether this note has an outer tie at the specified endpoint.
+    ///
+    /// If the note does not participate in a tie at the specified endpoint,
+    /// this function returns false.
+    ///
+    /// @param forTieEnd True to examine the tie end; false to examine the tie start.
+    /// @return True if the note has an outer tie at the specified endpoint; false if there is no tie or the tie is inner.
+    [[nodiscard]] bool calcHasOuterTie(bool forTieEnd = false) const;
+
+    /// @brief Determines whether this note has an inner tie at the specified endpoint.
+    ///
+    /// If the note does not participate in a tie at the specified endpoint,
+    /// this function returns false.
+    ///
+    /// @param forTieEnd True to examine the tie end; false to examine the tie start.
+    /// @return True if the note has an inner tie at the specified endpoint; false if there is no tie or the tie is outer.
+    [[nodiscard]] bool calcHasInnerTie(bool forTieEnd = false) const;
+
     /// @brief Calculates the staff number, taking into account cross staffing
     [[nodiscard]]
     StaffCmper calcStaff() const;
@@ -1737,6 +1761,16 @@ public:
     /// even if the document's `PartVoicingPolicy` is to ignore part voicing.
     [[nodiscard]]
     bool calcIsIncludedInVoicing() const;
+
+    /// @brief Return true if this is the top note in the entry.
+    /// @note This function takes part voicing into account if the document's part voicing policy is #PartVoicingPolicy::Apply.
+    [[nodiscard]]
+    bool calcIsTop() const;
+
+    /// @brief Return true if this is the bottom note in the entry.
+    /// @note This function takes part voicing into account if the document's part voicing policy is #PartVoicingPolicy::Apply.
+    [[nodiscard]]
+    bool calcIsBottom() const;
 
     /// @brief If this note has a smart shape acting as an arpeggio tie, return the tied-to note. If this note
     /// is part of a chord, the function always returns null.
@@ -1823,8 +1857,14 @@ private:
     [[nodiscard]]
     NoteInfoPtr calcTieFromWithPreviousMeasure(Cmper previousMeasure, bool requireTie) const;
 
+    [[nodiscard]]
+    CurveContourDirection calcEffectiveTieDirectionImpl(bool forTieEnd) const;
+
     EntryInfoPtr m_entry;
     size_t m_noteIndex;
+
+    /// @brief Cache the effective tie direction for this entry to avoid repeatedly calculating it.
+    mutable std::optional<CurveContourDirection> m_tieDirection{};
 };
 
 } // namespace dom

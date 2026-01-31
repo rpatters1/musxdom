@@ -2952,13 +2952,13 @@ CurveContourDirection NoteInfoPtr::calcDefaultTieDirection(bool forTieEnd) const
         // Notes in entries are always sorted from lowest to highest
         const size_t noteIndex = getNoteIndex();
 
-        if (noteIndex == 0) {
+        if (calcIsBottom()) {
             if (auto mixed = tryMixedStemDirection()) {
                 return *mixed;
             }
             return CurveContourDirection::Down;
         }
-        if (noteIndex + 1 == noteCount) {
+        if (calcIsTop()) {
             if (auto mixed = tryMixedStemDirection()) {
                 return *mixed;
             }
@@ -2993,7 +2993,7 @@ CurveContourDirection NoteInfoPtr::calcDefaultTieDirection(bool forTieEnd) const
     return upStem ? CurveContourDirection::Down : CurveContourDirection::Up;
 }
 
-CurveContourDirection NoteInfoPtr::calcEffectiveTieDirection(bool forTieEnd) const
+CurveContourDirection NoteInfoPtr::calcEffectiveTieDirectionImpl(bool forTieEnd) const
 {
     if (const auto tieAlter = details::TieAlterBase::fromNoteInfo(*this, forTieEnd)) {
         if (tieAlter->freezeDirection) {
@@ -3032,6 +3032,144 @@ CurveContourDirection NoteInfoPtr::calcEffectiveTieDirection(bool forTieEnd) con
     }
 
     return calcDefaultTieDirection(forTieEnd);
+}
+
+CurveContourDirection NoteInfoPtr::calcEffectiveTieDirection(bool forTieEnd) const
+{
+    if (!m_tieDirection.has_value()) {
+        m_tieDirection = calcEffectiveTieDirectionImpl(forTieEnd);
+    }
+    return *m_tieDirection;
+}
+
+std::optional<TieConnectStyleType> NoteInfoPtr::calcConnectStyleType(bool forTieEnd) const
+{
+    const auto entryInfo = getEntryInfo();
+    const auto entryFrame = entryInfo.getFrame();
+    const auto entry = entryInfo->getEntry();
+
+    const auto direction = calcEffectiveTieDirection(forTieEnd);
+    if (direction == CurveContourDirection::Unspecified) {
+        return std::nullopt;
+    }
+    const bool isLowest = calcIsBottom();
+    const bool isHighest = calcIsTop();
+
+    const bool useOuter = [&]() -> bool {
+        // Even manual settings do not override inner placement when the note is actually inner.
+        if (!isLowest && !isHighest) {
+            return false;
+        }
+        if (!isLowest || !isHighest) { // checking booleans accommodates notes eliminated by voiced parts
+            // Only lowest note can be "under"; only highest note can be "over".
+            if (isLowest && direction != CurveContourDirection::Down) {
+                return false;
+            }
+            if (isHighest && direction != CurveContourDirection::Up) {
+                return false;
+            }
+        }
+        // Local override beats global.
+        if (auto tieAlts = details::TieAlterBase::fromNoteInfo(*this, forTieEnd)) {
+            if (tieAlts->outerLocal) {
+                return tieAlts->outerOn;
+            }
+        }
+        if (const auto tieOptions = entryFrame->getDocument()->getOptions()->get<options::TieOptions>()) {
+            return tieOptions->useOuterPlacement;
+        }
+        return true;
+    }();
+
+    const bool isOver = direction == CurveContourDirection::Up;
+    const bool isUnder = direction == CurveContourDirection::Down;
+
+    const bool isStartPos = !forTieEnd;
+
+    if (useOuter) {
+        // Prefer "outer stem" for certain 2nd-interval/stem-direction cases,
+        // otherwise "outer note".
+        //
+        // This depends on whether the entry has a stem.
+        const bool hasStem = entry->hasStem();
+        if (hasStem) {
+            const bool upStem = entryInfo.calcUpStem();
+
+            const auto thisNote = operator->();
+            const bool upSecBit = thisNote->upStemSecond;
+            const bool dwSecBit = thisNote->downStemSecond;
+
+            bool useOuterStem = false;
+
+            if (forTieEnd) {
+                // Endpoint rules:
+                // Downstem under: OuterNote if DW second bit set; else OuterStem.
+                // Upstem over:    OuterStem if UP second bit set; else OuterNote.
+                if (!upStem && isUnder && !dwSecBit) {
+                    useOuterStem = true;
+                } else if (upStem && isOver && upSecBit) {
+                    useOuterStem = true;
+                }
+            } else {
+                // Startpoint rules are the "opposites" of the endpoint rules.
+                if (upStem && isOver && !upSecBit) {
+                    useOuterStem = true;
+                } else if (!upStem && isUnder && dwSecBit) {
+                    useOuterStem = true;
+                }
+            }
+
+            if (useOuterStem) {
+                if (isOver) {
+                    return isStartPos
+                        ? TieConnectStyleType::OverHighestNoteStemStartPosOver
+                        : TieConnectStyleType::OverHighestNoteStemEndPosOver;
+                }
+                // under
+                return isStartPos
+                    ? TieConnectStyleType::UnderLowestNoteStemStartPosUnder
+                    : TieConnectStyleType::UnderLowestNoteStemEndPosUnder;
+            }
+        }
+
+        // OuterNote fallback
+        if (isOver) {
+            return isStartPos
+                ? TieConnectStyleType::OverHighestNoteStartPosOver
+                : TieConnectStyleType::OverHighestNoteEndPosOver;
+        }
+        // under
+        return isStartPos
+            ? TieConnectStyleType::UnderLowestNoteStartPosUnder
+            : TieConnectStyleType::UnderLowestNoteEndPosUnder;
+    }
+
+    // Inner placement
+    if (isOver) {
+        return isStartPos
+            ? TieConnectStyleType::OverStartPosInner
+            : TieConnectStyleType::OverEndPosInner;
+    }
+    // under
+    return isStartPos
+        ? TieConnectStyleType::UnderStartPosInner
+        : TieConnectStyleType::UnderEndPosInner;
+}
+
+bool NoteInfoPtr::calcHasOuterTie(bool forTieEnd) const
+{
+    if (auto style = calcConnectStyleType(forTieEnd)) {
+        return isOuterTieConnectStyle(*style);
+    }
+    return false;
+}
+
+bool NoteInfoPtr::calcHasInnerTie(bool forTieEnd) const
+{
+    if (auto style = calcConnectStyleType(forTieEnd)) {
+        return !isOuterTieConnectStyle(*style);
+    }
+    return false;
 }
 
 StaffCmper NoteInfoPtr::calcStaff() const
@@ -3214,6 +3352,42 @@ bool NoteInfoPtr::calcIsIncludedInVoicing() const
         return partVoicing->calcShowsNote(*this);
     }
     return true;
+}
+
+bool NoteInfoPtr::calcIsTop() const
+{
+    auto entryInfo = getEntryInfo();
+    auto entry = entryInfo->getEntry();
+    MUSX_ASSERT_IF(entry->notes.empty()) {
+        return false;
+    }
+    if (const auto partVoicing = entryInfo.getFrame()->getContext().getPolicyPartVoicing()) {
+        for (size_t x = entry->notes.size(); x-- > 0; ) {
+            if (partVoicing->calcShowsNote(NoteInfoPtr(entryInfo, x))) {
+                return getNoteIndex() == x;
+            }
+        }
+        return false;
+    }
+    return getNoteIndex() == entry->notes.size() - 1;
+}
+
+bool NoteInfoPtr::calcIsBottom() const
+{
+    auto entryInfo = getEntryInfo();
+    auto entry = entryInfo->getEntry();
+    MUSX_ASSERT_IF(entry->notes.empty()) {
+        return false;
+    }
+    if (const auto partVoicing = entryInfo.getFrame()->getContext().getPolicyPartVoicing()) {
+        for (size_t x = 0; x < entry->notes.size(); x++) {
+            if (partVoicing->calcShowsNote(NoteInfoPtr(entryInfo, x))) {
+                return getNoteIndex() == x;
+            }
+        }
+        return false;
+    }
+    return getNoteIndex() == 0;
 }
 
 NoteInfoPtr NoteInfoPtr::calcArpeggiatedTieToNote(CurveContourDirection* tieDirection) const

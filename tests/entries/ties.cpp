@@ -904,3 +904,48 @@ TEST(TieDetection, TieDirectionOppositeStems)
         checkTieDirections(NoteInfoPtr(EntryInfoPtr(entryFrame, 2), 3), CurveContourDirection::Up);
     }
 }
+
+TEST(TieDetection, TieConnectStyleType)
+{
+    std::vector<char> xml;
+    musxtest::readFile(musxtest::getInputPath() / "tied_opposite_stems.enigmaxml", xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(xml);
+    ASSERT_TRUE(doc);
+
+    auto checkTie = [](const NoteInfoPtr& startNote, TieConnectStyleType expectedStart, TieConnectStyleType expectedEnd) {
+        ASSERT_TRUE(startNote);
+        EXPECT_EQ(startNote.calcConnectStyleType(), expectedStart);
+        EXPECT_EQ(startNote.calcHasOuterTie(), isOuterTieConnectStyle(expectedStart));
+        EXPECT_EQ(startNote.calcHasInnerTie(), !isOuterTieConnectStyle(expectedStart));
+        auto endNote = startNote.calcTieTo();
+        ASSERT_TRUE(endNote);
+        EXPECT_EQ(endNote.calcConnectStyleType(true), expectedEnd);
+        EXPECT_EQ(endNote.calcHasOuterTie(true), isOuterTieConnectStyle(expectedEnd));
+        EXPECT_EQ(endNote.calcHasInnerTie(true), !isOuterTieConnectStyle(expectedEnd));
+    };
+
+    {
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 1);
+        ASSERT_TRUE(gfhold) << " gfhold not found for 1, 1";
+        auto entryFrame = gfhold.createEntryFrame(0);
+        ASSERT_TRUE(entryFrame);
+        checkTie(NoteInfoPtr(EntryInfoPtr(entryFrame, 0), 1), TieConnectStyleType::OverHighestNoteStemStartPosOver, TieConnectStyleType::OverHighestNoteEndPosOver);
+    }
+    {
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 2);
+        ASSERT_TRUE(gfhold) << " gfhold not found for 1, 2";
+        auto entryFrame = gfhold.createEntryFrame(0);
+        ASSERT_TRUE(entryFrame);
+        checkTie(NoteInfoPtr(EntryInfoPtr(entryFrame, 1), 0), TieConnectStyleType::OverStartPosInner, TieConnectStyleType::OverEndPosInner);
+    }
+    {
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 3);
+        ASSERT_TRUE(gfhold) << " gfhold not found for 1, 3";
+        auto entryFrame = gfhold.createEntryFrame(0);
+        ASSERT_TRUE(entryFrame);
+        checkTie(NoteInfoPtr(EntryInfoPtr(entryFrame, 2), 0), TieConnectStyleType::UnderLowestNoteStartPosUnder, TieConnectStyleType::UnderLowestNoteEndPosUnder);
+        checkTie(NoteInfoPtr(EntryInfoPtr(entryFrame, 2), 1), TieConnectStyleType::OverStartPosInner, TieConnectStyleType::OverEndPosInner);
+        checkTie(NoteInfoPtr(EntryInfoPtr(entryFrame, 2), 2), TieConnectStyleType::OverStartPosInner, TieConnectStyleType::OverEndPosInner);
+        checkTie(NoteInfoPtr(EntryInfoPtr(entryFrame, 2), 3), TieConnectStyleType::OverHighestNoteStartPosOver, TieConnectStyleType::OverHighestNoteEndPosOver);
+    }
+}

@@ -1627,26 +1627,6 @@ public:
     };
 
     /**
-     * @enum ConnectStyleType
-     * @brief Enumeration for tie connect style types
-     */
-    enum class ConnectStyleType
-    {
-        OverStartPosInner,
-        OverEndPosInner,
-        UnderStartPosInner,
-        UnderEndPosInner,
-        OverHighestNoteStartPosOver,
-        OverHighestNoteEndPosOver,
-        UnderLowestNoteStartPosUnder,
-        UnderLowestNoteEndPosUnder,
-        OverHighestNoteStemStartPosOver,
-        OverHighestNoteStemEndPosOver,
-        UnderLowestNoteStemStartPosUnder,
-        UnderLowestNoteStemEndPosUnder
-    };
-
-    /**
      * @enum ControlStyleType
      * @brief Enumeration for tie control style types
      */
@@ -1694,7 +1674,7 @@ public:
     };
 
     /** @brief Tie connect styles */
-    std::unordered_map<ConnectStyleType, std::shared_ptr<ConnectStyle>> tieConnectStyles;
+    std::unordered_map<TieConnectStyleType, std::shared_ptr<ConnectStyle>> tieConnectStyles;
 
     /** @brief Struct for tie control style control points */
     struct ControlPoint {

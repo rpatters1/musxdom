@@ -322,19 +322,19 @@ MUSX_XML_ENUM_MAPPING(TieOptions::InsetStyle, {
     {"percent", TieOptions::InsetStyle::Percent}
 });
 
-MUSX_XML_ENUM_MAPPING(TieOptions::ConnectStyleType, {
-    {"overStartPosInner", TieOptions::ConnectStyleType::OverStartPosInner},
-    {"overEndPosInner", TieOptions::ConnectStyleType::OverEndPosInner},
-    {"underStartPosInner", TieOptions::ConnectStyleType::UnderStartPosInner},
-    {"underEndPosInner", TieOptions::ConnectStyleType::UnderEndPosInner},
-    {"overHighestNoteStartPosOver", TieOptions::ConnectStyleType::OverHighestNoteStartPosOver},
-    {"overHighestNoteEndPosOver", TieOptions::ConnectStyleType::OverHighestNoteEndPosOver},
-    {"underLowestNoteStartPosUnder", TieOptions::ConnectStyleType::UnderLowestNoteStartPosUnder},
-    {"underLowestNoteEndPosUnder", TieOptions::ConnectStyleType::UnderLowestNoteEndPosUnder},
-    {"overHighestNoteStemStartPosOver", TieOptions::ConnectStyleType::OverHighestNoteStemStartPosOver},
-    {"overHighestNoteStemEndPosOver", TieOptions::ConnectStyleType::OverHighestNoteStemEndPosOver},
-    {"underLowestNoteStemStartPosUnder", TieOptions::ConnectStyleType::UnderLowestNoteStemStartPosUnder},
-    {"underLowestNoteStemEndPosUnder", TieOptions::ConnectStyleType::UnderLowestNoteStemEndPosUnder}
+MUSX_XML_ENUM_MAPPING(TieConnectStyleType, {
+    {"overStartPosInner", TieConnectStyleType::OverStartPosInner},
+    {"overEndPosInner", TieConnectStyleType::OverEndPosInner},
+    {"underStartPosInner", TieConnectStyleType::UnderStartPosInner},
+    {"underEndPosInner", TieConnectStyleType::UnderEndPosInner},
+    {"overHighestNoteStartPosOver", TieConnectStyleType::OverHighestNoteStartPosOver},
+    {"overHighestNoteEndPosOver", TieConnectStyleType::OverHighestNoteEndPosOver},
+    {"underLowestNoteStartPosUnder", TieConnectStyleType::UnderLowestNoteStartPosUnder},
+    {"underLowestNoteEndPosUnder", TieConnectStyleType::UnderLowestNoteEndPosUnder},
+    {"overHighestNoteStemStartPosOver", TieConnectStyleType::OverHighestNoteStemStartPosOver},
+    {"overHighestNoteStemEndPosOver", TieConnectStyleType::OverHighestNoteStemEndPosOver},
+    {"underLowestNoteStemStartPosUnder", TieConnectStyleType::UnderLowestNoteStemStartPosUnder},
+    {"underLowestNoteStemEndPosUnder", TieConnectStyleType::UnderLowestNoteStemEndPosUnder}
 });
 
 MUSX_XML_ENUM_MAPPING(TieOptions::ControlStyleType, {
