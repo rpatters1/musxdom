@@ -203,7 +203,7 @@ TEST(SvgConvertTest, MatchesViewBoxAndPathsAndStrokes)
     ASSERT_FALSE(ec) << "Failed to create output directory: " << svgOut;
     ASSERT_TRUE(std::filesystem::is_directory(svgOut));
 
-    std::vector<int> shapeIds;
+    std::vector<Cmper> shapeIds;
     for (const auto& entry : std::filesystem::directory_iterator(svgRoot)) {
         if (!entry.is_regular_file()) {
             continue;
@@ -422,7 +422,7 @@ TEST(SvgConvertTest, TextMetricsMatches)
     std::filesystem::create_directories(svgOut, ec);
     ASSERT_FALSE(ec) << "Failed to create output directory: " << svgOut;
 
-    const std::vector<int> textShapeIds{2, 3, 7};
+    const std::vector<Cmper> textShapeIds{2, 3, 7};
     std::vector<std::filesystem::path> outputs;
     constexpr double kTextTolerance = 0.05;
     constexpr double kViewBoxTolerance = 0.25;
