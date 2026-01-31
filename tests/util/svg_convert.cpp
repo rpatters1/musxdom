@@ -27,9 +27,12 @@
 #include <sstream>
 #include <string>
 #include <vector>
+#include <cstdlib>
 
 #include "gtest/gtest.h"
 #include "test_utils.h"
+
+using namespace musx::dom;
 
 namespace musxtest {
 namespace {
@@ -152,6 +155,21 @@ bool containsAny(const std::string& svg, const std::vector<std::string>& needles
     return false;
 }
 
+bool keepSvgOutput()
+{
+#ifdef _WIN32
+    char* buf = nullptr;
+    size_t len = 0;
+    if (_dupenv_s(&buf, &len, "MUSX_KEEP_SVG_OUTPUT") != 0 || !buf) {
+        return false;
+    }
+    free(buf);
+    return true;
+#else
+    return std::getenv("MUSX_KEEP_SVG_OUTPUT") != nullptr;
+#endif
+}
+
 bool viewBoxEncloses(const ViewBox& outer, const ViewBox& inner, double tolerance)
 {
     double outerMaxX = outer.minX + outer.width;
@@ -206,8 +224,8 @@ TEST(SvgConvertTest, MatchesViewBoxAndPathsAndStrokes)
     constexpr double kExactTolerance = 1.9;
     constexpr double kStrokeTolerance = 0.05;
 
-    for (int shapeId : shapeIds) {
-        auto shape = doc->getOthers()->get<musx::dom::others::ShapeDef>(musx::dom::SCORE_PARTID, shapeId);
+    for (Cmper shapeId : shapeIds) {
+        auto shape = doc->getOthers()->get<others::ShapeDef>(SCORE_PARTID, shapeId);
         ASSERT_TRUE(shape) << "Missing ShapeDef " << shapeId;
 
         const std::string ourSvg = musx::util::SvgConvert::toSvg(*shape);
@@ -273,7 +291,7 @@ TEST(SvgConvertTest, MatchesViewBoxAndPathsAndStrokes)
         EXPECT_GT(refDrawable, 0) << "No drawable elements in reference SVG " << shapeId;
     }
 
-    if (std::getenv("MUSX_KEEP_SVG_OUTPUT") == nullptr) {
+    if (!keepSvgOutput()) {
         std::filesystem::remove_all(svgOut, ec);
         ASSERT_FALSE(ec) << "Failed to remove directory: " << svgOut;
         ASSERT_FALSE(std::filesystem::exists(svgOut));
@@ -292,7 +310,7 @@ TEST(SvgConvertTest, TextMetricsMatches)
 
     const auto svgRoot = inputRoot / "PattersonDefault";
 
-    auto metrics = [](const musx::dom::FontInfo& font,
+    auto metrics = [](const FontInfo& font,
                       std::u32string_view text) -> std::optional<musx::util::SvgConvert::GlyphMetrics> {
         if (text.empty()) {
             return std::nullopt;
@@ -409,8 +427,8 @@ TEST(SvgConvertTest, TextMetricsMatches)
     constexpr double kTextTolerance = 0.05;
     constexpr double kViewBoxTolerance = 0.25;
 
-    for (int shapeId : textShapeIds) {
-        auto shape = doc->getOthers()->get<musx::dom::others::ShapeDef>(musx::dom::SCORE_PARTID, shapeId);
+    for (Cmper shapeId : textShapeIds) {
+        auto shape = doc->getOthers()->get<others::ShapeDef>(SCORE_PARTID, shapeId);
         ASSERT_TRUE(shape);
         const auto refPath = svgRoot / (std::to_string(shapeId) + ".svg");
         const std::string referenceSvg = readFileText(refPath);
@@ -448,7 +466,7 @@ TEST(SvgConvertTest, TextMetricsMatches)
             << refBox.width << ", " << refBox.height << ")";
     }
 
-    if (std::getenv("MUSX_KEEP_SVG_OUTPUT") == nullptr) {
+    if (!keepSvgOutput()) {
         for (const auto& outPath : outputs) {
             std::filesystem::remove(outPath, ec);
             ASSERT_FALSE(ec) << "Failed to remove file: " << outPath;
