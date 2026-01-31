@@ -33,6 +33,8 @@ class NoteInfoPtr;
 }
 namespace util {
 
+/// @class Tie
+/// @brief Static class containing utilites for ties.
 class Tie
 {
 public:

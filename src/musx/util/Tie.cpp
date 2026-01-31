@@ -561,11 +561,18 @@ std::optional<std::pair<TieConnectStyleType, TieConnectStyleType>> Tie::calcConn
                         }
                     }
                 } else {
+                    // 1. Ties to rests and nothing have StemOuter placement at their endpoint when the tie is outer.
                     const bool nextStemUp = (direction == CurveContourDirection::Up);
-                    // 1. Ties to rests and nothing have StemOuter placement at their endpoint.
                     endStyle = calcConnectStyleTypeAtEndPoint(noteInfo, forTieEnd, direction, nextStemUp, noteInfo, true,
                         noteInfo.getNoteIndex(), entry->notes.size(), false, false)
                         .value_or(TieConnectStyleType::OverEndPosInner);
+                    if (isOuterConnectStyle(endStyle)) {
+                        if (endStyle == TieConnectStyleType::OverHighestNoteEndPosOver) {
+                            endStyle = TieConnectStyleType::OverHighestNoteStemEndPosOver;
+                        } else if (endStyle == TieConnectStyleType::UnderLowestNoteEndPosUnder) {
+                            endStyle = TieConnectStyleType::UnderLowestNoteStemEndPosUnder;
+                        }
+                    }
                 }
             } else {
                 if (calcIsEndOfSystem(noteInfo, false)) {

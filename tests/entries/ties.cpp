@@ -969,8 +969,8 @@ TEST(TieDetection, TieConnectStyleTypeForTiesToNowhere)
         checkTieConnectStyleType(NoteInfoPtr(EntryInfoPtr(entryFrame, 0), 0), TieConnectStyleType::UnderLowestNoteStartPosUnder, TieConnectStyleType::UnderLowestNoteStemEndPosUnder);
         checkTieConnectStyleType(NoteInfoPtr(EntryInfoPtr(entryFrame, 0), 1), TieConnectStyleType::UnderStartPosInner, TieConnectStyleType::UnderEndPosInner);
         checkTieConnectStyleType(NoteInfoPtr(EntryInfoPtr(entryFrame, 0), 2), TieConnectStyleType::OverStartPosInner, TieConnectStyleType::OverEndPosInner);
-        /// @todo the end type this result conflicts with a comment in the code, but matches Lua code, so it must be checked in Finale.
-        checkTieConnectStyleType(NoteInfoPtr(EntryInfoPtr(entryFrame, 0), 3), TieConnectStyleType::OverHighestNoteStartPosOver, TieConnectStyleType::OverHighestNoteEndPosOver);
+        // This result is checked in Finale, even though the endpoint connect style type conflicts with Lua library result (which is note rather than stem)
+        checkTieConnectStyleType(NoteInfoPtr(EntryInfoPtr(entryFrame, 0), 3), TieConnectStyleType::OverHighestNoteStartPosOver, TieConnectStyleType::OverHighestNoteStemEndPosOver);
     }
     {
         auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 2);
@@ -980,8 +980,7 @@ TEST(TieDetection, TieConnectStyleTypeForTiesToNowhere)
         checkTieConnectStyleType(NoteInfoPtr(EntryInfoPtr(entryFrame, 1), 0), TieConnectStyleType::UnderLowestNoteStartPosUnder, TieConnectStyleType::UnderLowestNoteStemEndPosUnder);
         checkTieConnectStyleType(NoteInfoPtr(EntryInfoPtr(entryFrame, 1), 1), TieConnectStyleType::UnderStartPosInner, TieConnectStyleType::UnderEndPosInner);
         checkTieConnectStyleType(NoteInfoPtr(EntryInfoPtr(entryFrame, 1), 2), TieConnectStyleType::UnderStartPosInner, TieConnectStyleType::UnderEndPosInner);
-        /// @todo the end type for this result conflicts with a comment in the code *and* the Lua result.
-        checkTieConnectStyleType(NoteInfoPtr(EntryInfoPtr(entryFrame, 1), 3), TieConnectStyleType::OverHighestNoteStartPosOver, TieConnectStyleType::OverHighestNoteEndPosOver);
+        checkTieConnectStyleType(NoteInfoPtr(EntryInfoPtr(entryFrame, 1), 3), TieConnectStyleType::OverHighestNoteStartPosOver, TieConnectStyleType::OverHighestNoteStemEndPosOver);
     }
     {
         auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 3);
