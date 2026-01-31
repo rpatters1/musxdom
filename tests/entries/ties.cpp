@@ -905,6 +905,21 @@ TEST(TieDetection, TieDirectionOppositeStems)
     }
 }
 
+static void checkTieConnectStyleType(const NoteInfoPtr& startNote, TieConnectStyleType expectedStart, TieConnectStyleType expectedEnd)
+{
+    ASSERT_TRUE(startNote);
+    const auto entryInfo = startNote.getEntryInfo();
+    const std::string tieLabel = "Tie start meas " + std::to_string(entryInfo.getMeasure())
+        + " entryIdx " + std::to_string(entryInfo.getIndexInFrame())
+        + " noteIdx " + std::to_string(startNote.getNoteIndex());
+
+    auto styles = musx::util::Tie::calcConnectStyleTypes(startNote, false);
+    ASSERT_TRUE(styles) << tieLabel << " : connect styles missing (no tie?)";
+    const auto& [startStyle, endStyle] = *styles;
+    EXPECT_EQ(startStyle, expectedStart) << tieLabel << " : start connect style mismatch";
+    EXPECT_EQ(endStyle, expectedEnd) << tieLabel << " : end connect style mismatch";
+};
+
 TEST(TieDetection, TieConnectStyleType)
 {
     std::vector<char> xml;
@@ -912,37 +927,43 @@ TEST(TieDetection, TieConnectStyleType)
     auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(xml);
     ASSERT_TRUE(doc);
 
-    auto checkTie = [](const NoteInfoPtr& startNote, TieConnectStyleType expectedStart, TieConnectStyleType expectedEnd) {
-        ASSERT_TRUE(startNote);
-        auto styles = musx::util::Tie::calcConnectStyleTypes(startNote, false);
-        ASSERT_TRUE(styles);
-        const auto& [startStyle, endStyle] = *styles;
-        EXPECT_EQ(startStyle, expectedStart);
-        EXPECT_EQ(endStyle, expectedEnd);
-    };
-
     {
         auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 1);
         ASSERT_TRUE(gfhold) << " gfhold not found for 1, 1";
         auto entryFrame = gfhold.createEntryFrame(0);
         ASSERT_TRUE(entryFrame);
-        checkTie(NoteInfoPtr(EntryInfoPtr(entryFrame, 0), 1), TieConnectStyleType::OverHighestNoteStemStartPosOver, TieConnectStyleType::OverHighestNoteEndPosOver);
+        checkTieConnectStyleType(NoteInfoPtr(EntryInfoPtr(entryFrame, 0), 1), TieConnectStyleType::OverHighestNoteStemStartPosOver, TieConnectStyleType::OverHighestNoteEndPosOver);
     }
     {
         auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 2);
         ASSERT_TRUE(gfhold) << " gfhold not found for 1, 2";
         auto entryFrame = gfhold.createEntryFrame(0);
         ASSERT_TRUE(entryFrame);
-        checkTie(NoteInfoPtr(EntryInfoPtr(entryFrame, 1), 0), TieConnectStyleType::OverStartPosInner, TieConnectStyleType::OverEndPosInner);
+        checkTieConnectStyleType(NoteInfoPtr(EntryInfoPtr(entryFrame, 1), 0), TieConnectStyleType::OverStartPosInner, TieConnectStyleType::OverEndPosInner);
     }
     {
         auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 3);
         ASSERT_TRUE(gfhold) << " gfhold not found for 1, 3";
         auto entryFrame = gfhold.createEntryFrame(0);
         ASSERT_TRUE(entryFrame);
-        checkTie(NoteInfoPtr(EntryInfoPtr(entryFrame, 2), 0), TieConnectStyleType::UnderLowestNoteStartPosUnder, TieConnectStyleType::UnderLowestNoteStemEndPosUnder);
-        checkTie(NoteInfoPtr(EntryInfoPtr(entryFrame, 2), 1), TieConnectStyleType::OverStartPosInner, TieConnectStyleType::OverEndPosInner);
-        checkTie(NoteInfoPtr(EntryInfoPtr(entryFrame, 2), 2), TieConnectStyleType::OverStartPosInner, TieConnectStyleType::OverEndPosInner);
-        checkTie(NoteInfoPtr(EntryInfoPtr(entryFrame, 2), 3), TieConnectStyleType::OverHighestNoteStartPosOver, TieConnectStyleType::OverHighestNoteEndPosOver);
+        checkTieConnectStyleType(NoteInfoPtr(EntryInfoPtr(entryFrame, 2), 0), TieConnectStyleType::UnderLowestNoteStartPosUnder, TieConnectStyleType::UnderLowestNoteStemEndPosUnder);
+        checkTieConnectStyleType(NoteInfoPtr(EntryInfoPtr(entryFrame, 2), 1), TieConnectStyleType::OverStartPosInner, TieConnectStyleType::OverEndPosInner);
+        checkTieConnectStyleType(NoteInfoPtr(EntryInfoPtr(entryFrame, 2), 2), TieConnectStyleType::OverStartPosInner, TieConnectStyleType::OverEndPosInner);
+        checkTieConnectStyleType(NoteInfoPtr(EntryInfoPtr(entryFrame, 2), 3), TieConnectStyleType::OverHighestNoteStartPosOver, TieConnectStyleType::OverHighestNoteEndPosOver);
+    }
+}
+
+TEST(TieDetection, TieConnectStyleTypeForTiesToNowhere)
+{
+    std::vector<char> xml;
+    musxtest::readFile(musxtest::getInputPath() / "ties_to_nowhere.enigmaxml", xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(xml);
+    ASSERT_TRUE(doc);
+    {
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 1);
+        ASSERT_TRUE(gfhold) << " gfhold not found for 1, 1";
+        auto entryFrame = gfhold.createEntryFrame(0);
+        ASSERT_TRUE(entryFrame);
+        checkTieConnectStyleType(NoteInfoPtr(EntryInfoPtr(entryFrame, 0), 0), TieConnectStyleType::UnderLowestNoteStartPosUnder, TieConnectStyleType::UnderLowestNoteStartPosUnder);
     }
 }

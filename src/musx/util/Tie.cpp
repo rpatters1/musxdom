@@ -270,7 +270,7 @@ CurveContourDirection Tie::calcDefaultDirection(const dom::NoteInfoPtr& noteInfo
     auto tryMixedStemDirection = [&]() -> std::optional<CurveContourDirection> {
         std::optional<bool> adjacentUpStem;
         if (forTieEnd) {
-            // There seems to be a "bug" in how Finale (as of 2K) determines mixed-stem values for Tie-Ends.
+            // There seems to be a "bug" in how Finale (as of Finale 2000) determines mixed-stem values for Tie-Ends.
             // It looks at the stem direction of the immediately preceding entry, even if that entry
             // is not the entry that started the tie. Therefore, do not use TiedFromNote() to
             // get the stem direction.
@@ -281,7 +281,7 @@ CurveContourDirection Tie::calcDefaultDirection(const dom::NoteInfoPtr& noteInfo
             if (NoteInfoPtr endNote = noteInfo.calcTieTo()) {
                 adjacentUpStem = endNote.getEntryInfo().calcUpStem();
             } else {
-                // Finale (as of v2K) has the following Mickey Mouse behavior. When no Tie-To note exists,
+                // Finale (as of Finale 2000) has the following observed behavior. When no Tie-To note exists,
                 // it determines the mixed stem value based on
                 //      1. If the next entry is a rest, the adjStemDir is indeterminate so use stemDir
                 //      2. If the next entry is a note with its stem frozen, use it
@@ -436,6 +436,7 @@ std::optional<TieConnectStyleType> Tie::calcConnectStyleTypeAtEndPoint(
         if (calcUseOuterPlacement(noteInfo, forTieEnd, tieAlterContext)) {
             if (entry->hasStem()) {
                 if (forEndPoint) {
+                    // A downstem 2nd is always treated as OuterNote; an upstem 2nd is always treated as OuterStem
                     if (!stemUp && direction == CurveContourDirection::Down && !downStemSecond) {
                         return isStartPos ? TieConnectStyleType::UnderLowestNoteStemStartPosUnder
                                           : TieConnectStyleType::UnderLowestNoteStemEndPosUnder;
@@ -445,6 +446,7 @@ std::optional<TieConnectStyleType> Tie::calcConnectStyleTypeAtEndPoint(
                                           : TieConnectStyleType::OverHighestNoteStemEndPosOver;
                     }
                 } else {
+                    // Opposites of the endpoint rules above
                     if (stemUp && direction == CurveContourDirection::Up && !upStemSecond) {
                         return isStartPos ? TieConnectStyleType::OverHighestNoteStemStartPosOver
                                           : TieConnectStyleType::OverHighestNoteStemEndPosOver;
@@ -489,6 +491,7 @@ std::optional<std::pair<TieConnectStyleType, TieConnectStyleType>> Tie::calcConn
     auto startStyle = calcConnectStyleTypeAtEndPoint(noteInfo, forTieEnd, direction, stemUp, noteInfo, false)
         .value_or(TieConnectStyleType::OverStartPosInner);
     auto endStyle = startStyle;
+    // Initialize with something before we know the true end style (matches Lua's calc_placement)
 
     if (forTieEnd) {
         endStyle = calcConnectStyleTypeAtEndPoint(noteInfo, forTieEnd, direction, stemUp, noteInfo, true)
@@ -507,6 +510,7 @@ std::optional<std::pair<TieConnectStyleType, TieConnectStyleType>> Tie::calcConn
                         const int nextStaffPos = std::get<3>(nextNote.calcNotePropertiesInView(/*alwaysUseEntryStaff*/ true));
                         const int currStaffPos = std::get<3>(noteInfo.calcNotePropertiesInView(/*alwaysUseEntryStaff*/ true));
                         if (nextStaffPos < currStaffPos) {
+                            // Ties to an adjacent empty bar have inner placement on both ends (Finale behavior)
                             endStyle = TieConnectStyleType::UnderEndPosInner;
                         } else {
                             const bool nextStemUp = nextEntry.calcUpStem();
@@ -519,20 +523,22 @@ std::optional<std::pair<TieConnectStyleType, TieConnectStyleType>> Tie::calcConn
                         const int nextStaffPos = std::get<3>(nextNote.calcNotePropertiesInView(/*alwaysUseEntryStaff*/ true));
                         const int currStaffPos = std::get<3>(noteInfo.calcNotePropertiesInView(/*alwaysUseEntryStaff*/ true));
                         if (nextStaffPos > currStaffPos) {
+                            // Ties to an adjacent empty bar have inner placement on both ends (Finale behavior)
                             endStyle = TieConnectStyleType::OverEndPosInner;
                         } else {
                             bool upStemSecond = nextNote->upStemSecond;
                             bool downStemSecond = nextNote->downStemSecond;
                             bool nextStemUp = nextEntry.calcUpStem();
-                            if (nextStemUp) {
-                                for (size_t noteIndex = 0; noteIndex < nextEntryNoteCount; noteIndex++) {
-                                    NoteInfoPtr checkNote(nextEntry, noteIndex);
-                                    if (checkNote->upStemSecond) {
-                                        upStemSecond = true;
-                                    }
-                                }
-                                nextStemUp = (direction == CurveContourDirection::Up);
+                    if (nextStemUp) {
+                        // Finale 2000 behavior: OR all upstem-2nd bits for downstem chords containing 2nds (flaky in Scroll View <130%)
+                        for (size_t noteIndex = 0; noteIndex < nextEntryNoteCount; noteIndex++) {
+                            NoteInfoPtr checkNote(nextEntry, noteIndex);
+                            if (checkNote->upStemSecond) {
+                                upStemSecond = true;
                             }
+                        }
+                        nextStemUp = (direction == CurveContourDirection::Up);
+                    }
                             endStyle = calcConnectStyleTypeAtEndPoint(
                                 nextNote, forTieEnd, direction, nextStemUp, noteInfo, true,
                                 nextNote.getNoteIndex(), nextEntryNoteCount, upStemSecond, downStemSecond)
@@ -541,6 +547,7 @@ std::optional<std::pair<TieConnectStyleType, TieConnectStyleType>> Tie::calcConn
                     }
                 } else {
                     const bool nextStemUp = (direction == CurveContourDirection::Up);
+                    // Ties to rests or to nothing have StemOuter placement at their endpoint (Lua/Finale behavior)
                     endStyle = calcConnectStyleTypeAtEndPoint(noteInfo, forTieEnd, direction, nextStemUp, noteInfo, true,
                         noteInfo.getNoteIndex(), entry->notes.size(), false, false)
                         .value_or(TieConnectStyleType::OverEndPosInner);
@@ -559,6 +566,7 @@ std::optional<std::pair<TieConnectStyleType, TieConnectStyleType>> Tie::calcConn
         }
     }
 
+    // If either endpoint is inner, force both to inner (Finale/Lua behavior)
     if (isInnerConnectStyle(startStyle)) {
         endStyle = isOverInnerConnectStyle(startStyle)
             ? TieConnectStyleType::OverEndPosInner
