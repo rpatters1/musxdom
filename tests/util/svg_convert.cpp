@@ -215,7 +215,7 @@ TEST(SvgConvertTest, MatchesViewBoxAndPathsAndStrokes)
         if (!stringHasDigit(stem)) {
             continue;
         }
-        shapeIds.push_back(std::stoi(stem));
+        shapeIds.push_back(static_cast<Cmper>(std::stoi(stem)));
     }
 
     std::sort(shapeIds.begin(), shapeIds.end());
