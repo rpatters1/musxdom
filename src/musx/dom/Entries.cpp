@@ -641,6 +641,17 @@ bool EntryInfoPtr::calcIsSamePitchContentAndDuration(const EntryInfoPtr& src, bo
     return calcIsSamePitchContent(src, compareConcert);
 }
 
+NoteInfoPtr EntryInfoPtr::findNoteId(NoteNumber noteId) const
+{
+    const auto entry = (*this)->getEntry();
+    for (size_t idx = 0; idx < entry->notes.size(); ++idx) {
+        if (entry->notes[idx]->getNoteId() == noteId) {
+            return NoteInfoPtr((*this), idx);
+        }
+    }
+    return {};
+}
+
 LayerIndex EntryInfoPtr::getLayerIndex() const { return m_entryFrame->getLayerIndex(); }
 
 StaffCmper EntryInfoPtr::getStaff() const { return m_entryFrame->getStaff(); }
