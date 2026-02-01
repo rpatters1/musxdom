@@ -891,17 +891,6 @@ public:
     /// @return true if the layer settings dependent on #others::LayerAttributes::onlyIfOtherLayersHaveNotes are in effect. Otherwise false.
     [[nodiscard]] bool calcIfLayerSettingsApply() const;
 
-    /// @brief Calculates if this entry has cross-staffed notes all in a single direction.
-    /// @param staffList Optional staff list used to determine staff order.
-    ///        If it is not supplied, the function automatically retrieves the scroll-view staff order
-    ///        from the document. Supplying an explicit list can be used to avoid repeatedly fetching the
-    ///        staff list when calling this function in a loop (for example, within a beam).
-    /// @return
-    ///   - **1**  if all cross-staffed notes cross upward to a higher staff.
-    ///   - **0**  if the note is not cross-staffed, or if notes are crossed both up and down.
-    ///   - **−1** if all cross-staffed notes cross downward to a lower staff.
-    [[nodiscard]] int calcCrossStaffDirectionForAll(DeferredReference<MusxInstanceList<others::StaffUsed>> staffList = {}) const;
-
     /// @brief Calculates all the notes in this entry are crossed to the same staff.
     /// @return The crossed staffId if all notes are crossed to it. If no crossed notes, or if no all cross notes are crossed
     ///         to the same staff, returns std::nullopt.
