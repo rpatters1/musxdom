@@ -75,6 +75,7 @@
 #include "util/SvgConvert.h"
 #include "util/Logger.h"
 #include "util/TestSupport.h"
+#include "util/Tie.h"
 #include "xml/XmlInterface.h"
 #include "dom/Document.h"
 #include "factory/DocumentFactory.h"

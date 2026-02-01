@@ -1652,14 +1652,6 @@ public:
     [[nodiscard]]
     NoteInfoPtr calcTieFrom(bool requireTie = true) const;
 
-    /// @brief Calculates the default tie direction for this note.
-    /// @param forTieEnd If @p forTieEnd is true, the direction for the tie-end stub on this note is returned.
-    /// Otherwise the direction for the tie starting on this note is returned.
-    /// @return The contour direction that applies to the tie, or
-    ///         #CurveContourDirection::Unspecified when the contour cannot be determined.
-    [[nodiscard]]
-    CurveContourDirection calcDefaultTieDirection(bool forTieEnd = false) const;
-
     /// @brief Calculates the effective tie direction for this note, taking into account all options and overrides.
     /// @param forTieEnd If @p forTieEnd is true, the direction for the tie-end stub on this note is returned.
     /// Otherwise the direction for the tie starting on this note is returned.
@@ -1667,6 +1659,23 @@ public:
     ///         #CurveContourDirection::Unspecified when the contour cannot be determined.
     [[nodiscard]]
     CurveContourDirection calcEffectiveTieDirection(bool forTieEnd = false) const;
+    /// @brief Determines whether this note has an outer tie at the specified endpoint.
+    ///
+    /// If the note does not participate in a tie at the specified endpoint,
+    /// this function returns false.
+    ///
+    /// @param forTieEnd True to examine the tie end; false to examine the tie start.
+    /// @return True if the note has an outer tie at the specified endpoint; false if there is no tie or the tie is inner.
+    [[nodiscard]] bool calcHasOuterTie(bool forTieEnd = false) const;
+
+    /// @brief Determines whether this note has an inner tie at the specified endpoint.
+    ///
+    /// If the note does not participate in a tie at the specified endpoint,
+    /// this function returns false.
+    ///
+    /// @param forTieEnd True to examine the tie end; false to examine the tie start.
+    /// @return True if the note has an inner tie at the specified endpoint; false if there is no tie or the tie is outer.
+    [[nodiscard]] bool calcHasInnerTie(bool forTieEnd = false) const;
 
     /// @brief Calculates the staff number, taking into account cross staffing
     [[nodiscard]]
@@ -1737,6 +1746,16 @@ public:
     /// even if the document's `PartVoicingPolicy` is to ignore part voicing.
     [[nodiscard]]
     bool calcIsIncludedInVoicing() const;
+
+    /// @brief Return true if this is the top note in the entry.
+    /// @note This function takes part voicing into account if the document's part voicing policy is #PartVoicingPolicy::Apply.
+    [[nodiscard]]
+    bool calcIsTop() const;
+
+    /// @brief Return true if this is the bottom note in the entry.
+    /// @note This function takes part voicing into account if the document's part voicing policy is #PartVoicingPolicy::Apply.
+    [[nodiscard]]
+    bool calcIsBottom() const;
 
     /// @brief If this note has a smart shape acting as an arpeggio tie, return the tied-to note. If this note
     /// is part of a chord, the function always returns null.
@@ -1825,6 +1844,9 @@ private:
 
     EntryInfoPtr m_entry;
     size_t m_noteIndex;
+
+    /// @brief Cache the effective tie direction for this entry to avoid repeatedly calculating it.
+    mutable std::optional<CurveContourDirection> m_tieDirection{};
 };
 
 } // namespace dom

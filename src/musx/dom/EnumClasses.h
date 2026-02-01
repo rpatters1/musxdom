@@ -168,5 +168,25 @@ enum class ShowClefMode
     Always      ///< Clef is always displayed. (xml value is "forced")
 };
 
+/**
+ * @enum TieConnectStyleType
+ * @brief Enumeration for tie connect style types
+ */
+enum class TieConnectStyleType
+{
+    OverStartPosInner,
+    OverEndPosInner,
+    UnderStartPosInner,
+    UnderEndPosInner,
+    OverHighestNoteStartPosOver,
+    OverHighestNoteEndPosOver,
+    UnderLowestNoteStartPosUnder,
+    UnderLowestNoteEndPosUnder,
+    OverHighestNoteStemStartPosOver,
+    OverHighestNoteStemEndPosOver,
+    UnderLowestNoteStemStartPosUnder,
+    UnderLowestNoteStemEndPosUnder
+};
+
 } // namespace dom
 } // namespace musx

@@ -24,6 +24,8 @@
 #include "musx/musx.h"
 #include "test_utils.h"
 
+using namespace musx::dom;
+
 TEST(TieOptionsTest, PropertiesTest)
 {
     constexpr static musxtest::string_view xml = R"xml(
@@ -77,7 +79,7 @@ TEST(TieOptionsTest, PropertiesTest)
 </finale>
 )xml";
 
-    using TieOptions = musx::dom::options::TieOptions;
+    using TieOptions = options::TieOptions;
 
     auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml);
     auto options = doc->getOptions();
@@ -113,8 +115,8 @@ TEST(TieOptionsTest, PropertiesTest)
     EXPECT_DOUBLE_EQ(tieOptions->tieTipWidth, 0.25);
 
     // Test tie connect styles
-    ASSERT_TRUE(tieOptions->tieConnectStyles.count(TieOptions::ConnectStyleType::OverStartPosInner));
-    const auto& connectStyle = tieOptions->tieConnectStyles.at(TieOptions::ConnectStyleType::OverStartPosInner);
+    ASSERT_TRUE(tieOptions->tieConnectStyles.count(TieConnectStyleType::OverStartPosInner));
+    const auto& connectStyle = tieOptions->tieConnectStyles.at(TieConnectStyleType::OverStartPosInner);
     EXPECT_EQ(connectStyle->offsetX, -4);
     EXPECT_EQ(connectStyle->offsetY, 8);
 

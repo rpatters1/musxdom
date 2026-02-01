@@ -61,6 +61,7 @@ set(MUSX_SRC_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/src/musx/util/ShapeRecognize.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/musx/util/SvgConvert.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/musx/util/TestSupport.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/musx/util/Tie.cpp
 )
 
 # Create a static library for the project
