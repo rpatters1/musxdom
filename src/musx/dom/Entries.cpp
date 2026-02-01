@@ -1058,21 +1058,29 @@ bool EntryInfoPtr::calcUpStemImpl() const
         }
     }
     // cross-staff direction was not part of the 2001 testing, but this seems the right place for it for now.
-    const auto scrollViewStaves = frame->getDocument()->getScrollViewStaves(frame->getRequestedPartId());
-    int foundCrossDirection = 0;
+    const auto staffSystem = frame->getDocument()->calcSystemFromMeasure(frame->getRequestedPartId(), frame->getMeasure());
+    bool foundCrossDirection = false;
+    Evpu maxUpDist = 0;
+    Evpu maxDownDist = 0;
+    const auto baseStaff = createCurrentStaff();
+    const auto baseStaffUsed = frame->getDocument()->getOthers()->get<others::StaffUsed>(frame->getRequestedPartId(), staffSystem->getCmper(), frame->getStaff());
+    const Evpu middlePos = baseStaffUsed->distFromTop - (baseStaff->lineSpace * baseStaff->stemReversal);
     for (auto next = beamStart; next; next = next.getNextInBeamGroup()) {
-        const int currDirection = next.calcCrossStaffDirectionForAll(scrollViewStaves);
-        if (currDirection != 0) {
-            if (foundCrossDirection == 0) {
-                foundCrossDirection = currDirection;
-            } else if (currDirection != foundCrossDirection) {
-                foundCrossDirection = 0;
-                break;
-            }
+        const auto& entry = next->getEntry();
+        for (size_t x = 0; x < entry->notes.size(); x++) {
+            const auto noteInfo = NoteInfoPtr(next, x);
+            const StaffCmper noteStaffId = noteInfo.calcStaff();
+            foundCrossDirection = foundCrossDirection || noteStaffId != frame->getStaff();
+            const auto noteStaffUsed = frame->getDocument()->getOthers()->get<others::StaffUsed>(frame->getRequestedPartId(), staffSystem->getCmper(), noteStaffId);
+            const auto noteStaff = next.createCurrentStaff(noteStaffId);
+            const int staffLine = std::get<3>(noteInfo.calcNotePropertiesInView(/*alwaysUseEntryStaff*/ false));
+            const Evpu notePos = noteStaffUsed->distFromTop - (noteStaff->lineSpace * staffLine);
+            maxUpDist = std::max(notePos, maxUpDist);
+            maxDownDist = std::min(notePos, maxDownDist);
         }
     }
-    if (foundCrossDirection != 0) {
-        return foundCrossDirection < 0; // stem direction is opposite the cross direction, so cross down means stem up.
+    if (foundCrossDirection) {
+        return maxUpDist + maxDownDist < middlePos;
     }
 
     return calcUpStemDefault();
@@ -2024,30 +2032,6 @@ bool EntryInfoPtr::calcIfLayerSettingsApply() const
     return false;
 }
 
-int EntryInfoPtr::calcCrossStaffDirectionForAll(DeferredReference<MusxInstanceList<others::StaffUsed>> staffList) const
-{
-    const auto frame = getFrame();
-
-    if (!staffList) {
-        staffList.emplace(frame->getDocument()->getScrollViewStaves(frame->getRequestedPartId()));
-    }
-
-    int crossStaffDirectionFound = 0;
-    auto entry = (*this)->getEntry();
-    for (size_t x = 0; x < entry->notes.size(); x++) {
-        const auto noteInfo = NoteInfoPtr(*this, x);
-        const int currDirection = noteInfo.calcCrossStaffDirection(staffList);
-        if (currDirection != 0) {
-            if (crossStaffDirectionFound == 0) {
-                crossStaffDirectionFound = currDirection;
-            } else if (currDirection != crossStaffDirectionFound) {
-                return 0; // mixed directions, so short-circuit out
-            }
-        }
-    }
-    return crossStaffDirectionFound;
-}
-
 std::optional<StaffCmper> EntryInfoPtr::calcCrossedStaffForAll() const
 {
     auto entry = (*this)->getEntry();
@@ -2982,7 +2966,7 @@ CurveContourDirection NoteInfoPtr::calcDefaultTieDirection(bool forTieEnd) const
         int stemReversalPos = staff->stemReversal;
         return applyOpposingSeconds((staffPos < stemReversalPos) ? CurveContourDirection::Down : CurveContourDirection::Up);
     }
-    
+
     // Finale’s mixed-stem logic looks ahead/back for an adjacent entry whose stem direction
     // differs from the current stem. We replicate that by checking for adjacent stems before
     // relying on the fallback direction below.
