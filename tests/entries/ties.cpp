@@ -1011,3 +1011,119 @@ TEST(TieDetection, TieConnectStyleTypeForTiesToNowhere)
         checkTieConnectStyleType(NoteInfoPtr(EntryInfoPtr(entryFrame, 0), 3), TieConnectStyleType::OverStartPosInner, TieConnectStyleType::OverEndPosInner);
     }
 }
+
+using CT = details::TieAlterBase::ConnectionType;
+static void checkTieConnectionType(const NoteInfoPtr& startNote, CT expectedStartScroll, CT expectedEndScroll,
+                                   CT expectedStartPage, CT expectedEndPage, bool forTieEnd = false)
+{
+    ASSERT_TRUE(startNote);
+    const auto entryInfo = startNote.getEntryInfo();
+    const std::string tieLabel = "Tie start meas " + std::to_string(entryInfo.getMeasure())
+        + " entryIdx " + std::to_string(entryInfo.getIndexInFrame())
+        + " noteIdx " + std::to_string(startNote.getNoteIndex());
+
+    auto startCtScr = musx::util::Tie::calcConnectionType(startNote, forTieEnd, false, false);
+    auto endCtScr = musx::util::Tie::calcConnectionType(startNote, forTieEnd, true, false);
+    ASSERT_TRUE(startCtScr) << tieLabel << " : scroll view start connection type missing (no tie?)";
+    ASSERT_TRUE(endCtScr) << tieLabel << " : scroll view end connection type missing (no tie?)";
+    EXPECT_EQ(startCtScr, expectedStartScroll) << tieLabel << " : start connect style mismatch";
+    EXPECT_EQ(endCtScr, expectedEndScroll) << tieLabel << " : end connect style mismatch";
+
+    auto startCtPg = musx::util::Tie::calcConnectionType(startNote, forTieEnd, false, true);
+    auto endCtPg = musx::util::Tie::calcConnectionType(startNote, forTieEnd, true, true);
+    ASSERT_TRUE(startCtPg) << tieLabel << " : page view start connection type missing (no tie?)";
+    ASSERT_TRUE(endCtPg) << tieLabel << " : page view end connection type missing (no tie?)";
+    EXPECT_EQ(startCtPg, expectedStartPage) << tieLabel << " : start connect style mismatch";
+    EXPECT_EQ(endCtPg, expectedEndPage) << tieLabel << " : end connect style mismatch";
+};
+
+TEST(TieDetection, TieConnectionType)
+{
+    std::vector<char> xml;
+    musxtest::readFile(musxtest::getInputPath() / "tied_opposite_stems.enigmaxml", xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(xml);
+    ASSERT_TRUE(doc);
+
+    {
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 1);
+        ASSERT_TRUE(gfhold) << " gfhold not found for 1, 1";
+        auto entryFrame = gfhold.createEntryFrame(0);
+        ASSERT_TRUE(entryFrame);
+        checkTieConnectionType(NoteInfoPtr(EntryInfoPtr(entryFrame, 0), 1), CT::NoteRightNoteTop, CT::NoteCenterNoteTop, CT::NoteRightNoteTop, CT::NoteCenterNoteTop);
+    }
+    {
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 2);
+        ASSERT_TRUE(gfhold) << " gfhold not found for 1, 2";
+        auto entryFrame = gfhold.createEntryFrame(0);
+        ASSERT_TRUE(entryFrame);
+        checkTieConnectionType(NoteInfoPtr(EntryInfoPtr(entryFrame, 1), 0), CT::EntryRightNoteCenter, CT::EntryLeftNoteCenter, CT::EntryRightNoteCenter, CT::EntryLeftNoteCenter);
+    }
+    {
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 3);
+        ASSERT_TRUE(gfhold) << " gfhold not found for 1, 3";
+        auto entryFrame = gfhold.createEntryFrame(0);
+        ASSERT_TRUE(entryFrame);
+        checkTieConnectionType(NoteInfoPtr(EntryInfoPtr(entryFrame, 2), 0), CT::NoteCenterNoteBottom, CT::NoteLeftNoteBottom, CT::NoteCenterNoteBottom, CT::NoteLeftNoteBottom);
+        checkTieConnectionType(NoteInfoPtr(EntryInfoPtr(entryFrame, 2), 1), CT::EntryRightNoteCenter, CT::EntryLeftNoteCenter, CT::EntryRightNoteCenter, CT::EntryLeftNoteCenter);
+        checkTieConnectionType(NoteInfoPtr(EntryInfoPtr(entryFrame, 2), 2), CT::EntryRightNoteCenter, CT::EntryLeftNoteCenter, CT::EntryRightNoteCenter, CT::EntryLeftNoteCenter);
+        checkTieConnectionType(NoteInfoPtr(EntryInfoPtr(entryFrame, 2), 3), CT::NoteCenterNoteTop,  CT::NoteCenterNoteTop,  CT::NoteCenterNoteTop,  CT::NoteCenterNoteTop);
+    }
+}
+
+TEST(TieDetection, TieConnectionTypeForTiesToNowhere)
+{
+    std::vector<char> xml;
+    musxtest::readFile(musxtest::getInputPath() / "ties_to_nowhere.enigmaxml", xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(xml);
+    ASSERT_TRUE(doc);
+    // the following results are verified to match the Lua library results, except as noted.
+    {
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 1);
+        ASSERT_TRUE(gfhold) << " gfhold not found for 1, 1";
+        auto entryFrame = gfhold.createEntryFrame(0);
+        ASSERT_TRUE(entryFrame);
+        checkTieConnectionType(NoteInfoPtr(EntryInfoPtr(entryFrame, 0), 0), CT::NoteCenterNoteBottom, CT::NoteLeftNoteBottom, CT::NoteCenterNoteBottom, CT::NoteLeftNoteBottom);
+        checkTieConnectionType(NoteInfoPtr(EntryInfoPtr(entryFrame, 0), 1), CT::EntryRightNoteCenter, CT::EntryLeftNoteCenter, CT::EntryRightNoteCenter, CT::EntryLeftNoteCenter);
+        checkTieConnectionType(NoteInfoPtr(EntryInfoPtr(entryFrame, 0), 2), CT::EntryRightNoteCenter, CT::EntryLeftNoteCenter, CT::EntryRightNoteCenter, CT::EntryLeftNoteCenter);
+        // This result is checked in Finale, even though the endpoint connect style type conflicts with Lua library result (which is note-center rather than note-left)
+        checkTieConnectionType(NoteInfoPtr(EntryInfoPtr(entryFrame, 0), 3), CT::NoteCenterNoteTop, CT::NoteLeftNoteTop, CT::NoteCenterNoteTop, CT::NoteLeftNoteTop);
+    }
+    {
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 2);
+        ASSERT_TRUE(gfhold) << " gfhold not found for 1, 2";
+        auto entryFrame = gfhold.createEntryFrame(0);
+        ASSERT_TRUE(entryFrame);
+        checkTieConnectionType(NoteInfoPtr(EntryInfoPtr(entryFrame, 1), 0), CT::NoteCenterNoteBottom, CT::NoteLeftNoteBottom, CT::NoteCenterNoteBottom, CT::NoteLeftNoteBottom);
+        checkTieConnectionType(NoteInfoPtr(EntryInfoPtr(entryFrame, 1), 1), CT::EntryRightNoteCenter, CT::NoteLeftNoteCenter, CT::EntryRightNoteCenter, CT::NoteLeftNoteCenter);
+        checkTieConnectionType(NoteInfoPtr(EntryInfoPtr(entryFrame, 1), 2), CT::NoteRightNoteCenter, CT::EntryLeftNoteCenter, CT::NoteRightNoteCenter, CT::EntryLeftNoteCenter);
+        checkTieConnectionType(NoteInfoPtr(EntryInfoPtr(entryFrame, 1), 3), CT::NoteCenterNoteTop, CT::NoteLeftNoteTop, CT::NoteCenterNoteTop, CT::NoteLeftNoteTop);
+    }
+    {
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 3);
+        ASSERT_TRUE(gfhold) << " gfhold not found for 1, 3";
+        auto entryFrame = gfhold.createEntryFrame(0);
+        ASSERT_TRUE(entryFrame);
+        checkTieConnectionType(NoteInfoPtr(EntryInfoPtr(entryFrame, 1), 0), CT::NoteCenterNoteBottom, CT::NoteCenterNoteBottom, CT::NoteCenterNoteBottom, CT::SystemEnd);
+        checkTieConnectionType(NoteInfoPtr(EntryInfoPtr(entryFrame, 1), 1), CT::EntryRightNoteCenter, CT::NoteLeftNoteCenter, CT::EntryRightNoteCenter, CT::SystemEnd);
+        checkTieConnectionType(NoteInfoPtr(EntryInfoPtr(entryFrame, 1), 2), CT::NoteRightNoteTop, CT::NoteCenterNoteTop, CT::NoteRightNoteTop, CT::SystemEnd);
+    }
+    {
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 4);
+        ASSERT_TRUE(gfhold) << " gfhold not found for 1, 4";
+        auto entryFrame = gfhold.createEntryFrame(0);
+        ASSERT_TRUE(entryFrame);
+        checkTieConnectionType(NoteInfoPtr(EntryInfoPtr(entryFrame, 0), 0), CT::SystemStart, CT::NoteCenterNoteBottom, CT::SystemStart, CT::NoteCenterNoteBottom, true);
+        checkTieConnectionType(NoteInfoPtr(EntryInfoPtr(entryFrame, 0), 1), CT::SystemStart, CT::NoteLeftNoteCenter, CT::SystemStart, CT::NoteLeftNoteCenter, true);
+        checkTieConnectionType(NoteInfoPtr(EntryInfoPtr(entryFrame, 0), 2), CT::SystemStart, CT::NoteCenterNoteTop, CT::SystemStart, CT::NoteCenterNoteTop, true);
+    }
+    {
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 5);
+        ASSERT_TRUE(gfhold) << " gfhold not found for 1, 1";
+        auto entryFrame = gfhold.createEntryFrame(0);
+        ASSERT_TRUE(entryFrame);
+        checkTieConnectionType(NoteInfoPtr(EntryInfoPtr(entryFrame, 0), 0), CT::EntryRightNoteCenter, CT::EntryLeftNoteCenter, CT::EntryRightNoteCenter, CT::EntryLeftNoteCenter);
+        checkTieConnectionType(NoteInfoPtr(EntryInfoPtr(entryFrame, 0), 1), CT::EntryRightNoteCenter, CT::EntryLeftNoteCenter, CT::EntryRightNoteCenter, CT::EntryLeftNoteCenter);
+        checkTieConnectionType(NoteInfoPtr(EntryInfoPtr(entryFrame, 0), 2), CT::EntryRightNoteCenter, CT::EntryLeftNoteCenter, CT::EntryRightNoteCenter, CT::EntryLeftNoteCenter);
+        checkTieConnectionType(NoteInfoPtr(EntryInfoPtr(entryFrame, 0), 3), CT::EntryRightNoteCenter, CT::EntryLeftNoteCenter, CT::EntryRightNoteCenter, CT::EntryLeftNoteCenter);
+    }
+}
