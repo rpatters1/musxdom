@@ -104,7 +104,7 @@ var searchData=
   ['tibetancymbals_101',['TibetanCymbals',['../namespacemusx_1_1dom_1_1uuid.html#a1d8fb75ee6324c8e5f8f57dcce2d2dbf',1,'musx::dom::uuid']]],
   ['tibetansingingbowls_102',['TibetanSingingBowls',['../namespacemusx_1_1dom_1_1uuid.html#a118fedbc9580358173a05470ef5062af',1,'musx::dom::uuid']]],
   ['tictocblock_103',['TicTocBlock',['../namespacemusx_1_1dom_1_1uuid.html#a2869663972531fecf28e255fc5efc9e7',1,'musx::dom::uuid']]],
-  ['tieconnectstyles_104',['tieConnectStyles',['../classmusx_1_1dom_1_1options_1_1TieOptions.html#a6ca3ddcea30621fa17fb9a27e9d548a3',1,'musx::dom::options::TieOptions']]],
+  ['tieconnectstyles_104',['tieConnectStyles',['../classmusx_1_1dom_1_1options_1_1TieOptions.html#ae6c8ccad01306b039fd2a47325869889',1,'musx::dom::options::TieOptions']]],
   ['tiecontrolstyles_105',['tieControlStyles',['../classmusx_1_1dom_1_1options_1_1TieOptions.html#af2a8f568f0e7a5e47db7ea3f4c944a52',1,'musx::dom::options::TieOptions']]],
   ['tieend_106',['tieEnd',['../classmusx_1_1dom_1_1Note.html#a6f312eed82f216e8b14500319fa36549',1,'musx::dom::Note']]],
   ['tiestart_107',['tieStart',['../classmusx_1_1dom_1_1Note.html#a8020db4ad0f674e86e386af23a6d0eca',1,'musx::dom::Note']]],

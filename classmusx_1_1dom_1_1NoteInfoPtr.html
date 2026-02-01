@@ -156,12 +156,15 @@ size_t&#160;</td><td class="memItemRight" valign="bottom"><b>getNoteIndex</b> ()
 <tr class="memitem:a8d4472ff1bfd27358ea69f33a3e82d18" id="r_a8d4472ff1bfd27358ea69f33a3e82d18"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html">NoteInfoPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html#a8d4472ff1bfd27358ea69f33a3e82d18">calcTieFrom</a> (bool requireTie=true) const</td></tr>
 <tr class="memdesc:a8d4472ff1bfd27358ea69f33a3e82d18"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the note that this note could tie from.  <br /></td></tr>
 <tr class="separator:a8d4472ff1bfd27358ea69f33a3e82d18"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa850aaccc99a73cbd2dc1c9a473bb7eb" id="r_aa850aaccc99a73cbd2dc1c9a473bb7eb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemusx_1_1dom.html#a0dc36a86e1ae0cadd7b7e4c624b07b55">CurveContourDirection</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html#aa850aaccc99a73cbd2dc1c9a473bb7eb">calcDefaultTieDirection</a> (bool forTieEnd=false) const</td></tr>
-<tr class="memdesc:aa850aaccc99a73cbd2dc1c9a473bb7eb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the default tie direction for this note.  <br /></td></tr>
-<tr class="separator:aa850aaccc99a73cbd2dc1c9a473bb7eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a654c741b643fecacb1be670e79c729f1" id="r_a654c741b643fecacb1be670e79c729f1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemusx_1_1dom.html#a0dc36a86e1ae0cadd7b7e4c624b07b55">CurveContourDirection</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html#a654c741b643fecacb1be670e79c729f1">calcEffectiveTieDirection</a> (bool forTieEnd=false) const</td></tr>
 <tr class="memdesc:a654c741b643fecacb1be670e79c729f1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the effective tie direction for this note, taking into account all options and overrides.  <br /></td></tr>
 <tr class="separator:a654c741b643fecacb1be670e79c729f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa8d4784bb1418f49c677a9e6d95b95de" id="r_aa8d4784bb1418f49c677a9e6d95b95de"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html#aa8d4784bb1418f49c677a9e6d95b95de">calcHasOuterTie</a> (bool forTieEnd=false) const</td></tr>
+<tr class="memdesc:aa8d4784bb1418f49c677a9e6d95b95de"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines whether this note has an outer tie at the specified endpoint.  <br /></td></tr>
+<tr class="separator:aa8d4784bb1418f49c677a9e6d95b95de"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a33fc628d0949601ef6f8cc6a083e9afe" id="r_a33fc628d0949601ef6f8cc6a083e9afe"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html#a33fc628d0949601ef6f8cc6a083e9afe">calcHasInnerTie</a> (bool forTieEnd=false) const</td></tr>
+<tr class="memdesc:a33fc628d0949601ef6f8cc6a083e9afe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines whether this note has an inner tie at the specified endpoint.  <br /></td></tr>
+<tr class="separator:a33fc628d0949601ef6f8cc6a083e9afe"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a47410cd12a40e392c789ffc3c265b264" id="r_a47410cd12a40e392c789ffc3c265b264"><td class="memItemLeft" align="right" valign="top"><a id="a47410cd12a40e392c789ffc3c265b264" name="a47410cd12a40e392c789ffc3c265b264"></a>
 <a class="el" href="namespacemusx_1_1dom.html#ada2c0787f5b7cb764d2a344d491ab99c">StaffCmper</a>&#160;</td><td class="memItemRight" valign="bottom"><b>calcStaff</b> () const</td></tr>
 <tr class="memdesc:a47410cd12a40e392c789ffc3c265b264"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the staff number, taking into account cross staffing. <br /></td></tr>
@@ -192,6 +195,12 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>calcIsEnharmonicRespe
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>calcIsIncludedInVoicing</b> () const</td></tr>
 <tr class="memdesc:aa078714d4ad095bd9be5da204e9bc438"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if this note is included in the part voicing. This function returns the correct value even if the document's <code>PartVoicingPolicy</code> is to ignore part voicing. <br /></td></tr>
 <tr class="separator:aa078714d4ad095bd9be5da204e9bc438"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae5c74d24751ea19781ea5c0b812b5b08" id="r_ae5c74d24751ea19781ea5c0b812b5b08"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html#ae5c74d24751ea19781ea5c0b812b5b08">calcIsTop</a> () const</td></tr>
+<tr class="memdesc:ae5c74d24751ea19781ea5c0b812b5b08"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return true if this is the top note in the entry.  <br /></td></tr>
+<tr class="separator:ae5c74d24751ea19781ea5c0b812b5b08"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6043bdd2ea1ce370c5d4d31acd455f73" id="r_a6043bdd2ea1ce370c5d4d31acd455f73"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html#a6043bdd2ea1ce370c5d4d31acd455f73">calcIsBottom</a> () const</td></tr>
+<tr class="memdesc:a6043bdd2ea1ce370c5d4d31acd455f73"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return true if this is the bottom note in the entry.  <br /></td></tr>
+<tr class="separator:a6043bdd2ea1ce370c5d4d31acd455f73"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a86d9a28c8d013692c8e06d6624ae3bbf" id="r_a86d9a28c8d013692c8e06d6624ae3bbf"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html">NoteInfoPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html#a86d9a28c8d013692c8e06d6624ae3bbf">calcArpeggiatedTieToNote</a> (<a class="el" href="namespacemusx_1_1dom.html#a0dc36a86e1ae0cadd7b7e4c624b07b55">CurveContourDirection</a> *tieDirection=nullptr) const</td></tr>
 <tr class="memdesc:a86d9a28c8d013692c8e06d6624ae3bbf"><td class="mdescLeft">&#160;</td><td class="mdescRight">If this note has a smart shape acting as an arpeggio tie, return the tied-to note. If this note is part of a chord, the function always returns null.  <br /></td></tr>
 <tr class="separator:a86d9a28c8d013692c8e06d6624ae3bbf"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -346,33 +355,6 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>calcIsIncludedInVoici
 
 </div>
 </div>
-<a id="aa850aaccc99a73cbd2dc1c9a473bb7eb" name="aa850aaccc99a73cbd2dc1c9a473bb7eb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa850aaccc99a73cbd2dc1c9a473bb7eb">&#9670;&#160;</a></span>calcDefaultTieDirection()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="namespacemusx_1_1dom.html#a0dc36a86e1ae0cadd7b7e4c624b07b55">CurveContourDirection</a> musx::dom::NoteInfoPtr::calcDefaultTieDirection </td>
-          <td>(</td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>forTieEnd</em> = <code>false</code></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Calculates the default tie direction for this note. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">forTieEnd</td><td>If <code>forTieEnd</code> is true, the direction for the tie-end stub on this note is returned. Otherwise the direction for the tie starting on this note is returned. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>The contour direction that applies to the tie, or <a class="el" href="namespacemusx_1_1dom.html#a0dc36a86e1ae0cadd7b7e4c624b07b55a6fcdc090caeade09d0efd6253932b6f5" title="contour is automatic, indeterminate, or does not apply">CurveContourDirection::Unspecified</a> when the contour cannot be determined. </dd></dl>
-
-</div>
-</div>
 <a id="a654c741b643fecacb1be670e79c729f1" name="a654c741b643fecacb1be670e79c729f1"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a654c741b643fecacb1be670e79c729f1">&#9670;&#160;</a></span>calcEffectiveTieDirection()</h2>
 
@@ -397,6 +379,62 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>calcIsIncludedInVoici
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The contour direction that applies to the tie, or <a class="el" href="namespacemusx_1_1dom.html#a0dc36a86e1ae0cadd7b7e4c624b07b55a6fcdc090caeade09d0efd6253932b6f5" title="contour is automatic, indeterminate, or does not apply">CurveContourDirection::Unspecified</a> when the contour cannot be determined. </dd></dl>
+
+</div>
+</div>
+<a id="a33fc628d0949601ef6f8cc6a083e9afe" name="a33fc628d0949601ef6f8cc6a083e9afe"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a33fc628d0949601ef6f8cc6a083e9afe">&#9670;&#160;</a></span>calcHasInnerTie()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool musx::dom::NoteInfoPtr::calcHasInnerTie </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>forTieEnd</em> = <code>false</code></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Determines whether this note has an inner tie at the specified endpoint. </p>
+<p>If the note does not participate in a tie at the specified endpoint, this function returns false.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">forTieEnd</td><td>True to examine the tie end; false to examine the tie start. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True if the note has an inner tie at the specified endpoint; false if there is no tie or the tie is outer. </dd></dl>
+
+</div>
+</div>
+<a id="aa8d4784bb1418f49c677a9e6d95b95de" name="aa8d4784bb1418f49c677a9e6d95b95de"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa8d4784bb1418f49c677a9e6d95b95de">&#9670;&#160;</a></span>calcHasOuterTie()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool musx::dom::NoteInfoPtr::calcHasOuterTie </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>forTieEnd</em> = <code>false</code></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Determines whether this note has an outer tie at the specified endpoint. </p>
+<p>If the note does not participate in a tie at the specified endpoint, this function returns false.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">forTieEnd</td><td>True to examine the tie end; false to examine the tie start. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True if the note has an outer tie at the specified endpoint; false if there is no tie or the tie is inner. </dd></dl>
 
 </div>
 </div>
@@ -454,6 +492,26 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>calcIsIncludedInVoici
 
 </div>
 </div>
+<a id="a6043bdd2ea1ce370c5d4d31acd455f73" name="a6043bdd2ea1ce370c5d4d31acd455f73"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6043bdd2ea1ce370c5d4d31acd455f73">&#9670;&#160;</a></span>calcIsBottom()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool musx::dom::NoteInfoPtr::calcIsBottom </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Return true if this is the bottom note in the entry. </p>
+<dl class="section note"><dt>Note</dt><dd>This function takes part voicing into account if the document's part voicing policy is <a class="el" href="namespacemusx_1_1dom.html#a8ff59967b46549e150ea4f524c00de95a9639e32cab248434a17ab32237cb3b71">PartVoicingPolicy::Apply</a>. </dd></dl>
+
+</div>
+</div>
 <a id="a84f3b5f320d4e1dd16a71d82a3db7a4a" name="a84f3b5f320d4e1dd16a71d82a3db7a4a"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a84f3b5f320d4e1dd16a71d82a3db7a4a">&#9670;&#160;</a></span>calcIsEnharmonicRespellInAnyPart()</h2>
 
@@ -471,6 +529,26 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>calcIsIncludedInVoici
 
 <p>Calculates if any linked part has this note enharmonically respelled. </p>
 <dl class="section return"><dt>Returns</dt><dd>True if a part exists with the note enharmonically respelled, otherwise false. </dd></dl>
+
+</div>
+</div>
+<a id="ae5c74d24751ea19781ea5c0b812b5b08" name="ae5c74d24751ea19781ea5c0b812b5b08"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae5c74d24751ea19781ea5c0b812b5b08">&#9670;&#160;</a></span>calcIsTop()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool musx::dom::NoteInfoPtr::calcIsTop </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Return true if this is the top note in the entry. </p>
+<dl class="section note"><dt>Note</dt><dd>This function takes part voicing into account if the document's part voicing policy is <a class="el" href="namespacemusx_1_1dom.html#a8ff59967b46549e150ea4f524c00de95a9639e32cab248434a17ab32237cb3b71">PartVoicingPolicy::Apply</a>. </dd></dl>
 
 </div>
 </div>

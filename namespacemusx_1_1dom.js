@@ -990,6 +990,20 @@ var namespacemusx_1_1dom =
       [ "Never", "namespacemusx_1_1dom.html#a09b81b6535bd382e3afc1a00ba080215a6e7b34fa59e1bd229b207892956dc41c", null ],
       [ "Always", "namespacemusx_1_1dom.html#a09b81b6535bd382e3afc1a00ba080215a68eec46437c384d8dad18d5464ebc35c", null ]
     ] ],
+    [ "TieConnectStyleType", "namespacemusx_1_1dom.html#a5f06724a2f55f38e74adc2f8d37e20d5", [
+      [ "OverStartPosInner", "namespacemusx_1_1dom.html#a5f06724a2f55f38e74adc2f8d37e20d5a3639d2ca739f8a1a16e7fa7bd801c46c", null ],
+      [ "OverEndPosInner", "namespacemusx_1_1dom.html#a5f06724a2f55f38e74adc2f8d37e20d5a6368a13c1e700dccd33860fb6245afa8", null ],
+      [ "UnderStartPosInner", "namespacemusx_1_1dom.html#a5f06724a2f55f38e74adc2f8d37e20d5a205ed4071bdcb7c13498c39f2609aab4", null ],
+      [ "UnderEndPosInner", "namespacemusx_1_1dom.html#a5f06724a2f55f38e74adc2f8d37e20d5a030032d5979564f0099dd1164b7ef5d6", null ],
+      [ "OverHighestNoteStartPosOver", "namespacemusx_1_1dom.html#a5f06724a2f55f38e74adc2f8d37e20d5a4b0d8e9da020225b93c5468956b126c6", null ],
+      [ "OverHighestNoteEndPosOver", "namespacemusx_1_1dom.html#a5f06724a2f55f38e74adc2f8d37e20d5aa2d88808afd8056f7dc570cb007892d3", null ],
+      [ "UnderLowestNoteStartPosUnder", "namespacemusx_1_1dom.html#a5f06724a2f55f38e74adc2f8d37e20d5ae66d50fd77b0a49bacf0230b90deea56", null ],
+      [ "UnderLowestNoteEndPosUnder", "namespacemusx_1_1dom.html#a5f06724a2f55f38e74adc2f8d37e20d5ab9fdd5d06d42d6378bea5c17a3572df5", null ],
+      [ "OverHighestNoteStemStartPosOver", "namespacemusx_1_1dom.html#a5f06724a2f55f38e74adc2f8d37e20d5a89dfa04d6c9218bdfe2f2923b8398a67", null ],
+      [ "OverHighestNoteStemEndPosOver", "namespacemusx_1_1dom.html#a5f06724a2f55f38e74adc2f8d37e20d5aebfa053d4d5bb9b0ddcfcb33618c6e1f", null ],
+      [ "UnderLowestNoteStemStartPosUnder", "namespacemusx_1_1dom.html#a5f06724a2f55f38e74adc2f8d37e20d5a457c58fc1848107d6ad8c04803bb935e", null ],
+      [ "UnderLowestNoteStemEndPosUnder", "namespacemusx_1_1dom.html#a5f06724a2f55f38e74adc2f8d37e20d5a94509c4a4583aded1d9589fecadb779f", null ]
+    ] ],
     [ "calcDurationInfoFromEdu", "namespacemusx_1_1dom.html#ad70355206e90c7b79b7860fc5d75bff0", null ],
     [ "calcNumberOfBeamsInEdu", "namespacemusx_1_1dom.html#aa75d341865ea5c3e1a8fcb735ea5e51b", null ],
     [ "BASE_SYSTEM_ID", "namespacemusx_1_1dom.html#ac87f0744ae26e5eb9f08d9615fc15bc5", null ],

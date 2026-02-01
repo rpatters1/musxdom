@@ -418,6 +418,7 @@ var hierarchy =
     ] ],
     [ "musx::util::TestConfiguration", "classmusx_1_1util_1_1TestConfiguration.html", null ],
     [ "musx::dom::TextsPool", "classmusx_1_1dom_1_1TextsPool.html", null ],
+    [ "musx::util::Tie", "classmusx_1_1util_1_1Tie.html", null ],
     [ "musx::dom::TimeSignature::TimeSigComponent", "structmusx_1_1dom_1_1TimeSignature_1_1TimeSigComponent.html", null ],
     [ "music_theory::Transposer", "classmusic__theory_1_1Transposer.html", null ],
     [ "musx::dom::EntryFrame::TupletInfo", "structmusx_1_1dom_1_1EntryFrame_1_1TupletInfo.html", null ],

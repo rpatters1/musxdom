@@ -162,25 +162,6 @@ Public Types</h2></td></tr>
  }</td></tr>
 <tr class="memdesc:aa595700238a8bcb2327afec614f402cf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enumeration for inset styles.  <a href="classmusx_1_1dom_1_1options_1_1TieOptions.html#aa595700238a8bcb2327afec614f402cf">More...</a><br /></td></tr>
 <tr class="separator:aa595700238a8bcb2327afec614f402cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9cb29136be1eb3d2571c1e93bd678e59" id="r_a9cb29136be1eb3d2571c1e93bd678e59"><td class="memItemLeft" align="right" valign="top"><a id="a9cb29136be1eb3d2571c1e93bd678e59" name="a9cb29136be1eb3d2571c1e93bd678e59"></a>enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1options_1_1TieOptions.html#a9cb29136be1eb3d2571c1e93bd678e59">ConnectStyleType</a> { <br />
-&#160;&#160;<b>OverStartPosInner</b>
-, <b>OverEndPosInner</b>
-, <b>UnderStartPosInner</b>
-, <b>UnderEndPosInner</b>
-, <br />
-&#160;&#160;<b>OverHighestNoteStartPosOver</b>
-, <b>OverHighestNoteEndPosOver</b>
-, <b>UnderLowestNoteStartPosUnder</b>
-, <b>UnderLowestNoteEndPosUnder</b>
-, <br />
-&#160;&#160;<b>OverHighestNoteStemStartPosOver</b>
-, <b>OverHighestNoteStemEndPosOver</b>
-, <b>UnderLowestNoteStemStartPosUnder</b>
-, <b>UnderLowestNoteStemEndPosUnder</b>
-<br />
- }</td></tr>
-<tr class="memdesc:a9cb29136be1eb3d2571c1e93bd678e59"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enumeration for tie connect style types. <br /></td></tr>
-<tr class="separator:a9cb29136be1eb3d2571c1e93bd678e59"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac17e09ac7e1de61a6afa2b6638806555" id="r_ac17e09ac7e1de61a6afa2b6638806555"><td class="memItemLeft" align="right" valign="top"><a id="ac17e09ac7e1de61a6afa2b6638806555" name="ac17e09ac7e1de61a6afa2b6638806555"></a>enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1options_1_1TieOptions.html#ac17e09ac7e1de61a6afa2b6638806555">ControlStyleType</a> { <b>ShortSpan</b>
 , <b>MediumSpan</b>
 , <b>LongSpan</b>
@@ -349,10 +330,10 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>avoidStaffLinesOnly</
 <a class="el" href="namespacemusx_1_1dom.html#a901fc57f5455ae033180b2401434b6a9">EvpuFloat</a>&#160;</td><td class="memItemRight" valign="bottom"><b>tieTipWidth</b> {}</td></tr>
 <tr class="memdesc:ad39fb64daf1e6a8d96a7bfa47db0b824"><td class="mdescLeft">&#160;</td><td class="mdescRight">Width of the tie tip. <br /></td></tr>
 <tr class="separator:ad39fb64daf1e6a8d96a7bfa47db0b824"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6ca3ddcea30621fa17fb9a27e9d548a3" id="r_a6ca3ddcea30621fa17fb9a27e9d548a3"><td class="memItemLeft" align="right" valign="top"><a id="a6ca3ddcea30621fa17fb9a27e9d548a3" name="a6ca3ddcea30621fa17fb9a27e9d548a3"></a>
-std::unordered_map&lt; <a class="el" href="classmusx_1_1dom_1_1options_1_1TieOptions.html#a9cb29136be1eb3d2571c1e93bd678e59">ConnectStyleType</a>, std::shared_ptr&lt; <a class="el" href="structmusx_1_1dom_1_1options_1_1TieOptions_1_1ConnectStyle.html">ConnectStyle</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>tieConnectStyles</b></td></tr>
-<tr class="memdesc:a6ca3ddcea30621fa17fb9a27e9d548a3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tie connect styles. <br /></td></tr>
-<tr class="separator:a6ca3ddcea30621fa17fb9a27e9d548a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae6c8ccad01306b039fd2a47325869889" id="r_ae6c8ccad01306b039fd2a47325869889"><td class="memItemLeft" align="right" valign="top"><a id="ae6c8ccad01306b039fd2a47325869889" name="ae6c8ccad01306b039fd2a47325869889"></a>
+std::unordered_map&lt; <a class="el" href="namespacemusx_1_1dom.html#a5f06724a2f55f38e74adc2f8d37e20d5">TieConnectStyleType</a>, std::shared_ptr&lt; <a class="el" href="structmusx_1_1dom_1_1options_1_1TieOptions_1_1ConnectStyle.html">ConnectStyle</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>tieConnectStyles</b></td></tr>
+<tr class="memdesc:ae6c8ccad01306b039fd2a47325869889"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tie connect styles. <br /></td></tr>
+<tr class="separator:ae6c8ccad01306b039fd2a47325869889"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af2a8f568f0e7a5e47db7ea3f4c944a52" id="r_af2a8f568f0e7a5e47db7ea3f4c944a52"><td class="memItemLeft" align="right" valign="top"><a id="af2a8f568f0e7a5e47db7ea3f4c944a52" name="af2a8f568f0e7a5e47db7ea3f4c944a52"></a>
 std::unordered_map&lt; <a class="el" href="classmusx_1_1dom_1_1options_1_1TieOptions.html#ac17e09ac7e1de61a6afa2b6638806555">ControlStyleType</a>, std::shared_ptr&lt; <a class="el" href="structmusx_1_1dom_1_1options_1_1TieOptions_1_1ControlStyle.html">ControlStyle</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>tieControlStyles</b></td></tr>
 <tr class="memdesc:af2a8f568f0e7a5e47db7ea3f4c944a52"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tie control styles. <br /></td></tr>

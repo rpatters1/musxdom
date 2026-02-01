@@ -8,20 +8,6 @@ var classmusx_1_1dom_1_1options_1_1TieOptions =
       [ "StemReversal", "classmusx_1_1dom_1_1options_1_1TieOptions.html#a8e717bcfa8a196892b462c27ccb5084fa0674e7e4fbd13db5049c5f7b8847bbd2", null ],
       [ "SplitEvenly", "classmusx_1_1dom_1_1options_1_1TieOptions.html#a8e717bcfa8a196892b462c27ccb5084fab9e279a647b045b9b8046f152ce466e5", null ]
     ] ],
-    [ "ConnectStyleType", "classmusx_1_1dom_1_1options_1_1TieOptions.html#a9cb29136be1eb3d2571c1e93bd678e59", [
-      [ "OverStartPosInner", "classmusx_1_1dom_1_1options_1_1TieOptions.html#a9cb29136be1eb3d2571c1e93bd678e59a3639d2ca739f8a1a16e7fa7bd801c46c", null ],
-      [ "OverEndPosInner", "classmusx_1_1dom_1_1options_1_1TieOptions.html#a9cb29136be1eb3d2571c1e93bd678e59a6368a13c1e700dccd33860fb6245afa8", null ],
-      [ "UnderStartPosInner", "classmusx_1_1dom_1_1options_1_1TieOptions.html#a9cb29136be1eb3d2571c1e93bd678e59a205ed4071bdcb7c13498c39f2609aab4", null ],
-      [ "UnderEndPosInner", "classmusx_1_1dom_1_1options_1_1TieOptions.html#a9cb29136be1eb3d2571c1e93bd678e59a030032d5979564f0099dd1164b7ef5d6", null ],
-      [ "OverHighestNoteStartPosOver", "classmusx_1_1dom_1_1options_1_1TieOptions.html#a9cb29136be1eb3d2571c1e93bd678e59a4b0d8e9da020225b93c5468956b126c6", null ],
-      [ "OverHighestNoteEndPosOver", "classmusx_1_1dom_1_1options_1_1TieOptions.html#a9cb29136be1eb3d2571c1e93bd678e59aa2d88808afd8056f7dc570cb007892d3", null ],
-      [ "UnderLowestNoteStartPosUnder", "classmusx_1_1dom_1_1options_1_1TieOptions.html#a9cb29136be1eb3d2571c1e93bd678e59ae66d50fd77b0a49bacf0230b90deea56", null ],
-      [ "UnderLowestNoteEndPosUnder", "classmusx_1_1dom_1_1options_1_1TieOptions.html#a9cb29136be1eb3d2571c1e93bd678e59ab9fdd5d06d42d6378bea5c17a3572df5", null ],
-      [ "OverHighestNoteStemStartPosOver", "classmusx_1_1dom_1_1options_1_1TieOptions.html#a9cb29136be1eb3d2571c1e93bd678e59a89dfa04d6c9218bdfe2f2923b8398a67", null ],
-      [ "OverHighestNoteStemEndPosOver", "classmusx_1_1dom_1_1options_1_1TieOptions.html#a9cb29136be1eb3d2571c1e93bd678e59aebfa053d4d5bb9b0ddcfcb33618c6e1f", null ],
-      [ "UnderLowestNoteStemStartPosUnder", "classmusx_1_1dom_1_1options_1_1TieOptions.html#a9cb29136be1eb3d2571c1e93bd678e59a457c58fc1848107d6ad8c04803bb935e", null ],
-      [ "UnderLowestNoteStemEndPosUnder", "classmusx_1_1dom_1_1options_1_1TieOptions.html#a9cb29136be1eb3d2571c1e93bd678e59a94509c4a4583aded1d9589fecadb779f", null ]
-    ] ],
     [ "ControlStyleType", "classmusx_1_1dom_1_1options_1_1TieOptions.html#ac17e09ac7e1de61a6afa2b6638806555", [
       [ "ShortSpan", "classmusx_1_1dom_1_1options_1_1TieOptions.html#ac17e09ac7e1de61a6afa2b6638806555a7b7ce44994a4a2997770c417296af75c", null ],
       [ "MediumSpan", "classmusx_1_1dom_1_1options_1_1TieOptions.html#ac17e09ac7e1de61a6afa2b6638806555a80fdef3032cbe7ee9d0cb47d2bbbb4c4", null ],
@@ -68,7 +54,7 @@ var classmusx_1_1dom_1_1options_1_1TieOptions =
     [ "sysBreakRightHAdj", "classmusx_1_1dom_1_1options_1_1TieOptions.html#a2dc87591249516806fc6715fc8027fbf", null ],
     [ "thicknessLeft", "classmusx_1_1dom_1_1options_1_1TieOptions.html#a7c217116ab40e0eb3fb251a6ff0a9976", null ],
     [ "thicknessRight", "classmusx_1_1dom_1_1options_1_1TieOptions.html#ac7d6eeac85d43967a0473f0bd7e15fa2", null ],
-    [ "tieConnectStyles", "classmusx_1_1dom_1_1options_1_1TieOptions.html#a6ca3ddcea30621fa17fb9a27e9d548a3", null ],
+    [ "tieConnectStyles", "classmusx_1_1dom_1_1options_1_1TieOptions.html#ae6c8ccad01306b039fd2a47325869889", null ],
     [ "tieControlStyles", "classmusx_1_1dom_1_1options_1_1TieOptions.html#af2a8f568f0e7a5e47db7ea3f4c944a52", null ],
     [ "tieTipWidth", "classmusx_1_1dom_1_1options_1_1TieOptions.html#ad39fb64daf1e6a8d96a7bfa47db0b824", null ],
     [ "useInterpolation", "classmusx_1_1dom_1_1options_1_1TieOptions.html#afff69dbeb165745b5fc54a8f5446d2e2", null ],

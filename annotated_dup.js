@@ -294,7 +294,8 @@ var annotated_dup =
         [ "Fraction", "classmusx_1_1util_1_1Fraction.html", "classmusx_1_1util_1_1Fraction" ],
         [ "Logger", "classmusx_1_1util_1_1Logger.html", "classmusx_1_1util_1_1Logger" ],
         [ "SvgConvert", "classmusx_1_1util_1_1SvgConvert.html", "classmusx_1_1util_1_1SvgConvert" ],
-        [ "TestConfiguration", "classmusx_1_1util_1_1TestConfiguration.html", null ]
+        [ "TestConfiguration", "classmusx_1_1util_1_1TestConfiguration.html", null ],
+        [ "Tie", "classmusx_1_1util_1_1Tie.html", null ]
       ] ],
       [ "utils", null, [
         [ "PseudoTieShapeInfo", "structmusx_1_1utils_1_1PseudoTieShapeInfo.html", "structmusx_1_1utils_1_1PseudoTieShapeInfo" ]
