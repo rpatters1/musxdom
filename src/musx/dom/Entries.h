@@ -603,6 +603,12 @@ public:
     [[nodiscard]]
     bool calcContainsPitchContent(const EntryInfoPtr& src, bool compareConcert = true) const;
 
+    /// @brief Returns a NoteInfoPtr for the note specified by @p noteId within this entry.
+    /// @param noteId The note to find.
+    /// @return A NoteInfoPtr corresponding to the input noteId or null if the note is not in the requested entry.
+    [[nodiscard]]
+    NoteInfoPtr findNoteId(NoteNumber noteId) const;
+
     /// @brief Returns the frame.
     [[nodiscard]] std::shared_ptr<const EntryFrame> getFrame() const { return m_entryFrame; }
 
