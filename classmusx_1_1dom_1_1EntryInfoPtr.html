@@ -155,6 +155,9 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>getVoice</b> () const<
 <tr class="memitem:a32be4982c899aa9232fa353654cb3a92" id="r_a32be4982c899aa9232fa353654cb3a92"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#a32be4982c899aa9232fa353654cb3a92">calcContainsPitchContent</a> (const <a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a> &amp;src, bool compareConcert=true) const</td></tr>
 <tr class="memdesc:a32be4982c899aa9232fa353654cb3a92"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns whether <code>src</code> represent the same notated value.  <br /></td></tr>
 <tr class="separator:a32be4982c899aa9232fa353654cb3a92"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad256c6ed3d341ea3e8a7bcc9328939c7" id="r_ad256c6ed3d341ea3e8a7bcc9328939c7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html">NoteInfoPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#ad256c6ed3d341ea3e8a7bcc9328939c7">findNoteId</a> (<a class="el" href="namespacemusx_1_1dom.html#ab7553a97242f576eaef75f3e2197d5be">NoteNumber</a> noteId) const</td></tr>
+<tr class="memdesc:ad256c6ed3d341ea3e8a7bcc9328939c7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a <a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html" title="Wraps an EntryInfo instance and a note index.">NoteInfoPtr</a> for the note specified by <code>noteId</code> within this entry.  <br /></td></tr>
+<tr class="separator:ad256c6ed3d341ea3e8a7bcc9328939c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a87802553e72c2d71f8e23f4cb01f6a56" id="r_a87802553e72c2d71f8e23f4cb01f6a56"><td class="memItemLeft" align="right" valign="top"><a id="a87802553e72c2d71f8e23f4cb01f6a56" name="a87802553e72c2d71f8e23f4cb01f6a56"></a>
 std::shared_ptr&lt; const <a class="el" href="classmusx_1_1dom_1_1EntryFrame.html">EntryFrame</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getFrame</b> () const</td></tr>
 <tr class="memdesc:a87802553e72c2d71f8e23f4cb01f6a56"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the frame. <br /></td></tr>
@@ -1385,6 +1388,33 @@ Static Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The main entry if found. If the grace note is at the end of a measure or v2 sequence, or if ignoring rests and the next non-grace is a rest, returns null. Also returns null if this is not a grace note. </dd></dl>
 <p>and then the main note has a corresponding v2 sequence at the same elapsed duration.)</p>
+
+</div>
+</div>
+<a id="ad256c6ed3d341ea3e8a7bcc9328939c7" name="ad256c6ed3d341ea3e8a7bcc9328939c7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad256c6ed3d341ea3e8a7bcc9328939c7">&#9670;&#160;</a></span>findNoteId()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html">NoteInfoPtr</a> musx::dom::EntryInfoPtr::findNoteId </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespacemusx_1_1dom.html#ab7553a97242f576eaef75f3e2197d5be">NoteNumber</a>&#160;</td>
+          <td class="paramname"><em>noteId</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns a <a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html" title="Wraps an EntryInfo instance and a note index.">NoteInfoPtr</a> for the note specified by <code>noteId</code> within this entry. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">noteId</td><td>The note to find. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A <a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html" title="Wraps an EntryInfo instance and a note index.">NoteInfoPtr</a> corresponding to the input noteId or null if the note is not in the requested entry. </dd></dl>
 
 </div>
 </div>

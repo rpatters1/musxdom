@@ -57,6 +57,7 @@ var classmusx_1_1dom_1_1EntryInfoPtr =
     [ "findDisplayEntryForBeamOverBarline", "classmusx_1_1dom_1_1EntryInfoPtr.html#aba9a0999ab9a7395e0f6520840a92fa5", null ],
     [ "findHiddenSourceForBeamOverBarline", "classmusx_1_1dom_1_1EntryInfoPtr.html#a59c0b80e223e99f95a8fd7682e527f98", null ],
     [ "findMainEntryForGraceNote", "classmusx_1_1dom_1_1EntryInfoPtr.html#a11a03b83916995c156d7f6dcdb60a49a", null ],
+    [ "findNoteId", "classmusx_1_1dom_1_1EntryInfoPtr.html#ad256c6ed3d341ea3e8a7bcc9328939c7", null ],
     [ "findTupletInfo", "classmusx_1_1dom_1_1EntryInfoPtr.html#afd810deb36d0bf21b99d27486533ba21", null ],
     [ "getFrame", "classmusx_1_1dom_1_1EntryInfoPtr.html#a87802553e72c2d71f8e23f4cb01f6a56", null ],
     [ "getIndexInFrame", "classmusx_1_1dom_1_1EntryInfoPtr.html#a11f59be0da355d4fc06ed79f4465f067", null ],
