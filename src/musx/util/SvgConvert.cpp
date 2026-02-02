@@ -209,8 +209,6 @@ struct Transform
     }
 };
 
-const Transform kFlipY{1.0, 0.0, 0.0, -1.0, 0.0, 0.0};
-
 double toEvpuDouble(dom::Evpu value)
 {
     return static_cast<double>(value);
