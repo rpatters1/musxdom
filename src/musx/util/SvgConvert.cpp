@@ -73,17 +73,6 @@ struct Bounds
         include({b.x, a.y});
     }
 
-    void expand(double delta)
-    {
-        if (!hasValue) {
-            return;
-        }
-        minX -= delta;
-        minY -= delta;
-        maxX += delta;
-        maxY += delta;
-    }
-
     bool hasValue{};
     double minX{};
     double minY{};
@@ -119,17 +108,6 @@ public:
     void curveTo(const Point& c1, const Point& c2, const Point& pt)
     {
         appendCommand("C", c1.x, c1.y, c2.x, c2.y, pt.x, pt.y);
-    }
-
-    void arcTo(double rx, double ry, double xAxisRotation, bool largeArc, bool sweep, const Point& pt)
-    {
-        if (m_hasData) {
-            m_stream << ' ';
-        }
-        m_stream << 'A' << ' ' << rx << ' ' << ry << ' ' << xAxisRotation << ' '
-                 << (largeArc ? 1 : 0) << ' ' << (sweep ? 1 : 0) << ' '
-                 << pt.x << ' ' << pt.y;
-        m_hasData = true;
     }
 
     void closePath()
@@ -231,16 +209,9 @@ struct Transform
     }
 };
 
-const Transform kFlipY{1.0, 0.0, 0.0, -1.0, 0.0, 0.0};
-
 double toEvpuDouble(dom::Evpu value)
 {
     return static_cast<double>(value);
-}
-
-double toEvpuDouble16ths(dom::Evpu16ths value)
-{
-    return static_cast<double>(value) / 16.0;
 }
 
 double toEvpuFromEfix(dom::Efix value)
@@ -315,38 +286,12 @@ Transform makeTranslateRotateScaleWithPivot(const Point& translate, double sx, d
     return multiplyTransforms(translateTransform, multiplyTransforms(rotateAboutPivot, scale));
 }
 
-Transform makePivotTransform(const Point& pivot, double sx, double sy, double radians)
-{
-    Transform translateToOrigin = makeTranslate(-pivot.x, -pivot.y);
-    Transform scale = makeScale(sx, sy);
-    Transform rotate = makeRotate(radians);
-    Transform translateBack = makeTranslate(pivot.x, pivot.y);
-    return multiplyTransforms(translateBack, multiplyTransforms(rotate, multiplyTransforms(scale, translateToOrigin)));
-}
-
 Point applyTransform(const Transform& transform, const Point& pt)
 {
     return {
         transform.a * pt.x + transform.c * pt.y + transform.tx,
         transform.b * pt.x + transform.d * pt.y + transform.ty
     };
-}
-
-Bounds transformBounds(const Bounds& bounds, const Transform& transform)
-{
-    Bounds result;
-    if (!bounds.hasValue) {
-        return result;
-    }
-    Point p1{bounds.minX, bounds.minY};
-    Point p2{bounds.maxX, bounds.minY};
-    Point p3{bounds.maxX, bounds.maxY};
-    Point p4{bounds.minX, bounds.maxY};
-    result.include(applyTransform(transform, p1));
-    result.include(applyTransform(transform, p2));
-    result.include(applyTransform(transform, p3));
-    result.include(applyTransform(transform, p4));
-    return result;
 }
 
 double decodeRotationRadians(int rotationValue)
@@ -581,23 +526,6 @@ Point evaluateCubic(const Point& p0, const Point& p1, const Point& p2, const Poi
     };
 }
 
-double averageScaleForStroke(const Transform& transform)
-{
-    double sx = std::hypot(transform.a, transform.b);
-    double sy = std::hypot(transform.c, transform.d);
-    constexpr double kEpsilon = 1e-9;
-    if (sx < kEpsilon && sy < kEpsilon) {
-        return 1.0;
-    }
-    if (sx < kEpsilon) {
-        return sy;
-    }
-    if (sy < kEpsilon) {
-        return sx;
-    }
-    return 0.5 * (sx + sy);
-}
-
 Point normalize(const Point& vector)
 {
     double length = std::hypot(vector.x, vector.y);
@@ -607,7 +535,7 @@ Point normalize(const Point& vector)
     return {vector.x / length, vector.y / length};
 }
 
-double arrowheadSizeForPreset(dom::ArrowheadPreset preset)
+[[maybe_unused]] double arrowheadSizeForPreset(dom::ArrowheadPreset preset)
 {
     switch (preset) {
     case dom::ArrowheadPreset::SmallFilled:
@@ -622,13 +550,13 @@ double arrowheadSizeForPreset(dom::ArrowheadPreset preset)
     return dom::EVPU_PER_SPACE;
 }
 
-struct ArrowheadGeometry
+struct [[maybe_unused]] ArrowheadGeometry
 {
     std::string path;
     Bounds bounds;
 };
 
-ArrowheadGeometry makeArrowheadPath(const Point& tip, const Point& direction, double size, bool curved)
+[[maybe_unused]] ArrowheadGeometry makeArrowheadPath(const Point& tip, const Point& direction, double size, bool curved)
 {
     ArrowheadGeometry result;
     Point dir = normalize(direction);
@@ -670,6 +598,7 @@ std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape,
     auto document = shape.getDocument();
     TextState text(document);
     PenState pen;
+    [[maybe_unused]] ArrowheadState arrowheads;
     bool lineWidthSet = false;
 
     PathBuilder path;
@@ -1449,6 +1378,16 @@ std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape,
             const auto* data = std::get_if<dom::ShapeDefInstruction::VerticalMode>(&inst.data);
             if (data) {
                 pen.verticalAlign = data->mode;
+            }
+            break;
+        }
+        case IT::SetArrowhead: {
+            if (const auto* data = std::get_if<dom::ShapeDefInstruction::SetArrowhead>(&inst.data)) {
+                arrowheads.startId = data->startArrowId;
+                arrowheads.endId = data->endArrowId;
+                arrowheads.startFlags = data->startFlags;
+                arrowheads.endFlags = data->endFlags;
+                /// @todo Render start/end arrowhead caps for line/path instructions.
             }
             break;
         }
