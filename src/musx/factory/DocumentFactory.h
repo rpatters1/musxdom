@@ -21,7 +21,12 @@
  */
 #pragma once
 
+#include <cstddef>
 #include <memory>
+#include <optional>
+#include <type_traits>
+#include <utility>
+#include <vector>
 
 #include "musx/dom/Document.h"
 #include "musx/factory/HeaderFactory.h"
@@ -40,18 +45,84 @@ class DocumentFactory : FactoryBase
     using DocumentPtr = std::shared_ptr<Document>;
 
 public:
+    template <typename Container>
+    using IsCharContainer = std::enable_if_t<
+        (sizeof(std::remove_cv_t<typename Container::value_type>) == 1)
+        && !std::is_same_v<std::remove_cv_t<typename Container::value_type>, bool>
+    >;
+
+    /// @brief Optional arguments for document creation.
+    struct CreateOptions
+    {
+        CreateOptions() = default;
+        CreateOptions(dom::PartVoicingPolicy policy) : partVoicingPolicy(policy) {}
+        CreateOptions(std::vector<char>&& notationMetadata)
+            : m_notationMetadata(std::move(notationMetadata)) {}
+
+        template <typename Container, typename = IsCharContainer<Container>>
+        CreateOptions(const Container& notationMetadata)
+        {
+            setNotationMetadata(notationMetadata);
+        }
+
+        dom::PartVoicingPolicy partVoicingPolicy = dom::PartVoicingPolicy::Ignore; ///< Part voicing behavior for this document.
+
+        /// @brief Optional NotationMetadata.xml content.
+        [[nodiscard]]
+        const std::vector<char>& getNotationMetadata() const { return m_notationMetadata; }
+
+        template <typename Container, typename = IsCharContainer<Container>>
+        void setNotationMetadata(const Container& notationMetadata)
+        {
+            const auto* data = reinterpret_cast<const char*>(notationMetadata.data());
+            m_notationMetadata.assign(data, data + notationMetadata.size());
+        }
+
+        void setNotationMetadata(std::vector<char>&& notationMetadata)
+        {
+            m_notationMetadata = std::move(notationMetadata);
+        }
+
+    private:
+        std::vector<char> m_notationMetadata;
+    };
+
     /**
      * @brief Creates a `Document` object from an XML buffer.
      *
      * @param data Pointer to a buffer containing EnigmaXML for a musx file.
      * @param size The size of the buffer.
-     * @param partVoicingPolicy Whether to ignore or apply part voicing as defined by @ref dom::others::PartVoicing (when it exists).
+     * @param createOptions Optional creation options, including part voicing policy and NotationMetadata.xml data.
      * @return A fully populated `Document` object.
      * @throws std::invalid_argument If required nodes or attributes are missing or invalid.
      */
     template <typename XmlDocumentType>
     [[nodiscard]]
-    static DocumentPtr create(const char* data, size_t size, dom::PartVoicingPolicy partVoicingPolicy = dom::PartVoicingPolicy::Ignore)
+    static DocumentPtr create(const char* data, size_t size)
+    {
+        return create<XmlDocumentType>(data, size, CreateOptions{});
+    }
+
+    /// @brief Creates a `Document` object from a char container (e.g. std::string, std::vector<char>).
+    template <typename XmlDocumentType, typename Container, typename = IsCharContainer<Container>>
+    [[nodiscard]]
+    static DocumentPtr create(const Container& xmlBuffer)
+    {
+        return create<XmlDocumentType>(asCharData(xmlBuffer), xmlBuffer.size(), CreateOptions{});
+    }
+
+    /**
+     * @brief Creates a `Document` object from an XML buffer.
+     *
+     * @param data Pointer to a buffer containing EnigmaXML for a musx file.
+     * @param size The size of the buffer.
+     * @param createOptions Optional creation options, including part voicing policy and NotationMetadata.xml data.
+     * @return A fully populated `Document` object.
+     * @throws std::invalid_argument If required nodes or attributes are missing or invalid.
+     */
+    template <typename XmlDocumentType>
+    [[nodiscard]]
+    static DocumentPtr create(const char* data, size_t size, const CreateOptions& createOptions)
     {
         static_assert(std::is_base_of<musx::xml::IXmlDocument, XmlDocumentType>::value,
                       "XmlReaderType must derive from IXmlDocument.");
@@ -66,7 +137,8 @@ public:
 
         DocumentPtr document(new Document);
         document->m_self = document;
-        document->m_partVoicingPolicy = partVoicingPolicy;
+        document->m_partVoicingPolicy = createOptions.partVoicingPolicy;
+        document->m_scoreDurationSeconds = parseScoreDurationSeconds<XmlDocumentType>(createOptions.getNotationMetadata());
 
         ElementLinker elementLinker;
         for (auto element = rootElement->getFirstChildElement(); element; element = element->getNextSibling()) {
@@ -118,19 +190,53 @@ public:
         return document;
     }
 
-    /**
-     * @brief Creates a `Document` object from an XML buffer.
-     *
-     * @param xmlBuffer Buffer containing EnigmaXML for a musx file.
-     * @param partVoicingPolicy Whether to ignore or apply part voicing as defined by @ref dom::others::PartVoicing (when it exists).
-     * @return A fully populated `Document` object.
-     * @throws std::invalid_argument If required nodes or attributes are missing or invalid.
-     */
-    template <typename XmlDocumentType>
+    /// @brief Creates a `Document` object from a char container and explicit create options.
+    template <typename XmlDocumentType, typename Container, typename = IsCharContainer<Container>>
     [[nodiscard]]
-    static DocumentPtr create(const std::vector<char>& xmlBuffer, dom::PartVoicingPolicy partVoicingPolicy = dom::PartVoicingPolicy::Ignore)
+    static DocumentPtr create(const Container& xmlBuffer, const CreateOptions& createOptions)
     {
-        return create<XmlDocumentType>(xmlBuffer.data(), xmlBuffer.size(), partVoicingPolicy);
+        return create<XmlDocumentType>(asCharData(xmlBuffer), xmlBuffer.size(), createOptions);
+    }
+
+private:
+    template <typename Container>
+    static const char* asCharData(const Container& buffer)
+    {
+        return reinterpret_cast<const char*>(buffer.data());
+    }
+
+    template <typename XmlDocumentType>
+    static std::optional<double> parseScoreDurationSeconds(const std::vector<char>& notationMetadata)
+    {
+        if (notationMetadata.empty()) {
+            return std::nullopt;
+        }
+
+        std::unique_ptr<musx::xml::IXmlDocument> xmlDocument = std::make_unique<XmlDocumentType>();
+        try {
+            xmlDocument->loadFromBuffer(notationMetadata.data(), notationMetadata.size());
+        } catch (...) {
+            return std::nullopt;
+        }
+
+        auto rootElement = xmlDocument->getRootElement();
+        if (!rootElement || rootElement->getTagName() != "metadata") {
+            return std::nullopt;
+        }
+        if (auto fileInfo = rootElement->getFirstChildElement("fileInfo")) {
+            auto creatorString = fileInfo->getFirstChildElement("creatorString");
+            if (!creatorString || creatorString->getTextTrimmed().rfind("Finale", 0) != 0) {
+                return std::nullopt;
+            }
+            if (auto scoreDuration = fileInfo->getFirstChildElement("scoreDuration")) {
+                try {
+                    return scoreDuration->getTextAs<double>();
+                } catch (...) {
+                    return std::nullopt;
+                }
+            }
+        }
+        return std::nullopt;
     }
 };
 

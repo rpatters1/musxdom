@@ -126,7 +126,8 @@ class EnigmaParsingContext;
  * - `^fdate(format)`: inserts the file modified date where the format is the same as for `^date`.
  * - `^time(seconds)`: inserts the current time where seconds 0=omit seconds, nonzero (normally 1)=include seconds.
  * The OS locale settings determine if it is rendered with AM/PM or 24-hour times. (See @ref musx::dom::options::TextOptions::showTimeSeconds.)
- * - `^perftime(format)`: inserts the total performance time. For a list of format values, see the following note.
+ * - `^perftime(format)`: inserts the total performance time. This is populated from NotationMetadata.xml when provided via
+ *   @ref musx::factory::DocumentFactory::CreateOptions. For a list of format values, see the following note.
  *
  * @note The Finale U.I. does not seem to have a mechanism to modify the `^perftime` format from its default value of 4. However, plugins
  * can easily create an Enigma string with any of the format values. They are as follows.

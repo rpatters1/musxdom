@@ -926,6 +926,74 @@ TEST(TextsTest, ParseEnigmaInsertsBaseLevel)
     musxtest::g_endMessages << "parsed file dates: " << output << std::endl;
 }
 
+TEST(TextsTest, ParseEnigmaPerfTimeFromNotationMetadata)
+{
+    using namespace musx::util;
+
+    constexpr musxtest::string_view minimalXml = R"xml(
+<?xml version="1.0" encoding="UTF-8"?>
+<finale>
+  <header>
+    <headerData>
+      <wordOrder>lo-endian</wordOrder>
+      <textEncoding>Mac</textEncoding>
+    </headerData>
+  </header>
+</finale>
+)xml";
+
+    constexpr musxtest::string_view finaleMetadata = R"xml(
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata version="27.4" xmlns="http://www.makemusic.com/2012/NotationMetadata">
+  <fileInfo>
+    <scoreDuration>273.0</scoreDuration>
+    <creatorString>Finale 27.4.1.146 for Macintosh</creatorString>
+  </fileInfo>
+</metadata>
+)xml";
+
+    constexpr musxtest::string_view nonFinaleMetadata = R"xml(
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata version="27.4" xmlns="http://www.makemusic.com/2012/NotationMetadata">
+  <fileInfo>
+    <scoreDuration>273.0</scoreDuration>
+    <creatorString>MuseScore 4.4.0</creatorString>
+  </fileInfo>
+</metadata>
+)xml";
+
+    auto buildWithMetadata = [&](musxtest::string_view metadata) -> musx::dom::DocumentPtr {
+        musx::factory::DocumentFactory::CreateOptions options(metadata);
+        return musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(
+            minimalXml.data(), minimalXml.size(), options);
+    };
+
+    auto getParsedText = [](const musx::dom::DocumentPtr& document, const std::string& input) -> std::string {
+        std::string output;
+        EnigmaString::parseEnigmaText(document, SCORE_PARTID, input, [&](const std::string& text, const musx::util::EnigmaStyles&) -> bool {
+            output += text;
+            return true;
+        });
+        return output;
+    };
+
+    auto finaleDoc = buildWithMetadata(finaleMetadata);
+    ASSERT_TRUE(finaleDoc);
+    ASSERT_TRUE(finaleDoc->getScoreDurationSeconds().has_value());
+    EXPECT_DOUBLE_EQ(finaleDoc->getScoreDurationSeconds().value(), 273.0);
+    EXPECT_EQ(getParsedText(finaleDoc, "^perftime(0)"), "4:33");
+    EXPECT_EQ(getParsedText(finaleDoc, "^perftime(1)"), "00:04:33");
+    EXPECT_EQ(getParsedText(finaleDoc, "^perftime(2)"), "00:04:33.000");
+    EXPECT_EQ(getParsedText(finaleDoc, "^perftime(3)"), "04:33");
+    EXPECT_EQ(getParsedText(finaleDoc, "X ^perftime(4) Y"), "X 4'33\" Y");
+    EXPECT_EQ(getParsedText(finaleDoc, "^perftime(5)"), "4");
+
+    auto nonFinaleDoc = buildWithMetadata(nonFinaleMetadata);
+    ASSERT_TRUE(nonFinaleDoc);
+    EXPECT_FALSE(nonFinaleDoc->getScoreDurationSeconds().has_value());
+    EXPECT_EQ(getParsedText(nonFinaleDoc, "X ^perftime(4) Y"), "X  Y");
+}
+
 TEST(TextsTest, ParseEnigmaFontInfo)
 {
     using namespace musx::util;

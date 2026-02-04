@@ -23,6 +23,9 @@
 #include <unordered_map>
 #include <cctype>
 #include <string>
+#include <cmath>
+#include <sstream>
+#include <iomanip>
 
 #include "musx/musx.h"
 
@@ -30,6 +33,63 @@ using namespace musx::dom;
 
 namespace musx {
 namespace util {
+
+namespace {
+std::string formatPerfTime(double secondsValue, int format)
+{
+    if (secondsValue < 0.0) {
+        return {};
+    }
+
+    const auto secondsRounded = static_cast<long long>(std::llround(secondsValue));
+    const auto millisRounded = static_cast<long long>(std::llround(secondsValue * 1000.0));
+    auto pad2 = [](long long v) {
+        std::ostringstream s;
+        s << std::setfill('0') << std::setw(2) << v;
+        return s.str();
+    };
+    auto pad3 = [](long long v) {
+        std::ostringstream s;
+        s << std::setfill('0') << std::setw(3) << v;
+        return s.str();
+    };
+
+    switch (format) {
+    case 0: { // M:SS
+        const auto minutes = secondsRounded / 60;
+        const auto seconds = secondsRounded % 60;
+        return std::to_string(minutes) + ":" + pad2(seconds);
+    }
+    case 1: { // HH:MM:SS
+        const auto hours = secondsRounded / 3600;
+        const auto minutes = (secondsRounded % 3600) / 60;
+        const auto seconds = secondsRounded % 60;
+        return pad2(hours) + ":" + pad2(minutes) + ":" + pad2(seconds);
+    }
+    case 2: { // HH:MM:SS.mmm
+        const auto hours = millisRounded / 3600000;
+        const auto minutes = (millisRounded % 3600000) / 60000;
+        const auto seconds = (millisRounded % 60000) / 1000;
+        const auto millis = millisRounded % 1000;
+        return pad2(hours) + ":" + pad2(minutes) + ":" + pad2(seconds) + "." + pad3(millis);
+    }
+    case 3: { // MM:SS
+        const auto minutes = secondsRounded / 60;
+        const auto seconds = secondsRounded % 60;
+        return pad2(minutes) + ":" + pad2(seconds);
+    }
+    case 4: { // M'SS"
+        const auto minutes = secondsRounded / 60;
+        const auto seconds = secondsRounded % 60;
+        return std::to_string(minutes) + "'" + pad2(seconds) + "\"";
+    }
+    case 5: // M
+        return std::to_string(secondsRounded / 60);
+    default:
+        return {};
+    }
+}
+} // namespace
 
 std::string EnigmaString::toU8(char32_t cp)
 {
@@ -415,6 +475,14 @@ bool EnigmaString::parseEnigmaTextImpl(const std::shared_ptr<dom::Document>& doc
         } else if (components[0] == "lyricist") {
             if (auto textInsert = document->getTexts()->get<texts::FileInfoText>(Cmper(texts::FileInfoText::TextType::Lyricist))) {
                 addToBuf(trimTags(textInsert->text));
+            }
+        } else if (components[0] == "perftime") {
+            if (auto scoreDuration = document->getScoreDurationSeconds(); scoreDuration.has_value()) {
+                int format = 4;
+                if (components.size() > 1) {
+                    format = std::stoi(components[1]);
+                }
+                addToBuf(formatPerfTime(scoreDuration.value(), format));
             }
         } else if (components[0] == "page") {
             addToBuf("#");

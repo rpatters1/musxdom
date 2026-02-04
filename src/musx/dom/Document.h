@@ -140,6 +140,10 @@ public:
     [[nodiscard]]
     PartVoicingPolicy getPartVoicingPolicy() const { return m_partVoicingPolicy; }
 
+    /// @brief Returns the score playback duration in seconds, if provided by NotationMetadata.xml.
+    [[nodiscard]]
+    std::optional<double> getScoreDurationSeconds() const { return m_scoreDurationSeconds; }
+
     /// @brief Returns the Scroll View Cmper for the given @p partId.
     /// @param partId The linked part to check.
     [[nodiscard]]
@@ -253,6 +257,7 @@ private:
                                 ///< This computed by the factory.
 
     PartVoicingPolicy m_partVoicingPolicy{};    ///< The part voicing policy in effect for this document.
+    std::optional<double> m_scoreDurationSeconds; ///< Optional score duration in seconds from NotationMetadata.xml.
 
     mutable std::unordered_map<Cmper, KnownShapeDefType> m_shapeRecognitionCache; ///< Cache of ShapeDef recognitions.
 
