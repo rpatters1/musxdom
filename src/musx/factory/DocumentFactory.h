@@ -45,6 +45,7 @@ class DocumentFactory : FactoryBase
     using DocumentPtr = std::shared_ptr<Document>;
 
 public:
+    /// @brief SFINAE helper for containers whose element type is 1 byte (excluding `bool`).
     template <typename Container>
     using IsCharContainer = std::enable_if_t<
         (sizeof(std::remove_cv_t<typename Container::value_type>) == 1)
@@ -54,11 +55,21 @@ public:
     /// @brief Optional arguments for document creation.
     struct CreateOptions
     {
+        /// @brief Default constructor.
         CreateOptions() = default;
+
+        /// @brief Construct options with a part-voicing policy.
+        /// @param policy The policy to apply for this document.
         CreateOptions(dom::PartVoicingPolicy policy) : partVoicingPolicy(policy) {}
+
+        /// @brief Construct options by moving in NotationMetadata.xml bytes.
+        /// @param notationMetadata Buffer containing NotationMetadata.xml.
         CreateOptions(std::vector<char>&& notationMetadata)
             : m_notationMetadata(std::move(notationMetadata)) {}
 
+        /// @brief Construct options by copying a 1-byte-element metadata buffer.
+        /// @tparam Container A contiguous container with 1-byte element type.
+        /// @param notationMetadata Buffer containing NotationMetadata.xml.
         template <typename Container, typename = IsCharContainer<Container>>
         CreateOptions(const Container& notationMetadata)
         {
@@ -71,6 +82,9 @@ public:
         [[nodiscard]]
         const std::vector<char>& getNotationMetadata() const { return m_notationMetadata; }
 
+        /// @brief Set NotationMetadata.xml by copying from a 1-byte-element buffer.
+        /// @tparam Container A contiguous container with 1-byte element type.
+        /// @param notationMetadata Buffer containing NotationMetadata.xml.
         template <typename Container, typename = IsCharContainer<Container>>
         void setNotationMetadata(const Container& notationMetadata)
         {
@@ -78,6 +92,8 @@ public:
             m_notationMetadata.assign(data, data + notationMetadata.size());
         }
 
+        /// @brief Set NotationMetadata.xml by moving an existing `std::vector<char>`.
+        /// @param notationMetadata Buffer containing NotationMetadata.xml.
         void setNotationMetadata(std::vector<char>&& notationMetadata)
         {
             m_notationMetadata = std::move(notationMetadata);
@@ -92,7 +108,6 @@ public:
      *
      * @param data Pointer to a buffer containing EnigmaXML for a musx file.
      * @param size The size of the buffer.
-     * @param createOptions Optional creation options, including part voicing policy and NotationMetadata.xml data.
      * @return A fully populated `Document` object.
      * @throws std::invalid_argument If required nodes or attributes are missing or invalid.
      */
