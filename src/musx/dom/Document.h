@@ -22,7 +22,9 @@
 #pragma once
 
 #include <memory>
+#include <cstdint>
 #include <optional>
+#include <string>
 #include <unordered_map>
 #include <vector>
 
@@ -51,6 +53,16 @@ using namespace header;
 struct InstrumentInfo;
 enum class KnownShapeDefType;
 using InstrumentMap = std::unordered_map<StaffCmper, InstrumentInfo>; ///< A list of instruments, which may be single- or multi-staff
+using EmbeddedGraphicBlob = std::vector<uint8_t>; ///< Raw bytes for one embedded graphic payload from a musx archive.
+
+/// @brief Embedded graphic payload from a musx archive entry.
+struct EmbeddedGraphicData
+{
+    std::string extension;          ///< File extension without the leading dot (e.g. "png", "jpg", "svg").
+    EmbeddedGraphicBlob bytes;      ///< Raw file bytes.
+};
+
+using EmbeddedGraphicsMap = std::unordered_map<Cmper, EmbeddedGraphicData>; ///< Embedded graphics keyed by cmper (filename stem in musx archive).
 /// @class InstrumentInfo
 /// @brief Represents information about each instrument in the document. This is calculated from the staves,
 /// staff groups, and multistaff instrument groups.
@@ -143,6 +155,10 @@ public:
     /// @brief Returns the score playback duration in seconds, if provided by NotationMetadata.xml.
     [[nodiscard]]
     std::optional<double> getScoreDurationSeconds() const { return m_scoreDurationSeconds; }
+
+    /// @brief Returns all embedded graphics keyed by graphic cmper.
+    [[nodiscard]]
+    const EmbeddedGraphicsMap& getEmbeddedGraphics() const { return m_embeddedGraphics; }
 
     /// @brief Returns the Scroll View Cmper for the given @p partId.
     /// @param partId The linked part to check.
@@ -258,6 +274,7 @@ private:
 
     PartVoicingPolicy m_partVoicingPolicy{};    ///< The part voicing policy in effect for this document.
     std::optional<double> m_scoreDurationSeconds; ///< Optional score duration in seconds from NotationMetadata.xml.
+    EmbeddedGraphicsMap m_embeddedGraphics;     ///< Embedded graphics passed in by the caller (from musx container files).
 
     mutable std::unordered_map<Cmper, KnownShapeDefType> m_shapeRecognitionCache; ///< Cache of ShapeDef recognitions.
 

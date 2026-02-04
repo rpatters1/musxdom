@@ -273,3 +273,34 @@ TEST(DocumentTest, CalcJumpFromMeasures)
     auto result = doc->calcJumpFromMeasures(SCORE_PARTID, 3);
     EXPECT_EQ(result, expected);
 }
+
+TEST(DocumentTest, EmbeddedGraphicsRoundTrip)
+{
+    constexpr static musxtest::string_view emptyData = R"xml(
+<?xml version="1.0" encoding="UTF-8"?>
+<finale/>
+    )xml";
+
+    musx::factory::DocumentFactory::CreateOptions::EmbeddedGraphicFiles graphics{
+        { "101.png", EmbeddedGraphicBlob{0x89, 0x50, 0x4E, 0x47} },
+        { "202.jpg", EmbeddedGraphicBlob{0xFF, 0xD8, 0xFF} },
+        { "not-a-cmper.png", EmbeddedGraphicBlob{0x00} },
+        { "303", EmbeddedGraphicBlob{0x11} }
+    };
+
+    musx::factory::DocumentFactory::CreateOptions options(std::move(graphics));
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(
+        emptyData.data(), emptyData.size(), std::move(options));
+
+    ASSERT_TRUE(doc);
+    const auto& embedded = doc->getEmbeddedGraphics();
+    ASSERT_EQ(embedded.size(), 2u);
+    auto itPng = embedded.find(Cmper(101));
+    ASSERT_NE(itPng, embedded.end());
+    EXPECT_EQ(itPng->second.extension, "png");
+    EXPECT_EQ(itPng->second.bytes, (EmbeddedGraphicBlob{0x89, 0x50, 0x4E, 0x47}));
+    auto itJpg = embedded.find(Cmper(202));
+    ASSERT_NE(itJpg, embedded.end());
+    EXPECT_EQ(itJpg->second.extension, "jpg");
+    EXPECT_EQ(itJpg->second.bytes, (EmbeddedGraphicBlob{0xFF, 0xD8, 0xFF}));
+}

@@ -21,9 +21,14 @@
  */
 #pragma once
 
+#include <algorithm>
 #include <cstddef>
+#include <cctype>
+#include <limits>
 #include <memory>
 #include <optional>
+#include <string>
+#include <string_view>
 #include <type_traits>
 #include <utility>
 #include <vector>
@@ -55,6 +60,15 @@ public:
     /// @brief Optional arguments for document creation.
     struct CreateOptions
     {
+        /// @brief Raw embedded graphic file payload from a musx archive.
+        struct EmbeddedGraphicFile
+        {
+            std::string filename;                 ///< Archive filename in `cmper.ext` form.
+            dom::EmbeddedGraphicBlob bytes;       ///< Raw file bytes.
+        };
+
+        using EmbeddedGraphicFiles = std::vector<EmbeddedGraphicFile>; ///< Embedded graphic files provided by caller.
+
         /// @brief Default constructor.
         CreateOptions() = default;
 
@@ -66,6 +80,13 @@ public:
         /// @param notationMetadata Buffer containing NotationMetadata.xml.
         CreateOptions(std::vector<char>&& notationMetadata)
             : m_notationMetadata(std::move(notationMetadata)) {}
+
+        /// @brief Construct options by moving embedded graphic files.
+        /// @param embeddedGraphicFiles Embedded graphic files in `cmper.ext` form.
+        CreateOptions(EmbeddedGraphicFiles&& embeddedGraphicFiles)
+        {
+            setEmbeddedGraphics(std::move(embeddedGraphicFiles));
+        }
 
         /// @brief Construct options by copying a 1-byte-element metadata buffer.
         /// @tparam Container A contiguous container with 1-byte element type.
@@ -81,6 +102,14 @@ public:
         /// @brief Optional NotationMetadata.xml content.
         [[nodiscard]]
         const std::vector<char>& getNotationMetadata() const { return m_notationMetadata; }
+
+        /// @brief Embedded graphics keyed by graphic cmper.
+        [[nodiscard]]
+        const dom::EmbeddedGraphicsMap& getEmbeddedGraphics() const { return m_embeddedGraphics; }
+
+        /// @brief Move out embedded graphics.
+        [[nodiscard]]
+        dom::EmbeddedGraphicsMap takeEmbeddedGraphics() { return std::move(m_embeddedGraphics); }
 
         /// @brief Set NotationMetadata.xml by copying from a 1-byte-element buffer.
         /// @tparam Container A contiguous container with 1-byte element type.
@@ -99,8 +128,51 @@ public:
             m_notationMetadata = std::move(notationMetadata);
         }
 
+        /// @brief Set embedded graphics by parsing moved archive files in `cmper.ext` form.
+        /// @param embeddedGraphicFiles Embedded graphic files from the musx archive.
+        void setEmbeddedGraphics(EmbeddedGraphicFiles&& embeddedGraphicFiles)
+        {
+            m_embeddedGraphics.clear();
+            for (auto& file : embeddedGraphicFiles) {
+                const auto parsed = parseEmbeddedGraphicFilename(file.filename);
+                if (!parsed) {
+                    continue;
+                }
+                auto& entry = m_embeddedGraphics[parsed->first];
+                entry.extension = std::move(parsed->second);
+                entry.bytes = std::move(file.bytes);
+            }
+        }
+
     private:
+        static std::optional<std::pair<Cmper, std::string>> parseEmbeddedGraphicFilename(const std::string& filename)
+        {
+            const auto dotPos = filename.find('.');
+            if (dotPos == std::string::npos || dotPos == 0 || dotPos + 1 >= filename.size()) {
+                return std::nullopt;
+            }
+
+            const std::string_view cmperText(filename.data(), dotPos);
+            if (cmperText.empty() || !std::all_of(cmperText.begin(), cmperText.end(),
+                [](unsigned char ch) { return std::isdigit(ch) != 0; })) {
+                return std::nullopt;
+            }
+
+            unsigned long long cmperValue = 0;
+            try {
+                cmperValue = std::stoull(std::string(cmperText));
+            } catch (...) {
+                return std::nullopt;
+            }
+            if (cmperValue > static_cast<unsigned long long>(std::numeric_limits<Cmper>::max())) {
+                return std::nullopt;
+            }
+
+            return std::make_pair(static_cast<Cmper>(cmperValue), filename.substr(dotPos + 1));
+        }
+
         std::vector<char> m_notationMetadata;
+        dom::EmbeddedGraphicsMap m_embeddedGraphics;
     };
 
     /**
@@ -137,7 +209,7 @@ public:
      */
     template <typename XmlDocumentType>
     [[nodiscard]]
-    static DocumentPtr create(const char* data, size_t size, const CreateOptions& createOptions)
+    static DocumentPtr create(const char* data, size_t size, CreateOptions&& createOptions)
     {
         static_assert(std::is_base_of<musx::xml::IXmlDocument, XmlDocumentType>::value,
                       "XmlReaderType must derive from IXmlDocument.");
@@ -154,6 +226,7 @@ public:
         document->m_self = document;
         document->m_partVoicingPolicy = createOptions.partVoicingPolicy;
         document->m_scoreDurationSeconds = parseScoreDurationSeconds<XmlDocumentType>(createOptions.getNotationMetadata());
+        document->m_embeddedGraphics = createOptions.takeEmbeddedGraphics();
 
         ElementLinker elementLinker;
         for (auto element = rootElement->getFirstChildElement(); element; element = element->getNextSibling()) {
@@ -208,9 +281,9 @@ public:
     /// @brief Creates a `Document` object from a char container and explicit create options.
     template <typename XmlDocumentType, typename Container, typename = IsCharContainer<Container>>
     [[nodiscard]]
-    static DocumentPtr create(const Container& xmlBuffer, const CreateOptions& createOptions)
+    static DocumentPtr create(const Container& xmlBuffer, CreateOptions&& createOptions)
     {
-        return create<XmlDocumentType>(asCharData(xmlBuffer), xmlBuffer.size(), createOptions);
+        return create<XmlDocumentType>(asCharData(xmlBuffer), xmlBuffer.size(), std::move(createOptions));
     }
 
 private:
