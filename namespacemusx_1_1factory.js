@@ -1,7 +1,7 @@
 var namespacemusx_1_1factory =
 [
     [ "DetailsFactory", "classmusx_1_1factory_1_1DetailsFactory.html", null ],
-    [ "DocumentFactory", "classmusx_1_1factory_1_1DocumentFactory.html", null ],
+    [ "DocumentFactory", "classmusx_1_1factory_1_1DocumentFactory.html", "classmusx_1_1factory_1_1DocumentFactory" ],
     [ "ElementLinker", "classmusx_1_1factory_1_1ElementLinker.html", "classmusx_1_1factory_1_1ElementLinker" ],
     [ "EntryFactory", "classmusx_1_1factory_1_1EntryFactory.html", null ],
     [ "FactoryBase", "classmusx_1_1factory_1_1FactoryBase.html", null ],

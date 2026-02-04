@@ -288,6 +288,7 @@ var hierarchy =
     [ "musx::dom::options::SmartShapeOptions::ControlStyle", "structmusx_1_1dom_1_1options_1_1SmartShapeOptions_1_1ControlStyle.html", null ],
     [ "musx::dom::options::TieOptions::ControlStyle", "structmusx_1_1dom_1_1options_1_1TieOptions_1_1ControlStyle.html", null ],
     [ "musx::factory::TypeRegistry< Types >::CreatedInstanceInfo", "structmusx_1_1factory_1_1TypeRegistry_1_1CreatedInstanceInfo.html", null ],
+    [ "musx::factory::DocumentFactory::CreateOptions", "structmusx_1_1factory_1_1DocumentFactory_1_1CreateOptions.html", null ],
     [ "musx::dom::ShapeDefInstruction::CurveTo", "structmusx_1_1dom_1_1ShapeDefInstruction_1_1CurveTo.html", null ],
     [ "musx::util::DateTime", "structmusx_1_1util_1_1DateTime.html", null ],
     [ "musx::dom::ShapeDefInstruction::Decoded", "structmusx_1_1dom_1_1ShapeDefInstruction_1_1Decoded.html", null ],

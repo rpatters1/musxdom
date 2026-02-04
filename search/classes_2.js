@@ -15,7 +15,7 @@ var searchData=
   ['clefoptions_12',['ClefOptions',['../classmusx_1_1dom_1_1options_1_1ClefOptions.html',1,'musx::dom::options']]],
   ['clonechar_13',['CloneChar',['../structmusx_1_1dom_1_1ShapeDefInstruction_1_1CloneChar.html',1,'musx::dom::ShapeDefInstruction']]],
   ['commonclassbase_14',['CommonClassBase',['../classmusx_1_1dom_1_1CommonClassBase.html',1,'musx::dom']]],
-  ['compositeitem_15',['compositeitem',['../classmusx_1_1dom_1_1others_1_1TimeCompositeLower_1_1CompositeItem.html',1,'musx::dom::others::TimeCompositeLower::CompositeItem'],['../classmusx_1_1dom_1_1others_1_1TimeCompositeUpper_1_1CompositeItem.html',1,'musx::dom::others::TimeCompositeUpper::CompositeItem']]],
+  ['compositeitem_15',['compositeitem',['../classmusx_1_1dom_1_1others_1_1TimeCompositeUpper_1_1CompositeItem.html',1,'musx::dom::others::TimeCompositeUpper::CompositeItem'],['../classmusx_1_1dom_1_1others_1_1TimeCompositeLower_1_1CompositeItem.html',1,'musx::dom::others::TimeCompositeLower::CompositeItem']]],
   ['connectionstyle_16',['ConnectionStyle',['../structmusx_1_1dom_1_1options_1_1SmartShapeOptions_1_1ConnectionStyle.html',1,'musx::dom::options::SmartShapeOptions']]],
   ['connectstyle_17',['ConnectStyle',['../structmusx_1_1dom_1_1options_1_1TieOptions_1_1ConnectStyle.html',1,'musx::dom::options::TieOptions']]],
   ['containedclassbase_18',['ContainedClassBase',['../classmusx_1_1dom_1_1ContainedClassBase.html',1,'musx::dom']]],
@@ -24,9 +24,10 @@ var searchData=
   ['controlpointadjustment_21',['ControlPointAdjustment',['../classmusx_1_1dom_1_1smartshape_1_1ControlPointAdjustment.html',1,'musx::dom::smartshape']]],
   ['controlstyle_22',['controlstyle',['../structmusx_1_1dom_1_1options_1_1SmartShapeOptions_1_1ControlStyle.html',1,'musx::dom::options::SmartShapeOptions::ControlStyle'],['../structmusx_1_1dom_1_1options_1_1TieOptions_1_1ControlStyle.html',1,'musx::dom::options::TieOptions::ControlStyle']]],
   ['createdinstanceinfo_23',['CreatedInstanceInfo',['../structmusx_1_1factory_1_1TypeRegistry_1_1CreatedInstanceInfo.html',1,'musx::factory::TypeRegistry']]],
-  ['crossstaff_24',['CrossStaff',['../classmusx_1_1dom_1_1details_1_1CrossStaff.html',1,'musx::dom::details']]],
-  ['curveto_25',['CurveTo',['../structmusx_1_1dom_1_1ShapeDefInstruction_1_1CurveTo.html',1,'musx::dom::ShapeDefInstruction']]],
-  ['customdownstem_26',['CustomDownStem',['../classmusx_1_1dom_1_1details_1_1CustomDownStem.html',1,'musx::dom::details']]],
-  ['customstem_27',['CustomStem',['../classmusx_1_1dom_1_1details_1_1CustomStem.html',1,'musx::dom::details']]],
-  ['customupstem_28',['CustomUpStem',['../classmusx_1_1dom_1_1details_1_1CustomUpStem.html',1,'musx::dom::details']]]
+  ['createoptions_24',['CreateOptions',['../structmusx_1_1factory_1_1DocumentFactory_1_1CreateOptions.html',1,'musx::factory::DocumentFactory']]],
+  ['crossstaff_25',['CrossStaff',['../classmusx_1_1dom_1_1details_1_1CrossStaff.html',1,'musx::dom::details']]],
+  ['curveto_26',['CurveTo',['../structmusx_1_1dom_1_1ShapeDefInstruction_1_1CurveTo.html',1,'musx::dom::ShapeDefInstruction']]],
+  ['customdownstem_27',['CustomDownStem',['../classmusx_1_1dom_1_1details_1_1CustomDownStem.html',1,'musx::dom::details']]],
+  ['customstem_28',['CustomStem',['../classmusx_1_1dom_1_1details_1_1CustomStem.html',1,'musx::dom::details']]],
+  ['customupstem_29',['CustomUpStem',['../classmusx_1_1dom_1_1details_1_1CustomUpStem.html',1,'musx::dom::details']]]
 ];

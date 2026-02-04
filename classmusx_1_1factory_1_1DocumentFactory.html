@@ -93,6 +93,8 @@ $(document).ready(function(){initNavTree('classmusx_1_1factory_1_1DocumentFactor
 
 <div class="header">
   <div class="summary">
+<a href="#nested-classes">Classes</a> &#124;
+<a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="classmusx_1_1factory_1_1DocumentFactory-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">musx::factory::DocumentFactory Class Reference</div></div>
@@ -115,22 +117,100 @@ $(document).ready(function(){initNavTree('classmusx_1_1factory_1_1DocumentFactor
   </map>
 </div></div>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
+Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmusx_1_1factory_1_1DocumentFactory_1_1CreateOptions.html">CreateOptions</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Optional arguments for document creation.  <a href="structmusx_1_1factory_1_1DocumentFactory_1_1CreateOptions.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-types" name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:a2b74a4dd470aa3145d544623ae185e3b" id="r_a2b74a4dd470aa3145d544623ae185e3b"><td class="memTemplParams" colspan="2"><a id="a2b74a4dd470aa3145d544623ae185e3b" name="a2b74a4dd470aa3145d544623ae185e3b"></a>
+template&lt;typename Container &gt; </td></tr>
+<tr class="memitem:a2b74a4dd470aa3145d544623ae185e3b"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><b>IsCharContainer</b> = std::enable_if_t&lt;(sizeof(std::remove_cv_t&lt; typename Container::value_type &gt;)==1) &amp;&amp;!std::is_same_v&lt; std::remove_cv_t&lt; typename Container::value_type &gt;, bool &gt; &gt;</td></tr>
+<tr class="separator:a2b74a4dd470aa3145d544623ae185e3b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:a28215d1fdde894163f9b2ea2f6ec38cf" id="r_a28215d1fdde894163f9b2ea2f6ec38cf"><td class="memTemplParams" colspan="2">template&lt;typename XmlDocumentType &gt; </td></tr>
-<tr class="memitem:a28215d1fdde894163f9b2ea2f6ec38cf"><td class="memTemplItemLeft" align="right" valign="top">static DocumentPtr&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classmusx_1_1factory_1_1DocumentFactory.html#a28215d1fdde894163f9b2ea2f6ec38cf">create</a> (const char *data, size_t size, <a class="el" href="namespacemusx_1_1dom.html#a8ff59967b46549e150ea4f524c00de95">dom::PartVoicingPolicy</a> partVoicingPolicy=<a class="el" href="namespacemusx_1_1dom.html#a8ff59967b46549e150ea4f524c00de95afd038fc7f319e48f3115d92bf5bdbef9">dom::PartVoicingPolicy::Ignore</a>)</td></tr>
-<tr class="memdesc:a28215d1fdde894163f9b2ea2f6ec38cf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a <code>Document</code> object from an XML buffer.  <br /></td></tr>
-<tr class="separator:a28215d1fdde894163f9b2ea2f6ec38cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad4752b673d2391ce84f1779e48c42d72" id="r_ad4752b673d2391ce84f1779e48c42d72"><td class="memTemplParams" colspan="2">template&lt;typename XmlDocumentType &gt; </td></tr>
-<tr class="memitem:ad4752b673d2391ce84f1779e48c42d72"><td class="memTemplItemLeft" align="right" valign="top">static DocumentPtr&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classmusx_1_1factory_1_1DocumentFactory.html#ad4752b673d2391ce84f1779e48c42d72">create</a> (const std::vector&lt; char &gt; &amp;xmlBuffer, <a class="el" href="namespacemusx_1_1dom.html#a8ff59967b46549e150ea4f524c00de95">dom::PartVoicingPolicy</a> partVoicingPolicy=<a class="el" href="namespacemusx_1_1dom.html#a8ff59967b46549e150ea4f524c00de95afd038fc7f319e48f3115d92bf5bdbef9">dom::PartVoicingPolicy::Ignore</a>)</td></tr>
-<tr class="memdesc:ad4752b673d2391ce84f1779e48c42d72"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a <code>Document</code> object from an XML buffer.  <br /></td></tr>
-<tr class="separator:ad4752b673d2391ce84f1779e48c42d72"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a99addb7044f05ca121c446568dc9045f" id="r_a99addb7044f05ca121c446568dc9045f"><td class="memTemplParams" colspan="2">template&lt;typename XmlDocumentType &gt; </td></tr>
+<tr class="memitem:a99addb7044f05ca121c446568dc9045f"><td class="memTemplItemLeft" align="right" valign="top">static DocumentPtr&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classmusx_1_1factory_1_1DocumentFactory.html#a99addb7044f05ca121c446568dc9045f">create</a> (const char *data, size_t size)</td></tr>
+<tr class="memdesc:a99addb7044f05ca121c446568dc9045f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a <code>Document</code> object from an XML buffer.  <br /></td></tr>
+<tr class="separator:a99addb7044f05ca121c446568dc9045f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4f7ed6fcdd55300c254325353f36ad78" id="r_a4f7ed6fcdd55300c254325353f36ad78"><td class="memTemplParams" colspan="2"><a id="a4f7ed6fcdd55300c254325353f36ad78" name="a4f7ed6fcdd55300c254325353f36ad78"></a>
+template&lt;typename XmlDocumentType , typename Container , typename  = IsCharContainer&lt;Container&gt;&gt; </td></tr>
+<tr class="memitem:a4f7ed6fcdd55300c254325353f36ad78"><td class="memTemplItemLeft" align="right" valign="top">static DocumentPtr&#160;</td><td class="memTemplItemRight" valign="bottom"><b>create</b> (const Container &amp;xmlBuffer)</td></tr>
+<tr class="memdesc:a4f7ed6fcdd55300c254325353f36ad78"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a <code>Document</code> object from a char container (e.g. std::string, std::vector&lt;char&gt;). <br /></td></tr>
+<tr class="separator:a4f7ed6fcdd55300c254325353f36ad78"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa60a52528633aeb7fd2bb2f7cff2bc04" id="r_aa60a52528633aeb7fd2bb2f7cff2bc04"><td class="memTemplParams" colspan="2">template&lt;typename XmlDocumentType &gt; </td></tr>
+<tr class="memitem:aa60a52528633aeb7fd2bb2f7cff2bc04"><td class="memTemplItemLeft" align="right" valign="top">static DocumentPtr&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classmusx_1_1factory_1_1DocumentFactory.html#aa60a52528633aeb7fd2bb2f7cff2bc04">create</a> (const char *data, size_t size, const <a class="el" href="structmusx_1_1factory_1_1DocumentFactory_1_1CreateOptions.html">CreateOptions</a> &amp;createOptions)</td></tr>
+<tr class="memdesc:aa60a52528633aeb7fd2bb2f7cff2bc04"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a <code>Document</code> object from an XML buffer.  <br /></td></tr>
+<tr class="separator:aa60a52528633aeb7fd2bb2f7cff2bc04"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa315c4d8a4630f2d935708ddeec854d6" id="r_aa315c4d8a4630f2d935708ddeec854d6"><td class="memTemplParams" colspan="2"><a id="aa315c4d8a4630f2d935708ddeec854d6" name="aa315c4d8a4630f2d935708ddeec854d6"></a>
+template&lt;typename XmlDocumentType , typename Container , typename  = IsCharContainer&lt;Container&gt;&gt; </td></tr>
+<tr class="memitem:aa315c4d8a4630f2d935708ddeec854d6"><td class="memTemplItemLeft" align="right" valign="top">static DocumentPtr&#160;</td><td class="memTemplItemRight" valign="bottom"><b>create</b> (const Container &amp;xmlBuffer, const <a class="el" href="structmusx_1_1factory_1_1DocumentFactory_1_1CreateOptions.html">CreateOptions</a> &amp;createOptions)</td></tr>
+<tr class="memdesc:aa315c4d8a4630f2d935708ddeec854d6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a <code>Document</code> object from a char container and explicit create options. <br /></td></tr>
+<tr class="separator:aa315c4d8a4630f2d935708ddeec854d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Factory class for creating <code>Document</code> objects from XML. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="a28215d1fdde894163f9b2ea2f6ec38cf" name="a28215d1fdde894163f9b2ea2f6ec38cf"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a28215d1fdde894163f9b2ea2f6ec38cf">&#9670;&#160;</a></span>create() <span class="overload">[1/2]</span></h2>
+<a id="a99addb7044f05ca121c446568dc9045f" name="a99addb7044f05ca121c446568dc9045f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a99addb7044f05ca121c446568dc9045f">&#9670;&#160;</a></span>create() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename XmlDocumentType &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static DocumentPtr musx::factory::DocumentFactory::create </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>data</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>size</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Creates a <code>Document</code> object from an XML buffer. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">data</td><td>Pointer to a buffer containing EnigmaXML for a musx file. </td></tr>
+    <tr><td class="paramname">size</td><td>The size of the buffer. </td></tr>
+    <tr><td class="paramname">createOptions</td><td>Optional creation options, including part voicing policy and NotationMetadata.xml data. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A fully populated <code>Document</code> object. </dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::invalid_argument</td><td>If required nodes or attributes are missing or invalid. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="aa60a52528633aeb7fd2bb2f7cff2bc04" name="aa60a52528633aeb7fd2bb2f7cff2bc04"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa60a52528633aeb7fd2bb2f7cff2bc04">&#9670;&#160;</a></span>create() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -155,8 +235,8 @@ template&lt;typename XmlDocumentType &gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespacemusx_1_1dom.html#a8ff59967b46549e150ea4f524c00de95">dom::PartVoicingPolicy</a>&#160;</td>
-          <td class="paramname"><em>partVoicingPolicy</em> = <code><a class="el" href="namespacemusx_1_1dom.html#a8ff59967b46549e150ea4f524c00de95afd038fc7f319e48f3115d92bf5bdbef9">dom::PartVoicingPolicy::Ignore</a></code>&#160;</td>
+          <td class="paramtype">const <a class="el" href="structmusx_1_1factory_1_1DocumentFactory_1_1CreateOptions.html">CreateOptions</a> &amp;&#160;</td>
+          <td class="paramname"><em>createOptions</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -176,61 +256,7 @@ template&lt;typename XmlDocumentType &gt; </div>
   <table class="params">
     <tr><td class="paramname">data</td><td>Pointer to a buffer containing EnigmaXML for a musx file. </td></tr>
     <tr><td class="paramname">size</td><td>The size of the buffer. </td></tr>
-    <tr><td class="paramname">partVoicingPolicy</td><td>Whether to ignore or apply part voicing as defined by <a class="el" href="classmusx_1_1dom_1_1others_1_1PartVoicing.html">dom::others::PartVoicing</a> (when it exists). </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>A fully populated <code>Document</code> object. </dd></dl>
-<dl class="exception"><dt>Exceptions</dt><dd>
-  <table class="exception">
-    <tr><td class="paramname">std::invalid_argument</td><td>If required nodes or attributes are missing or invalid. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="ad4752b673d2391ce84f1779e48c42d72" name="ad4752b673d2391ce84f1779e48c42d72"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad4752b673d2391ce84f1779e48c42d72">&#9670;&#160;</a></span>create() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename XmlDocumentType &gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static DocumentPtr musx::factory::DocumentFactory::create </td>
-          <td>(</td>
-          <td class="paramtype">const std::vector&lt; char &gt; &amp;&#160;</td>
-          <td class="paramname"><em>xmlBuffer</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="namespacemusx_1_1dom.html#a8ff59967b46549e150ea4f524c00de95">dom::PartVoicingPolicy</a>&#160;</td>
-          <td class="paramname"><em>partVoicingPolicy</em> = <code><a class="el" href="namespacemusx_1_1dom.html#a8ff59967b46549e150ea4f524c00de95afd038fc7f319e48f3115d92bf5bdbef9">dom::PartVoicingPolicy::Ignore</a></code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Creates a <code>Document</code> object from an XML buffer. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">xmlBuffer</td><td>Buffer containing EnigmaXML for a musx file. </td></tr>
-    <tr><td class="paramname">partVoicingPolicy</td><td>Whether to ignore or apply part voicing as defined by <a class="el" href="classmusx_1_1dom_1_1others_1_1PartVoicing.html">dom::others::PartVoicing</a> (when it exists). </td></tr>
+    <tr><td class="paramname">createOptions</td><td>Optional creation options, including part voicing policy and NotationMetadata.xml data. </td></tr>
   </table>
   </dd>
 </dl>
