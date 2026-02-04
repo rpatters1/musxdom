@@ -1,5 +1,7 @@
 var NAVTREEINDEX28 =
 {
+"classmusx_1_1xml_1_1tinyxml2_1_1Element.html#abce86bec3a55a26f810629d6e5a25b2f":[1,0,1,2,2,2,2],
+"classmusx_1_1xml_1_1tinyxml2_1_1Element.html#abce86bec3a55a26f810629d6e5a25b2f":[2,0,1,4,2,2,2],
 "dir_191fb42801ea6f65c7c2314c973a64f2.html":[3,0,0,1,0],
 "dir_31b4f6a6f039d97388938cfaca958628.html":[3,0,0,1,2],
 "dir_54fbbe5e00a650311736d3d3e444d826.html":[3,0,0,1,1],
@@ -91,8 +93,8 @@ var NAVTREEINDEX28 =
 "index.html":[],
 "music__theory_8hpp_source.html":[3,0,0,0,0],
 "musx_8h_source.html":[3,0,0,1,4],
-"namespacemembers.html":[1,1,0],
 "namespacemembers.html":[1,1,0,0],
+"namespacemembers.html":[1,1,0],
 "namespacemembers_b.html":[1,1,0,1],
 "namespacemembers_c.html":[1,1,0,2],
 "namespacemembers_d.html":[1,1,0,3],
@@ -247,7 +249,5 @@ var NAVTREEINDEX28 =
 "namespacemusx_1_1dom.html#a4223cd531120dbef7acd854c3d2631b8":[1,0,1,0,69],
 "namespacemusx_1_1dom.html#a484882ede2c8bb64570f45fce4c0edef":[1,0,1,0,107],
 "namespacemusx_1_1dom.html#a4b9366303184d73bffbde1123caeb358":[1,0,1,0,110],
-"namespacemusx_1_1dom.html#a58a07f9a8e6c45605a8dab47d3b70d7f":[1,0,1,0,84],
-"namespacemusx_1_1dom.html#a58a07f9a8e6c45605a8dab47d3b70d7fa0074882deee30ffbff3641c589b6a089":[1,0,1,0,84,2],
-"namespacemusx_1_1dom.html#a58a07f9a8e6c45605a8dab47d3b70d7fa6adf97f83acf6453d4a6a4b1070f3754":[1,0,1,0,84,0]
+"namespacemusx_1_1dom.html#a58a07f9a8e6c45605a8dab47d3b70d7f":[1,0,1,0,84]
 };

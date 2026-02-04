@@ -128,6 +128,7 @@ Public Types</h2></td></tr>
 <tr class="memitem:a2b74a4dd470aa3145d544623ae185e3b" id="r_a2b74a4dd470aa3145d544623ae185e3b"><td class="memTemplParams" colspan="2"><a id="a2b74a4dd470aa3145d544623ae185e3b" name="a2b74a4dd470aa3145d544623ae185e3b"></a>
 template&lt;typename Container &gt; </td></tr>
 <tr class="memitem:a2b74a4dd470aa3145d544623ae185e3b"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><b>IsCharContainer</b> = std::enable_if_t&lt;(sizeof(std::remove_cv_t&lt; typename Container::value_type &gt;)==1) &amp;&amp;!std::is_same_v&lt; std::remove_cv_t&lt; typename Container::value_type &gt;, bool &gt; &gt;</td></tr>
+<tr class="memdesc:a2b74a4dd470aa3145d544623ae185e3b"><td class="mdescLeft">&#160;</td><td class="mdescRight">SFINAE helper for containers whose element type is 1 byte (excluding <code>bool</code>). <br /></td></tr>
 <tr class="separator:a2b74a4dd470aa3145d544623ae185e3b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
@@ -195,7 +196,6 @@ template&lt;typename XmlDocumentType &gt; </div>
   <table class="params">
     <tr><td class="paramname">data</td><td>Pointer to a buffer containing EnigmaXML for a musx file. </td></tr>
     <tr><td class="paramname">size</td><td>The size of the buffer. </td></tr>
-    <tr><td class="paramname">createOptions</td><td>Optional creation options, including part voicing policy and NotationMetadata.xml data. </td></tr>
   </table>
   </dd>
 </dl>
