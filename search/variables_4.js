@@ -85,7 +85,8 @@ var searchData=
   ['extbeyond8th_82',['extBeyond8th',['../classmusx_1_1dom_1_1details_1_1BeamExtension.html#a3921e8086601cc5062f021afa54f6a7a',1,'musx::dom::details::BeamExtension']]],
   ['extendbeamsoverrests_83',['extendBeamsOverRests',['../classmusx_1_1dom_1_1options_1_1BeamOptions.html#a1f3b47bbee6bfc6cce1eebee87ce55f8',1,'musx::dom::options::BeamOptions']]],
   ['extendsecbeamsoverrests_84',['extendSecBeamsOverRests',['../classmusx_1_1dom_1_1options_1_1BeamOptions.html#a02176fb4836f94f10f6fdb5e856785d6',1,'musx::dom::options::BeamOptions']]],
-  ['extractpart_85',['extractPart',['../classmusx_1_1dom_1_1others_1_1PartDefinition.html#aa8675552dd37b6a515773aa5f860d46d',1,'musx::dom::others::PartDefinition']]],
-  ['extraendsystemspace_86',['extraEndSystemSpace',['../classmusx_1_1dom_1_1others_1_1StaffSystem.html#a81d083d6208bfcde0680e0d5e2b74c7c',1,'musx::dom::others::StaffSystem']]],
-  ['extrastartsystemspace_87',['extraStartSystemSpace',['../classmusx_1_1dom_1_1others_1_1StaffSystem.html#aeb8d6f9841c73fdf5f04be04a7393d91',1,'musx::dom::others::StaffSystem']]]
+  ['extension_85',['extension',['../structmusx_1_1dom_1_1EmbeddedGraphicData.html#a4fcb4768de1e4b04b01da74ffcf8b908',1,'musx::dom::EmbeddedGraphicData']]],
+  ['extractpart_86',['extractPart',['../classmusx_1_1dom_1_1others_1_1PartDefinition.html#aa8675552dd37b6a515773aa5f860d46d',1,'musx::dom::others::PartDefinition']]],
+  ['extraendsystemspace_87',['extraEndSystemSpace',['../classmusx_1_1dom_1_1others_1_1StaffSystem.html#a81d083d6208bfcde0680e0d5e2b74c7c',1,'musx::dom::others::StaffSystem']]],
+  ['extrastartsystemspace_88',['extraStartSystemSpace',['../classmusx_1_1dom_1_1others_1_1StaffSystem.html#aeb8d6f9841c73fdf5f04be04a7393d91',1,'musx::dom::others::StaffSystem']]]
 ];

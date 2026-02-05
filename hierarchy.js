@@ -301,6 +301,8 @@ var hierarchy =
     [ "musx::dom::ShapeDefInstruction::DrawChar", "structmusx_1_1dom_1_1ShapeDefInstruction_1_1DrawChar.html", null ],
     [ "musx::factory::ElementLinker", "classmusx_1_1factory_1_1ElementLinker.html", null ],
     [ "musx::dom::ShapeDefInstruction::Ellipse", "structmusx_1_1dom_1_1ShapeDefInstruction_1_1Ellipse.html", null ],
+    [ "musx::dom::EmbeddedGraphicData", "structmusx_1_1dom_1_1EmbeddedGraphicData.html", null ],
+    [ "musx::factory::DocumentFactory::CreateOptions::EmbeddedGraphicFile", "structmusx_1_1factory_1_1DocumentFactory_1_1CreateOptions_1_1EmbeddedGraphicFile.html", null ],
     [ "std::enable_shared_from_this", null, [
       [ "musx::dom::EntryFrame", "classmusx_1_1dom_1_1EntryFrame.html", null ]
     ] ],

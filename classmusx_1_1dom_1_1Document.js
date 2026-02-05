@@ -10,6 +10,7 @@ var classmusx_1_1dom_1_1Document =
     [ "getCachedShapeRecognition", "classmusx_1_1dom_1_1Document.html#a47127c636306813c211180c392e8ef7d", null ],
     [ "getDetails", "classmusx_1_1dom_1_1Document.html#ae5cc504ac90381247c976fddfbf8f6a7", null ],
     [ "getDetails", "classmusx_1_1dom_1_1Document.html#a9c2d300cb8b2da41a34601235b41d963", null ],
+    [ "getEmbeddedGraphics", "classmusx_1_1dom_1_1Document.html#ac11e47f85844df2aa302212a8e2329e7", null ],
     [ "getEntries", "classmusx_1_1dom_1_1Document.html#af81dc03185013ac23c53e5a5f2da3b30", null ],
     [ "getEntries", "classmusx_1_1dom_1_1Document.html#ae196757dfb2f417d75f9510a18b157dc", null ],
     [ "getHeader", "classmusx_1_1dom_1_1Document.html#aa1299858559ac9bb595ab00e67ea0102", null ],

@@ -235,6 +235,7 @@ var annotated_dup =
         [ "DetailsBase", "classmusx_1_1dom_1_1DetailsBase.html", "classmusx_1_1dom_1_1DetailsBase" ],
         [ "DetailsPool", "classmusx_1_1dom_1_1DetailsPool.html", "classmusx_1_1dom_1_1DetailsPool" ],
         [ "Document", "classmusx_1_1dom_1_1Document.html", "classmusx_1_1dom_1_1Document" ],
+        [ "EmbeddedGraphicData", "structmusx_1_1dom_1_1EmbeddedGraphicData.html", "structmusx_1_1dom_1_1EmbeddedGraphicData" ],
         [ "Entry", "classmusx_1_1dom_1_1Entry.html", "classmusx_1_1dom_1_1Entry" ],
         [ "EntryDetailsBase", "classmusx_1_1dom_1_1EntryDetailsBase.html", "classmusx_1_1dom_1_1EntryDetailsBase" ],
         [ "EntryFrame", "classmusx_1_1dom_1_1EntryFrame.html", "classmusx_1_1dom_1_1EntryFrame" ],

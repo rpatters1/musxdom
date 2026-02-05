@@ -142,15 +142,15 @@ template&lt;typename XmlDocumentType , typename Container , typename  = IsCharCo
 <tr class="memitem:a4f7ed6fcdd55300c254325353f36ad78"><td class="memTemplItemLeft" align="right" valign="top">static DocumentPtr&#160;</td><td class="memTemplItemRight" valign="bottom"><b>create</b> (const Container &amp;xmlBuffer)</td></tr>
 <tr class="memdesc:a4f7ed6fcdd55300c254325353f36ad78"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a <code>Document</code> object from a char container (e.g. std::string, std::vector&lt;char&gt;). <br /></td></tr>
 <tr class="separator:a4f7ed6fcdd55300c254325353f36ad78"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa60a52528633aeb7fd2bb2f7cff2bc04" id="r_aa60a52528633aeb7fd2bb2f7cff2bc04"><td class="memTemplParams" colspan="2">template&lt;typename XmlDocumentType &gt; </td></tr>
-<tr class="memitem:aa60a52528633aeb7fd2bb2f7cff2bc04"><td class="memTemplItemLeft" align="right" valign="top">static DocumentPtr&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classmusx_1_1factory_1_1DocumentFactory.html#aa60a52528633aeb7fd2bb2f7cff2bc04">create</a> (const char *data, size_t size, const <a class="el" href="structmusx_1_1factory_1_1DocumentFactory_1_1CreateOptions.html">CreateOptions</a> &amp;createOptions)</td></tr>
-<tr class="memdesc:aa60a52528633aeb7fd2bb2f7cff2bc04"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a <code>Document</code> object from an XML buffer.  <br /></td></tr>
-<tr class="separator:aa60a52528633aeb7fd2bb2f7cff2bc04"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa315c4d8a4630f2d935708ddeec854d6" id="r_aa315c4d8a4630f2d935708ddeec854d6"><td class="memTemplParams" colspan="2"><a id="aa315c4d8a4630f2d935708ddeec854d6" name="aa315c4d8a4630f2d935708ddeec854d6"></a>
+<tr class="memitem:a69f6bca48702dce126d452989fa36cc5" id="r_a69f6bca48702dce126d452989fa36cc5"><td class="memTemplParams" colspan="2">template&lt;typename XmlDocumentType &gt; </td></tr>
+<tr class="memitem:a69f6bca48702dce126d452989fa36cc5"><td class="memTemplItemLeft" align="right" valign="top">static DocumentPtr&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classmusx_1_1factory_1_1DocumentFactory.html#a69f6bca48702dce126d452989fa36cc5">create</a> (const char *data, size_t size, <a class="el" href="structmusx_1_1factory_1_1DocumentFactory_1_1CreateOptions.html">CreateOptions</a> &amp;&amp;createOptions)</td></tr>
+<tr class="memdesc:a69f6bca48702dce126d452989fa36cc5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a <code>Document</code> object from an XML buffer.  <br /></td></tr>
+<tr class="separator:a69f6bca48702dce126d452989fa36cc5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a94d171b1f2a11d99811fa75fafc99bb9" id="r_a94d171b1f2a11d99811fa75fafc99bb9"><td class="memTemplParams" colspan="2"><a id="a94d171b1f2a11d99811fa75fafc99bb9" name="a94d171b1f2a11d99811fa75fafc99bb9"></a>
 template&lt;typename XmlDocumentType , typename Container , typename  = IsCharContainer&lt;Container&gt;&gt; </td></tr>
-<tr class="memitem:aa315c4d8a4630f2d935708ddeec854d6"><td class="memTemplItemLeft" align="right" valign="top">static DocumentPtr&#160;</td><td class="memTemplItemRight" valign="bottom"><b>create</b> (const Container &amp;xmlBuffer, const <a class="el" href="structmusx_1_1factory_1_1DocumentFactory_1_1CreateOptions.html">CreateOptions</a> &amp;createOptions)</td></tr>
-<tr class="memdesc:aa315c4d8a4630f2d935708ddeec854d6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a <code>Document</code> object from a char container and explicit create options. <br /></td></tr>
-<tr class="separator:aa315c4d8a4630f2d935708ddeec854d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a94d171b1f2a11d99811fa75fafc99bb9"><td class="memTemplItemLeft" align="right" valign="top">static DocumentPtr&#160;</td><td class="memTemplItemRight" valign="bottom"><b>create</b> (const Container &amp;xmlBuffer, <a class="el" href="structmusx_1_1factory_1_1DocumentFactory_1_1CreateOptions.html">CreateOptions</a> &amp;&amp;createOptions)</td></tr>
+<tr class="memdesc:a94d171b1f2a11d99811fa75fafc99bb9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a <code>Document</code> object from a char container and explicit create options. <br /></td></tr>
+<tr class="separator:a94d171b1f2a11d99811fa75fafc99bb9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Factory class for creating <code>Document</code> objects from XML. </p>
@@ -209,8 +209,8 @@ template&lt;typename XmlDocumentType &gt; </div>
 
 </div>
 </div>
-<a id="aa60a52528633aeb7fd2bb2f7cff2bc04" name="aa60a52528633aeb7fd2bb2f7cff2bc04"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa60a52528633aeb7fd2bb2f7cff2bc04">&#9670;&#160;</a></span>create() <span class="overload">[2/2]</span></h2>
+<a id="a69f6bca48702dce126d452989fa36cc5" name="a69f6bca48702dce126d452989fa36cc5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a69f6bca48702dce126d452989fa36cc5">&#9670;&#160;</a></span>create() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -235,7 +235,7 @@ template&lt;typename XmlDocumentType &gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="structmusx_1_1factory_1_1DocumentFactory_1_1CreateOptions.html">CreateOptions</a> &amp;&#160;</td>
+          <td class="paramtype"><a class="el" href="structmusx_1_1factory_1_1DocumentFactory_1_1CreateOptions.html">CreateOptions</a> &amp;&amp;&#160;</td>
           <td class="paramname"><em>createOptions</em>&#160;</td>
         </tr>
         <tr>

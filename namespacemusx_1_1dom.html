@@ -153,6 +153,9 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1Document.html">Document</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Represents a document object that encapsulates the entire EnigmaXML structure.  <a href="classmusx_1_1dom_1_1Document.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmusx_1_1dom_1_1EmbeddedGraphicData.html">EmbeddedGraphicData</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Embedded graphic payload from a musx archive entry.  <a href="structmusx_1_1dom_1_1EmbeddedGraphicData.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1Entry.html">Entry</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Represents an entry containing metadata and notes.  <a href="classmusx_1_1dom_1_1Entry.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -276,8 +279,16 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>DocumentWeakPtr</b> 
 using&#160;</td><td class="memItemRight" valign="bottom"><b>Duration</b> = std::pair&lt; <a class="el" href="namespacemusx_1_1dom.html#a3c91ee84b72cc27a2899191d6baee312">NoteType</a>, unsigned &gt;</td></tr>
 <tr class="memdesc:a9fd6f660a4f7c02787b6bbe3307a15af"><td class="mdescLeft">&#160;</td><td class="mdescRight">Expresses a duration as a <a class="el" href="namespacemusx_1_1dom.html#a3c91ee84b72cc27a2899191d6baee312" title="Enum class representing note types based on EDU values.">NoteType</a> and a number of dots (unsigned) <br /></td></tr>
 <tr class="separator:a9fd6f660a4f7c02787b6bbe3307a15af"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af9192bccf9b3700caeb880975e768c69" id="r_af9192bccf9b3700caeb880975e768c69"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemusx_1_1dom.html#af9192bccf9b3700caeb880975e768c69">InstrumentMap</a> = std::unordered_map&lt; <a class="el" href="namespacemusx_1_1dom.html#ada2c0787f5b7cb764d2a344d491ab99c">StaffCmper</a>, <a class="el" href="structmusx_1_1dom_1_1InstrumentInfo.html">InstrumentInfo</a> &gt;</td></tr>
+<tr class="memitem:af9192bccf9b3700caeb880975e768c69" id="r_af9192bccf9b3700caeb880975e768c69"><td class="memItemLeft" align="right" valign="top"><a id="af9192bccf9b3700caeb880975e768c69" name="af9192bccf9b3700caeb880975e768c69"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>InstrumentMap</b> = std::unordered_map&lt; <a class="el" href="namespacemusx_1_1dom.html#ada2c0787f5b7cb764d2a344d491ab99c">StaffCmper</a>, <a class="el" href="structmusx_1_1dom_1_1InstrumentInfo.html">InstrumentInfo</a> &gt;</td></tr>
+<tr class="memdesc:af9192bccf9b3700caeb880975e768c69"><td class="mdescLeft">&#160;</td><td class="mdescRight">A list of instruments, which may be single- or multi-staff. <br /></td></tr>
 <tr class="separator:af9192bccf9b3700caeb880975e768c69"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab352380618e6ad3cf2c84d5a6b34d844" id="r_ab352380618e6ad3cf2c84d5a6b34d844"><td class="memItemLeft" align="right" valign="top"><a id="ab352380618e6ad3cf2c84d5a6b34d844" name="ab352380618e6ad3cf2c84d5a6b34d844"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>EmbeddedGraphicBlob</b> = std::vector&lt; uint8_t &gt;</td></tr>
+<tr class="memdesc:ab352380618e6ad3cf2c84d5a6b34d844"><td class="mdescLeft">&#160;</td><td class="mdescRight">Raw bytes for one embedded graphic payload from a musx archive. <br /></td></tr>
+<tr class="separator:ab352380618e6ad3cf2c84d5a6b34d844"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab6c9d6e38f68c0631771adfe88470077" id="r_ab6c9d6e38f68c0631771adfe88470077"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemusx_1_1dom.html#ab6c9d6e38f68c0631771adfe88470077">EmbeddedGraphicsMap</a> = std::unordered_map&lt; <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a>, <a class="el" href="structmusx_1_1dom_1_1EmbeddedGraphicData.html">EmbeddedGraphicData</a> &gt;</td></tr>
+<tr class="separator:ab6c9d6e38f68c0631771adfe88470077"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a849c0fb091707be060d840e877486f65" id="r_a849c0fb091707be060d840e877486f65"><td class="memItemLeft" align="right" valign="top"><a id="a849c0fb091707be060d840e877486f65" name="a849c0fb091707be060d840e877486f65"></a>
 using&#160;</td><td class="memItemRight" valign="bottom"><b>Cmper</b> = uint16_t</td></tr>
 <tr class="memdesc:a849c0fb091707be060d840e877486f65"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enigma "comperator" key type. <br /></td></tr>
@@ -646,18 +657,18 @@ template&lt;typename Pool , typename T &gt; </td></tr>
 <div class="textblock"><p>The DOM (document object model) for musx files. </p>
 <p>classes representing the musx document </p>
 </div><h2 class="groupheader">Typedef Documentation</h2>
-<a id="af9192bccf9b3700caeb880975e768c69" name="af9192bccf9b3700caeb880975e768c69"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af9192bccf9b3700caeb880975e768c69">&#9670;&#160;</a></span>InstrumentMap</h2>
+<a id="ab6c9d6e38f68c0631771adfe88470077" name="ab6c9d6e38f68c0631771adfe88470077"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab6c9d6e38f68c0631771adfe88470077">&#9670;&#160;</a></span>EmbeddedGraphicsMap</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="namespacemusx_1_1dom.html#af9192bccf9b3700caeb880975e768c69">musx::dom::InstrumentMap</a> = typedef std::unordered_map&lt;<a class="el" href="namespacemusx_1_1dom.html#ada2c0787f5b7cb764d2a344d491ab99c">StaffCmper</a>, <a class="el" href="structmusx_1_1dom_1_1InstrumentInfo.html">InstrumentInfo</a>&gt;</td>
+          <td class="memname">using <a class="el" href="namespacemusx_1_1dom.html#ab6c9d6e38f68c0631771adfe88470077">musx::dom::EmbeddedGraphicsMap</a> = typedef std::unordered_map&lt;<a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a>, <a class="el" href="structmusx_1_1dom_1_1EmbeddedGraphicData.html">EmbeddedGraphicData</a>&gt;</td>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>A list of instruments, which may be single- or multi-staff </p>
+<p>Embedded graphics keyed by cmper (filename stem in musx archive). </p>
 
 </div>
 </div>
