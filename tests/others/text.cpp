@@ -965,7 +965,7 @@ TEST(TextsTest, ParseEnigmaPerfTimeFromNotationMetadata)
     auto buildWithMetadata = [&](musxtest::string_view metadata) -> musx::dom::DocumentPtr {
         musx::factory::DocumentFactory::CreateOptions options(metadata);
         return musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(
-            minimalXml.data(), minimalXml.size(), options);
+            minimalXml.data(), minimalXml.size(), std::move(options));
     };
 
     auto getParsedText = [](const musx::dom::DocumentPtr& document, const std::string& input) -> std::string {
