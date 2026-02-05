@@ -164,7 +164,7 @@ public:
             } catch (...) {
                 return std::nullopt;
             }
-            if (cmperValue > static_cast<unsigned long long>(std::numeric_limits<Cmper>::max())) {
+            if (cmperValue > static_cast<unsigned long long>((std::numeric_limits<Cmper>::max)())) {
                 return std::nullopt;
             }
 
