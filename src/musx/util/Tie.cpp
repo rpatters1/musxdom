@@ -901,5 +901,109 @@ std::optional<Tie::ContourResult> Tie::calcContourStyleType(
     return ContourResult{options::TieOptions::ControlStyleType::MediumSpan, tieLength};
 }
 
+std::optional<Tie::ContourControlPoints> Tie::calcDefaultContourControlPoints(
+    const dom::NoteInfoPtr& noteInfo, options::TieOptions::ControlStyleType styleType, Evpu length)
+{
+    if (!noteInfo) {
+        return std::nullopt;
+    }
+
+    const auto tieOptions = noteInfo.getEntryInfo().getFrame()->getDocument()->getOptions()->get<options::TieOptions>();
+    if (!tieOptions) {
+        return std::nullopt;
+    }
+
+    auto getStyle = [&](options::TieOptions::ControlStyleType type)
+        -> const std::shared_ptr<options::TieOptions::ControlStyle>& {
+        static const std::shared_ptr<options::TieOptions::ControlStyle> kEmpty;
+        const auto it = tieOptions->tieControlStyles.find(type);
+        return (it == tieOptions->tieControlStyles.end()) ? kEmpty : it->second;
+    };
+
+    const auto style = getStyle(styleType);
+    if (!style || !style->cp1 || !style->cp2) {
+        return std::nullopt;
+    }
+
+    ContourControlPoints result{
+        ContourControlPoint{style->cp1->insetRatio, style->cp1->height, style->cp1->insetFixed},
+        ContourControlPoint{style->cp2->insetRatio, style->cp2->height, style->cp2->insetFixed},
+        tieOptions->insetStyle
+    };
+
+    if (!tieOptions->useInterpolation || styleType != options::TieOptions::ControlStyleType::MediumSpan) {
+        return result;
+    }
+
+    const auto shortStyle = getStyle(options::TieOptions::ControlStyleType::ShortSpan);
+    const auto mediumStyle = getStyle(options::TieOptions::ControlStyleType::MediumSpan);
+    const auto longStyle = getStyle(options::TieOptions::ControlStyleType::LongSpan);
+    if (!shortStyle || !shortStyle->cp1 || !shortStyle->cp2
+        || !mediumStyle || !mediumStyle->cp1 || !mediumStyle->cp2
+        || !longStyle || !longStyle->cp1 || !longStyle->cp2) {
+        return result;
+    }
+
+    const Evpu mediumSpan = mediumStyle->span;
+    const bool belowMedium = length < mediumSpan;
+    const auto& lowerStyle = belowMedium ? shortStyle : mediumStyle;
+    const auto& upperStyle = belowMedium ? mediumStyle : longStyle;
+    const Evpu lowerSpan = lowerStyle->span;
+    const Evpu upperSpan = upperStyle->span;
+    if (upperSpan == lowerSpan) {
+        return result;
+    }
+
+    const double interpolationPercent =
+        (static_cast<double>(length) - static_cast<double>(lowerSpan))
+        / (static_cast<double>(upperSpan) - static_cast<double>(lowerSpan));
+
+    auto lerpRounded = [interpolationPercent](auto lower, auto upper) {
+        const double value = static_cast<double>(lower)
+            + (static_cast<double>(upper) - static_cast<double>(lower)) * interpolationPercent;
+        return static_cast<decltype(lower)>(std::lround(value));
+    };
+
+    result.left.height = lerpRounded(lowerStyle->cp1->height, upperStyle->cp1->height);
+    result.right.height = lerpRounded(lowerStyle->cp2->height, upperStyle->cp2->height);
+
+    if (tieOptions->insetStyle == options::TieOptions::InsetStyle::Percent) {
+        result.left.insetRatio = lerpRounded(lowerStyle->cp1->insetRatio, upperStyle->cp1->insetRatio);
+        result.right.insetRatio = lerpRounded(lowerStyle->cp2->insetRatio, upperStyle->cp2->insetRatio);
+    }
+
+    return result;
+}
+
+std::optional<Tie::ContourControlPoints> Tie::calcEffectiveContourControlPoints(
+    const dom::NoteInfoPtr& noteInfo, bool forTieEnd, options::TieOptions::ControlStyleType styleType, Evpu length)
+{
+    if (!noteInfo) {
+        return std::nullopt;
+    }
+
+    if (const auto tieAlter = details::TieAlterBase::fromNoteInfo(noteInfo, forTieEnd)) {
+        if (tieAlter->ctlPtAdjOn) {
+            const bool fixed = tieAlter->ctlPtFixed;
+            return ContourControlPoints{
+                ContourControlPoint{
+                    static_cast<Efix>(tieAlter->insetRatio1),
+                    tieAlter->height1,
+                    fixed ? tieAlter->insetRatio1 : 0
+                },
+                ContourControlPoint{
+                    static_cast<Efix>(tieAlter->insetRatio2),
+                    tieAlter->height2,
+                    fixed ? tieAlter->insetRatio2 : 0
+                },
+                fixed ? options::TieOptions::InsetStyle::Fixed
+                      : options::TieOptions::InsetStyle::Percent
+            };
+        }
+    }
+
+    return calcDefaultContourControlPoints(noteInfo, styleType, length);
+}
+
 } // namespace util
 } // namespace musx

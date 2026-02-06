@@ -68,6 +68,22 @@ public:
         dom::Evpu length{}; ///< Computed tie length in EVPU used for span classification.
     };
 
+    /// @brief Control point parameters for a tie contour.
+    struct ContourControlPoint
+    {
+        dom::Efix insetRatio{}; ///< Inset ratio (percent-based inset).
+        dom::Evpu height{}; ///< Height of the control point in EVPU.
+        dom::Evpu insetFixed{}; ///< Fixed inset in EVPU (used when inset style is Fixed).
+    };
+
+    /// @brief Control points for a tie contour (left/right endpoints).
+    struct ContourControlPoints
+    {
+        ContourControlPoint left; ///< Left control point.
+        ContourControlPoint right; ///< Right control point.
+        dom::options::TieOptions::InsetStyle insetStyle{}; ///< Which inset value is active.
+    };
+
     /// @brief Calculates the default tie direction for the specified note.
     /// @param noteInfo The note whose default tie direction is being calculated.
     /// @param forTieEnd True for tie-end stub ties, false for regular tie-forward ties.
@@ -129,6 +145,33 @@ public:
     [[nodiscard]]
     static std::optional<ContourResult> calcContourStyleType(
         const dom::NoteInfoPtr& noteInfo, const ContourGeometry& geometry, bool forTieEnd = false);
+
+    /// @brief Calculates default contour control points (inset/height) for a given control style.
+    /// @param noteInfo The note whose tie options are consulted.
+    /// @param styleType The control style type to evaluate (Short/Medium/Long/TieEnds).
+    /// @param length The tie length in EVPU used for interpolation when enabled.
+    /// @return Calculated control points, or std::nullopt if inputs/styles are unavailable.
+    ///
+    /// When tie options enable interpolation and @p styleType is MediumSpan, heights are interpolated between
+    /// Short/Medium or Medium/Long depending on @p length. Relative inset ratios are interpolated only when the
+    /// inset style is Percent; fixed insets remain the MediumSpan fixed values.
+    [[nodiscard]]
+    static std::optional<ContourControlPoints> calcDefaultContourControlPoints(
+        const dom::NoteInfoPtr& noteInfo, dom::options::TieOptions::ControlStyleType styleType, dom::Evpu length);
+
+    /// @brief Calculates effective contour control points (inset/height) for a tie.
+    /// @param noteInfo The note whose tie options and tie alterations are consulted.
+    /// @param forTieEnd True for tie-end stub ties, false for regular tie-forward ties.
+    /// @param styleType The control style type to evaluate (Short/Medium/Long/TieEnds).
+    /// @param length The tie length in EVPU used for interpolation when enabled.
+    /// @return Calculated control points, or std::nullopt if inputs/styles are unavailable.
+    ///
+    /// If a tie alteration record exists and control point adjustments are enabled, this returns the alteration
+    /// control points (and inset style from the alteration). Otherwise it falls back to
+    /// #calcDefaultContourControlPoints.
+    [[nodiscard]]
+    static std::optional<ContourControlPoints> calcEffectiveContourControlPoints(
+        const dom::NoteInfoPtr& noteInfo, bool forTieEnd, dom::options::TieOptions::ControlStyleType styleType, dom::Evpu length);
 
 private:
     /// @brief Calculates the connect style type for a single endpoint (placement_for_endpoint).

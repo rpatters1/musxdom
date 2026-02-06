@@ -37,6 +37,15 @@ struct ExpectedContour
     Evpu length{};
 };
 
+struct ExpectedControlPoints
+{
+    options::TieOptions::InsetStyle insetStyle{};
+    Efix leftInsetRatio{};
+    Evpu leftHeight{};
+    Efix rightInsetRatio{};
+    Evpu rightHeight{};
+};
+
 struct ContourCase
 {
     int measure{};
@@ -57,6 +66,20 @@ static void runContourCase(const NoteInfoPtr& noteInfo, const ContourCase& testC
                         << (testCase.forPageView ? " (page view)" : " (scroll view)");
     EXPECT_EQ(result->styleType, testCase.expected->styleType);
     EXPECT_EQ(result->length, testCase.expected->length);
+}
+
+static void runControlPointCase(const NoteInfoPtr& noteInfo, int measure, bool forPageView,
+                                options::TieOptions::ControlStyleType styleType, Evpu length,
+                                const ExpectedControlPoints& expected)
+{
+    auto result = Tie::calcDefaultContourControlPoints(noteInfo, styleType, length);
+    ASSERT_TRUE(result) << "No contour control points for measure " << measure
+                        << (forPageView ? " (page view)" : " (scroll view)");
+    EXPECT_EQ(result->insetStyle, expected.insetStyle);
+    EXPECT_EQ(result->left.insetRatio, expected.leftInsetRatio);
+    EXPECT_EQ(result->left.height, expected.leftHeight);
+    EXPECT_EQ(result->right.insetRatio, expected.rightInsetRatio);
+    EXPECT_EQ(result->right.height, expected.rightHeight);
 }
 
 } // namespace
@@ -208,5 +231,77 @@ TEST(TieContour, ContourTypes)
 
         runContourCase(noteInfo, scrollCase);
         runContourCase(noteInfo, pageCase);
+    }
+}
+
+TEST(TieContour, InterpolatedControlPoints)
+{
+    std::vector<char> xml;
+    musxtest::readFile(musxtest::getInputPath() / "tie_contour_interpolated.enigmaxml", xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
+    ASSERT_TRUE(doc);
+
+    const int staff = 1;
+    const size_t entryIndex = 0;
+    const size_t noteIndex = 0;
+
+    struct InterpCase
+    {
+        int measure{};
+        options::TieOptions::ControlStyleType scrollStyle{};
+        Evpu scrollLength{};
+        ExpectedControlPoints scrollExpected{};
+        options::TieOptions::ControlStyleType pageStyle{};
+        Evpu pageLength{};
+        ExpectedControlPoints pageExpected{};
+    };
+
+    const std::vector<InterpCase> cases{
+        {
+            1,
+            options::TieOptions::ControlStyleType::MediumSpan,
+            611,
+            {options::TieOptions::InsetStyle::Percent, 710, 50, 915, 18},
+            options::TieOptions::ControlStyleType::MediumSpan,
+            1596,
+            {options::TieOptions::InsetStyle::Percent, 1634, 96, 1839, 96},
+        },
+        {
+            3,
+            options::TieOptions::ControlStyleType::ShortSpan,
+            109,
+            {options::TieOptions::InsetStyle::Percent, 205, 2, 410, 72},
+            options::TieOptions::ControlStyleType::MediumSpan,
+            343,
+            {options::TieOptions::InsetStyle::Percent, 381, 19, 586, 53},
+        },
+        {
+            5,
+            options::TieOptions::ControlStyleType::MediumSpan,
+            885,
+            {options::TieOptions::InsetStyle::Percent, 987, 67, 1192, 25},
+            options::TieOptions::ControlStyleType::LongSpan,
+            1650,
+            {options::TieOptions::InsetStyle::Percent, 1638, 96, 1843, 96},
+        },
+    };
+
+    for (const auto& testCase : cases) {
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, staff, testCase.measure);
+        ASSERT_TRUE(gfhold) << "gfhold not found for staff " << staff << ", measure " << testCase.measure;
+        auto entryFrame = gfhold.createEntryFrame(0);
+        ASSERT_TRUE(entryFrame);
+
+        NoteInfoPtr noteInfo = createNoteInfo(entryFrame, entryIndex, noteIndex);
+        ASSERT_TRUE(noteInfo) << "note info not found for staff " << staff
+                              << ", measure " << testCase.measure
+                              << ", entry index " << entryIndex
+                              << ", note index " << noteIndex;
+        ASSERT_TRUE(noteInfo->tieStart) << "note is not a tie start for measure " << testCase.measure;
+
+        runControlPointCase(noteInfo, testCase.measure, false,
+                            testCase.scrollStyle, testCase.scrollLength, testCase.scrollExpected);
+        runControlPointCase(noteInfo, testCase.measure, true,
+                            testCase.pageStyle, testCase.pageLength, testCase.pageExpected);
     }
 }
