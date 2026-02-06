@@ -1501,17 +1501,34 @@ std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape,
             double width = toEvpuDouble(data->width);
             double height = toEvpuDouble(data->height);
             double x = current.x;
-            double y = current.y - height;
-            bool useAbsolutePlacement = false;
+            double y = current.y;
+            bool useBoundsPlacement = false;
+            if (lastStartObject) {
+                auto isSentinel = [](dom::Evpu value) {
+                    return value == (std::numeric_limits<dom::Evpu>::min)()
+                        || value == (std::numeric_limits<dom::Evpu>::max)();
+                };
+                if (!isSentinel(lastStartObject->left) && !isSentinel(lastStartObject->right)
+                    && !isSentinel(lastStartObject->top) && !isSentinel(lastStartObject->bottom)) {
+                    const double left = toEvpuDouble(lastStartObject->left);
+                    const double right = toEvpuDouble(lastStartObject->right);
+                    const double top = toEvpuDouble(lastStartObject->top);
+                    const double bottom = toEvpuDouble(lastStartObject->bottom);
+                    width = right - left;
+                    height = top - bottom;
+                    x = left;
+                    y = -top;
+                    useBoundsPlacement = true;
+                }
+            }
             if (assignment) {
-                width = toEvpuDouble(assignment->width);
-                height = toEvpuDouble(assignment->height);
-                x = toEvpuDouble(assignment->left);
-                y = -toEvpuDouble(assignment->bottom) - height;
-                useAbsolutePlacement = true;
+                if (!useBoundsPlacement) {
+                    width = toEvpuDouble(assignment->width);
+                    height = toEvpuDouble(assignment->height);
+                }
             }
             std::string encoded = base64Encode(payload->bytes);
-            Point worldTopLeft = useAbsolutePlacement ? Point{x, y} : toWorld({x, y + height});
+            Point worldTopLeft = useBoundsPlacement ? Point{x, y} : toWorld({x, y + height});
             std::ostringstream element;
             element << "<image x=\"" << worldTopLeft.x << "\" y=\"" << worldTopLeft.y
                     << "\" width=\"" << width << "\" height=\"" << height
@@ -1519,8 +1536,8 @@ std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape,
                     << ";base64," << encoded << "\"/>";
             elements.push_back(element.str());
 
-            Point worldMin = useAbsolutePlacement ? Point{x, y} : toWorld({x, y});
-            Point worldMax = useAbsolutePlacement ? Point{x + width, y + height} : toWorld({x + width, y + height});
+            Point worldMin = useBoundsPlacement ? Point{x, y} : toWorld({x, y});
+            Point worldMax = useBoundsPlacement ? Point{x + width, y + height} : toWorld({x + width, y + height});
             bounds.include({worldMin.x, worldMin.y});
             bounds.include({worldMax.x, worldMax.y});
             break;

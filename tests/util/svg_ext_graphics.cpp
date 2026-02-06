@@ -38,7 +38,7 @@ namespace {
 
 std::filesystem::path dataRoot()
 {
-    return std::filesystem::path("tests/data/svg_ext_graphics");
+    return std::filesystem::path("svg_ext_graphics");
 }
 
 std::string readTextFile(const std::filesystem::path& path)
