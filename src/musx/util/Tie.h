@@ -26,11 +26,13 @@
 
 #include "musx/dom/Details.h"
 #include "musx/dom/EnumClasses.h"
+#include "musx/dom/Options.h"
 
 namespace musx {
 namespace dom {
 class NoteInfoPtr;
 }
+
 namespace util {
 
 /// @class Tie
@@ -38,25 +40,76 @@ namespace util {
 class Tie
 {
 public:
+    /// @enum EndPointKind
+    /// @brief Classifies what the tie endpoint attaches to for contour-length calculations.
+    enum class EndPointKind
+    {
+        Notehead,           ///< Endpoint attaches to a notehead.
+        MeasureBoundary,    ///< Endpoint attaches to a measure boundary (not a notehead).
+        SystemBoundary      ///< Endpoint attaches to a system boundary (start/end of system).
+    };
+
+    /// @brief Caller-supplied horizontal geometry used for contour span classification.
+    struct ContourGeometry
+    {
+        dom::EvpuFloat startToEndLeft{}; ///< End-left X minus start-left X in EVPU.
+        dom::EvpuFloat startNoteheadWidth{}; ///< Width of the start notehead in EVPU.
+        std::optional<dom::EvpuFloat> endNoteheadWidth{}; ///< Width of the end notehead in EVPU; defaults to startNoteheadWidth when omitted.
+        dom::EvpuFloat startAdjustment{}; ///< Caller-supplied start endpoint adjustment in EVPU (for engine-specific spacing/system rules).
+        dom::EvpuFloat endAdjustment{}; ///< Caller-supplied end endpoint adjustment in EVPU (for engine-specific spacing/system rules).
+        EndPointKind startPointKind{EndPointKind::Notehead}; ///< Attachment kind for the start endpoint.
+        EndPointKind endPointKind{EndPointKind::Notehead}; ///< Attachment kind for the end endpoint.
+    };
+
+    /// @brief Result of contour style classification.
+    struct ContourResult
+    {
+        dom::options::TieOptions::ControlStyleType styleType{}; ///< Selected control style span type.
+        dom::Evpu length{}; ///< Computed tie length in EVPU used for span classification.
+    };
+
+    /// @brief Control point parameters for a tie contour.
+    struct ContourControlPoint
+    {
+        dom::Efix insetRatio{}; ///< Inset ratio (percent-based inset).
+        dom::Evpu height{}; ///< Height of the control point in EVPU.
+        dom::Evpu insetFixed{}; ///< Fixed inset in EVPU (used when inset style is Fixed).
+    };
+
+    /// @brief Control points for a tie contour (left/right endpoints).
+    struct ContourControlPoints
+    {
+        ContourControlPoint left; ///< Left control point.
+        ContourControlPoint right; ///< Right control point.
+        dom::options::TieOptions::InsetStyle insetStyle{}; ///< Which inset value is active.
+    };
+
+    /// @brief Combined contour metrics for tie geometry and control points.
+    struct ContourMetrics
+    {
+        ContourResult contour; ///< Span type and computed length.
+        ContourControlPoints controlPoints; ///< Control points for the selected span type.
+    };
+
     /// @brief Calculates the default tie direction for the specified note.
     /// @param noteInfo The note whose default tie direction is being calculated.
-    /// @param forTieEnd If true, the tie-end contour is returned; otherwise the tie-start contour.
+    /// @param forTieEnd True for tie-end stub ties, false for regular tie-forward ties.
     /// @return The contour direction that Finale would choose for the tie, or
     ///         #dom::CurveContourDirection::Unspecified when the contour cannot be determined.
     [[nodiscard]]
-    static dom::CurveContourDirection calcDefaultDirection(const dom::NoteInfoPtr& noteInfo, bool forTieEnd);
+    static dom::CurveContourDirection calcDefaultDirection(const dom::NoteInfoPtr& noteInfo, bool forTieEnd = false);
 
     /// @brief Calculates the effective tie direction taking into account overrides and special rules.
     /// @param noteInfo The note whose effective tie direction is being calculated.
-    /// @param forTieEnd If true, uses the tie-end context; otherwise uses the tie-start context.
+    /// @param forTieEnd True for tie-end stub ties, false for regular tie-forward ties.
     /// @return The contour direction that currently applies to the tie, or
     ///         #dom::CurveContourDirection::Unspecified when the contour cannot be determined.
     [[nodiscard]]
-    static dom::CurveContourDirection calcEffectiveDirection(const dom::NoteInfoPtr& noteInfo, bool forTieEnd);
+    static dom::CurveContourDirection calcEffectiveDirection(const dom::NoteInfoPtr& noteInfo, bool forTieEnd = false);
 
     /// @brief Calculates the connect style types for both endpoints of a tie.
     /// @param noteInfo The note whose tie is being analyzed.
-    /// @param forTieEnd True if the note represents a tie end; false for tie starts.
+    /// @param forTieEnd True for tie-end stub ties, false for regular tie-forward ties.
     /// @returns A pair containing start and end connect style types, or std::nullopt if no tie exists.
     [[nodiscard]]
     static std::optional<std::pair<dom::TieConnectStyleType, dom::TieConnectStyleType>> calcConnectStyleTypes(
@@ -70,13 +123,71 @@ public:
 
     /// @brief Calculates the default connection type for a tie endpoint.
     /// @param noteInfo The note whose endpoint is being analyzed.
-    /// @param forTieEnd True if the endpoint is for a tie end; false for a tie start.
+    /// @param forTieEnd True for tie-end stub ties, false for regular tie-forward ties.
     /// @param forEndPoint True if calculating the end point; false for the start point.
     /// @param forPageView True if calculating with page view system breaks, false for scroll/studio view.
     /// @returns The connection type, or std::nullopt if no applicable tie exists.
     [[nodiscard]]
     static std::optional<dom::details::TieAlterBase::ConnectionType> calcConnectionType(
-        const dom::NoteInfoPtr& noteInfo, bool forTieEnd, bool forEndPoint, bool forPageView = false);
+        const dom::NoteInfoPtr& noteInfo, bool forTieEnd, bool forEndPoint, bool forPageView = true);
+
+    /// @brief Resolves endpoint offsets for a tie endpoint from default policy and tie-alter overrides.
+    /// @param noteInfo The note whose tie alterations are consulted.
+    /// @param forTieEnd True for tie-end stub ties, false for regular tie-forward ties.
+    /// @param forEndPoint True for end-point offset, false for start-point offset.
+    /// @param direction Optional tie contour direction. If omitted or Unspecified, effective direction is calculated.
+    /// @param forPageView True to apply page-view system-break rules in endpoint connection evaluation.
+    /// @return The effective endpoint offsets in EVPU.
+    [[nodiscard]]
+    static dom::options::TieOptions::ConnectStyle calcEndpointOffsets(const dom::NoteInfoPtr& noteInfo, bool forTieEnd, bool forEndPoint,
+        std::optional<dom::CurveContourDirection> direction = std::nullopt, bool forPageView = true);
+
+    /// @brief Calculates the tie control style span using caller-supplied horizontal geometry.
+    /// @param noteInfo The note whose tie context is being evaluated.
+    /// @param forTieEnd True for tie-end stub ties, false for regular tie-forward ties.
+    /// @param geometry Horizontal endpoint geometry in EVPU. `startAdjustment` and `endAdjustment` let the caller inject
+    ///        layout-engine-specific endpoint adjustments (for example system-boundary behavior or custom spacing policy)
+    ///        while this function still applies tie placement rules around noteheads.
+    /// @return `std::nullopt` if no applicable tie can be resolved; otherwise the selected span style and computed EVPU length.
+    [[nodiscard]]
+    static std::optional<ContourResult> calcContourStyleType(
+        const dom::NoteInfoPtr& noteInfo, const ContourGeometry& geometry, bool forTieEnd = false);
+
+    /// @brief Calculates default contour control points (inset/height) for a given control style.
+    /// @param noteInfo The note whose tie options are consulted.
+    /// @param styleType The control style type to evaluate (Short/Medium/Long/TieEnds).
+    /// @param length The tie length in EVPU used for interpolation when enabled.
+    /// @return Calculated control points, or std::nullopt if inputs/styles are unavailable.
+    ///
+    /// When tie options enable interpolation and @p styleType is MediumSpan, heights are interpolated between
+    /// Short/Medium or Medium/Long depending on @p length. Relative inset ratios are interpolated only when the
+    /// inset style is Percent; fixed insets remain the MediumSpan fixed values.
+    [[nodiscard]]
+    static std::optional<ContourControlPoints> calcDefaultContourControlPoints(
+        const dom::NoteInfoPtr& noteInfo, dom::options::TieOptions::ControlStyleType styleType, dom::Evpu length);
+
+    /// @brief Calculates effective contour control points (inset/height) for a tie.
+    /// @param noteInfo The note whose tie options and tie alterations are consulted.
+    /// @param forTieEnd True for tie-end stub ties, false for regular tie-forward ties.
+    /// @param styleType The control style type to evaluate (Short/Medium/Long/TieEnds).
+    /// @param length The tie length in EVPU used for interpolation when enabled.
+    /// @return Calculated control points, or std::nullopt if inputs/styles are unavailable.
+    ///
+    /// If a tie alteration record exists and control point adjustments are enabled, this returns the alteration
+    /// control points (and inset style from the alteration). Otherwise it falls back to
+    /// #calcDefaultContourControlPoints.
+    [[nodiscard]]
+    static std::optional<ContourControlPoints> calcEffectiveContourControlPoints(
+        const dom::NoteInfoPtr& noteInfo, bool forTieEnd, dom::options::TieOptions::ControlStyleType styleType, dom::Evpu length);
+
+    /// @brief Calculates span classification and control points in one call.
+    /// @param noteInfo The note whose tie options and tie alterations are consulted.
+    /// @param geometry Horizontal endpoint geometry in EVPU.
+    /// @param forTieEnd True for tie-end stub ties, false for regular tie-forward ties.
+    /// @return Combined contour metrics, or std::nullopt if inputs/styles are unavailable.
+    [[nodiscard]]
+    static std::optional<ContourMetrics> calcEffectiveContourMetrics(
+        const dom::NoteInfoPtr& noteInfo, const ContourGeometry& geometry, bool forTieEnd = false);
 
 private:
     /// @brief Calculates the connect style type for a single endpoint (placement_for_endpoint).

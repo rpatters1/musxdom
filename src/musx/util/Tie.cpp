@@ -20,6 +20,7 @@
  * THE SOFTWARE.
  */
 #include "musx/musx.h"
+#include <cmath>
 
 using namespace musx::dom;
 
@@ -243,6 +244,89 @@ bool calcIsEndOfSystem(const NoteInfoPtr& noteInfo, bool forPageView)
     }
 
     return false;
+}
+
+options::TieOptions::ConnectStyle calcConnectStyleOffset(const MusxInstance<options::TieOptions>& tieOptions, TieConnectStyleType connectStyle)
+{
+    options::TieOptions::ConnectStyle result{};
+    if (!tieOptions) {
+        return result;
+    }
+    const auto it = tieOptions->tieConnectStyles.find(connectStyle);
+    if (it == tieOptions->tieConnectStyles.end() || !it->second) {
+        return result;
+    }
+    return *it->second;
+}
+
+bool directionContextMatches(details::TieAlterBase::DirectionContext context, CurveContourDirection direction)
+{
+    switch (context) {
+        case details::TieAlterBase::DirectionContext::None:
+            return true;
+        case details::TieAlterBase::DirectionContext::Under:
+            return direction == CurveContourDirection::Down;
+        case details::TieAlterBase::DirectionContext::Over:
+            return direction == CurveContourDirection::Up;
+    }
+    return false;
+}
+
+options::TieOptions::ConnectStyle applyTieAlterEndpointOffsets(const NoteInfoPtr& noteInfo, bool forTieEnd, bool forEndPoint,
+    details::TieAlterBase::ConnectionType connectionType, CurveContourDirection direction, const options::TieOptions::ConnectStyle& defaultOffset)
+{
+    if (!noteInfo) {
+        return defaultOffset;
+    }
+    const auto tieAlter = details::TieAlterBase::fromNoteInfo(noteInfo, forTieEnd);
+    if (!tieAlter) {
+        return defaultOffset;
+    }
+    if (forEndPoint) {
+        if (!tieAlter->enPtAdjOn || tieAlter->enPtEntCnct != connectionType
+            || !directionContextMatches(tieAlter->enPtContext, direction)) {
+            return defaultOffset;
+        }
+        return options::TieOptions::ConnectStyle{tieAlter->xEnd, tieAlter->yEnd};
+    }
+    if (!tieAlter->stPtAdjOn || tieAlter->stPtEntCnct != connectionType
+        || !directionContextMatches(tieAlter->stPtContext, direction)) {
+        return defaultOffset;
+    }
+    return options::TieOptions::ConnectStyle{tieAlter->xStart, tieAlter->yStart};
+}
+
+Evpu calcEndpointOffsetX(const NoteInfoPtr& noteInfo, bool forTieEnd, bool forEndPoint,
+    Tie::EndPointKind endpointKind, CurveContourDirection direction)
+{
+    if (endpointKind == Tie::EndPointKind::Notehead) {
+        return Tie::calcEndpointOffsets(noteInfo, forTieEnd, forEndPoint, direction, true).offsetX;
+    }
+
+    options::TieOptions::ConnectStyle defaultOffset{};
+    if (!noteInfo) {
+        return defaultOffset.offsetX;
+    }
+    const auto tieOptions = noteInfo.getEntryInfo().getFrame()->getDocument()->getOptions()->get<options::TieOptions>();
+    if (!tieOptions) {
+        return defaultOffset.offsetX;
+    }
+    if (endpointKind == Tie::EndPointKind::SystemBoundary) {
+        defaultOffset.offsetX = forEndPoint ? tieOptions->sysBreakRightHAdj : tieOptions->sysBreakLeftHAdj;
+    }
+
+    std::optional<details::TieAlterBase::ConnectionType> connectionType;
+    if (forEndPoint && endpointKind == Tie::EndPointKind::SystemBoundary && !forTieEnd) {
+        connectionType = details::TieAlterBase::ConnectionType::SystemEnd;
+    } else if (!forEndPoint && endpointKind == Tie::EndPointKind::SystemBoundary && forTieEnd) {
+        connectionType = details::TieAlterBase::ConnectionType::SystemStart;
+    } else {
+        connectionType = Tie::calcConnectionType(noteInfo, forTieEnd, forEndPoint, true);
+    }
+    if (!connectionType) {
+        return defaultOffset.offsetX;
+    }
+    return applyTieAlterEndpointOffsets(noteInfo, forTieEnd, forEndPoint, *connectionType, direction, defaultOffset).offsetX;
 }
 
 } // namespace
@@ -696,6 +780,246 @@ std::optional<details::TieAlterBase::ConnectionType> Tie::calcConnectionType(
             : details::TieAlterBase::ConnectionType::NoteRightNoteBottom;
     }
     return std::nullopt;
+}
+
+options::TieOptions::ConnectStyle Tie::calcEndpointOffsets(const dom::NoteInfoPtr& noteInfo, bool forTieEnd, bool forEndPoint,
+    std::optional<CurveContourDirection> direction, bool forPageView)
+{
+    options::TieOptions::ConnectStyle defaultOffset{};
+    if (!noteInfo) {
+        return defaultOffset;
+    }
+    const auto entryFrame = noteInfo.getEntryInfo().getFrame();
+    const auto tieOptions = entryFrame->getDocument()->getOptions()->get<options::TieOptions>();
+    if (!tieOptions) {
+        return defaultOffset;
+    }
+
+    if (!direction.has_value() || *direction == CurveContourDirection::Unspecified) {
+        direction = noteInfo.calcEffectiveTieDirection(forTieEnd);
+    }
+    if (!direction.has_value() || *direction == CurveContourDirection::Unspecified) {
+        return defaultOffset;
+    }
+
+    const auto connectionType = calcConnectionType(noteInfo, forTieEnd, forEndPoint, forPageView);
+    if (!connectionType) {
+        return defaultOffset;
+    }
+
+    if (*connectionType == details::TieAlterBase::ConnectionType::SystemEnd) {
+        defaultOffset.offsetX = tieOptions->sysBreakRightHAdj;
+    } else if (*connectionType == details::TieAlterBase::ConnectionType::SystemStart) {
+        defaultOffset.offsetX = tieOptions->sysBreakLeftHAdj;
+    } else if (const auto styles = calcConnectStyleTypes(noteInfo, forTieEnd)) {
+        defaultOffset = calcConnectStyleOffset(tieOptions, forEndPoint ? styles->second : styles->first);
+    }
+
+    return applyTieAlterEndpointOffsets(noteInfo, forTieEnd, forEndPoint, *connectionType, *direction, defaultOffset);
+}
+
+std::optional<Tie::ContourResult> Tie::calcContourStyleType(
+    const dom::NoteInfoPtr& noteInfo, const ContourGeometry& geometry, bool forTieEnd)
+{
+    if (!noteInfo) {
+        return std::nullopt;
+    }
+
+    const auto entryFrame = noteInfo.getEntryInfo().getFrame();
+    const auto tieOptions = entryFrame->getDocument()->getOptions()->get<options::TieOptions>();
+    if (!tieOptions) {
+        return std::nullopt;
+    }
+
+    const auto direction = noteInfo.calcEffectiveTieDirection(forTieEnd);
+    if (direction == CurveContourDirection::Unspecified) {
+        return std::nullopt;
+    }
+
+    const auto connectStyles = calcConnectStyleTypes(noteInfo, forTieEnd);
+    if (!connectStyles) {
+        return std::nullopt;
+    }
+    const auto& [startStyle, endStyle] = *connectStyles;
+
+    constexpr double kOuterNoteOffsetPct = 7.0 / 16.0;
+    constexpr Evpu kInnerIncrement = 6;
+    dom::EvpuFloat startPos = 0.0;
+    dom::EvpuFloat endPos = geometry.startToEndLeft;
+    Evpu startIncrement = 0;
+    Evpu endIncrement = 0;
+
+    if (geometry.startPointKind == EndPointKind::Notehead) {
+        if (startStyle == TieConnectStyleType::OverStartPosInner
+            || startStyle == TieConnectStyleType::OverHighestNoteStemStartPosOver
+            || startStyle == TieConnectStyleType::UnderStartPosInner) {
+            startPos += geometry.startNoteheadWidth;
+            startIncrement = kInnerIncrement;
+        } else {
+            startPos += geometry.startNoteheadWidth * kOuterNoteOffsetPct;
+        }
+    }
+
+    if (geometry.endPointKind == EndPointKind::Notehead) {
+        if (endStyle == TieConnectStyleType::OverEndPosInner
+            || endStyle == TieConnectStyleType::UnderEndPosInner
+            || endStyle == TieConnectStyleType::UnderLowestNoteStemEndPosUnder) {
+            endIncrement = -kInnerIncrement;
+        } else {
+            const dom::EvpuFloat endNoteheadWidth = geometry.endNoteheadWidth.value_or(geometry.startNoteheadWidth);
+            endPos += endNoteheadWidth * (1.0 - kOuterNoteOffsetPct);
+        }
+    }
+
+    const dom::EvpuFloat startOffset = static_cast<dom::EvpuFloat>(calcEndpointOffsetX(
+        noteInfo, forTieEnd, false, geometry.startPointKind, direction)) + geometry.startAdjustment;
+    const dom::EvpuFloat endOffset = static_cast<dom::EvpuFloat>(calcEndpointOffsetX(
+        noteInfo, forTieEnd, true, geometry.endPointKind, direction)) + geometry.endAdjustment;
+
+    const Evpu tieLength = static_cast<Evpu>(std::lround((endPos - startPos)
+        + ((endOffset + endIncrement) - (startOffset + startIncrement))));
+
+    if (tieOptions->useTieEndCtlStyle) {
+        return ContourResult{options::TieOptions::ControlStyleType::TieEnds, tieLength};
+    }
+
+    const auto shortStyleIt = tieOptions->tieControlStyles.find(options::TieOptions::ControlStyleType::ShortSpan);
+    const auto mediumStyleIt = tieOptions->tieControlStyles.find(options::TieOptions::ControlStyleType::MediumSpan);
+    const auto longStyleIt = tieOptions->tieControlStyles.find(options::TieOptions::ControlStyleType::LongSpan);
+    if (shortStyleIt == tieOptions->tieControlStyles.end() || !shortStyleIt->second
+        || mediumStyleIt == tieOptions->tieControlStyles.end() || !mediumStyleIt->second
+        || longStyleIt == tieOptions->tieControlStyles.end() || !longStyleIt->second) {
+        return std::nullopt;
+    }
+
+    if (tieLength >= longStyleIt->second->span) {
+        return ContourResult{options::TieOptions::ControlStyleType::LongSpan, tieLength};
+    }
+    if (tieLength <= shortStyleIt->second->span) {
+        return ContourResult{options::TieOptions::ControlStyleType::ShortSpan, tieLength};
+    }
+    return ContourResult{options::TieOptions::ControlStyleType::MediumSpan, tieLength};
+}
+
+std::optional<Tie::ContourControlPoints> Tie::calcDefaultContourControlPoints(
+    const dom::NoteInfoPtr& noteInfo, options::TieOptions::ControlStyleType styleType, Evpu length)
+{
+    if (!noteInfo) {
+        return std::nullopt;
+    }
+
+    const auto tieOptions = noteInfo.getEntryInfo().getFrame()->getDocument()->getOptions()->get<options::TieOptions>();
+    if (!tieOptions) {
+        return std::nullopt;
+    }
+
+    auto getStyle = [&](options::TieOptions::ControlStyleType type)
+        -> const std::shared_ptr<options::TieOptions::ControlStyle>& {
+        static const std::shared_ptr<options::TieOptions::ControlStyle> kEmpty;
+        const auto it = tieOptions->tieControlStyles.find(type);
+        return (it == tieOptions->tieControlStyles.end()) ? kEmpty : it->second;
+    };
+
+    const auto style = getStyle(styleType);
+    if (!style || !style->cp1 || !style->cp2) {
+        return std::nullopt;
+    }
+
+    ContourControlPoints result{
+        ContourControlPoint{style->cp1->insetRatio, style->cp1->height, style->cp1->insetFixed},
+        ContourControlPoint{style->cp2->insetRatio, style->cp2->height, style->cp2->insetFixed},
+        tieOptions->insetStyle
+    };
+
+    if (!tieOptions->useInterpolation || styleType != options::TieOptions::ControlStyleType::MediumSpan) {
+        return result;
+    }
+
+    const auto shortStyle = getStyle(options::TieOptions::ControlStyleType::ShortSpan);
+    const auto mediumStyle = getStyle(options::TieOptions::ControlStyleType::MediumSpan);
+    const auto longStyle = getStyle(options::TieOptions::ControlStyleType::LongSpan);
+    if (!shortStyle || !shortStyle->cp1 || !shortStyle->cp2
+        || !mediumStyle || !mediumStyle->cp1 || !mediumStyle->cp2
+        || !longStyle || !longStyle->cp1 || !longStyle->cp2) {
+        return result;
+    }
+
+    const Evpu mediumSpan = mediumStyle->span;
+    const bool belowMedium = length < mediumSpan;
+    const auto& lowerStyle = belowMedium ? shortStyle : mediumStyle;
+    const auto& upperStyle = belowMedium ? mediumStyle : longStyle;
+    const Evpu lowerSpan = lowerStyle->span;
+    const Evpu upperSpan = upperStyle->span;
+    if (upperSpan == lowerSpan) {
+        return result;
+    }
+
+    const double interpolationPercent =
+        (static_cast<double>(length) - static_cast<double>(lowerSpan))
+        / (static_cast<double>(upperSpan) - static_cast<double>(lowerSpan));
+
+    auto lerpRounded = [interpolationPercent](auto lower, auto upper) {
+        const double value = static_cast<double>(lower)
+            + (static_cast<double>(upper) - static_cast<double>(lower)) * interpolationPercent;
+        return static_cast<decltype(lower)>(std::lround(value));
+    };
+
+    result.left.height = lerpRounded(lowerStyle->cp1->height, upperStyle->cp1->height);
+    result.right.height = lerpRounded(lowerStyle->cp2->height, upperStyle->cp2->height);
+
+    if (tieOptions->insetStyle == options::TieOptions::InsetStyle::Percent) {
+        result.left.insetRatio = lerpRounded(lowerStyle->cp1->insetRatio, upperStyle->cp1->insetRatio);
+        result.right.insetRatio = lerpRounded(lowerStyle->cp2->insetRatio, upperStyle->cp2->insetRatio);
+    }
+
+    return result;
+}
+
+std::optional<Tie::ContourControlPoints> Tie::calcEffectiveContourControlPoints(
+    const dom::NoteInfoPtr& noteInfo, bool forTieEnd, options::TieOptions::ControlStyleType styleType, Evpu length)
+{
+    if (!noteInfo) {
+        return std::nullopt;
+    }
+
+    if (const auto tieAlter = details::TieAlterBase::fromNoteInfo(noteInfo, forTieEnd)) {
+        if (tieAlter->ctlPtAdjOn) {
+            const bool fixed = tieAlter->ctlPtFixed;
+            return ContourControlPoints{
+                ContourControlPoint{
+                    static_cast<Efix>(tieAlter->insetRatio1),
+                    tieAlter->height1,
+                    fixed ? tieAlter->insetRatio1 : 0
+                },
+                ContourControlPoint{
+                    static_cast<Efix>(tieAlter->insetRatio2),
+                    tieAlter->height2,
+                    fixed ? tieAlter->insetRatio2 : 0
+                },
+                fixed ? options::TieOptions::InsetStyle::Fixed
+                      : options::TieOptions::InsetStyle::Percent
+            };
+        }
+    }
+
+    return calcDefaultContourControlPoints(noteInfo, styleType, length);
+}
+
+std::optional<Tie::ContourMetrics> Tie::calcEffectiveContourMetrics(
+    const dom::NoteInfoPtr& noteInfo, const ContourGeometry& geometry, bool forTieEnd)
+{
+    const auto contour = calcContourStyleType(noteInfo, geometry, forTieEnd);
+    if (!contour) {
+        return std::nullopt;
+    }
+
+    const auto controlPoints = calcEffectiveContourControlPoints(
+        noteInfo, forTieEnd, contour->styleType, contour->length);
+    if (!controlPoints) {
+        return std::nullopt;
+    }
+
+    return ContourMetrics{*contour, *controlPoints};
 }
 
 } // namespace util

@@ -24,6 +24,7 @@
 #include "musx/musx.h"
 #include "test_utils.h"
 
+using namespace musxtest;
 using namespace musx::dom;
 
 static void checkTie(const NoteInfoPtr& fromNote, const NoteInfoPtr& toNoteExpected, const std::optional<NoteInfoPtr>& backNoteExpected = std::nullopt, bool requireTie = true)
@@ -58,11 +59,6 @@ static void checkTie(const NoteInfoPtr& fromNote, const NoteInfoPtr& toNoteExpec
         auto fromNoteExpected = toNoteExpected.calcTieFrom();
         EXPECT_FALSE(fromNoteExpected);
     }
-}
-
-static NoteInfoPtr createNoteInfo(const std::shared_ptr<const EntryFrame>& entryFrame, size_t entryIndex, size_t noteIndex)
-{
-    return NoteInfoPtr(EntryInfoPtr(entryFrame, entryIndex), noteIndex);
 }
 
 TEST(TieDetection, TiesInMeasure)
