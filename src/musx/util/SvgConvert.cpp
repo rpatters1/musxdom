@@ -1152,8 +1152,24 @@ std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape,
                     unit = {chord.x / chordLen, chord.y / chordLen};
                     normal = {-unit.y, unit.x};
                 }
-                double bulge = (worldC1.y - worldStart.y) + (worldC2.y - worldStart.y);
-                double offsetSign = (bulge >= 0.0) ? -1.0 : 1.0;
+                // Determine bulge in local coordinates so the default slur direction
+                // (up to the right, down to the left) is preserved across rotations.
+                double bulge = 0.0;
+                {
+                    Point localChord{endPoint.x - startPoint.x, endPoint.y - startPoint.y};
+                    double localChordLen = std::hypot(localChord.x, localChord.y);
+                    if (localChordLen > 0.0) {
+                        Point localUnit{localChord.x / localChordLen, localChord.y / localChordLen};
+                        Point localNormal{-localUnit.y, localUnit.x};
+                        const Point c1Vec{c1.x - startPoint.x, c1.y - startPoint.y};
+                        const Point c2Vec{c2.x - startPoint.x, c2.y - startPoint.y};
+                        bulge = (c1Vec.x * localNormal.x + c1Vec.y * localNormal.y)
+                            + (c2Vec.x * localNormal.x + c2Vec.y * localNormal.y);
+                    } else {
+                        bulge = (c1.y - startPoint.y) + (c2.y - startPoint.y);
+                    }
+                }
+                double offsetSign = (bulge >= 0.0) ? 1.0 : -1.0;
                 constexpr double kInvSqrt2 = 0.7071067811865476;
                 double tipScale = tipWidth * kInvSqrt2;
 
