@@ -844,8 +844,8 @@ std::optional<Tie::ContourResult> Tie::calcContourStyleType(
 
     constexpr double kOuterNoteOffsetPct = 7.0 / 16.0;
     constexpr Evpu kInnerIncrement = 6;
-    double startPos = 0;
-    double endPos = static_cast<double>(geometry.startToEndLeft);
+    dom::EvpuFloat startPos = 0.0;
+    dom::EvpuFloat endPos = geometry.startToEndLeft;
     Evpu startIncrement = 0;
     Evpu endIncrement = 0;
 
@@ -856,7 +856,7 @@ std::optional<Tie::ContourResult> Tie::calcContourStyleType(
             startPos += geometry.startNoteheadWidth;
             startIncrement = kInnerIncrement;
         } else {
-            startPos += static_cast<double>(geometry.startNoteheadWidth) * kOuterNoteOffsetPct;
+            startPos += geometry.startNoteheadWidth * kOuterNoteOffsetPct;
         }
     }
 
@@ -866,18 +866,18 @@ std::optional<Tie::ContourResult> Tie::calcContourStyleType(
             || endStyle == TieConnectStyleType::UnderLowestNoteStemEndPosUnder) {
             endIncrement = -kInnerIncrement;
         } else {
-            const Evpu endNoteheadWidth = geometry.endNoteheadWidth.value_or(geometry.startNoteheadWidth);
-            endPos += static_cast<double>(endNoteheadWidth) * (1.0 - kOuterNoteOffsetPct);
+            const dom::EvpuFloat endNoteheadWidth = geometry.endNoteheadWidth.value_or(geometry.startNoteheadWidth);
+            endPos += endNoteheadWidth * (1.0 - kOuterNoteOffsetPct);
         }
     }
 
-    const Evpu startOffset = calcEndpointOffsetX(
-        noteInfo, forTieEnd, false, geometry.startPointKind, direction) + geometry.startAdjustment;
-    const Evpu endOffset = calcEndpointOffsetX(
-        noteInfo, forTieEnd, true, geometry.endPointKind, direction) + geometry.endAdjustment;
+    const dom::EvpuFloat startOffset = static_cast<dom::EvpuFloat>(calcEndpointOffsetX(
+        noteInfo, forTieEnd, false, geometry.startPointKind, direction)) + geometry.startAdjustment;
+    const dom::EvpuFloat endOffset = static_cast<dom::EvpuFloat>(calcEndpointOffsetX(
+        noteInfo, forTieEnd, true, geometry.endPointKind, direction)) + geometry.endAdjustment;
 
     const Evpu tieLength = static_cast<Evpu>(std::lround((endPos - startPos)
-        + static_cast<double>((endOffset + endIncrement) - (startOffset + startIncrement))));
+        + ((endOffset + endIncrement) - (startOffset + startIncrement))));
 
     if (tieOptions->useTieEndCtlStyle) {
         return ContourResult{options::TieOptions::ControlStyleType::TieEnds, tieLength};

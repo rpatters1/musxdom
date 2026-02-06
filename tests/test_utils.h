@@ -69,6 +69,13 @@ inline bool stringHasDigit(const std::string& s)
            != s.end();
 }
 
+inline musx::dom::NoteInfoPtr createNoteInfo(const std::shared_ptr<const musx::dom::EntryFrame>& entryFrame,
+                                             size_t entryIndex,
+                                             size_t noteIndex)
+{
+    return musx::dom::NoteInfoPtr(musx::dom::EntryInfoPtr(entryFrame, entryIndex), noteIndex);
+}
+
 void staffListCheck(std::string_view staffListName, const musx::dom::MusxInstance<musx::dom::others::StaffList>& staffList, std::vector<int> expectedValues);
 
 } // namespace musxtext

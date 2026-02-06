@@ -51,6 +51,7 @@ add_executable(musxdomtests
     entries/entries.cpp
     entries/keysigs.cpp
     entries/ties.cpp
+    entries/tie_contours.cpp
     # options
     options/accidental_options.cpp
     options/alternate_notation_options.cpp

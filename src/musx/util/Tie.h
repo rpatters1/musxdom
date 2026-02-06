@@ -52,11 +52,11 @@ public:
     /// @brief Caller-supplied horizontal geometry used for contour span classification.
     struct ContourGeometry
     {
-        dom::Evpu startToEndLeft{}; ///< End-left X minus start-left X in EVPU.
-        dom::Evpu startNoteheadWidth{}; ///< Width of the start notehead in EVPU.
-        std::optional<dom::Evpu> endNoteheadWidth{}; ///< Width of the end notehead in EVPU; defaults to startNoteheadWidth when omitted.
-        dom::Evpu startAdjustment{}; ///< Caller-supplied start endpoint adjustment in EVPU (for engine-specific spacing/system rules).
-        dom::Evpu endAdjustment{}; ///< Caller-supplied end endpoint adjustment in EVPU (for engine-specific spacing/system rules).
+        dom::EvpuFloat startToEndLeft{}; ///< End-left X minus start-left X in EVPU.
+        dom::EvpuFloat startNoteheadWidth{}; ///< Width of the start notehead in EVPU.
+        std::optional<dom::EvpuFloat> endNoteheadWidth{}; ///< Width of the end notehead in EVPU; defaults to startNoteheadWidth when omitted.
+        dom::EvpuFloat startAdjustment{}; ///< Caller-supplied start endpoint adjustment in EVPU (for engine-specific spacing/system rules).
+        dom::EvpuFloat endAdjustment{}; ///< Caller-supplied end endpoint adjustment in EVPU (for engine-specific spacing/system rules).
         EndPointKind startPointKind{EndPointKind::Notehead}; ///< Attachment kind for the start endpoint.
         EndPointKind endPointKind{EndPointKind::Notehead}; ///< Attachment kind for the end endpoint.
     };

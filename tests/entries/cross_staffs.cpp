@@ -24,6 +24,7 @@
 #include "musx/musx.h"
 #include "test_utils.h"
 
+using namespace musxtest;
 using namespace musx::dom;
 
 static void checkCrossStaff(const NoteInfoPtr& note, StaffCmper expectedStaff, ClefIndex expectedClef, int expectedStaffPos)
@@ -40,12 +41,6 @@ static void checkCrossStaff(const NoteInfoPtr& note, StaffCmper expectedStaff, C
         << msg << " clef does note match";
     EXPECT_EQ(std::get<3>(note.calcNoteProperties()), expectedStaffPos) << msg << " staff position does not match";
 }
-
-static NoteInfoPtr createNoteInfo(const std::shared_ptr<const EntryFrame>& entryFrame, size_t entryIndex, size_t noteIndex)
-{
-    return NoteInfoPtr(EntryInfoPtr(entryFrame, entryIndex), noteIndex);
-}
-
 TEST(CrossStaff, Measure3)
 {
     std::vector<char> xml;
@@ -58,9 +53,9 @@ TEST(CrossStaff, Measure3)
     auto entryFrame = gfhold.createEntryFrame(0);
     ASSERT_TRUE(entryFrame);
 
-    checkCrossStaff(createNoteInfo(entryFrame, 1, 0), 2, 3, 0);
-    checkCrossStaff(createNoteInfo(entryFrame, 1, 1), 1, 0, -7);
-    checkCrossStaff(createNoteInfo(entryFrame, 1, 2), 1, 0, -5);
+    checkCrossStaff(musxtest::createNoteInfo(entryFrame, 1, 0), 2, 3, 0);
+    checkCrossStaff(musxtest::createNoteInfo(entryFrame, 1, 1), 1, 0, -7);
+    checkCrossStaff(musxtest::createNoteInfo(entryFrame, 1, 2), 1, 0, -5);
 }
 
 TEST(CrossStaff, Measure4)
@@ -75,13 +70,13 @@ TEST(CrossStaff, Measure4)
     auto entryFrame = gfhold.createEntryFrame(0);
     ASSERT_TRUE(entryFrame);
 
-    checkCrossStaff(createNoteInfo(entryFrame, 0, 0), 2, 3, 0);
-    checkCrossStaff(createNoteInfo(entryFrame, 0, 1), 1, 0, -7);
-    checkCrossStaff(createNoteInfo(entryFrame, 0, 2), 1, 0, -5);
+    checkCrossStaff(musxtest::createNoteInfo(entryFrame, 0, 0), 2, 3, 0);
+    checkCrossStaff(musxtest::createNoteInfo(entryFrame, 0, 1), 1, 0, -7);
+    checkCrossStaff(musxtest::createNoteInfo(entryFrame, 0, 2), 1, 0, -5);
 
-    checkCrossStaff(createNoteInfo(entryFrame, 1, 0), 2, 1, -6);
-    checkCrossStaff(createNoteInfo(entryFrame, 1, 1), 1, 0, -7);
-    checkCrossStaff(createNoteInfo(entryFrame, 1, 2), 1, 0, -5);
+    checkCrossStaff(musxtest::createNoteInfo(entryFrame, 1, 0), 2, 1, -6);
+    checkCrossStaff(musxtest::createNoteInfo(entryFrame, 1, 1), 1, 0, -7);
+    checkCrossStaff(musxtest::createNoteInfo(entryFrame, 1, 2), 1, 0, -5);
 }
 
 TEST(CrossStaff, Measure5)
@@ -96,7 +91,7 @@ TEST(CrossStaff, Measure5)
     auto entryFrame = gfhold.createEntryFrame(0);
     ASSERT_TRUE(entryFrame);
 
-    checkCrossStaff(createNoteInfo(entryFrame, 1, 0), 2, 1, -6);
-    checkCrossStaff(createNoteInfo(entryFrame, 1, 1), 1, 0, -7);
-    checkCrossStaff(createNoteInfo(entryFrame, 1, 2), 1, 0, -5);
+    checkCrossStaff(musxtest::createNoteInfo(entryFrame, 1, 0), 2, 1, -6);
+    checkCrossStaff(musxtest::createNoteInfo(entryFrame, 1, 1), 1, 0, -7);
+    checkCrossStaff(musxtest::createNoteInfo(entryFrame, 1, 2), 1, 0, -5);
 }
