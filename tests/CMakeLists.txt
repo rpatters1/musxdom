@@ -41,9 +41,10 @@ enable_testing()
 # Add the test executable
 add_executable(musxdomtests
 	musxdomtests.cpp
-	document.cpp
-	header.cpp
-	pool.cpp
+    dom/document.cpp
+    dom/document_graphics.cpp
+    dom/header.cpp
+    dom/pool.cpp
     # entries
     entries/beam_detection.cpp
     entries/cross_staffs.cpp
