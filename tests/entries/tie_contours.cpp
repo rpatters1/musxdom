@@ -92,13 +92,13 @@ TEST(TieContour, ContourTypes)
     auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
     ASSERT_TRUE(doc);
 
-    const int staff = 1;
+    const Cmper staff = 1;
     const size_t entryIndex = 0;
     const size_t noteIndex = 0;
 
-    const std::vector<int> measures{1, 3, 5};
+    const std::vector<Cmper> measures{1, 3, 5};
 
-    for (int measure : measures) {
+    for (Cmper measure : measures) {
         auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, staff, measure);
         ASSERT_TRUE(gfhold) << "gfhold not found for staff " << staff << ", measure " << measure;
         auto entryFrame = gfhold.createEntryFrame(0);
@@ -273,13 +273,13 @@ TEST(TieContour, InterpolatedControlPoints)
     auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
     ASSERT_TRUE(doc);
 
-    const int staff = 1;
+    const Cmper staff = 1;
     const size_t entryIndex = 0;
     const size_t noteIndex = 0;
 
     struct InterpCase
     {
-        int measure{};
+        Cmper measure{};
         options::TieOptions::ControlStyleType scrollStyle{};
         Evpu scrollLength{};
         ExpectedControlPoints scrollExpected{};
