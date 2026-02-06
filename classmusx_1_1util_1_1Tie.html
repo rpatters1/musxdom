@@ -93,6 +93,8 @@ $(document).ready(function(){initNavTree('classmusx_1_1util_1_1Tie.html',''); in
 
 <div class="header">
   <div class="summary">
+<a href="#nested-classes">Classes</a> &#124;
+<a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="classmusx_1_1util_1_1Tie-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">musx::util::Tie Class Reference</div></div>
@@ -104,29 +106,104 @@ $(document).ready(function(){initNavTree('classmusx_1_1util_1_1Tie.html',''); in
 
 <p><code>#include &lt;<a class="el" href="Tie_8h_source.html">Tie.h</a>&gt;</code></p>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
+Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmusx_1_1util_1_1Tie_1_1ContourControlPoint.html">ContourControlPoint</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Control point parameters for a tie contour.  <a href="structmusx_1_1util_1_1Tie_1_1ContourControlPoint.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmusx_1_1util_1_1Tie_1_1ContourControlPoints.html">ContourControlPoints</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Control points for a tie contour (left/right endpoints).  <a href="structmusx_1_1util_1_1Tie_1_1ContourControlPoints.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmusx_1_1util_1_1Tie_1_1ContourGeometry.html">ContourGeometry</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Caller-supplied horizontal geometry used for contour span classification.  <a href="structmusx_1_1util_1_1Tie_1_1ContourGeometry.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmusx_1_1util_1_1Tie_1_1ContourMetrics.html">ContourMetrics</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Combined contour metrics for tie geometry and control points.  <a href="structmusx_1_1util_1_1Tie_1_1ContourMetrics.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmusx_1_1util_1_1Tie_1_1ContourResult.html">ContourResult</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Result of contour style classification.  <a href="structmusx_1_1util_1_1Tie_1_1ContourResult.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-types" name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:a425309cf6ac4e529c1db478195440cef" id="r_a425309cf6ac4e529c1db478195440cef"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1util_1_1Tie.html#a425309cf6ac4e529c1db478195440cef">EndPointKind</a> { <a class="el" href="classmusx_1_1util_1_1Tie.html#a425309cf6ac4e529c1db478195440cefa0d8fea01be6d9721717726c9e02b74a9">Notehead</a>
+, <a class="el" href="classmusx_1_1util_1_1Tie.html#a425309cf6ac4e529c1db478195440cefad0697277c6a2cd990dc29c51b89c1e54">MeasureBoundary</a>
+, <a class="el" href="classmusx_1_1util_1_1Tie.html#a425309cf6ac4e529c1db478195440cefae0577adc1dafd348d398b0301e368a45">SystemBoundary</a>
+ }</td></tr>
+<tr class="memdesc:a425309cf6ac4e529c1db478195440cef"><td class="mdescLeft">&#160;</td><td class="mdescRight">Classifies what the tie endpoint attaches to for contour-length calculations.  <a href="classmusx_1_1util_1_1Tie.html#a425309cf6ac4e529c1db478195440cef">More...</a><br /></td></tr>
+<tr class="separator:a425309cf6ac4e529c1db478195440cef"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:acc75d0fa0da7a24ae5812c783c1604df" id="r_acc75d0fa0da7a24ae5812c783c1604df"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="namespacemusx_1_1dom.html#a0dc36a86e1ae0cadd7b7e4c624b07b55">dom::CurveContourDirection</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1util_1_1Tie.html#acc75d0fa0da7a24ae5812c783c1604df">calcDefaultDirection</a> (const <a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html">dom::NoteInfoPtr</a> &amp;noteInfo, bool forTieEnd)</td></tr>
-<tr class="memdesc:acc75d0fa0da7a24ae5812c783c1604df"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the default tie direction for the specified note.  <br /></td></tr>
-<tr class="separator:acc75d0fa0da7a24ae5812c783c1604df"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac50f271c8095f8cd97e9a03e96418117" id="r_ac50f271c8095f8cd97e9a03e96418117"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="namespacemusx_1_1dom.html#a0dc36a86e1ae0cadd7b7e4c624b07b55">dom::CurveContourDirection</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1util_1_1Tie.html#ac50f271c8095f8cd97e9a03e96418117">calcEffectiveDirection</a> (const <a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html">dom::NoteInfoPtr</a> &amp;noteInfo, bool forTieEnd)</td></tr>
-<tr class="memdesc:ac50f271c8095f8cd97e9a03e96418117"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the effective tie direction taking into account overrides and special rules.  <br /></td></tr>
-<tr class="separator:ac50f271c8095f8cd97e9a03e96418117"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9bbee01a61fdd2474db997507876d7a1" id="r_a9bbee01a61fdd2474db997507876d7a1"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="namespacemusx_1_1dom.html#a0dc36a86e1ae0cadd7b7e4c624b07b55">dom::CurveContourDirection</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1util_1_1Tie.html#a9bbee01a61fdd2474db997507876d7a1">calcDefaultDirection</a> (const <a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html">dom::NoteInfoPtr</a> &amp;noteInfo, bool forTieEnd=false)</td></tr>
+<tr class="memdesc:a9bbee01a61fdd2474db997507876d7a1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the default tie direction for the specified note.  <br /></td></tr>
+<tr class="separator:a9bbee01a61fdd2474db997507876d7a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a47235467b8c1d1617b5c9860506f78cf" id="r_a47235467b8c1d1617b5c9860506f78cf"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="namespacemusx_1_1dom.html#a0dc36a86e1ae0cadd7b7e4c624b07b55">dom::CurveContourDirection</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1util_1_1Tie.html#a47235467b8c1d1617b5c9860506f78cf">calcEffectiveDirection</a> (const <a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html">dom::NoteInfoPtr</a> &amp;noteInfo, bool forTieEnd=false)</td></tr>
+<tr class="memdesc:a47235467b8c1d1617b5c9860506f78cf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the effective tie direction taking into account overrides and special rules.  <br /></td></tr>
+<tr class="separator:a47235467b8c1d1617b5c9860506f78cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a21eff7b35bcf7bf29c5588f1d489e5ba" id="r_a21eff7b35bcf7bf29c5588f1d489e5ba"><td class="memItemLeft" align="right" valign="top">static std::optional&lt; std::pair&lt; <a class="el" href="namespacemusx_1_1dom.html#a5f06724a2f55f38e74adc2f8d37e20d5">dom::TieConnectStyleType</a>, <a class="el" href="namespacemusx_1_1dom.html#a5f06724a2f55f38e74adc2f8d37e20d5">dom::TieConnectStyleType</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1util_1_1Tie.html#a21eff7b35bcf7bf29c5588f1d489e5ba">calcConnectStyleTypes</a> (const <a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html">dom::NoteInfoPtr</a> &amp;noteInfo, bool forTieEnd)</td></tr>
 <tr class="memdesc:a21eff7b35bcf7bf29c5588f1d489e5ba"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the connect style types for both endpoints of a tie.  <br /></td></tr>
 <tr class="separator:a21eff7b35bcf7bf29c5588f1d489e5ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8bc64973fc02e52ad11ca59d3fa21d3a" id="r_a8bc64973fc02e52ad11ca59d3fa21d3a"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1util_1_1Tie.html#a8bc64973fc02e52ad11ca59d3fa21d3a">calcIsOuterConnectStyle</a> (<a class="el" href="namespacemusx_1_1dom.html#a5f06724a2f55f38e74adc2f8d37e20d5">dom::TieConnectStyleType</a> type)</td></tr>
 <tr class="memdesc:a8bc64973fc02e52ad11ca59d3fa21d3a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if the connect style is an outer placement.  <br /></td></tr>
 <tr class="separator:a8bc64973fc02e52ad11ca59d3fa21d3a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a03964b4627e839e558f90587290d9a30" id="r_a03964b4627e839e558f90587290d9a30"><td class="memItemLeft" align="right" valign="top">static std::optional&lt; <a class="el" href="classmusx_1_1dom_1_1details_1_1TieAlterBase.html#a568325ed0d5aa2b159b889d25e8b3755">dom::details::TieAlterBase::ConnectionType</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1util_1_1Tie.html#a03964b4627e839e558f90587290d9a30">calcConnectionType</a> (const <a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html">dom::NoteInfoPtr</a> &amp;noteInfo, bool forTieEnd, bool forEndPoint, bool forPageView=false)</td></tr>
-<tr class="memdesc:a03964b4627e839e558f90587290d9a30"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the default connection type for a tie endpoint.  <br /></td></tr>
-<tr class="separator:a03964b4627e839e558f90587290d9a30"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7e30335f6bfdabd491a1dceee36e1f94" id="r_a7e30335f6bfdabd491a1dceee36e1f94"><td class="memItemLeft" align="right" valign="top">static std::optional&lt; <a class="el" href="classmusx_1_1dom_1_1details_1_1TieAlterBase.html#a568325ed0d5aa2b159b889d25e8b3755">dom::details::TieAlterBase::ConnectionType</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1util_1_1Tie.html#a7e30335f6bfdabd491a1dceee36e1f94">calcConnectionType</a> (const <a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html">dom::NoteInfoPtr</a> &amp;noteInfo, bool forTieEnd, bool forEndPoint, bool forPageView=true)</td></tr>
+<tr class="memdesc:a7e30335f6bfdabd491a1dceee36e1f94"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the default connection type for a tie endpoint.  <br /></td></tr>
+<tr class="separator:a7e30335f6bfdabd491a1dceee36e1f94"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5f32b77a1d2b29f1bc87f7e973525d09" id="r_a5f32b77a1d2b29f1bc87f7e973525d09"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structmusx_1_1dom_1_1options_1_1TieOptions_1_1ConnectStyle.html">dom::options::TieOptions::ConnectStyle</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1util_1_1Tie.html#a5f32b77a1d2b29f1bc87f7e973525d09">calcEndpointOffsets</a> (const <a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html">dom::NoteInfoPtr</a> &amp;noteInfo, bool forTieEnd, bool forEndPoint, std::optional&lt; <a class="el" href="namespacemusx_1_1dom.html#a0dc36a86e1ae0cadd7b7e4c624b07b55">dom::CurveContourDirection</a> &gt; direction=std::nullopt, bool forPageView=true)</td></tr>
+<tr class="memdesc:a5f32b77a1d2b29f1bc87f7e973525d09"><td class="mdescLeft">&#160;</td><td class="mdescRight">Resolves endpoint offsets for a tie endpoint from default policy and tie-alter overrides.  <br /></td></tr>
+<tr class="separator:a5f32b77a1d2b29f1bc87f7e973525d09"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abaec869eccbeb353cb59b2934a3685de" id="r_abaec869eccbeb353cb59b2934a3685de"><td class="memItemLeft" align="right" valign="top">static std::optional&lt; <a class="el" href="structmusx_1_1util_1_1Tie_1_1ContourResult.html">ContourResult</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1util_1_1Tie.html#abaec869eccbeb353cb59b2934a3685de">calcContourStyleType</a> (const <a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html">dom::NoteInfoPtr</a> &amp;noteInfo, const <a class="el" href="structmusx_1_1util_1_1Tie_1_1ContourGeometry.html">ContourGeometry</a> &amp;geometry, bool forTieEnd=false)</td></tr>
+<tr class="memdesc:abaec869eccbeb353cb59b2934a3685de"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the tie control style span using caller-supplied horizontal geometry.  <br /></td></tr>
+<tr class="separator:abaec869eccbeb353cb59b2934a3685de"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae6edbfe4115e0477bf540218115b635a" id="r_ae6edbfe4115e0477bf540218115b635a"><td class="memItemLeft" align="right" valign="top">static std::optional&lt; <a class="el" href="structmusx_1_1util_1_1Tie_1_1ContourControlPoints.html">ContourControlPoints</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1util_1_1Tie.html#ae6edbfe4115e0477bf540218115b635a">calcDefaultContourControlPoints</a> (const <a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html">dom::NoteInfoPtr</a> &amp;noteInfo, <a class="el" href="classmusx_1_1dom_1_1options_1_1TieOptions.html#ac17e09ac7e1de61a6afa2b6638806555">dom::options::TieOptions::ControlStyleType</a> styleType, <a class="el" href="namespacemusx_1_1dom.html#a7f27f66bcae06e7ccf1173bfca211da2">dom::Evpu</a> length)</td></tr>
+<tr class="memdesc:ae6edbfe4115e0477bf540218115b635a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates default contour control points (inset/height) for a given control style.  <br /></td></tr>
+<tr class="separator:ae6edbfe4115e0477bf540218115b635a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a05a4e2c3a8c66157ad8e62e20f7a428c" id="r_a05a4e2c3a8c66157ad8e62e20f7a428c"><td class="memItemLeft" align="right" valign="top">static std::optional&lt; <a class="el" href="structmusx_1_1util_1_1Tie_1_1ContourControlPoints.html">ContourControlPoints</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1util_1_1Tie.html#a05a4e2c3a8c66157ad8e62e20f7a428c">calcEffectiveContourControlPoints</a> (const <a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html">dom::NoteInfoPtr</a> &amp;noteInfo, bool forTieEnd, <a class="el" href="classmusx_1_1dom_1_1options_1_1TieOptions.html#ac17e09ac7e1de61a6afa2b6638806555">dom::options::TieOptions::ControlStyleType</a> styleType, <a class="el" href="namespacemusx_1_1dom.html#a7f27f66bcae06e7ccf1173bfca211da2">dom::Evpu</a> length)</td></tr>
+<tr class="memdesc:a05a4e2c3a8c66157ad8e62e20f7a428c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates effective contour control points (inset/height) for a tie.  <br /></td></tr>
+<tr class="separator:a05a4e2c3a8c66157ad8e62e20f7a428c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeef4724666cc5f94506607303283f34d" id="r_aeef4724666cc5f94506607303283f34d"><td class="memItemLeft" align="right" valign="top">static std::optional&lt; <a class="el" href="structmusx_1_1util_1_1Tie_1_1ContourMetrics.html">ContourMetrics</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1util_1_1Tie.html#aeef4724666cc5f94506607303283f34d">calcEffectiveContourMetrics</a> (const <a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html">dom::NoteInfoPtr</a> &amp;noteInfo, const <a class="el" href="structmusx_1_1util_1_1Tie_1_1ContourGeometry.html">ContourGeometry</a> &amp;geometry, bool forTieEnd=false)</td></tr>
+<tr class="memdesc:aeef4724666cc5f94506607303283f34d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates span classification and control points in one call.  <br /></td></tr>
+<tr class="separator:aeef4724666cc5f94506607303283f34d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Static class containing utilites for ties. </p>
-</div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="a03964b4627e839e558f90587290d9a30" name="a03964b4627e839e558f90587290d9a30"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a03964b4627e839e558f90587290d9a30">&#9670;&#160;</a></span>calcConnectionType()</h2>
+</div><h2 class="groupheader">Member Enumeration Documentation</h2>
+<a id="a425309cf6ac4e529c1db478195440cef" name="a425309cf6ac4e529c1db478195440cef"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a425309cf6ac4e529c1db478195440cef">&#9670;&#160;</a></span>EndPointKind</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum class <a class="el" href="classmusx_1_1util_1_1Tie.html#a425309cf6ac4e529c1db478195440cef">musx::util::Tie::EndPointKind</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">strong</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Classifies what the tie endpoint attaches to for contour-length calculations. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a425309cf6ac4e529c1db478195440cefa0d8fea01be6d9721717726c9e02b74a9" name="a425309cf6ac4e529c1db478195440cefa0d8fea01be6d9721717726c9e02b74a9"></a>Notehead&#160;</td><td class="fielddoc"><p>Endpoint attaches to a notehead. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a425309cf6ac4e529c1db478195440cefad0697277c6a2cd990dc29c51b89c1e54" name="a425309cf6ac4e529c1db478195440cefad0697277c6a2cd990dc29c51b89c1e54"></a>MeasureBoundary&#160;</td><td class="fielddoc"><p>Endpoint attaches to a measure boundary (not a notehead). </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a425309cf6ac4e529c1db478195440cefae0577adc1dafd348d398b0301e368a45" name="a425309cf6ac4e529c1db478195440cefae0577adc1dafd348d398b0301e368a45"></a>SystemBoundary&#160;</td><td class="fielddoc"><p>Endpoint attaches to a system boundary (start/end of system). </p>
+</td></tr>
+</table>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a7e30335f6bfdabd491a1dceee36e1f94" name="a7e30335f6bfdabd491a1dceee36e1f94"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7e30335f6bfdabd491a1dceee36e1f94">&#9670;&#160;</a></span>calcConnectionType()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -156,7 +233,7 @@ Static Public Member Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>forPageView</em> = <code>false</code>&#160;</td>
+          <td class="paramname"><em>forPageView</em> = <code>true</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -175,7 +252,7 @@ Static Public Member Functions</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">noteInfo</td><td>The note whose endpoint is being analyzed. </td></tr>
-    <tr><td class="paramname">forTieEnd</td><td>True if the endpoint is for a tie end; false for a tie start. </td></tr>
+    <tr><td class="paramname">forTieEnd</td><td>True for tie-end stub ties, false for regular tie-forward ties. </td></tr>
     <tr><td class="paramname">forEndPoint</td><td>True if calculating the end point; false for the start point. </td></tr>
     <tr><td class="paramname">forPageView</td><td>True if calculating with page view system breaks, false for scroll/studio view. </td></tr>
   </table>
@@ -223,7 +300,7 @@ Static Public Member Functions</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">noteInfo</td><td>The note whose tie is being analyzed. </td></tr>
-    <tr><td class="paramname">forTieEnd</td><td>True if the note represents a tie end; false for tie starts. </td></tr>
+    <tr><td class="paramname">forTieEnd</td><td>True for tie-end stub ties, false for regular tie-forward ties. </td></tr>
   </table>
   </dd>
 </dl>
@@ -231,8 +308,115 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="acc75d0fa0da7a24ae5812c783c1604df" name="acc75d0fa0da7a24ae5812c783c1604df"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#acc75d0fa0da7a24ae5812c783c1604df">&#9670;&#160;</a></span>calcDefaultDirection()</h2>
+<a id="abaec869eccbeb353cb59b2934a3685de" name="abaec869eccbeb353cb59b2934a3685de"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abaec869eccbeb353cb59b2934a3685de">&#9670;&#160;</a></span>calcContourStyleType()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::optional&lt; <a class="el" href="structmusx_1_1util_1_1Tie_1_1ContourResult.html">Tie::ContourResult</a> &gt; musx::util::Tie::calcContourStyleType </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html">dom::NoteInfoPtr</a> &amp;&#160;</td>
+          <td class="paramname"><em>noteInfo</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structmusx_1_1util_1_1Tie_1_1ContourGeometry.html">ContourGeometry</a> &amp;&#160;</td>
+          <td class="paramname"><em>geometry</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>forTieEnd</em> = <code>false</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Calculates the tie control style span using caller-supplied horizontal geometry. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">noteInfo</td><td>The note whose tie context is being evaluated. </td></tr>
+    <tr><td class="paramname">forTieEnd</td><td>True for tie-end stub ties, false for regular tie-forward ties. </td></tr>
+    <tr><td class="paramname">geometry</td><td>Horizontal endpoint geometry in EVPU. <code>startAdjustment</code> and <code>endAdjustment</code> let the caller inject layout-engine-specific endpoint adjustments (for example system-boundary behavior or custom spacing policy) while this function still applies tie placement rules around noteheads. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><code>std::nullopt</code> if no applicable tie can be resolved; otherwise the selected span style and computed EVPU length. </dd></dl>
+
+</div>
+</div>
+<a id="ae6edbfe4115e0477bf540218115b635a" name="ae6edbfe4115e0477bf540218115b635a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae6edbfe4115e0477bf540218115b635a">&#9670;&#160;</a></span>calcDefaultContourControlPoints()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::optional&lt; <a class="el" href="structmusx_1_1util_1_1Tie_1_1ContourControlPoints.html">Tie::ContourControlPoints</a> &gt; musx::util::Tie::calcDefaultContourControlPoints </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html">dom::NoteInfoPtr</a> &amp;&#160;</td>
+          <td class="paramname"><em>noteInfo</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classmusx_1_1dom_1_1options_1_1TieOptions.html#ac17e09ac7e1de61a6afa2b6638806555">dom::options::TieOptions::ControlStyleType</a>&#160;</td>
+          <td class="paramname"><em>styleType</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacemusx_1_1dom.html#a7f27f66bcae06e7ccf1173bfca211da2">dom::Evpu</a>&#160;</td>
+          <td class="paramname"><em>length</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Calculates default contour control points (inset/height) for a given control style. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">noteInfo</td><td>The note whose tie options are consulted. </td></tr>
+    <tr><td class="paramname">styleType</td><td>The control style type to evaluate (Short/Medium/Long/TieEnds). </td></tr>
+    <tr><td class="paramname">length</td><td>The tie length in EVPU used for interpolation when enabled. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Calculated control points, or std::nullopt if inputs/styles are unavailable.</dd></dl>
+<p>When tie options enable interpolation and <code>styleType</code> is MediumSpan, heights are interpolated between Short/Medium or Medium/Long depending on <code>length</code>. Relative inset ratios are interpolated only when the inset style is Percent; fixed insets remain the MediumSpan fixed values. </p>
+
+</div>
+</div>
+<a id="a9bbee01a61fdd2474db997507876d7a1" name="a9bbee01a61fdd2474db997507876d7a1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9bbee01a61fdd2474db997507876d7a1">&#9670;&#160;</a></span>calcDefaultDirection()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -250,7 +434,7 @@ Static Public Member Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>forTieEnd</em>&#160;</td>
+          <td class="paramname"><em>forTieEnd</em> = <code>false</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -269,7 +453,7 @@ Static Public Member Functions</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">noteInfo</td><td>The note whose default tie direction is being calculated. </td></tr>
-    <tr><td class="paramname">forTieEnd</td><td>If true, the tie-end contour is returned; otherwise the tie-start contour. </td></tr>
+    <tr><td class="paramname">forTieEnd</td><td>True for tie-end stub ties, false for regular tie-forward ties. </td></tr>
   </table>
   </dd>
 </dl>
@@ -277,8 +461,122 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ac50f271c8095f8cd97e9a03e96418117" name="ac50f271c8095f8cd97e9a03e96418117"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac50f271c8095f8cd97e9a03e96418117">&#9670;&#160;</a></span>calcEffectiveDirection()</h2>
+<a id="a05a4e2c3a8c66157ad8e62e20f7a428c" name="a05a4e2c3a8c66157ad8e62e20f7a428c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a05a4e2c3a8c66157ad8e62e20f7a428c">&#9670;&#160;</a></span>calcEffectiveContourControlPoints()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::optional&lt; <a class="el" href="structmusx_1_1util_1_1Tie_1_1ContourControlPoints.html">Tie::ContourControlPoints</a> &gt; musx::util::Tie::calcEffectiveContourControlPoints </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html">dom::NoteInfoPtr</a> &amp;&#160;</td>
+          <td class="paramname"><em>noteInfo</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>forTieEnd</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classmusx_1_1dom_1_1options_1_1TieOptions.html#ac17e09ac7e1de61a6afa2b6638806555">dom::options::TieOptions::ControlStyleType</a>&#160;</td>
+          <td class="paramname"><em>styleType</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacemusx_1_1dom.html#a7f27f66bcae06e7ccf1173bfca211da2">dom::Evpu</a>&#160;</td>
+          <td class="paramname"><em>length</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Calculates effective contour control points (inset/height) for a tie. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">noteInfo</td><td>The note whose tie options and tie alterations are consulted. </td></tr>
+    <tr><td class="paramname">forTieEnd</td><td>True for tie-end stub ties, false for regular tie-forward ties. </td></tr>
+    <tr><td class="paramname">styleType</td><td>The control style type to evaluate (Short/Medium/Long/TieEnds). </td></tr>
+    <tr><td class="paramname">length</td><td>The tie length in EVPU used for interpolation when enabled. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Calculated control points, or std::nullopt if inputs/styles are unavailable.</dd></dl>
+<p>If a tie alteration record exists and control point adjustments are enabled, this returns the alteration control points (and inset style from the alteration). Otherwise it falls back to <a class="el" href="classmusx_1_1util_1_1Tie.html#ae6edbfe4115e0477bf540218115b635a" title="Calculates default contour control points (inset/height) for a given control style.">calcDefaultContourControlPoints</a>. </p>
+
+</div>
+</div>
+<a id="aeef4724666cc5f94506607303283f34d" name="aeef4724666cc5f94506607303283f34d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aeef4724666cc5f94506607303283f34d">&#9670;&#160;</a></span>calcEffectiveContourMetrics()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::optional&lt; <a class="el" href="structmusx_1_1util_1_1Tie_1_1ContourMetrics.html">Tie::ContourMetrics</a> &gt; musx::util::Tie::calcEffectiveContourMetrics </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html">dom::NoteInfoPtr</a> &amp;&#160;</td>
+          <td class="paramname"><em>noteInfo</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structmusx_1_1util_1_1Tie_1_1ContourGeometry.html">ContourGeometry</a> &amp;&#160;</td>
+          <td class="paramname"><em>geometry</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>forTieEnd</em> = <code>false</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Calculates span classification and control points in one call. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">noteInfo</td><td>The note whose tie options and tie alterations are consulted. </td></tr>
+    <tr><td class="paramname">geometry</td><td>Horizontal endpoint geometry in EVPU. </td></tr>
+    <tr><td class="paramname">forTieEnd</td><td>True for tie-end stub ties, false for regular tie-forward ties. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Combined contour metrics, or std::nullopt if inputs/styles are unavailable. </dd></dl>
+
+</div>
+</div>
+<a id="a47235467b8c1d1617b5c9860506f78cf" name="a47235467b8c1d1617b5c9860506f78cf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a47235467b8c1d1617b5c9860506f78cf">&#9670;&#160;</a></span>calcEffectiveDirection()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -296,7 +594,7 @@ Static Public Member Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>forTieEnd</em>&#160;</td>
+          <td class="paramname"><em>forTieEnd</em> = <code>false</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -315,11 +613,78 @@ Static Public Member Functions</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">noteInfo</td><td>The note whose effective tie direction is being calculated. </td></tr>
-    <tr><td class="paramname">forTieEnd</td><td>If true, uses the tie-end context; otherwise uses the tie-start context. </td></tr>
+    <tr><td class="paramname">forTieEnd</td><td>True for tie-end stub ties, false for regular tie-forward ties. </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The contour direction that currently applies to the tie, or <a class="el" href="namespacemusx_1_1dom.html#a0dc36a86e1ae0cadd7b7e4c624b07b55a6fcdc090caeade09d0efd6253932b6f5" title="contour is automatic, indeterminate, or does not apply">dom::CurveContourDirection::Unspecified</a> when the contour cannot be determined. </dd></dl>
+
+</div>
+</div>
+<a id="a5f32b77a1d2b29f1bc87f7e973525d09" name="a5f32b77a1d2b29f1bc87f7e973525d09"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5f32b77a1d2b29f1bc87f7e973525d09">&#9670;&#160;</a></span>calcEndpointOffsets()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structmusx_1_1dom_1_1options_1_1TieOptions_1_1ConnectStyle.html">options::TieOptions::ConnectStyle</a> musx::util::Tie::calcEndpointOffsets </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html">dom::NoteInfoPtr</a> &amp;&#160;</td>
+          <td class="paramname"><em>noteInfo</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>forTieEnd</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>forEndPoint</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::optional&lt; <a class="el" href="namespacemusx_1_1dom.html#a0dc36a86e1ae0cadd7b7e4c624b07b55">dom::CurveContourDirection</a> &gt;&#160;</td>
+          <td class="paramname"><em>direction</em> = <code>std::nullopt</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>forPageView</em> = <code>true</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Resolves endpoint offsets for a tie endpoint from default policy and tie-alter overrides. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">noteInfo</td><td>The note whose tie alterations are consulted. </td></tr>
+    <tr><td class="paramname">forTieEnd</td><td>True for tie-end stub ties, false for regular tie-forward ties. </td></tr>
+    <tr><td class="paramname">forEndPoint</td><td>True for end-point offset, false for start-point offset. </td></tr>
+    <tr><td class="paramname">direction</td><td>Optional tie contour direction. If omitted or Unspecified, effective direction is calculated. </td></tr>
+    <tr><td class="paramname">forPageView</td><td>True to apply page-view system-break rules in endpoint connection evaluation. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The effective endpoint offsets in EVPU. </dd></dl>
 
 </div>
 </div>

@@ -296,7 +296,7 @@ var annotated_dup =
         [ "Logger", "classmusx_1_1util_1_1Logger.html", "classmusx_1_1util_1_1Logger" ],
         [ "SvgConvert", "classmusx_1_1util_1_1SvgConvert.html", "classmusx_1_1util_1_1SvgConvert" ],
         [ "TestConfiguration", "classmusx_1_1util_1_1TestConfiguration.html", null ],
-        [ "Tie", "classmusx_1_1util_1_1Tie.html", null ]
+        [ "Tie", "classmusx_1_1util_1_1Tie.html", "classmusx_1_1util_1_1Tie" ]
       ] ],
       [ "utils", null, [
         [ "PseudoTieShapeInfo", "structmusx_1_1utils_1_1PseudoTieShapeInfo.html", "structmusx_1_1utils_1_1PseudoTieShapeInfo" ]

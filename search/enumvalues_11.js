@@ -63,6 +63,7 @@ var searchData=
   ['substitute_60',['Substitute',['../classmusx_1_1util_1_1EnigmaString.html#ab46ba36ca6082f38e0ce7be58a0553c3a5f7bbf366eef76376ac3d25b02eb5164',1,'musx::util::EnigmaString']]],
   ['subtitle_61',['Subtitle',['../classmusx_1_1dom_1_1texts_1_1FileInfoText.html#a4455690874447b44689900f86bba4c2aa035f4e29da2d6d31303f7d7cfa1be13b',1,'musx::dom::texts::FileInfoText']]],
   ['swing_62',['Swing',['../namespacemusx_1_1dom_1_1others.html#a8ca1afe21691e4db1cdfd8b62344ecfea198b44a40aa77f2256886010c7526c0b',1,'musx::dom::others']]],
-  ['systemend_63',['SystemEnd',['../classmusx_1_1dom_1_1details_1_1TieAlterBase.html#a568325ed0d5aa2b159b889d25e8b3755a7140ce70e4bce02aebf36514786b916c',1,'musx::dom::details::TieAlterBase']]],
-  ['systemstart_64',['systemstart',['../classmusx_1_1dom_1_1options_1_1LyricOptions.html#af8f5c0bceb30383a2c1fa569c63192beab950514e762ca2def02ad5c01ef0b80c',1,'musx::dom::options::LyricOptions::SystemStart'],['../classmusx_1_1dom_1_1details_1_1TieAlterBase.html#a568325ed0d5aa2b159b889d25e8b3755ab950514e762ca2def02ad5c01ef0b80c',1,'musx::dom::details::TieAlterBase::SystemStart']]]
+  ['systemboundary_63',['SystemBoundary',['../classmusx_1_1util_1_1Tie.html#a425309cf6ac4e529c1db478195440cefae0577adc1dafd348d398b0301e368a45',1,'musx::util::Tie']]],
+  ['systemend_64',['SystemEnd',['../classmusx_1_1dom_1_1details_1_1TieAlterBase.html#a568325ed0d5aa2b159b889d25e8b3755a7140ce70e4bce02aebf36514786b916c',1,'musx::dom::details::TieAlterBase']]],
+  ['systemstart_65',['systemstart',['../classmusx_1_1dom_1_1options_1_1LyricOptions.html#af8f5c0bceb30383a2c1fa569c63192beab950514e762ca2def02ad5c01ef0b80c',1,'musx::dom::options::LyricOptions::SystemStart'],['../classmusx_1_1dom_1_1details_1_1TieAlterBase.html#a568325ed0d5aa2b159b889d25e8b3755ab950514e762ca2def02ad5c01ef0b80c',1,'musx::dom::details::TieAlterBase::SystemStart']]]
 ];
