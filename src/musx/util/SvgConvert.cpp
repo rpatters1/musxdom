@@ -1446,6 +1446,22 @@ std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape,
                 return false;
             }
             const auto graphicCmper = data->cmper;
+            dom::MusxInstance<dom::others::ShapeGraphicAssign> assignment;
+
+            if (auto doc = shape.getDocument()) {
+                if (auto others = doc->getOthers()) {
+                    assignment = others->get<dom::others::ShapeGraphicAssign>(shape.getRequestedPartId(), graphicCmper);
+                    if (!assignment) {
+                        auto assigns = others->getArray<dom::others::ShapeGraphicAssign>(shape.getRequestedPartId());
+                        for (const auto& nextAssign : assigns) {
+                            if (nextAssign->graphicCmper == graphicCmper) {
+                                assignment = nextAssign;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
 
             std::optional<ExternalGraphicPayload> payload;
             if (auto doc = shape.getDocument()) {
@@ -1463,18 +1479,14 @@ std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape,
 
             if (!payload) {
                 if (auto doc = shape.getDocument()) {
-                    auto others = doc->getOthers();
-                    if (others) {
-                        const auto assignment = others->get<dom::others::ShapeGraphicAssign>(shape.getRequestedPartId(), graphicCmper);
-                        if (assignment) {
-                            if (auto path = doc->resolveExternalGraphicPath(assignment->fDescId)) {
-                                ExternalGraphicPayload filePayload;
-                                filePayload.bytes = readFileBytes(*path);
-                                if (!filePayload.bytes.empty()) {
-                                    filePayload.mimeType = mimeTypeFromExtension(path->extension());
-                                    if (!filePayload.mimeType.empty()) {
-                                        payload = std::move(filePayload);
-                                    }
+                    if (assignment) {
+                        if (auto path = doc->resolveExternalGraphicPath(assignment->fDescId)) {
+                            ExternalGraphicPayload filePayload;
+                            filePayload.bytes = readFileBytes(*path);
+                            if (!filePayload.bytes.empty()) {
+                                filePayload.mimeType = mimeTypeFromExtension(path->extension());
+                                if (!filePayload.mimeType.empty()) {
+                                    payload = std::move(filePayload);
                                 }
                             }
                         }
@@ -1490,8 +1502,16 @@ std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape,
             double height = toEvpuDouble(data->height);
             double x = current.x;
             double y = current.y - height;
+            bool useAbsolutePlacement = false;
+            if (assignment) {
+                width = toEvpuDouble(assignment->width);
+                height = toEvpuDouble(assignment->height);
+                x = toEvpuDouble(assignment->left);
+                y = -toEvpuDouble(assignment->bottom) - height;
+                useAbsolutePlacement = true;
+            }
             std::string encoded = base64Encode(payload->bytes);
-            Point worldTopLeft = toWorld({x, y + height});
+            Point worldTopLeft = useAbsolutePlacement ? Point{x, y} : toWorld({x, y + height});
             std::ostringstream element;
             element << "<image x=\"" << worldTopLeft.x << "\" y=\"" << worldTopLeft.y
                     << "\" width=\"" << width << "\" height=\"" << height
@@ -1499,8 +1519,8 @@ std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape,
                     << ";base64," << encoded << "\"/>";
             elements.push_back(element.str());
 
-            Point worldMin = toWorld({x, y});
-            Point worldMax = toWorld({x + width, y + height});
+            Point worldMin = useAbsolutePlacement ? Point{x, y} : toWorld({x, y});
+            Point worldMax = useAbsolutePlacement ? Point{x + width, y + height} : toWorld({x + width, y + height});
             bounds.include({worldMin.x, worldMin.y});
             bounds.include({worldMax.x, worldMax.y});
             break;

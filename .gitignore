@@ -64,3 +64,4 @@ callgrind.out.*
 #Ignore doxygen generated files
 /docs/generated/
 /tests/data/output/
+/tests/data/svg_ext_graphics/output/

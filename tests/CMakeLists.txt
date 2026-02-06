@@ -130,6 +130,7 @@ add_executable(musxdomtests
     # util
     util/fraction.cpp
     util/svg_convert.cpp
+    util/svg_ext_graphics.cpp
 )
 
 # Enable Unity/Jumbo build for this target
