@@ -618,7 +618,7 @@ Additional Inherited Members</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Graphic instance Cmper. A non-zero value indicates that the graphic is embedded in the <code>musx</code> file. Embedded graphics are stored in the <code>/graphics/</code> subdirectory of the musx zip archive. This value also identifies the filename within that directory. For example, if the <code>graphicCmper</code> is 3 and the embedded file has extendion <code></code>.png then the file is called <code>3.png</code> within the directory. </p>
+<p>Graphic instance Cmper. A non-zero value indicates an embedded graphic whose payload is only available if the caller loaded it into the <a class="el" href="classmusx_1_1dom_1_1Document.html">Document</a> using <a class="el" href="structmusx_1_1factory_1_1DocumentFactory_1_1CreateOptions.html">musx::factory::DocumentFactory::CreateOptions</a>. The embedded file may be found in the <code>/graphics/</code> subdirectory of the musx zip archive, named using this cmper (for example, <code>3.png</code> when <code>graphicCmper</code> is 3). </p>
 
 </div>
 </div>

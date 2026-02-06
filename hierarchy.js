@@ -320,8 +320,6 @@ var hierarchy =
     [ "musx::dom::Entry::EntryLocation", "structmusx_1_1dom_1_1Entry_1_1EntryLocation.html", null ],
     [ "musx::dom::EntryPool", "classmusx_1_1dom_1_1EntryPool.html", null ],
     [ "musx::dom::ShapeDefInstruction::ExternalGraphic", "structmusx_1_1dom_1_1ShapeDefInstruction_1_1ExternalGraphic.html", null ],
-    [ "musx::util::SvgConvert::ExternalGraphicInfo", "structmusx_1_1util_1_1SvgConvert_1_1ExternalGraphicInfo.html", null ],
-    [ "musx::util::SvgConvert::ExternalGraphicPayload", "structmusx_1_1util_1_1SvgConvert_1_1ExternalGraphicPayload.html", null ],
     [ "musx::factory::FactoryBase", "classmusx_1_1factory_1_1FactoryBase.html", [
       [ "musx::factory::PoolFactory< DetailsFactory, dom::DetailsBase, dom::DetailsPool >", "classmusx_1_1factory_1_1PoolFactory.html", [
         [ "musx::factory::DetailsFactory", "classmusx_1_1factory_1_1DetailsFactory.html", null ]

@@ -198,6 +198,13 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>getMaxBlankPages</b> (
 const <a class="el" href="namespacemusx_1_1dom.html#af9192bccf9b3700caeb880975e768c69">InstrumentMap</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getInstruments</b> () const</td></tr>
 <tr class="memdesc:a5f737b924b967fc0cfe22d79c763c164"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the instrument map for this document. It is computed by the factory. <br /></td></tr>
 <tr class="separator:a5f737b924b967fc0cfe22d79c763c164"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a827ae325cfb221d9b93e84b4e8252049" id="r_a827ae325cfb221d9b93e84b4e8252049"><td class="memItemLeft" align="right" valign="top"><a id="a827ae325cfb221d9b93e84b4e8252049" name="a827ae325cfb221d9b93e84b4e8252049"></a>
+const std::optional&lt; std::filesystem::path &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getSourcePath</b> () const</td></tr>
+<tr class="memdesc:a827ae325cfb221d9b93e84b4e8252049"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the path to the musx (or EnigmaXML) file used to create this document, if provided. <br /></td></tr>
+<tr class="separator:a827ae325cfb221d9b93e84b4e8252049"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7faa5f48201ebde9262502435ece74d8" id="r_a7faa5f48201ebde9262502435ece74d8"><td class="memItemLeft" align="right" valign="top">std::optional&lt; std::filesystem::path &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1Document.html#a7faa5f48201ebde9262502435ece74d8">resolveExternalGraphicPath</a> (<a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> fileDescId) const</td></tr>
+<tr class="memdesc:a7faa5f48201ebde9262502435ece74d8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Resolve an external graphic path using SCORE_PARTID.  <br /></td></tr>
+<tr class="separator:a7faa5f48201ebde9262502435ece74d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a58f73fe5524281814278b6dbcd3fe871" id="r_a58f73fe5524281814278b6dbcd3fe871"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="structmusx_1_1dom_1_1InstrumentInfo.html">InstrumentInfo</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1Document.html#a58f73fe5524281814278b6dbcd3fe871">getInstrumentForStaff</a> (<a class="el" href="namespacemusx_1_1dom.html#ada2c0787f5b7cb764d2a344d491ab99c">StaffCmper</a> staffId) const</td></tr>
 <tr class="memdesc:a58f73fe5524281814278b6dbcd3fe871"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the instrument info for the given staffId.  <br /></td></tr>
 <tr class="separator:a58f73fe5524281814278b6dbcd3fe871"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -544,6 +551,33 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>musx::factory::Docum
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True if iteration completed. False if the <code>iterator</code> returned false and exited early. </dd></dl>
+
+</div>
+</div>
+<a id="a7faa5f48201ebde9262502435ece74d8" name="a7faa5f48201ebde9262502435ece74d8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7faa5f48201ebde9262502435ece74d8">&#9670;&#160;</a></span>resolveExternalGraphicPath()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::optional&lt; std::filesystem::path &gt; musx::dom::Document::resolveExternalGraphicPath </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a>&#160;</td>
+          <td class="paramname"><em>fileDescId</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Resolve an external graphic path using SCORE_PARTID. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">fileDescId</td><td>The FileDescription cmper associated with the graphic. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A resolved path if the file can be located, otherwise std::nullopt. </dd></dl>
 
 </div>
 </div>

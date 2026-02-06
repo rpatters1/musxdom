@@ -24,7 +24,5 @@ var searchData=
   ['entrypool_21',['EntryPool',['../classmusx_1_1dom_1_1EntryPool.html',1,'musx::dom']]],
   ['entrysize_22',['EntrySize',['../classmusx_1_1dom_1_1details_1_1EntrySize.html',1,'musx::dom::details']]],
   ['expressiontext_23',['ExpressionText',['../classmusx_1_1dom_1_1texts_1_1ExpressionText.html',1,'musx::dom::texts']]],
-  ['externalgraphic_24',['ExternalGraphic',['../structmusx_1_1dom_1_1ShapeDefInstruction_1_1ExternalGraphic.html',1,'musx::dom::ShapeDefInstruction']]],
-  ['externalgraphicinfo_25',['ExternalGraphicInfo',['../structmusx_1_1util_1_1SvgConvert_1_1ExternalGraphicInfo.html',1,'musx::util::SvgConvert']]],
-  ['externalgraphicpayload_26',['ExternalGraphicPayload',['../structmusx_1_1util_1_1SvgConvert_1_1ExternalGraphicPayload.html',1,'musx::util::SvgConvert']]]
+  ['externalgraphic_24',['ExternalGraphic',['../structmusx_1_1dom_1_1ShapeDefInstruction_1_1ExternalGraphic.html',1,'musx::dom::ShapeDefInstruction']]]
 ];

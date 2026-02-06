@@ -10,6 +10,5 @@ var searchData=
   ['entrypoolptr_7',['EntryPoolPtr',['../namespacemusx_1_1dom.html#adb56e4e338213ad74040718738d97547',1,'musx::dom']]],
   ['evpu_8',['Evpu',['../namespacemusx_1_1dom.html#a7f27f66bcae06e7ccf1173bfca211da2',1,'musx::dom']]],
   ['evpu16ths_9',['Evpu16ths',['../namespacemusx_1_1dom.html#a724894a371aee2f8438f1dec8109e451',1,'musx::dom']]],
-  ['evpufloat_10',['EvpuFloat',['../namespacemusx_1_1dom.html#a901fc57f5455ae033180b2401434b6a9',1,'musx::dom']]],
-  ['externalgraphicfn_11',['ExternalGraphicFn',['../classmusx_1_1util_1_1SvgConvert.html#a6a7c55257d29261d17935260253cf737',1,'musx::util::SvgConvert']]]
+  ['evpufloat_10',['EvpuFloat',['../namespacemusx_1_1dom.html#a901fc57f5455ae033180b2401434b6a9',1,'musx::dom']]]
 ];

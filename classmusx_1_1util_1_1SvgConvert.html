@@ -108,12 +108,6 @@ $(document).ready(function(){initNavTree('classmusx_1_1util_1_1SvgConvert.html',
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmusx_1_1util_1_1SvgConvert_1_1ExternalGraphicInfo.html">ExternalGraphicInfo</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Metadata describing an external graphic instruction.  <a href="structmusx_1_1util_1_1SvgConvert_1_1ExternalGraphicInfo.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmusx_1_1util_1_1SvgConvert_1_1ExternalGraphicPayload.html">ExternalGraphicPayload</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Payload data for external graphics.  <a href="structmusx_1_1util_1_1SvgConvert_1_1ExternalGraphicPayload.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmusx_1_1util_1_1SvgConvert_1_1GlyphMetrics.html">GlyphMetrics</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Metrics for sizing SVG text bounds.  <a href="structmusx_1_1util_1_1SvgConvert_1_1GlyphMetrics.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -123,16 +117,12 @@ Public Types</h2></td></tr>
 <tr class="memitem:a03a5e022f0ab7e2c53b56f129655bfcf" id="r_a03a5e022f0ab7e2c53b56f129655bfcf"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1util_1_1SvgConvert.html#a03a5e022f0ab7e2c53b56f129655bfcf">GlyphMetricsFn</a> = std::function&lt; std::optional&lt; <a class="el" href="structmusx_1_1util_1_1SvgConvert_1_1GlyphMetrics.html">GlyphMetrics</a> &gt;(const <a class="el" href="classmusx_1_1dom_1_1FontInfo.html">dom::FontInfo</a> &amp;, std::u32string_view)&gt;</td></tr>
 <tr class="memdesc:a03a5e022f0ab7e2c53b56f129655bfcf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Optional callback that returns glyph metrics in EVPU units.  <br /></td></tr>
 <tr class="separator:a03a5e022f0ab7e2c53b56f129655bfcf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6a7c55257d29261d17935260253cf737" id="r_a6a7c55257d29261d17935260253cf737"><td class="memItemLeft" align="right" valign="top"><a id="a6a7c55257d29261d17935260253cf737" name="a6a7c55257d29261d17935260253cf737"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>ExternalGraphicFn</b> = std::function&lt; std::optional&lt; <a class="el" href="structmusx_1_1util_1_1SvgConvert_1_1ExternalGraphicPayload.html">ExternalGraphicPayload</a> &gt;(const <a class="el" href="structmusx_1_1util_1_1SvgConvert_1_1ExternalGraphicInfo.html">ExternalGraphicInfo</a> &amp;)&gt;</td></tr>
-<tr class="memdesc:a6a7c55257d29261d17935260253cf737"><td class="mdescLeft">&#160;</td><td class="mdescRight">Optional callback that resolves external graphics to a MIME type and byte buffer. <br /></td></tr>
-<tr class="separator:a6a7c55257d29261d17935260253cf737"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:a98584bf9ceeb54bc5a21f4c4ad6688b5" id="r_a98584bf9ceeb54bc5a21f4c4ad6688b5"><td class="memItemLeft" align="right" valign="top">static std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1util_1_1SvgConvert.html#a98584bf9ceeb54bc5a21f4c4ad6688b5">toSvg</a> (const dom::others::ShapeDef &amp;shape, <a class="el" href="classmusx_1_1util_1_1SvgConvert.html#a03a5e022f0ab7e2c53b56f129655bfcf">GlyphMetricsFn</a> glyphMetrics=nullptr, <a class="el" href="classmusx_1_1util_1_1SvgConvert.html#a6a7c55257d29261d17935260253cf737">ExternalGraphicFn</a> externalGraphicResolver=nullptr)</td></tr>
-<tr class="memdesc:a98584bf9ceeb54bc5a21f4c4ad6688b5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert a ShapeDef into an SVG string buffer.  <br /></td></tr>
-<tr class="separator:a98584bf9ceeb54bc5a21f4c4ad6688b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3c96c13bf5170b46c678884ae37bd7f3" id="r_a3c96c13bf5170b46c678884ae37bd7f3"><td class="memItemLeft" align="right" valign="top">static std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1util_1_1SvgConvert.html#a3c96c13bf5170b46c678884ae37bd7f3">toSvg</a> (const dom::others::ShapeDef &amp;shape, <a class="el" href="classmusx_1_1util_1_1SvgConvert.html#a03a5e022f0ab7e2c53b56f129655bfcf">GlyphMetricsFn</a> glyphMetrics=nullptr)</td></tr>
+<tr class="memdesc:a3c96c13bf5170b46c678884ae37bd7f3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert a ShapeDef into an SVG string buffer.  <br /></td></tr>
+<tr class="separator:a3c96c13bf5170b46c678884ae37bd7f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Converts a Shape Designer definition into an SVG buffer. </p>
@@ -157,8 +147,8 @@ Return std::nullopt to fall back to heuristic metrics. </dd></dl>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a98584bf9ceeb54bc5a21f4c4ad6688b5" name="a98584bf9ceeb54bc5a21f4c4ad6688b5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a98584bf9ceeb54bc5a21f4c4ad6688b5">&#9670;&#160;</a></span>toSvg()</h2>
+<a id="a3c96c13bf5170b46c678884ae37bd7f3" name="a3c96c13bf5170b46c678884ae37bd7f3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3c96c13bf5170b46c678884ae37bd7f3">&#9670;&#160;</a></span>toSvg()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -176,13 +166,7 @@ Return std::nullopt to fall back to heuristic metrics. </dd></dl>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="classmusx_1_1util_1_1SvgConvert.html#a03a5e022f0ab7e2c53b56f129655bfcf">GlyphMetricsFn</a>&#160;</td>
-          <td class="paramname"><em>glyphMetrics</em> = <code>nullptr</code>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="classmusx_1_1util_1_1SvgConvert.html#a6a7c55257d29261d17935260253cf737">ExternalGraphicFn</a>&#160;</td>
-          <td class="paramname"><em>externalGraphicResolver</em> = <code>nullptr</code>&#160;</td>
+          <td class="paramname"><em>glyphMetrics</em> = <code>nullptr</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -201,18 +185,13 @@ Return std::nullopt to fall back to heuristic metrics. </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">shape</td><td>The shape definition to convert. </td></tr>
-    <tr><td class="paramname">glyphMetrics</td><td>Optional callback that returns glyph metrics in EVPU units. </td></tr>
-    <tr><td class="paramname">externalGraphicResolver</td><td>Optional callback that resolves external graphics to bytes and MIME types. </td></tr>
+    <tr><td class="paramname">glyphMetrics</td><td>Optional callback that receives the resolved font and the glyph(s) to measure and returns glyph metrics in EVPU units. </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>An SVG buffer encoded as a string. </dd></dl>
-<dl class="section note"><dt>Note</dt><dd>The glyph callback receives the resolved font and the glyph(s) to measure. </dd>
-<dd>
-If an external graphic is encountered and cannot be resolved, this returns an empty string. </dd></dl>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000007">Todo:</a></b></dt><dd><p class="startdd">ShapeDef SetArrowhead instructions are decoded but not yet rendered in SVG output. </p>
-<p class="enddd">External graphic handling has not been tested yet. </p>
-</dd></dl>
+<dl class="section note"><dt>Note</dt><dd>External graphics are resolved from embedded graphics in the <a class="el" href="classmusx_1_1dom_1_1Document.html">musx::dom::Document</a> when available. Otherwise the converter tries a file with the same filename in the directory containing the source musx/EnigmaXML (provided via <a class="el" href="structmusx_1_1factory_1_1DocumentFactory_1_1CreateOptions.html">musx::factory::DocumentFactory::CreateOptions</a>), then the original file location. If an external graphic still cannot be resolved, <a class="el" href="classmusx_1_1util_1_1SvgConvert.html#a3c96c13bf5170b46c678884ae37bd7f3" title="Convert a ShapeDef into an SVG string buffer.">toSvg</a> returns an empty string. </dd></dl>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000007">Todo:</a></b></dt><dd>ShapeDef SetArrowhead instructions are decoded but not yet rendered in SVG output. </dd></dl>
 <dl class="todo"><dt><b><a class="el" href="todo.html#_todo000006">Todo:</a></b></dt><dd>Render start/end arrowhead caps for line/path instructions. </dd></dl>
 
 </div>

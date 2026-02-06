@@ -17,7 +17,7 @@ var searchData=
   ['timecompositeupper_14',['TimeCompositeUpper',['../classmusx_1_1dom_1_1others_1_1TimeCompositeUpper.html#af0f36a83fa7adb3e5aa927308077c267',1,'musx::dom::others::TimeCompositeUpper']]],
   ['timesignatureoptions_15',['TimeSignatureOptions',['../classmusx_1_1dom_1_1options_1_1TimeSignatureOptions.html#a9fb522d4e6a09b44a93bc94aebb2c6f6',1,'musx::dom::options::TimeSignatureOptions']]],
   ['todouble_16',['toDouble',['../classmusx_1_1util_1_1Fraction.html#a1689d4b0c911c1fb4188c12567ae8fd5',1,'musx::util::Fraction']]],
-  ['tosvg_17',['toSvg',['../classmusx_1_1util_1_1SvgConvert.html#a98584bf9ceeb54bc5a21f4c4ad6688b5',1,'musx::util::SvgConvert']]],
+  ['tosvg_17',['toSvg',['../classmusx_1_1util_1_1SvgConvert.html#a3c96c13bf5170b46c678884ae37bd7f3',1,'musx::util::SvgConvert']]],
   ['tou8_18',['toU8',['../classmusx_1_1util_1_1EnigmaString.html#a65cb6ea962b2f85dfd98c485ceaa712c',1,'musx::util::EnigmaString']]],
   ['transposer_19',['Transposer',['../classmusic__theory_1_1Transposer.html#a77f3b85e9a4d9cfc42678c236fbd9ef6',1,'music_theory::Transposer']]],
   ['trimtags_20',['trimTags',['../classmusx_1_1util_1_1EnigmaString.html#a0613f33d67f174d1901dd935232a74b9',1,'musx::util::EnigmaString']]],

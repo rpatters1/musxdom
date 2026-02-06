@@ -25,9 +25,11 @@ var classmusx_1_1dom_1_1Document =
     [ "getPartVoicingPolicy", "classmusx_1_1dom_1_1Document.html#a5b93af4a8022dfce8ac7cc7a59d48041", null ],
     [ "getScoreDurationSeconds", "classmusx_1_1dom_1_1Document.html#a2704d8f219e493a359e31865b1c338ab", null ],
     [ "getScrollViewStaves", "classmusx_1_1dom_1_1Document.html#aaa777b3635d7f5c40c9dc99ccdedbac2", null ],
+    [ "getSourcePath", "classmusx_1_1dom_1_1Document.html#a827ae325cfb221d9b93e84b4e8252049", null ],
     [ "getStudioViewStaves", "classmusx_1_1dom_1_1Document.html#a8007e3abd2fde240fe374c81c82e1065", null ],
     [ "getTexts", "classmusx_1_1dom_1_1Document.html#ac1bf9233c31c0ef654d2cead254f7ae7", null ],
     [ "getTexts", "classmusx_1_1dom_1_1Document.html#a2c77b6f1a626b8ce48552d4b58f72446", null ],
     [ "iterateEntries", "classmusx_1_1dom_1_1Document.html#a284ebc5093ab40aaa65ba82696003160", null ],
+    [ "resolveExternalGraphicPath", "classmusx_1_1dom_1_1Document.html#a7faa5f48201ebde9262502435ece74d8", null ],
     [ "setCachedShapeRecognition", "classmusx_1_1dom_1_1Document.html#ac3c4cbf7a6cd9a856ee56b04443a4474", null ]
 ];

@@ -9,9 +9,11 @@ var structmusx_1_1factory_1_1DocumentFactory_1_1CreateOptions =
     [ "CreateOptions", "structmusx_1_1factory_1_1DocumentFactory_1_1CreateOptions.html#a404fbfbce6c5846cb2654c91a4137677", null ],
     [ "getEmbeddedGraphics", "structmusx_1_1factory_1_1DocumentFactory_1_1CreateOptions.html#a151d7fda1aa35fa70350e9b7b3a9252c", null ],
     [ "getNotationMetadata", "structmusx_1_1factory_1_1DocumentFactory_1_1CreateOptions.html#a981a325f9dec39a70e25d466f46391b2", null ],
+    [ "getSourcePath", "structmusx_1_1factory_1_1DocumentFactory_1_1CreateOptions.html#a884c1f4ad554cd98134659af9244b715", null ],
     [ "setEmbeddedGraphics", "structmusx_1_1factory_1_1DocumentFactory_1_1CreateOptions.html#a1b4d827c0b15cff8045602d9f2b45855", null ],
     [ "setNotationMetadata", "structmusx_1_1factory_1_1DocumentFactory_1_1CreateOptions.html#ad8d92edf8d1cf549902b70d23d705a24", null ],
     [ "setNotationMetadata", "structmusx_1_1factory_1_1DocumentFactory_1_1CreateOptions.html#aa3393fbc636dca26e12c6dfa5ddc1ddf", null ],
+    [ "setSourcePath", "structmusx_1_1factory_1_1DocumentFactory_1_1CreateOptions.html#ae826394a45fbe341c9f2579be6a663dd", null ],
     [ "takeEmbeddedGraphics", "structmusx_1_1factory_1_1DocumentFactory_1_1CreateOptions.html#a193f18d451958c87b9b62d9678da0db0", null ],
     [ "partVoicingPolicy", "structmusx_1_1factory_1_1DocumentFactory_1_1CreateOptions.html#a97dd66a1acbdcec143bf68b0d484dfd3", null ]
 ];
