@@ -22,6 +22,8 @@
 #include <algorithm>
 #include <cmath>
 #include <cstdint>
+#include <filesystem>
+#include <fstream>
 #include <functional>
 #include <limits>
 #include <optional>
@@ -589,9 +591,13 @@ struct [[maybe_unused]] ArrowheadGeometry
 } // namespace
 
 std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape,
-                              GlyphMetricsFn glyphMetrics,
-                              ExternalGraphicFn externalGraphicResolver)
+                              GlyphMetricsFn glyphMetrics)
 {
+    struct ExternalGraphicPayload {
+        std::string mimeType;
+        std::vector<std::uint8_t> bytes;
+    };
+
     std::vector<std::string> elements;
     Bounds bounds;
     PaintState paint;
@@ -766,6 +772,48 @@ std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape,
             output.push_back('=');
         }
         return output;
+    };
+
+    // Finale-supported external graphic types:
+    // TIFF, Metafile, EPS, BMP, GIF, JPEG, PNG, PDF, SVG (export-only), EPUB (export-only).
+    // We only map formats that are commonly supported in SVG <image> data URIs.
+    auto mimeTypeFromExtension = [](const std::filesystem::path& extensionPath) -> std::string {
+        auto extension = extensionPath.u8string();
+        if (!extension.empty() && extension.front() == '.') {
+            extension.erase(extension.begin());
+        }
+        if (extension.empty()) {
+            return {};
+        }
+        std::string lower;
+        lower.reserve(extension.size());
+        for (unsigned char ch : extension) {
+            lower.push_back(static_cast<char>(std::tolower(ch)));
+        }
+        if (lower == "png") {
+            return "image/png";
+        }
+        if (lower == "jpg" || lower == "jpeg") {
+            return "image/jpeg";
+        }
+        if (lower == "gif") {
+            return "image/gif";
+        }
+        if (lower == "bmp") {
+            return "image/bmp";
+        }
+        if (lower == "svg") {
+            return "image/svg+xml";
+        }
+        return {};
+    };
+
+    auto readFileBytes = [](const std::filesystem::path& path) -> std::vector<std::uint8_t> {
+        std::ifstream file(path, std::ios::binary);
+        if (!file.is_open()) {
+            return {};
+        }
+        return std::vector<std::uint8_t>((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
     };
 
     shape.iterateInstructions([&](const dom::ShapeDefInstruction::Decoded& inst) -> bool {
@@ -1393,15 +1441,47 @@ std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape,
         }
         case IT::ExternalGraphic: {
             const auto* data = std::get_if<dom::ShapeDefInstruction::ExternalGraphic>(&inst.data);
-            if (!data || !externalGraphicResolver) {
+            if (!data) {
                 unresolvedExternalGraphic = true;
                 return false;
             }
-            ExternalGraphicInfo info;
-            info.width = data->width;
-            info.height = data->height;
-            info.cmper = data->cmper;
-            auto payload = externalGraphicResolver(info);
+            const auto graphicCmper = data->cmper;
+
+            std::optional<ExternalGraphicPayload> payload;
+            if (auto doc = shape.getDocument()) {
+                const auto& embedded = doc->getEmbeddedGraphics();
+                auto it = embedded.find(graphicCmper);
+                if (it != embedded.end() && !it->second.bytes.empty()) {
+                    ExternalGraphicPayload embeddedPayload;
+                    embeddedPayload.bytes = it->second.bytes;
+                    embeddedPayload.mimeType = mimeTypeFromExtension(it->second.extension);
+                    if (!embeddedPayload.mimeType.empty()) {
+                        payload = std::move(embeddedPayload);
+                    }
+                }
+            }
+
+            if (!payload) {
+                if (auto doc = shape.getDocument()) {
+                    auto others = doc->getOthers();
+                    if (others) {
+                        const auto assignment = others->get<dom::others::ShapeGraphicAssign>(shape.getRequestedPartId(), graphicCmper);
+                        if (assignment) {
+                            if (auto path = doc->resolveExternalGraphicPath(assignment->fDescId)) {
+                                ExternalGraphicPayload filePayload;
+                                filePayload.bytes = readFileBytes(*path);
+                                if (!filePayload.bytes.empty()) {
+                                    filePayload.mimeType = mimeTypeFromExtension(path->extension());
+                                    if (!filePayload.mimeType.empty()) {
+                                        payload = std::move(filePayload);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
             if (!payload || payload->bytes.empty() || payload->mimeType.empty()) {
                 unresolvedExternalGraphic = true;
                 return false;

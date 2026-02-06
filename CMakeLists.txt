@@ -108,3 +108,7 @@ target_compile_definitions(musx INTERFACE
 
 # Ensure the library uses the correct include paths
 target_include_directories(musx PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
+
+if(APPLE)
+    target_link_libraries(musx PRIVATE "-framework CoreFoundation")
+endif()

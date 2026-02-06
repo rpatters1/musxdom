@@ -24,6 +24,7 @@
 #include <algorithm>
 #include <cstddef>
 #include <cctype>
+#include <filesystem>
 #include <limits>
 #include <memory>
 #include <optional>
@@ -107,6 +108,10 @@ public:
         [[nodiscard]]
         const dom::EmbeddedGraphicsMap& getEmbeddedGraphics() const { return m_embeddedGraphics; }
 
+        /// @brief Optional path to the musx (or EnigmaXML) file being loaded.
+        [[nodiscard]]
+        const std::optional<std::filesystem::path>& getSourcePath() const { return m_sourcePath; }
+
         /// @brief Move out embedded graphics.
         [[nodiscard]]
         dom::EmbeddedGraphicsMap takeEmbeddedGraphics() { return std::move(m_embeddedGraphics); }
@@ -144,6 +149,12 @@ public:
             }
         }
 
+        /// @brief Set the path to the musx (or EnigmaXML) file being loaded.
+        void setSourcePath(std::filesystem::path path)
+        {
+            m_sourcePath = std::move(path);
+        }
+
     private:
         static std::optional<std::pair<Cmper, std::string>> parseEmbeddedGraphicFilename(const std::string& filename)
         {
@@ -173,6 +184,7 @@ public:
 
         std::vector<char> m_notationMetadata;
         dom::EmbeddedGraphicsMap m_embeddedGraphics;
+        std::optional<std::filesystem::path> m_sourcePath;
     };
 
     /**
@@ -227,6 +239,7 @@ public:
         document->m_partVoicingPolicy = createOptions.partVoicingPolicy;
         document->m_scoreDurationSeconds = parseScoreDurationSeconds<XmlDocumentType>(createOptions.getNotationMetadata());
         document->m_embeddedGraphics = createOptions.takeEmbeddedGraphics();
+        document->m_sourcePath = createOptions.getSourcePath();
 
         ElementLinker elementLinker;
         for (auto element = rootElement->getFirstChildElement(); element; element = element->getNextSibling()) {

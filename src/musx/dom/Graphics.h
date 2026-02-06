@@ -215,10 +215,11 @@ public:
     bool rightPgFixedPerc{};            ///< If true, preserve aspect ratio on right-pages (UI setting only). The Finale UI appears to sync this with #fixedPerc.
     Evpu rightPgLeft{};                 ///< Horizontal position for right pages.
     Evpu rightPgBottom{};               ///< Vertical position for right pages.
-    Cmper graphicCmper{};               ///< Graphic instance Cmper. A non-zero value indicates that the graphic is embedded in the `musx` file.
-                                        ///< Embedded graphics are stored in the @c /graphics/ subdirectory of the musx zip archive. This value
-                                        ///< also identifies the filename within that directory. For example, if the @c graphicCmper is 3 and the
-                                        ///< embedded file has extendion @c .png then the file is called @c 3.png within the directory.
+    Cmper graphicCmper{};               ///< Graphic instance Cmper. A non-zero value indicates an embedded graphic whose payload is
+                                        ///< only available if the caller loaded it into the @ref Document using
+                                        ///< @ref musx::factory::DocumentFactory::CreateOptions. The embedded file may be found in the
+                                        ///< @c /graphics/ subdirectory of the musx zip archive, named using this cmper (for example,
+                                        ///< @c 3.png when @c graphicCmper is 3).
 
     /// @brief Return the starting page number, taking into account leading blank pages in all parts.
     /// This calculation mimics observed behavior in Finale.
@@ -272,7 +273,7 @@ public:
 
 /**
  * @class ShapeGraphicAssign
- * @brief Represents a graphic assignment anchored to a specific staff and measure.
+ * @brief Represents a graphic used by a specific @ref ShapeDef.
  *
  * The Cmper comes from a #ShapeDefInstructionType::ExternalGraphic instruction.
  *
