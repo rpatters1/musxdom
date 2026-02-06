@@ -23,6 +23,7 @@
 
 #include <memory>
 #include <cstdint>
+#include <filesystem>
 #include <optional>
 #include <string>
 #include <unordered_map>
@@ -207,6 +208,16 @@ public:
     [[nodiscard]]
     const InstrumentMap& getInstruments() const { return m_instruments; }
 
+    /// @brief Returns the path to the musx (or EnigmaXML) file used to create this document, if provided.
+    [[nodiscard]]
+    const std::optional<std::filesystem::path>& getSourcePath() const { return m_sourcePath; }
+
+    /// @brief Resolve an external graphic path using SCORE_PARTID.
+    /// @param fileDescId The FileDescription cmper associated with the graphic.
+    /// @return A resolved path if the file can be located, otherwise std::nullopt.
+    [[nodiscard]]
+    std::optional<std::filesystem::path> resolveExternalGraphicPath(Cmper fileDescId) const;
+
     /// @brief Get the instrument info for the given staffId
     /// @param staffId The staffId to find.
     [[nodiscard]]
@@ -275,6 +286,7 @@ private:
     PartVoicingPolicy m_partVoicingPolicy{};    ///< The part voicing policy in effect for this document.
     std::optional<double> m_scoreDurationSeconds; ///< Optional score duration in seconds from NotationMetadata.xml.
     EmbeddedGraphicsMap m_embeddedGraphics;     ///< Embedded graphics passed in by the caller (from musx container files).
+    std::optional<std::filesystem::path> m_sourcePath; ///< Path to the musx (or EnigmaXML) file used to create this document.
 
     mutable std::unordered_map<Cmper, KnownShapeDefType> m_shapeRecognitionCache; ///< Cache of ShapeDef recognitions.
 

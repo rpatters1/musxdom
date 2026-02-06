@@ -22,14 +22,109 @@
 #include <algorithm>
 #include <cstdlib>
 #include <exception>
+#include <cstring>
+#include <filesystem>
 #include <limits>
 #include <string>
 #include <vector>
 
 #include "musx/musx.h"
 
+#if defined(MUSX_RUNNING_ON_MACOS)
+#include <CoreFoundation/CoreFoundation.h>
+#include <dlfcn.h>
+#endif
+
 namespace musx {
 namespace dom {
+
+#ifndef DOXYGEN_SHOULD_IGNORE_THIS
+namespace {
+#if defined(MUSX_RUNNING_ON_MACOS)
+std::optional<std::filesystem::path> toPathFromCfString(CFStringRef value)
+{
+    if (!value) {
+        return std::nullopt;
+    }
+    const auto length = CFStringGetLength(value);
+    const auto maxSize = CFStringGetMaximumSizeForEncoding(length, kCFStringEncodingUTF8);
+    if (maxSize < 0) {
+        return std::nullopt;
+    }
+    std::string buffer(static_cast<size_t>(maxSize) + 1, '\0');
+    if (!CFStringGetCString(value, buffer.data(), maxSize + 1, kCFStringEncodingUTF8)) {
+        return std::nullopt;
+    }
+    buffer.resize(std::strlen(buffer.c_str()));
+    return std::filesystem::path(buffer);
+}
+
+std::optional<std::filesystem::path> resolveMacBookmarkData(const std::vector<std::uint8_t>& data)
+{
+    if (data.empty()) {
+        return std::nullopt;
+    }
+    CFDataRef bookmarkData = CFDataCreate(kCFAllocatorDefault, data.data(), static_cast<CFIndex>(data.size()));
+    if (!bookmarkData) {
+        return std::nullopt;
+    }
+    CFURLRef url = CFURLCreateByResolvingBookmarkData(
+        kCFAllocatorDefault,
+        bookmarkData,
+        kCFBookmarkResolutionWithoutUIMask | kCFBookmarkResolutionWithoutMountingMask,
+        nullptr,
+        nullptr,
+        nullptr,
+        nullptr);
+    CFRelease(bookmarkData);
+    if (!url) {
+        return std::nullopt;
+    }
+    CFStringRef pathString = CFURLCopyFileSystemPath(url, kCFURLPOSIXPathStyle);
+    CFRelease(url);
+    auto path = toPathFromCfString(pathString);
+    if (pathString) {
+        CFRelease(pathString);
+    }
+    return path;
+}
+
+std::optional<std::filesystem::path> resolveMacAliasData(const std::vector<std::uint8_t>& data, Cmper fileDescId)
+{
+    if (data.empty()) {
+        return std::nullopt;
+    }
+    CFDataRef aliasData = CFDataCreate(kCFAllocatorDefault, data.data(), static_cast<CFIndex>(data.size()));
+    if (!aliasData) {
+        return std::nullopt;
+    }
+    using BookmarkFromAliasFn = CFDataRef (*)(CFAllocatorRef, CFDataRef);
+    auto fn = reinterpret_cast<BookmarkFromAliasFn>(dlsym(RTLD_DEFAULT, "CFURLCreateBookmarkDataFromAliasRecord"));
+    if (!fn) {
+        ::musx::util::Logger::log(::musx::util::Logger::LogLevel::Warning,
+            "External graphic path resolution failed for fileDesc " + std::to_string(fileDescId)
+            + ": macOS alias resolution is unavailable (CFURLCreateBookmarkDataFromAliasRecord not found).");
+        CFRelease(aliasData);
+        return std::nullopt;
+    }
+    CFDataRef bookmarkData = fn ? fn(kCFAllocatorDefault, aliasData) : nullptr;
+    CFRelease(aliasData);
+    if (!bookmarkData) {
+        ::musx::util::Logger::log(::musx::util::Logger::LogLevel::Warning,
+            "External graphic path resolution failed for fileDesc " + std::to_string(fileDescId)
+            + ": unable to resolve macOS alias record to bookmark data.");
+        return std::nullopt;
+    }
+    std::vector<std::uint8_t> bytes(static_cast<size_t>(CFDataGetLength(bookmarkData)));
+    if (!bytes.empty()) {
+        CFDataGetBytes(bookmarkData, CFRangeMake(0, CFDataGetLength(bookmarkData)), bytes.data());
+    }
+    CFRelease(bookmarkData);
+    return resolveMacBookmarkData(bytes);
+}
+#endif
+} // namespace
+#endif // DOXYGEN_SHOULD_IGNORE_THIS
 
 // ********************
 // ***** Document *****
@@ -326,6 +421,81 @@ bool Document::iterateEntries(Cmper partId, std::function<bool(const EntryInfoPt
     return scrollView.iterateEntries(0, scrollView.size() - 1, calcEntireDocument(), iterator);
 }
 
+std::optional<std::filesystem::path> Document::resolveExternalGraphicPath(Cmper fileDescId) const
+{
+    const auto others = getOthers();
+    if (!others) {
+        return std::nullopt;
+    }
+
+    const auto fileDesc = others->get<others::FileDescription>(SCORE_PARTID, fileDescId);
+    const Cmper pathId = fileDesc ? fileDesc->pathId : fileDescId;
+    const auto filePath = others->get<others::FilePath>(SCORE_PARTID, pathId);
+    if (!filePath || filePath->path.empty()) {
+        return std::nullopt;
+    }
+
+    const auto trySourceDirectory = [&](const std::filesystem::path& storedPath)
+        -> std::optional<std::filesystem::path> {
+        if (!m_sourcePath) {
+            return std::nullopt;
+        }
+        std::filesystem::path filename = storedPath.filename();
+        if (filename.empty()) {
+            return std::nullopt;
+        }
+        std::filesystem::path candidate = m_sourcePath->parent_path() / filename;
+        if (std::filesystem::is_regular_file(candidate)) {
+            return candidate;
+        }
+        return std::nullopt;
+    };
+
+    std::filesystem::path storedPath = std::filesystem::path(filePath->path);
+
+    if (auto candidate = trySourceDirectory(storedPath)) {
+        return candidate;
+    }
+
+    if (fileDesc) {
+        switch (fileDesc->pathType) {
+        case others::FileDescription::PathType::MacAlias: {
+#if defined(MUSX_RUNNING_ON_MACOS)
+            const auto alias = others->get<others::FileAlias>(SCORE_PARTID, fileDescId);
+            if (alias) {
+                if (auto path = resolveMacAliasData(alias->aliasHandle, fileDescId); path && std::filesystem::is_regular_file(*path)) {
+                    return path;
+                }
+            }
+#endif
+            break;
+        }
+        case others::FileDescription::PathType::MacUrlBookmark: {
+#if defined(MUSX_RUNNING_ON_MACOS)
+            const auto bookmark = others->get<others::FileUrlBookmark>(SCORE_PARTID, fileDescId);
+            if (bookmark) {
+                if (auto path = resolveMacBookmarkData(bookmark->urlBookmarkData); path && std::filesystem::is_regular_file(*path)) {
+                    return path;
+                }
+            }
+#endif
+            break;
+        }
+        case others::FileDescription::PathType::MacFsSpec:
+            break;
+        case others::FileDescription::PathType::DosPath:
+        case others::FileDescription::PathType::MacPosixPath:
+            break;
+        }
+    }
+
+    if (storedPath.is_absolute() && std::filesystem::is_regular_file(storedPath)) {
+        return storedPath;
+    }
+
+    return std::nullopt;
+}
+
 // **************************
 // ***** InstrumentInfo *****
 // **************************
@@ -360,4 +530,4 @@ const InstrumentInfo* InstrumentInfo::getInstrumentForStaff(const InstrumentMap&
 }
 
 } // namespace dom
-} // namespace musx
+} // namespace mus

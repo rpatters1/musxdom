@@ -173,7 +173,11 @@ struct DateTime
         }
 
         std::ostringstream oss;
-        oss.imbue(std::locale("")); // Use user’s current locale
+        try {
+            oss.imbue(std::locale("")); // Use user’s current locale
+        } catch (const std::runtime_error&) {
+            oss.imbue(std::locale::classic());
+        }
 
         oss << std::put_time(&tm, fmt);
         return oss.str();
@@ -259,7 +263,11 @@ struct DateTime
         }
 
         std::ostringstream oss;
-        oss.imbue(std::locale("")); // Use user's current locale
+        try {
+            oss.imbue(std::locale("")); // Use user's current locale
+        } catch (const std::runtime_error&) {
+            oss.imbue(std::locale::classic());
+        }
         oss << std::put_time(&tm, fmt);
         return oss.str();
 

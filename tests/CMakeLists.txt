@@ -41,9 +41,10 @@ enable_testing()
 # Add the test executable
 add_executable(musxdomtests
 	musxdomtests.cpp
-	document.cpp
-	header.cpp
-	pool.cpp
+    dom/document.cpp
+    dom/document_graphics.cpp
+    dom/header.cpp
+    dom/pool.cpp
     # entries
     entries/beam_detection.cpp
     entries/cross_staffs.cpp
@@ -129,6 +130,7 @@ add_executable(musxdomtests
     # util
     util/fraction.cpp
     util/svg_convert.cpp
+    util/svg_ext_graphics.cpp
 )
 
 # Enable Unity/Jumbo build for this target

@@ -63,7 +63,9 @@ public:
 };
 
 int main(int argc, char **argv) {
-    setlocale(LC_ALL, "");
+    if (!setlocale(LC_ALL, "")) {
+        setlocale(LC_ALL, "C");
+    }
 
     ::testing::InitGoogleTest(&argc, argv);
     ::testing::AddGlobalTestEnvironment(new TestEnvironment);

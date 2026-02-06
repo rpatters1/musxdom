@@ -22,6 +22,8 @@
 #include <algorithm>
 #include <cmath>
 #include <cstdint>
+#include <filesystem>
+#include <fstream>
 #include <functional>
 #include <limits>
 #include <optional>
@@ -589,9 +591,13 @@ struct [[maybe_unused]] ArrowheadGeometry
 } // namespace
 
 std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape,
-                              GlyphMetricsFn glyphMetrics,
-                              ExternalGraphicFn externalGraphicResolver)
+                              GlyphMetricsFn glyphMetrics)
 {
+    struct ExternalGraphicPayload {
+        std::string mimeType;
+        std::vector<std::uint8_t> bytes;
+    };
+
     std::vector<std::string> elements;
     Bounds bounds;
     PaintState paint;
@@ -766,6 +772,48 @@ std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape,
             output.push_back('=');
         }
         return output;
+    };
+
+    // Finale-supported external graphic types:
+    // TIFF, Metafile, EPS, BMP, GIF, JPEG, PNG, PDF, SVG (export-only), EPUB (export-only).
+    // We only map formats that are commonly supported in SVG <image> data URIs.
+    auto mimeTypeFromExtension = [](const std::filesystem::path& extensionPath) -> std::string {
+        auto extension = extensionPath.u8string();
+        if (!extension.empty() && extension.front() == '.') {
+            extension.erase(extension.begin());
+        }
+        if (extension.empty()) {
+            return {};
+        }
+        std::string lower;
+        lower.reserve(extension.size());
+        for (unsigned char ch : extension) {
+            lower.push_back(static_cast<char>(std::tolower(ch)));
+        }
+        if (lower == "png") {
+            return "image/png";
+        }
+        if (lower == "jpg" || lower == "jpeg") {
+            return "image/jpeg";
+        }
+        if (lower == "gif") {
+            return "image/gif";
+        }
+        if (lower == "bmp") {
+            return "image/bmp";
+        }
+        if (lower == "svg") {
+            return "image/svg+xml";
+        }
+        return {};
+    };
+
+    auto readFileBytes = [](const std::filesystem::path& path) -> std::vector<std::uint8_t> {
+        std::ifstream file(path, std::ios::binary);
+        if (!file.is_open()) {
+            return {};
+        }
+        return std::vector<std::uint8_t>((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
     };
 
     shape.iterateInstructions([&](const dom::ShapeDefInstruction::Decoded& inst) -> bool {
@@ -1104,8 +1152,24 @@ std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape,
                     unit = {chord.x / chordLen, chord.y / chordLen};
                     normal = {-unit.y, unit.x};
                 }
-                double bulge = (worldC1.y - worldStart.y) + (worldC2.y - worldStart.y);
-                double offsetSign = (bulge >= 0.0) ? -1.0 : 1.0;
+                // Determine bulge in local coordinates so the default slur direction
+                // (up to the right, down to the left) is preserved across rotations.
+                double bulge = 0.0;
+                {
+                    Point localChord{endPoint.x - startPoint.x, endPoint.y - startPoint.y};
+                    double localChordLen = std::hypot(localChord.x, localChord.y);
+                    if (localChordLen > 0.0) {
+                        Point localUnit{localChord.x / localChordLen, localChord.y / localChordLen};
+                        Point localNormal{-localUnit.y, localUnit.x};
+                        const Point c1Vec{c1.x - startPoint.x, c1.y - startPoint.y};
+                        const Point c2Vec{c2.x - startPoint.x, c2.y - startPoint.y};
+                        bulge = (c1Vec.x * localNormal.x + c1Vec.y * localNormal.y)
+                            + (c2Vec.x * localNormal.x + c2Vec.y * localNormal.y);
+                    } else {
+                        bulge = (c1.y - startPoint.y) + (c2.y - startPoint.y);
+                    }
+                }
+                double offsetSign = (bulge >= 0.0) ? 1.0 : -1.0;
                 constexpr double kInvSqrt2 = 0.7071067811865476;
                 double tipScale = tipWidth * kInvSqrt2;
 
@@ -1393,15 +1457,59 @@ std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape,
         }
         case IT::ExternalGraphic: {
             const auto* data = std::get_if<dom::ShapeDefInstruction::ExternalGraphic>(&inst.data);
-            if (!data || !externalGraphicResolver) {
+            if (!data) {
                 unresolvedExternalGraphic = true;
                 return false;
             }
-            ExternalGraphicInfo info;
-            info.width = data->width;
-            info.height = data->height;
-            info.cmper = data->cmper;
-            auto payload = externalGraphicResolver(info);
+            const auto graphicCmper = data->cmper;
+            dom::MusxInstance<dom::others::ShapeGraphicAssign> assignment;
+
+            if (auto doc = shape.getDocument()) {
+                if (auto others = doc->getOthers()) {
+                    assignment = others->get<dom::others::ShapeGraphicAssign>(shape.getRequestedPartId(), graphicCmper);
+                    if (!assignment) {
+                        auto assigns = others->getArray<dom::others::ShapeGraphicAssign>(shape.getRequestedPartId());
+                        for (const auto& nextAssign : assigns) {
+                            if (nextAssign->graphicCmper == graphicCmper) {
+                                assignment = nextAssign;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+
+            std::optional<ExternalGraphicPayload> payload;
+            if (auto doc = shape.getDocument()) {
+                const auto& embedded = doc->getEmbeddedGraphics();
+                auto it = embedded.find(graphicCmper);
+                if (it != embedded.end() && !it->second.bytes.empty()) {
+                    ExternalGraphicPayload embeddedPayload;
+                    embeddedPayload.bytes = it->second.bytes;
+                    embeddedPayload.mimeType = mimeTypeFromExtension(it->second.extension);
+                    if (!embeddedPayload.mimeType.empty()) {
+                        payload = std::move(embeddedPayload);
+                    }
+                }
+            }
+
+            if (!payload) {
+                if (auto doc = shape.getDocument()) {
+                    if (assignment) {
+                        if (auto path = doc->resolveExternalGraphicPath(assignment->fDescId)) {
+                            ExternalGraphicPayload filePayload;
+                            filePayload.bytes = readFileBytes(*path);
+                            if (!filePayload.bytes.empty()) {
+                                filePayload.mimeType = mimeTypeFromExtension(path->extension());
+                                if (!filePayload.mimeType.empty()) {
+                                    payload = std::move(filePayload);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
             if (!payload || payload->bytes.empty() || payload->mimeType.empty()) {
                 unresolvedExternalGraphic = true;
                 return false;
@@ -1409,9 +1517,34 @@ std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape,
             double width = toEvpuDouble(data->width);
             double height = toEvpuDouble(data->height);
             double x = current.x;
-            double y = current.y - height;
+            double y = current.y;
+            bool useBoundsPlacement = false;
+            if (lastStartObject) {
+                auto isSentinel = [](dom::Evpu value) {
+                    return value == (std::numeric_limits<dom::Evpu>::min)()
+                        || value == (std::numeric_limits<dom::Evpu>::max)();
+                };
+                if (!isSentinel(lastStartObject->left) && !isSentinel(lastStartObject->right)
+                    && !isSentinel(lastStartObject->top) && !isSentinel(lastStartObject->bottom)) {
+                    const double left = toEvpuDouble(lastStartObject->left);
+                    const double right = toEvpuDouble(lastStartObject->right);
+                    const double top = toEvpuDouble(lastStartObject->top);
+                    const double bottom = toEvpuDouble(lastStartObject->bottom);
+                    width = right - left;
+                    height = top - bottom;
+                    x = left;
+                    y = -top;
+                    useBoundsPlacement = true;
+                }
+            }
+            if (assignment) {
+                if (!useBoundsPlacement) {
+                    width = toEvpuDouble(assignment->width);
+                    height = toEvpuDouble(assignment->height);
+                }
+            }
             std::string encoded = base64Encode(payload->bytes);
-            Point worldTopLeft = toWorld({x, y + height});
+            Point worldTopLeft = useBoundsPlacement ? Point{x, y} : toWorld({x, y + height});
             std::ostringstream element;
             element << "<image x=\"" << worldTopLeft.x << "\" y=\"" << worldTopLeft.y
                     << "\" width=\"" << width << "\" height=\"" << height
@@ -1419,8 +1552,8 @@ std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape,
                     << ";base64," << encoded << "\"/>";
             elements.push_back(element.str());
 
-            Point worldMin = toWorld({x, y});
-            Point worldMax = toWorld({x + width, y + height});
+            Point worldMin = useBoundsPlacement ? Point{x, y} : toWorld({x, y});
+            Point worldMax = useBoundsPlacement ? Point{x + width, y + height} : toWorld({x + width, y + height});
             bounds.include({worldMin.x, worldMin.y});
             bounds.include({worldMax.x, worldMax.y});
             break;

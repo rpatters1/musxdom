@@ -46,32 +46,15 @@ namespace util {
 class SvgConvert
 {
 public:
-    /// @struct ExternalGraphicPayload
-    /// @brief Payload data for external graphics.
-    struct ExternalGraphicPayload
-    {
-        std::string mimeType; ///< MIME type for the graphic data.
-        std::vector<std::uint8_t> bytes; ///< Raw graphic bytes (caller-provided).
-    };
-
-    /// @struct ExternalGraphicInfo
-    /// @brief Metadata describing an external graphic instruction.
-    struct ExternalGraphicInfo
-    {
-        dom::Evpu width{}; ///< Width of the external graphic in EVPU units.
-        dom::Evpu height{}; ///< Height of the external graphic in EVPU units.
-        dom::Cmper cmper{}; ///< Cmper matching #dom::others::PageGraphicAssign::graphicCmper.
-    };
-
     /// @brief Metrics for sizing SVG text bounds.
     struct GlyphMetrics
     {
         /// @brief The advance width of the text in EVPU units.
-        double advance{};
+        dom::EvpuFloat advance{};
         /// @brief The ascent above the baseline in EVPU units.
-        double ascent{};
+        dom::EvpuFloat ascent{};
         /// @brief The descent below the baseline in EVPU units (positive value).
-        double descent{};
+        dom::EvpuFloat descent{};
     };
 
     /// @brief Optional callback that returns glyph metrics in EVPU units.
@@ -79,21 +62,19 @@ public:
     /// @note Return std::nullopt to fall back to heuristic metrics.
     using GlyphMetricsFn = std::function<std::optional<GlyphMetrics>(const dom::FontInfo&, std::u32string_view)>;
 
-    /// @brief Optional callback that resolves external graphics to a MIME type and byte buffer.
-    using ExternalGraphicFn = std::function<std::optional<ExternalGraphicPayload>(const ExternalGraphicInfo&)>;
-
     /// @brief Convert a ShapeDef into an SVG string buffer.
     /// @param shape The shape definition to convert.
-    /// @param glyphMetrics Optional callback that returns glyph metrics in EVPU units.
-    /// @param externalGraphicResolver Optional callback that resolves external graphics to bytes and MIME types.
+    /// @param glyphMetrics Optional callback that receives the resolved font and the glyph(s) to measure
+    ///        and returns glyph metrics in EVPU units.
     /// @return An SVG buffer encoded as a string.
-    /// @note The glyph callback receives the resolved font and the glyph(s) to measure.
-    /// @note If an external graphic is encountered and cannot be resolved, this returns an empty string.
+    /// @note External graphics are resolved from embedded graphics in the @ref musx::dom::Document when
+    ///       available. Otherwise the converter tries a file with the same filename in the directory
+    ///       containing the source musx/EnigmaXML (provided via
+    ///       @ref musx::factory::DocumentFactory::CreateOptions), then the original file location. If an
+    ///       external graphic still cannot be resolved, #toSvg returns an empty string.
     /// @todo ShapeDef SetArrowhead instructions are decoded but not yet rendered in SVG output.
-    /// @todo External graphic handling has not been tested yet.
     static std::string toSvg(const dom::others::ShapeDef& shape,
-                             GlyphMetricsFn glyphMetrics = nullptr,
-                             ExternalGraphicFn externalGraphicResolver = nullptr);
+                             GlyphMetricsFn glyphMetrics = nullptr);
 };
 
 } // namespace util

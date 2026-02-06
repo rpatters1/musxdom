@@ -298,6 +298,75 @@ TEST(SvgConvertTest, MatchesViewBoxAndPathsAndStrokes)
     }
 }
 
+TEST(SvgConvertTest, ReverseBulgeShapes)
+{
+    const auto inputRoot = getInputPath();
+    const auto xmlPath = inputRoot / "shapecurve_dragged.enigmaxml";
+    if (!std::filesystem::is_regular_file(xmlPath)) {
+        GTEST_SKIP() << "Missing reverse bulge test data: " << xmlPath;
+    }
+
+    std::vector<Cmper> shapeIds = {
+        5, 6, 7, 8
+    };
+    if (shapeIds.empty()) {
+        GTEST_SKIP() << "No reverse bulge ShapeDef ids configured.";
+    }
+
+    std::vector<char> enigmaXml;
+    readFile(xmlPath, enigmaXml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(enigmaXml);
+    ASSERT_TRUE(doc);
+
+    const auto svgRoot = inputRoot / "shapecurve_dragged";
+    const auto svgOut = getOutputPath() / "shapecurve_dragged";
+    std::error_code ec;
+    std::filesystem::create_directories(svgOut, ec);
+    ASSERT_FALSE(ec) << "Failed to create output directory: " << svgOut;
+
+    std::vector<std::filesystem::path> outputs;
+    for (Cmper shapeId : shapeIds) {
+        auto shape = doc->getOthers()->get<others::ShapeDef>(SCORE_PARTID, shapeId);
+        ASSERT_TRUE(shape) << "Missing ShapeDef " << shapeId;
+
+        const std::string ourSvg = musx::util::SvgConvert::toSvg(*shape);
+        ASSERT_FALSE(ourSvg.empty()) << "Empty SVG for ShapeDef " << shapeId;
+
+        const auto outPath = svgOut / (std::to_string(shapeId) + "_test.svg");
+        std::ofstream out(outPath, std::ios::binary);
+        ASSERT_TRUE(out.is_open()) << "Failed to open file for writing: " << outPath;
+        out << ourSvg;
+        out.close();
+        outputs.push_back(outPath);
+
+        const auto refPath = svgRoot / (std::to_string(shapeId) + ".svg");
+        if (!std::filesystem::is_regular_file(refPath)) {
+            continue;
+        }
+
+        const std::string referenceSvg = readFileText(refPath);
+        if (referenceSvg.empty()) {
+            continue;
+        }
+
+        ViewBox refBox = parseViewBox(referenceSvg);
+        ViewBox ourBox = parseViewBox(ourSvg);
+        ASSERT_TRUE(refBox.valid) << "Missing viewBox in reference SVG " << shapeId;
+        ASSERT_TRUE(ourBox.valid) << "Missing viewBox in generated SVG " << shapeId;
+
+        constexpr double kTolerance = 1.9;
+        EXPECT_TRUE(viewBoxEncloses(ourBox, refBox, kTolerance))
+            << "reverse bulge viewBox mismatch for ShapeDef " << shapeId;
+    }
+
+    if (!keepSvgOutput()) {
+        for (const auto& outPath : outputs) {
+            std::filesystem::remove(outPath, ec);
+            ASSERT_FALSE(ec) << "Failed to remove file: " << outPath;
+        }
+    }
+}
+
 TEST(SvgConvertTest, TextMetricsMatches)
 {
     const auto inputRoot = getInputPath() / "reference";
