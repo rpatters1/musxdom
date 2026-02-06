@@ -231,6 +231,38 @@ TEST(TieContour, ContourTypes)
 
         runContourCase(noteInfo, scrollCase);
         runContourCase(noteInfo, pageCase);
+
+        const auto scrollDefault = Tie::calcDefaultContourControlPoints(
+            noteInfo, scrollCase.expected->styleType, scrollCase.expected->length);
+        ASSERT_TRUE(scrollDefault) << "No default contour control points for measure " << measure
+                                   << " (scroll view)";
+        const auto scrollEffective = Tie::calcEffectiveContourMetrics(
+            noteInfo, scrollCase.geometry, /*forTieEnd=*/false);
+        ASSERT_TRUE(scrollEffective) << "No effective contour metrics for measure " << measure
+                                     << " (scroll view)";
+        EXPECT_EQ(scrollEffective->contour.styleType, scrollCase.expected->styleType);
+        EXPECT_EQ(scrollEffective->contour.length, scrollCase.expected->length);
+        EXPECT_EQ(scrollEffective->controlPoints.insetStyle, scrollDefault->insetStyle);
+        EXPECT_EQ(scrollEffective->controlPoints.left.insetRatio, scrollDefault->left.insetRatio);
+        EXPECT_EQ(scrollEffective->controlPoints.left.height, scrollDefault->left.height);
+        EXPECT_EQ(scrollEffective->controlPoints.right.insetRatio, scrollDefault->right.insetRatio);
+        EXPECT_EQ(scrollEffective->controlPoints.right.height, scrollDefault->right.height);
+
+        const auto pageDefault = Tie::calcDefaultContourControlPoints(
+            noteInfo, pageCase.expected->styleType, pageCase.expected->length);
+        ASSERT_TRUE(pageDefault) << "No default contour control points for measure " << measure
+                                 << " (page view)";
+        const auto pageEffective = Tie::calcEffectiveContourMetrics(
+            noteInfo, pageCase.geometry, /*forTieEnd=*/false);
+        ASSERT_TRUE(pageEffective) << "No effective contour metrics for measure " << measure
+                                   << " (page view)";
+        EXPECT_EQ(pageEffective->contour.styleType, pageCase.expected->styleType);
+        EXPECT_EQ(pageEffective->contour.length, pageCase.expected->length);
+        EXPECT_EQ(pageEffective->controlPoints.insetStyle, pageDefault->insetStyle);
+        EXPECT_EQ(pageEffective->controlPoints.left.insetRatio, pageDefault->left.insetRatio);
+        EXPECT_EQ(pageEffective->controlPoints.left.height, pageDefault->left.height);
+        EXPECT_EQ(pageEffective->controlPoints.right.insetRatio, pageDefault->right.insetRatio);
+        EXPECT_EQ(pageEffective->controlPoints.right.height, pageDefault->right.height);
     }
 }
 

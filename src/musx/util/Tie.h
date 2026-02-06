@@ -84,6 +84,13 @@ public:
         dom::options::TieOptions::InsetStyle insetStyle{}; ///< Which inset value is active.
     };
 
+    /// @brief Combined contour metrics for tie geometry and control points.
+    struct ContourMetrics
+    {
+        ContourResult contour; ///< Span type and computed length.
+        ContourControlPoints controlPoints; ///< Control points for the selected span type.
+    };
+
     /// @brief Calculates the default tie direction for the specified note.
     /// @param noteInfo The note whose default tie direction is being calculated.
     /// @param forTieEnd True for tie-end stub ties, false for regular tie-forward ties.
@@ -172,6 +179,15 @@ public:
     [[nodiscard]]
     static std::optional<ContourControlPoints> calcEffectiveContourControlPoints(
         const dom::NoteInfoPtr& noteInfo, bool forTieEnd, dom::options::TieOptions::ControlStyleType styleType, dom::Evpu length);
+
+    /// @brief Calculates span classification and control points in one call.
+    /// @param noteInfo The note whose tie options and tie alterations are consulted.
+    /// @param geometry Horizontal endpoint geometry in EVPU.
+    /// @param forTieEnd True for tie-end stub ties, false for regular tie-forward ties.
+    /// @return Combined contour metrics, or std::nullopt if inputs/styles are unavailable.
+    [[nodiscard]]
+    static std::optional<ContourMetrics> calcEffectiveContourMetrics(
+        const dom::NoteInfoPtr& noteInfo, const ContourGeometry& geometry, bool forTieEnd = false);
 
 private:
     /// @brief Calculates the connect style type for a single endpoint (placement_for_endpoint).

@@ -1005,5 +1005,22 @@ std::optional<Tie::ContourControlPoints> Tie::calcEffectiveContourControlPoints(
     return calcDefaultContourControlPoints(noteInfo, styleType, length);
 }
 
+std::optional<Tie::ContourMetrics> Tie::calcEffectiveContourMetrics(
+    const dom::NoteInfoPtr& noteInfo, const ContourGeometry& geometry, bool forTieEnd)
+{
+    const auto contour = calcContourStyleType(noteInfo, geometry, forTieEnd);
+    if (!contour) {
+        return std::nullopt;
+    }
+
+    const auto controlPoints = calcEffectiveContourControlPoints(
+        noteInfo, forTieEnd, contour->styleType, contour->length);
+    if (!controlPoints) {
+        return std::nullopt;
+    }
+
+    return ContourMetrics{*contour, *controlPoints};
+}
+
 } // namespace util
 } // namespace musx
