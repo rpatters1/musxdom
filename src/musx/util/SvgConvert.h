@@ -47,7 +47,8 @@ class SvgConvert
 {
 public:
     /// @brief SVG unit suffixes supported by the converter.
-    /// @note The absolute units (px/pt/pc/cm/mm/in) map to EVPU conversions in this converter.
+    /// @note The absolute units (px/pt/pc/cm/mm/in) are converted from EVPU in this converter.
+    ///       When SvgUnit::None is used, output coordinates are unitless EVPU (after any explicit scaling).
     enum class SvgUnit
     {
         None, ///< Unitless (no suffix).
@@ -97,6 +98,7 @@ public:
     /// @brief Convert a ShapeDef into an SVG string buffer with explicit scaling and units.
     /// @param shape The shape definition to convert.
     /// @param scaling Scale factor applied to EVPU-based coordinates before unit conversion.
+    ///        When @p unit is SvgUnit::None, the output coordinates are EVPU * scaling.
     /// @param unit Unit suffix for width/height (e.g., @ref SvgUnit::Millimeters).
     /// @return An SVG buffer encoded as a string.
     static std::string toSvg(const dom::others::ShapeDef& shape,
@@ -106,6 +108,7 @@ public:
     /// @brief Convert a ShapeDef into an SVG string buffer with explicit scaling and units.
     /// @param shape The shape definition to convert.
     /// @param scaling Scale factor applied to EVPU-based coordinates before unit conversion.
+    ///        When @p unit is SvgUnit::None, the output coordinates are EVPU * scaling.
     /// @param unit Unit suffix for width/height (e.g., @ref SvgUnit::Millimeters).
     /// @param glyphMetrics Callback that receives the resolved font and the glyph(s) to measure and returns
     ///        glyph metrics in EVPU units.

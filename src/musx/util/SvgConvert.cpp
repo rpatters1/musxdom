@@ -1207,6 +1207,11 @@ std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape,
                 const double cp1y = options ? toEvpuDouble(options->slurThicknessCp1Y) : 8.0;
                 const double cp2x = options ? toEvpuDouble(options->slurThicknessCp2X) : 0.0;
                 const double cp2y = options ? toEvpuDouble(options->slurThicknessCp2Y) : 8.0;
+                const double tipWidthScaled = scaleValue(tipWidth);
+                const double cp1xScaled = scaleValue(cp1x);
+                const double cp1yScaled = scaleValue(cp1y);
+                const double cp2xScaled = scaleValue(cp2x);
+                const double cp2yScaled = scaleValue(cp2y);
 
                 Point worldStart = toWorldCurve(startPoint, startPoint);
                 Point worldC1 = toWorldCurve(c1, startPoint);
@@ -1240,7 +1245,7 @@ std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape,
                 }
                 double offsetSign = (bulge >= 0.0) ? 1.0 : -1.0;
                 constexpr double kInvSqrt2 = 0.7071067811865476;
-                double tipScale = tipWidth * kInvSqrt2;
+                double tipScale = tipWidthScaled * kInvSqrt2;
 
                 Point worldOffsetStart{
                     worldStart.x + unit.x * tipScale + normal.x * tipScale * offsetSign,
@@ -1251,12 +1256,12 @@ std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape,
                     worldEnd.y - unit.y * tipScale + normal.y * tipScale * offsetSign
                 };
                 Point worldOffsetC1{
-                    worldC1.x + unit.x * cp1x + normal.x * cp1y * offsetSign,
-                    worldC1.y + unit.y * cp1x + normal.y * cp1y * offsetSign
+                    worldC1.x + unit.x * cp1xScaled + normal.x * cp1yScaled * offsetSign,
+                    worldC1.y + unit.y * cp1xScaled + normal.y * cp1yScaled * offsetSign
                 };
                 Point worldOffsetC2{
-                    worldC2.x + unit.x * cp2x + normal.x * cp2y * offsetSign,
-                    worldC2.y + unit.y * cp2x + normal.y * cp2y * offsetSign
+                    worldC2.x + unit.x * cp2xScaled + normal.x * cp2yScaled * offsetSign,
+                    worldC2.y + unit.y * cp2xScaled + normal.y * cp2yScaled * offsetSign
                 };
 
                 if (path.empty()) {
@@ -1871,10 +1876,14 @@ std::string SvgConvert::toSvgWithPageFormatScaling(const dom::others::ShapeDef& 
         throw std::invalid_argument("ShapeDef must be associated with a Document.");
     }
     auto options = document->getOptions()->get<dom::options::PageFormatOptions>();
-    MUSX_ASSERT_IF(!options || !options->pageFormatScore) {
+    MUSX_ASSERT_IF(!options) {
         throw std::invalid_argument("PageFormatOptions are not available on this Document.");
     }
-    const double scaling = options->pageFormatScore->calcCombinedSystemScaling().toDouble();
+    auto pageFormat = options->calcPageFormatForPart(dom::SCORE_PARTID);
+    MUSX_ASSERT_IF(!pageFormat) {
+        throw std::invalid_argument("PageFormatOptions could not resolve a score page format.");
+    }
+    const double scaling = pageFormat->calcCombinedSystemScaling().toDouble();
     return toSvg(shape, scaling, unit, std::move(glyphMetrics));
 }
 
