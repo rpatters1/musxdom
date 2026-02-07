@@ -182,22 +182,20 @@ bool viewBoxEncloses(const ViewBox& outer, const ViewBox& inner, double toleranc
         && outerMaxY >= innerMaxY - tolerance;
 }
 
-} // namespace
+using SvgBuilder = std::function<std::string(const others::ShapeDef&)>;
 
-TEST(SvgConvertTest, MatchesViewBoxAndPathsAndStrokes)
+void runSvgReferenceComparison(const std::filesystem::path& xmlPath,
+                               const std::filesystem::path& svgRoot,
+                               const std::filesystem::path& svgOut,
+                               const SvgBuilder& makeSvg)
 {
-    const auto inputRoot = getInputPath() / "reference";
-    const auto xmlPath = inputRoot / "PattersonDefault.enigmaxml";
     std::vector<char> enigmaXml;
     readFile(xmlPath, enigmaXml);
 
     auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(enigmaXml);
     ASSERT_TRUE(doc);
 
-    const auto svgRoot = inputRoot / "PattersonDefault";
     ASSERT_TRUE(std::filesystem::is_directory(svgRoot));
-
-    const auto svgOut = getOutputPath() / "PattersonDefault";
     std::error_code ec;
     std::filesystem::create_directories(svgOut, ec);
     ASSERT_FALSE(ec) << "Failed to create output directory: " << svgOut;
@@ -228,7 +226,7 @@ TEST(SvgConvertTest, MatchesViewBoxAndPathsAndStrokes)
         auto shape = doc->getOthers()->get<others::ShapeDef>(SCORE_PARTID, shapeId);
         ASSERT_TRUE(shape) << "Missing ShapeDef " << shapeId;
 
-        const std::string ourSvg = musx::util::SvgConvert::toSvg(*shape);
+        const std::string ourSvg = makeSvg(*shape);
         ASSERT_FALSE(ourSvg.empty()) << "Empty SVG for ShapeDef " << shapeId;
 
         const auto outPath = svgOut / (std::to_string(shapeId) + "_test.svg");
@@ -254,7 +252,6 @@ TEST(SvgConvertTest, MatchesViewBoxAndPathsAndStrokes)
         double tolerance = kTolerance;
         double exactTolerance = kExactTolerance;
         if (shapeId == 128) {
-            // Reference 128 uses solid strokes; our export keeps dashes, slightly enlarging the box.
             tolerance = 5.0;
             exactTolerance = 5.0;
         }
@@ -284,7 +281,7 @@ TEST(SvgConvertTest, MatchesViewBoxAndPathsAndStrokes)
                     << "effective stroke width mismatch for ShapeDef " << shapeId << " path " << i;
             }
         }
-        
+
         int ourDrawable = countTag(ourSvg, "path") + countTag(ourSvg, "ellipse");
         int refDrawable = countTag(referenceSvg, "path") + countTag(referenceSvg, "ellipse");
         EXPECT_GT(ourDrawable, 0) << "No drawable elements in generated SVG " << shapeId;
@@ -298,28 +295,21 @@ TEST(SvgConvertTest, MatchesViewBoxAndPathsAndStrokes)
     }
 }
 
-TEST(SvgConvertTest, ReverseBulgeShapes)
+void runReverseBulgeTest(const std::filesystem::path& xmlPath,
+                         const std::filesystem::path& svgRoot,
+                         const std::filesystem::path& svgOut,
+                         const SvgBuilder& makeSvg)
 {
-    const auto inputRoot = getInputPath();
-    const auto xmlPath = inputRoot / "shapecurve_dragged.enigmaxml";
     if (!std::filesystem::is_regular_file(xmlPath)) {
         GTEST_SKIP() << "Missing reverse bulge test data: " << xmlPath;
     }
 
-    std::vector<Cmper> shapeIds = {
-        5, 6, 7, 8
-    };
-    if (shapeIds.empty()) {
-        GTEST_SKIP() << "No reverse bulge ShapeDef ids configured.";
-    }
-
+    std::vector<Cmper> shapeIds = {5, 6, 7, 8};
     std::vector<char> enigmaXml;
     readFile(xmlPath, enigmaXml);
     auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(enigmaXml);
     ASSERT_TRUE(doc);
 
-    const auto svgRoot = inputRoot / "shapecurve_dragged";
-    const auto svgOut = getOutputPath() / "shapecurve_dragged";
     std::error_code ec;
     std::filesystem::create_directories(svgOut, ec);
     ASSERT_FALSE(ec) << "Failed to create output directory: " << svgOut;
@@ -329,7 +319,7 @@ TEST(SvgConvertTest, ReverseBulgeShapes)
         auto shape = doc->getOthers()->get<others::ShapeDef>(SCORE_PARTID, shapeId);
         ASSERT_TRUE(shape) << "Missing ShapeDef " << shapeId;
 
-        const std::string ourSvg = musx::util::SvgConvert::toSvg(*shape);
+        const std::string ourSvg = makeSvg(*shape);
         ASSERT_FALSE(ourSvg.empty()) << "Empty SVG for ShapeDef " << shapeId;
 
         const auto outPath = svgOut / (std::to_string(shapeId) + "_test.svg");
@@ -365,6 +355,54 @@ TEST(SvgConvertTest, ReverseBulgeShapes)
             ASSERT_FALSE(ec) << "Failed to remove file: " << outPath;
         }
     }
+}
+
+} // namespace
+
+TEST(SvgConvertTest, MatchesViewBoxAndPathsAndStrokes)
+{
+    const auto inputRoot = getInputPath() / "reference";
+    const auto xmlPath = inputRoot / "PattersonDefault.enigmaxml";
+    const auto svgRoot = inputRoot / "PattersonDefault";
+    const auto svgOut = getOutputPath() / "PattersonDefault";
+    runSvgReferenceComparison(xmlPath, svgRoot, svgOut, [](const others::ShapeDef& shape) {
+        return musx::util::SvgConvert::toSvg(shape);
+    });
+}
+
+TEST(SvgConvertTest, ReverseBulgeShapes)
+{
+    const auto inputRoot = getInputPath();
+    const auto xmlPath = inputRoot / "shapecurve_dragged.enigmaxml";
+    const auto svgRoot = inputRoot / "shapecurve_dragged";
+    const auto svgOut = getOutputPath() / "shapecurve_dragged";
+    runReverseBulgeTest(xmlPath, svgRoot, svgOut, [](const others::ShapeDef& shape) {
+        return musx::util::SvgConvert::toSvg(shape);
+    });
+}
+
+TEST(SvgConvertTest, MatchesViewBoxAndPathsAndStrokesPageScaled)
+{
+    const auto inputRoot = getInputPath() / "reference";
+    const auto xmlPath = inputRoot / "PattersonDefault.enigmaxml";
+    const auto svgRoot = inputRoot / "PattersonDefault_page_scaled";
+    const auto svgOut = getOutputPath() / "PattersonDefault_page_scaled";
+    runSvgReferenceComparison(xmlPath, svgRoot, svgOut, [](const others::ShapeDef& shape) {
+        return musx::util::SvgConvert::toSvgWithPageFormatScaling(
+            shape, musx::util::SvgConvert::SvgUnit::Millimeters);
+    });
+}
+
+TEST(SvgConvertTest, ReverseBulgeShapesPageScaled)
+{
+    const auto inputRoot = getInputPath();
+    const auto xmlPath = inputRoot / "shapecurve_dragged.enigmaxml";
+    const auto svgRoot = inputRoot / "shapecurve_dragged_page_scaled";
+    const auto svgOut = getOutputPath() / "shapecurve_dragged_page_scaled";
+    runReverseBulgeTest(xmlPath, svgRoot, svgOut, [](const others::ShapeDef& shape) {
+        return musx::util::SvgConvert::toSvgWithPageFormatScaling(
+            shape, musx::util::SvgConvert::SvgUnit::Millimeters);
+    });
 }
 
 TEST(SvgConvertTest, TextMetricsMatches)

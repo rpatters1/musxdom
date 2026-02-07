@@ -96,6 +96,23 @@ std::optional<std::array<double, 4>> parseViewBox(const std::string& svg)
     return values;
 }
 
+void compareViewBox(const std::string& referenceSvg,
+                    const std::string& ourSvg,
+                    const std::string& label)
+{
+    auto refBox = parseViewBox(referenceSvg);
+    auto ourBox = parseViewBox(ourSvg);
+    ASSERT_TRUE(refBox.has_value()) << "Missing viewBox in reference SVG for " << label;
+    ASSERT_TRUE(ourBox.has_value()) << "Missing viewBox in generated SVG for " << label;
+    constexpr double kTolerance = 0.5;
+    const auto& ref = *refBox;
+    const auto& ours = *ourBox;
+    EXPECT_NEAR(ours[0], ref[0], kTolerance) << "viewBox minX mismatch for " << label;
+    EXPECT_NEAR(ours[1], ref[1], kTolerance) << "viewBox minY mismatch for " << label;
+    EXPECT_NEAR(ours[2], ref[2], kTolerance) << "viewBox width mismatch for " << label;
+    EXPECT_NEAR(ours[3], ref[3], kTolerance) << "viewBox height mismatch for " << label;
+}
+
 void writeSvgOutput(const std::string& svg, const std::string& filename)
 {
     const auto outDir = dataRoot() / "output";
@@ -256,4 +273,65 @@ TEST(SvgConvertExternalGraphicsTest, MissingGraphicReturnsEmpty)
     EXPECT_TRUE(svg.empty());
 
     std::filesystem::remove_all(tempDir);
+}
+
+TEST(SvgConvertExternalGraphicsTest, EmbeddedAndSourceDirectoryMatchBoundsPageScaled)
+{
+    const auto base = dataRoot();
+    const auto xmlPath = base / "elephant.enigmaxml";
+    const std::string xmlContents = readTextFile(xmlPath);
+    std::vector<char> xmlBuffer(xmlContents.begin(), xmlContents.end());
+
+    std::vector<std::uint8_t> embeddedBytes = readBinaryFile(base / "embedded" / "2.jpg");
+    ASSERT_FALSE(embeddedBytes.empty());
+    musx::factory::DocumentFactory::CreateOptions createOptions;
+    createOptions.setEmbeddedGraphics({
+        { "2.jpg", embeddedBytes }
+    });
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(
+        xmlBuffer, std::move(createOptions));
+    ASSERT_TRUE(doc);
+
+    auto shape = doc->getOthers()->get<others::ShapeDef>(SCORE_PARTID, 6);
+    ASSERT_TRUE(shape);
+
+    const std::string embeddedSvg = musx::util::SvgConvert::toSvgWithPageFormatScaling(
+        *shape, musx::util::SvgConvert::SvgUnit::Millimeters);
+    ASSERT_FALSE(embeddedSvg.empty());
+    writeSvgOutput(embeddedSvg, "embedded_page_scaled.svg");
+
+    const auto pageScaledDir = base / "elephant_page_scaled";
+    const auto refSvgName = std::to_string(shape->getCmper()) + ".svg";
+    const std::string refEmbedded = readTextFile(pageScaledDir / refSvgName);
+    ASSERT_FALSE(refEmbedded.empty());
+    compareViewBox(refEmbedded, embeddedSvg, "embedded");
+
+    const auto sourceDir = base / "source_dir";
+    const auto tempDir = makeTempDir("svg_ext_graphics");
+    auto tempXml = xmlContents;
+    for (const auto& entry : std::filesystem::directory_iterator(sourceDir)) {
+        if (!entry.is_regular_file()) {
+            continue;
+        }
+        const auto filename = entry.path().filename().string();
+        const auto target = tempDir / filename;
+        std::filesystem::copy_file(entry.path(), target, std::filesystem::copy_options::overwrite_existing);
+        replaceAllInPlace(tempXml, filename, target.string());
+    }
+
+    std::vector<char> tempBuffer(tempXml.begin(), tempXml.end());
+    auto sourceDoc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(tempBuffer);
+    ASSERT_TRUE(sourceDoc);
+
+    auto sourceShape = sourceDoc->getOthers()->get<others::ShapeDef>(SCORE_PARTID, 6);
+    ASSERT_TRUE(sourceShape);
+
+    const std::string sourceSvg = musx::util::SvgConvert::toSvgWithPageFormatScaling(
+        *sourceShape, musx::util::SvgConvert::SvgUnit::Millimeters);
+    ASSERT_FALSE(sourceSvg.empty());
+    writeSvgOutput(sourceSvg, "source_page_scaled.svg");
+
+    const std::string refSource = readTextFile(pageScaledDir / refSvgName);
+    ASSERT_FALSE(refSource.empty());
+    compareViewBox(refSource, sourceSvg, "source_dir");
 }
