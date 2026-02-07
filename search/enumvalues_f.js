@@ -17,7 +17,10 @@ var searchData=
   ['percussionmidimap_14',['PercussionMidiMap',['../namespacemusx_1_1dom_1_1others.html#a8ca1afe21691e4db1cdfd8b62344ecfea9886936a49e92031e21d52724cb2e0de',1,'musx::dom::others']]],
   ['phrygian_15',['Phrygian',['../namespacemusic__theory.html#a04ed1b374e50ea532b72ed1bb66683cea805db0fe201d84ac80b9572cb7d262ea',1,'music_theory']]],
   ['pianobrace_16',['PianoBrace',['../classmusx_1_1dom_1_1details_1_1Bracket.html#a94b9ba6a2a06355200a730432e7788c2aaf8f1f518c9abfade56624f83e4d399c',1,'musx::dom::details::Bracket']]],
-  ['playtempotoolchanges_17',['PlayTempoToolChanges',['../namespacemusx_1_1dom_1_1others.html#a8ca1afe21691e4db1cdfd8b62344ecfeaa0cbb728784176e49dae513294122965',1,'musx::dom::others']]],
-  ['plus_18',['Plus',['../classmusx_1_1dom_1_1others_1_1ChordSuffixElement.html#ad089ab13497a1e9197571632e31c2757a32ba78fe43257d3e7f88e3935a8ea0d4',1,'musx::dom::others::ChordSuffixElement']]],
-  ['positioninmeasure_19',['PositionInMeasure',['../classmusx_1_1dom_1_1others_1_1MeasureExprAssign.html#ac9f93b9b37f2319e87e8c33ec0bed159ae7fc6b9e306b7c9b939b8caca872a9e0',1,'musx::dom::others::MeasureExprAssign']]]
+  ['picas_17',['Picas',['../classmusx_1_1util_1_1SvgConvert.html#aec8aa781edbb07156c2299287a118e7ba87f77e575f5cc4a838eb75067569a0a6',1,'musx::util::SvgConvert']]],
+  ['pixels_18',['Pixels',['../classmusx_1_1util_1_1SvgConvert.html#aec8aa781edbb07156c2299287a118e7bac3d2f5d37334dc978fd8b17fc77408a1',1,'musx::util::SvgConvert']]],
+  ['playtempotoolchanges_19',['PlayTempoToolChanges',['../namespacemusx_1_1dom_1_1others.html#a8ca1afe21691e4db1cdfd8b62344ecfeaa0cbb728784176e49dae513294122965',1,'musx::dom::others']]],
+  ['plus_20',['Plus',['../classmusx_1_1dom_1_1others_1_1ChordSuffixElement.html#ad089ab13497a1e9197571632e31c2757a32ba78fe43257d3e7f88e3935a8ea0d4',1,'musx::dom::others::ChordSuffixElement']]],
+  ['points_21',['Points',['../classmusx_1_1util_1_1SvgConvert.html#aec8aa781edbb07156c2299287a118e7ba75dd5f1160a3f02b6fae89c54361a1b3',1,'musx::util::SvgConvert']]],
+  ['positioninmeasure_22',['PositionInMeasure',['../classmusx_1_1dom_1_1others_1_1MeasureExprAssign.html#ac9f93b9b37f2319e87e8c33ec0bed159ae7fc6b9e306b7c9b939b8caca872a9e0',1,'musx::dom::others::MeasureExprAssign']]]
 ];
