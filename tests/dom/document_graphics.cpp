@@ -195,8 +195,10 @@ TEST(DocumentGraphicsTest, ResolvesFromSourceDirectory)
     const auto graphicPath = tempDir / filename;
     writeFile(graphicPath, "fake");
 
-    musx::factory::DocumentFactory::CreateOptions options;
-    options.setSourcePath(tempDir / "score.musx");
+    musx::factory::DocumentFactory::CreateOptions options(
+        tempDir / "score.musx",
+        std::vector<char>{},
+        musx::factory::DocumentFactory::CreateOptions::EmbeddedGraphicFiles{});
 
     const auto xml = buildGraphicsXml(filename.string());
     auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(
@@ -213,8 +215,10 @@ TEST(DocumentGraphicsTest, ReturnsNulloptWhenMissing)
 {
     const auto tempDir = makeTempDir("musxdom_graphics_missing");
 
-    musx::factory::DocumentFactory::CreateOptions options;
-    options.setSourcePath(tempDir / "score.musx");
+    musx::factory::DocumentFactory::CreateOptions options(
+        tempDir / "score.musx",
+        std::vector<char>{},
+        musx::factory::DocumentFactory::CreateOptions::EmbeddedGraphicFiles{});
 
     const auto xml = buildGraphicsXml("missing.png");
     auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(
@@ -237,8 +241,10 @@ TEST(DocumentGraphicsTest, PrefersSourceDirectoryOverAbsolutePath)
     writeFile(sourceGraphic, "source");
     writeFile(absoluteGraphic, "absolute");
 
-    musx::factory::DocumentFactory::CreateOptions options;
-    options.setSourcePath(sourceDir / "score.musx");
+    musx::factory::DocumentFactory::CreateOptions options(
+        sourceDir / "score.musx",
+        std::vector<char>{},
+        musx::factory::DocumentFactory::CreateOptions::EmbeddedGraphicFiles{});
 
     const auto xml = buildGraphicsXml(absoluteGraphic.string());
     auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(
@@ -260,8 +266,10 @@ TEST(DocumentGraphicsTest, FallsBackToAbsolutePath)
     const auto absoluteGraphic = absoluteDir / filename;
     writeFile(absoluteGraphic, "absolute");
 
-    musx::factory::DocumentFactory::CreateOptions options;
-    options.setSourcePath(sourceDir / "score.musx");
+    musx::factory::DocumentFactory::CreateOptions options(
+        sourceDir / "score.musx",
+        std::vector<char>{},
+        musx::factory::DocumentFactory::CreateOptions::EmbeddedGraphicFiles{});
 
     const auto xml = buildGraphicsXml(absoluteGraphic.string());
     auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(
@@ -309,8 +317,10 @@ TEST(DocumentGraphicsTest, ResolvesFromMacUrlBookmark)
     const std::string bookmarkHex = hexEncode(bookmarkBytes);
     const auto xml = buildBookmarkGraphicsXml(filename.string(), bookmarkHex, bookmarkBytes.size());
 
-    musx::factory::DocumentFactory::CreateOptions options;
-    options.setSourcePath(sourceDir / "score.musx");
+    musx::factory::DocumentFactory::CreateOptions options(
+        sourceDir / "score.musx",
+        std::vector<char>{},
+        musx::factory::DocumentFactory::CreateOptions::EmbeddedGraphicFiles{});
     auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(
         xml.data(), xml.size(), std::move(options));
 
@@ -345,8 +355,10 @@ TEST(DocumentGraphicsTest, ResolvesFromMacAlias)
 
     const auto xml = buildAliasGraphicsXml(filename.string(), aliasHex, aliasLength);
 
-    musx::factory::DocumentFactory::CreateOptions options;
-    options.setSourcePath(sourceDir / "score.musx");
+    musx::factory::DocumentFactory::CreateOptions options(
+        sourceDir / "score.musx",
+        std::vector<char>{},
+        musx::factory::DocumentFactory::CreateOptions::EmbeddedGraphicFiles{});
     auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(
         xml.data(), xml.size(), std::move(options));
 
