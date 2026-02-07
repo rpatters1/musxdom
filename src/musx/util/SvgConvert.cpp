@@ -28,6 +28,7 @@
 #include <limits>
 #include <optional>
 #include <sstream>
+#include <stdexcept>
 #include <string>
 #include <string_view>
 #include <variant>
@@ -590,7 +591,62 @@ struct [[maybe_unused]] ArrowheadGeometry
 
 } // namespace
 
+std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape)
+{
+    return toSvg(shape, 1.0, SvgUnit::None, nullptr);
+}
+
 std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape,
+                              GlyphMetricsFn glyphMetrics)
+{
+    return toSvg(shape, 1.0, SvgUnit::None, std::move(glyphMetrics));
+}
+
+std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape,
+                              double scaling,
+                              SvgUnit unit)
+{
+    return toSvg(shape, scaling, unit, nullptr);
+}
+
+static constexpr std::string_view unitSuffixFor(musx::util::SvgConvert::SvgUnit unit)
+{
+    switch (unit) {
+    case musx::util::SvgConvert::SvgUnit::None:        return {};
+    case musx::util::SvgConvert::SvgUnit::Pixels:      return "px";
+    case musx::util::SvgConvert::SvgUnit::Points:      return "pt";
+    case musx::util::SvgConvert::SvgUnit::Picas:       return "pc";
+    case musx::util::SvgConvert::SvgUnit::Centimeters: return "cm";
+    case musx::util::SvgConvert::SvgUnit::Millimeters: return "mm";
+    case musx::util::SvgConvert::SvgUnit::Inches:      return "in";
+    }
+    return {};
+}
+
+static constexpr double evpuPerUnit(musx::util::SvgConvert::SvgUnit unit)
+{
+    switch (unit) {
+    case musx::util::SvgConvert::SvgUnit::None:
+        return 1.0;
+    case musx::util::SvgConvert::SvgUnit::Pixels:
+        return dom::EVPU_PER_PX;
+    case musx::util::SvgConvert::SvgUnit::Points:
+        return dom::EVPU_PER_POINT;
+    case musx::util::SvgConvert::SvgUnit::Picas:
+        return dom::EVPU_PER_PICA;
+    case musx::util::SvgConvert::SvgUnit::Centimeters:
+        return dom::EVPU_PER_CM;
+    case musx::util::SvgConvert::SvgUnit::Millimeters:
+        return dom::EVPU_PER_MM;
+    case musx::util::SvgConvert::SvgUnit::Inches:
+        return dom::EVPU_PER_INCH;
+    }
+    return 1.0;
+}
+
+std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape,
+                              double scaling,
+                              SvgUnit unit,
                               GlyphMetricsFn glyphMetrics)
 {
     struct ExternalGraphicPayload {
@@ -640,10 +696,19 @@ std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape,
     double currentObjectScaleY = 1.0;
     bool hasCurrentObjectTransform = false;
 
+    const double unitScale = evpuPerUnit(unit);
+    const double outputScale = (unitScale != 0.0) ? (scaling / unitScale) : scaling;
+    auto scalePoint = [&](const Point& value) {
+        return Point{value.x * outputScale, value.y * outputScale};
+    };
+    auto scaleValue = [&](double value) {
+        return value * outputScale;
+    };
+
     auto toWorld = [&](const Point& local) {
         Point world = applyTransform(currentTransform, local);
         world.y = -world.y;
-        return world;
+        return scalePoint(world);
     };
 
     auto toWorldCurve = [&](const Point& local, const Point& pivotLocal) {
@@ -659,7 +724,7 @@ std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape,
         Transform curveTransform = multiplyTransforms(groupTransform, localTransform);
         Point world = applyTransform(curveTransform, local);
         world.y = -world.y;
-        return world;
+        return scalePoint(world);
     };
 
     auto beginDrawing = [&]() {
@@ -703,9 +768,11 @@ std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape,
         }
         if (stroke) {
             element << " stroke=\"" << grayToRgb(paint.gray) << "\"";
-            element << " stroke-width=\"" << paint.strokeWidth << "\"";
+            const double strokeWidthOut = scaleValue(paint.strokeWidth);
+            element << " stroke-width=\"" << strokeWidthOut << "\"";
             if (paint.dash && paint.dash->first > 0.0 && paint.dash->second > 0.0) {
-                element << " stroke-dasharray=\"" << paint.dash->first << ' ' << paint.dash->second << "\"";
+                element << " stroke-dasharray=\"" << scaleValue(paint.dash->first) << ' '
+                        << scaleValue(paint.dash->second) << "\"";
             }
         } else {
             element << " stroke=\"none\"";
@@ -1017,14 +1084,15 @@ std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape,
                 }
                 path.lineTo(worldEnd);
                 pathBounds.include(worldEnd);
-                includeLineStrokeBounds(strokeBounds, worldStart, worldEnd, paint.strokeWidth / 2.0);
+                const double strokeWidthOut = scaleValue(paint.strokeWidth);
+                includeLineStrokeBounds(strokeBounds, worldStart, worldEnd, strokeWidthOut / 2.0);
                 double segmentLen = std::hypot(worldEnd.x - worldStart.x, worldEnd.y - worldStart.y);
                 if (segmentLen > 0.0) {
                 if (pathBounds.hasValue && lastLineStartWorld && lastLineEndWorld) {
                     Point center{(pathBounds.minX + pathBounds.maxX) / 2.0,
                                  (pathBounds.minY + pathBounds.maxY) / 2.0};
                     includeLineJoinBounds(strokeBounds, *lastLineStartWorld, *lastLineEndWorld, worldEnd,
-                                          center, paint.strokeWidth / 2.0);
+                                          center, strokeWidthOut / 2.0);
                 }
                     if (!firstLineStartWorld || !firstLineEndWorld) {
                         firstLineStartWorld = worldStart;
@@ -1069,7 +1137,8 @@ std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape,
                 for (int i = 1; i <= kCurveSamples; ++i) {
                     double t = static_cast<double>(i) / static_cast<double>(kCurveSamples);
                     Point next = evaluateCubic(worldStart, worldC1, worldC2, worldEnd, t);
-                    includeLineStrokeBounds(strokeBounds, prev, next, paint.strokeWidth / 2.0);
+                    const double strokeWidthOut = scaleValue(paint.strokeWidth);
+                    includeLineStrokeBounds(strokeBounds, prev, next, strokeWidthOut / 2.0);
                     prev = next;
                 }
             }
@@ -1238,10 +1307,11 @@ std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape,
                 path.lineTo(w3);
                 path.closePath();
                 pathBounds.includeRect(w0, w2);
-                includeLineStrokeBounds(strokeBounds, w0, w1, paint.strokeWidth / 2.0);
-                includeLineStrokeBounds(strokeBounds, w1, w2, paint.strokeWidth / 2.0);
-                includeLineStrokeBounds(strokeBounds, w2, w3, paint.strokeWidth / 2.0);
-                includeLineStrokeBounds(strokeBounds, w3, w0, paint.strokeWidth / 2.0);
+                const double strokeWidthOut = scaleValue(paint.strokeWidth);
+                includeLineStrokeBounds(strokeBounds, w0, w1, strokeWidthOut / 2.0);
+                includeLineStrokeBounds(strokeBounds, w1, w2, strokeWidthOut / 2.0);
+                includeLineStrokeBounds(strokeBounds, w2, w3, strokeWidthOut / 2.0);
+                includeLineStrokeBounds(strokeBounds, w3, w0, strokeWidthOut / 2.0);
                 current = p0;
                 start = p0;
             }
@@ -1257,8 +1327,8 @@ std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape,
                 double rx = std::abs(width / 2.0);
                 double ry = std::abs(height / 2.0);
                 Point worldCenter = toWorld(center);
-                double worldRx = rx * std::hypot(currentTransform.a, currentTransform.b);
-                double worldRy = ry * std::hypot(currentTransform.c, currentTransform.d);
+                double worldRx = scaleValue(rx * std::hypot(currentTransform.a, currentTransform.b));
+                double worldRy = scaleValue(ry * std::hypot(currentTransform.c, currentTransform.d));
                 
 
                 auto isSentinel = [](dom::Evpu value) {
@@ -1282,9 +1352,9 @@ std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape,
                         double objWidth = right - left;
                         double objHeight = top - bottom;
                         Point objCenter{(left + right) / 2.0, (top + bottom) / 2.0};
-                        worldCenter = {objCenter.x, -objCenter.y};
-                        worldRx = objWidth / 2.0;
-                        worldRy = objHeight / 2.0;
+                        worldCenter = scalePoint({objCenter.x, -objCenter.y});
+                        worldRx = scaleValue(objWidth / 2.0);
+                        worldRy = scaleValue(objHeight / 2.0);
                     }
                 }
                 pendingEllipse = EllipseState{worldCenter, worldRx, worldRy};
@@ -1300,12 +1370,13 @@ std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape,
             if (pathBounds.hasValue && lastLineStartWorld && lastLineEndWorld && firstLineStartWorld && firstLineEndWorld) {
                 Point center{(pathBounds.minX + pathBounds.maxX) / 2.0,
                              (pathBounds.minY + pathBounds.maxY) / 2.0};
+                const double strokeWidthOut = scaleValue(paint.strokeWidth);
                 includeLineStrokeBounds(strokeBounds, *lastLineEndWorld, *firstLineStartWorld,
-                                        paint.strokeWidth / 2.0);
+                                        strokeWidthOut / 2.0);
                 includeLineJoinBounds(strokeBounds, *lastLineStartWorld, *lastLineEndWorld, *firstLineStartWorld,
-                                      center, paint.strokeWidth / 2.0);
+                                      center, strokeWidthOut / 2.0);
                 includeLineJoinBounds(strokeBounds, *lastLineEndWorld, *firstLineStartWorld, *firstLineEndWorld,
-                                      center, paint.strokeWidth / 2.0);
+                                      center, strokeWidthOut / 2.0);
             }
             path.closePath();
             current = start;
@@ -1333,7 +1404,7 @@ std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape,
                                   << "\" rx=\"" << ellipse.rx << "\" ry=\"" << ellipse.ry << "\"";
                     strokeElement << " fill=\"none\"";
                     strokeElement << " stroke=\"" << grayToRgb(0) << "\"";
-                    strokeElement << " stroke-width=\"" << paint.strokeWidth << "\"";
+                    strokeElement << " stroke-width=\"" << scaleValue(paint.strokeWidth) << "\"";
                     if (paint.dash && paint.dash->first > 0.0 && paint.dash->second > 0.0) {
                         strokeElement << " stroke-dasharray=\"" << paint.dash->first << ' ' << paint.dash->second
                                       << "\"";
@@ -1375,7 +1446,7 @@ std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape,
                                   << "\" rx=\"" << ellipse.rx << "\" ry=\"" << ellipse.ry << "\"";
                     strokeElement << " fill=\"none\"";
                     strokeElement << " stroke=\"" << grayToRgb(0) << "\"";
-                    strokeElement << " stroke-width=\"" << paint.strokeWidth << "\"";
+                    strokeElement << " stroke-width=\"" << scaleValue(paint.strokeWidth) << "\"";
                     if (paint.dash && paint.dash->first > 0.0 && paint.dash->second > 0.0) {
                         strokeElement << " stroke-dasharray=\"" << paint.dash->first << ' ' << paint.dash->second
                                       << "\"";
@@ -1402,7 +1473,7 @@ std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape,
                               << "\" rx=\"" << ellipse.rx << "\" ry=\"" << ellipse.ry << "\"";
                 strokeElement << " fill=\"none\"";
                 strokeElement << " stroke=\"" << grayToRgb(paint.gray) << "\"";
-                strokeElement << " stroke-width=\"" << paint.strokeWidth << "\"";
+                strokeElement << " stroke-width=\"" << scaleValue(paint.strokeWidth) << "\"";
                 if (paint.dash && paint.dash->first > 0.0 && paint.dash->second > 0.0) {
                     strokeElement << " stroke-dasharray=\"" << paint.dash->first << ' ' << paint.dash->second
                                   << "\"";
@@ -1544,16 +1615,18 @@ std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape,
                 }
             }
             std::string encoded = base64Encode(payload->bytes);
-            Point worldTopLeft = useBoundsPlacement ? Point{x, y} : toWorld({x, y + height});
+            const double widthOut = scaleValue(width);
+            const double heightOut = scaleValue(height);
+            Point worldTopLeft = useBoundsPlacement ? scalePoint({x, y}) : toWorld({x, y + height});
             std::ostringstream element;
             element << "<image x=\"" << worldTopLeft.x << "\" y=\"" << worldTopLeft.y
-                    << "\" width=\"" << width << "\" height=\"" << height
+                    << "\" width=\"" << widthOut << "\" height=\"" << heightOut
                     << "\" href=\"data:" << payload->mimeType
                     << ";base64," << encoded << "\"/>";
             elements.push_back(element.str());
 
-            Point worldMin = useBoundsPlacement ? Point{x, y} : toWorld({x, y});
-            Point worldMax = useBoundsPlacement ? Point{x + width, y + height} : toWorld({x + width, y + height});
+            Point worldMin = useBoundsPlacement ? scalePoint({x, y}) : toWorld({x, y});
+            Point worldMax = useBoundsPlacement ? scalePoint({x + width, y + height}) : toWorld({x + width, y + height});
             bounds.include({worldMin.x, worldMin.y});
             bounds.include({worldMax.x, worldMax.y});
             break;
@@ -1590,13 +1663,18 @@ std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape,
             double fontSizeEvpu = fontSizePoints * dom::EVPU_PER_POINT;
             Point anchor = toWorld(current);
             GlyphMetrics metrics = resolveMetrics(currentFont, data->codePoint, fontSizeEvpu);
+            GlyphMetrics metricsOut{
+                scaleValue(metrics.advance),
+                scaleValue(metrics.ascent),
+                scaleValue(metrics.descent)
+            };
             std::ostringstream element;
             element << "<text";
             if (!fontName.empty()) {
                 element << " font-family=\"" << fontName << "\"";
             }
             element << " transform=\"translate(" << anchor.x << ',' << anchor.y << ")\"";
-            element << " font-size=\"" << fontSizeEvpu << "\"";
+            element << " font-size=\"" << scaleValue(fontSizeEvpu) << "\"";
             element << " font-weight=\"" << (currentFont.bold ? "bold" : "normal") << "\"";
             element << " font-style=\"" << (currentFont.italic ? "italic" : "normal") << "\"";
             if (currentFont.underline || currentFont.strikeout) {
@@ -1620,8 +1698,8 @@ std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape,
             elements.push_back(element.str());
 
             Bounds localBounds;
-            localBounds.include({anchor.x, anchor.y + metrics.descent});
-            localBounds.include({anchor.x + metrics.advance, anchor.y - metrics.ascent});
+            localBounds.include({anchor.x, anchor.y + metricsOut.descent});
+            localBounds.include({anchor.x + metricsOut.advance, anchor.y - metricsOut.ascent});
             bounds.include({localBounds.minX, localBounds.minY});
             bounds.include({localBounds.maxX, localBounds.maxY});
             current.x += metrics.advance;
@@ -1655,6 +1733,11 @@ std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape,
             double dy = toEvpuDouble(data->dy);
             double length = std::hypot(dx, dy);
             GlyphMetrics metrics = resolveMetrics(currentFont, data->codePoint, fontSizeEvpu);
+            GlyphMetrics metricsOut{
+                scaleValue(metrics.advance),
+                scaleValue(metrics.ascent),
+                scaleValue(metrics.descent)
+            };
             double step = metrics.advance;
             if (step <= 0.0) {
                 step = length;
@@ -1675,7 +1758,7 @@ std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape,
                     element << " font-family=\"" << fontName << "\"";
                 }
                 element << " transform=\"translate(" << anchor.x << ',' << anchor.y << ")\"";
-                element << " font-size=\"" << fontSizeEvpu << "\"";
+                element << " font-size=\"" << scaleValue(fontSizeEvpu) << "\"";
                 element << " font-weight=\"" << (currentFont.bold ? "bold" : "normal") << "\"";
                 element << " font-style=\"" << (currentFont.italic ? "italic" : "normal") << "\"";
                 if (currentFont.underline || currentFont.strikeout) {
@@ -1699,8 +1782,8 @@ std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape,
                 elements.push_back(element.str());
 
                 Bounds localBounds;
-                localBounds.include({anchor.x, anchor.y + metrics.descent});
-                localBounds.include({anchor.x + metrics.advance, anchor.y - metrics.ascent});
+                localBounds.include({anchor.x, anchor.y + metricsOut.descent});
+                localBounds.include({anchor.x + metricsOut.advance, anchor.y - metricsOut.ascent});
                 bounds.include({localBounds.minX, localBounds.minY});
                 bounds.include({localBounds.maxX, localBounds.maxY});
             }
@@ -1735,6 +1818,7 @@ std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape,
     svg << "<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" "
            "\"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">\n";
     svg << "<!-- Generator: MusxDom -->\n";
+    const std::string_view unitSuffix = unitSuffixFor(unit);
     if (bounds.hasValue) {
         double minX = bounds.minX;
         double minY = bounds.minY;
@@ -1746,7 +1830,15 @@ std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape,
                "xmlns:xlink=\"http://www.w3.org/1999/xlink\" viewBox=\""
             << minX << ' ' << minY << ' ' << width << ' ' << height << "\"";
         if (width > 0.0 && height > 0.0) {
-            svg << " width=\"" << width << "\" height=\"" << height << "\"";
+            svg << " width=\"" << width;
+            if (!unitSuffix.empty()) {
+                svg << unitSuffix;
+            }
+            svg << "\" height=\"" << height;
+            if (!unitSuffix.empty()) {
+                svg << unitSuffix;
+            }
+            svg << "\"";
         }
         svg << " xml:space=\"preserve\">\n";
     } else {
@@ -1762,6 +1854,28 @@ std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape,
     svg << "    </g>\n";
     svg << "</svg>\n";
     return svg.str();
+}
+
+std::string SvgConvert::toSvgWithPageFormatScaling(const dom::others::ShapeDef& shape,
+                                                   SvgUnit unit)
+{
+    return toSvgWithPageFormatScaling(shape, unit, nullptr);
+}
+
+std::string SvgConvert::toSvgWithPageFormatScaling(const dom::others::ShapeDef& shape,
+                                                   SvgUnit unit,
+                                                   GlyphMetricsFn glyphMetrics)
+{
+    auto document = shape.getDocument();
+    MUSX_ASSERT_IF(!document) {
+        throw std::invalid_argument("ShapeDef must be associated with a Document.");
+    }
+    auto options = document->getOptions()->get<dom::options::PageFormatOptions>();
+    MUSX_ASSERT_IF(!options || !options->pageFormatScore) {
+        throw std::invalid_argument("PageFormatOptions are not available on this Document.");
+    }
+    const double scaling = options->pageFormatScore->calcCombinedSystemScaling().toDouble();
+    return toSvg(shape, scaling, unit, std::move(glyphMetrics));
 }
 
 
