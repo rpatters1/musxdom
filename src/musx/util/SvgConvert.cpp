@@ -803,8 +803,8 @@ std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape,
         }
         GlyphMetrics fallback;
         fallback.advance = fontSizeEvpu * 0.6;
-        fallback.ascent = fontSizeEvpu * 0.8;
-        fallback.descent = fontSizeEvpu * 0.2;
+        fallback.glyphTop = fontSizeEvpu * 0.8;
+        fallback.glyphBottom = -fontSizeEvpu * 0.2;
         return fallback;
     };
 
@@ -1670,8 +1670,8 @@ std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape,
             GlyphMetrics metrics = resolveMetrics(currentFont, data->codePoint, fontSizeEvpu);
             GlyphMetrics metricsOut{
                 scaleValue(metrics.advance),
-                scaleValue(metrics.ascent),
-                scaleValue(metrics.descent)
+                scaleValue(metrics.glyphTop),
+                scaleValue(metrics.glyphBottom)
             };
             std::ostringstream element;
             element << "<text";
@@ -1703,8 +1703,8 @@ std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape,
             elements.push_back(element.str());
 
             Bounds localBounds;
-            localBounds.include({anchor.x, anchor.y + metricsOut.descent});
-            localBounds.include({anchor.x + metricsOut.advance, anchor.y - metricsOut.ascent});
+            localBounds.include({anchor.x, anchor.y - metricsOut.glyphBottom});
+            localBounds.include({anchor.x + metricsOut.advance, anchor.y - metricsOut.glyphTop});
             bounds.include({localBounds.minX, localBounds.minY});
             bounds.include({localBounds.maxX, localBounds.maxY});
             current.x += metrics.advance;
@@ -1740,8 +1740,8 @@ std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape,
             GlyphMetrics metrics = resolveMetrics(currentFont, data->codePoint, fontSizeEvpu);
             GlyphMetrics metricsOut{
                 scaleValue(metrics.advance),
-                scaleValue(metrics.ascent),
-                scaleValue(metrics.descent)
+                scaleValue(metrics.glyphTop),
+                scaleValue(metrics.glyphBottom)
             };
             double step = metrics.advance;
             if (step <= 0.0) {
@@ -1787,8 +1787,8 @@ std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape,
                 elements.push_back(element.str());
 
                 Bounds localBounds;
-                localBounds.include({anchor.x, anchor.y + metricsOut.descent});
-                localBounds.include({anchor.x + metricsOut.advance, anchor.y - metricsOut.ascent});
+                localBounds.include({anchor.x, anchor.y - metricsOut.glyphBottom});
+                localBounds.include({anchor.x + metricsOut.advance, anchor.y - metricsOut.glyphTop});
                 bounds.include({localBounds.minX, localBounds.minY});
                 bounds.include({localBounds.maxX, localBounds.maxY});
             }

@@ -65,10 +65,10 @@ public:
     {
         /// @brief The advance width of the text in EVPU units.
         dom::EvpuFloat advance{};
-        /// @brief The ascent above the baseline in EVPU units.
-        dom::EvpuFloat ascent{};
-        /// @brief The descent below the baseline in EVPU units (positive value).
-        dom::EvpuFloat descent{};
+        /// @brief The glyph top relative to the baseline in EVPU units.
+        dom::EvpuFloat glyphTop{};
+        /// @brief The glyph bottom relative to the baseline in EVPU units (typically negative).
+        dom::EvpuFloat glyphBottom{};
     };
 
     /// @brief Optional callback that returns glyph metrics in EVPU units.
