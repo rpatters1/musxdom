@@ -963,7 +963,11 @@ TEST(TextsTest, ParseEnigmaPerfTimeFromNotationMetadata)
 )xml";
 
     auto buildWithMetadata = [&](musxtest::string_view metadata) -> musx::dom::DocumentPtr {
-        musx::factory::DocumentFactory::CreateOptions options(metadata);
+        std::vector<char> metadataBuffer(metadata.begin(), metadata.end());
+        musx::factory::DocumentFactory::CreateOptions options(
+            std::filesystem::path(""),
+            std::move(metadataBuffer),
+            musx::factory::DocumentFactory::CreateOptions::EmbeddedGraphicFiles{});
         return musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(
             minimalXml.data(), minimalXml.size(), std::move(options));
     };

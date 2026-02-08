@@ -183,13 +183,15 @@ TEST(SvgConvertExternalGraphicsTest, EmbeddedAndSourceDirectoryMatchBounds)
     const auto embeddedGraphicPath = embeddedRoot / (std::to_string(*graphicCmper) + ".jpg");
     const auto embeddedBytes = readBinaryFile(embeddedGraphicPath);
 
-    musx::factory::DocumentFactory::CreateOptions options;
     musx::factory::DocumentFactory::CreateOptions::EmbeddedGraphicFile embeddedFile;
     embeddedFile.filename = embeddedGraphicPath.filename().string();
     embeddedFile.bytes = embeddedBytes;
     musx::factory::DocumentFactory::CreateOptions::EmbeddedGraphicFiles embeddedFiles;
     embeddedFiles.push_back(std::move(embeddedFile));
-    options.setEmbeddedGraphics(std::move(embeddedFiles));
+    musx::factory::DocumentFactory::CreateOptions options(
+        xmlPath,
+        std::vector<char>{},
+        std::move(embeddedFiles));
 
     auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(
         xml.data(), xml.size(), std::move(options));
@@ -222,8 +224,10 @@ TEST(SvgConvertExternalGraphicsTest, EmbeddedAndSourceDirectoryMatchBounds)
         std::filesystem::copy_file(sourceGraphic, tempGraphic, std::filesystem::copy_options::overwrite_existing);
     }
 
-    musx::factory::DocumentFactory::CreateOptions sourceOptions;
-    sourceOptions.setSourcePath(tempXml);
+    musx::factory::DocumentFactory::CreateOptions sourceOptions(
+        tempXml,
+        std::vector<char>{},
+        musx::factory::DocumentFactory::CreateOptions::EmbeddedGraphicFiles{});
     auto sourceDoc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(
         xml.data(), xml.size(), std::move(sourceOptions));
     auto sourceShape = findExternalGraphicShape(sourceDoc, 6);
@@ -259,9 +263,11 @@ TEST(SvgConvertExternalGraphicsTest, MissingGraphicReturnsEmpty)
     replaceAllInPlace(xml, "<pathType>macAlias</pathType>", "<pathType>macPosixPath</pathType>");
     replaceAllInPlace(xml, "elephant_face_10x10.jpg", "missing.jpg");
 
-    musx::factory::DocumentFactory::CreateOptions options;
     const auto tempDir = makeTempDir("musxdom_svg_ext_missing");
-    options.setSourcePath(tempDir / "elephant.enigmaxml");
+    musx::factory::DocumentFactory::CreateOptions options(
+        tempDir / "elephant.enigmaxml",
+        std::vector<char>{},
+        musx::factory::DocumentFactory::CreateOptions::EmbeddedGraphicFiles{});
 
     auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(
         xml.data(), xml.size(), std::move(options));
@@ -284,10 +290,12 @@ TEST(SvgConvertExternalGraphicsTest, EmbeddedAndSourceDirectoryMatchBoundsPageSc
 
     std::vector<std::uint8_t> embeddedBytes = readBinaryFile(base / "embedded" / "2.jpg");
     ASSERT_FALSE(embeddedBytes.empty());
-    musx::factory::DocumentFactory::CreateOptions createOptions;
-    createOptions.setEmbeddedGraphics({
-        { "2.jpg", embeddedBytes }
-    });
+    musx::factory::DocumentFactory::CreateOptions createOptions(
+        xmlPath,
+        std::vector<char>{},
+        {
+            { "2.jpg", embeddedBytes }
+        });
     auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(
         xmlBuffer, std::move(createOptions));
     ASSERT_TRUE(doc);

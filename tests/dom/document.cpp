@@ -288,7 +288,10 @@ TEST(DocumentTest, EmbeddedGraphicsRoundTrip)
         { "303", EmbeddedGraphicBlob{0x11} }
     };
 
-    musx::factory::DocumentFactory::CreateOptions options(std::move(graphics));
+    musx::factory::DocumentFactory::CreateOptions options(
+        std::filesystem::path(""),
+        std::vector<char>{},
+        std::move(graphics));
     auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(
         emptyData.data(), emptyData.size(), std::move(options));
 

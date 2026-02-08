@@ -77,26 +77,20 @@ public:
         /// @param policy The policy to apply for this document.
         CreateOptions(dom::PartVoicingPolicy policy) : partVoicingPolicy(policy) {}
 
-        /// @brief Construct options by moving in NotationMetadata.xml bytes.
+        /// @brief Construct options with explicit inputs.
+        /// @param inputFilepath Path to the musx (or EnigmaXML) file being loaded.
         /// @param notationMetadata Buffer containing NotationMetadata.xml.
-        CreateOptions(std::vector<char>&& notationMetadata)
-            : m_notationMetadata(std::move(notationMetadata)) {}
-
-        /// @brief Construct options by moving embedded graphic files.
         /// @param embeddedGraphicFiles Embedded graphic files in `cmper.ext` form.
-        CreateOptions(EmbeddedGraphicFiles&& embeddedGraphicFiles)
-        {
-            setEmbeddedGraphics(std::move(embeddedGraphicFiles));
-        }
-
-        /// @brief Construct options by copying a 1-byte-element metadata buffer.
-        /// @tparam Container A contiguous container with 1-byte element type.
-        /// @param notationMetadata Buffer containing NotationMetadata.xml.
-        template <typename Container, typename = IsCharContainer<Container>>
-        CreateOptions(const Container& notationMetadata)
-        {
-            setNotationMetadata(notationMetadata);
-        }
+        /// @param policy The policy to apply for this document.
+        CreateOptions(std::filesystem::path inputFilepath,
+                      std::vector<char> notationMetadata,
+                      EmbeddedGraphicFiles embeddedGraphicFiles,
+                      dom::PartVoicingPolicy policy = dom::PartVoicingPolicy::Ignore)
+            : partVoicingPolicy(policy),
+              m_notationMetadata(std::move(notationMetadata)),
+              m_embeddedGraphics(parseEmbeddedGraphicFiles(std::move(embeddedGraphicFiles))),
+              m_sourcePath(std::move(inputFilepath))
+        {}
 
         dom::PartVoicingPolicy partVoicingPolicy = dom::PartVoicingPolicy::Ignore; ///< Part voicing behavior for this document.
 
@@ -116,46 +110,22 @@ public:
         [[nodiscard]]
         dom::EmbeddedGraphicsMap takeEmbeddedGraphics() { return std::move(m_embeddedGraphics); }
 
-        /// @brief Set NotationMetadata.xml by copying from a 1-byte-element buffer.
-        /// @tparam Container A contiguous container with 1-byte element type.
-        /// @param notationMetadata Buffer containing NotationMetadata.xml.
-        template <typename Container, typename = IsCharContainer<Container>>
-        void setNotationMetadata(const Container& notationMetadata)
+    private:
+        static dom::EmbeddedGraphicsMap parseEmbeddedGraphicFiles(EmbeddedGraphicFiles&& embeddedGraphicFiles)
         {
-            const auto* data = reinterpret_cast<const char*>(notationMetadata.data());
-            m_notationMetadata.assign(data, data + notationMetadata.size());
-        }
-
-        /// @brief Set NotationMetadata.xml by moving an existing `std::vector<char>`.
-        /// @param notationMetadata Buffer containing NotationMetadata.xml.
-        void setNotationMetadata(std::vector<char>&& notationMetadata)
-        {
-            m_notationMetadata = std::move(notationMetadata);
-        }
-
-        /// @brief Set embedded graphics by parsing moved archive files in `cmper.ext` form.
-        /// @param embeddedGraphicFiles Embedded graphic files from the musx archive.
-        void setEmbeddedGraphics(EmbeddedGraphicFiles&& embeddedGraphicFiles)
-        {
-            m_embeddedGraphics.clear();
+            dom::EmbeddedGraphicsMap embeddedGraphics;
             for (auto& file : embeddedGraphicFiles) {
                 const auto parsed = parseEmbeddedGraphicFilename(file.filename);
                 if (!parsed) {
                     continue;
                 }
-                auto& entry = m_embeddedGraphics[parsed->first];
+                auto& entry = embeddedGraphics[parsed->first];
                 entry.extension = std::move(parsed->second);
                 entry.bytes = std::move(file.bytes);
             }
+            return embeddedGraphics;
         }
 
-        /// @brief Set the path to the musx (or EnigmaXML) file being loaded.
-        void setSourcePath(std::filesystem::path path)
-        {
-            m_sourcePath = std::move(path);
-        }
-
-    private:
         static std::optional<std::pair<Cmper, std::string>> parseEmbeddedGraphicFilename(const std::string& filename)
         {
             const auto dotPos = filename.find('.');
