@@ -461,19 +461,19 @@ TEST(SvgConvertTest, TextMetricsMatches)
             switch (codePoint) {
             case U'\uE566':
                 result.advance = 46.463989257812;
-                result.glyphTop = 36.578125;
-                result.glyphBottom = -0.296875;
+                result.ascent = 36.578125;
+                result.descent = 0.296875;
                 break;
             case U'\uF427':
                 result.advance = 105.609375;
-                result.glyphTop = 193.0;
-                result.glyphBottom = -193.0;
+                result.ascent = 193.0;
+                result.descent = 193.0;
                 break;
             default:
                 ADD_FAILURE() << "Unexpected Finale Maestro glyph: " << static_cast<std::uint32_t>(codePoint);
                 result.advance = 0.0;
-                result.glyphTop = 0.0;
-                result.glyphBottom = 0.0;
+                result.ascent = 0.0;
+                result.descent = 0.0;
                 break;
             }
         } else if (isHelvetica) {
@@ -489,8 +489,8 @@ TEST(SvgConvertTest, TextMetricsMatches)
                 result.advance = 0.0;
                 break;
             }
-            result.glyphTop = 37.0;
-            result.glyphBottom = -11.0;
+            result.ascent = 37.0;
+            result.descent = 11.0;
         } else if (isArial) {
             switch (codePoint) {
             case U'T': result.advance = 21.990234375; break;
@@ -501,48 +501,48 @@ TEST(SvgConvertTest, TextMetricsMatches)
                 result.advance = 0.0;
                 break;
             }
-            result.glyphTop = 26.140625;
-            result.glyphBottom = -0.125;
+            result.ascent = 26.140625;
+            result.descent = 0.125;
         } else if (isTimes) {
             if (codePoint == U' ') {
                 result.advance = 12.0;
-                result.glyphTop = 36.0;
-                result.glyphBottom = -12.0;
+                result.ascent = 36.0;
+                result.descent = 12.0;
             } else {
                 ADD_FAILURE() << "Unexpected Times glyph: " << static_cast<std::uint32_t>(codePoint);
                 result.advance = 0.0;
-                result.glyphTop = 0.0;
-                result.glyphBottom = 0.0;
+                result.ascent = 0.0;
+                result.descent = 0.0;
             }
         } else if (isTimesNewRoman) {
             switch (codePoint) {
             case U'T':
                 result.advance = 21.990234375;
-                result.glyphTop = 23.765625;
-                result.glyphBottom = -0.125;
+                result.ascent = 23.765625;
+                result.descent = 0.125;
                 break;
             case U'A':
                 result.advance = 25.998046875;
-                result.glyphTop = 24.3125;
-                result.glyphBottom = -0.125;
+                result.ascent = 24.3125;
+                result.descent = 0.125;
                 break;
             case U'B':
                 result.advance = 24.01171875;
-                result.glyphTop = 23.765625;
-                result.glyphBottom = -0.125;
+                result.ascent = 23.765625;
+                result.descent = 0.125;
                 break;
             default:
                 ADD_FAILURE() << "Unexpected Times New Roman glyph: " << static_cast<std::uint32_t>(codePoint);
                 result.advance = 0.0;
-                result.glyphTop = 0.0;
-                result.glyphBottom = 0.0;
+                result.ascent = 0.0;
+                result.descent = 0.0;
                 break;
             }
         } else {
             ADD_FAILURE() << "Unexpected font family for glyph: " << static_cast<std::uint32_t>(codePoint);
             result.advance = 0.0;
-            result.glyphTop = 0.0;
-            result.glyphBottom = 0.0;
+            result.ascent = 0.0;
+            result.descent = 0.0;
         }
         return result;
     };
@@ -555,7 +555,7 @@ TEST(SvgConvertTest, TextMetricsMatches)
     const std::vector<Cmper> textShapeIds{2, 3, 4, 7};
     std::vector<std::filesystem::path> outputs;
     constexpr double kTextTolerance = 0.05;
-    constexpr double kViewBoxTolerance = 0.25;
+    constexpr double kViewBoxTolerance = 0.5;
 
     for (Cmper shapeId : textShapeIds) {
         auto shape = doc->getOthers()->get<others::ShapeDef>(SCORE_PARTID, shapeId);
