@@ -1871,17 +1871,13 @@ std::string SvgConvert::toSvgWithPageFormatScaling(const dom::others::ShapeDef& 
                                                    SvgUnit unit,
                                                    GlyphMetricsFn glyphMetrics)
 {
-    auto document = shape.getDocument();
-    MUSX_ASSERT_IF(!document) {
-        throw std::invalid_argument("ShapeDef must be associated with a Document.");
-    }
-    auto options = document->getOptions()->get<dom::options::PageFormatOptions>();
+    const auto options = shape.getDocument()->getOptions()->get<dom::options::PageFormatOptions>();
     MUSX_ASSERT_IF(!options) {
         throw std::invalid_argument("PageFormatOptions are not available on this Document.");
     }
     auto pageFormat = options->pageFormatScore;
     MUSX_ASSERT_IF(!pageFormat) {
-        throw std::invalid_argument("PageFormatOptions could not resolve a score page format.");
+        throw std::invalid_argument("PageFormatOptions has no score page format.");
     }
     const double scaling = pageFormat->calcCombinedSystemScaling().toDouble();
     return toSvg(shape, scaling, unit, std::move(glyphMetrics));
