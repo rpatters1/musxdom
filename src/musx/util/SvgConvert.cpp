@@ -1879,7 +1879,7 @@ std::string SvgConvert::toSvgWithPageFormatScaling(const dom::others::ShapeDef& 
     MUSX_ASSERT_IF(!options) {
         throw std::invalid_argument("PageFormatOptions are not available on this Document.");
     }
-    auto pageFormat = options->calcPageFormatForPart(dom::SCORE_PARTID);
+    auto pageFormat = options->pageFormatScore;
     MUSX_ASSERT_IF(!pageFormat) {
         throw std::invalid_argument("PageFormatOptions could not resolve a score page format.");
     }
