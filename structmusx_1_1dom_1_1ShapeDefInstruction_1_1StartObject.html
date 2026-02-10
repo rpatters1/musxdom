@@ -138,9 +138,7 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>scaleX</b> {}</td></tr
 int&#160;</td><td class="memItemRight" valign="bottom"><b>scaleY</b> {}</td></tr>
 <tr class="memdesc:a428c85408d04cbe2278386be08651a3d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Y scale transform (scale ratio * 1000). <br /></td></tr>
 <tr class="separator:a428c85408d04cbe2278386be08651a3d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af4fc29aa1b51e1470f7d7810b75bc581" id="r_af4fc29aa1b51e1470f7d7810b75bc581"><td class="memItemLeft" align="right" valign="top"><a id="af4fc29aa1b51e1470f7d7810b75bc581" name="af4fc29aa1b51e1470f7d7810b75bc581"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>rotation</b> {}</td></tr>
-<tr class="memdesc:af4fc29aa1b51e1470f7d7810b75bc581"><td class="mdescLeft">&#160;</td><td class="mdescRight">Rotation transform (binary angle, 2^32 units per full circle). <br /></td></tr>
+<tr class="memitem:af4fc29aa1b51e1470f7d7810b75bc581" id="r_af4fc29aa1b51e1470f7d7810b75bc581"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmusx_1_1dom_1_1ShapeDefInstruction_1_1StartObject.html#af4fc29aa1b51e1470f7d7810b75bc581">rotation</a> {}</td></tr>
 <tr class="separator:af4fc29aa1b51e1470f7d7810b75bc581"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa4c713e1d08ce60214871fa9ca862400" id="r_aa4c713e1d08ce60214871fa9ca862400"><td class="memItemLeft" align="right" valign="top"><a id="aa4c713e1d08ce60214871fa9ca862400" name="aa4c713e1d08ce60214871fa9ca862400"></a>
 int&#160;</td><td class="memItemRight" valign="bottom"><b>unused9</b> {}</td></tr>
@@ -153,7 +151,23 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>unused10</b> {}</td></
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Holds the parsed data for a <a class="el" href="structmusx_1_1dom_1_1ShapeDefInstruction_1_1StartObject.html" title="Holds the parsed data for a StartObject instruction.">StartObject</a> instruction. </p>
-</div></div><!-- contents -->
+</div><h2 class="groupheader">Member Data Documentation</h2>
+<a id="af4fc29aa1b51e1470f7d7810b75bc581" name="af4fc29aa1b51e1470f7d7810b75bc581"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af4fc29aa1b51e1470f7d7810b75bc581">&#9670;&#160;</a></span>rotation</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int musx::dom::ShapeDefInstruction::StartObject::rotation {}</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Rotation transform: bit 31=sign of cos(theta), bit 30=sign of sin(theta), bits 0..10=|sin(theta)| scaled to 0..0x400. </p>
+
+</div>
+</div>
+</div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
