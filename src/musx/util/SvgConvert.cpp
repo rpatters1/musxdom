@@ -297,6 +297,12 @@ Point applyTransform(const Transform& transform, const Point& pt)
     };
 }
 
+/// @brief Decode Finale's packed rotation value to radians.
+/// @details The top two bits encode quadrant signs and the low 11 bits encode magnitude:
+///          bit 31 (0x80000000) = sign of cos(theta),
+///          bit 30 (0x40000000) = sign of sin(theta),
+///          bits 0..10 = |sin(theta)| scaled to 0..0x400.
+/// @return Angle in the range [0, 2*pi).
 double decodeRotationRadians(int rotationValue)
 {
     constexpr double kPi = 3.14159265358979323846;
@@ -318,25 +324,25 @@ double decodeRotationRadians(int rotationValue)
         default: break;
     }
 
-    const bool bit180     = (raw & 0x80000000u) != 0;
-    const bool belowXAxis = (raw & 0x40000000u) != 0;
+    const bool bit31CosNegative = (raw & 0x80000000u) != 0;
+    const bool bit30SinNegative = (raw & 0x40000000u) != 0;
 
     // The low 11 bits encode |sin(theta)| scaled to 0..0x400.
     const uint32_t ticks = raw & 0x7FFu;
     const double ratio = (std::min)(1.0, (std::max)(0.0, static_cast<double>(ticks) / 1024.0));
     const double a = std::asin(ratio);
 
-    // Quadrant selection based on sign bits (bit180 = cos sign, belowXAxis = sin sign).
+    // Quadrant selection based on sign bits (bit31 = cos sign, bit30 = sin sign).
     // Returned angle is in [0, 2pi).
-    if (!bit180 && !belowXAxis) {
+    if (!bit31CosNegative && !bit30SinNegative) {
         // q0: 0 + a
         return a;
     }
-    if (bit180 && !belowXAxis) {
+    if (bit31CosNegative && !bit30SinNegative) {
         // q1: pi - a
         return kPi - a;
     }
-    if (bit180 && belowXAxis) {
+    if (bit31CosNegative && bit30SinNegative) {
         // q2: pi + a
         return kPi + a;
     }

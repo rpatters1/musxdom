@@ -169,7 +169,10 @@ enum class ShapeDefInstructionType
     /// - 0, 1: origin point (x, y)
     /// - 2..5: bounding rect (left, top, right, bottom)
     /// - 6, 7: x and y transform (scale ratio * 1000)
-    /// - 8:    rotation transform (binary angle, 2^32 units per full circle)
+    /// - 8:    rotation transform packed as:
+    ///         bit 31 (0x80000000) = sign of cos(theta),
+    ///         bit 30 (0x40000000) = sign of sin(theta),
+    ///         bits 0..10 = |sin(theta)| scaled to 0..0x400
     /// - 9,10: unused/undocumented
     StartObject,
 
@@ -307,7 +310,8 @@ struct ShapeDefInstruction
         Evpu bottom{};   ///< Bottom of the bounding rectangle.
         int  scaleX{};   ///< X scale transform (scale ratio * 1000).
         int  scaleY{};   ///< Y scale transform (scale ratio * 1000).
-        int  rotation{}; ///< Rotation transform (binary angle, 2^32 units per full circle).
+        int  rotation{}; ///< Rotation transform: bit 31=sign of cos(theta), bit 30=sign of sin(theta),
+                         ///< bits 0..10=|sin(theta)| scaled to 0..0x400.
         int  unused9{};  ///< Undocumented/unused field at index 9.
         int  unused10{}; ///< Undocumented/unused field at index 10.
     };
@@ -323,7 +327,8 @@ struct ShapeDefInstruction
         Evpu bottom{};   ///< Bottom of the bounding rectangle.
         int  scaleX{};   ///< X scale transform (scale ratio * 1000).
         int  scaleY{};   ///< Y scale transform (scale ratio * 1000).
-        int  rotation{}; ///< Rotation transform (binary angle, 2^32 units per full circle).
+        int  rotation{}; ///< Rotation transform: bit 31=sign of cos(theta), bit 30=sign of sin(theta),
+                         ///< bits 0..10=|sin(theta)| scaled to 0..0x400.
         int  unused9{};  ///< Undocumented/unused field at index 9.
         int  unused10{}; ///< Undocumented/unused field at index 10.
     };
