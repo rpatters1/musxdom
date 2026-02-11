@@ -1,5 +1,6 @@
 var hierarchy =
 [
+    [ "musx::dom::NoteInfoPtr::ArpeggiatedTieInfo", "structmusx_1_1dom_1_1NoteInfoPtr_1_1ArpeggiatedTieInfo.html", null ],
     [ "musx::dom::details::FretboardDiagram::Barre", "classmusx_1_1dom_1_1details_1_1FretboardDiagram_1_1Barre.html", null ],
     [ "musx::dom::Base", "classmusx_1_1dom_1_1Base.html", [
       [ "musx::dom::CommonClassBase", "classmusx_1_1dom_1_1CommonClassBase.html", [
@@ -383,6 +384,7 @@ var hierarchy =
     [ "musx::dom::OthersPool", "classmusx_1_1dom_1_1OthersPool.html", null ],
     [ "musx::dom::options::PageFormatOptions::PageFormat", "classmusx_1_1dom_1_1options_1_1PageFormatOptions_1_1PageFormat.html", null ],
     [ "musx::dom::percussion::PercussionNoteType", "structmusx_1_1dom_1_1percussion_1_1PercussionNoteType.html", null ],
+    [ "musx::dom::NoteInfoPtr::PseudoTieInfo", "structmusx_1_1dom_1_1NoteInfoPtr_1_1PseudoTieInfo.html", null ],
     [ "musx::utils::PseudoTieShapeInfo", "structmusx_1_1utils_1_1PseudoTieShapeInfo.html", null ],
     [ "musx::dom::ShapeDefInstruction::Rectangle", "structmusx_1_1dom_1_1ShapeDefInstruction_1_1Rectangle.html", null ],
     [ "musx::dom::ShapeDefInstruction::RLineTo", "structmusx_1_1dom_1_1ShapeDefInstruction_1_1RLineTo.html", null ],
@@ -425,6 +427,7 @@ var hierarchy =
     [ "musx::util::TestConfiguration", "classmusx_1_1util_1_1TestConfiguration.html", null ],
     [ "musx::dom::TextsPool", "classmusx_1_1dom_1_1TextsPool.html", null ],
     [ "musx::util::Tie", "classmusx_1_1util_1_1Tie.html", null ],
+    [ "musx::dom::NoteInfoPtr::TieStandInSource", "structmusx_1_1dom_1_1NoteInfoPtr_1_1TieStandInSource.html", null ],
     [ "musx::dom::TimeSignature::TimeSigComponent", "structmusx_1_1dom_1_1TimeSignature_1_1TimeSigComponent.html", null ],
     [ "music_theory::Transposer", "classmusic__theory_1_1Transposer.html", null ],
     [ "musx::dom::EntryFrame::TupletInfo", "structmusx_1_1dom_1_1EntryFrame_1_1TupletInfo.html", null ],

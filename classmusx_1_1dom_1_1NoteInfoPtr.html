@@ -93,6 +93,7 @@ $(document).ready(function(){initNavTree('classmusx_1_1dom_1_1NoteInfoPtr.html',
 
 <div class="header">
   <div class="summary">
+<a href="#nested-classes">Classes</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="classmusx_1_1dom_1_1NoteInfoPtr-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">musx::dom::NoteInfoPtr Class Reference</div></div>
@@ -104,6 +105,18 @@ $(document).ready(function(){initNavTree('classmusx_1_1dom_1_1NoteInfoPtr.html',
 
 <p><code>#include &lt;<a class="el" href="Entries_8h_source.html">Entries.h</a>&gt;</code></p>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
+Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmusx_1_1dom_1_1NoteInfoPtr_1_1ArpeggiatedTieInfo.html">ArpeggiatedTieInfo</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Metadata for a smart-shape arpeggiated tie match.  <a href="structmusx_1_1dom_1_1NoteInfoPtr_1_1ArpeggiatedTieInfo.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmusx_1_1dom_1_1NoteInfoPtr_1_1PseudoTieInfo.html">PseudoTieInfo</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Metadata for pseudo tie and pseudo tie-end detection.  <a href="structmusx_1_1dom_1_1NoteInfoPtr_1_1PseudoTieInfo.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmusx_1_1dom_1_1NoteInfoPtr_1_1TieStandInSource.html">TieStandInSource</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Identifies one surrogate tie source matched for a note.  <a href="structmusx_1_1dom_1_1NoteInfoPtr_1_1TieStandInSource.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:af96307ed369138a67d004695055e894d" id="r_af96307ed369138a67d004695055e894d"><td class="memItemLeft" align="right" valign="top"><a id="af96307ed369138a67d004695055e894d" name="af96307ed369138a67d004695055e894d"></a>
@@ -201,15 +214,17 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>calcIsIncludedInVoici
 <tr class="memitem:a6043bdd2ea1ce370c5d4d31acd455f73" id="r_a6043bdd2ea1ce370c5d4d31acd455f73"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html#a6043bdd2ea1ce370c5d4d31acd455f73">calcIsBottom</a> () const</td></tr>
 <tr class="memdesc:a6043bdd2ea1ce370c5d4d31acd455f73"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return true if this is the bottom note in the entry.  <br /></td></tr>
 <tr class="separator:a6043bdd2ea1ce370c5d4d31acd455f73"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a86d9a28c8d013692c8e06d6624ae3bbf" id="r_a86d9a28c8d013692c8e06d6624ae3bbf"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html">NoteInfoPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html#a86d9a28c8d013692c8e06d6624ae3bbf">calcArpeggiatedTieToNote</a> (<a class="el" href="namespacemusx_1_1dom.html#a0dc36a86e1ae0cadd7b7e4c624b07b55">CurveContourDirection</a> *tieDirection=nullptr) const</td></tr>
-<tr class="memdesc:a86d9a28c8d013692c8e06d6624ae3bbf"><td class="mdescLeft">&#160;</td><td class="mdescRight">If this note has a smart shape acting as an arpeggio tie, return the tied-to note. If this note is part of a chord, the function always returns null.  <br /></td></tr>
-<tr class="separator:a86d9a28c8d013692c8e06d6624ae3bbf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8d126e1959435de5a8168c2713ff928d" id="r_a8d126e1959435de5a8168c2713ff928d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html#a8d126e1959435de5a8168c2713ff928d">calcHasPseudoLvTie</a> (<a class="el" href="namespacemusx_1_1dom.html#a0dc36a86e1ae0cadd7b7e4c624b07b55">CurveContourDirection</a> *tieDirection=nullptr) const</td></tr>
-<tr class="memdesc:a8d126e1959435de5a8168c2713ff928d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates if this note has a smart shape, shape expression, or shape articulation acting as a laissez vibrer tie. For any of these to count, the entry must have a number of these stand-in items equal to the number of notes in the entry.  <br /></td></tr>
-<tr class="separator:a8d126e1959435de5a8168c2713ff928d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:affbcbf88341627f44eb678a36783a4ca" id="r_affbcbf88341627f44eb678a36783a4ca"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html#affbcbf88341627f44eb678a36783a4ca">calcHasPseudoTieEnd</a> (<a class="el" href="namespacemusx_1_1dom.html#a0dc36a86e1ae0cadd7b7e4c624b07b55">CurveContourDirection</a> *tieDirection=nullptr) const</td></tr>
-<tr class="memdesc:affbcbf88341627f44eb678a36783a4ca"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates if this note has a smart shape, shape expression, or shape articulation acting as a tie end. For any of these to count, the entry must have a number of these stand-in items equal to the number of notes in the entry.  <br /></td></tr>
-<tr class="separator:affbcbf88341627f44eb678a36783a4ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac0840cb71f2d973958c389c2a806aca0" id="r_ac0840cb71f2d973958c389c2a806aca0"><td class="memItemLeft" align="right" valign="top">std::optional&lt; <a class="el" href="structmusx_1_1dom_1_1NoteInfoPtr_1_1ArpeggiatedTieInfo.html">ArpeggiatedTieInfo</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html#ac0840cb71f2d973958c389c2a806aca0">calcArpeggiatedTieInfo</a> () const</td></tr>
+<tr class="memdesc:ac0840cb71f2d973958c389c2a806aca0"><td class="mdescLeft">&#160;</td><td class="mdescRight">If this note has a smart shape acting as an arpeggio tie, returns tie metadata. If this note is part of a chord, the function always returns std::nullopt.  <br /></td></tr>
+<tr class="separator:ac0840cb71f2d973958c389c2a806aca0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab6c73b9fc08738bb70bf615a29d0ae3f" id="r_ab6c73b9fc08738bb70bf615a29d0ae3f"><td class="memItemLeft" align="right" valign="top"><a id="ab6c73b9fc08738bb70bf615a29d0ae3f" name="ab6c73b9fc08738bb70bf615a29d0ae3f"></a>
+<a class="el" href="structmusx_1_1dom_1_1NoteInfoPtr_1_1PseudoTieInfo.html">PseudoTieInfo</a>&#160;</td><td class="memItemRight" valign="bottom"><b>calcPseudoLvTieInfo</b> () const</td></tr>
+<tr class="memdesc:ab6c73b9fc08738bb70bf615a29d0ae3f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates whether this note has a stand-in laissez-vibrer tie and returns tie metadata. For a match, the entry must have a number of qualifying stand-in items equal to the number of notes in the entry. <br /></td></tr>
+<tr class="separator:ab6c73b9fc08738bb70bf615a29d0ae3f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8d7ea5877dcf0a6c3f69a5bd1fb75b86" id="r_a8d7ea5877dcf0a6c3f69a5bd1fb75b86"><td class="memItemLeft" align="right" valign="top"><a id="a8d7ea5877dcf0a6c3f69a5bd1fb75b86" name="a8d7ea5877dcf0a6c3f69a5bd1fb75b86"></a>
+<a class="el" href="structmusx_1_1dom_1_1NoteInfoPtr_1_1PseudoTieInfo.html">PseudoTieInfo</a>&#160;</td><td class="memItemRight" valign="bottom"><b>calcPseudoTieEndInfo</b> () const</td></tr>
+<tr class="memdesc:a8d7ea5877dcf0a6c3f69a5bd1fb75b86"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates whether this note has a stand-in tie-end and returns tie metadata. For a match, the entry must have a number of qualifying stand-in items equal to the number of notes in the entry. <br /></td></tr>
+<tr class="separator:a8d7ea5877dcf0a6c3f69a5bd1fb75b86"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a351043be4712ae30b3b2371ac0f05ce2" id="r_a351043be4712ae30b3b2371ac0f05ce2"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::pair&lt; <a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html">NoteInfoPtr</a>, <a class="el" href="namespacemusx_1_1dom.html#a0dc36a86e1ae0cadd7b7e4c624b07b55">CurveContourDirection</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html#a351043be4712ae30b3b2371ac0f05ce2">calcJumpTieContinuationsFrom</a> () const</td></tr>
 <tr class="memdesc:a351043be4712ae30b3b2371ac0f05ce2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the notes in prior measures that continue a "jump" tie into this note.  <br /></td></tr>
 <tr class="separator:a351043be4712ae30b3b2371ac0f05ce2"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -263,30 +278,23 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>calcIsIncludedInVoici
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a86d9a28c8d013692c8e06d6624ae3bbf" name="a86d9a28c8d013692c8e06d6624ae3bbf"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a86d9a28c8d013692c8e06d6624ae3bbf">&#9670;&#160;</a></span>calcArpeggiatedTieToNote()</h2>
+<a id="ac0840cb71f2d973958c389c2a806aca0" name="ac0840cb71f2d973958c389c2a806aca0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac0840cb71f2d973958c389c2a806aca0">&#9670;&#160;</a></span>calcArpeggiatedTieInfo()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html">NoteInfoPtr</a> musx::dom::NoteInfoPtr::calcArpeggiatedTieToNote </td>
+          <td class="memname">std::optional&lt; <a class="el" href="structmusx_1_1dom_1_1NoteInfoPtr_1_1ArpeggiatedTieInfo.html">NoteInfoPtr::ArpeggiatedTieInfo</a> &gt; musx::dom::NoteInfoPtr::calcArpeggiatedTieInfo </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="namespacemusx_1_1dom.html#a0dc36a86e1ae0cadd7b7e4c624b07b55">CurveContourDirection</a> *&#160;</td>
-          <td class="paramname"><em>tieDirection</em> = <code>nullptr</code></td><td>)</td>
+          <td class="paramname"></td><td>)</td>
           <td> const</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>If this note has a smart shape acting as an arpeggio tie, return the tied-to note. If this note is part of a chord, the function always returns null. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[out]</td><td class="paramname">tieDirection</td><td>Optional output parameter receiving the tie's curve contour direction. It is set to <a class="el" href="namespacemusx_1_1dom.html#a0dc36a86e1ae0cadd7b7e4c624b07b55a08a38277b0309070706f6652eeae9a53" title="contour is curved downward (tips face up)">CurveContourDirection::Down</a> for under ties, <a class="el" href="namespacemusx_1_1dom.html#a0dc36a86e1ae0cadd7b7e4c624b07b55a258f49887ef8d14ac268c92b02503aaa" title="contour is curved upward (tips face down)">CurveContourDirection::Up</a> for over ties, or <a class="el" href="namespacemusx_1_1dom.html#a0dc36a86e1ae0cadd7b7e4c624b07b55a6fcdc090caeade09d0efd6253932b6f5" title="contour is automatic, indeterminate, or does not apply">CurveContourDirection::Unspecified</a> if the contour cannot be determined. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>The arpeggio-tied note, or null if no such tie exists or this note is part of a chord. </dd></dl>
+<p>If this note has a smart shape acting as an arpeggio tie, returns tie metadata. If this note is part of a chord, the function always returns std::nullopt. </p>
+<dl class="section return"><dt>Returns</dt><dd>Tie metadata when an arpeggiated stand-in tie exists; otherwise std::nullopt. </dd></dl>
 
 </div>
 </div>
@@ -435,60 +443,6 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>calcIsIncludedInVoici
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True if the note has an outer tie at the specified endpoint; false if there is no tie or the tie is inner. </dd></dl>
-
-</div>
-</div>
-<a id="a8d126e1959435de5a8168c2713ff928d" name="a8d126e1959435de5a8168c2713ff928d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8d126e1959435de5a8168c2713ff928d">&#9670;&#160;</a></span>calcHasPseudoLvTie()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool musx::dom::NoteInfoPtr::calcHasPseudoLvTie </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="namespacemusx_1_1dom.html#a0dc36a86e1ae0cadd7b7e4c624b07b55">CurveContourDirection</a> *&#160;</td>
-          <td class="paramname"><em>tieDirection</em> = <code>nullptr</code></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Calculates if this note has a smart shape, shape expression, or shape articulation acting as a laissez vibrer tie. For any of these to count, the entry must have a number of these stand-in items equal to the number of notes in the entry. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[out]</td><td class="paramname">tieDirection</td><td>Optional output parameter receiving the tie's curve contour direction. It is set to <a class="el" href="namespacemusx_1_1dom.html#a0dc36a86e1ae0cadd7b7e4c624b07b55a08a38277b0309070706f6652eeae9a53" title="contour is curved downward (tips face up)">CurveContourDirection::Down</a> for under ties, <a class="el" href="namespacemusx_1_1dom.html#a0dc36a86e1ae0cadd7b7e4c624b07b55a258f49887ef8d14ac268c92b02503aaa" title="contour is curved upward (tips face down)">CurveContourDirection::Up</a> for over ties, or <a class="el" href="namespacemusx_1_1dom.html#a0dc36a86e1ae0cadd7b7e4c624b07b55a6fcdc090caeade09d0efd6253932b6f5" title="contour is automatic, indeterminate, or does not apply">CurveContourDirection::Unspecified</a> if the contour cannot be determined. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>True if a pseudo laissez vibrer tie exists; otherwise false. </dd></dl>
-
-</div>
-</div>
-<a id="affbcbf88341627f44eb678a36783a4ca" name="affbcbf88341627f44eb678a36783a4ca"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#affbcbf88341627f44eb678a36783a4ca">&#9670;&#160;</a></span>calcHasPseudoTieEnd()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool musx::dom::NoteInfoPtr::calcHasPseudoTieEnd </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="namespacemusx_1_1dom.html#a0dc36a86e1ae0cadd7b7e4c624b07b55">CurveContourDirection</a> *&#160;</td>
-          <td class="paramname"><em>tieDirection</em> = <code>nullptr</code></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Calculates if this note has a smart shape, shape expression, or shape articulation acting as a tie end. For any of these to count, the entry must have a number of these stand-in items equal to the number of notes in the entry. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[out]</td><td class="paramname">tieDirection</td><td>Optional output parameter receiving the tie's curve contour direction. It is set to <a class="el" href="namespacemusx_1_1dom.html#a0dc36a86e1ae0cadd7b7e4c624b07b55a08a38277b0309070706f6652eeae9a53" title="contour is curved downward (tips face up)">CurveContourDirection::Down</a> for under ties, <a class="el" href="namespacemusx_1_1dom.html#a0dc36a86e1ae0cadd7b7e4c624b07b55a258f49887ef8d14ac268c92b02503aaa" title="contour is curved upward (tips face down)">CurveContourDirection::Up</a> for over ties, or <a class="el" href="namespacemusx_1_1dom.html#a0dc36a86e1ae0cadd7b7e4c624b07b55a6fcdc090caeade09d0efd6253932b6f5" title="contour is automatic, indeterminate, or does not apply">CurveContourDirection::Unspecified</a> if the contour cannot be determined. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>True if a pseudo tie end exists; otherwise false. </dd></dl>
 
 </div>
 </div>

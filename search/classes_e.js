@@ -19,5 +19,6 @@ var searchData=
   ['poolfactory_3c_20optionsfactory_2c_20dom_3a_3aoptionsbase_2c_20dom_3a_3aoptionspool_20_3e_16',['PoolFactory&lt; OptionsFactory, dom::OptionsBase, dom::OptionsPool &gt;',['../classmusx_1_1factory_1_1PoolFactory.html',1,'musx::factory']]],
   ['poolfactory_3c_20othersfactory_2c_20dom_3a_3aothersbase_2c_20dom_3a_3aotherspool_20_3e_17',['PoolFactory&lt; OthersFactory, dom::OthersBase, dom::OthersPool &gt;',['../classmusx_1_1factory_1_1PoolFactory.html',1,'musx::factory']]],
   ['poolfactory_3c_20textsfactory_2c_20dom_3a_3atextsbase_2c_20dom_3a_3atextspool_20_3e_18',['PoolFactory&lt; TextsFactory, dom::TextsBase, dom::TextsPool &gt;',['../classmusx_1_1factory_1_1PoolFactory.html',1,'musx::factory']]],
-  ['pseudotieshapeinfo_19',['PseudoTieShapeInfo',['../structmusx_1_1utils_1_1PseudoTieShapeInfo.html',1,'musx::utils']]]
+  ['pseudotieinfo_19',['PseudoTieInfo',['../structmusx_1_1dom_1_1NoteInfoPtr_1_1PseudoTieInfo.html',1,'musx::dom::NoteInfoPtr']]],
+  ['pseudotieshapeinfo_20',['PseudoTieShapeInfo',['../structmusx_1_1utils_1_1PseudoTieShapeInfo.html',1,'musx::utils']]]
 ];
