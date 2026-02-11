@@ -1763,34 +1763,66 @@ public:
     [[nodiscard]]
     bool calcIsBottom() const;
 
-    /// @brief If this note has a smart shape acting as an arpeggio tie, return the tied-to note. If this note
-    /// is part of a chord, the function always returns null.
-    /// @param [out] tieDirection Optional output parameter receiving the tie's curve contour direction. It is set to
-    ///         #CurveContourDirection::Down for under ties, #CurveContourDirection::Up for over ties, or
-    ///         #CurveContourDirection::Unspecified if the contour cannot be determined.
-    /// @return The arpeggio-tied note, or null if no such tie exists or this note is part of a chord.
-    [[nodiscard]]
-    NoteInfoPtr calcArpeggiatedTieToNote(CurveContourDirection* tieDirection = nullptr) const;
+    /// @struct TieStandInSource
+    /// @brief Identifies one surrogate tie source matched for a note.
+    ///
+    /// A pseudo tie match may come from one source type (smart shapes, shape expressions,
+    /// or shape articulations). Each qualifying source is recorded here for diagnostics
+    /// and downstream filtering.
+    struct TieStandInSource
+    {
+        /// @enum Type
+        /// @brief The category of source that produced the pseudo tie candidate.
+        enum class Type
+        {
+            SmartShape,         ///< Smart shape record from the Others pool.
+            ShapeExpression,    ///< Measure expression assignment with a tie-like shape.
+            ShapeArticulation,  ///< Articulation assignment with a tie-like shape.
+        };
 
-    /// @brief Calculates if this note has a smart shape, shape expression, or shape articulation acting as
-    /// a laissez vibrer tie. For any of these to count, the entry must have a number of these stand-in
-    /// items equal to the number of notes in the entry.
-    /// @param [out] tieDirection Optional output parameter receiving the tie's curve contour direction. It is set to
-    ///         #CurveContourDirection::Down for under ties, #CurveContourDirection::Up for over ties, or
-    ///         #CurveContourDirection::Unspecified if the contour cannot be determined.
-    /// @return True if a pseudo laissez vibrer tie exists; otherwise false.
-    [[nodiscard]]
-    bool calcHasPseudoLvTie(CurveContourDirection* tieDirection = nullptr) const;
+        Type type{ Type::SmartShape };                             ///< The matched source category.
+        Cmper sourceId{};                                          ///< Source identifier within the source category.
+        std::optional<Inci> sourceInci{};                          ///< Optional incidence index for sources that are inci-addressed.
+        CurveContourDirection direction{ CurveContourDirection::Unspecified }; ///< Contour direction resolved for this source.
+    };
 
-    /// @brief Calculates if this note has a smart shape, shape expression, or shape articulation acting as
-    /// a tie end. For any of these to count, the entry must have a number of these stand-in items equal
-    /// to the number of notes in the entry.
-    /// @param [out] tieDirection Optional output parameter receiving the tie's curve contour direction. It is set to
-    ///         #CurveContourDirection::Down for under ties, #CurveContourDirection::Up for over ties, or
-    ///         #CurveContourDirection::Unspecified if the contour cannot be determined.
-    /// @return True if a pseudo tie end exists; otherwise false.
+    /// @struct ArpeggiatedTieInfo
+    /// @brief Metadata for a smart-shape arpeggiated tie match.
+    struct ArpeggiatedTieInfo
+    {
+        EntryInfoPtr targetEntry{};                                ///< Entry containing the tied-to note.
+        size_t targetNoteIndex{};                                  ///< Note index within #targetEntry.
+        CurveContourDirection direction{ CurveContourDirection::Unspecified }; ///< Contour direction reported by the source smart shape.
+        Cmper smartShapeId{};                                      ///< Cmper of the smart shape that produced the match.
+    };
+
+    /// @struct PseudoTieInfo
+    /// @brief Metadata for pseudo tie and pseudo tie-end detection.
+    struct PseudoTieInfo
+    {
+        bool matched{};                                            ///< True when this note satisfies the pseudo tie criteria.
+        CurveContourDirection direction{ CurveContourDirection::Unspecified }; ///< Resolved contour direction for this note.
+        std::vector<TieStandInSource> sources{};                   ///< Contributing surrogate tie sources from the winning source type.
+
+        /// @brief Returns true when this object represents a successful pseudo tie match.
+        explicit operator bool() const noexcept { return matched; }
+    };
+
+    /// @brief If this note has a smart shape acting as an arpeggio tie, returns tie metadata.
+    /// If this note is part of a chord, the function always returns std::nullopt.
+    /// @return Tie metadata when an arpeggiated stand-in tie exists; otherwise std::nullopt.
     [[nodiscard]]
-    bool calcHasPseudoTieEnd(CurveContourDirection* tieDirection = nullptr) const;
+    std::optional<ArpeggiatedTieInfo> calcArpeggiatedTieInfo() const;
+
+    /// @brief Calculates whether this note has a stand-in laissez-vibrer tie and returns tie metadata.
+    /// For a match, the entry must have a number of qualifying stand-in items equal to the number of notes in the entry.
+    [[nodiscard]]
+    PseudoTieInfo calcPseudoLvTieInfo() const;
+
+    /// @brief Calculates whether this note has a stand-in tie-end and returns tie metadata.
+    /// For a match, the entry must have a number of qualifying stand-in items equal to the number of notes in the entry.
+    [[nodiscard]]
+    PseudoTieInfo calcPseudoTieEndInfo() const;
 
     /// @brief Calculates the notes in prior measures that continue a "jump" tie into this note.
     /// @details A jump tie is a tie that skips over intervening measures due to repeat or navigation
@@ -1811,17 +1843,13 @@ private:
     static NoteInfoPtr findTieFromCandidate(const NoteInfoPtr& note, Cmper previousMeasure,
         const std::function<TieFromSearchAction(const NoteInfoPtr&, bool)>& decide);
 
-    /// @brief Calculates pseudo tie behavior for the specified mode.
-    /// @param [out] tieDirection Optional output parameter receiving the tie's curve contour direction.
-    /// @param mode The pseudo tie mode to evaluate.
+    /// @brief Calculates pseudo-tie metadata for the specified mode.
     [[nodiscard]]
-    bool calcPseudoTieInternal(utils::PseudoTieMode mode, CurveContourDirection* tieDirection) const;
+    PseudoTieInfo calcPseudoTieInfoInternal(utils::PseudoTieMode mode) const;
 
-    /// @brief Returns true if a pseudo tie condition is satisfied for the entry and optionally outputs a contour.
-    /// @param [in,out] tieDirection Optional output parameter receiving the tie's curve contour direction.
-    /// @param directions Contour directions gathered for this entry.
+    /// @brief Returns true if a pseudo-tie condition is satisfied for the entry and updates @p info.
     [[nodiscard]]
-    bool selectPseudoTieDirection(CurveContourDirection* tieDirection,
+    bool selectPseudoTieDirectionAndMatch(PseudoTieInfo* info,
         std::vector<CurveContourDirection>& directions,
         const std::vector<size_t>* eligibleNoteIndices = nullptr) const;
 
