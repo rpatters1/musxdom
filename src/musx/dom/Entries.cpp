@@ -2871,6 +2871,16 @@ NoteInfoPtr NoteInfoPtr::calcTieFrom(bool requireTie) const
     return calcTieFromWithPreviousMeasure(m_entry.getMeasure() - 1, requireTie);
 }
 
+CurveContourDirection NoteInfoPtr::calcFreezeTieDirection(bool forTieEnd) const
+{
+    if (const auto tieAlter = details::TieAlterBase::fromNoteInfo(*this, forTieEnd)) {
+        if (tieAlter->freezeDirection) {
+            return tieAlter->down ? CurveContourDirection::Down : CurveContourDirection::Up;
+        }
+    }
+    return CurveContourDirection::Unspecified;
+}
+
 CurveContourDirection NoteInfoPtr::calcEffectiveTieDirection(bool forTieEnd) const
 {
     if (!m_tieDirection.has_value()) {

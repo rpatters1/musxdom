@@ -1658,6 +1658,15 @@ public:
     [[nodiscard]]
     NoteInfoPtr calcTieFrom(bool requireTie = true) const;
 
+    /// @brief Calculates the user-frozen tie direction for this note, if any.
+    /// @param forTieEnd If @p forTieEnd is true, the user-frozen direction for the tie-end stub on this note is returned.
+    /// Otherwise the direction for the tie starting on this note is returned.
+    /// @return The contour direction if the tie is user-frozen, or
+    ///         #CurveContourDirection::Unspecified when the contour has not been user-frozen.
+    [[nodiscard]]
+    CurveContourDirection calcFreezeTieDirection(bool forTieEnd = false) const;
+    /// @brief Determines whether this note has an outer tie at the specified endpoint.
+
     /// @brief Calculates the effective tie direction for this note, taking into account all options and overrides.
     /// @param forTieEnd If @p forTieEnd is true, the direction for the tie-end stub on this note is returned.
     /// Otherwise the direction for the tie starting on this note is returned.

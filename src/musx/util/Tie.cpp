@@ -458,10 +458,8 @@ CurveContourDirection Tie::calcDefaultDirection(const dom::NoteInfoPtr& noteInfo
 
 CurveContourDirection Tie::calcEffectiveDirection(const dom::NoteInfoPtr& noteInfo, bool forTieEnd)
 {
-    if (const auto tieAlter = details::TieAlterBase::fromNoteInfo(noteInfo, forTieEnd)) {
-        if (tieAlter->freezeDirection) {
-            return tieAlter->down ? CurveContourDirection::Down : CurveContourDirection::Up;
-        }
+    if (const auto frozenDir = noteInfo.calcFreezeTieDirection(forTieEnd); frozenDir != CurveContourDirection::Unspecified) {
+        return frozenDir;
     }
 
     const auto entryInfo = noteInfo.getEntryInfo();
