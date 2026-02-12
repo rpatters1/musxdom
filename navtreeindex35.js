@@ -1,6 +1,8 @@
 var NAVTREEINDEX35 =
 {
+"structmusx_1_1factory_1_1DocumentFactory_1_1CreateOptions.html#a981a325f9dec39a70e25d466f46391b2":[1,0,1,1,1,0,6],
 "structmusx_1_1factory_1_1DocumentFactory_1_1CreateOptions.html#aa647dfa210e7c69630322149e0eab636":[2,0,1,1,1,0,3],
+"structmusx_1_1factory_1_1DocumentFactory_1_1CreateOptions.html#aa647dfa210e7c69630322149e0eab636":[1,0,1,1,1,0,3],
 "structmusx_1_1factory_1_1DocumentFactory_1_1CreateOptions_1_1EmbeddedGraphicFile.html":[2,0,1,1,1,0,0],
 "structmusx_1_1factory_1_1DocumentFactory_1_1CreateOptions_1_1EmbeddedGraphicFile.html":[1,0,1,1,1,0,0],
 "structmusx_1_1factory_1_1DocumentFactory_1_1CreateOptions_1_1EmbeddedGraphicFile.html#a1e1a62944a5b5cfeea1cbaae7d28705a":[2,0,1,1,1,0,0,1],
@@ -11,8 +13,8 @@ var NAVTREEINDEX35 =
 "structmusx_1_1factory_1_1TypeRegistry_1_1CreatedInstanceInfo.html":[1,0,1,1,10,0],
 "structmusx_1_1factory_1_1TypeRegistry_1_1CreatedInstanceInfo.html#a2231cc7f88c9deb59d9e005dc3299ca5":[2,0,1,1,10,0,1],
 "structmusx_1_1factory_1_1TypeRegistry_1_1CreatedInstanceInfo.html#a2231cc7f88c9deb59d9e005dc3299ca5":[1,0,1,1,10,0,1],
-"structmusx_1_1factory_1_1TypeRegistry_1_1CreatedInstanceInfo.html#a5ba450a034494d114b29489e8797f0bb":[1,0,1,1,10,0,2],
 "structmusx_1_1factory_1_1TypeRegistry_1_1CreatedInstanceInfo.html#a5ba450a034494d114b29489e8797f0bb":[2,0,1,1,10,0,2],
+"structmusx_1_1factory_1_1TypeRegistry_1_1CreatedInstanceInfo.html#a5ba450a034494d114b29489e8797f0bb":[1,0,1,1,10,0,2],
 "structmusx_1_1factory_1_1TypeRegistry_1_1CreatedInstanceInfo.html#a654b9bdf82e38af9bd53d4efe81036fc":[1,0,1,1,10,0,0],
 "structmusx_1_1factory_1_1TypeRegistry_1_1CreatedInstanceInfo.html#a654b9bdf82e38af9bd53d4efe81036fc":[2,0,1,1,10,0,0],
 "structmusx_1_1factory_1_1TypeRegistry_1_1is__registered__type.html":[1,0,1,1,10,1],

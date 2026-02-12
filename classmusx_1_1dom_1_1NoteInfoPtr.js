@@ -9,6 +9,7 @@ var classmusx_1_1dom_1_1NoteInfoPtr =
     [ "calcCrossStaffDirection", "classmusx_1_1dom_1_1NoteInfoPtr.html#aad11d0055ca42686bfb5d5f8dfa98247", null ],
     [ "calcDefaultEnharmonic", "classmusx_1_1dom_1_1NoteInfoPtr.html#aabb32c50345e151d488956b4f61f99b1", null ],
     [ "calcEffectiveTieDirection", "classmusx_1_1dom_1_1NoteInfoPtr.html#a654c741b643fecacb1be670e79c729f1", null ],
+    [ "calcFreezeTieDirection", "classmusx_1_1dom_1_1NoteInfoPtr.html#a0160d32691946e7c62db97e76f57fea3", null ],
     [ "calcHasInnerTie", "classmusx_1_1dom_1_1NoteInfoPtr.html#a33fc628d0949601ef6f8cc6a083e9afe", null ],
     [ "calcHasOuterTie", "classmusx_1_1dom_1_1NoteInfoPtr.html#aa8d4784bb1418f49c677a9e6d95b95de", null ],
     [ "calcIsBottom", "classmusx_1_1dom_1_1NoteInfoPtr.html#a6043bdd2ea1ce370c5d4d31acd455f73", null ],

@@ -169,8 +169,11 @@ size_t&#160;</td><td class="memItemRight" valign="bottom"><b>getNoteIndex</b> ()
 <tr class="memitem:a8d4472ff1bfd27358ea69f33a3e82d18" id="r_a8d4472ff1bfd27358ea69f33a3e82d18"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html">NoteInfoPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html#a8d4472ff1bfd27358ea69f33a3e82d18">calcTieFrom</a> (bool requireTie=true) const</td></tr>
 <tr class="memdesc:a8d4472ff1bfd27358ea69f33a3e82d18"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the note that this note could tie from.  <br /></td></tr>
 <tr class="separator:a8d4472ff1bfd27358ea69f33a3e82d18"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0160d32691946e7c62db97e76f57fea3" id="r_a0160d32691946e7c62db97e76f57fea3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemusx_1_1dom.html#a0dc36a86e1ae0cadd7b7e4c624b07b55">CurveContourDirection</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html#a0160d32691946e7c62db97e76f57fea3">calcFreezeTieDirection</a> (bool forTieEnd=false) const</td></tr>
+<tr class="memdesc:a0160d32691946e7c62db97e76f57fea3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the user-frozen tie direction for this note, if any.  <br /></td></tr>
+<tr class="separator:a0160d32691946e7c62db97e76f57fea3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a654c741b643fecacb1be670e79c729f1" id="r_a654c741b643fecacb1be670e79c729f1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemusx_1_1dom.html#a0dc36a86e1ae0cadd7b7e4c624b07b55">CurveContourDirection</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html#a654c741b643fecacb1be670e79c729f1">calcEffectiveTieDirection</a> (bool forTieEnd=false) const</td></tr>
-<tr class="memdesc:a654c741b643fecacb1be670e79c729f1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the effective tie direction for this note, taking into account all options and overrides.  <br /></td></tr>
+<tr class="memdesc:a654c741b643fecacb1be670e79c729f1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines whether this note has an outer tie at the specified endpoint.  <br /></td></tr>
 <tr class="separator:a654c741b643fecacb1be670e79c729f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa8d4784bb1418f49c677a9e6d95b95de" id="r_aa8d4784bb1418f49c677a9e6d95b95de"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html#aa8d4784bb1418f49c677a9e6d95b95de">calcHasOuterTie</a> (bool forTieEnd=false) const</td></tr>
 <tr class="memdesc:aa8d4784bb1418f49c677a9e6d95b95de"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines whether this note has an outer tie at the specified endpoint.  <br /></td></tr>
@@ -379,14 +382,41 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>calcIsIncludedInVoici
       </table>
 </div><div class="memdoc">
 
-<p>Calculates the effective tie direction for this note, taking into account all options and overrides. </p>
-<dl class="params"><dt>Parameters</dt><dd>
+<p>Determines whether this note has an outer tie at the specified endpoint. </p>
+<p>Calculates the effective tie direction for this note, taking into account all options and overrides. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">forTieEnd</td><td>If <code>forTieEnd</code> is true, the direction for the tie-end stub on this note is returned. Otherwise the direction for the tie starting on this note is returned. </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The contour direction that applies to the tie, or <a class="el" href="namespacemusx_1_1dom.html#a0dc36a86e1ae0cadd7b7e4c624b07b55a6fcdc090caeade09d0efd6253932b6f5" title="contour is automatic, indeterminate, or does not apply">CurveContourDirection::Unspecified</a> when the contour cannot be determined. </dd></dl>
+
+</div>
+</div>
+<a id="a0160d32691946e7c62db97e76f57fea3" name="a0160d32691946e7c62db97e76f57fea3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0160d32691946e7c62db97e76f57fea3">&#9670;&#160;</a></span>calcFreezeTieDirection()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacemusx_1_1dom.html#a0dc36a86e1ae0cadd7b7e4c624b07b55">CurveContourDirection</a> musx::dom::NoteInfoPtr::calcFreezeTieDirection </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>forTieEnd</em> = <code>false</code></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Calculates the user-frozen tie direction for this note, if any. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">forTieEnd</td><td>If <code>forTieEnd</code> is true, the user-frozen direction for the tie-end stub on this note is returned. Otherwise the direction for the tie starting on this note is returned. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The contour direction if the tie is user-frozen, or <a class="el" href="namespacemusx_1_1dom.html#a0dc36a86e1ae0cadd7b7e4c624b07b55a6fcdc090caeade09d0efd6253932b6f5" title="contour is automatic, indeterminate, or does not apply">CurveContourDirection::Unspecified</a> when the contour has not been user-frozen. </dd></dl>
 
 </div>
 </div>
