@@ -169,10 +169,14 @@ enum class ShapeDefInstructionType
     /// - 0, 1: origin point (x, y)
     /// - 2..5: bounding rect (left, top, right, bottom)
     /// - 6, 7: x and y transform (scale ratio * 1000)
-    /// - 8:    rotation transform packed as:
-    ///         bit 31 (0x80000000) = sign of cos(theta),
-    ///         bit 30 (0x40000000) = sign of sin(theta),
-    ///         bits 0..10 = |sin(theta)| scaled to 0..0x400
+    /// - 8:    packed rotation value, with two observed encodings:
+    ///         - sign+magnitude trig encoding:
+    ///           bit 31 (0x80000000) = sign of cos(theta),
+    ///           bit 30 (0x40000000) = sign of sin(theta),
+    ///           bits 0..10 = |sin(theta)| scaled to 0..0x400
+    ///         - angle-marker encoding:
+    ///           bit 29 (0x20000000) marks a fixed-scale angle payload
+    ///           interpreted as floor(radians * 100000)
     /// - 9,10: unused/undocumented
     StartObject,
 
@@ -310,8 +314,9 @@ struct ShapeDefInstruction
         Evpu bottom{};   ///< Bottom of the bounding rectangle.
         int  scaleX{};   ///< X scale transform (scale ratio * 1000).
         int  scaleY{};   ///< Y scale transform (scale ratio * 1000).
-        int  rotation{}; ///< Rotation transform: bit 31=sign of cos(theta), bit 30=sign of sin(theta),
-                         ///< bits 0..10=|sin(theta)| scaled to 0..0x400.
+        int  rotation{}; ///< Packed rotation value.
+                         ///< Sign+magnitude trig encoding: bit31=sign of cos(theta), bit30=sign of sin(theta), bits 0..10=|sin(theta)|*1024.
+                         ///< Angle-marker encoding: bit29 marks payload interpreted as floor(radians * 100000).
         int  unused9{};  ///< Undocumented/unused field at index 9.
         int  unused10{}; ///< Undocumented/unused field at index 10.
     };
@@ -327,8 +332,9 @@ struct ShapeDefInstruction
         Evpu bottom{};   ///< Bottom of the bounding rectangle.
         int  scaleX{};   ///< X scale transform (scale ratio * 1000).
         int  scaleY{};   ///< Y scale transform (scale ratio * 1000).
-        int  rotation{}; ///< Rotation transform: bit 31=sign of cos(theta), bit 30=sign of sin(theta),
-                         ///< bits 0..10=|sin(theta)| scaled to 0..0x400.
+        int  rotation{}; ///< Packed rotation value.
+                         ///< Sign+magnitude trig encoding: bit31=sign of cos(theta), bit30=sign of sin(theta), bits 0..10=|sin(theta)|*1024.
+                         ///< Angle-marker encoding: bit29 marks payload interpreted as floor(radians * 100000).
         int  unused9{};  ///< Undocumented/unused field at index 9.
         int  unused10{}; ///< Undocumented/unused field at index 10.
     };

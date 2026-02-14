@@ -60,8 +60,8 @@
       </created>
       <modified>
         <year>2026</year>
-        <month>1</month>
-        <day>29</day>
+        <month>2</month>
+        <day>14</day>
         <modifiedBy/>
         <enigmaVersion>
           <major>27</major>
@@ -25679,6 +25679,170 @@
       <data>44</data>
       <data>27</data>
     </shapeData>
+    <shapeData cmper="211">
+      <data>0</data>
+      <data>0</data>
+      <data>-348</data>
+      <data>152</data>
+      <data>-327</data>
+      <data>-136</data>
+      <data>1000</data>
+      <data>1000</data>
+      <data>0</data>
+      <data>66</data>
+      <data>288</data>
+      <data>-336</data>
+      <data>152</data>
+      <data>-348</data>
+      <data>152</data>
+      <data>-327</data>
+      <data>8</data>
+      <data>1000</data>
+      <data>1000</data>
+      <data>0</data>
+      <data>66</data>
+      <data>144</data>
+      <data>3</data>
+      <data>-38</data>
+      <data>-48</data>
+      <data>66</data>
+      <data>-72</data>
+      <data>-38</data>
+      <data>-24</data>
+      <data>2</data>
+      <data>0</data>
+      <data>46</data>
+      <data>24</data>
+      <data>-66</data>
+      <data>72</data>
+      <data>28</data>
+      <data>48</data>
+      <data>-336</data>
+      <data>-136</data>
+      <data>-348</data>
+      <data>8</data>
+      <data>-327</data>
+      <data>-136</data>
+      <data>1000</data>
+      <data>1000</data>
+      <data>0</data>
+      <data>66</data>
+      <data>144</data>
+      <data>-38</data>
+      <data>48</data>
+      <data>66</data>
+      <data>72</data>
+      <data>-38</data>
+      <data>24</data>
+      <data>2</data>
+      <data>0</data>
+      <data>46</data>
+      <data>-24</data>
+      <data>-66</data>
+      <data>-72</data>
+      <data>28</data>
+      <data>-48</data>
+      <data>-40</data>
+      <data>28</data>
+      <data>-242</data>
+      <data>208</data>
+      <data>-103</data>
+      <data>-176</data>
+      <data>1000</data>
+      <data>1000</data>
+      <data>0</data>
+      <data>66</data>
+      <data>288</data>
+      <data>-144</data>
+      <data>132</data>
+      <data>-242</data>
+      <data>208</data>
+      <data>-156</data>
+      <data>16</data>
+      <data>1000</data>
+      <data>1000</data>
+      <data>0</data>
+      <data>66</data>
+      <data>144</data>
+      <data>5</data>
+      <data>38</data>
+      <data>-48</data>
+      <data>-66</data>
+      <data>-72</data>
+      <data>38</data>
+      <data>-24</data>
+      <data>-2</data>
+      <data>0</data>
+      <data>-46</data>
+      <data>24</data>
+      <data>-86</data>
+      <data>80</data>
+      <data>152</data>
+      <data>88</data>
+      <data>-144</data>
+      <data>-156</data>
+      <data>-212</data>
+      <data>16</data>
+      <data>-103</data>
+      <data>-176</data>
+      <data>1000</data>
+      <data>1000</data>
+      <data>0</data>
+      <data>66</data>
+      <data>144</data>
+      <data>38</data>
+      <data>48</data>
+      <data>-66</data>
+      <data>72</data>
+      <data>38</data>
+      <data>24</data>
+      <data>-2</data>
+      <data>0</data>
+      <data>-46</data>
+      <data>-24</data>
+      <data>258</data>
+      <data>-84</data>
+      <data>-248</data>
+      <data>-84</data>
+      <data>61</data>
+      <data>140</data>
+      <data>61</data>
+      <data>233</data>
+      <data>105</data>
+      <data>-184</data>
+      <data>1000</data>
+      <data>1000</data>
+      <data>0</data>
+      <data>27</data>
+      <data>354</data>
+      <data>6</data>
+      <data>30</data>
+      <data>0</data>
+      <data>6</data>
+      <data>4</data>
+      <data>8</data>
+      <data>8</data>
+      <data>-33</data>
+      <data>192</data>
+      <data>16</data>
+      <data>-210</data>
+      <data>-18</data>
+      <data>0</data>
+      <data>0</data>
+      <data>-300</data>
+      <data>18</data>
+      <data>0</data>
+      <data>12</data>
+      <data>-4</data>
+      <data>5</data>
+      <data>-14</data>
+      <data>-8</data>
+      <data>8</data>
+      <data>-6</data>
+      <data>4</data>
+      <data>-30</data>
+      <data>0</data>
+    </shapeData>
     <shapeData cmper="213">
       <data>0</data>
       <data>0</data>
@@ -28568,7 +28732,6 @@
     <shapeDef cmper="129">
       <instList>23</instList>
       <dataList>23</dataList>
-      <shapeType>expression</shapeType>
     </shapeDef>
     <shapeDef cmper="130">
       <instList>43</instList>
@@ -28583,7 +28746,6 @@
     <shapeDef cmper="132">
       <instList>47</instList>
       <dataList>47</dataList>
-      <shapeType>expression</shapeType>
     </shapeDef>
     <shapeDef cmper="133">
       <instList>49</instList>
@@ -28633,6 +28795,11 @@
     <shapeDef cmper="142">
       <instList>210</instList>
       <dataList>210</dataList>
+      <shapeType>expression</shapeType>
+    </shapeDef>
+    <shapeDef cmper="143">
+      <instList>211</instList>
+      <dataList>211</dataList>
       <shapeType>expression</shapeType>
     </shapeDef>
     <shapeList cmper="1">
@@ -37489,6 +37656,152 @@
       </instruct>
       <instruct>
         <tag>stroke</tag>
+      </instruct>
+    </shapeList>
+    <shapeList cmper="211">
+      <instruct>
+        <numData>11</numData>
+        <tag>startGroup</tag>
+      </instruct>
+      <instruct>
+        <numData>11</numData>
+        <tag>startObject</tag>
+      </instruct>
+      <instruct>
+        <numData>1</numData>
+        <tag>bracket</tag>
+      </instruct>
+      <instruct>
+        <numData>6</numData>
+        <tag>curveTo</tag>
+      </instruct>
+      <instruct>
+        <numData>2</numData>
+        <tag>rLineTo</tag>
+      </instruct>
+      <instruct>
+        <numData>6</numData>
+        <tag>curveTo</tag>
+      </instruct>
+      <instruct>
+        <tag>closePath</tag>
+      </instruct>
+      <instruct>
+        <tag>fillSolid</tag>
+      </instruct>
+      <instruct>
+        <numData>11</numData>
+        <tag>startObject</tag>
+      </instruct>
+      <instruct>
+        <numData>6</numData>
+        <tag>curveTo</tag>
+      </instruct>
+      <instruct>
+        <numData>2</numData>
+        <tag>rLineTo</tag>
+      </instruct>
+      <instruct>
+        <numData>6</numData>
+        <tag>curveTo</tag>
+      </instruct>
+      <instruct>
+        <tag>closePath</tag>
+      </instruct>
+      <instruct>
+        <tag>fillSolid</tag>
+      </instruct>
+      <instruct>
+        <tag>endGroup</tag>
+      </instruct>
+      <instruct>
+        <numData>11</numData>
+        <tag>startGroup</tag>
+      </instruct>
+      <instruct>
+        <numData>11</numData>
+        <tag>startObject</tag>
+      </instruct>
+      <instruct>
+        <numData>1</numData>
+        <tag>bracket</tag>
+      </instruct>
+      <instruct>
+        <numData>6</numData>
+        <tag>curveTo</tag>
+      </instruct>
+      <instruct>
+        <numData>2</numData>
+        <tag>rLineTo</tag>
+      </instruct>
+      <instruct>
+        <numData>6</numData>
+        <tag>curveTo</tag>
+      </instruct>
+      <instruct>
+        <tag>closePath</tag>
+      </instruct>
+      <instruct>
+        <tag>fillSolid</tag>
+      </instruct>
+      <instruct>
+        <numData>11</numData>
+        <tag>startObject</tag>
+      </instruct>
+      <instruct>
+        <numData>6</numData>
+        <tag>curveTo</tag>
+      </instruct>
+      <instruct>
+        <numData>2</numData>
+        <tag>rLineTo</tag>
+      </instruct>
+      <instruct>
+        <numData>6</numData>
+        <tag>curveTo</tag>
+      </instruct>
+      <instruct>
+        <tag>closePath</tag>
+      </instruct>
+      <instruct>
+        <tag>fillSolid</tag>
+      </instruct>
+      <instruct>
+        <tag>endGroup</tag>
+      </instruct>
+      <instruct>
+        <numData>11</numData>
+        <tag>startObject</tag>
+      </instruct>
+      <instruct>
+        <numData>1</numData>
+        <tag>bracket</tag>
+      </instruct>
+      <instruct>
+        <numData>6</numData>
+        <tag>curveTo</tag>
+      </instruct>
+      <instruct>
+        <numData>6</numData>
+        <tag>curveTo</tag>
+      </instruct>
+      <instruct>
+        <numData>2</numData>
+        <tag>rLineTo</tag>
+      </instruct>
+      <instruct>
+        <numData>6</numData>
+        <tag>curveTo</tag>
+      </instruct>
+      <instruct>
+        <numData>6</numData>
+        <tag>curveTo</tag>
+      </instruct>
+      <instruct>
+        <tag>closePath</tag>
+      </instruct>
+      <instruct>
+        <tag>fillSolid</tag>
       </instruct>
     </shapeList>
     <shapeList cmper="213">
