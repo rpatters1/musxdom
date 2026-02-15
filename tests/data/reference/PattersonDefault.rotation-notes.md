@@ -32,13 +32,9 @@ Reference files known to differ:
 
 ## Write Method
 
-These updates were applied with a bespoke one-off C++ plugin that writes raw shape-data
-incidences (`ot_SB`) directly.
+These updates should be applied by writing raw shape-data incidences (`ot_SB`) directly.
 
 Why this matters:
-- Lua-level shape setters did not persist these values in this workflow.
-- Direct raw inci writes were required to preserve the alternate packed-angle encoding.
-
-Implementation reference (outside this repo):
-- `DoOneOffFunction` in
-  `.../RGP PlugIns/Force Full Names/-Source/FullName.cpp`
+- High-level shape save paths may rewrite rotation values to legacy packing.
+- Direct raw inci writes preserve the alternate packed-angle encoding.
+- This can be done with RGP Lua 0.79 or higher using the `FCRawData` class.
