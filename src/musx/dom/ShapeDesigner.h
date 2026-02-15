@@ -170,6 +170,7 @@ enum class ShapeDefInstructionType
     /// - 2..5: bounding rect (left, top, right, bottom)
     /// - 6, 7: x and y transform (scale ratio * 1000)
     /// - 8:    packed rotation value, with two observed encodings:
+    ///         (in both encodings, value 0 means no rotation)
     ///         - sign+magnitude trig encoding:
     ///           bit 31 (0x80000000) = sign of cos(theta),
     ///           bit 30 (0x40000000) = sign of sin(theta),
@@ -315,6 +316,7 @@ struct ShapeDefInstruction
         int  scaleX{};   ///< X scale transform (scale ratio * 1000).
         int  scaleY{};   ///< Y scale transform (scale ratio * 1000).
         int  rotation{}; ///< Packed rotation value.
+                         ///< In both encodings, value 0 means no rotation.
                          ///< Sign+magnitude trig encoding: bit31=sign of cos(theta), bit30=sign of sin(theta), bits 0..10=|sin(theta)|*1024.
                          ///< Angle-marker encoding: bit29 marks payload interpreted as floor(radians * 100000).
         int  unused9{};  ///< Undocumented/unused field at index 9.
@@ -333,6 +335,7 @@ struct ShapeDefInstruction
         int  scaleX{};   ///< X scale transform (scale ratio * 1000).
         int  scaleY{};   ///< Y scale transform (scale ratio * 1000).
         int  rotation{}; ///< Packed rotation value.
+                         ///< In both encodings, value 0 means no rotation.
                          ///< Sign+magnitude trig encoding: bit31=sign of cos(theta), bit30=sign of sin(theta), bits 0..10=|sin(theta)|*1024.
                          ///< Angle-marker encoding: bit29 marks payload interpreted as floor(radians * 100000).
         int  unused9{};  ///< Undocumented/unused field at index 9.

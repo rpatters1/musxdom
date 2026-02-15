@@ -561,6 +561,9 @@ void runReverseBulgeTest(const std::filesystem::path& xmlPath,
 
 TEST(SvgConvertTest, MatchesViewBoxAndPathsAndStrokes)
 {
+    // Fixture maintenance note:
+    // tests/data/reference/PattersonDefault.rotation-notes.md documents
+    // intentional alternate packed-angle rotation values in PattersonDefault.
     const auto inputRoot = getInputPath() / "reference";
     const auto xmlPath = inputRoot / "PattersonDefault.enigmaxml";
     const auto svgRoot = inputRoot / "PattersonDefault";
