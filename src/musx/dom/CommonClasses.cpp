@@ -91,11 +91,15 @@ bool FontInfo::calcIsSMuFL() const
         "Bravura",
         "Leland",
         "Emmentaler",
+        "Finale Ash",
+        "Finale Broadway",
+        "Finale Engraver",
+        "Finale Jazz",
+        "Finale Legacy",
+        "Finale Maestro",
         "Gonville",
         "MuseJazz",
         "Petaluma",
-        "Finale Maestro",
-        "Finale Broadway"
     };
 
     if (calcSMuFLMetaDataPath().has_value()) {

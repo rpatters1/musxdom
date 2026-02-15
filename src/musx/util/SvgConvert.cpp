@@ -297,19 +297,32 @@ Point applyTransform(const Transform& transform, const Point& pt)
     };
 }
 
-/// @brief Decode Finale's packed rotation value to radians.
-/// @details The top two bits encode quadrant signs and the low 11 bits encode magnitude:
-///          bit 31 (0x80000000) = sign of cos(theta),
-///          bit 30 (0x40000000) = sign of sin(theta),
-///          bits 0..10 = |sin(theta)| scaled to 0..0x400.
+/// @brief Decode packed rotation data to radians.
+/// @details Supports both encodings observed in shape data:
+///          1) Sign+magnitude trig encoding:
+///             bit 31 (0x80000000) = sign of cos(theta),
+///             bit 30 (0x40000000) = sign of sin(theta),
+///             bits 0..10 = |sin(theta)| scaled to 0..0x400.
+///          2) Angle-marker encoding:
+///             bit 29 (0x20000000) marks a fixed-scale angle payload,
+///             interpreted as floor(radians * 100000).
+///          In both encodings, 0 means no rotation.
 /// @return Angle in the range [0, 2*pi).
 double decodeRotationRadians(int rotationValue)
 {
     constexpr double kPi = 3.14159265358979323846;
 
     const uint32_t raw = static_cast<uint32_t>(rotationValue);
+    constexpr uint32_t kAngleEncodingFlag = 0x20000000u;
 
-    // Canonical boundary aliases observed in Finale:
+    if ((raw & kAngleEncodingFlag) != 0u) {
+        const double fullTurn = 2.0 * kPi;
+        const double radians = static_cast<double>(raw & ~kAngleEncodingFlag) / 100000.0;
+        const double wrapped = std::fmod(radians, fullTurn);
+        return wrapped >= 0.0 ? wrapped : wrapped + fullTurn;
+    }
+
+    // Canonical boundary aliases observed in the legacy encoding:
     //   0°   -> 0x00000000
     //   90°  -> 0x00000400
     //   180° -> 0x80000000
