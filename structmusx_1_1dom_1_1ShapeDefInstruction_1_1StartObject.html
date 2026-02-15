@@ -163,7 +163,7 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>unused10</b> {}</td></
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Rotation transform: bit 31=sign of cos(theta), bit 30=sign of sin(theta), bits 0..10=|sin(theta)| scaled to 0..0x400. </p>
+<p>Packed rotation value. In both encodings, value 0 means no rotation. Sign+magnitude trig encoding: bit31=sign of cos(theta), bit30=sign of sin(theta), bits 0..10=|sin(theta)|*1024. Angle-marker encoding: bit29 marks payload interpreted as floor(radians * 100000). </p>
 
 </div>
 </div>
