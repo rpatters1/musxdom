@@ -179,10 +179,16 @@ struct PenState
 
 struct ArrowheadState
 {
+    int packedKindCodes{};
     int startId{};
     int endId{};
-    int startFlags{};
-    int endFlags{};
+    int extra{};
+
+    int startKindCode() const noexcept
+    { return static_cast<int>(static_cast<unsigned int>(packedKindCodes) & 0xFFFFu); }
+
+    int endKindCode() const noexcept
+    { return static_cast<int>((static_cast<unsigned int>(packedKindCodes) >> 16) & 0xFFFFu); }
 };
 
 struct PathDirectionState
@@ -578,6 +584,13 @@ struct [[maybe_unused]] ArrowheadGeometry
     Bounds bounds;
 };
 
+struct SvgFragment
+{
+    std::string content;
+    Bounds bounds;
+    bool hasBounds{};
+};
+
 [[maybe_unused]] ArrowheadGeometry makeArrowheadPath(const Point& tip, const Point& direction, double size, bool curved)
 {
     ArrowheadGeometry result;
@@ -605,6 +618,320 @@ struct [[maybe_unused]] ArrowheadGeometry
     result.bounds.include(tip);
     result.bounds.include(left);
     result.bounds.include(right);
+    return result;
+}
+
+std::optional<Bounds> parseSvgViewBoxBounds(std::string_view svg)
+{
+    const std::string_view key = "viewBox=\"";
+    const auto pos = svg.find(key);
+    if (pos == std::string_view::npos) {
+        return std::nullopt;
+    }
+    const auto start = pos + key.size();
+    const auto end = svg.find('"', start);
+    if (end == std::string_view::npos) {
+        return std::nullopt;
+    }
+    std::istringstream input(std::string(svg.substr(start, end - start)));
+    double minX{};
+    double minY{};
+    double width{};
+    double height{};
+    if (!(input >> minX >> minY >> width >> height)) {
+        return std::nullopt;
+    }
+    Bounds bounds;
+    bounds.include({minX, minY});
+    bounds.include({minX + width, minY + height});
+    return bounds;
+}
+
+std::optional<std::string> extractSvgGroupContents(std::string_view svg, std::string_view groupId)
+{
+    std::string marker = "<g id=\"";
+    marker += std::string(groupId);
+    marker += "\">";
+    const auto openPos = svg.find(marker);
+    if (openPos == std::string_view::npos) {
+        return std::nullopt;
+    }
+    const auto contentStart = openPos + marker.size();
+    const auto closePos = svg.find("</g>", contentStart);
+    if (closePos == std::string_view::npos) {
+        return std::nullopt;
+    }
+    return std::string(svg.substr(contentStart, closePos - contentStart));
+}
+
+std::optional<std::string> extractXmlAttribute(std::string_view tag, std::string_view name)
+{
+    std::string needle = std::string(name) + "=\"";
+    const auto pos = tag.find(needle);
+    if (pos == std::string_view::npos) {
+        return std::nullopt;
+    }
+    const auto start = pos + needle.size();
+    const auto end = tag.find('"', start);
+    if (end == std::string_view::npos) {
+        return std::nullopt;
+    }
+    return std::string(tag.substr(start, end - start));
+}
+
+bool computeTransformedBoundsFromGeneratedPath(std::string_view d,
+                                              const Transform& transform,
+                                              double strokeWidth,
+                                              bool hasStroke,
+                                              Bounds& outBounds)
+{
+    size_t pos = 0;
+    char command = '\0';
+    Point current{};
+    Point subpathStart{};
+    bool hasCurrent = false;
+    Bounds geomBounds;
+    bool hasPrevLineSegment = false;
+    Point prevLineStart{};
+    Point prevLineEnd{};
+
+    auto skipSeparators = [&]() {
+        while (pos < d.size()) {
+            const char ch = d[pos];
+            if (ch == ' ' || ch == '\t' || ch == '\n' || ch == '\r' || ch == ',') {
+                ++pos;
+                continue;
+            }
+            break;
+        }
+    };
+
+    auto readNumber = [&](double& value) -> bool {
+        skipSeparators();
+        if (pos >= d.size()) {
+            return false;
+        }
+        const size_t start = pos;
+        bool sawDigit = false;
+        if (d[pos] == '+' || d[pos] == '-') {
+            ++pos;
+        }
+        while (pos < d.size() && std::isdigit(static_cast<unsigned char>(d[pos]))) {
+            sawDigit = true;
+            ++pos;
+        }
+        if (pos < d.size() && d[pos] == '.') {
+            ++pos;
+            while (pos < d.size() && std::isdigit(static_cast<unsigned char>(d[pos]))) {
+                sawDigit = true;
+                ++pos;
+            }
+        }
+        if (pos < d.size() && (d[pos] == 'e' || d[pos] == 'E')) {
+            size_t expPos = pos + 1;
+            if (expPos < d.size() && (d[expPos] == '+' || d[expPos] == '-')) {
+                ++expPos;
+            }
+            bool expDigits = false;
+            while (expPos < d.size() && std::isdigit(static_cast<unsigned char>(d[expPos]))) {
+                expDigits = true;
+                ++expPos;
+            }
+            if (expDigits) {
+                pos = expPos;
+            }
+        }
+        if (!sawDigit) {
+            pos = start;
+            return false;
+        }
+        try {
+            value = std::stod(std::string(d.substr(start, pos - start)));
+        } catch (...) {
+            pos = start;
+            return false;
+        }
+        return true;
+    };
+
+    auto includeTransformedLineSegment = [&](const Point& a, const Point& b) {
+        geomBounds.include(a);
+        geomBounds.include(b);
+        outBounds.include(a);
+        outBounds.include(b);
+        if (hasStroke && strokeWidth > 0.0) {
+            includeLineStrokeBounds(outBounds, a, b, strokeWidth / 2.0);
+            if (hasPrevLineSegment && geomBounds.hasValue) {
+                Point center{
+                    (geomBounds.minX + geomBounds.maxX) / 2.0,
+                    (geomBounds.minY + geomBounds.maxY) / 2.0
+                };
+                includeLineJoinBounds(outBounds, prevLineStart, prevLineEnd, b, center, strokeWidth / 2.0);
+            }
+        }
+        prevLineStart = a;
+        prevLineEnd = b;
+        hasPrevLineSegment = true;
+    };
+
+    while (true) {
+        skipSeparators();
+        if (pos >= d.size()) {
+            break;
+        }
+        const char ch = d[pos];
+        if (std::isalpha(static_cast<unsigned char>(ch))) {
+            command = ch;
+            ++pos;
+        } else if (command == '\0') {
+            return false;
+        }
+
+        switch (command) {
+        case 'M': {
+            double x{};
+            double y{};
+            if (!readNumber(x) || !readNumber(y)) {
+                return false;
+            }
+            current = {x, y};
+            subpathStart = current;
+            hasCurrent = true;
+            const Point p = applyTransform(transform, current);
+            geomBounds.include(p);
+            outBounds.include(p);
+            hasPrevLineSegment = false;
+            command = 'L'; // SVG implicit lineto for subsequent coordinate pairs.
+            break;
+        }
+        case 'L': {
+            if (!hasCurrent) {
+                return false;
+            }
+            double x{};
+            double y{};
+            if (!readNumber(x) || !readNumber(y)) {
+                return false;
+            }
+            Point next{x, y};
+            includeTransformedLineSegment(applyTransform(transform, current), applyTransform(transform, next));
+            current = next;
+            break;
+        }
+        case 'C': {
+            if (!hasCurrent) {
+                return false;
+            }
+            double x1{}, y1{}, x2{}, y2{}, x{}, y{};
+            if (!readNumber(x1) || !readNumber(y1)
+                || !readNumber(x2) || !readNumber(y2)
+                || !readNumber(x) || !readNumber(y)) {
+                return false;
+            }
+            const Point p0 = applyTransform(transform, current);
+            const Point p1 = applyTransform(transform, {x1, y1});
+            const Point p2 = applyTransform(transform, {x2, y2});
+            const Point p3 = applyTransform(transform, {x, y});
+            const Bounds cubicBounds = computeCubicBounds(p0, p1, p2, p3);
+            geomBounds.include({cubicBounds.minX, cubicBounds.minY});
+            geomBounds.include({cubicBounds.maxX, cubicBounds.maxY});
+            outBounds.include({cubicBounds.minX, cubicBounds.minY});
+            outBounds.include({cubicBounds.maxX, cubicBounds.maxY});
+            if (hasStroke && strokeWidth > 0.0) {
+                constexpr int kCurveSamples = 24;
+                Point prev = p0;
+                for (int i = 1; i <= kCurveSamples; ++i) {
+                    const double t = static_cast<double>(i) / static_cast<double>(kCurveSamples);
+                    Point next = evaluateCubic(p0, p1, p2, p3, t);
+                    includeLineStrokeBounds(outBounds, prev, next, strokeWidth / 2.0);
+                    prev = next;
+                }
+            }
+            hasPrevLineSegment = false;
+            current = {x, y};
+            break;
+        }
+        case 'Z':
+        case 'z': {
+            if (hasCurrent) {
+                includeTransformedLineSegment(applyTransform(transform, current), applyTransform(transform, subpathStart));
+                current = subpathStart;
+            }
+            hasPrevLineSegment = false;
+            break;
+        }
+        default:
+            return false;
+        }
+    }
+
+    return outBounds.hasValue;
+}
+
+std::optional<Bounds> computeTransformedBoundsFromSvgContent(std::string_view content, const Transform& transform)
+{
+    Bounds result;
+    bool foundPath = false;
+    size_t pos = 0;
+    while (true) {
+        const auto tagStart = content.find("<path", pos);
+        if (tagStart == std::string_view::npos) {
+            break;
+        }
+        const auto tagEnd = content.find('>', tagStart);
+        if (tagEnd == std::string_view::npos) {
+            break;
+        }
+        const std::string_view tag = content.substr(tagStart, tagEnd - tagStart + 1);
+        pos = tagEnd + 1;
+
+        const auto dAttr = extractXmlAttribute(tag, "d");
+        if (!dAttr) {
+            continue;
+        }
+
+        bool hasStroke = true;
+        if (const auto strokeAttr = extractXmlAttribute(tag, "stroke")) {
+            hasStroke = (*strokeAttr != "none");
+        }
+        double strokeWidth = 0.0;
+        if (hasStroke) {
+            if (const auto strokeWidthAttr = extractXmlAttribute(tag, "stroke-width")) {
+                try {
+                    strokeWidth = std::stod(*strokeWidthAttr);
+                } catch (...) {
+                    strokeWidth = 0.0;
+                }
+            }
+        }
+
+        Bounds pathBounds;
+        if (!computeTransformedBoundsFromGeneratedPath(*dAttr, transform, strokeWidth, hasStroke, pathBounds)) {
+            return std::nullopt;
+        }
+        if (pathBounds.hasValue) {
+            result.include({pathBounds.minX, pathBounds.minY});
+            result.include({pathBounds.maxX, pathBounds.maxY});
+            foundPath = true;
+        }
+    }
+
+    if (!foundPath || !result.hasValue) {
+        return std::nullopt;
+    }
+    return result;
+}
+
+Bounds transformBoundsRect(const Bounds& source, const Transform& transform)
+{
+    Bounds result;
+    if (!source.hasValue) {
+        return result;
+    }
+    result.include(applyTransform(transform, {source.minX, source.minY}));
+    result.include(applyTransform(transform, {source.minX, source.maxY}));
+    result.include(applyTransform(transform, {source.maxX, source.minY}));
+    result.include(applyTransform(transform, {source.maxX, source.maxY}));
     return result;
 }
 
@@ -694,6 +1021,9 @@ std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape,
     std::optional<Point> firstLineEndWorld;
     std::optional<Point> lastLineStartWorld;
     std::optional<Point> lastLineEndWorld;
+    int lineSegmentCount = 0;
+    bool pathHasNonLineGeometry = false;
+    bool pathClosed = false;
     std::optional<EllipseState> pendingEllipse;
 
     Point current{};
@@ -756,6 +1086,9 @@ std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape,
             firstLineEndWorld.reset();
             lastLineStartWorld.reset();
             lastLineEndWorld.reset();
+            lineSegmentCount = 0;
+            pathHasNonLineGeometry = false;
+            pathClosed = false;
         }
     };
 
@@ -775,8 +1108,188 @@ std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape,
             return;
         }
 
+        const std::string basePathData = path.str();
+        std::string strokePathData = basePathData;
+        std::optional<Bounds> strokeBoundsOverride;
+        Bounds arrowBounds;
+        bool hasArrowBounds = false;
+        std::vector<std::string> arrowElements;
+
+        auto appendPresetArrowhead = [&](const Point& tip,
+                                         const Point& direction,
+                                         dom::ArrowheadPreset preset) -> bool {
+            const bool curved = preset == dom::ArrowheadPreset::SmallCurved
+                || preset == dom::ArrowheadPreset::MediumCurved
+                || preset == dom::ArrowheadPreset::LargeCurved;
+            const ArrowheadGeometry geometry = makeArrowheadPath(
+                tip, direction, scaleValue(arrowheadSizeForPreset(preset)), curved);
+            if (geometry.path.empty() || !geometry.bounds.hasValue) {
+                return false;
+            }
+
+            const std::string strokeColor = grayToRgb(paint.gray);
+            if (preset == dom::ArrowheadPreset::SmallOutline) {
+                std::ostringstream fillElement;
+                fillElement << "<path d=\"" << geometry.path
+                            << "\" stroke=\"none\" fill=\"" << grayToRgb(100) << "\"/>";
+                arrowElements.push_back(fillElement.str());
+
+                std::ostringstream outlineElement;
+                outlineElement << "<path d=\"" << geometry.path
+                               << "\" stroke=\"" << strokeColor
+                               << "\" fill=\"none\" stroke-width=\"" << scaleValue(1.8) << "\"/>";
+                arrowElements.push_back(outlineElement.str());
+            } else {
+                std::ostringstream element;
+                element << "<path d=\"" << geometry.path
+                        << "\" stroke=\"none\" fill=\"" << strokeColor << "\"/>";
+                arrowElements.push_back(element.str());
+            }
+
+            arrowBounds.include({geometry.bounds.minX, geometry.bounds.minY});
+            arrowBounds.include({geometry.bounds.maxX, geometry.bounds.maxY});
+            hasArrowBounds = true;
+            return true;
+        };
+
+        auto appendCustomArrowhead = [&](const Point& tip,
+                                         const Point& direction,
+                                         int arrowShapeId) -> bool {
+            if (arrowShapeId <= 0 || arrowShapeId == shape.getCmper() || !document) {
+                return false;
+            }
+            auto others = document->getOthers();
+            if (!others) {
+                return false;
+            }
+            auto arrowShape = others->get<dom::others::ShapeDef>(shape.getRequestedPartId(), dom::Cmper(arrowShapeId));
+            if (!arrowShape) {
+                return false;
+            }
+            Point dir = normalize(direction);
+            if (dir.x == 0.0 && dir.y == 0.0) {
+                return false;
+            }
+            const std::string arrowSvg = SvgConvert::toSvg(*arrowShape, scaling, unit, glyphMetrics);
+            if (arrowSvg.empty()) {
+                return false;
+            }
+            auto content = extractSvgGroupContents(arrowSvg, "MusxDom");
+            if (!content || content->empty()) {
+                return false;
+            }
+            const double angle = std::atan2(dir.y, dir.x);
+            const Transform xf = makeTranslateRotateScale(tip, 1.0, 1.0, angle);
+
+            std::ostringstream group;
+            group << "<g transform=\"matrix(" << xf.a << ' ' << xf.b << ' ' << xf.c << ' ' << xf.d << ' '
+                  << xf.tx << ' ' << xf.ty << ")\">" << *content << "</g>";
+            arrowElements.push_back(group.str());
+
+            if (const auto contentBounds = computeTransformedBoundsFromSvgContent(*content, xf);
+                contentBounds && contentBounds->hasValue) {
+                arrowBounds.include({contentBounds->minX, contentBounds->minY});
+                arrowBounds.include({contentBounds->maxX, contentBounds->maxY});
+                hasArrowBounds = true;
+            } else if (const auto nestedBounds = parseSvgViewBoxBounds(arrowSvg);
+                       nestedBounds && nestedBounds->hasValue) {
+                const Bounds transformed = transformBoundsRect(*nestedBounds, xf);
+                if (transformed.hasValue) {
+                    arrowBounds.include({transformed.minX, transformed.minY});
+                    arrowBounds.include({transformed.maxX, transformed.maxY});
+                    hasArrowBounds = true;
+                }
+            }
+            return true;
+        };
+
+        bool renderedStartArrow = false;
+        bool renderedEndArrow = false;
+        if (stroke && firstLineStartWorld && firstLineEndWorld && lastLineStartWorld && lastLineEndWorld) {
+            auto presetForId = [](int id) -> std::optional<dom::ArrowheadPreset> {
+                switch (id) {
+                case 1: return dom::ArrowheadPreset::SmallFilled;
+                case 2: return dom::ArrowheadPreset::SmallOutline;
+                case 3: return dom::ArrowheadPreset::SmallCurved;
+                case 4: return dom::ArrowheadPreset::LargeCurved;
+                case 5: return dom::ArrowheadPreset::MediumCurved;
+                default:
+                    return std::nullopt;
+                }
+            };
+
+            Point startTangent{
+                firstLineEndWorld->x - firstLineStartWorld->x,
+                firstLineEndWorld->y - firstLineStartWorld->y
+            };
+            Point endTangent{
+                lastLineEndWorld->x - lastLineStartWorld->x,
+                lastLineEndWorld->y - lastLineStartWorld->y
+            };
+
+            if (arrowheads.startKindCode() == 1) {
+                if (auto preset = presetForId(arrowheads.startId)) {
+                    renderedStartArrow = appendPresetArrowhead(
+                        *firstLineStartWorld,
+                        Point{-startTangent.x, -startTangent.y},
+                        *preset);
+                }
+            } else if (arrowheads.startKindCode() == 2) {
+                renderedStartArrow = appendCustomArrowhead(
+                    *firstLineStartWorld,
+                    Point{-startTangent.x, -startTangent.y},
+                    arrowheads.startId);
+            }
+            if (arrowheads.endKindCode() == 1) {
+                if (auto preset = presetForId(arrowheads.endId)) {
+                    renderedEndArrow = appendPresetArrowhead(
+                        *lastLineEndWorld,
+                        endTangent,
+                        *preset);
+                }
+            } else if (arrowheads.endKindCode() == 2) {
+                renderedEndArrow = appendCustomArrowhead(
+                    *lastLineEndWorld,
+                    endTangent,
+                    arrowheads.endId);
+            }
+
+            const bool canTrimSingleLineStroke = lineSegmentCount == 1
+                && !pathHasNonLineGeometry
+                && !pathClosed;
+            if (canTrimSingleLineStroke && (renderedStartArrow || renderedEndArrow)) {
+                Point lineStart = *firstLineStartWorld;
+                Point lineEnd = *lastLineEndWorld;
+                Point dir = normalize({lineEnd.x - lineStart.x, lineEnd.y - lineStart.y});
+                if (!(dir.x == 0.0 && dir.y == 0.0)) {
+                    const double trimAmount = scaleValue(12.0); // Finale default backoff observed in exported examples.
+                    if (renderedStartArrow) {
+                        lineStart.x += dir.x * trimAmount;
+                        lineStart.y += dir.y * trimAmount;
+                    }
+                    if (renderedEndArrow) {
+                        lineEnd.x -= dir.x * trimAmount;
+                        lineEnd.y -= dir.y * trimAmount;
+                    }
+                    Point trimmedVec{lineEnd.x - lineStart.x, lineEnd.y - lineStart.y};
+                    if (std::hypot(trimmedVec.x, trimmedVec.y) > 1e-6) {
+                        std::ostringstream trimmed;
+                        trimmed << "M " << lineStart.x << ' ' << lineStart.y
+                                << " L " << lineEnd.x << ' ' << lineEnd.y;
+                        strokePathData = trimmed.str();
+
+                        Bounds trimmedStrokeBounds;
+                        trimmedStrokeBounds.include(lineStart);
+                        trimmedStrokeBounds.include(lineEnd);
+                        includeLineStrokeBounds(trimmedStrokeBounds, lineStart, lineEnd, scaleValue(paint.strokeWidth) / 2.0);
+                        strokeBoundsOverride = trimmedStrokeBounds;
+                    }
+                }
+            }
+        }
+
         std::ostringstream element;
-        element << "<path d=\"" << path.str() << "\"";
+        element << "<path d=\"" << (stroke ? strokePathData : basePathData) << "\"";
         if (fill) {
             element << " fill=\"" << grayToRgb(paint.gray) << "\"";
             if (evenOdd) {
@@ -798,11 +1311,21 @@ std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape,
         }
         element << "/>";
         elements.push_back(element.str());
+        for (const auto& arrowElement : arrowElements) {
+            elements.push_back(arrowElement);
+        }
 
         Bounds combined = pathBounds;
-        if (stroke && strokeBounds.hasValue) {
-            combined.include({strokeBounds.minX, strokeBounds.minY});
-            combined.include({strokeBounds.maxX, strokeBounds.maxY});
+        if (stroke) {
+            const Bounds& effectiveStrokeBounds = strokeBoundsOverride ? *strokeBoundsOverride : strokeBounds;
+            if (effectiveStrokeBounds.hasValue) {
+                combined.include({effectiveStrokeBounds.minX, effectiveStrokeBounds.minY});
+                combined.include({effectiveStrokeBounds.maxX, effectiveStrokeBounds.maxY});
+            }
+            if (hasArrowBounds) {
+                combined.include({arrowBounds.minX, arrowBounds.minY});
+                combined.include({arrowBounds.maxX, arrowBounds.maxY});
+            }
         }
         if (combined.hasValue) {
             bounds.include({combined.minX, combined.minY});
@@ -961,6 +1484,9 @@ std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape,
             strokeBounds.clear();
             pathRendered = false;
             resetLineTracking();
+            lineSegmentCount = 0;
+            pathHasNonLineGeometry = false;
+            pathClosed = false;
             resetEllipse();
             break;
         }
@@ -999,6 +1525,9 @@ std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape,
             strokeBounds.clear();
             pathRendered = false;
             resetLineTracking();
+            lineSegmentCount = 0;
+            pathHasNonLineGeometry = false;
+            pathClosed = false;
             resetEllipse();
             break;
         }
@@ -1028,6 +1557,9 @@ std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape,
             textLineStartX = current.x;
             lineWidthSet = false;
             resetLineTracking();
+            lineSegmentCount = 0;
+            pathHasNonLineGeometry = false;
+            pathClosed = false;
             resetEllipse();
             lastStartObject.reset();
             lastMove.reset();
@@ -1102,6 +1634,7 @@ std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape,
                     resetLineTracking();
                 }
                 path.lineTo(worldEnd);
+                ++lineSegmentCount;
                 pathBounds.include(worldEnd);
                 const double strokeWidthOut = scaleValue(paint.strokeWidth);
                 includeLineStrokeBounds(strokeBounds, worldStart, worldEnd, strokeWidthOut / 2.0);
@@ -1125,6 +1658,7 @@ std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape,
         }
         case IT::CurveTo: {
             beginDrawing();
+            pathHasNonLineGeometry = true;
             const auto* data = std::get_if<dom::ShapeDefInstruction::CurveTo>(&inst.data);
             if (data) {
                 Point startPoint = current;
@@ -1165,6 +1699,7 @@ std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape,
         }
         case IT::Slur: {
             beginDrawing();
+            pathHasNonLineGeometry = true;
             const auto* data = std::get_if<dom::ShapeDefInstruction::Slur>(&inst.data);
             if (data) {
                 Point startPoint = current;
@@ -1315,6 +1850,7 @@ std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape,
         }
         case IT::Rectangle: {
             beginDrawing();
+            pathHasNonLineGeometry = true;
             const auto* data = std::get_if<dom::ShapeDefInstruction::Rectangle>(&inst.data);
             if (data) {
                 Point p0 = current;
@@ -1343,6 +1879,7 @@ std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape,
         }
         case IT::Ellipse: {
             beginDrawing();
+            pathHasNonLineGeometry = true;
             const auto* data = std::get_if<dom::ShapeDefInstruction::Ellipse>(&inst.data);
             if (data) {
                 double width = toEvpuDouble(data->width);
@@ -1391,6 +1928,7 @@ std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape,
         }
         case IT::ClosePath:
             beginDrawing();
+            pathClosed = true;
             if (pathBounds.hasValue && lastLineStartWorld && lastLineEndWorld && firstLineStartWorld && firstLineEndWorld) {
                 Point center{(pathBounds.minX + pathBounds.maxX) / 2.0,
                              (pathBounds.minY + pathBounds.maxY) / 2.0};
@@ -1542,10 +2080,10 @@ std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape,
         }
         case IT::SetArrowhead: {
             if (const auto* data = std::get_if<dom::ShapeDefInstruction::SetArrowhead>(&inst.data)) {
+                arrowheads.packedKindCodes = data->packedKindCodes;
                 arrowheads.startId = data->startArrowId;
                 arrowheads.endId = data->endArrowId;
-                arrowheads.startFlags = data->startFlags;
-                arrowheads.endFlags = data->endFlags;
+                arrowheads.extra = data->extra;
                 /// @todo Render start/end arrowhead caps for line/path instructions.
             }
             break;
