@@ -288,6 +288,7 @@ var annotated_dup =
         [ "unknown_xml_error", "classmusx_1_1factory_1_1unknown__xml__error.html", null ]
       ] ],
       [ "util", null, [
+        [ "ArrowheadPresetSpec", "structmusx_1_1util_1_1ArrowheadPresetSpec.html", "structmusx_1_1util_1_1ArrowheadPresetSpec" ],
         [ "DateTime", "structmusx_1_1util_1_1DateTime.html", "structmusx_1_1util_1_1DateTime" ],
         [ "EnigmaParsingContext", "classmusx_1_1util_1_1EnigmaParsingContext.html", "classmusx_1_1util_1_1EnigmaParsingContext" ],
         [ "EnigmaString", "classmusx_1_1util_1_1EnigmaString.html", "classmusx_1_1util_1_1EnigmaString" ],

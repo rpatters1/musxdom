@@ -35,5 +35,6 @@ var searchData=
   ['percussionnotecode_32',['PercussionNoteCode',['../classmusx_1_1dom_1_1details_1_1PercussionNoteCode.html#abf678c0b5d37f36e1361a4899333121b',1,'musx::dom::details::PercussionNoteCode']]],
   ['percussionnoteinfo_33',['PercussionNoteInfo',['../classmusx_1_1dom_1_1others_1_1PercussionNoteInfo.html#a57a93dbf3fa5e947bb9128451e35965a',1,'musx::dom::others::PercussionNoteInfo']]],
   ['pianobracebracketoptions_34',['PianoBraceBracketOptions',['../classmusx_1_1dom_1_1options_1_1PianoBraceBracketOptions.html#a51d77142d65ca9b0ce116347b08df22d',1,'musx::dom::options::PianoBraceBracketOptions']]],
-  ['positivemodulus_35',['positiveModulus',['../namespacemusic__theory.html#ad044685489c9b3d008be12762a490463',1,'music_theory']]]
+  ['positivemodulus_35',['positiveModulus',['../namespacemusic__theory.html#ad044685489c9b3d008be12762a490463',1,'music_theory']]],
+  ['presetarrowheadassvg_36',['presetArrowheadAsSvg',['../classmusx_1_1util_1_1SvgConvert.html#a2618282059e8a4a05b4b54f52048adf0',1,'musx::util::SvgConvert']]]
 ];

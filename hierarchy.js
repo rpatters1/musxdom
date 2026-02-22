@@ -1,6 +1,7 @@
 var hierarchy =
 [
     [ "musx::dom::NoteInfoPtr::ArpeggiatedTieInfo", "structmusx_1_1dom_1_1NoteInfoPtr_1_1ArpeggiatedTieInfo.html", null ],
+    [ "musx::util::ArrowheadPresetSpec", "structmusx_1_1util_1_1ArrowheadPresetSpec.html", null ],
     [ "musx::dom::details::FretboardDiagram::Barre", "classmusx_1_1dom_1_1details_1_1FretboardDiagram_1_1Barre.html", null ],
     [ "musx::dom::Base", "classmusx_1_1dom_1_1Base.html", [
       [ "musx::dom::CommonClassBase", "classmusx_1_1dom_1_1CommonClassBase.html", [

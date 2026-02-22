@@ -93,6 +93,7 @@ $(document).ready(function(){initNavTree('structmusx_1_1dom_1_1ShapeDefInstructi
 
 <div class="header">
   <div class="summary">
+<a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="structmusx_1_1dom_1_1ShapeDefInstruction_1_1SetArrowhead-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">musx::dom::ShapeDefInstruction::SetArrowhead Struct Reference</div></div>
@@ -104,24 +105,35 @@ $(document).ready(function(){initNavTree('structmusx_1_1dom_1_1ShapeDefInstructi
 
 <p><code>#include &lt;<a class="el" href="ShapeDesigner_8h_source.html">ShapeDesigner.h</a>&gt;</code></p>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:ac189a2041dd231ae20a5865431ea6b4d" id="r_ac189a2041dd231ae20a5865431ea6b4d"><td class="memItemLeft" align="right" valign="top"><a id="ac189a2041dd231ae20a5865431ea6b4d" name="ac189a2041dd231ae20a5865431ea6b4d"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>startKindCode</b> () const noexcept</td></tr>
+<tr class="memdesc:ac189a2041dd231ae20a5865431ea6b4d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the start kind code from <a class="el" href="structmusx_1_1dom_1_1ShapeDefInstruction_1_1SetArrowhead.html#ac9aaf46693d454828f71547f82ad1459">packedKindCodes</a> (low 16 bits). <br /></td></tr>
+<tr class="separator:ac189a2041dd231ae20a5865431ea6b4d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8f9d992960182de056051758b10906ee" id="r_a8f9d992960182de056051758b10906ee"><td class="memItemLeft" align="right" valign="top"><a id="a8f9d992960182de056051758b10906ee" name="a8f9d992960182de056051758b10906ee"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>endKindCode</b> () const noexcept</td></tr>
+<tr class="memdesc:a8f9d992960182de056051758b10906ee"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the end kind code from <a class="el" href="structmusx_1_1dom_1_1ShapeDefInstruction_1_1SetArrowhead.html#ac9aaf46693d454828f71547f82ad1459">packedKindCodes</a> (high 16 bits). <br /></td></tr>
+<tr class="separator:a8f9d992960182de056051758b10906ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
+<tr class="memitem:ac9aaf46693d454828f71547f82ad1459" id="r_ac9aaf46693d454828f71547f82ad1459"><td class="memItemLeft" align="right" valign="top"><a id="ac9aaf46693d454828f71547f82ad1459" name="ac9aaf46693d454828f71547f82ad1459"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>packedKindCodes</b> {}</td></tr>
+<tr class="memdesc:ac9aaf46693d454828f71547f82ad1459"><td class="mdescLeft">&#160;</td><td class="mdescRight">Raw word 0. Packs start/end kind codes (e.g. 0x00010001 preset/preset, 0x00020002 custom/custom). <br /></td></tr>
+<tr class="separator:ac9aaf46693d454828f71547f82ad1459"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2d7392ac06b586361cf89aa5184becff" id="r_a2d7392ac06b586361cf89aa5184becff"><td class="memItemLeft" align="right" valign="top"><a id="a2d7392ac06b586361cf89aa5184becff" name="a2d7392ac06b586361cf89aa5184becff"></a>
 int&#160;</td><td class="memItemRight" valign="bottom"><b>startArrowId</b> {}</td></tr>
-<tr class="memdesc:a2d7392ac06b586361cf89aa5184becff"><td class="mdescLeft">&#160;</td><td class="mdescRight">Identifier of the start arrowhead. <br /></td></tr>
+<tr class="memdesc:a2d7392ac06b586361cf89aa5184becff"><td class="mdescLeft">&#160;</td><td class="mdescRight">Raw word 1. Start arrowhead id (preset id or custom arrowhead ShapeDef cmper). <br /></td></tr>
 <tr class="separator:a2d7392ac06b586361cf89aa5184becff"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab1e3f240aa2b71ee35b7ebc10ce2bc6e" id="r_ab1e3f240aa2b71ee35b7ebc10ce2bc6e"><td class="memItemLeft" align="right" valign="top"><a id="ab1e3f240aa2b71ee35b7ebc10ce2bc6e" name="ab1e3f240aa2b71ee35b7ebc10ce2bc6e"></a>
 int&#160;</td><td class="memItemRight" valign="bottom"><b>endArrowId</b> {}</td></tr>
-<tr class="memdesc:ab1e3f240aa2b71ee35b7ebc10ce2bc6e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Identifier of the end arrowhead. <br /></td></tr>
+<tr class="memdesc:ab1e3f240aa2b71ee35b7ebc10ce2bc6e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Raw word 2. End arrowhead id (preset id or custom arrowhead ShapeDef cmper). <br /></td></tr>
 <tr class="separator:ab1e3f240aa2b71ee35b7ebc10ce2bc6e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5aee7b2ba2ec4466a05ae7a8237d689f" id="r_a5aee7b2ba2ec4466a05ae7a8237d689f"><td class="memItemLeft" align="right" valign="top"><a id="a5aee7b2ba2ec4466a05ae7a8237d689f" name="a5aee7b2ba2ec4466a05ae7a8237d689f"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>startFlags</b> {}</td></tr>
-<tr class="memdesc:a5aee7b2ba2ec4466a05ae7a8237d689f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Flags for the start arrowhead (built-in vs custom, etc.). <br /></td></tr>
-<tr class="separator:a5aee7b2ba2ec4466a05ae7a8237d689f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a203f387198cb7aff2f8b970740ebbbdf" id="r_a203f387198cb7aff2f8b970740ebbbdf"><td class="memItemLeft" align="right" valign="top"><a id="a203f387198cb7aff2f8b970740ebbbdf" name="a203f387198cb7aff2f8b970740ebbbdf"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>endFlags</b> {}</td></tr>
-<tr class="memdesc:a203f387198cb7aff2f8b970740ebbbdf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Flags for the end arrowhead (built-in vs custom, etc.). <br /></td></tr>
-<tr class="separator:a203f387198cb7aff2f8b970740ebbbdf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a791c09a84b3a6d766e8ab114129233e5" id="r_a791c09a84b3a6d766e8ab114129233e5"><td class="memItemLeft" align="right" valign="top"><a id="a791c09a84b3a6d766e8ab114129233e5" name="a791c09a84b3a6d766e8ab114129233e5"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>extra</b> {}</td></tr>
+<tr class="memdesc:a791c09a84b3a6d766e8ab114129233e5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Raw word 3. Unknown (value persists when edited by plugin; no observed rendering effect in current examples). <br /></td></tr>
+<tr class="separator:a791c09a84b3a6d766e8ab114129233e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Holds the parsed data for a <a class="el" href="structmusx_1_1dom_1_1ShapeDefInstruction_1_1SetArrowhead.html" title="Holds the parsed data for a SetArrowhead instruction.">SetArrowhead</a> instruction. </p>

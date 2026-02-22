@@ -35,12 +35,13 @@ var searchData=
   ['staffstyleassign_32',['StaffStyleAssign',['../classmusx_1_1dom_1_1others_1_1StaffStyleAssign.html#aa615ca1c6fec6da3338f2a3eec31f3dd',1,'musx::dom::others::StaffStyleAssign']]],
   ['staffsystem_33',['StaffSystem',['../classmusx_1_1dom_1_1others_1_1StaffSystem.html#a2379e9502bd46ef93a559ee15a8e8440',1,'musx::dom::others::StaffSystem']]],
   ['staffused_34',['StaffUsed',['../classmusx_1_1dom_1_1others_1_1StaffUsed.html#a4c311f21f3ba79a3b8781da1cb5a8589',1,'musx::dom::others::StaffUsed']]],
-  ['startswithfontcommand_35',['startsWithFontCommand',['../classmusx_1_1util_1_1EnigmaString.html#a3b5fae91351629aeff9b1f526a46af6d',1,'musx::util::EnigmaString']]],
-  ['startswithstylecommand_36',['startsWithStyleCommand',['../classmusx_1_1util_1_1EnigmaString.html#a2869cf6bd896d6c3a1d83545e424fadc',1,'musx::util::EnigmaString']]],
-  ['stemalterations_37',['stemalterations',['../classmusx_1_1dom_1_1details_1_1StemAlterations.html#af06394782e64b9ed871698af6ca27495',1,'musx::dom::details::StemAlterations::StemAlterations()'],['../classmusx_1_1dom_1_1details_1_1StemAlterationsUnderBeam.html#af06394782e64b9ed871698af6ca27495',1,'musx::dom::details::StemAlterationsUnderBeam::StemAlterations()']]],
-  ['stemoptions_38',['StemOptions',['../classmusx_1_1dom_1_1options_1_1StemOptions.html#a5c48c35393259a1e2ff79abcd5495acf',1,'musx::dom::options::StemOptions']]],
-  ['stepwisetranspose_39',['stepwiseTranspose',['../classmusic__theory_1_1Transposer.html#a549005f7f6843171987b3ff128c76152',1,'music_theory::Transposer']]],
-  ['sumcounts_40',['sumCounts',['../structmusx_1_1dom_1_1TimeSignature_1_1TimeSigComponent.html#a7f520211e7fe24c719f3d682ee248f0e',1,'musx::dom::TimeSignature::TimeSigComponent']]],
-  ['sumunits_41',['sumUnits',['../structmusx_1_1dom_1_1TimeSignature_1_1TimeSigComponent.html#ad6741949876b88d061a2fc0656eca76c',1,'musx::dom::TimeSignature::TimeSigComponent']]],
-  ['systemlock_42',['SystemLock',['../classmusx_1_1dom_1_1others_1_1SystemLock.html#abc2ae56f0a50eae89ef3e46ab66f0ad0',1,'musx::dom::others::SystemLock']]]
+  ['startkindcode_35',['startKindCode',['../structmusx_1_1dom_1_1ShapeDefInstruction_1_1SetArrowhead.html#ac189a2041dd231ae20a5865431ea6b4d',1,'musx::dom::ShapeDefInstruction::SetArrowhead']]],
+  ['startswithfontcommand_36',['startsWithFontCommand',['../classmusx_1_1util_1_1EnigmaString.html#a3b5fae91351629aeff9b1f526a46af6d',1,'musx::util::EnigmaString']]],
+  ['startswithstylecommand_37',['startsWithStyleCommand',['../classmusx_1_1util_1_1EnigmaString.html#a2869cf6bd896d6c3a1d83545e424fadc',1,'musx::util::EnigmaString']]],
+  ['stemalterations_38',['stemalterations',['../classmusx_1_1dom_1_1details_1_1StemAlterations.html#af06394782e64b9ed871698af6ca27495',1,'musx::dom::details::StemAlterations::StemAlterations()'],['../classmusx_1_1dom_1_1details_1_1StemAlterationsUnderBeam.html#af06394782e64b9ed871698af6ca27495',1,'musx::dom::details::StemAlterationsUnderBeam::StemAlterations()']]],
+  ['stemoptions_39',['StemOptions',['../classmusx_1_1dom_1_1options_1_1StemOptions.html#a5c48c35393259a1e2ff79abcd5495acf',1,'musx::dom::options::StemOptions']]],
+  ['stepwisetranspose_40',['stepwiseTranspose',['../classmusic__theory_1_1Transposer.html#a549005f7f6843171987b3ff128c76152',1,'music_theory::Transposer']]],
+  ['sumcounts_41',['sumCounts',['../structmusx_1_1dom_1_1TimeSignature_1_1TimeSigComponent.html#a7f520211e7fe24c719f3d682ee248f0e',1,'musx::dom::TimeSignature::TimeSigComponent']]],
+  ['sumunits_42',['sumUnits',['../structmusx_1_1dom_1_1TimeSignature_1_1TimeSigComponent.html#ad6741949876b88d061a2fc0656eca76c',1,'musx::dom::TimeSignature::TimeSigComponent']]],
+  ['systemlock_43',['SystemLock',['../classmusx_1_1dom_1_1others_1_1SystemLock.html#abc2ae56f0a50eae89ef3e46ab66f0ad0',1,'musx::dom::others::SystemLock']]]
 ];

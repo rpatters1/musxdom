@@ -145,6 +145,9 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memitem:ad400b0d1954a54c7f6e45fa756614c12" id="r_ad400b0d1954a54c7f6e45fa756614c12"><td class="memItemLeft" align="right" valign="top">static std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1util_1_1SvgConvert.html#ad400b0d1954a54c7f6e45fa756614c12">toSvg</a> (const dom::others::ShapeDef &amp;shape, double scaling, <a class="el" href="classmusx_1_1util_1_1SvgConvert.html#aec8aa781edbb07156c2299287a118e7b">SvgUnit</a> unit, <a class="el" href="classmusx_1_1util_1_1SvgConvert.html#a03a5e022f0ab7e2c53b56f129655bfcf">GlyphMetricsFn</a> glyphMetrics)</td></tr>
 <tr class="memdesc:ad400b0d1954a54c7f6e45fa756614c12"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert a ShapeDef into an SVG string buffer with explicit scaling and units.  <br /></td></tr>
 <tr class="separator:ad400b0d1954a54c7f6e45fa756614c12"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2618282059e8a4a05b4b54f52048adf0" id="r_a2618282059e8a4a05b4b54f52048adf0"><td class="memItemLeft" align="right" valign="top">static std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1util_1_1SvgConvert.html#a2618282059e8a4a05b4b54f52048adf0">presetArrowheadAsSvg</a> (<a class="el" href="namespacemusx_1_1dom.html#a9da9d8587a1c6dbc6c8462bcc0e4e69d">dom::ArrowheadPreset</a> preset, double scaling=1.0, <a class="el" href="classmusx_1_1util_1_1SvgConvert.html#aec8aa781edbb07156c2299287a118e7b">SvgUnit</a> unit=<a class="el" href="classmusx_1_1util_1_1SvgConvert.html#aec8aa781edbb07156c2299287a118e7ba6adf97f83acf6453d4a6a4b1070f3754">SvgUnit::None</a>)</td></tr>
+<tr class="memdesc:a2618282059e8a4a05b4b54f52048adf0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert a Finale preset arrowhead into a standalone SVG string buffer.  <br /></td></tr>
+<tr class="separator:a2618282059e8a4a05b4b54f52048adf0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afd3cd9506baad7524a7de9859bf1e6e8" id="r_afd3cd9506baad7524a7de9859bf1e6e8"><td class="memItemLeft" align="right" valign="top">static std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1util_1_1SvgConvert.html#afd3cd9506baad7524a7de9859bf1e6e8">toSvgWithPageFormatScaling</a> (const dom::others::ShapeDef &amp;shape, <a class="el" href="classmusx_1_1util_1_1SvgConvert.html#aec8aa781edbb07156c2299287a118e7b">SvgUnit</a> unit=<a class="el" href="classmusx_1_1util_1_1SvgConvert.html#aec8aa781edbb07156c2299287a118e7ba3be6521a73bcafce5b38459ec548bd11">SvgUnit::Millimeters</a>)</td></tr>
 <tr class="memdesc:afd3cd9506baad7524a7de9859bf1e6e8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert a ShapeDef into an SVG string buffer using the document's page format scaling.  <br /></td></tr>
 <tr class="separator:afd3cd9506baad7524a7de9859bf1e6e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -217,6 +220,60 @@ Return std::nullopt to fall back to heuristic metrics. </dd></dl>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="a2618282059e8a4a05b4b54f52048adf0" name="a2618282059e8a4a05b4b54f52048adf0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2618282059e8a4a05b4b54f52048adf0">&#9670;&#160;</a></span>presetArrowheadAsSvg()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string musx::util::SvgConvert::presetArrowheadAsSvg </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespacemusx_1_1dom.html#a9da9d8587a1c6dbc6c8462bcc0e4e69d">dom::ArrowheadPreset</a>&#160;</td>
+          <td class="paramname"><em>preset</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>scaling</em> = <code>1.0</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classmusx_1_1util_1_1SvgConvert.html#aec8aa781edbb07156c2299287a118e7b">SvgUnit</a>&#160;</td>
+          <td class="paramname"><em>unit</em> = <code><a class="el" href="classmusx_1_1util_1_1SvgConvert.html#aec8aa781edbb07156c2299287a118e7ba6adf97f83acf6453d4a6a4b1070f3754">SvgUnit::None</a></code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Convert a Finale preset arrowhead into a standalone SVG string buffer. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">preset</td><td>The Finale preset arrowhead type. </td></tr>
+    <tr><td class="paramname">scaling</td><td>Scale factor applied to EVPU-based coordinates before unit conversion. When <code>unit</code> is <a class="el" href="classmusx_1_1util_1_1SvgConvert.html#aec8aa781edbb07156c2299287a118e7ba6adf97f83acf6453d4a6a4b1070f3754" title="Unitless (no suffix).">SvgUnit::None</a>, the output coordinates are EVPU * scaling. </td></tr>
+    <tr><td class="paramname">unit</td><td>Unit suffix for width/height (e.g., <a class="el" href="classmusx_1_1util_1_1SvgConvert.html#aec8aa781edbb07156c2299287a118e7ba3be6521a73bcafce5b38459ec548bd11">SvgUnit::Millimeters</a>). </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>An SVG buffer encoded as a string.</dd></dl>
+<p>The returned SVG has the arrow tip anchored at (0,0) and points to the right (positive X axis) at zero rotation. </p>
+
+</div>
+</div>
 <a id="ab661dfea2a0c82f4b2240e9db5b50b78" name="ab661dfea2a0c82f4b2240e9db5b50b78"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ab661dfea2a0c82f4b2240e9db5b50b78">&#9670;&#160;</a></span>toSvg() <span class="overload">[1/4]</span></h2>
 
