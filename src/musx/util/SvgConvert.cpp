@@ -203,6 +203,12 @@ struct PathDirectionState
     bool closed{};
 };
 
+struct LineSegmentWorld
+{
+    Point start{};
+    Point end{};
+};
+
 struct Transform
 {
     double a{1.0};
@@ -569,11 +575,11 @@ Point normalize(const Point& vector)
     case dom::ArrowheadPreset::SmallFilled:
     case dom::ArrowheadPreset::SmallOutline:
     case dom::ArrowheadPreset::SmallCurved:
-        return dom::EVPU_PER_SPACE * 0.9;
+        return 20.0;
     case dom::ArrowheadPreset::MediumCurved:
-        return dom::EVPU_PER_SPACE * 2.5;
+        return 60.0;
     case dom::ArrowheadPreset::LargeCurved:
-        return dom::EVPU_PER_SPACE * 4.0;
+        return 100.0; // Finale export matches a 100 EVPU curved-arrow length.
     }
     return dom::EVPU_PER_SPACE;
 }
@@ -618,6 +624,75 @@ struct SvgFragment
     result.bounds.include(tip);
     result.bounds.include(left);
     result.bounds.include(right);
+    return result;
+}
+
+std::string makeTriangleOutlineStrokePathWithTipRepeat(const Point& tip, const Point& direction, double size)
+{
+    Point dir = normalize(direction);
+    if (dir.x == 0.0 && dir.y == 0.0) {
+        return {};
+    }
+    Point perp{-dir.y, dir.x};
+    Point baseCenter{tip.x - dir.x * size, tip.y - dir.y * size};
+    double halfWidth = size / 2.0;
+    Point left{baseCenter.x + perp.x * halfWidth, baseCenter.y + perp.y * halfWidth};
+    Point right{baseCenter.x - perp.x * halfWidth, baseCenter.y - perp.y * halfWidth};
+
+    std::ostringstream path;
+    path << "M " << tip.x << ' ' << tip.y
+         << " L " << left.x << ' ' << left.y
+         << " L " << right.x << ' ' << right.y
+         << " L " << tip.x << ' ' << tip.y
+         << " L " << tip.x << ' ' << tip.y
+         << " Z";
+    return path.str();
+}
+
+ArrowheadGeometry makeCubicCurvedArrowheadPath(const Point& tip, const Point& direction, double size)
+{
+    ArrowheadGeometry result;
+    Point dir = normalize(direction);
+    if (dir.x == 0.0 && dir.y == 0.0) {
+        return result;
+    }
+    Point perp{-dir.y, dir.x};
+
+    // Finale's curved presets (small/medium/large) share this cubic template:
+    // base endpoints at +/-0.5L off the axis, with controls at 0.8L and +/-0.15L.
+    const double baseDist = size;
+    const double baseHalf = size * 0.5;
+    const double ctrlDist = size * 0.8;
+    const double ctrlOff = size * 0.15;
+
+    Point baseA{
+        tip.x - dir.x * baseDist + perp.x * baseHalf,
+        tip.y - dir.y * baseDist + perp.y * baseHalf
+    };
+    Point ctrlA{
+        tip.x - dir.x * ctrlDist + perp.x * ctrlOff,
+        tip.y - dir.y * ctrlDist + perp.y * ctrlOff
+    };
+    Point ctrlB{
+        tip.x - dir.x * ctrlDist - perp.x * ctrlOff,
+        tip.y - dir.y * ctrlDist - perp.y * ctrlOff
+    };
+    Point baseB{
+        tip.x - dir.x * baseDist - perp.x * baseHalf,
+        tip.y - dir.y * baseDist - perp.y * baseHalf
+    };
+
+    std::ostringstream path;
+    path << "M " << tip.x << ' ' << tip.y
+         << " L " << baseA.x << ' ' << baseA.y
+         << " C " << ctrlA.x << ' ' << ctrlA.y << ' '
+                  << ctrlB.x << ' ' << ctrlB.y << ' '
+                  << baseB.x << ' ' << baseB.y
+         << " Z";
+    result.path = path.str();
+    result.bounds.include(tip);
+    result.bounds.include(baseA);
+    result.bounds.include(baseB);
     return result;
 }
 
@@ -1025,6 +1100,8 @@ std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape,
     bool pathHasNonLineGeometry = false;
     bool pathClosed = false;
     std::optional<EllipseState> pendingEllipse;
+    PathDirectionState pathDirection;
+    std::vector<LineSegmentWorld> lineSegmentsWorld;
 
     Point current{};
     Point start{};
@@ -1089,6 +1166,8 @@ std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape,
             lineSegmentCount = 0;
             pathHasNonLineGeometry = false;
             pathClosed = false;
+            pathDirection = {};
+            lineSegmentsWorld.clear();
         }
     };
 
@@ -1121,8 +1200,10 @@ std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape,
             const bool curved = preset == dom::ArrowheadPreset::SmallCurved
                 || preset == dom::ArrowheadPreset::MediumCurved
                 || preset == dom::ArrowheadPreset::LargeCurved;
-            const ArrowheadGeometry geometry = makeArrowheadPath(
-                tip, direction, scaleValue(arrowheadSizeForPreset(preset)), curved);
+            const double scaledSize = scaleValue(arrowheadSizeForPreset(preset));
+            const ArrowheadGeometry geometry = curved
+                ? makeCubicCurvedArrowheadPath(tip, direction, scaledSize)
+                : makeArrowheadPath(tip, direction, scaledSize, false);
             if (geometry.path.empty() || !geometry.bounds.hasValue) {
                 return false;
             }
@@ -1134,8 +1215,10 @@ std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape,
                             << "\" stroke=\"none\" fill=\"" << grayToRgb(100) << "\"/>";
                 arrowElements.push_back(fillElement.str());
 
+                const std::string outlinePath = makeTriangleOutlineStrokePathWithTipRepeat(
+                    tip, direction, scaledSize);
                 std::ostringstream outlineElement;
-                outlineElement << "<path d=\"" << geometry.path
+                outlineElement << "<path d=\"" << (outlinePath.empty() ? geometry.path : outlinePath)
                                << "\" stroke=\"" << strokeColor
                                << "\" fill=\"none\" stroke-width=\"" << scaleValue(1.8) << "\"/>";
                 arrowElements.push_back(outlineElement.str());
@@ -1205,51 +1288,157 @@ std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape,
 
         bool renderedStartArrow = false;
         bool renderedEndArrow = false;
-        if (stroke && firstLineStartWorld && firstLineEndWorld && lastLineStartWorld && lastLineEndWorld) {
-            auto presetForId = [](int id) -> std::optional<dom::ArrowheadPreset> {
-                switch (id) {
-                case 1: return dom::ArrowheadPreset::SmallFilled;
-                case 2: return dom::ArrowheadPreset::SmallOutline;
-                case 3: return dom::ArrowheadPreset::SmallCurved;
-                case 4: return dom::ArrowheadPreset::LargeCurved;
-                case 5: return dom::ArrowheadPreset::MediumCurved;
-                default:
-                    return std::nullopt;
+        const bool hasArrowheads = arrowheads.startKindCode() != 0 || arrowheads.endKindCode() != 0;
+        auto presetForId = [](int id) -> std::optional<dom::ArrowheadPreset> {
+            switch (id) {
+            case 1: return dom::ArrowheadPreset::SmallFilled;
+            case 2: return dom::ArrowheadPreset::SmallOutline;
+            case 3: return dom::ArrowheadPreset::SmallCurved;
+            case 4: return dom::ArrowheadPreset::LargeCurved;
+            case 5: return dom::ArrowheadPreset::MediumCurved;
+            default:
+                return std::nullopt;
+            }
+        };
+        if (stroke && hasArrowheads && !pathClosed && !pathHasNonLineGeometry && !lineSegmentsWorld.empty()) {
+            PathBuilder trimmedPath;
+            Bounds trimmedStrokeBounds;
+            bool hasTrimmedStrokeBounds = false;
+            const double trimAmount = scaleValue(12.0); // Finale default backoff observed in exported examples.
+
+            auto appendTrimmedSegment = [&](const Point& a, const Point& b) {
+                trimmedPath.moveTo(a);
+                trimmedPath.lineTo(b);
+                if (!hasTrimmedStrokeBounds) {
+                    trimmedStrokeBounds.include(a);
+                    trimmedStrokeBounds.include(b);
+                    hasTrimmedStrokeBounds = true;
+                } else {
+                    trimmedStrokeBounds.include(a);
+                    trimmedStrokeBounds.include(b);
                 }
+                includeLineStrokeBounds(trimmedStrokeBounds, a, b, scaleValue(paint.strokeWidth) / 2.0);
             };
 
-            Point startTangent{
-                firstLineEndWorld->x - firstLineStartWorld->x,
-                firstLineEndWorld->y - firstLineStartWorld->y
+            auto appendArrowForKind = [&](bool isStart, const Point& tip, const Point& tangent) -> bool {
+                if (isStart) {
+                    if (arrowheads.startKindCode() == 1) {
+                        if (auto preset = presetForId(arrowheads.startId)) {
+                            return appendPresetArrowhead(tip, tangent, *preset);
+                        }
+                    } else if (arrowheads.startKindCode() == 2) {
+                        return appendCustomArrowhead(tip, tangent, arrowheads.startId);
+                    }
+                } else {
+                    if (arrowheads.endKindCode() == 1) {
+                        if (auto preset = presetForId(arrowheads.endId)) {
+                            return appendPresetArrowhead(tip, tangent, *preset);
+                        }
+                    } else if (arrowheads.endKindCode() == 2) {
+                        return appendCustomArrowhead(tip, tangent, arrowheads.endId);
+                    }
+                }
+                return false;
             };
-            Point endTangent{
-                lastLineEndWorld->x - lastLineStartWorld->x,
-                lastLineEndWorld->y - lastLineStartWorld->y
+
+            auto findFallbackDirection = [&](size_t index) -> Point {
+                if (index == 0) {
+                    // Finale exports the leading zero-length line in shape 16 with the arrowheads
+                    // in the unrotated default orientation (pointing along +X for the segment).
+                    return {1.0, 0.0};
+                }
+                for (size_t j = index + 1; j < lineSegmentsWorld.size(); ++j) {
+                    const auto& nextSeg = lineSegmentsWorld[j];
+                    Point nextVec{nextSeg.end.x - nextSeg.start.x, nextSeg.end.y - nextSeg.start.y};
+                    Point nextDir = normalize(nextVec);
+                    if (!(nextDir.x == 0.0 && nextDir.y == 0.0)) {
+                        return nextDir;
+                    }
+                }
+                for (size_t j = index; j > 0; --j) {
+                    const auto& prevSeg = lineSegmentsWorld[j - 1];
+                    Point prevVec{prevSeg.end.x - prevSeg.start.x, prevSeg.end.y - prevSeg.start.y};
+                    Point prevDir = normalize(prevVec);
+                    if (!(prevDir.x == 0.0 && prevDir.y == 0.0)) {
+                        return prevDir;
+                    }
+                }
+                return {};
             };
+
+            for (size_t segIndex = 0; segIndex < lineSegmentsWorld.size(); ++segIndex) {
+                const auto& seg = lineSegmentsWorld[segIndex];
+                Point segVec{seg.end.x - seg.start.x, seg.end.y - seg.start.y};
+                Point dir = normalize(segVec);
+                const bool zeroLength = (dir.x == 0.0 && dir.y == 0.0);
+                if (zeroLength) {
+                    dir = findFallbackDirection(segIndex);
+                }
+                if (dir.x == 0.0 && dir.y == 0.0) {
+                    appendTrimmedSegment(seg.start, seg.end);
+                    continue;
+                }
+
+                Point startArrowTangent = zeroLength ? dir : Point{-dir.x, -dir.y};
+                bool segStartArrow = appendArrowForKind(true, seg.start, startArrowTangent);
+                bool segEndArrow = appendArrowForKind(false, seg.end, dir);
+
+                if (zeroLength) {
+                    appendTrimmedSegment(seg.start, seg.end);
+                    continue;
+                }
+
+                Point a = seg.start;
+                Point b = seg.end;
+                if (segStartArrow) {
+                    a.x += dir.x * trimAmount;
+                    a.y += dir.y * trimAmount;
+                }
+                if (segEndArrow) {
+                    b.x -= dir.x * trimAmount;
+                    b.y -= dir.y * trimAmount;
+                }
+                Point trimmedVec{b.x - a.x, b.y - a.y};
+                if (std::hypot(trimmedVec.x, trimmedVec.y) <= 1e-6) {
+                    appendTrimmedSegment(a, a);
+                } else {
+                    appendTrimmedSegment(a, b);
+                }
+            }
+
+            if (!trimmedPath.empty()) {
+                strokePathData = trimmedPath.str();
+                if (hasTrimmedStrokeBounds && trimmedStrokeBounds.hasValue) {
+                    strokeBoundsOverride = trimmedStrokeBounds;
+                }
+            }
+        } else if (stroke && pathDirection.hasStartDir && pathDirection.hasEndDir) {
+            Point startTangent = pathDirection.startDir;
+            Point endTangent = pathDirection.endDir;
 
             if (arrowheads.startKindCode() == 1) {
                 if (auto preset = presetForId(arrowheads.startId)) {
                     renderedStartArrow = appendPresetArrowhead(
-                        *firstLineStartWorld,
+                        pathDirection.startPoint,
                         Point{-startTangent.x, -startTangent.y},
                         *preset);
                 }
             } else if (arrowheads.startKindCode() == 2) {
                 renderedStartArrow = appendCustomArrowhead(
-                    *firstLineStartWorld,
+                    pathDirection.startPoint,
                     Point{-startTangent.x, -startTangent.y},
                     arrowheads.startId);
             }
             if (arrowheads.endKindCode() == 1) {
                 if (auto preset = presetForId(arrowheads.endId)) {
                     renderedEndArrow = appendPresetArrowhead(
-                        *lastLineEndWorld,
+                        pathDirection.endPoint,
                         endTangent,
                         *preset);
                 }
             } else if (arrowheads.endKindCode() == 2) {
                 renderedEndArrow = appendCustomArrowhead(
-                    *lastLineEndWorld,
+                    pathDirection.endPoint,
                     endTangent,
                     arrowheads.endId);
             }
@@ -1310,9 +1499,16 @@ std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape,
             element << " stroke=\"none\"";
         }
         element << "/>";
-        elements.push_back(element.str());
-        for (const auto& arrowElement : arrowElements) {
-            elements.push_back(arrowElement);
+        if (stroke && !arrowElements.empty()) {
+            for (const auto& arrowElement : arrowElements) {
+                elements.push_back(arrowElement);
+            }
+            elements.push_back(element.str());
+        } else {
+            elements.push_back(element.str());
+            for (const auto& arrowElement : arrowElements) {
+                elements.push_back(arrowElement);
+            }
         }
 
         Bounds combined = pathBounds;
@@ -1638,6 +1834,7 @@ std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape,
                 pathBounds.include(worldEnd);
                 const double strokeWidthOut = scaleValue(paint.strokeWidth);
                 includeLineStrokeBounds(strokeBounds, worldStart, worldEnd, strokeWidthOut / 2.0);
+                lineSegmentsWorld.push_back({worldStart, worldEnd});
                 double segmentLen = std::hypot(worldEnd.x - worldStart.x, worldEnd.y - worldStart.y);
                 if (segmentLen > 0.0) {
                 if (pathBounds.hasValue && lastLineStartWorld && lastLineEndWorld) {
@@ -1652,6 +1849,14 @@ std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape,
                     }
                     lastLineStartWorld = worldStart;
                     lastLineEndWorld = worldEnd;
+                    if (!pathDirection.hasStartDir) {
+                        pathDirection.hasStartDir = true;
+                        pathDirection.startPoint = worldStart;
+                        pathDirection.startDir = {worldEnd.x - worldStart.x, worldEnd.y - worldStart.y};
+                    }
+                    pathDirection.hasEndDir = true;
+                    pathDirection.endPoint = worldEnd;
+                    pathDirection.endDir = {worldEnd.x - worldStart.x, worldEnd.y - worldStart.y};
                 }
             }
             break;
@@ -1676,10 +1881,38 @@ std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape,
                 Point worldC1 = toWorldCurve(c1, startPoint);
                 Point worldC2 = toWorldCurve(c2, startPoint);
                 Point worldEnd = toWorldCurve(current, startPoint);
+                auto firstNonZeroDirection = [](const std::initializer_list<Point>& candidates) {
+                    for (const auto& candidate : candidates) {
+                        if (std::hypot(candidate.x, candidate.y) > 1e-6) {
+                            return candidate;
+                        }
+                    }
+                    return Point{};
+                };
+                Point curveStartDir = firstNonZeroDirection({
+                    {worldC1.x - worldStart.x, worldC1.y - worldStart.y},
+                    {worldC2.x - worldStart.x, worldC2.y - worldStart.y},
+                    {worldEnd.x - worldStart.x, worldEnd.y - worldStart.y}
+                });
+                Point curveEndDir = firstNonZeroDirection({
+                    {worldEnd.x - worldC2.x, worldEnd.y - worldC2.y},
+                    {worldEnd.x - worldC1.x, worldEnd.y - worldC1.y},
+                    {worldEnd.x - worldStart.x, worldEnd.y - worldStart.y}
+                });
                 if (path.empty()) {
                     path.moveTo(worldStart);
                     pathBounds.include(worldStart);
                     strokeBounds.include(worldStart);
+                }
+                if (!pathDirection.hasStartDir && std::hypot(curveStartDir.x, curveStartDir.y) > 1e-6) {
+                    pathDirection.hasStartDir = true;
+                    pathDirection.startPoint = worldStart;
+                    pathDirection.startDir = curveStartDir;
+                }
+                if (std::hypot(curveEndDir.x, curveEndDir.y) > 1e-6) {
+                    pathDirection.hasEndDir = true;
+                    pathDirection.endPoint = worldEnd;
+                    pathDirection.endDir = curveEndDir;
                 }
                 path.curveTo(worldC1, worldC2, worldEnd);
                 Bounds curveBounds = computeCubicBounds(worldStart, worldC1, worldC2, worldEnd);
@@ -1929,6 +2162,7 @@ std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape,
         case IT::ClosePath:
             beginDrawing();
             pathClosed = true;
+            pathDirection.closed = true;
             if (pathBounds.hasValue && lastLineStartWorld && lastLineEndWorld && firstLineStartWorld && firstLineEndWorld) {
                 Point center{(pathBounds.minX + pathBounds.maxX) / 2.0,
                              (pathBounds.minY + pathBounds.maxY) / 2.0};

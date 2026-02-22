@@ -2378,6 +2378,91 @@
       <data>0</data>
       <data>332</data>
     </shapeData>
+    <shapeData cmper="15">
+      <data>4</data>
+      <data>-4</data>
+      <data>4</data>
+      <data>-2</data>
+      <data>4</data>
+      <data>-6</data>
+      <data>0</data>
+      <data>0</data>
+      <data>0</data>
+      <data>0</data>
+      <data>0</data>
+      <data>0</data>
+      <data>0</data>
+      <data>256</data>
+      <data>18</data>
+      <data>0</data>
+      <data>72</data>
+      <data>72</data>
+      <data>144</data>
+      <data>0</data>
+      <data>72</data>
+      <data>-72</data>
+      <data>4</data>
+      <data>196</data>
+      <data>-27</data>
+      <data>231</data>
+      <data>434</data>
+      <data>-124</data>
+      <data>1514</data>
+      <data>1514</data>
+      <data>1073742162</data>
+      <data>0</data>
+      <data>0</data>
+      <data>512</data>
+      <data>65538</data>
+      <data>12</data>
+      <data>5</data>
+      <data>0</data>
+      <data>0</data>
+      <data>0</data>
+      <data>18</data>
+      <data>0</data>
+      <data>130</data>
+      <data>-127</data>
+      <data>86</data>
+      <data>199</data>
+      <data>112</data>
+      <data>-181</data>
+    </shapeData>
+    <shapeData cmper="16">
+      <data>-84</data>
+      <data>-24</data>
+      <data>-184</data>
+      <data>266</data>
+      <data>436</data>
+      <data>-95</data>
+      <data>1000</data>
+      <data>1000</data>
+      <data>0</data>
+      <data>0</data>
+      <data>0</data>
+      <data>131073</data>
+      <data>4</data>
+      <data>12</data>
+      <data>0</data>
+      <data>0</data>
+      <data>0</data>
+      <data>256</data>
+      <data>18</data>
+      <data>0</data>
+      <data>0</data>
+      <data>0</data>
+      <data>132</data>
+      <data>224</data>
+      <data>44</data>
+      <data>-260</data>
+      <data>136</data>
+      <data>100</data>
+      <data>176</data>
+      <data>168</data>
+      <data>-528</data>
+      <data>44</data>
+      <data>168</data>
+    </shapeData>
     <shapeDef cmper="1">
       <instList>1</instList>
       <dataList>1</dataList>
@@ -2445,6 +2530,16 @@
     <shapeDef cmper="14">
       <instList>14</instList>
       <dataList>14</dataList>
+      <shapeType>expression</shapeType>
+    </shapeDef>
+    <shapeDef cmper="15">
+      <instList>15</instList>
+      <dataList>15</dataList>
+      <shapeType>expression</shapeType>
+    </shapeDef>
+    <shapeDef cmper="16">
+      <instList>16</instList>
+      <dataList>16</dataList>
       <shapeType>expression</shapeType>
     </shapeDef>
     <shapeList cmper="1">
@@ -2977,6 +3072,107 @@
       <instruct>
         <numData>2</numData>
         <tag>setDash</tag>
+      </instruct>
+      <instruct>
+        <numData>2</numData>
+        <tag>rLineTo</tag>
+      </instruct>
+      <instruct>
+        <tag>stroke</tag>
+      </instruct>
+    </shapeList>
+    <shapeList cmper="15">
+      <instruct>
+        <numData>11</numData>
+        <tag>startObject</tag>
+      </instruct>
+      <instruct>
+        <numData>2</numData>
+        <tag>rMoveTo</tag>
+      </instruct>
+      <instruct>
+        <numData>1</numData>
+        <tag>lineWidth</tag>
+      </instruct>
+      <instruct>
+        <numData>2</numData>
+        <tag>setDash</tag>
+      </instruct>
+      <instruct>
+        <numData>6</numData>
+        <tag>curveTo</tag>
+      </instruct>
+      <instruct>
+        <tag>stroke</tag>
+      </instruct>
+      <instruct>
+        <numData>11</numData>
+        <tag>startObject</tag>
+      </instruct>
+      <instruct>
+        <numData>1</numData>
+        <tag>lineWidth</tag>
+      </instruct>
+      <instruct>
+        <numData>4</numData>
+        <tag>setArrowhead</tag>
+      </instruct>
+      <instruct>
+        <numData>2</numData>
+        <tag>rMoveTo</tag>
+      </instruct>
+      <instruct>
+        <numData>2</numData>
+        <tag>setDash</tag>
+      </instruct>
+      <instruct>
+        <numData>6</numData>
+        <tag>curveTo</tag>
+      </instruct>
+      <instruct>
+        <tag>stroke</tag>
+      </instruct>
+    </shapeList>
+    <shapeList cmper="16">
+      <instruct>
+        <numData>11</numData>
+        <tag>startObject</tag>
+      </instruct>
+      <instruct>
+        <numData>4</numData>
+        <tag>setArrowhead</tag>
+      </instruct>
+      <instruct>
+        <numData>2</numData>
+        <tag>rMoveTo</tag>
+      </instruct>
+      <instruct>
+        <numData>1</numData>
+        <tag>lineWidth</tag>
+      </instruct>
+      <instruct>
+        <numData>2</numData>
+        <tag>setDash</tag>
+      </instruct>
+      <instruct>
+        <numData>2</numData>
+        <tag>rLineTo</tag>
+      </instruct>
+      <instruct>
+        <numData>2</numData>
+        <tag>rLineTo</tag>
+      </instruct>
+      <instruct>
+        <numData>2</numData>
+        <tag>rLineTo</tag>
+      </instruct>
+      <instruct>
+        <numData>2</numData>
+        <tag>rLineTo</tag>
+      </instruct>
+      <instruct>
+        <numData>2</numData>
+        <tag>rLineTo</tag>
       </instruct>
       <instruct>
         <numData>2</numData>

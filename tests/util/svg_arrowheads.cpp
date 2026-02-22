@@ -25,6 +25,10 @@
 #include <filesystem>
 #include <fstream>
 #include <cstdlib>
+#include <sstream>
+#include <regex>
+#include <cctype>
+#include <cmath>
 
 #include "gtest/gtest.h"
 #include "test_utils.h"
@@ -43,6 +47,40 @@ struct ShapeInstructionSummary
     std::optional<ShapeDefInstruction::SetDash> setDash;
     std::vector<ShapeDefInstruction::RLineTo> lineSegments;
     int setArrowheadCount{};
+};
+
+struct ArrowheadViewBox
+{
+    double minX{};
+    double minY{};
+    double width{};
+    double height{};
+    bool valid{};
+};
+
+struct ArrowheadPathGeometry
+{
+    std::string commands;
+    std::vector<double> numbers;
+    std::string rawD;
+};
+
+struct ArrowheadGeomPoint
+{
+    double x{};
+    double y{};
+};
+
+struct ArrowheadPresetFilledShape
+{
+    enum class Kind { Unknown, Triangle, CubicWedge };
+    Kind kind{Kind::Unknown};
+    ArrowheadGeomPoint tip{};
+    ArrowheadGeomPoint a{};   // First edge/base point after tip.
+    ArrowheadGeomPoint b{};   // Second base point (triangle) or cubic end point.
+    ArrowheadGeomPoint c1{};  // Cubic only.
+    ArrowheadGeomPoint c2{};  // Cubic only.
+    std::string rawD;
 };
 
 ShapeInstructionSummary summarizeShape(const others::ShapeDef& shape)
@@ -82,6 +120,304 @@ int countSvgTag(const std::string& svg, const std::string& tag)
         pos += needle.size();
     }
     return count;
+}
+
+ArrowheadViewBox parseArrowheadViewBox(const std::string& svg)
+{
+    ArrowheadViewBox result;
+    const std::string key = "viewBox=\"";
+    auto pos = svg.find(key);
+    if (pos == std::string::npos) {
+        return result;
+    }
+    pos += key.size();
+    auto end = svg.find('"', pos);
+    if (end == std::string::npos) {
+        return result;
+    }
+    std::istringstream input(svg.substr(pos, end - pos));
+    if (input >> result.minX >> result.minY >> result.width >> result.height) {
+        result.valid = true;
+    }
+    return result;
+}
+
+std::vector<std::string> extractArrowheadFilledPathDs(const std::string& svg)
+{
+    std::vector<std::string> result;
+    static const std::regex pathTagRegex(R"(<path\b[^>]*>)");
+    static const std::regex dAttrRegex(R"(\bd=\"([^\"]+)\")");
+    for (std::sregex_iterator it(svg.begin(), svg.end(), pathTagRegex), end; it != end; ++it) {
+        const std::string tag = it->str();
+        if (tag.find("stroke=\"none\"") == std::string::npos) {
+            continue;
+        }
+        if (tag.find("fill=\"none\"") != std::string::npos) {
+            continue;
+        }
+        std::smatch dMatch;
+        if (std::regex_search(tag, dMatch, dAttrRegex)) {
+            result.push_back(dMatch[1].str());
+        }
+    }
+    return result;
+}
+
+std::vector<std::string> extractArrowheadOutlineStrokePathDs(const std::string& svg)
+{
+    std::vector<std::string> result;
+    static const std::regex pathTagRegex(R"(<path\b[^>]*>)");
+    static const std::regex dAttrRegex(R"(\bd=\"([^\"]+)\")");
+    static const std::regex strokeWidthRegex(R"(\bstroke-width=\"([^\"]+)\")");
+    for (std::sregex_iterator it(svg.begin(), svg.end(), pathTagRegex), end; it != end; ++it) {
+        const std::string tag = it->str();
+        if (tag.find("fill=\"none\"") == std::string::npos) {
+            continue;
+        }
+        if (tag.find("stroke=\"none\"") != std::string::npos) {
+            continue;
+        }
+        std::smatch swMatch;
+        if (!std::regex_search(tag, swMatch, strokeWidthRegex)) {
+            continue;
+        }
+        const double sw = std::stod(swMatch[1].str());
+        if (sw > 2.5) { // Skip the main line stroke; keep the outline-arrowhead strokes (~1.8)
+            continue;
+        }
+        std::smatch dMatch;
+        if (std::regex_search(tag, dMatch, dAttrRegex)) {
+            result.push_back(dMatch[1].str());
+        }
+    }
+    return result;
+}
+
+ArrowheadPathGeometry parseArrowheadPathGeometry(const std::string& d)
+{
+    ArrowheadPathGeometry result;
+    result.rawD = d;
+    size_t pos = 0;
+    auto skipSeparators = [&]() {
+        while (pos < d.size()) {
+            const unsigned char ch = static_cast<unsigned char>(d[pos]);
+            if (std::isspace(ch) || d[pos] == ',') {
+                ++pos;
+            } else {
+                break;
+            }
+        }
+    };
+    auto readNumber = [&](double& value) -> bool {
+        skipSeparators();
+        if (pos >= d.size()) {
+            return false;
+        }
+        size_t start = pos;
+        bool sawDigit = false;
+        if (d[pos] == '+' || d[pos] == '-') {
+            ++pos;
+        }
+        while (pos < d.size() && std::isdigit(static_cast<unsigned char>(d[pos]))) {
+            sawDigit = true;
+            ++pos;
+        }
+        if (pos < d.size() && d[pos] == '.') {
+            ++pos;
+            while (pos < d.size() && std::isdigit(static_cast<unsigned char>(d[pos]))) {
+                sawDigit = true;
+                ++pos;
+            }
+        }
+        if (pos < d.size() && (d[pos] == 'e' || d[pos] == 'E')) {
+            size_t expPos = pos + 1;
+            if (expPos < d.size() && (d[expPos] == '+' || d[expPos] == '-')) {
+                ++expPos;
+            }
+            bool expDigits = false;
+            while (expPos < d.size() && std::isdigit(static_cast<unsigned char>(d[expPos]))) {
+                expDigits = true;
+                ++expPos;
+            }
+            if (expDigits) {
+                pos = expPos;
+            }
+        }
+        if (!sawDigit) {
+            pos = start;
+            return false;
+        }
+        value = std::stod(d.substr(start, pos - start));
+        return true;
+    };
+
+    while (pos < d.size()) {
+        skipSeparators();
+        if (pos >= d.size()) {
+            break;
+        }
+        const unsigned char ch = static_cast<unsigned char>(d[pos]);
+        if (std::isalpha(ch)) {
+            result.commands.push_back(static_cast<char>(std::toupper(ch)));
+            ++pos;
+            continue;
+        }
+        double value{};
+        if (readNumber(value)) {
+            result.numbers.push_back(value);
+            continue;
+        }
+        ++pos;
+    }
+    return result;
+}
+
+bool arrowheadGeomPointNear(const ArrowheadGeomPoint& a,
+                            const ArrowheadGeomPoint& b,
+                            double tolerance)
+{
+    return std::abs(a.x - b.x) <= tolerance && std::abs(a.y - b.y) <= tolerance;
+}
+
+std::optional<ArrowheadPresetFilledShape> parseArrowheadPresetFilledShape(const ArrowheadPathGeometry& geom)
+{
+    auto readPoint = [&](size_t numberIndex) -> ArrowheadGeomPoint {
+        return ArrowheadGeomPoint{geom.numbers[numberIndex], geom.numbers[numberIndex + 1]};
+    };
+    auto pointEq = [&](const ArrowheadGeomPoint& p, const ArrowheadGeomPoint& q) {
+        return std::abs(p.x - q.x) <= 1e-6 && std::abs(p.y - q.y) <= 1e-6;
+    };
+
+    std::vector<char> cmds(geom.commands.begin(), geom.commands.end());
+    std::vector<double> nums = geom.numbers;
+
+    // Canonicalize redundant explicit close line: ... L <tip> Z
+    if (!cmds.empty() && cmds.back() == 'Z' && cmds.size() >= 2 && cmds[cmds.size() - 2] == 'L') {
+        // Compute number offset to the final L command.
+        size_t numOffset = 0;
+        for (size_t i = 0; i + 2 < cmds.size(); ++i) {
+            switch (cmds[i]) {
+            case 'M':
+            case 'L':
+                numOffset += 2;
+                break;
+            case 'C':
+                numOffset += 6;
+                break;
+            case 'Q':
+                numOffset += 4;
+                break;
+            case 'Z':
+                break;
+            default:
+                return std::nullopt;
+            }
+        }
+        if (numOffset + 1 < nums.size() && nums.size() >= 4) {
+            ArrowheadGeomPoint lastL{nums[numOffset], nums[numOffset + 1]};
+            ArrowheadGeomPoint tip{nums[0], nums[1]};
+            if (pointEq(lastL, tip)) {
+                nums.resize(numOffset);
+                cmds.erase(cmds.end() - 2); // remove the redundant L before Z
+            }
+        }
+    }
+
+    ArrowheadPresetFilledShape out;
+    out.rawD = geom.rawD;
+    if (cmds == std::vector<char>{'M', 'L', 'L', 'Z'} && nums.size() == 6) {
+        out.kind = ArrowheadPresetFilledShape::Kind::Triangle;
+        out.tip = readPoint(0);
+        out.a = readPoint(2);
+        out.b = readPoint(4);
+        return out;
+    }
+    if (cmds == std::vector<char>{'M', 'L', 'C', 'Z'} && nums.size() == 10) {
+        out.kind = ArrowheadPresetFilledShape::Kind::CubicWedge;
+        out.tip = readPoint(0);
+        out.a = readPoint(2);
+        out.c1 = readPoint(4);
+        out.c2 = readPoint(6);
+        out.b = readPoint(8);
+        return out;
+    }
+    return std::nullopt;
+}
+
+bool arrowheadPresetFilledShapeNear(const ArrowheadPresetFilledShape& a,
+                                    const ArrowheadPresetFilledShape& b,
+                                    double tolerance)
+{
+    if (a.kind != b.kind) {
+        return false;
+    }
+    if (!arrowheadGeomPointNear(a.tip, b.tip, tolerance)) {
+        return false;
+    }
+    switch (a.kind) {
+    case ArrowheadPresetFilledShape::Kind::Triangle:
+        return (arrowheadGeomPointNear(a.a, b.a, tolerance)
+                && arrowheadGeomPointNear(a.b, b.b, tolerance))
+            || (arrowheadGeomPointNear(a.a, b.b, tolerance)
+                && arrowheadGeomPointNear(a.b, b.a, tolerance));
+    case ArrowheadPresetFilledShape::Kind::CubicWedge:
+        return (arrowheadGeomPointNear(a.a, b.a, tolerance)
+                && arrowheadGeomPointNear(a.c1, b.c1, tolerance)
+                && arrowheadGeomPointNear(a.c2, b.c2, tolerance)
+                && arrowheadGeomPointNear(a.b, b.b, tolerance))
+            || (arrowheadGeomPointNear(a.a, b.b, tolerance)
+                && arrowheadGeomPointNear(a.c1, b.c2, tolerance)
+                && arrowheadGeomPointNear(a.c2, b.c1, tolerance)
+                && arrowheadGeomPointNear(a.b, b.a, tolerance));
+    case ArrowheadPresetFilledShape::Kind::Unknown:
+        return false;
+    }
+    return false;
+}
+
+void expectArrowheadPathGeometrySetMatches(const std::vector<std::string>& generatedPaths,
+                                           const std::vector<std::string>& referencePaths,
+                                           double tolerance,
+                                           int shapeId)
+{
+    std::vector<ArrowheadPathGeometry> genGeoms;
+    for (const auto& d : generatedPaths) {
+        genGeoms.push_back(parseArrowheadPathGeometry(d));
+    }
+    std::vector<ArrowheadPathGeometry> refGeoms;
+    for (const auto& d : referencePaths) {
+        refGeoms.push_back(parseArrowheadPathGeometry(d));
+    }
+
+    std::vector<ArrowheadPresetFilledShape> genShapes;
+    for (const auto& geom : genGeoms) {
+        auto parsed = parseArrowheadPresetFilledShape(geom);
+        ASSERT_TRUE(parsed.has_value()) << "ShapeDef " << shapeId << " unparsed generated path: " << geom.rawD;
+        genShapes.push_back(*parsed);
+    }
+    std::vector<ArrowheadPresetFilledShape> refShapes;
+    for (const auto& geom : refGeoms) {
+        auto parsed = parseArrowheadPresetFilledShape(geom);
+        ASSERT_TRUE(parsed.has_value()) << "ShapeDef " << shapeId << " unparsed reference path: " << geom.rawD;
+        refShapes.push_back(*parsed);
+    }
+
+    ASSERT_EQ(genShapes.size(), refShapes.size()) << "ShapeDef " << shapeId;
+    std::vector<bool> used(genShapes.size(), false);
+    for (const auto& refShape : refShapes) {
+        bool matched = false;
+        for (size_t i = 0; i < genShapes.size(); ++i) {
+            if (used[i]) {
+                continue;
+            }
+            if (arrowheadPresetFilledShapeNear(genShapes[i], refShape, tolerance)) {
+                used[i] = true;
+                matched = true;
+                break;
+            }
+        }
+        EXPECT_TRUE(matched) << "ShapeDef " << shapeId << " unmatched path geometry: " << refShape.rawD;
+    }
 }
 
 bool keepArrowheadSvgOutput()
@@ -232,7 +568,7 @@ TEST(SvgArrowheadsStage0Test, CustomArrowheadShape12IsStandaloneArrowheadGeometr
 TEST(SvgArrowheadsStage0Test, FinaleReferenceSvgsUseExplicitPathsNotSvgMarkers)
 {
     const auto svgRoot = getInputPath() / "arrowheads";
-    for (int shapeId : {6, 7, 8, 9, 10, 11, 12, 13, 14}) {
+    for (int shapeId : {6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16}) {
         std::vector<char> bytes;
         const auto path = svgRoot / (std::to_string(shapeId) + ".svg");
         readFile(path, bytes);
@@ -246,6 +582,8 @@ TEST(SvgArrowheadsStage0Test, FinaleReferenceSvgsUseExplicitPathsNotSvgMarkers)
 
 TEST(SvgArrowheadsStage0Test, SvgConvertRendersArrowheadsAsExplicitPaths)
 {
+    constexpr double kViewBoxTolerance = 2.0;
+
     std::vector<char> enigmaXml;
     readFile(getInputPath() / "arrowheads.enigmaxml", enigmaXml);
 
@@ -258,7 +596,7 @@ TEST(SvgArrowheadsStage0Test, SvgConvertRendersArrowheadsAsExplicitPaths)
     std::filesystem::create_directories(outRoot, ec);
     ASSERT_FALSE(ec) << "Failed to create output directory: " << outRoot;
 
-    for (int shapeId : {6, 7, 8, 9, 10, 11, 12, 13, 14}) {
+    for (int shapeId : {6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16}) {
         const auto shape = requireShape(doc, shapeId);
         ASSERT_TRUE(shape);
 
@@ -281,15 +619,82 @@ TEST(SvgArrowheadsStage0Test, SvgConvertRendersArrowheadsAsExplicitPaths)
         const std::string reference(bytes.begin(), bytes.end());
         ASSERT_FALSE(reference.empty()) << refPath;
 
+        const auto refBox = parseArrowheadViewBox(reference);
+        const auto genBox = parseArrowheadViewBox(generated);
+        ASSERT_TRUE(refBox.valid) << "Missing viewBox in reference SVG for ShapeDef " << shapeId;
+        ASSERT_TRUE(genBox.valid) << "Missing viewBox in generated SVG for ShapeDef " << shapeId;
+
         EXPECT_EQ(countSvgTag(generated, "path"), countSvgTag(reference, "path")) << "ShapeDef " << shapeId;
         EXPECT_EQ(generated.find("<marker"), std::string::npos) << "ShapeDef " << shapeId;
         EXPECT_EQ(generated.find("marker-start="), std::string::npos) << "ShapeDef " << shapeId;
         EXPECT_EQ(generated.find("marker-end="), std::string::npos) << "ShapeDef " << shapeId;
+        EXPECT_NEAR(genBox.minX, refBox.minX, kViewBoxTolerance) << "ShapeDef " << shapeId;
+        EXPECT_NEAR(genBox.minY, refBox.minY, kViewBoxTolerance) << "ShapeDef " << shapeId;
+        EXPECT_NEAR(genBox.width, refBox.width, kViewBoxTolerance) << "ShapeDef " << shapeId;
+        EXPECT_NEAR(genBox.height, refBox.height, kViewBoxTolerance) << "ShapeDef " << shapeId;
     }
 
     if (!keepArrowheadSvgOutput()) {
         std::filesystem::remove_all(outRoot, ec);
         ASSERT_FALSE(ec) << "Failed to remove output directory: " << outRoot;
+    }
+}
+
+TEST(SvgArrowheadsStage0Test, PresetArrowheadGeometryMatchesReference)
+{
+    constexpr double kPathGeometryTolerance = 0.01;
+
+    std::vector<char> enigmaXml;
+    readFile(getInputPath() / "arrowheads.enigmaxml", enigmaXml);
+
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(enigmaXml);
+    ASSERT_TRUE(doc);
+
+    const auto svgRoot = getInputPath() / "arrowheads";
+    for (int shapeId : {6, 7, 8, 9, 10}) {
+        const auto shape = requireShape(doc, shapeId);
+        ASSERT_TRUE(shape);
+        const std::string generated = musx::util::SvgConvert::toSvg(*shape);
+        ASSERT_FALSE(generated.empty()) << "ShapeDef " << shapeId;
+
+        std::vector<char> bytes;
+        const auto refPath = svgRoot / (std::to_string(shapeId) + ".svg");
+        readFile(refPath, bytes);
+        const std::string reference(bytes.begin(), bytes.end());
+        ASSERT_FALSE(reference.empty()) << refPath;
+
+        expectArrowheadPathGeometrySetMatches(
+            extractArrowheadFilledPathDs(generated),
+            extractArrowheadFilledPathDs(reference),
+            kPathGeometryTolerance,
+            shapeId);
+    }
+}
+
+TEST(SvgArrowheadsStage0Test, SmallOutlineStrokePathRepeatsTipBeforeClose)
+{
+    constexpr double kTolerance = 0.01;
+
+    std::vector<char> enigmaXml;
+    readFile(getInputPath() / "arrowheads.enigmaxml", enigmaXml);
+
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(enigmaXml);
+    ASSERT_TRUE(doc);
+    const auto shape = requireShape(doc, 7);
+    ASSERT_TRUE(shape);
+
+    const std::string generated = musx::util::SvgConvert::toSvg(*shape);
+    ASSERT_FALSE(generated.empty());
+
+    const auto outlineDs = extractArrowheadOutlineStrokePathDs(generated);
+    ASSERT_EQ(outlineDs.size(), 2u);
+    for (const auto& d : outlineDs) {
+        const auto geom = parseArrowheadPathGeometry(d);
+        EXPECT_EQ(geom.commands, "MLLLLZ") << d;
+        ASSERT_GE(geom.numbers.size(), 10u) << d;
+        const ArrowheadGeomPoint tip{geom.numbers[0], geom.numbers[1]};
+        const ArrowheadGeomPoint penultimate{geom.numbers[8], geom.numbers[9]};
+        EXPECT_TRUE(arrowheadGeomPointNear(tip, penultimate, kTolerance)) << d;
     }
 }
 
