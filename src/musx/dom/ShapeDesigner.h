@@ -274,7 +274,7 @@ struct ShapeDefInstruction
         int packedKindCodes{};  ///< Raw word 0. Packs start/end kind codes (e.g. 0x00010001 preset/preset, 0x00020002 custom/custom).
         int startArrowId{};     ///< Raw word 1. Start arrowhead id (preset id or custom arrowhead ShapeDef cmper).
         int endArrowId{};       ///< Raw word 2. End arrowhead id (preset id or custom arrowhead ShapeDef cmper).
-        int extra{};            ///< Raw word 3. Undocumented (possibly backoff or reserved metadata).
+        int extra{};            ///< Raw word 3. Unknown (value persists when edited by plugin; no observed rendering effect in current examples).
 
         /// @brief Returns the start kind code from @ref packedKindCodes (low 16 bits).
         int startKindCode() const noexcept
