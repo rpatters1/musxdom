@@ -93,17 +93,17 @@ ShapeInstructionSummary summarizeShape(const others::ShapeDef& shape)
             return false;
         }
 
-        if (const auto* data = std::get_if<ShapeDefInstruction::SetArrowhead>(&inst.data)) {
-            summary.setArrowhead = *data;
+        if (const auto* setArrowheadInst = std::get_if<ShapeDefInstruction::SetArrowhead>(&inst.data)) {
+            summary.setArrowhead = *setArrowheadInst;
             ++summary.setArrowheadCount;
-        } else if (const auto* data = std::get_if<ShapeDefInstruction::RMoveTo>(&inst.data)) {
-            summary.move = *data;
-        } else if (const auto* data = std::get_if<ShapeDefInstruction::LineWidth>(&inst.data)) {
-            summary.lineWidth = *data;
-        } else if (const auto* data = std::get_if<ShapeDefInstruction::SetDash>(&inst.data)) {
-            summary.setDash = *data;
-        } else if (const auto* data = std::get_if<ShapeDefInstruction::RLineTo>(&inst.data)) {
-            summary.lineSegments.push_back(*data);
+        } else if (const auto* moveInst = std::get_if<ShapeDefInstruction::RMoveTo>(&inst.data)) {
+            summary.move = *moveInst;
+        } else if (const auto* lineWidthInst = std::get_if<ShapeDefInstruction::LineWidth>(&inst.data)) {
+            summary.lineWidth = *lineWidthInst;
+        } else if (const auto* setDashInst = std::get_if<ShapeDefInstruction::SetDash>(&inst.data)) {
+            summary.setDash = *setDashInst;
+        } else if (const auto* lineToInst = std::get_if<ShapeDefInstruction::RLineTo>(&inst.data)) {
+            summary.lineSegments.push_back(*lineToInst);
         }
         return true;
     });
@@ -552,7 +552,7 @@ TEST(SvgArrowheadsStage0Test, SvgConvertRendersArrowheadsAsExplicitPaths)
     ASSERT_FALSE(ec) << "Failed to create output directory: " << outRoot;
 
     for (int shapeId : {6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16}) {
-        const auto shape = requireShape(doc, shapeId);
+        const auto shape = requireShape(doc, static_cast<Cmper>(shapeId));
         ASSERT_TRUE(shape);
 
         const std::string generated = musx::util::SvgConvert::toSvg(*shape);
