@@ -118,6 +118,13 @@ public:
                              SvgUnit unit,
                              GlyphMetricsFn glyphMetrics);
 
+    /// @brief Convert a Finale preset arrowhead into a standalone SVG string buffer.
+    /// @param preset The Finale preset arrowhead type.
+    /// @return An SVG buffer encoded as a string.
+    /// @details The returned SVG is unitless EVPU geometry with the arrow tip anchored at (0,0)
+    ///          and pointing to the right (positive X axis).
+    static std::string presetArrowheadAsSvg(dom::ArrowheadPreset preset);
+
     /// @brief Convert a ShapeDef into an SVG string buffer using the document's page format scaling.
     /// @param shape The shape definition to convert.
     /// @param unit Unit suffix for width/height (e.g., @ref SvgUnit::Millimeters).

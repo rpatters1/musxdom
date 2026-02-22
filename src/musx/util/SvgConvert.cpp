@@ -1010,6 +1010,71 @@ Bounds transformBoundsRect(const Bounds& source, const Transform& transform)
     return result;
 }
 
+std::optional<SvgFragment> makePresetArrowheadSvgFragment(dom::ArrowheadPreset preset, std::string_view primaryColor)
+{
+    const bool curved = preset == dom::ArrowheadPreset::SmallCurved
+        || preset == dom::ArrowheadPreset::MediumCurved
+        || preset == dom::ArrowheadPreset::LargeCurved;
+    const double size = arrowheadSizeForPreset(preset);
+    const Point tip{0.0, 0.0};
+    const Point direction{1.0, 0.0};
+    const ArrowheadGeometry geometry = curved
+        ? makeCubicCurvedArrowheadPath(tip, direction, size)
+        : makeArrowheadPath(tip, direction, size, false);
+    if (geometry.path.empty() || !geometry.bounds.hasValue) {
+        return std::nullopt;
+    }
+
+    SvgFragment fragment;
+    std::ostringstream content;
+    if (preset == dom::ArrowheadPreset::SmallOutline) {
+        content << "<path d=\"" << geometry.path
+                << "\" stroke=\"none\" fill=\"" << grayToRgb(100) << "\"/>";
+
+        const std::string outlinePath = makeTriangleOutlineStrokePathWithTipRepeat(tip, direction, size);
+        content << "<path d=\"" << (outlinePath.empty() ? geometry.path : outlinePath)
+                << "\" stroke=\"" << primaryColor
+                << "\" fill=\"none\" stroke-width=\"1.8\"/>";
+    } else {
+        content << "<path d=\"" << geometry.path
+                << "\" stroke=\"none\" fill=\"" << primaryColor << "\"/>";
+    }
+    fragment.content = content.str();
+
+    if (const auto exactBounds = computeTransformedBoundsFromSvgContent(fragment.content, Transform{});
+        exactBounds && exactBounds->hasValue) {
+        fragment.bounds = *exactBounds;
+        fragment.hasBounds = true;
+    } else {
+        fragment.bounds = geometry.bounds;
+        fragment.hasBounds = geometry.bounds.hasValue;
+    }
+    return fragment;
+}
+
+std::string makeStandaloneSvgFromFragment(const SvgFragment& fragment)
+{
+    if (!fragment.hasBounds || !fragment.bounds.hasValue || fragment.content.empty()) {
+        return {};
+    }
+    const double width = fragment.bounds.maxX - fragment.bounds.minX;
+    const double height = fragment.bounds.maxY - fragment.bounds.minY;
+
+    std::ostringstream svg;
+    svg << "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n";
+    svg << "<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" "
+           "\"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">\n";
+    svg << "<!-- Generator: MusxDom -->\n";
+    svg << "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" "
+           "xmlns:xlink=\"http://www.w3.org/1999/xlink\" "
+        << "viewBox=\"" << fragment.bounds.minX << ' ' << fragment.bounds.minY << ' '
+        << width << ' ' << height << "\" "
+        << "width=\"" << width << "\" height=\"" << height << "\" xml:space=\"preserve\">\n";
+    svg << "    <g id=\"MusxDom\">" << fragment.content << "</g>\n";
+    svg << "</svg>\n";
+    return svg.str();
+}
+
 } // namespace
 
 std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape)
@@ -1197,41 +1262,36 @@ std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape,
         auto appendPresetArrowhead = [&](const Point& tip,
                                          const Point& direction,
                                          dom::ArrowheadPreset preset) -> bool {
-            const bool curved = preset == dom::ArrowheadPreset::SmallCurved
-                || preset == dom::ArrowheadPreset::MediumCurved
-                || preset == dom::ArrowheadPreset::LargeCurved;
-            const double scaledSize = scaleValue(arrowheadSizeForPreset(preset));
-            const ArrowheadGeometry geometry = curved
-                ? makeCubicCurvedArrowheadPath(tip, direction, scaledSize)
-                : makeArrowheadPath(tip, direction, scaledSize, false);
-            if (geometry.path.empty() || !geometry.bounds.hasValue) {
+            const auto fragment = makePresetArrowheadSvgFragment(preset, grayToRgb(paint.gray));
+            if (!fragment || fragment->content.empty() || !fragment->hasBounds || !fragment->bounds.hasValue) {
                 return false;
             }
-
-            const std::string strokeColor = grayToRgb(paint.gray);
-            if (preset == dom::ArrowheadPreset::SmallOutline) {
-                std::ostringstream fillElement;
-                fillElement << "<path d=\"" << geometry.path
-                            << "\" stroke=\"none\" fill=\"" << grayToRgb(100) << "\"/>";
-                arrowElements.push_back(fillElement.str());
-
-                const std::string outlinePath = makeTriangleOutlineStrokePathWithTipRepeat(
-                    tip, direction, scaledSize);
-                std::ostringstream outlineElement;
-                outlineElement << "<path d=\"" << (outlinePath.empty() ? geometry.path : outlinePath)
-                               << "\" stroke=\"" << strokeColor
-                               << "\" fill=\"none\" stroke-width=\"" << scaleValue(1.8) << "\"/>";
-                arrowElements.push_back(outlineElement.str());
-            } else {
-                std::ostringstream element;
-                element << "<path d=\"" << geometry.path
-                        << "\" stroke=\"none\" fill=\"" << strokeColor << "\"/>";
-                arrowElements.push_back(element.str());
+            Point dir = normalize(direction);
+            if (dir.x == 0.0 && dir.y == 0.0) {
+                return false;
             }
+            const double angle = std::atan2(dir.y, dir.x);
+            const double presetScale = scaleValue(1.0);
+            const Transform xf = makeTranslateRotateScale(tip, presetScale, presetScale, angle);
 
-            arrowBounds.include({geometry.bounds.minX, geometry.bounds.minY});
-            arrowBounds.include({geometry.bounds.maxX, geometry.bounds.maxY});
-            hasArrowBounds = true;
+            std::ostringstream group;
+            group << "<g transform=\"matrix(" << xf.a << ' ' << xf.b << ' ' << xf.c << ' ' << xf.d << ' '
+                  << xf.tx << ' ' << xf.ty << ")\">" << fragment->content << "</g>";
+            arrowElements.push_back(group.str());
+
+            if (const auto contentBounds = computeTransformedBoundsFromSvgContent(fragment->content, xf);
+                contentBounds && contentBounds->hasValue) {
+                arrowBounds.include({contentBounds->minX, contentBounds->minY});
+                arrowBounds.include({contentBounds->maxX, contentBounds->maxY});
+                hasArrowBounds = true;
+            } else {
+                const Bounds transformed = transformBoundsRect(fragment->bounds, xf);
+                if (transformed.hasValue) {
+                    arrowBounds.include({transformed.minX, transformed.minY});
+                    arrowBounds.include({transformed.maxX, transformed.maxY});
+                    hasArrowBounds = true;
+                }
+            }
             return true;
         };
 
@@ -2650,6 +2710,15 @@ std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape,
     svg << "    </g>\n";
     svg << "</svg>\n";
     return svg.str();
+}
+
+std::string SvgConvert::presetArrowheadAsSvg(dom::ArrowheadPreset preset)
+{
+    const auto fragment = makePresetArrowheadSvgFragment(preset, grayToRgb(0));
+    if (!fragment) {
+        return {};
+    }
+    return makeStandaloneSvgFromFragment(*fragment);
 }
 
 std::string SvgConvert::toSvgWithPageFormatScaling(const dom::others::ShapeDef& shape,

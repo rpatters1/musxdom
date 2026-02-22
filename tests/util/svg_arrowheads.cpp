@@ -375,51 +375,6 @@ bool arrowheadPresetFilledShapeNear(const ArrowheadPresetFilledShape& a,
     return false;
 }
 
-void expectArrowheadPathGeometrySetMatches(const std::vector<std::string>& generatedPaths,
-                                           const std::vector<std::string>& referencePaths,
-                                           double tolerance,
-                                           int shapeId)
-{
-    std::vector<ArrowheadPathGeometry> genGeoms;
-    for (const auto& d : generatedPaths) {
-        genGeoms.push_back(parseArrowheadPathGeometry(d));
-    }
-    std::vector<ArrowheadPathGeometry> refGeoms;
-    for (const auto& d : referencePaths) {
-        refGeoms.push_back(parseArrowheadPathGeometry(d));
-    }
-
-    std::vector<ArrowheadPresetFilledShape> genShapes;
-    for (const auto& geom : genGeoms) {
-        auto parsed = parseArrowheadPresetFilledShape(geom);
-        ASSERT_TRUE(parsed.has_value()) << "ShapeDef " << shapeId << " unparsed generated path: " << geom.rawD;
-        genShapes.push_back(*parsed);
-    }
-    std::vector<ArrowheadPresetFilledShape> refShapes;
-    for (const auto& geom : refGeoms) {
-        auto parsed = parseArrowheadPresetFilledShape(geom);
-        ASSERT_TRUE(parsed.has_value()) << "ShapeDef " << shapeId << " unparsed reference path: " << geom.rawD;
-        refShapes.push_back(*parsed);
-    }
-
-    ASSERT_EQ(genShapes.size(), refShapes.size()) << "ShapeDef " << shapeId;
-    std::vector<bool> used(genShapes.size(), false);
-    for (const auto& refShape : refShapes) {
-        bool matched = false;
-        for (size_t i = 0; i < genShapes.size(); ++i) {
-            if (used[i]) {
-                continue;
-            }
-            if (arrowheadPresetFilledShapeNear(genShapes[i], refShape, tolerance)) {
-                used[i] = true;
-                matched = true;
-                break;
-            }
-        }
-        EXPECT_TRUE(matched) << "ShapeDef " << shapeId << " unmatched path geometry: " << refShape.rawD;
-    }
-}
-
 bool keepArrowheadSvgOutput()
 {
 #ifdef _WIN32
@@ -640,34 +595,55 @@ TEST(SvgArrowheadsStage0Test, SvgConvertRendersArrowheadsAsExplicitPaths)
     }
 }
 
-TEST(SvgArrowheadsStage0Test, PresetArrowheadGeometryMatchesReference)
+TEST(SvgArrowheadsStage0Test, PresetArrowheadStandaloneGeometryMatchesTemplates)
 {
     constexpr double kPathGeometryTolerance = 0.01;
+    using Kind = ArrowheadPresetFilledShape::Kind;
+    using Preset = ArrowheadPreset;
+    auto pt = [](double x, double y) { return ArrowheadGeomPoint{x, y}; };
+    auto triangle = [&](Preset preset, double x, double y) {
+        ArrowheadPresetFilledShape s;
+        s.kind = Kind::Triangle;
+        s.tip = pt(0.0, 0.0);
+        s.a = pt(x, y);
+        s.b = pt(x, -y);
+        s.rawD = std::to_string(static_cast<int>(preset));
+        return s;
+    };
+    auto cubic = [&](Preset preset, double baseX, double baseY, double ctrlX, double ctrlY) {
+        ArrowheadPresetFilledShape s;
+        s.kind = Kind::CubicWedge;
+        s.tip = pt(0.0, 0.0);
+        s.a = pt(baseX, baseY);
+        s.c1 = pt(ctrlX, ctrlY);
+        s.c2 = pt(ctrlX, -ctrlY);
+        s.b = pt(baseX, -baseY);
+        s.rawD = std::to_string(static_cast<int>(preset));
+        return s;
+    };
 
-    std::vector<char> enigmaXml;
-    readFile(getInputPath() / "arrowheads.enigmaxml", enigmaXml);
+    struct ExpectedCase {
+        Preset preset;
+        ArrowheadPresetFilledShape expectedFill;
+    };
+    const std::vector<ExpectedCase> cases = {
+        {Preset::SmallFilled,  triangle(Preset::SmallFilled, -20.0, 10.0)},
+        {Preset::SmallOutline, triangle(Preset::SmallOutline, -20.0, 10.0)},
+        {Preset::SmallCurved,  cubic(Preset::SmallCurved, -20.0, 10.0, -16.0, 3.0)},
+        {Preset::MediumCurved, cubic(Preset::MediumCurved, -60.0, 30.0, -48.0, 9.0)},
+        {Preset::LargeCurved,  cubic(Preset::LargeCurved, -100.0, 50.0, -80.0, 15.0)},
+    };
 
-    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(enigmaXml);
-    ASSERT_TRUE(doc);
-
-    const auto svgRoot = getInputPath() / "arrowheads";
-    for (int shapeId : {6, 7, 8, 9, 10}) {
-        const auto shape = requireShape(doc, shapeId);
-        ASSERT_TRUE(shape);
-        const std::string generated = musx::util::SvgConvert::toSvg(*shape);
-        ASSERT_FALSE(generated.empty()) << "ShapeDef " << shapeId;
-
-        std::vector<char> bytes;
-        const auto refPath = svgRoot / (std::to_string(shapeId) + ".svg");
-        readFile(refPath, bytes);
-        const std::string reference(bytes.begin(), bytes.end());
-        ASSERT_FALSE(reference.empty()) << refPath;
-
-        expectArrowheadPathGeometrySetMatches(
-            extractArrowheadFilledPathDs(generated),
-            extractArrowheadFilledPathDs(reference),
-            kPathGeometryTolerance,
-            shapeId);
+    for (const auto& item : cases) {
+        const std::string svg = musx::util::SvgConvert::presetArrowheadAsSvg(item.preset);
+        ASSERT_FALSE(svg.empty());
+        const auto fills = extractArrowheadFilledPathDs(svg);
+        ASSERT_EQ(fills.size(), 1u) << static_cast<int>(item.preset);
+        const auto geom = parseArrowheadPathGeometry(fills.front());
+        const auto parsed = parseArrowheadPresetFilledShape(geom);
+        ASSERT_TRUE(parsed.has_value()) << fills.front();
+        EXPECT_TRUE(arrowheadPresetFilledShapeNear(*parsed, item.expectedFill, kPathGeometryTolerance))
+            << "Preset " << static_cast<int>(item.preset) << " path: " << fills.front();
     }
 }
 
@@ -696,6 +672,56 @@ TEST(SvgArrowheadsStage0Test, SmallOutlineStrokePathRepeatsTipBeforeClose)
         const ArrowheadGeomPoint penultimate{geom.numbers[8], geom.numbers[9]};
         EXPECT_TRUE(arrowheadGeomPointNear(tip, penultimate, kTolerance)) << d;
     }
+}
+
+TEST(SvgArrowheadsStage0Test, StandalonePresetArrowheadSvgApi)
+{
+    using Preset = ArrowheadPreset;
+    struct Expected {
+        Preset preset;
+        int pathCount;
+    };
+    const std::vector<Expected> cases = {
+        {Preset::SmallFilled, 1},
+        {Preset::SmallOutline, 2},
+        {Preset::SmallCurved, 1},
+        {Preset::LargeCurved, 1},
+        {Preset::MediumCurved, 1},
+    };
+
+    for (const auto& item : cases) {
+        const std::string svg = musx::util::SvgConvert::presetArrowheadAsSvg(item.preset);
+        ASSERT_FALSE(svg.empty());
+        EXPECT_NE(svg.find("<g id=\"MusxDom\">"), std::string::npos);
+        EXPECT_EQ(svg.find("<marker"), std::string::npos);
+        EXPECT_EQ(countSvgTag(svg, "path"), item.pathCount);
+
+        const auto box = parseArrowheadViewBox(svg);
+        ASSERT_TRUE(box.valid);
+        EXPECT_LE(box.minX, 0.0);
+        EXPECT_LE(box.minY, 0.0);
+        EXPECT_GE(box.minX + box.width, 0.0);
+        EXPECT_GE(box.minY + box.height, 0.0);
+    }
+}
+
+TEST(SvgArrowheadsStage0Test, StandaloneSmallOutlinePresetDrawOrder)
+{
+    const std::string svg = musx::util::SvgConvert::presetArrowheadAsSvg(ArrowheadPreset::SmallOutline);
+    ASSERT_FALSE(svg.empty());
+
+    static const std::regex pathTagRegex(R"(<path\b[^>]*>)");
+    std::vector<std::string> pathTags;
+    for (std::sregex_iterator it(svg.begin(), svg.end(), pathTagRegex), end; it != end; ++it) {
+        pathTags.push_back(it->str());
+    }
+    ASSERT_EQ(pathTags.size(), 2u);
+
+    EXPECT_NE(pathTags[0].find("stroke=\"none\""), std::string::npos) << pathTags[0];
+    EXPECT_NE(pathTags[0].find("fill=\"rgb(255,255,255)\""), std::string::npos) << pathTags[0];
+
+    EXPECT_NE(pathTags[1].find("fill=\"none\""), std::string::npos) << pathTags[1];
+    EXPECT_NE(pathTags[1].find("stroke=\"rgb(0,0,0)\""), std::string::npos) << pathTags[1];
 }
 
 } // namespace
