@@ -68,6 +68,7 @@
 #include "music_theory/music_theory.hpp"
 
 #include "util/Fraction.h"
+#include "util/ArrowheadPresets.h"
 #include "util/DateTimeFormat.h"
 #include "util/EnigmaString.h"
 #include "util/PseudoTieUtils.h"

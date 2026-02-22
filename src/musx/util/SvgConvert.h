@@ -120,10 +120,15 @@ public:
 
     /// @brief Convert a Finale preset arrowhead into a standalone SVG string buffer.
     /// @param preset The Finale preset arrowhead type.
+    /// @param scaling Scale factor applied to EVPU-based coordinates before unit conversion.
+    ///        When @p unit is SvgUnit::None, the output coordinates are EVPU * scaling.
+    /// @param unit Unit suffix for width/height (e.g., @ref SvgUnit::Millimeters).
     /// @return An SVG buffer encoded as a string.
-    /// @details The returned SVG is unitless EVPU geometry with the arrow tip anchored at (0,0)
-    ///          and pointing to the right (positive X axis).
-    static std::string presetArrowheadAsSvg(dom::ArrowheadPreset preset);
+    /// @details The returned SVG has the arrow tip anchored at (0,0) and points to the right
+    ///          (positive X axis) at zero rotation.
+    static std::string presetArrowheadAsSvg(dom::ArrowheadPreset preset,
+                                            double scaling = 1.0,
+                                            SvgUnit unit = SvgUnit::None);
 
     /// @brief Convert a ShapeDef into an SVG string buffer using the document's page format scaling.
     /// @param shape The shape definition to convert.

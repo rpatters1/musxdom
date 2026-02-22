@@ -703,6 +703,57 @@ TEST(SvgArrowheadsStage0Test, StandalonePresetArrowheadSvgApi)
         EXPECT_GE(box.minX + box.width, 0.0);
         EXPECT_GE(box.minY + box.height, 0.0);
     }
+
+    const std::string baseSvg = musx::util::SvgConvert::presetArrowheadAsSvg(Preset::SmallFilled);
+    const std::string scaledMmSvg = musx::util::SvgConvert::presetArrowheadAsSvg(
+        Preset::SmallFilled, 2.0, musx::util::SvgConvert::SvgUnit::Millimeters);
+    ASSERT_FALSE(baseSvg.empty());
+    ASSERT_FALSE(scaledMmSvg.empty());
+    EXPECT_NE(scaledMmSvg.find("mm\""), std::string::npos);
+
+    const auto baseBox = parseArrowheadViewBox(baseSvg);
+    const auto scaledBox = parseArrowheadViewBox(scaledMmSvg);
+    ASSERT_TRUE(baseBox.valid);
+    ASSERT_TRUE(scaledBox.valid);
+    const double expectedScale = 2.0 / EVPU_PER_MM;
+    EXPECT_NEAR(scaledBox.width, baseBox.width * expectedScale, 0.01);
+    EXPECT_NEAR(scaledBox.height, baseBox.height * expectedScale, 0.01);
+}
+
+TEST(SvgArrowheadsStage0Test, PresetArrowheadSpecApi)
+{
+    using Preset = musx::dom::ArrowheadPreset;
+    using Fill = musx::util::ArrowheadPresetFillStyle;
+
+    const auto smallFilled = musx::util::getArrowheadPresetSpec(Preset::SmallFilled);
+    EXPECT_DOUBLE_EQ(smallFilled.length, 20.0);
+    EXPECT_DOUBLE_EQ(smallFilled.baseWidth, 20.0);
+    EXPECT_FALSE(smallFilled.curvedBack);
+    EXPECT_EQ(smallFilled.fillStyle, Fill::SolidFill);
+
+    const auto smallOutline = musx::util::getArrowheadPresetSpec(Preset::SmallOutline);
+    EXPECT_DOUBLE_EQ(smallOutline.length, 20.0);
+    EXPECT_DOUBLE_EQ(smallOutline.baseWidth, 20.0);
+    EXPECT_FALSE(smallOutline.curvedBack);
+    EXPECT_EQ(smallOutline.fillStyle, Fill::WhiteFillWithOutline);
+
+    const auto smallCurved = musx::util::getArrowheadPresetSpec(Preset::SmallCurved);
+    EXPECT_DOUBLE_EQ(smallCurved.length, 20.0);
+    EXPECT_DOUBLE_EQ(smallCurved.baseWidth, 20.0);
+    EXPECT_TRUE(smallCurved.curvedBack);
+    EXPECT_EQ(smallCurved.fillStyle, Fill::SolidFill);
+
+    const auto mediumCurved = musx::util::getArrowheadPresetSpec(Preset::MediumCurved);
+    EXPECT_DOUBLE_EQ(mediumCurved.length, 60.0);
+    EXPECT_DOUBLE_EQ(mediumCurved.baseWidth, 60.0);
+    EXPECT_TRUE(mediumCurved.curvedBack);
+    EXPECT_EQ(mediumCurved.fillStyle, Fill::SolidFill);
+
+    const auto largeCurved = musx::util::getArrowheadPresetSpec(Preset::LargeCurved);
+    EXPECT_DOUBLE_EQ(largeCurved.length, 100.0);
+    EXPECT_DOUBLE_EQ(largeCurved.baseWidth, 100.0);
+    EXPECT_TRUE(largeCurved.curvedBack);
+    EXPECT_EQ(largeCurved.fillStyle, Fill::SolidFill);
 }
 
 TEST(SvgArrowheadsStage0Test, StandaloneSmallOutlinePresetDrawOrder)

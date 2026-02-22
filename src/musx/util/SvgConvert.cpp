@@ -571,17 +571,8 @@ Point normalize(const Point& vector)
 
 [[maybe_unused]] double arrowheadSizeForPreset(dom::ArrowheadPreset preset)
 {
-    switch (preset) {
-    case dom::ArrowheadPreset::SmallFilled:
-    case dom::ArrowheadPreset::SmallOutline:
-    case dom::ArrowheadPreset::SmallCurved:
-        return 20.0;
-    case dom::ArrowheadPreset::MediumCurved:
-        return 60.0;
-    case dom::ArrowheadPreset::LargeCurved:
-        return 100.0; // Finale export matches a 100 EVPU curved-arrow length.
-    }
-    return dom::EVPU_PER_SPACE;
+    const ArrowheadPresetSpec spec = getArrowheadPresetSpec(preset);
+    return spec.length > 0.0 ? spec.length : dom::EVPU_PER_SPACE;
 }
 
 struct [[maybe_unused]] ArrowheadGeometry
@@ -1012,10 +1003,9 @@ Bounds transformBoundsRect(const Bounds& source, const Transform& transform)
 
 std::optional<SvgFragment> makePresetArrowheadSvgFragment(dom::ArrowheadPreset preset, std::string_view primaryColor)
 {
-    const bool curved = preset == dom::ArrowheadPreset::SmallCurved
-        || preset == dom::ArrowheadPreset::MediumCurved
-        || preset == dom::ArrowheadPreset::LargeCurved;
-    const double size = arrowheadSizeForPreset(preset);
+    const ArrowheadPresetSpec spec = getArrowheadPresetSpec(preset);
+    const bool curved = spec.curvedBack;
+    const double size = spec.length > 0.0 ? spec.length : arrowheadSizeForPreset(preset);
     const Point tip{0.0, 0.0};
     const Point direction{1.0, 0.0};
     const ArrowheadGeometry geometry = curved
@@ -1027,7 +1017,7 @@ std::optional<SvgFragment> makePresetArrowheadSvgFragment(dom::ArrowheadPreset p
 
     SvgFragment fragment;
     std::ostringstream content;
-    if (preset == dom::ArrowheadPreset::SmallOutline) {
+    if (spec.fillStyle == ArrowheadPresetFillStyle::WhiteFillWithOutline) {
         content << "<path d=\"" << geometry.path
                 << "\" stroke=\"none\" fill=\"" << grayToRgb(100) << "\"/>";
 
@@ -1050,29 +1040,6 @@ std::optional<SvgFragment> makePresetArrowheadSvgFragment(dom::ArrowheadPreset p
         fragment.hasBounds = geometry.bounds.hasValue;
     }
     return fragment;
-}
-
-std::string makeStandaloneSvgFromFragment(const SvgFragment& fragment)
-{
-    if (!fragment.hasBounds || !fragment.bounds.hasValue || fragment.content.empty()) {
-        return {};
-    }
-    const double width = fragment.bounds.maxX - fragment.bounds.minX;
-    const double height = fragment.bounds.maxY - fragment.bounds.minY;
-
-    std::ostringstream svg;
-    svg << "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n";
-    svg << "<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" "
-           "\"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">\n";
-    svg << "<!-- Generator: MusxDom -->\n";
-    svg << "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" "
-           "xmlns:xlink=\"http://www.w3.org/1999/xlink\" "
-        << "viewBox=\"" << fragment.bounds.minX << ' ' << fragment.bounds.minY << ' '
-        << width << ' ' << height << "\" "
-        << "width=\"" << width << "\" height=\"" << height << "\" xml:space=\"preserve\">\n";
-    svg << "    <g id=\"MusxDom\">" << fragment.content << "</g>\n";
-    svg << "</svg>\n";
-    return svg.str();
 }
 
 } // namespace
@@ -2712,13 +2679,65 @@ std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape,
     return svg.str();
 }
 
-std::string SvgConvert::presetArrowheadAsSvg(dom::ArrowheadPreset preset)
+std::string SvgConvert::presetArrowheadAsSvg(dom::ArrowheadPreset preset,
+                                             double scaling,
+                                             SvgUnit unit)
 {
     const auto fragment = makePresetArrowheadSvgFragment(preset, grayToRgb(0));
     if (!fragment) {
         return {};
     }
-    return makeStandaloneSvgFromFragment(*fragment);
+    if (!fragment->hasBounds || !fragment->bounds.hasValue || fragment->content.empty()) {
+        return {};
+    }
+
+    const double unitScale = evpuPerUnit(unit);
+    const double outputScale = (unitScale != 0.0) ? (scaling / unitScale) : scaling;
+    const Transform scaleTransform = makeScale(outputScale, outputScale);
+    const Bounds scaledBounds = transformBoundsRect(fragment->bounds, scaleTransform);
+    if (!scaledBounds.hasValue) {
+        return {};
+    }
+
+    const std::string_view unitSuffix = unitSuffixFor(unit);
+    const double width = scaledBounds.maxX - scaledBounds.minX;
+    const double height = scaledBounds.maxY - scaledBounds.minY;
+
+    std::string wrappedContent;
+    if (outputScale == 1.0) {
+        wrappedContent = fragment->content;
+    } else {
+        std::ostringstream group;
+        group << "<g transform=\"matrix(" << scaleTransform.a << ' ' << scaleTransform.b << ' '
+              << scaleTransform.c << ' ' << scaleTransform.d << ' '
+              << scaleTransform.tx << ' ' << scaleTransform.ty << ")\">"
+              << fragment->content << "</g>";
+        wrappedContent = group.str();
+    }
+
+    std::ostringstream svg;
+    svg << "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n";
+    svg << "<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" "
+           "\"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">\n";
+    svg << "<!-- Generator: MusxDom -->\n";
+    svg << "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" "
+           "xmlns:xlink=\"http://www.w3.org/1999/xlink\" viewBox=\""
+        << scaledBounds.minX << ' ' << scaledBounds.minY << ' ' << width << ' ' << height << "\"";
+    if (width > 0.0 && height > 0.0) {
+        svg << " width=\"" << width;
+        if (!unitSuffix.empty()) {
+            svg << unitSuffix;
+        }
+        svg << "\" height=\"" << height;
+        if (!unitSuffix.empty()) {
+            svg << unitSuffix;
+        }
+        svg << "\"";
+    }
+    svg << " xml:space=\"preserve\">\n";
+    svg << "    <g id=\"MusxDom\">" << wrappedContent << "</g>\n";
+    svg << "</svg>\n";
+    return svg.str();
 }
 
 std::string SvgConvert::toSvgWithPageFormatScaling(const dom::others::ShapeDef& shape,
