@@ -185,10 +185,10 @@ ShapeDefInstruction::parseSetArrowhead(const std::vector<int>& data)
 {
     if (data.size() >= 4) {
         return SetArrowhead{
-            data[0], // startArrowId
-            data[1], // endArrowId
-            data[2], // startFlags
-            data[3]  // endFlags
+            data[0], // packedKindCodes
+            data[1], // startArrowId (observed in current fixtures)
+            data[2], // endArrowId (observed in current fixtures)
+            data[3]  // extra (undocumented)
         };
     }
     return std::nullopt;

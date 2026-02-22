@@ -130,9 +130,12 @@ enum class ShapeDefInstructionType
     RMoveTo,
 
     /// set arrowhead
-    /// data items: (4) startArrowID, endArrowID, startFlags, endFlags
-    /// The meaning of the flags is currently untested, but they are likely used to specify
-    /// either a built-in #ArrowheadPreset or custom arrowhead (which is also a @ref others::ShapeDef).
+    /// data items: (4) raw words.
+    /// word 0 packs the start/end kind codes (preset/custom) into one 32-bit value
+    /// (start in low 16 bits, end in high 16 bits).
+    /// words 1 and 2 are the start/end arrowhead ids.
+    /// word 3 is undocumented.
+    /// and the fourth word remains undocumented.
     SetArrowhead,
 
     /// set black: equivalent to `SetGray(0)`
@@ -268,10 +271,18 @@ struct ShapeDefInstruction
 
     /// @brief Holds the parsed data for a SetArrowhead instruction.
     struct SetArrowhead {
-        int startArrowId{}; ///< Identifier of the start arrowhead.
-        int endArrowId{};   ///< Identifier of the end arrowhead.
-        int startFlags{};   ///< Flags for the start arrowhead (built-in vs custom, etc.).
-        int endFlags{};     ///< Flags for the end arrowhead (built-in vs custom, etc.).
+        int packedKindCodes{};  ///< Raw word 0. Packs start/end kind codes (e.g. 0x00010001 preset/preset, 0x00020002 custom/custom).
+        int startArrowId{};     ///< Raw word 1. Start arrowhead id (preset id or custom arrowhead ShapeDef cmper).
+        int endArrowId{};       ///< Raw word 2. End arrowhead id (preset id or custom arrowhead ShapeDef cmper).
+        int extra{};            ///< Raw word 3. Unknown (value persists when edited by plugin; no observed rendering effect in current examples).
+
+        /// @brief Returns the start kind code from @ref packedKindCodes (low 16 bits).
+        int startKindCode() const noexcept
+        { return static_cast<int>(static_cast<unsigned int>(packedKindCodes) & 0xFFFFu); }
+
+        /// @brief Returns the end kind code from @ref packedKindCodes (high 16 bits).
+        int endKindCode() const noexcept
+        { return static_cast<int>((static_cast<unsigned int>(packedKindCodes) >> 16) & 0xFFFFu); }
     };
 
     /// @brief Holds the parsed data for a SetDash instruction.

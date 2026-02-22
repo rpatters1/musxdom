@@ -129,6 +129,7 @@ add_executable(musxdomtests
     music_theory/transpose.cpp
     # util
     util/fraction.cpp
+    util/svg_arrowheads.cpp
     util/svg_convert.cpp
     util/svg_ext_graphics.cpp
 )
