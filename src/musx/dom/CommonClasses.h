@@ -433,13 +433,13 @@ public:
     }
 
     MeasCmper startMeasureId{};         ///< Starting measure in the range.
-    util::Fraction startPosition{};     ///< Starting EDU (Elapsed Durational Unit) in the range.
+    util::Fraction startPosition{};     ///< Starting position (where 1/4 is a quarter note value) in the range.
     MeasCmper endMeasureId{};           ///< Ending measure in the range.
-    util::Fraction endPosition{};       ///< Ending EDU (Elapsed Durational Unit) in the range.
+    util::Fraction endPosition{};       ///< Ending position (where 1/4 is a quarter note value) in the range.
 
     /// @brief Returns true of the given metric location is contained in this MusicRange instance.
     /// @param measId The measure ID to search for.
-    /// @param eduPosition The Edu position within the measure to search for.
+    /// @param eduPosition The fractional position within the measure to search for.
     bool contains(MeasCmper measId, util::Fraction eduPosition) const
     {
         return (startMeasureId < measId || (startMeasureId == measId && startPosition <= eduPosition)) &&

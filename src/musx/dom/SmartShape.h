@@ -412,7 +412,7 @@ public:
     bool calcIsDashed() const;
 
     /// @brief Returns true if this slur is being used as a pseudo tie for the specified mode.
-    /// It is used by #NoteInfoPtr::calcHasPseudoLvTie, which imposes additional rules and checks.
+    /// It is used by #NoteInfoPtr::calcPseudoTieInfoInternal, which imposes additional rules and checks.
     /// @param mode The pseudo tie mode to evaluate.
     /// @param forStartEntry The entry to check.
     bool calcIsPseudoTie(utils::PseudoTieMode mode, const EntryInfoPtr& forStartEntry) const;
