@@ -72,13 +72,13 @@ namespace details {
 // ******************************
 
 bool details::ArticulationAssign::calcPlacementAbove(const MusxInstance<others::ArticulationDef>& definition,
-    const EntryInfoPtr& forStartEntry) const
+    const EntryInfoPtr& entryInfo) const
 {
     if (overridePlacement) {
         return aboveEntry;
     }
 
-    const bool stemUp = forStartEntry.calcUpStem();
+    const bool stemUp = entryInfo.calcUpStem();
     if (!definition->autoVert) {
         return vertOffset >= 0;
     }
@@ -92,7 +92,7 @@ bool details::ArticulationAssign::calcPlacementAbove(const MusxInstance<others::
     case AD::AutoVerticalMode::StemSide:
         return stemUp;
     case AD::AutoVerticalMode::AlwaysNoteheadSide:
-        switch (forStartEntry.calcStemDirectionForced()) {
+        switch (entryInfo.calcStemDirectionForced()) {
         case StemDirection::AlwaysUp:
         case StemDirection::AlwaysDown:
             return stemUp;
@@ -106,24 +106,48 @@ bool details::ArticulationAssign::calcPlacementAbove(const MusxInstance<others::
     }
 }
 
-std::optional<details::ArticulationAssign::PseudoTieShapeContext>
-details::ArticulationAssign::calcPseudoTieShapeContext(const EntryInfoPtr& forStartEntry) const
+std::optional<details::ArticulationAssign::SelectedSymbolContext>
+details::ArticulationAssign::calcSelectedSymbolContext(const EntryInfoPtr& entryInfo) const
 {
-    PseudoTieShapeContext result;
-    if (!forStartEntry || !articDef || forStartEntry.calcDisplaysAsRest()) {
+    SelectedSymbolContext result;
+    if (!entryInfo || !articDef || entryInfo.calcDisplaysAsRest()) {
         return std::nullopt;
     }
 
-    const auto entry = forStartEntry->getEntry();
+    const auto entry = entryInfo->getEntry();
     if (!entry || entry->notes.empty()) {
         return std::nullopt;
     }
 
-    const auto doc = getDocument();
-    result.definition = doc->getOthers()->get<others::ArticulationDef>(getRequestedPartId(), articDef);
+    result.definition = getDocument()->getOthers()->get<others::ArticulationDef>(getRequestedPartId(), articDef);
     if (!result.definition) {
         return std::nullopt;
     }
+
+    result.symbol = result.definition->calcSelectedSymbol(calcPlacementAbove(result.definition, entryInfo));
+    return result;
+}
+
+std::optional<details::ArticulationAssign::SymbolInfo>
+details::ArticulationAssign::calcSymbolInfo(const EntryInfoPtr& entryInfo) const
+{
+    if (const auto context = calcSelectedSymbolContext(entryInfo)) {
+        return context->symbol;
+    }
+    return std::nullopt;
+}
+
+std::optional<details::ArticulationAssign::PseudoTieShapeContext>
+details::ArticulationAssign::calcPseudoTieShapeContext(const EntryInfoPtr& forStartEntry) const
+{
+    PseudoTieShapeContext result;
+    const auto selectedSymbolContext = calcSelectedSymbolContext(forStartEntry);
+    if (!selectedSymbolContext) {
+        return std::nullopt;
+    }
+    const auto doc = getDocument();
+    result.definition = selectedSymbolContext->definition;
+    result.selectedSymbol = selectedSymbolContext->symbol;
     const auto def = result.definition;
 
     using AD = others::ArticulationDef;
@@ -133,8 +157,6 @@ details::ArticulationAssign::calcPseudoTieShapeContext(const EntryInfoPtr& forSt
     if (def->autoVert && def->autoVertMode == AD::AutoVerticalMode::AlwaysOnStem) {
         return std::nullopt;
     }
-
-    result.selectedSymbol = def->calcSelectedSymbol(calcPlacementAbove(def, forStartEntry));
     if (!result.selectedSymbol.isShape) {
         return std::nullopt;
     }

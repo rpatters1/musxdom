@@ -110,6 +110,12 @@ public:
 class ArticulationAssign : public EntryDetailsBase
 {
 private:
+    struct SelectedSymbolContext
+    {
+        MusxInstance<others::ArticulationDef> definition;
+        others::ArticulationDef::SelectedSymbol symbol;
+    };
+
     struct PseudoTieShapeContext
     {
         utils::PseudoTieShapeInfo info;
@@ -118,6 +124,8 @@ private:
     };
 
 public:
+    using SymbolInfo = others::ArticulationDef::SelectedSymbol;
+
     /**
      * @brief Constructor function
      * @param document A weak pointer to the associated document.
@@ -146,12 +154,26 @@ public:
     [[nodiscard]] std::optional<utils::PseudoTieShapeInfo> calcIsPseudoTie(utils::PseudoTieMode mode,
         const EntryInfoPtr& forStartEntry) const;
 
+    /// @brief Resolves the symbol information used by this articulation assignment on the specified entry.
+    /// @details The returned symbol reflects the assignment-level placement semantics used by this library. Manual placement
+    /// cases are evaluated exactly from the assignment data. Automatic placement cases use the best available policy-based
+    /// interpretation of Finale's settings and may differ from Finale's final rendered side after layout-dependent positioning
+    /// or manual dragging.
+    /// @return The resolved symbol information, or std::nullopt if the entry context or articulation definition cannot be resolved.
+    [[nodiscard]] std::optional<SymbolInfo> calcSymbolInfo(const EntryInfoPtr& entryInfo) const;
+
     static const xml::XmlElementArray<ArticulationAssign>& xmlMappingArray();   ///< Required for musx::factory::FieldPopulator.
     constexpr static std::string_view XmlNodeName = "articAssign"; ///< The XML node name for this type.
 
 private:
+    /// @brief Calculates whether the articulation should be treated as placed above the entry.
+    /// @details This returns the semantic placement used for articulation behavior, not a guaranteed reconstruction of
+    /// Finale's final rendered position in every automatic-layout scenario. Manual placement cases are evaluated exactly
+    /// from the assignment data. Automatic placement cases use the best available policy-based interpretation of Finale's
+    /// settings and may differ from Finale's final rendered side after layout-dependent positioning or manual dragging.
     [[nodiscard]] bool calcPlacementAbove(const MusxInstance<others::ArticulationDef>& definition,
-        const EntryInfoPtr& forStartEntry) const;
+        const EntryInfoPtr& entryInfo) const;
+    [[nodiscard]] std::optional<SelectedSymbolContext> calcSelectedSymbolContext(const EntryInfoPtr& entryInfo) const;
     [[nodiscard]] std::optional<PseudoTieShapeContext> calcPseudoTieShapeContext(const EntryInfoPtr& forStartEntry) const;
 };
 
