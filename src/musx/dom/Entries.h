@@ -743,6 +743,12 @@ public:
     /// @return True if the entry is upstem barring any other factors that would override the stem direction. False if it is downstem.
     [[nodiscard]] bool calcUpStemDefault() const;
 
+    /// @brief Returns the forced stem direction if any.
+    /// @details This uses the following precedence: rhythmic notation, manual freeze, layer override, staff override, 
+    /// and v1/v2 behavior. Cross-staff direction overrides are intentionally excluded.
+    /// @return The forced direction, or #StemDirection::Default if none applies.
+    [[nodiscard]] StemDirection calcStemDirectionForced() const;
+
     /// @brief Determines the effective stem direction of the entry, taking into account voices, layers, staff options, manual overrides,
     /// and cross-staff notation.
     ///

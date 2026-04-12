@@ -111,6 +111,22 @@ TEST(ArticulationDefTest, PopulateFields)
     EXPECT_EQ(articDef->durBotNotePercent, 2);
     EXPECT_EQ(articDef->ampTopNoteDelta, 125);
     EXPECT_EQ(articDef->ampBotNoteDelta, 125);
+
+    const auto aboveSymbol = articDef->calcSelectedSymbol(true);
+    EXPECT_TRUE(aboveSymbol.usesAlternate);
+    EXPECT_FALSE(aboveSymbol.isShape);
+    EXPECT_EQ(aboveSymbol.character, articDef->charAlt);
+    EXPECT_EQ(aboveSymbol.font, articDef->fontAlt);
+    EXPECT_EQ(aboveSymbol.xOffset, articDef->xOffsetAlt);
+    EXPECT_EQ(aboveSymbol.yOffset, articDef->yOffsetAlt);
+
+    const auto belowSymbol = articDef->calcSelectedSymbol(false);
+    EXPECT_FALSE(belowSymbol.usesAlternate);
+    EXPECT_FALSE(belowSymbol.isShape);
+    EXPECT_EQ(belowSymbol.character, articDef->charMain);
+    EXPECT_EQ(belowSymbol.font, articDef->fontMain);
+    EXPECT_EQ(belowSymbol.xOffset, articDef->xOffsetMain);
+    EXPECT_EQ(belowSymbol.yOffset, articDef->yOffsetMain);
 }
 
 TEST(ArticulationAssignTest, Populate)

@@ -1025,52 +1025,20 @@ bool EntryInfoPtr::calcUpStemDefault() const
 
 bool EntryInfoPtr::calcUpStemImpl() const
 {
+    switch (calcStemDirectionForced()) {
+    case StemDirection::AlwaysUp:
+        return true;
+    case StemDirection::AlwaysDown:
+        return false;
+    case StemDirection::Default:
+        break;
+    }
+
     //stem direction is determined by the beam a note or rest is part of, if any, so
     //we must always look for a beam to calculate direction.
     auto beamStart = findBeamStartOrCurrent();
-    const auto frame = getFrame();
-
-    // This is the precedence as tested by RGP in ~2001.
-    // rhythmic slash notation
-    for (auto next = beamStart; next; next = next.getNextInBeamGroup()) {
-        auto staff = next.createCurrentStaff(); // the staff is cached by createCurrentStaff after first retrieval.
-        if (staff->altNotation == others::Staff::AlternateNotation::Rhythmic) {
-            return staff->altRhythmStemsUp;
-        }
-    }
-    // manual override of stem direction
-    for (auto next = beamStart; next; next = next.getNextInBeamGroup()) {
-        const auto [freezeStem, upStem] = next.calcEntryStemSettings();
-        if (freezeStem) {
-            return upStem;
-        }
-    }
-    // layer override of stem direction
-    for (auto next = beamStart; next; next = next.getNextInBeamGroup()) {
-        if (auto layerAtts = frame->getLayerAttributes()) {
-            if (layerAtts->freezeLayer && calcIfLayerSettingsApply()) {
-                return layerAtts->freezeStemsUp;
-            }
-        }
-    }
-    // staff override of stem direction
-    for (auto next = beamStart; next; next = next.getNextInBeamGroup()) {
-        auto staff = next.createCurrentStaff();
-        if (staff->stemDirection == others::Staff::StemDirection::AlwaysUp) {
-            return true;
-        } else if (staff->stemDirection == others::Staff::StemDirection::AlwaysDown) {
-            return false;
-        }
-    }
-    // v1/v2 direction
-    for (auto next = beamStart; next; next = next.getNextInBeamGroup()) {
-        const auto& entry = next->getEntry();
-        if (entry->v2Launch || entry->voice2) {
-            return std::get<1>(next.calcEntryStemSettings());
-        }
-    }
     // cross-staff direction was not part of the 2001 testing, but this seems the right place for it for now.
-    const auto scrollViewStaves = frame->getDocument()->getScrollViewStaves(frame->getRequestedPartId());
+    const auto scrollViewStaves = getFrame()->getDocument()->getScrollViewStaves(getFrame()->getRequestedPartId());
     int foundCrossDirection = 0;
     for (auto next = beamStart; next; next = next.getNextInBeamGroup()) {
         const int currDirection = next.calcCrossStaffDirectionForAll(scrollViewStaves);
@@ -1088,6 +1056,47 @@ bool EntryInfoPtr::calcUpStemImpl() const
     }
 
     return calcUpStemDefault();
+}
+
+StemDirection EntryInfoPtr::calcStemDirectionForced() const
+{
+    auto beamStart = findBeamStartOrCurrent();
+    const auto frame = getFrame();
+
+    // This is the precedence as tested by RGP in ~2001.
+    for (auto next = beamStart; next; next = next.getNextInBeamGroup()) {
+        auto staff = next.createCurrentStaff();
+        if (staff->altNotation == others::Staff::AlternateNotation::Rhythmic) {
+            return staff->altRhythmStemsUp ? StemDirection::AlwaysUp : StemDirection::AlwaysDown;
+        }
+    }
+    for (auto next = beamStart; next; next = next.getNextInBeamGroup()) {
+        const auto [freezeStem, upStem] = next.calcEntryStemSettings();
+        if (freezeStem) {
+            return upStem ? StemDirection::AlwaysUp : StemDirection::AlwaysDown;
+        }
+    }
+    for (auto next = beamStart; next; next = next.getNextInBeamGroup()) {
+        if (auto layerAtts = frame->getLayerAttributes()) {
+            if (layerAtts->freezeLayer && calcIfLayerSettingsApply()) {
+                return layerAtts->freezeStemsUp ? StemDirection::AlwaysUp : StemDirection::AlwaysDown;
+            }
+        }
+    }
+    for (auto next = beamStart; next; next = next.getNextInBeamGroup()) {
+        auto staff = next.createCurrentStaff();
+        if (staff->stemDirection == StemDirection::AlwaysUp || staff->stemDirection == StemDirection::AlwaysDown) {
+            return staff->stemDirection;
+        }
+    }
+    for (auto next = beamStart; next; next = next.getNextInBeamGroup()) {
+        const auto& entry = next->getEntry();
+        if (entry->v2Launch || entry->voice2) {
+            return std::get<1>(next.calcEntryStemSettings()) ? StemDirection::AlwaysUp : StemDirection::AlwaysDown;
+        }
+    }
+
+    return StemDirection::Default;
 }
 
 bool EntryInfoPtr::calcUnbeamed() const

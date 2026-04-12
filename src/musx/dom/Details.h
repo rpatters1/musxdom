@@ -114,8 +114,7 @@ private:
     {
         utils::PseudoTieShapeInfo info;
         MusxInstance<others::ArticulationDef> definition;
-        bool placeAbove{};
-        bool usesAlternateSymbol{};
+        others::ArticulationDef::SelectedSymbol selectedSymbol;
     };
 
 public:
@@ -151,6 +150,8 @@ public:
     constexpr static std::string_view XmlNodeName = "articAssign"; ///< The XML node name for this type.
 
 private:
+    [[nodiscard]] bool calcPlacementAbove(const MusxInstance<others::ArticulationDef>& definition,
+        const EntryInfoPtr& forStartEntry) const;
     [[nodiscard]] std::optional<PseudoTieShapeContext> calcPseudoTieShapeContext(const EntryInfoPtr& forStartEntry) const;
 };
 

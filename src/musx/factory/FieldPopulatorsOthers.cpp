@@ -34,6 +34,7 @@ using namespace ::musx::dom::others;
 extern template const XmlEnumMappingElement<AlignJustify> XmlEnumMapping<AlignJustify>::mapping;
 extern template const XmlEnumMappingElement<LyricTextType> XmlEnumMapping<LyricTextType>::mapping;
 extern template const XmlEnumMappingElement<ShowClefMode> XmlEnumMapping<ShowClefMode>::mapping;
+extern template const XmlEnumMappingElement<ShowClefMode> XmlEnumMapping<StemDirection>::mapping;
 extern template const XmlEnumMappingElement<options::TextOptions::HorizontalAlignment> XmlEnumMapping<options::TextOptions::HorizontalAlignment>::mapping;
 extern template const XmlEnumMappingElement<options::TextOptions::VerticalAlignment> XmlEnumMapping<options::TextOptions::VerticalAlignment>::mapping;
 extern template const XmlEnumMappingElement<options::TextOptions::TextJustify> XmlEnumMapping<options::TextOptions::TextJustify>::mapping;
@@ -337,12 +338,6 @@ MUSX_XML_ENUM_MAPPING(Staff::NotationStyle, {
     // {"standard", Staff::NotationStyle::Standard}, // this is the default and may not occur in the xml
     {"percussion", Staff::NotationStyle::Percussion},
     {"tab", Staff::NotationStyle::Tablature},
-});
-
-MUSX_XML_ENUM_MAPPING(Staff::StemDirection, {
-    // {"default", Staff::StemDirection::Default}, // this is the default and may not occur in the XML
-    {"alwaysUp", Staff::StemDirection::AlwaysUp},
-    {"alwaysDown", Staff::StemDirection::AlwaysDown},
 });
 
 MUSX_XML_ENUM_MAPPING(Staff::HideMode, {
@@ -1382,7 +1377,7 @@ MUSX_XML_ELEMENT_ARRAY(Staff, {
     {"hideTuplets", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->hideTuplets = populateBoolean(e, i); }},
     {"fretInstID", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->fretInstId = e->getTextAs<Cmper>(); }},
     {"hideStems", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->hideStems = populateBoolean(e, i); }},
-    {"stemDir", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->stemDirection = toEnum<Staff::StemDirection>(e); }},
+    {"stemDir", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->stemDirection = toEnum<StemDirection>(e); }},
     {"hideBeams", [](const XmlElementPtr& e, const std::shared_ptr<Staff>& i) { i->hideBeams = populateBoolean(e, i); }},
     {"stemStartFromStaff",[] (const XmlElementPtr& e, const std::shared_ptr<Staff>& i){ i->stemStartFromStaff = populateBoolean(e, i); }},
     {"stemsFixedEnd",[] (const XmlElementPtr& e, const std::shared_ptr<Staff>& i){ i->stemsFixedEnd = populateBoolean(e, i); }},

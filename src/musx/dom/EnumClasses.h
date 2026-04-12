@@ -168,6 +168,15 @@ enum class ShowClefMode
     Always      ///< Clef is always displayed. (xml value is "forced")
 };
 
+/// @enum StemDirection
+/// @brief Three-state stem direction setting or override.
+enum class StemDirection
+{
+    Default,    ///< No forced direction; use the default calculation.
+    AlwaysUp,   ///< Stems are forced up.
+    AlwaysDown  ///< Stems are forced down.
+};
+
 /**
  * @enum TieConnectStyleType
  * @brief Enumeration for tie connect style types

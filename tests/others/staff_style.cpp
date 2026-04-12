@@ -129,7 +129,7 @@ TEST(StaffStyleTest, PopulateFields)
     EXPECT_TRUE(staffStyle->altHideOtherExpressions);
     EXPECT_EQ(staffStyle->topRepeatDotOff, -3);
     EXPECT_EQ(staffStyle->vertTabNumOff, -1024);
-    EXPECT_EQ(staffStyle->stemDirection, others::Staff::StemDirection::AlwaysUp);
+    EXPECT_EQ(staffStyle->stemDirection, StemDirection::AlwaysUp);
     EXPECT_EQ(staffStyle->styleName, "Names and Stems");
     EXPECT_TRUE(staffStyle->addToMenu);
 

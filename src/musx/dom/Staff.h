@@ -65,17 +65,6 @@ public:
     };
 
     /**
-     * @enum StemDirection
-     * @brief Enum for staff-level stem direction override.
-     */
-    enum class StemDirection
-    {
-        Default,            ///< the default (may not occur in xml)
-        AlwaysUp,           ///< stems are always up on this staff
-        AlwaysDown          ///< stems are always down on this staff
-    };
-
-    /**
      * @enum NotationStyle
      * @brief Enum for notation style.
      */

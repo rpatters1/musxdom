@@ -252,6 +252,18 @@ public:
         AvoidSlur
     };
 
+    /// @brief The resolved main or alternate symbol selection for an articulation definition.
+    struct SelectedSymbol
+    {
+        bool usesAlternate{};                    ///< True when the alternate symbol is selected.
+        bool isShape{};                          ///< Whether the selected symbol uses a shape definition.
+        Cmper shapeId{};                         ///< Shape ID for the selected symbol when #isShape is true.
+        Evpu xOffset{};                          ///< Horizontal offset for the selected symbol.
+        Evpu yOffset{};                          ///< Vertical offset for the selected symbol.
+        char32_t character{};                    ///< The selected symbol character.
+        std::shared_ptr<FontInfo> font;          ///< Font info for the selected symbol.
+    };
+
     /**
      * @brief Constructor.
      *
@@ -302,6 +314,11 @@ public:
     int ampTopNotePercent{};                       ///< Key velocity percentage for the top note.
     int ampBotNotePercent{};                       ///< Key velocity percentage for the bottom note.
     Evpu distanceFromStemEnd{};                    ///< "On-stem distance from stem end/flag/beam"
+
+    /// @brief Resolves which symbol data applies for the specified placement.
+    /// @param placeAbove True when the articulation is placed above the entry; false when below.
+    /// @return The selected main or alternate symbol data.
+    [[nodiscard]] SelectedSymbol calcSelectedSymbol(bool placeAbove) const;
 
     constexpr static std::string_view XmlNodeName = "articDef"; ///< The XML node name for this type.
     static const xml::XmlElementArray<ArticulationDef>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.

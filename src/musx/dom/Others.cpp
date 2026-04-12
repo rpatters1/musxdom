@@ -31,6 +31,25 @@ namespace musx {
 namespace dom {
 namespace others {
 
+// ***************************
+// ***** ArticulationDef *****
+// ***************************
+
+ArticulationDef::SelectedSymbol ArticulationDef::calcSelectedSymbol(bool placeAbove) const
+{
+    const bool usesAlternate = placeAbove ? aboveSymbolAlt : belowSymbolAlt;
+
+    SelectedSymbol result;
+    result.usesAlternate = usesAlternate;
+    result.isShape = usesAlternate ? altIsShape : mainIsShape;
+    result.shapeId = usesAlternate ? altShape : mainShape;
+    result.xOffset = usesAlternate ? xOffsetAlt : xOffsetMain;
+    result.yOffset = usesAlternate ? yOffsetAlt : yOffsetMain;
+    result.character = usesAlternate ? charAlt : charMain;
+    result.font = usesAlternate ? fontAlt : fontMain;
+    return result;
+}
+
 // *****************
 // ***** Frame *****
 // *****************
