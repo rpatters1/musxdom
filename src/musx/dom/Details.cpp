@@ -110,12 +110,7 @@ std::optional<details::ArticulationAssign::SelectedSymbolContext>
 details::ArticulationAssign::calcSelectedSymbolContext(const EntryInfoPtr& entryInfo) const
 {
     SelectedSymbolContext result;
-    if (!entryInfo || !articDef || entryInfo.calcDisplaysAsRest()) {
-        return std::nullopt;
-    }
-
-    const auto entry = entryInfo->getEntry();
-    if (!entry || entry->notes.empty()) {
+    if (!entryInfo) {
         return std::nullopt;
     }
 
@@ -126,15 +121,6 @@ details::ArticulationAssign::calcSelectedSymbolContext(const EntryInfoPtr& entry
 
     result.symbol = result.definition->calcSelectedSymbol(calcPlacementAbove(result.definition, entryInfo));
     return result;
-}
-
-std::optional<details::ArticulationAssign::SymbolInfo>
-details::ArticulationAssign::calcSymbolInfo(const EntryInfoPtr& entryInfo) const
-{
-    if (const auto context = calcSelectedSymbolContext(entryInfo)) {
-        return context->symbol;
-    }
-    return std::nullopt;
 }
 
 std::optional<details::ArticulationAssign::PseudoTieShapeContext>

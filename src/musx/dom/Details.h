@@ -109,13 +109,18 @@ public:
  */
 class ArticulationAssign : public EntryDetailsBase
 {
-private:
+public:
+    /// @class SelectedSymbolContext
+    /// @brief Provides information about the best analysis as to which articulation symbol in being used on this assignment.
+    /// @details The symbol may be the main or alternate symbol, and it may be either a codepoint or a shape id. For automatically
+    /// positioned articulations, see the caveats at #calcPlacementAbove.
     struct SelectedSymbolContext
     {
-        MusxInstance<others::ArticulationDef> definition;
-        others::ArticulationDef::SelectedSymbol symbol;
+        MusxInstance<others::ArticulationDef> definition;   ///< The associated articulation definition.
+        others::ArticulationDef::SelectedSymbol symbol;     ///< Information about the selected symbol.
     };
 
+private:
     struct PseudoTieShapeContext
     {
         utils::PseudoTieShapeInfo info;
@@ -124,8 +129,6 @@ private:
     };
 
 public:
-    using SymbolInfo = others::ArticulationDef::SelectedSymbol;
-
     /**
      * @brief Constructor function
      * @param document A weak pointer to the associated document.
@@ -155,12 +158,12 @@ public:
         const EntryInfoPtr& forStartEntry) const;
 
     /// @brief Resolves the symbol information used by this articulation assignment on the specified entry.
-    /// @details The returned symbol reflects the assignment-level placement semantics used by this library. Manual placement
+    /// @details The returned symbol context reflects the assignment-level placement semantics used by this library. Manual placement
     /// cases are evaluated exactly from the assignment data. Automatic placement cases use the best available policy-based
     /// interpretation of Finale's settings and may differ from Finale's final rendered side after layout-dependent positioning
     /// or manual dragging.
-    /// @return The resolved symbol information, or std::nullopt if the entry context or articulation definition cannot be resolved.
-    [[nodiscard]] std::optional<SymbolInfo> calcSymbolInfo(const EntryInfoPtr& entryInfo) const;
+    /// @return The resolved symbol context, or std::nullopt if the entry context or articulation definition cannot be resolved.
+    [[nodiscard]] std::optional<SelectedSymbolContext> calcSelectedSymbolContext(const EntryInfoPtr& entryInfo) const;
 
     static const xml::XmlElementArray<ArticulationAssign>& xmlMappingArray();   ///< Required for musx::factory::FieldPopulator.
     constexpr static std::string_view XmlNodeName = "articAssign"; ///< The XML node name for this type.
@@ -173,7 +176,6 @@ private:
     /// settings and may differ from Finale's final rendered side after layout-dependent positioning or manual dragging.
     [[nodiscard]] bool calcPlacementAbove(const MusxInstance<others::ArticulationDef>& definition,
         const EntryInfoPtr& entryInfo) const;
-    [[nodiscard]] std::optional<SelectedSymbolContext> calcSelectedSymbolContext(const EntryInfoPtr& entryInfo) const;
     [[nodiscard]] std::optional<PseudoTieShapeContext> calcPseudoTieShapeContext(const EntryInfoPtr& forStartEntry) const;
 };
 
