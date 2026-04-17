@@ -120,6 +120,28 @@ details::ArticulationAssign::calcSelectedSymbolContext(const EntryInfoPtr& entry
     }
 
     result.symbol = result.definition->calcSelectedSymbol(calcPlacementAbove(result.definition, entryInfo));
+
+    if (result.definition->autoVert) {
+        using AD = others::ArticulationDef;
+        switch (result.definition->autoVertMode) {
+        case AD::AutoVerticalMode::AboveEntry:
+            result.placement = VerticalPlacement::Above;
+            break;
+        case AD::AutoVerticalMode::BelowEntry:
+            result.placement = VerticalPlacement::Below;
+            break;
+        case AD::AutoVerticalMode::AlwaysNoteheadSide:
+        case AD::AutoVerticalMode::AutoNoteStem:
+            result.placement = VerticalPlacement::Float;
+            break;
+        default:
+            result.placement = VerticalPlacement::NotApplicable;
+            break;
+        }
+    } else {
+        result.placement = vertOffset >= 0 ? VerticalPlacement::Above : VerticalPlacement::Below;
+    }
+
     return result;
 }
 

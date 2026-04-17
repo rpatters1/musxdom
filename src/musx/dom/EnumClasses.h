@@ -197,5 +197,15 @@ enum class TieConnectStyleType
     UnderLowestNoteStemEndPosUnder
 };
 
+/// @enum VerticalPlacement
+/// @brief Specifies a vertical placement relationship for notation objects.
+enum class VerticalPlacement
+{
+    NotApplicable, ///< Above/below placement does not meaningfully apply.
+    Float,         ///< Above/below placement floats based on context (usually stem direction).
+    Below,         ///< Always positioned below the reference point or object.
+    Above          ///< Always positioned above the reference point or object.
+};
+
 } // namespace dom
 } // namespace musx
