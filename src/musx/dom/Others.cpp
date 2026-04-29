@@ -330,13 +330,7 @@ MusxInstance<MarkingCategory> MeasureExprAssign::getMarkingCategory() const
 
 CategoryStaffListSet MeasureExprAssign::createStaffListSet() const
 {
-    Cmper effectiveStaffList = staffList;
-    if (!effectiveStaffList) {
-        if (const auto category = getMarkingCategory(); category && category->usesStaffList) {
-            effectiveStaffList = category->staffList;
-        }
-    }
-    return CategoryStaffListSet(getDocument(), getRequestedPartId(), effectiveStaffList);
+    return CategoryStaffListSet(getDocument(), getRequestedPartId(), staffList);
 }
 
 bool MeasureExprAssign::calcIsPartOfStaffListAssignment() const
