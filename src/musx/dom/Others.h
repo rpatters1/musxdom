@@ -1400,9 +1400,19 @@ public:
     /// @return The shape expression or nullptr if this assignment is for a text expression or #shapeExprId not found.
     MusxInstance<ShapeExpressionDef> getShapeExpression() const;
 
+    /// @brief Gets the marking category for the assigned text or shape expression.
+    /// @return The marking category or nullptr if the definition or its category cannot be resolved.
+    MusxInstance<MarkingCategory> getMarkingCategory() const;
+
     /// @brief Create a @ref StaffListSet for the given instance. This can be used to interrogate whether a staff appears in the staff set.
-    /// @return The created staff list set. If #staffList is zero, it will never find any staves for the staff list.
+    /// @return The created staff list set. If #staffList is zero, the function falls back to the expression category's
+    /// staff list when that category uses staff lists. Otherwise it will never find any staves.
     CategoryStaffListSet createStaffListSet() const;
+
+    /// @brief Calculates if this assignment participates in a staff-list-based assignment group.
+    /// @details This checks the assignment-level grouping fields first, then falls back to the assigned expression
+    /// category when the category uses staff lists. This works for both text and shape expressions.
+    bool calcIsPartOfStaffListAssignment() const;
 
     /// @brief Calculates the effective staffId for the assignment, returning top or bottom staff if appropriate
     /// @param forPageView Return the top/bottom staff in page view (when appropriate). If the staff does not appear in page view, the function falls back to scroll view.

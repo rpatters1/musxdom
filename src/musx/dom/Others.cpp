@@ -314,9 +314,40 @@ MusxInstance<ShapeExpressionDef> MeasureExprAssign::getShapeExpression() const
     return getDocument()->getOthers()->get<ShapeExpressionDef>(getRequestedPartId(), shapeExprId);
 }
 
+MusxInstance<MarkingCategory> MeasureExprAssign::getMarkingCategory() const
+{
+    Cmper categoryId = 0;
+    if (const auto textExpression = getTextExpression()) {
+        categoryId = textExpression->categoryId;
+    } else if (const auto shapeExpression = getShapeExpression()) {
+        categoryId = shapeExpression->categoryId;
+    }
+    if (!categoryId) {
+        return nullptr;
+    }
+    return getDocument()->getOthers()->get<MarkingCategory>(getRequestedPartId(), categoryId);
+}
+
 CategoryStaffListSet MeasureExprAssign::createStaffListSet() const
 {
-    return CategoryStaffListSet(getDocument(), getRequestedPartId(), staffList);
+    Cmper effectiveStaffList = staffList;
+    if (!effectiveStaffList) {
+        if (const auto category = getMarkingCategory(); category && category->usesStaffList) {
+            effectiveStaffList = category->staffList;
+        }
+    }
+    return CategoryStaffListSet(getDocument(), getRequestedPartId(), effectiveStaffList);
+}
+
+bool MeasureExprAssign::calcIsPartOfStaffListAssignment() const
+{
+    if (staffGroup != 0 || staffList != 0) {
+        return true;
+    }
+    if (const auto category = getMarkingCategory()) {
+        return category->usesStaffList && category->staffList != 0;
+    }
+    return false;
 }
 
 std::optional<HorizontalMeasExprAlign> MeasureExprAssign::calcEntryAlignmentType() const
@@ -413,7 +444,7 @@ MusxInstance<StaffComposite> MeasureExprAssign::createCurrentStaff(bool forPageV
 
 bool MeasureExprAssign::calcIsHiddenByAlternateNotation() const
 {
-    if (staffList != 0) {
+    if (calcIsPartOfStaffListAssignment()) {
         return false; // assignments with staff lists are never hidden by alternate notation: observed behavior
     }
     auto staff = createCurrentStaff();
@@ -1161,7 +1192,7 @@ bool StaffListSet<ScoreList, PartsList, ScoreForcedList, PartsForcedList>::conta
     return staffListContainsStaff(m_forcedStaffList);
 }
 
-template class StaffListSet< StaffListCategoryScore, StaffListCategoryParts>;
+template class StaffListSet<StaffListCategoryScore, StaffListCategoryParts>;
 template class StaffListSet<StaffListRepeatScore, StaffListRepeatParts, StaffListRepeatScoreForced, StaffListRepeatPartsForced>;
 
 // ***********************
