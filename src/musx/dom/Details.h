@@ -177,6 +177,11 @@ private:
     /// settings and may differ from Finale's final rendered side after layout-dependent positioning or manual dragging.
     [[nodiscard]] bool calcPlacementAbove(const MusxInstance<others::ArticulationDef>& definition,
         const EntryInfoPtr& entryInfo) const;
+    /// @brief Resolves the placement semantics for this articulation assignment on the specified entry.
+    /// @details This distinguishes fixed above/below placement from context-dependent floating placement and respects
+    /// assignment-level overrides and Finale's multi-layer stem-side modifier for otherwise fixed above/below modes.
+    [[nodiscard]] VerticalPlacement calcVerticalPlacement(const MusxInstance<others::ArticulationDef>& definition,
+        const EntryInfoPtr& entryInfo) const;
     [[nodiscard]] std::optional<PseudoTieShapeContext> calcPseudoTieShapeContext(const EntryInfoPtr& forStartEntry) const;
 };
 

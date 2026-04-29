@@ -195,3 +195,141 @@ TEST(ArticulationAssignTest, Populate)
     auto articInvalid = details->get<details::ArticulationAssign>(SCORE_PARTID, 999, 0);
     EXPECT_FALSE(articInvalid) << "ArticulationAssign with entnum=999 found but does not exist";
 }
+
+TEST(ArticulationAssignTest, CalcSelectedSymbolContextHonorsOverridePlacement)
+{
+    std::vector<char> defXml;
+    musxtest::readFile(musxtest::getInputPath() / "finale_maestro_default.enigmaxml", defXml);
+    auto defDoc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(defXml);
+    ASSERT_TRUE(defDoc);
+
+    std::vector<char> entryXml;
+    musxtest::readFile(musxtest::getInputPath() / "stemdirection.enigmaxml", entryXml);
+    auto entryDoc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(entryXml);
+    ASSERT_TRUE(entryDoc);
+
+    auto gfhold = details::GFrameHoldContext(entryDoc, SCORE_PARTID, 3, 3);
+    ASSERT_TRUE(gfhold);
+    auto entryFrame = gfhold.createEntryFrame(0);
+    ASSERT_TRUE(entryFrame);
+
+    auto entryInfo = EntryInfoPtr(entryFrame, 0);
+    ASSERT_TRUE(entryInfo);
+    ASSERT_TRUE(entryInfo.calcUpStem());
+
+    details::ArticulationAssign assign(defDoc, SCORE_PARTID, Base::ShareMode::All, 0, 0);
+    assign.articDef = 8;
+    assign.overridePlacement = true;
+    assign.aboveEntry = false;
+
+    const auto context = assign.calcSelectedSymbolContext(entryInfo);
+    ASSERT_TRUE(context);
+    EXPECT_EQ(context->placement, VerticalPlacement::Below);
+    EXPECT_TRUE(context->definition->belowSymbolAlt);
+    EXPECT_TRUE(context->symbol.usesAlternate);
+    EXPECT_EQ(context->symbol.character, context->definition->charAlt);
+}
+
+TEST(ArticulationAssignTest, CalcSelectedSymbolContextFloatsAboveEntryInMultiLayerStemSideContexts)
+{
+    std::vector<char> defXml;
+    musxtest::readFile(musxtest::getInputPath() / "finale_maestro_default.enigmaxml", defXml);
+    auto defDoc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(defXml);
+    ASSERT_TRUE(defDoc);
+
+    std::vector<char> entryXml;
+    musxtest::readFile(musxtest::getInputPath() / "stemdirection.enigmaxml", entryXml);
+    auto entryDoc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(entryXml);
+    ASSERT_TRUE(entryDoc);
+
+    auto gfhold = details::GFrameHoldContext(entryDoc, SCORE_PARTID, 3, 3);
+    ASSERT_TRUE(gfhold);
+    auto upperFrame = gfhold.createEntryFrame(0);
+    auto lowerFrame = gfhold.createEntryFrame(1);
+    ASSERT_TRUE(upperFrame);
+    ASSERT_TRUE(lowerFrame);
+
+    auto upperEntry = EntryInfoPtr(upperFrame, 0);
+    auto lowerEntry = EntryInfoPtr(lowerFrame, 0);
+    ASSERT_TRUE(upperEntry);
+    ASSERT_TRUE(lowerEntry);
+    ASSERT_TRUE(upperEntry.calcUpStem());
+    ASSERT_FALSE(lowerEntry.calcUpStem());
+
+    details::ArticulationAssign assign(defDoc, SCORE_PARTID, Base::ShareMode::All, 0, 0);
+    assign.articDef = 8;
+
+    const auto upperContext = assign.calcSelectedSymbolContext(upperEntry);
+    ASSERT_TRUE(upperContext);
+    EXPECT_EQ(upperContext->placement, VerticalPlacement::Float);
+    EXPECT_FALSE(upperContext->symbol.usesAlternate);
+    EXPECT_EQ(upperContext->symbol.character, upperContext->definition->charMain);
+
+    const auto lowerContext = assign.calcSelectedSymbolContext(lowerEntry);
+    ASSERT_TRUE(lowerContext);
+    EXPECT_EQ(lowerContext->placement, VerticalPlacement::Float);
+    EXPECT_TRUE(lowerContext->symbol.usesAlternate);
+    EXPECT_EQ(lowerContext->symbol.character, lowerContext->definition->charAlt);
+}
+
+TEST(ArticulationAssignTest, CalcSelectedSymbolContextKeepsBelowEntryFixedInMultiLayerStemSideContexts)
+{
+    constexpr static musxtest::string_view defXml = R"xml(
+<?xml version="1.0" encoding="UTF-8"?>
+<finale>
+  <others>
+    <articDef cmper="42">
+      <charMain>58960</charMain>
+      <sizeMain>24</sizeMain>
+      <autoHorz/>
+      <autoVert/>
+      <autoVertMode>belowEntry</autoVertMode>
+      <outsideStaff/>
+      <autoStack/>
+      <slurInteractionMode>avoidSlur</slurInteractionMode>
+      <charAlt>58961</charAlt>
+      <defVertPos>24</defVertPos>
+      <isStemSideWhenMultipleLayers/>
+      <sizeAlt>24</sizeAlt>
+    </articDef>
+  </others>
+</finale>
+    )xml";
+
+    auto defDoc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(defXml);
+    ASSERT_TRUE(defDoc);
+
+    std::vector<char> entryXml;
+    musxtest::readFile(musxtest::getInputPath() / "stemdirection.enigmaxml", entryXml);
+    auto entryDoc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(entryXml);
+    ASSERT_TRUE(entryDoc);
+
+    auto gfhold = details::GFrameHoldContext(entryDoc, SCORE_PARTID, 3, 3);
+    ASSERT_TRUE(gfhold);
+    auto upperFrame = gfhold.createEntryFrame(0);
+    auto lowerFrame = gfhold.createEntryFrame(1);
+    ASSERT_TRUE(upperFrame);
+    ASSERT_TRUE(lowerFrame);
+
+    auto upperEntry = EntryInfoPtr(upperFrame, 0);
+    auto lowerEntry = EntryInfoPtr(lowerFrame, 0);
+    ASSERT_TRUE(upperEntry);
+    ASSERT_TRUE(lowerEntry);
+    ASSERT_TRUE(upperEntry.calcUpStem());
+    ASSERT_FALSE(lowerEntry.calcUpStem());
+
+    details::ArticulationAssign assign(defDoc, SCORE_PARTID, Base::ShareMode::All, 0, 0);
+    assign.articDef = 42;
+
+    const auto upperContext = assign.calcSelectedSymbolContext(upperEntry);
+    ASSERT_TRUE(upperContext);
+    EXPECT_EQ(upperContext->placement, VerticalPlacement::Below);
+    EXPECT_FALSE(upperContext->symbol.usesAlternate);
+    EXPECT_EQ(upperContext->symbol.character, upperContext->definition->charMain);
+
+    const auto lowerContext = assign.calcSelectedSymbolContext(lowerEntry);
+    ASSERT_TRUE(lowerContext);
+    EXPECT_EQ(lowerContext->placement, VerticalPlacement::Below);
+    EXPECT_FALSE(lowerContext->symbol.usesAlternate);
+    EXPECT_EQ(lowerContext->symbol.character, lowerContext->definition->charMain);
+}

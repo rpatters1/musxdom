@@ -82,11 +82,13 @@ bool details::ArticulationAssign::calcPlacementAbove(const MusxInstance<others::
     if (!definition->autoVert) {
         return vertOffset >= 0;
     }
+    const bool stemSideInMultiLayer = definition->isStemSideWhenMultipleLayers
+        && entryInfo.getFrame()->getContext()->calcIsMultiLayer();
 
     using AD = others::ArticulationDef;
     switch (definition->autoVertMode) {
     case AD::AutoVerticalMode::AboveEntry:
-        return true;
+        return stemSideInMultiLayer ? stemUp : true;
     case AD::AutoVerticalMode::BelowEntry:
         return false;
     case AD::AutoVerticalMode::StemSide:
@@ -106,6 +108,34 @@ bool details::ArticulationAssign::calcPlacementAbove(const MusxInstance<others::
     }
 }
 
+VerticalPlacement details::ArticulationAssign::calcVerticalPlacement(
+    const MusxInstance<others::ArticulationDef>& definition,
+    const EntryInfoPtr& entryInfo) const
+{
+    if (overridePlacement) {
+        return aboveEntry ? VerticalPlacement::Above : VerticalPlacement::Below;
+    }
+    if (!definition->autoVert) {
+        return vertOffset >= 0 ? VerticalPlacement::Above : VerticalPlacement::Below;
+    }
+
+    const bool stemSideInMultiLayer = definition->isStemSideWhenMultipleLayers
+        && entryInfo.getFrame()->getContext()->calcIsMultiLayer();
+
+    using AD = others::ArticulationDef;
+    switch (definition->autoVertMode) {
+    case AD::AutoVerticalMode::AboveEntry:
+        return stemSideInMultiLayer ? VerticalPlacement::Float : VerticalPlacement::Above;
+    case AD::AutoVerticalMode::BelowEntry:
+        return VerticalPlacement::Below;
+    case AD::AutoVerticalMode::AlwaysNoteheadSide:
+    case AD::AutoVerticalMode::AutoNoteStem:
+        return VerticalPlacement::Float;
+    default:
+        return VerticalPlacement::NotApplicable;
+    }
+}
+
 std::optional<details::ArticulationAssign::SelectedSymbolContext>
 details::ArticulationAssign::calcSelectedSymbolContext(const EntryInfoPtr& entryInfo) const
 {
@@ -120,27 +150,7 @@ details::ArticulationAssign::calcSelectedSymbolContext(const EntryInfoPtr& entry
     }
 
     result.symbol = result.definition->calcSelectedSymbol(calcPlacementAbove(result.definition, entryInfo));
-
-    if (result.definition->autoVert) {
-        using AD = others::ArticulationDef;
-        switch (result.definition->autoVertMode) {
-        case AD::AutoVerticalMode::AboveEntry:
-            result.placement = VerticalPlacement::Above;
-            break;
-        case AD::AutoVerticalMode::BelowEntry:
-            result.placement = VerticalPlacement::Below;
-            break;
-        case AD::AutoVerticalMode::AlwaysNoteheadSide:
-        case AD::AutoVerticalMode::AutoNoteStem:
-            result.placement = VerticalPlacement::Float;
-            break;
-        default:
-            result.placement = VerticalPlacement::NotApplicable;
-            break;
-        }
-    } else {
-        result.placement = vertOffset >= 0 ? VerticalPlacement::Above : VerticalPlacement::Below;
-    }
+    result.placement = calcVerticalPlacement(result.definition, entryInfo);
 
     return result;
 }
