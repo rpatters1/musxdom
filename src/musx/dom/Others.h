@@ -294,6 +294,7 @@ public:
     Evpu defVertPos{};                             ///< Default vertical position.
     bool avoidStaffLines{};                        ///< Whether to avoid staff lines.
     bool isStemSideWhenMultipleLayers{};           ///< "Place stem side when multiple layers are present"
+                                                   ///< (Applicable only for #AutoVerticalMode::AboveEntry.)
     bool playArtic{};                              ///< Whether playback articulation is enabled.
     Evpu xOffsetAlt{};                             ///< Horizontal offset for the alternate symbol.
     Evpu yOffsetAlt{};                             ///< Vertical offset for the alternate symbol.

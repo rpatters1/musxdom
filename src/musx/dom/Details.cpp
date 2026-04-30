@@ -82,13 +82,14 @@ bool details::ArticulationAssign::calcPlacementAbove(const MusxInstance<others::
     if (!definition->autoVert) {
         return vertOffset >= 0;
     }
-    const bool stemSideInMultiLayer = definition->isStemSideWhenMultipleLayers
-        && entryInfo.getFrame()->getContext()->calcIsMultiLayer();
 
     using AD = others::ArticulationDef;
     switch (definition->autoVertMode) {
-    case AD::AutoVerticalMode::AboveEntry:
+    case AD::AutoVerticalMode::AboveEntry: {
+        const bool stemSideInMultiLayer = definition->isStemSideWhenMultipleLayers
+            && entryInfo.getFrame()->getContext()->calcIsMultiLayer();
         return stemSideInMultiLayer ? stemUp : true;
+    }
     case AD::AutoVerticalMode::BelowEntry:
         return false;
     case AD::AutoVerticalMode::StemSide:
@@ -119,13 +120,13 @@ VerticalPlacement details::ArticulationAssign::calcVerticalPlacement(
         return vertOffset >= 0 ? VerticalPlacement::Above : VerticalPlacement::Below;
     }
 
-    const bool stemSideInMultiLayer = definition->isStemSideWhenMultipleLayers
-        && entryInfo.getFrame()->getContext()->calcIsMultiLayer();
-
     using AD = others::ArticulationDef;
     switch (definition->autoVertMode) {
-    case AD::AutoVerticalMode::AboveEntry:
+    case AD::AutoVerticalMode::AboveEntry: {
+        const bool stemSideInMultiLayer = definition->isStemSideWhenMultipleLayers
+            && entryInfo.getFrame()->getContext()->calcIsMultiLayer();
         return stemSideInMultiLayer ? VerticalPlacement::Float : VerticalPlacement::Above;
+    }
     case AD::AutoVerticalMode::BelowEntry:
         return VerticalPlacement::Below;
     case AD::AutoVerticalMode::AlwaysNoteheadSide:
