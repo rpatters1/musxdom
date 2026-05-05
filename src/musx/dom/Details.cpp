@@ -102,11 +102,16 @@ bool details::ArticulationAssign::calcPlacementAbove(const MusxInstance<others::
         case StemDirection::Default:
             return !stemUp;
         }
+        assert(false && "invalid enum value");
+        // defensive break should be unreachable
+        break;
     case AD::AutoVerticalMode::AutoNoteStem:
         return stemUp;
     case AD::AutoVerticalMode::AlwaysOnStem:
         return stemUp;
     }
+    assert(false && "invalid enum value");
+    return stemUp; // defensive fallback should be unreachable
 }
 
 VerticalPlacement details::ArticulationAssign::calcVerticalPlacement(
