@@ -109,13 +109,24 @@ public:
  */
 class ArticulationAssign : public EntryDetailsBase
 {
+public:
+    /// @class SelectedSymbolContext
+    /// @brief Provides information about the best analysis as to which articulation symbol in being used on this assignment.
+    /// @details The symbol may be the main or alternate symbol, and it may be either a codepoint or a shape id. For automatically
+    /// positioned articulations, see the caveats at #calcPlacementAbove.
+    struct SelectedSymbolContext
+    {
+        MusxInstance<others::ArticulationDef> definition;   ///< The associated articulation definition.
+        others::ArticulationDef::SelectedSymbol symbol;     ///< Information about the selected symbol.
+        VerticalPlacement placement = VerticalPlacement::NotApplicable; //< whether the symbol is fixed above, fixed below, or floats.
+    };
+
 private:
     struct PseudoTieShapeContext
     {
         utils::PseudoTieShapeInfo info;
         MusxInstance<others::ArticulationDef> definition;
-        bool placeAbove{};
-        bool usesAlternateSymbol{};
+        others::ArticulationDef::SelectedSymbol selectedSymbol;
     };
 
 public:
@@ -147,10 +158,30 @@ public:
     [[nodiscard]] std::optional<utils::PseudoTieShapeInfo> calcIsPseudoTie(utils::PseudoTieMode mode,
         const EntryInfoPtr& forStartEntry) const;
 
+    /// @brief Resolves the symbol information used by this articulation assignment on the specified entry.
+    /// @details The returned symbol context reflects the assignment-level placement semantics used by this library. Manual placement
+    /// cases are evaluated exactly from the assignment data. Automatic placement cases use the best available policy-based
+    /// interpretation of Finale's settings and may differ from Finale's final rendered side after layout-dependent positioning
+    /// or manual dragging.
+    /// @return The resolved symbol context, or std::nullopt if the entry context or articulation definition cannot be resolved.
+    [[nodiscard]] std::optional<SelectedSymbolContext> calcSelectedSymbolContext(const EntryInfoPtr& entryInfo) const;
+
     static const xml::XmlElementArray<ArticulationAssign>& xmlMappingArray();   ///< Required for musx::factory::FieldPopulator.
     constexpr static std::string_view XmlNodeName = "articAssign"; ///< The XML node name for this type.
 
 private:
+    /// @brief Calculates whether the articulation should be treated as placed above the entry.
+    /// @details This returns the semantic placement used for articulation behavior, not a guaranteed reconstruction of
+    /// Finale's final rendered position in every automatic-layout scenario. Manual placement cases are evaluated exactly
+    /// from the assignment data. Automatic placement cases use the best available policy-based interpretation of Finale's
+    /// settings and may differ from Finale's final rendered side after layout-dependent positioning or manual dragging.
+    [[nodiscard]] bool calcPlacementAbove(const MusxInstance<others::ArticulationDef>& definition,
+        const EntryInfoPtr& entryInfo) const;
+    /// @brief Resolves the placement semantics for this articulation assignment on the specified entry.
+    /// @details This distinguishes fixed above/below placement from context-dependent floating placement and respects
+    /// assignment-level overrides and Finale's multi-layer stem-side modifier for otherwise fixed above/below modes.
+    [[nodiscard]] VerticalPlacement calcVerticalPlacement(const MusxInstance<others::ArticulationDef>& definition,
+        const EntryInfoPtr& entryInfo) const;
     [[nodiscard]] std::optional<PseudoTieShapeContext> calcPseudoTieShapeContext(const EntryInfoPtr& forStartEntry) const;
 };
 

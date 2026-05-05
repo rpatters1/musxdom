@@ -53,6 +53,12 @@ MUSX_XML_ENUM_MAPPING(ShowClefMode, {
     {"forced", ShowClefMode::Always}
 });
 
+MUSX_XML_ENUM_MAPPING(StemDirection, {
+    // {"default", StemDirection::Default}, // this is the default and may not occur in the XML
+    {"alwaysUp", StemDirection::AlwaysUp},
+    {"alwaysDown", StemDirection::AlwaysDown},
+});
+
 #ifndef DOXYGEN_SHOULD_IGNORE_THIS
 void populateFontEfx(const XmlElementPtr& e, const std::shared_ptr<dom::FontInfo>& i)
 {

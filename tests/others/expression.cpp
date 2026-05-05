@@ -344,6 +344,90 @@ TEST(MeasureExprAssign, Populate)
     EXPECT_FALSE(exprInvalid) << "MeasureExprAssign with cmper=3 found but does not exist";
 }
 
+TEST(MeasureExprAssign, CalcIsPartOfStaffListAssignment)
+{
+    constexpr static musxtest::string_view xml = R"xml(
+<?xml version="1.0" encoding="UTF-8"?>
+<finale>
+  <others>
+    <measExprAssign cmper="1" inci="0">
+      <textExprID>1</textExprID>
+      <staffAssign>1</staffAssign>
+    </measExprAssign>
+    <measExprAssign cmper="1" inci="1">
+      <shapeExprID>2</shapeExprID>
+      <staffAssign>1</staffAssign>
+    </measExprAssign>
+    <measExprAssign cmper="1" inci="2">
+      <textExprID>3</textExprID>
+      <staffAssign>1</staffAssign>
+    </measExprAssign>
+    <measExprAssign cmper="1" inci="3">
+      <textExprID>3</textExprID>
+      <staffAssign>1</staffAssign>
+      <staffGroup>9</staffGroup>
+      <staffList>7</staffList>
+    </measExprAssign>
+
+    <textExprDef cmper="1">
+      <textIDKey>1</textIDKey>
+      <categoryID>2</categoryID>
+    </textExprDef>
+    <shapeExprDef cmper="2">
+      <shapeDef>1</shapeDef>
+      <categoryID>2</categoryID>
+    </shapeExprDef>
+    <textExprDef cmper="3">
+      <textIDKey>2</textIDKey>
+      <categoryID>1</categoryID>
+    </textExprDef>
+
+    <markingsCategory cmper="1">
+      <categoryType>dynamics</categoryType>
+      <textFont/>
+      <musicFont/>
+      <staffList>7</staffList>
+    </markingsCategory>
+    <markingsCategory cmper="2">
+      <categoryType>tempoMarks</categoryType>
+      <textFont/>
+      <musicFont/>
+      <usesStaffList/>
+      <staffList>7</staffList>
+    </markingsCategory>
+  </others>
+</finale>
+    )xml";
+
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
+    ASSERT_TRUE(doc);
+
+    auto others = doc->getOthers();
+    ASSERT_TRUE(others);
+
+    auto textStaffListExpr = others->get<others::MeasureExprAssign>(SCORE_PARTID, 1, 0);
+    ASSERT_TRUE(textStaffListExpr);
+    ASSERT_TRUE(textStaffListExpr->getMarkingCategory());
+    EXPECT_EQ(textStaffListExpr->getMarkingCategory()->getCmper(), 2);
+    EXPECT_TRUE(textStaffListExpr->calcIsPartOfStaffListAssignment());
+
+    auto shapeStaffListExpr = others->get<others::MeasureExprAssign>(SCORE_PARTID, 1, 1);
+    ASSERT_TRUE(shapeStaffListExpr);
+    ASSERT_TRUE(shapeStaffListExpr->getMarkingCategory());
+    EXPECT_EQ(shapeStaffListExpr->getMarkingCategory()->getCmper(), 2);
+    EXPECT_TRUE(shapeStaffListExpr->calcIsPartOfStaffListAssignment());
+
+    auto plainExpr = others->get<others::MeasureExprAssign>(SCORE_PARTID, 1, 2);
+    ASSERT_TRUE(plainExpr);
+    ASSERT_TRUE(plainExpr->getMarkingCategory());
+    EXPECT_EQ(plainExpr->getMarkingCategory()->getCmper(), 1);
+    EXPECT_FALSE(plainExpr->calcIsPartOfStaffListAssignment());
+
+    auto explicitGroupedExpr = others->get<others::MeasureExprAssign>(SCORE_PARTID, 1, 3);
+    ASSERT_TRUE(explicitGroupedExpr);
+    EXPECT_TRUE(explicitGroupedExpr->calcIsPartOfStaffListAssignment());
+}
+
 TEST(ShapeExpressionDef, Populate)
 {
     constexpr static musxtest::string_view xml = R"xml(

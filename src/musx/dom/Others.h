@@ -252,6 +252,18 @@ public:
         AvoidSlur
     };
 
+    /// @brief The resolved main or alternate symbol selection for an articulation definition.
+    struct SelectedSymbol
+    {
+        bool usesAlternate{};                    ///< True when the alternate symbol is selected.
+        bool isShape{};                          ///< Whether the selected symbol uses a shape definition.
+        Cmper shapeId{};                         ///< Shape ID for the selected symbol when #isShape is true.
+        Evpu xOffset{};                          ///< Horizontal offset for the selected symbol.
+        Evpu yOffset{};                          ///< Vertical offset for the selected symbol.
+        char32_t character{};                    ///< The selected symbol character.
+        std::shared_ptr<FontInfo> font;          ///< Font info for the selected symbol.
+    };
+
     /**
      * @brief Constructor.
      *
@@ -282,6 +294,7 @@ public:
     Evpu defVertPos{};                             ///< Default vertical position.
     bool avoidStaffLines{};                        ///< Whether to avoid staff lines.
     bool isStemSideWhenMultipleLayers{};           ///< "Place stem side when multiple layers are present"
+                                                   ///< (Applicable only for #AutoVerticalMode::AboveEntry.)
     bool playArtic{};                              ///< Whether playback articulation is enabled.
     Evpu xOffsetAlt{};                             ///< Horizontal offset for the alternate symbol.
     Evpu yOffsetAlt{};                             ///< Vertical offset for the alternate symbol.
@@ -302,6 +315,11 @@ public:
     int ampTopNotePercent{};                       ///< Key velocity percentage for the top note.
     int ampBotNotePercent{};                       ///< Key velocity percentage for the bottom note.
     Evpu distanceFromStemEnd{};                    ///< "On-stem distance from stem end/flag/beam"
+
+    /// @brief Resolves which symbol data applies for the specified placement.
+    /// @param placeAbove True when the articulation is placed above the entry; false when below.
+    /// @return The selected main or alternate symbol data.
+    [[nodiscard]] SelectedSymbol calcSelectedSymbol(bool placeAbove) const;
 
     constexpr static std::string_view XmlNodeName = "articDef"; ///< The XML node name for this type.
     static const xml::XmlElementArray<ArticulationDef>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
@@ -1383,9 +1401,19 @@ public:
     /// @return The shape expression or nullptr if this assignment is for a text expression or #shapeExprId not found.
     MusxInstance<ShapeExpressionDef> getShapeExpression() const;
 
+    /// @brief Gets the marking category for the assigned text or shape expression.
+    /// @return The marking category or nullptr if the definition or its category cannot be resolved.
+    MusxInstance<MarkingCategory> getMarkingCategory() const;
+
     /// @brief Create a @ref StaffListSet for the given instance. This can be used to interrogate whether a staff appears in the staff set.
-    /// @return The created staff list set. If #staffList is zero, it will never find any staves for the staff list.
+    /// @return The created staff list set. If #staffList is zero, the function falls back to the expression category's
+    /// staff list when that category uses staff lists. Otherwise it will never find any staves.
     CategoryStaffListSet createStaffListSet() const;
+
+    /// @brief Calculates if this assignment participates in a staff-list-based assignment group.
+    /// @details This checks the assignment-level grouping fields first, then falls back to the assigned expression
+    /// category when the category uses staff lists. This works for both text and shape expressions.
+    bool calcIsPartOfStaffListAssignment() const;
 
     /// @brief Calculates the effective staffId for the assignment, returning top or bottom staff if appropriate
     /// @param forPageView Return the top/bottom staff in page view (when appropriate). If the staff does not appear in page view, the function falls back to scroll view.

@@ -121,7 +121,7 @@ constexpr char32_t fourStringTabClefSerif = 0xF40D;     ///< glyph "4stringTabCl
  */
 namespace symbol_glyph {
 // Use namespace instead of enum class due to comparison ugliness with enum class.
-constexpr char32_t unpitchedPercussionClef2 = 214;   ///< equivalen symbol glyph for "unpitchedPercussionClef2"
+constexpr char32_t unpitchedPercussionClef2 = 214;      ///< equivalent symbol glyph for "unpitchedPercussionClef2"
 } //namespace symbol_glyph
 
 } // namespace dom

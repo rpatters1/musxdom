@@ -71,24 +71,107 @@ namespace details {
 // ***** ArticulationAssign *****
 // ******************************
 
+bool details::ArticulationAssign::calcPlacementAbove(const MusxInstance<others::ArticulationDef>& definition,
+    const EntryInfoPtr& entryInfo) const
+{
+    if (overridePlacement) {
+        return aboveEntry;
+    }
+
+    const bool stemUp = entryInfo.calcUpStem();
+    if (!definition->autoVert) {
+        return vertOffset >= 0;
+    }
+
+    using AD = others::ArticulationDef;
+    switch (definition->autoVertMode) {
+    case AD::AutoVerticalMode::AboveEntry: {
+        const bool stemSideInMultiLayer = definition->isStemSideWhenMultipleLayers
+            && entryInfo.getFrame()->getContext()->calcIsMultiLayer();
+        return stemSideInMultiLayer ? stemUp : true;
+    }
+    case AD::AutoVerticalMode::BelowEntry:
+        return false;
+    case AD::AutoVerticalMode::StemSide:
+        return stemUp;
+    case AD::AutoVerticalMode::AlwaysNoteheadSide:
+        switch (entryInfo.calcStemDirectionForced()) {
+        case StemDirection::AlwaysUp:
+        case StemDirection::AlwaysDown:
+            return stemUp;
+        case StemDirection::Default:
+            return !stemUp;
+        }
+        assert(false && "invalid enum value");
+        // defensive break should be unreachable
+        break;
+    case AD::AutoVerticalMode::AutoNoteStem:
+        return stemUp;
+    case AD::AutoVerticalMode::AlwaysOnStem:
+        return stemUp;
+    }
+    assert(false && "invalid enum value");
+    return stemUp; // defensive fallback should be unreachable
+}
+
+VerticalPlacement details::ArticulationAssign::calcVerticalPlacement(
+    const MusxInstance<others::ArticulationDef>& definition,
+    const EntryInfoPtr& entryInfo) const
+{
+    if (overridePlacement) {
+        return aboveEntry ? VerticalPlacement::Above : VerticalPlacement::Below;
+    }
+    if (!definition->autoVert) {
+        return vertOffset >= 0 ? VerticalPlacement::Above : VerticalPlacement::Below;
+    }
+
+    using AD = others::ArticulationDef;
+    switch (definition->autoVertMode) {
+    case AD::AutoVerticalMode::AboveEntry: {
+        const bool stemSideInMultiLayer = definition->isStemSideWhenMultipleLayers
+            && entryInfo.getFrame()->getContext()->calcIsMultiLayer();
+        return stemSideInMultiLayer ? VerticalPlacement::Float : VerticalPlacement::Above;
+    }
+    case AD::AutoVerticalMode::BelowEntry:
+        return VerticalPlacement::Below;
+    case AD::AutoVerticalMode::AlwaysNoteheadSide:
+    case AD::AutoVerticalMode::AutoNoteStem:
+        return VerticalPlacement::Float;
+    default:
+        return VerticalPlacement::NotApplicable;
+    }
+}
+
+std::optional<details::ArticulationAssign::SelectedSymbolContext>
+details::ArticulationAssign::calcSelectedSymbolContext(const EntryInfoPtr& entryInfo) const
+{
+    SelectedSymbolContext result;
+    if (!entryInfo) {
+        return std::nullopt;
+    }
+
+    result.definition = getDocument()->getOthers()->get<others::ArticulationDef>(getRequestedPartId(), articDef);
+    if (!result.definition) {
+        return std::nullopt;
+    }
+
+    result.symbol = result.definition->calcSelectedSymbol(calcPlacementAbove(result.definition, entryInfo));
+    result.placement = calcVerticalPlacement(result.definition, entryInfo);
+
+    return result;
+}
+
 std::optional<details::ArticulationAssign::PseudoTieShapeContext>
 details::ArticulationAssign::calcPseudoTieShapeContext(const EntryInfoPtr& forStartEntry) const
 {
     PseudoTieShapeContext result;
-    if (!forStartEntry || !articDef || forStartEntry.calcDisplaysAsRest()) {
+    const auto selectedSymbolContext = calcSelectedSymbolContext(forStartEntry);
+    if (!selectedSymbolContext) {
         return std::nullopt;
     }
-
-    const auto entry = forStartEntry->getEntry();
-    if (!entry || entry->notes.empty()) {
-        return std::nullopt;
-    }
-
     const auto doc = getDocument();
-    result.definition = doc->getOthers()->get<others::ArticulationDef>(getRequestedPartId(), articDef);
-    if (!result.definition) {
-        return std::nullopt;
-    }
+    result.definition = selectedSymbolContext->definition;
+    result.selectedSymbol = selectedSymbolContext->symbol;
     const auto def = result.definition;
 
     using AD = others::ArticulationDef;
@@ -98,42 +181,13 @@ details::ArticulationAssign::calcPseudoTieShapeContext(const EntryInfoPtr& forSt
     if (def->autoVert && def->autoVertMode == AD::AutoVerticalMode::AlwaysOnStem) {
         return std::nullopt;
     }
-
-    const bool stemUp = forStartEntry.calcUpStem();
-    auto calcPlacementAbove = [&]() -> bool {
-        if (overridePlacement) {
-            return aboveEntry;
-        }
-        if (!def->autoVert) {
-            if (def->defVertPos > 0) {
-                return true;
-            }
-            if (def->defVertPos < 0) {
-                return false;
-            }
-            return stemUp;
-        }
-        switch (def->autoVertMode) {
-        case AD::AutoVerticalMode::AboveEntry:
-            return true;
-        case AD::AutoVerticalMode::BelowEntry:
-            return false;
-        default:
-            return stemUp;
-        }
-    };
-    result.placeAbove = calcPlacementAbove();
-    result.usesAlternateSymbol = result.placeAbove ? def->aboveSymbolAlt : def->belowSymbolAlt;
-
-    const bool usesShape = result.usesAlternateSymbol ? def->altIsShape : def->mainIsShape;
-    if (!usesShape) {
+    if (!result.selectedSymbol.isShape) {
         return std::nullopt;
     }
-    const auto shapeId = result.usesAlternateSymbol ? def->altShape : def->mainShape;
-    if (!shapeId) {
+    if (!result.selectedSymbol.shapeId) {
         return std::nullopt;
     }
-    result.info.shape = doc->getOthers()->get<others::ShapeDef>(getRequestedPartId(), shapeId);
+    result.info.shape = doc->getOthers()->get<others::ShapeDef>(getRequestedPartId(), result.selectedSymbol.shapeId);
     if (!result.info.shape) {
         return std::nullopt;
     }
@@ -162,8 +216,7 @@ std::optional<utils::PseudoTieShapeInfo> details::ArticulationAssign::calcIsPseu
         return std::nullopt;
     }
 
-    const auto def = tieShapeContext->definition;
-    const auto offset = (tieShapeContext->usesAlternateSymbol ? def->xOffsetAlt : def->xOffsetMain) + horzOffset;
+    const auto offset = tieShapeContext->selectedSymbol.xOffset + horzOffset;
     const auto endOffset = offset + tieShapeContext->info.calcWidthOffset();
     switch (mode) {
     case utils::PseudoTieMode::LaissezVibrer:

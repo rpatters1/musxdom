@@ -160,7 +160,7 @@ TEST(StaffTest, PopulateFields)
     EXPECT_EQ(staff1->vertTabNumOff, -1024);
     EXPECT_TRUE(staff1->hideStems);
     EXPECT_FALSE(staff1->hideBeams);
-    EXPECT_EQ(staff1->stemDirection, others::Staff::StemDirection::AlwaysUp);
+    EXPECT_EQ(staff1->stemDirection, StemDirection::AlwaysUp);
     EXPECT_EQ(staff1->autoNumbering, others::Staff::AutoNumberingStyle::ArabicSuffix);
     EXPECT_EQ(staff1->useAutoNumbering, false);
 
@@ -188,7 +188,7 @@ TEST(StaffTest, PopulateFields)
     EXPECT_EQ(staff2->vertTabNumOff, -1024);
     EXPECT_FALSE(staff2->hideStems);
     EXPECT_TRUE(staff2->hideBeams);
-    EXPECT_EQ(staff2->stemDirection, others::Staff::StemDirection::AlwaysDown);
+    EXPECT_EQ(staff2->stemDirection, StemDirection::AlwaysDown);
     EXPECT_EQ(staff2->autoNumbering, others::Staff::AutoNumberingStyle::ArabicPrefix);
     EXPECT_EQ(staff2->fretInstId, 1);
     EXPECT_EQ(staff2->useAutoNumbering, true);
@@ -196,7 +196,7 @@ TEST(StaffTest, PopulateFields)
     auto staff3 = others->get<others::Staff>(SCORE_PARTID, 11);
     ASSERT_TRUE(staff2) << "Staff with cmper 11 not found";
 
-    EXPECT_EQ(staff3->stemDirection, others::Staff::StemDirection::Default);
+    EXPECT_EQ(staff3->stemDirection, StemDirection::Default);
 }
 
 TEST(StaffTest, AutoNumbering)

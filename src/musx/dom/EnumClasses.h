@@ -168,6 +168,15 @@ enum class ShowClefMode
     Always      ///< Clef is always displayed. (xml value is "forced")
 };
 
+/// @enum StemDirection
+/// @brief Three-state stem direction setting or override.
+enum class StemDirection
+{
+    Default,    ///< No forced direction; use the default calculation.
+    AlwaysUp,   ///< Stems are forced up.
+    AlwaysDown  ///< Stems are forced down.
+};
+
 /**
  * @enum TieConnectStyleType
  * @brief Enumeration for tie connect style types
@@ -186,6 +195,16 @@ enum class TieConnectStyleType
     OverHighestNoteStemEndPosOver,
     UnderLowestNoteStemStartPosUnder,
     UnderLowestNoteStemEndPosUnder
+};
+
+/// @enum VerticalPlacement
+/// @brief Specifies a vertical placement relationship for notation objects.
+enum class VerticalPlacement
+{
+    NotApplicable, ///< Above/below placement does not meaningfully apply.
+    Float,         ///< Above/below placement floats based on context (usually stem direction).
+    Below,         ///< Always positioned below the reference point or object.
+    Above          ///< Always positioned above the reference point or object.
 };
 
 } // namespace dom
