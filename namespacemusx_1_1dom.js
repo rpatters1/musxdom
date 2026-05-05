@@ -993,6 +993,11 @@ var namespacemusx_1_1dom =
       [ "Never", "namespacemusx_1_1dom.html#a09b81b6535bd382e3afc1a00ba080215a6e7b34fa59e1bd229b207892956dc41c", null ],
       [ "Always", "namespacemusx_1_1dom.html#a09b81b6535bd382e3afc1a00ba080215a68eec46437c384d8dad18d5464ebc35c", null ]
     ] ],
+    [ "StemDirection", "namespacemusx_1_1dom.html#a85d511d77e60bbc95b83884133bd383f", [
+      [ "Default", "namespacemusx_1_1dom.html#a85d511d77e60bbc95b83884133bd383fa7a1920d61156abc05a60135aefe8bc67", null ],
+      [ "AlwaysUp", "namespacemusx_1_1dom.html#a85d511d77e60bbc95b83884133bd383fae15a1a05181326142cc6422ad1199831", null ],
+      [ "AlwaysDown", "namespacemusx_1_1dom.html#a85d511d77e60bbc95b83884133bd383fa2e17ed9e19024a0e0863360470252f70", null ]
+    ] ],
     [ "TieConnectStyleType", "namespacemusx_1_1dom.html#a5f06724a2f55f38e74adc2f8d37e20d5", [
       [ "OverStartPosInner", "namespacemusx_1_1dom.html#a5f06724a2f55f38e74adc2f8d37e20d5a3639d2ca739f8a1a16e7fa7bd801c46c", null ],
       [ "OverEndPosInner", "namespacemusx_1_1dom.html#a5f06724a2f55f38e74adc2f8d37e20d5a6368a13c1e700dccd33860fb6245afa8", null ],
@@ -1006,6 +1011,12 @@ var namespacemusx_1_1dom =
       [ "OverHighestNoteStemEndPosOver", "namespacemusx_1_1dom.html#a5f06724a2f55f38e74adc2f8d37e20d5aebfa053d4d5bb9b0ddcfcb33618c6e1f", null ],
       [ "UnderLowestNoteStemStartPosUnder", "namespacemusx_1_1dom.html#a5f06724a2f55f38e74adc2f8d37e20d5a457c58fc1848107d6ad8c04803bb935e", null ],
       [ "UnderLowestNoteStemEndPosUnder", "namespacemusx_1_1dom.html#a5f06724a2f55f38e74adc2f8d37e20d5a94509c4a4583aded1d9589fecadb779f", null ]
+    ] ],
+    [ "VerticalPlacement", "namespacemusx_1_1dom.html#a5f47ab5a8dd3f3cab33730ac7e178ad3", [
+      [ "NotApplicable", "namespacemusx_1_1dom.html#a5f47ab5a8dd3f3cab33730ac7e178ad3a7599922e28b6009660de5e67f8ce210c", null ],
+      [ "Float", "namespacemusx_1_1dom.html#a5f47ab5a8dd3f3cab33730ac7e178ad3a22ae0e2b89e5e3d477f988cc36d3272b", null ],
+      [ "Below", "namespacemusx_1_1dom.html#a5f47ab5a8dd3f3cab33730ac7e178ad3ae59dd8d25c0b6bb6697eac0617ccd412", null ],
+      [ "Above", "namespacemusx_1_1dom.html#a5f47ab5a8dd3f3cab33730ac7e178ad3a5b469fd01889ec12f1e84c6e66829fc1", null ]
     ] ],
     [ "calcDurationInfoFromEdu", "namespacemusx_1_1dom.html#ad70355206e90c7b79b7860fc5d75bff0", null ],
     [ "calcNumberOfBeamsInEdu", "namespacemusx_1_1dom.html#aa75d341865ea5c3e1a8fcb735ea5e51b", null ],

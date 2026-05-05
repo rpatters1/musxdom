@@ -30,11 +30,6 @@ var classmusx_1_1dom_1_1others_1_1Staff =
       [ "Percussion", "classmusx_1_1dom_1_1others_1_1Staff.html#a1e8b0e96deee5cbeb3f5bb82416d6cf6acb5c10c0b488ed4f3826ba628d18ca6a", null ],
       [ "Tablature", "classmusx_1_1dom_1_1others_1_1Staff.html#a1e8b0e96deee5cbeb3f5bb82416d6cf6a2bcbcf8fa5e77f260b3475e80c3f80d6", null ]
     ] ],
-    [ "StemDirection", "classmusx_1_1dom_1_1others_1_1Staff.html#a7be6f16155ed7836b23b0c320e77723a", [
-      [ "Default", "classmusx_1_1dom_1_1others_1_1Staff.html#a7be6f16155ed7836b23b0c320e77723aa7a1920d61156abc05a60135aefe8bc67", null ],
-      [ "AlwaysUp", "classmusx_1_1dom_1_1others_1_1Staff.html#a7be6f16155ed7836b23b0c320e77723aae15a1a05181326142cc6422ad1199831", null ],
-      [ "AlwaysDown", "classmusx_1_1dom_1_1others_1_1Staff.html#a7be6f16155ed7836b23b0c320e77723aa2e17ed9e19024a0e0863360470252f70", null ]
-    ] ],
     [ "Staff", "classmusx_1_1dom_1_1others_1_1Staff.html#a6b2463c519cd866520ed2116151334b5", null ],
     [ "addAutoNumbering", "classmusx_1_1dom_1_1others_1_1Staff.html#a428918fb57d8ff9b01b34f953b080904", null ],
     [ "calcAlternateNotationHidesEntries", "classmusx_1_1dom_1_1others_1_1Staff.html#a9d7c3b2be150114583a4bc3f1cfee5c6", null ],

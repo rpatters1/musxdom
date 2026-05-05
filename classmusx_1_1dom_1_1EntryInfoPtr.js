@@ -47,6 +47,7 @@ var classmusx_1_1dom_1_1EntryInfoPtr =
     [ "calcNextTupletIndex", "classmusx_1_1dom_1_1EntryInfoPtr.html#aa5bf030123af0df89bd68230ec285713", null ],
     [ "calcNumberOfBeams", "classmusx_1_1dom_1_1EntryInfoPtr.html#a8149bc295e394a775747727cf3d9a5c4", null ],
     [ "calcReverseGraceIndex", "classmusx_1_1dom_1_1EntryInfoPtr.html#a284505434c8a4a0b7fe8705062599b30", null ],
+    [ "calcStemDirectionForced", "classmusx_1_1dom_1_1EntryInfoPtr.html#a8026e2b4d623b8b4ac1ee7f8402a890a", null ],
     [ "calcTopBottomStaffPositions", "classmusx_1_1dom_1_1EntryInfoPtr.html#aa7cecd561c595a6685ab1204b919e442", null ],
     [ "calcUnbeamed", "classmusx_1_1dom_1_1EntryInfoPtr.html#accb023218f8bfd19cd3b3c4b82de530c", null ],
     [ "calcUpStem", "classmusx_1_1dom_1_1EntryInfoPtr.html#a87a183870482e7322a06c94d953a31aa", null ],

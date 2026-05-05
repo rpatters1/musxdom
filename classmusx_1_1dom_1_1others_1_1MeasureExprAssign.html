@@ -175,9 +175,15 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>calcIsPseudoTie</b> (
 <tr class="memitem:aeb5727858ee3ab49a03814b3663c559f" id="r_aeb5727858ee3ab49a03814b3663c559f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemusx_1_1dom.html#a4223cd531120dbef7acd854c3d2631b8">MusxInstance</a>&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1ShapeExpressionDef.html">ShapeExpressionDef</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1MeasureExprAssign.html#aeb5727858ee3ab49a03814b3663c559f">getShapeExpression</a> () const</td></tr>
 <tr class="memdesc:aeb5727858ee3ab49a03814b3663c559f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the assigned shape expression.  <br /></td></tr>
 <tr class="separator:aeb5727858ee3ab49a03814b3663c559f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4658c75d8732e839c43d43cb532f9b25" id="r_a4658c75d8732e839c43d43cb532f9b25"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemusx_1_1dom.html#a4223cd531120dbef7acd854c3d2631b8">MusxInstance</a>&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1MarkingCategory.html">MarkingCategory</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1MeasureExprAssign.html#a4658c75d8732e839c43d43cb532f9b25">getMarkingCategory</a> () const</td></tr>
+<tr class="memdesc:a4658c75d8732e839c43d43cb532f9b25"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the marking category for the assigned text or shape expression.  <br /></td></tr>
+<tr class="separator:a4658c75d8732e839c43d43cb532f9b25"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa6cfc0be17f9e8e6be2f683884794da1" id="r_aa6cfc0be17f9e8e6be2f683884794da1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemusx_1_1dom_1_1others.html#a8c831340a452cb492cff24c36447e317">CategoryStaffListSet</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1MeasureExprAssign.html#aa6cfc0be17f9e8e6be2f683884794da1">createStaffListSet</a> () const</td></tr>
 <tr class="memdesc:aa6cfc0be17f9e8e6be2f683884794da1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a <a class="el" href="classmusx_1_1dom_1_1others_1_1StaffListSet.html">StaffListSet</a> for the given instance. This can be used to interrogate whether a staff appears in the staff set.  <br /></td></tr>
 <tr class="separator:aa6cfc0be17f9e8e6be2f683884794da1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a552cef74b8f77a1f8e056d459d1355e5" id="r_a552cef74b8f77a1f8e056d459d1355e5"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1MeasureExprAssign.html#a552cef74b8f77a1f8e056d459d1355e5">calcIsPartOfStaffListAssignment</a> () const</td></tr>
+<tr class="memdesc:a552cef74b8f77a1f8e056d459d1355e5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates if this assignment participates in a staff-list-based assignment group.  <br /></td></tr>
+<tr class="separator:a552cef74b8f77a1f8e056d459d1355e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad064c2154b89dd126c0481dbe350002c" id="r_ad064c2154b89dd126c0481dbe350002c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemusx_1_1dom.html#ada2c0787f5b7cb764d2a344d491ab99c">StaffCmper</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1MeasureExprAssign.html#ad064c2154b89dd126c0481dbe350002c">calcAssignedStaffId</a> (bool forPageView=true) const</td></tr>
 <tr class="memdesc:ad064c2154b89dd126c0481dbe350002c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the effective staffId for the assignment, returning top or bottom staff if appropriate.  <br /></td></tr>
 <tr class="separator:ad064c2154b89dd126c0481dbe350002c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -550,6 +556,26 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
+<a id="a552cef74b8f77a1f8e056d459d1355e5" name="a552cef74b8f77a1f8e056d459d1355e5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a552cef74b8f77a1f8e056d459d1355e5">&#9670;&#160;</a></span>calcIsPartOfStaffListAssignment()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool musx::dom::others::MeasureExprAssign::calcIsPartOfStaffListAssignment </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Calculates if this assignment participates in a staff-list-based assignment group. </p>
+<p>This checks the assignment-level grouping fields first, then falls back to the assigned expression category when the category uses staff lists. This works for both text and shape expressions. </p>
+
+</div>
+</div>
 <a id="add8ad39ad4bd23c5a2e559cc832e8e6e" name="add8ad39ad4bd23c5a2e559cc832e8e6e"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#add8ad39ad4bd23c5a2e559cc832e8e6e">&#9670;&#160;</a></span>createCurrentStaff()</h2>
 
@@ -592,7 +618,27 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Create a <a class="el" href="classmusx_1_1dom_1_1others_1_1StaffListSet.html">StaffListSet</a> for the given instance. This can be used to interrogate whether a staff appears in the staff set. </p>
-<dl class="section return"><dt>Returns</dt><dd>The created staff list set. If <a class="el" href="classmusx_1_1dom_1_1others_1_1MeasureExprAssign.html#a403a1bdaab1e95edb4d13f2ecb6d7f87">staffList</a> is zero, it will never find any staves for the staff list. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>The created staff list set. If <a class="el" href="classmusx_1_1dom_1_1others_1_1MeasureExprAssign.html#a403a1bdaab1e95edb4d13f2ecb6d7f87">staffList</a> is zero, the function falls back to the expression category's staff list when that category uses staff lists. Otherwise it will never find any staves. </dd></dl>
+
+</div>
+</div>
+<a id="a4658c75d8732e839c43d43cb532f9b25" name="a4658c75d8732e839c43d43cb532f9b25"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4658c75d8732e839c43d43cb532f9b25">&#9670;&#160;</a></span>getMarkingCategory()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacemusx_1_1dom.html#a4223cd531120dbef7acd854c3d2631b8">MusxInstance</a>&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1MarkingCategory.html">MarkingCategory</a> &gt; musx::dom::others::MeasureExprAssign::getMarkingCategory </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Gets the marking category for the assigned text or shape expression. </p>
+<dl class="section return"><dt>Returns</dt><dd>The marking category or nullptr if the definition or its category cannot be resolved. </dd></dl>
 
 </div>
 </div>

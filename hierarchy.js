@@ -395,6 +395,8 @@ var hierarchy =
       [ "musx::factory::unknown_xml_error", "classmusx_1_1factory_1_1unknown__xml__error.html", null ],
       [ "musx::xml::load_error", "classmusx_1_1xml_1_1load__error.html", null ]
     ] ],
+    [ "musx::dom::others::ArticulationDef::SelectedSymbol", "structmusx_1_1dom_1_1others_1_1ArticulationDef_1_1SelectedSymbol.html", null ],
+    [ "musx::dom::details::ArticulationAssign::SelectedSymbolContext", "structmusx_1_1dom_1_1details_1_1ArticulationAssign_1_1SelectedSymbolContext.html", null ],
     [ "musx::dom::ShapeDefInstruction::SetArrowhead", "structmusx_1_1dom_1_1ShapeDefInstruction_1_1SetArrowhead.html", null ],
     [ "musx::dom::ShapeDefInstruction::SetDash", "structmusx_1_1dom_1_1ShapeDefInstruction_1_1SetDash.html", null ],
     [ "musx::dom::ShapeDefInstruction::SetFont", "structmusx_1_1dom_1_1ShapeDefInstruction_1_1SetFont.html", null ],

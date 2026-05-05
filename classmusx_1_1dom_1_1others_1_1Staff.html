@@ -148,12 +148,6 @@ Public Types</h2></td></tr>
  }</td></tr>
 <tr class="memdesc:a03805868cff56f8b8e45afcb891e81e1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enum for auto-numbering style. Auto-numbering is based on <a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html#aed8dd51f5f3d7128990113c16925589a" title="Unique identifier for the type of instrument.">instUuid</a>.  <a href="classmusx_1_1dom_1_1others_1_1Staff.html#a03805868cff56f8b8e45afcb891e81e1">More...</a><br /></td></tr>
 <tr class="separator:a03805868cff56f8b8e45afcb891e81e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7be6f16155ed7836b23b0c320e77723a" id="r_a7be6f16155ed7836b23b0c320e77723a"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html#a7be6f16155ed7836b23b0c320e77723a">StemDirection</a> { <a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html#a7be6f16155ed7836b23b0c320e77723aa7a1920d61156abc05a60135aefe8bc67">Default</a>
-, <a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html#a7be6f16155ed7836b23b0c320e77723aae15a1a05181326142cc6422ad1199831">AlwaysUp</a>
-, <a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html#a7be6f16155ed7836b23b0c320e77723aa2e17ed9e19024a0e0863360470252f70">AlwaysDown</a>
- }</td></tr>
-<tr class="memdesc:a7be6f16155ed7836b23b0c320e77723a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enum for staff-level stem direction override.  <a href="classmusx_1_1dom_1_1others_1_1Staff.html#a7be6f16155ed7836b23b0c320e77723a">More...</a><br /></td></tr>
-<tr class="separator:a7be6f16155ed7836b23b0c320e77723a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1e8b0e96deee5cbeb3f5bb82416d6cf6" id="r_a1e8b0e96deee5cbeb3f5bb82416d6cf6"><td class="memItemLeft" align="right" valign="top"><a id="a1e8b0e96deee5cbeb3f5bb82416d6cf6" name="a1e8b0e96deee5cbeb3f5bb82416d6cf6"></a>enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html#a1e8b0e96deee5cbeb3f5bb82416d6cf6">NotationStyle</a> { <b>Standard</b>
 , <b>Percussion</b>
 , <b>Tablature</b>
@@ -670,7 +664,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>hideStems</b> {}</td>
 <tr class="memdesc:a43a8a4d6e40a765ac43c63205336a494"><td class="mdescLeft">&#160;</td><td class="mdescRight">Inverse of "Display Stems". <br /></td></tr>
 <tr class="separator:a43a8a4d6e40a765ac43c63205336a494"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a43918594fcfadee25e19bbce250847e6" id="r_a43918594fcfadee25e19bbce250847e6"><td class="memItemLeft" align="right" valign="top"><a id="a43918594fcfadee25e19bbce250847e6" name="a43918594fcfadee25e19bbce250847e6"></a>
-<a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html#a7be6f16155ed7836b23b0c320e77723a">StemDirection</a>&#160;</td><td class="memItemRight" valign="bottom"><b>stemDirection</b> {}</td></tr>
+<a class="el" href="namespacemusx_1_1dom.html#a85d511d77e60bbc95b83884133bd383f">StemDirection</a>&#160;</td><td class="memItemRight" valign="bottom"><b>stemDirection</b> {}</td></tr>
 <tr class="memdesc:a43918594fcfadee25e19bbce250847e6"><td class="mdescLeft">&#160;</td><td class="mdescRight">stem direction for staff (xml node is <code>&lt;stemDir&gt;</code>) <br /></td></tr>
 <tr class="separator:a43918594fcfadee25e19bbce250847e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abf34de6cef2f1925161fdc23ede80da3" id="r_abf34de6cef2f1925161fdc23ede80da3"><td class="memItemLeft" align="right" valign="top"><a id="abf34de6cef2f1925161fdc23ede80da3" name="abf34de6cef2f1925161fdc23ede80da3"></a>
@@ -911,38 +905,6 @@ Additional Inherited Members</h2></td></tr>
 <tr><td class="fieldname"><a id="ab23c7e94e4782a34d7f06e54e6fed7d0a630aab72810a94e7a0cf5896f5d99aa4" name="ab23c7e94e4782a34d7f06e54e6fed7d0a630aab72810a94e7a0cf5896f5d99aa4"></a>ScoreParts&#160;</td><td class="fielddoc"><p>Collapse in score and parts. </p>
 </td></tr>
 <tr><td class="fieldname"><a id="ab23c7e94e4782a34d7f06e54e6fed7d0a5dd135d1bcfa7f63c3b7f25425c2a4a1" name="ab23c7e94e4782a34d7f06e54e6fed7d0a5dd135d1bcfa7f63c3b7f25425c2a4a1"></a>Score&#160;</td><td class="fielddoc"><p>Collapse in score only. </p>
-</td></tr>
-</table>
-
-</div>
-</div>
-<a id="a7be6f16155ed7836b23b0c320e77723a" name="a7be6f16155ed7836b23b0c320e77723a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7be6f16155ed7836b23b0c320e77723a">&#9670;&#160;</a></span>StemDirection</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">enum class <a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html#a7be6f16155ed7836b23b0c320e77723a">musx::dom::others::Staff::StemDirection</a></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">strong</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Enum for staff-level stem direction override. </p>
-<table class="fieldtable">
-<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a7be6f16155ed7836b23b0c320e77723aa7a1920d61156abc05a60135aefe8bc67" name="a7be6f16155ed7836b23b0c320e77723aa7a1920d61156abc05a60135aefe8bc67"></a>Default&#160;</td><td class="fielddoc"><p>the default (may not occur in xml) </p>
-</td></tr>
-<tr><td class="fieldname"><a id="a7be6f16155ed7836b23b0c320e77723aae15a1a05181326142cc6422ad1199831" name="a7be6f16155ed7836b23b0c320e77723aae15a1a05181326142cc6422ad1199831"></a>AlwaysUp&#160;</td><td class="fielddoc"><p>stems are always up on this staff </p>
-</td></tr>
-<tr><td class="fieldname"><a id="a7be6f16155ed7836b23b0c320e77723aa2e17ed9e19024a0e0863360470252f70" name="a7be6f16155ed7836b23b0c320e77723aa2e17ed9e19024a0e0863360470252f70"></a>AlwaysDown&#160;</td><td class="fielddoc"><p>stems are always down on this staff </p>
 </td></tr>
 </table>
 

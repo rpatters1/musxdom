@@ -267,6 +267,9 @@ std::optional&lt; size_t &gt;&#160;</td><td class="memItemRight" valign="bottom"
 <tr class="memitem:a002aa6823c31b83897d351c3ba49f5a4" id="r_a002aa6823c31b83897d351c3ba49f5a4"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#a002aa6823c31b83897d351c3ba49f5a4">calcUpStemDefault</a> () const</td></tr>
 <tr class="memdesc:a002aa6823c31b83897d351c3ba49f5a4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates if the entry is upstem by default, without considering voices, layers, staff options, cross-staffing, or manual overrides.  <br /></td></tr>
 <tr class="separator:a002aa6823c31b83897d351c3ba49f5a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8026e2b4d623b8b4ac1ee7f8402a890a" id="r_a8026e2b4d623b8b4ac1ee7f8402a890a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemusx_1_1dom.html#a85d511d77e60bbc95b83884133bd383f">StemDirection</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#a8026e2b4d623b8b4ac1ee7f8402a890a">calcStemDirectionForced</a> () const</td></tr>
+<tr class="memdesc:a8026e2b4d623b8b4ac1ee7f8402a890a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the forced stem direction if any.  <br /></td></tr>
+<tr class="separator:a8026e2b4d623b8b4ac1ee7f8402a890a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a87a183870482e7322a06c94d953a31aa" id="r_a87a183870482e7322a06c94d953a31aa"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#a87a183870482e7322a06c94d953a31aa">calcUpStem</a> () const</td></tr>
 <tr class="memdesc:a87a183870482e7322a06c94d953a31aa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines the effective stem direction of the entry, taking into account voices, layers, staff options, manual overrides, and cross-staff notation.  <br /></td></tr>
 <tr class="separator:a87a183870482e7322a06c94d953a31aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1163,6 +1166,26 @@ Static Public Member Functions</h2></td></tr>
 
 <p>Returns the lowest beam stub at this entry, where 2 = 16th note stub, 3 = 32nd note stub, etc. </p>
 <dl class="section return"><dt>Returns</dt><dd>0 if not beamed or no beam stub exists on this entry; otherwise, the lowest beam stub number </dd></dl>
+
+</div>
+</div>
+<a id="a8026e2b4d623b8b4ac1ee7f8402a890a" name="a8026e2b4d623b8b4ac1ee7f8402a890a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8026e2b4d623b8b4ac1ee7f8402a890a">&#9670;&#160;</a></span>calcStemDirectionForced()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacemusx_1_1dom.html#a85d511d77e60bbc95b83884133bd383f">StemDirection</a> musx::dom::EntryInfoPtr::calcStemDirectionForced </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the forced stem direction if any. </p>
+<p>This uses the following precedence: rhythmic notation, manual freeze, layer override, staff override, and v1/v2 behavior. Cross-staff direction overrides are intentionally excluded. </p><dl class="section return"><dt>Returns</dt><dd>The forced direction, or <a class="el" href="namespacemusx_1_1dom.html#a85d511d77e60bbc95b83884133bd383fa7a1920d61156abc05a60135aefe8bc67" title="No forced direction; use the default calculation.">StemDirection::Default</a> if none applies. </dd></dl>
 
 </div>
 </div>

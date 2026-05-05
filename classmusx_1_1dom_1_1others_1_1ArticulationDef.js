@@ -1,5 +1,6 @@
 var classmusx_1_1dom_1_1others_1_1ArticulationDef =
 [
+    [ "SelectedSymbol", "structmusx_1_1dom_1_1others_1_1ArticulationDef_1_1SelectedSymbol.html", "structmusx_1_1dom_1_1others_1_1ArticulationDef_1_1SelectedSymbol" ],
     [ "AutoVerticalMode", "classmusx_1_1dom_1_1others_1_1ArticulationDef.html#ac7293e071062ccde1f4c6d9de9cecd6e", [
       [ "AlwaysNoteheadSide", "classmusx_1_1dom_1_1others_1_1ArticulationDef.html#ac7293e071062ccde1f4c6d9de9cecd6eaad46474d15fa22636fd425e32faf11ae", null ],
       [ "AutoNoteStem", "classmusx_1_1dom_1_1others_1_1ArticulationDef.html#ac7293e071062ccde1f4c6d9de9cecd6ea61bc1fc4173f1aaa6d301ddd3fc2da33", null ],
@@ -19,6 +20,7 @@ var classmusx_1_1dom_1_1others_1_1ArticulationDef =
       [ "AvoidSlur", "classmusx_1_1dom_1_1others_1_1ArticulationDef.html#a49310a914cbb3b992e53028b19643e42a3145c961006e88ed0e022828a37c242e", null ]
     ] ],
     [ "ArticulationDef", "classmusx_1_1dom_1_1others_1_1ArticulationDef.html#ade0b281eb1f5ee1edf75b2ef527681f3", null ],
+    [ "calcSelectedSymbol", "classmusx_1_1dom_1_1others_1_1ArticulationDef.html#a1406929cc5953f99d2d02824e0f546d5", null ],
     [ "aboveSymbolAlt", "classmusx_1_1dom_1_1others_1_1ArticulationDef.html#a2d73f7bc6663eb7de47355e08fe85708", null ],
     [ "altIsShape", "classmusx_1_1dom_1_1others_1_1ArticulationDef.html#a5079097dc15921bcc9640ca6ed8c8da9", null ],
     [ "altShape", "classmusx_1_1dom_1_1others_1_1ArticulationDef.html#a4f117838a0af471b970a330489fd16d7", null ],
