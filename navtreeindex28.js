@@ -1,5 +1,13 @@
 var NAVTREEINDEX28 =
 {
+"classmusx_1_1xml_1_1tinyxml2_1_1Attribute.html#a3dc87d58c8be6e108538934fab02a317":[2,0,1,4,2,0,1],
+"classmusx_1_1xml_1_1tinyxml2_1_1Attribute.html#a3dc87d58c8be6e108538934fab02a317":[1,0,1,2,2,0,1],
+"classmusx_1_1xml_1_1tinyxml2_1_1Attribute.html#ac88cab337dbb357332347bf974319176":[2,0,1,4,2,0,3],
+"classmusx_1_1xml_1_1tinyxml2_1_1Attribute.html#ac88cab337dbb357332347bf974319176":[1,0,1,2,2,0,3],
+"classmusx_1_1xml_1_1tinyxml2_1_1Attribute.html#ae8b5c50a34b3092cedc0e4176941a786":[2,0,1,4,2,0,2],
+"classmusx_1_1xml_1_1tinyxml2_1_1Attribute.html#ae8b5c50a34b3092cedc0e4176941a786":[1,0,1,2,2,0,2],
+"classmusx_1_1xml_1_1tinyxml2_1_1Document.html":[2,0,1,4,2,1],
+"classmusx_1_1xml_1_1tinyxml2_1_1Document.html":[1,0,1,2,2,1],
 "classmusx_1_1xml_1_1tinyxml2_1_1Document.html#a0ea103332330c8bc3e65e9bbb9005148":[1,0,1,2,2,1,1],
 "classmusx_1_1xml_1_1tinyxml2_1_1Document.html#a0ea103332330c8bc3e65e9bbb9005148":[2,0,1,4,2,1,1],
 "classmusx_1_1xml_1_1tinyxml2_1_1Document.html#ace2bac63f7fcbf0f6bd9372e7e1c2739":[1,0,1,2,2,1,2],
@@ -241,13 +249,5 @@ var NAVTREEINDEX28 =
 "namespacemusx_1_1dom.html#a16d85e8ed9439b9a2ef071d38ffa0fd7a9bf7fd8cfe4d0efe1365f0666ef286b7":[1,0,1,0,88,8],
 "namespacemusx_1_1dom.html#a16d85e8ed9439b9a2ef071d38ffa0fd7ac6cdf96e9804915f9f5c6771802805fd":[1,0,1,0,88,2],
 "namespacemusx_1_1dom.html#a16d85e8ed9439b9a2ef071d38ffa0fd7aced4f5dff90dcb0f3434fa6e12cedbaa":[1,0,1,0,88,4],
-"namespacemusx_1_1dom.html#a16d85e8ed9439b9a2ef071d38ffa0fd7ae4ef81cce7e4e10033ebb10962dfdd5e":[1,0,1,0,88,1],
-"namespacemusx_1_1dom.html#a18750060f2b1c2d29282ecea4adbe04e":[1,0,1,0,76],
-"namespacemusx_1_1dom.html#a2158a5e042da1a8511f2e3b604afaa7b":[1,0,1,0,78],
-"namespacemusx_1_1dom.html#a29f7b9d057bc451a1135e77f8e621d5c":[1,0,1,0,109],
-"namespacemusx_1_1dom.html#a2ce10a96e600e1368dd4b8cefdf12d5b":[1,0,1,0,90],
-"namespacemusx_1_1dom.html#a2ce10a96e600e1368dd4b8cefdf12d5ba5fbff2c65b52ee38781d1d81ff11ecb5":[1,0,1,0,90,2],
-"namespacemusx_1_1dom.html#a2ce10a96e600e1368dd4b8cefdf12d5baed36a1ef76a59ee3f15180e0441188ad":[1,0,1,0,90,0],
-"namespacemusx_1_1dom.html#a2ce10a96e600e1368dd4b8cefdf12d5baf5616200d2e5faff161ac8f5e1637559":[1,0,1,0,90,1],
-"namespacemusx_1_1dom.html#a31c92a4751443e096b5a99100828f6e0":[1,0,1,0,113]
+"namespacemusx_1_1dom.html#a16d85e8ed9439b9a2ef071d38ffa0fd7ae4ef81cce7e4e10033ebb10962dfdd5e":[1,0,1,0,88,1]
 };

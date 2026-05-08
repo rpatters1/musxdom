@@ -1,5 +1,13 @@
 var NAVTREEINDEX26 =
 {
+"classmusx_1_1dom_1_1others_1_1TextBlock.html#af09b4d22b57a426c4f2bd2e7c5f8a9d6":[2,0,1,0,3,82,2],
+"classmusx_1_1dom_1_1others_1_1TextBlock.html#afaaee136aeca861afd7196a00498d6df":[1,0,1,0,3,82,6],
+"classmusx_1_1dom_1_1others_1_1TextBlock.html#afaaee136aeca861afd7196a00498d6df":[2,0,1,0,3,82,6],
+"classmusx_1_1dom_1_1others_1_1TextBlock.html#afc7936cb2a20d22c2fb86626281948c0":[2,0,1,0,3,82,14],
+"classmusx_1_1dom_1_1others_1_1TextBlock.html#afc7936cb2a20d22c2fb86626281948c0":[1,0,1,0,3,82,14],
+"classmusx_1_1dom_1_1others_1_1TextBlock.html#afe72246ff14c5ca09fb78f47a1c9900d":[2,0,1,0,3,82,20],
+"classmusx_1_1dom_1_1others_1_1TextBlock.html#afe72246ff14c5ca09fb78f47a1c9900d":[1,0,1,0,3,82,20],
+"classmusx_1_1dom_1_1others_1_1TextExpressionDef.html":[1,0,1,0,3,83],
 "classmusx_1_1dom_1_1others_1_1TextExpressionDef.html":[2,0,1,0,3,83],
 "classmusx_1_1dom_1_1others_1_1TextExpressionDef.html#a09982c086ee1b1e02ac582eb9d1d9f63":[2,0,1,0,3,83,25],
 "classmusx_1_1dom_1_1others_1_1TextExpressionDef.html#a09982c086ee1b1e02ac582eb9d1d9f63":[1,0,1,0,3,83,25],
@@ -241,13 +249,5 @@ var NAVTREEINDEX26 =
 "classmusx_1_1dom_1_1texts_1_1FileInfoText.html#aa6e25b12fcac3b717a33210c3df0447f":[1,0,1,0,4,3,1],
 "classmusx_1_1dom_1_1texts_1_1FileInfoText.html#aa6e25b12fcac3b717a33210c3df0447f":[2,0,1,0,6,3,1],
 "classmusx_1_1dom_1_1texts_1_1LyricsChorus.html":[2,0,1,0,6,4],
-"classmusx_1_1dom_1_1texts_1_1LyricsChorus.html":[1,0,1,0,4,4],
-"classmusx_1_1dom_1_1texts_1_1LyricsSection.html":[1,0,1,0,4,5],
-"classmusx_1_1dom_1_1texts_1_1LyricsSection.html":[2,0,1,0,6,5],
-"classmusx_1_1dom_1_1texts_1_1LyricsTextBase.html":[1,0,1,0,4,6],
-"classmusx_1_1dom_1_1texts_1_1LyricsTextBase.html":[2,0,1,0,6,6],
-"classmusx_1_1dom_1_1texts_1_1LyricsTextBase.html#a94ada56b9cce11b0102c7f295020bf3d":[1,0,1,0,4,6,3],
-"classmusx_1_1dom_1_1texts_1_1LyricsTextBase.html#a94ada56b9cce11b0102c7f295020bf3d":[2,0,1,0,6,6,3],
-"classmusx_1_1dom_1_1texts_1_1LyricsTextBase.html#aaa07f7d49633f9ff62d6441cc696f7eb":[1,0,1,0,4,6,1],
-"classmusx_1_1dom_1_1texts_1_1LyricsTextBase.html#aaa07f7d49633f9ff62d6441cc696f7eb":[2,0,1,0,6,6,1]
+"classmusx_1_1dom_1_1texts_1_1LyricsChorus.html":[1,0,1,0,4,4]
 };

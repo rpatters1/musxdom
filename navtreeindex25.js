@@ -1,5 +1,13 @@
 var NAVTREEINDEX25 =
 {
+"classmusx_1_1dom_1_1others_1_1StaffStyleAssign.html#a5ff48c44dda4b97ba8875d8363112ff4":[2,0,1,0,3,77,2],
+"classmusx_1_1dom_1_1others_1_1StaffStyleAssign.html#aa615ca1c6fec6da3338f2a3eec31f3dd":[2,0,1,0,3,77,0],
+"classmusx_1_1dom_1_1others_1_1StaffStyleAssign.html#aa615ca1c6fec6da3338f2a3eec31f3dd":[1,0,1,0,3,77,0],
+"classmusx_1_1dom_1_1others_1_1StaffStyleAssign.html#af54dd0f2ef09fbf838fa985a2359644a":[1,0,1,0,3,77,1],
+"classmusx_1_1dom_1_1others_1_1StaffStyleAssign.html#af54dd0f2ef09fbf838fa985a2359644a":[2,0,1,0,3,77,1],
+"classmusx_1_1dom_1_1others_1_1StaffStyle_1_1Masks.html":[2,0,1,0,3,76,0],
+"classmusx_1_1dom_1_1others_1_1StaffStyle_1_1Masks.html":[1,0,1,0,3,76,0],
+"classmusx_1_1dom_1_1others_1_1StaffStyle_1_1Masks.html#a00ea373c9a96e48bd940b62cbe02c8c1":[1,0,1,0,3,76,0,31],
 "classmusx_1_1dom_1_1others_1_1StaffStyle_1_1Masks.html#a00ea373c9a96e48bd940b62cbe02c8c1":[2,0,1,0,3,76,0,31],
 "classmusx_1_1dom_1_1others_1_1StaffStyle_1_1Masks.html#a13f212e8e2997daf2add1dc3e46cd944":[1,0,1,0,3,76,0,5],
 "classmusx_1_1dom_1_1others_1_1StaffStyle_1_1Masks.html#a13f212e8e2997daf2add1dc3e46cd944":[2,0,1,0,3,76,0,5],
@@ -241,13 +249,5 @@ var NAVTREEINDEX25 =
 "classmusx_1_1dom_1_1others_1_1TextBlock.html#ac45a6402d4c9f830a248b2e4d0d94ca5":[1,0,1,0,3,82,8],
 "classmusx_1_1dom_1_1others_1_1TextBlock.html#ac5d18a958e3d69ea80e8a3ab8bb014b0":[1,0,1,0,3,82,15],
 "classmusx_1_1dom_1_1others_1_1TextBlock.html#ac5d18a958e3d69ea80e8a3ab8bb014b0":[2,0,1,0,3,82,15],
-"classmusx_1_1dom_1_1others_1_1TextBlock.html#af09b4d22b57a426c4f2bd2e7c5f8a9d6":[1,0,1,0,3,82,2],
-"classmusx_1_1dom_1_1others_1_1TextBlock.html#af09b4d22b57a426c4f2bd2e7c5f8a9d6":[2,0,1,0,3,82,2],
-"classmusx_1_1dom_1_1others_1_1TextBlock.html#afaaee136aeca861afd7196a00498d6df":[1,0,1,0,3,82,6],
-"classmusx_1_1dom_1_1others_1_1TextBlock.html#afaaee136aeca861afd7196a00498d6df":[2,0,1,0,3,82,6],
-"classmusx_1_1dom_1_1others_1_1TextBlock.html#afc7936cb2a20d22c2fb86626281948c0":[2,0,1,0,3,82,14],
-"classmusx_1_1dom_1_1others_1_1TextBlock.html#afc7936cb2a20d22c2fb86626281948c0":[1,0,1,0,3,82,14],
-"classmusx_1_1dom_1_1others_1_1TextBlock.html#afe72246ff14c5ca09fb78f47a1c9900d":[2,0,1,0,3,82,20],
-"classmusx_1_1dom_1_1others_1_1TextBlock.html#afe72246ff14c5ca09fb78f47a1c9900d":[1,0,1,0,3,82,20],
-"classmusx_1_1dom_1_1others_1_1TextExpressionDef.html":[1,0,1,0,3,83]
+"classmusx_1_1dom_1_1others_1_1TextBlock.html#af09b4d22b57a426c4f2bd2e7c5f8a9d6":[1,0,1,0,3,82,2]
 };

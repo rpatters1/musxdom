@@ -1,5 +1,13 @@
 var NAVTREEINDEX27 =
 {
+"classmusx_1_1dom_1_1texts_1_1LyricsSection.html":[1,0,1,0,4,5],
+"classmusx_1_1dom_1_1texts_1_1LyricsSection.html":[2,0,1,0,6,5],
+"classmusx_1_1dom_1_1texts_1_1LyricsTextBase.html":[1,0,1,0,4,6],
+"classmusx_1_1dom_1_1texts_1_1LyricsTextBase.html":[2,0,1,0,6,6],
+"classmusx_1_1dom_1_1texts_1_1LyricsTextBase.html#a94ada56b9cce11b0102c7f295020bf3d":[1,0,1,0,4,6,3],
+"classmusx_1_1dom_1_1texts_1_1LyricsTextBase.html#a94ada56b9cce11b0102c7f295020bf3d":[2,0,1,0,6,6,3],
+"classmusx_1_1dom_1_1texts_1_1LyricsTextBase.html#aaa07f7d49633f9ff62d6441cc696f7eb":[1,0,1,0,4,6,1],
+"classmusx_1_1dom_1_1texts_1_1LyricsTextBase.html#aaa07f7d49633f9ff62d6441cc696f7eb":[2,0,1,0,6,6,1],
 "classmusx_1_1dom_1_1texts_1_1LyricsTextBase.html#aba62017f8e8a23f2657322d1d245c1a1":[1,0,1,0,4,6,2],
 "classmusx_1_1dom_1_1texts_1_1LyricsTextBase.html#aba62017f8e8a23f2657322d1d245c1a1":[2,0,1,0,6,6,2],
 "classmusx_1_1dom_1_1texts_1_1LyricsTextBase.html#ad53b94532b92f2f6a9ddaa892c87f3e5":[2,0,1,0,6,6,0],
@@ -241,13 +249,5 @@ var NAVTREEINDEX27 =
 "classmusx_1_1xml_1_1tinyxml2_1_1Attribute.html":[1,0,1,2,2,0],
 "classmusx_1_1xml_1_1tinyxml2_1_1Attribute.html":[2,0,1,4,2,0],
 "classmusx_1_1xml_1_1tinyxml2_1_1Attribute.html#a167994db8499f43f36c2649a8ca23e4e":[1,0,1,2,2,0,0],
-"classmusx_1_1xml_1_1tinyxml2_1_1Attribute.html#a167994db8499f43f36c2649a8ca23e4e":[2,0,1,4,2,0,0],
-"classmusx_1_1xml_1_1tinyxml2_1_1Attribute.html#a3dc87d58c8be6e108538934fab02a317":[2,0,1,4,2,0,1],
-"classmusx_1_1xml_1_1tinyxml2_1_1Attribute.html#a3dc87d58c8be6e108538934fab02a317":[1,0,1,2,2,0,1],
-"classmusx_1_1xml_1_1tinyxml2_1_1Attribute.html#ac88cab337dbb357332347bf974319176":[2,0,1,4,2,0,3],
-"classmusx_1_1xml_1_1tinyxml2_1_1Attribute.html#ac88cab337dbb357332347bf974319176":[1,0,1,2,2,0,3],
-"classmusx_1_1xml_1_1tinyxml2_1_1Attribute.html#ae8b5c50a34b3092cedc0e4176941a786":[2,0,1,4,2,0,2],
-"classmusx_1_1xml_1_1tinyxml2_1_1Attribute.html#ae8b5c50a34b3092cedc0e4176941a786":[1,0,1,2,2,0,2],
-"classmusx_1_1xml_1_1tinyxml2_1_1Document.html":[2,0,1,4,2,1],
-"classmusx_1_1xml_1_1tinyxml2_1_1Document.html":[1,0,1,2,2,1]
+"classmusx_1_1xml_1_1tinyxml2_1_1Attribute.html#a167994db8499f43f36c2649a8ca23e4e":[2,0,1,4,2,0,0]
 };

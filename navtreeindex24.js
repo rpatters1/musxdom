@@ -1,5 +1,13 @@
 var NAVTREEINDEX24 =
 {
+"classmusx_1_1dom_1_1others_1_1Staff.html#a588648e445cba5ae0e76a393b8e4eb9e":[1,0,1,0,3,64,136],
+"classmusx_1_1dom_1_1others_1_1Staff.html#a58b338d0edf7fd8e6fbbb940dcdf4c85":[2,0,1,0,3,64,104],
+"classmusx_1_1dom_1_1others_1_1Staff.html#a58b338d0edf7fd8e6fbbb940dcdf4c85":[1,0,1,0,3,64,104],
+"classmusx_1_1dom_1_1others_1_1Staff.html#a58bfd410b0e5d3dd368adbd497215b31":[1,0,1,0,3,64,139],
+"classmusx_1_1dom_1_1others_1_1Staff.html#a58bfd410b0e5d3dd368adbd497215b31":[2,0,1,0,3,64,139],
+"classmusx_1_1dom_1_1others_1_1Staff.html#a5b205d955314e786a58f46022ce9380f":[1,0,1,0,3,64,125],
+"classmusx_1_1dom_1_1others_1_1Staff.html#a5b205d955314e786a58f46022ce9380f":[2,0,1,0,3,64,125],
+"classmusx_1_1dom_1_1others_1_1Staff.html#a5f5673a3186d7261bbc96dddd096114c":[1,0,1,0,3,64,20],
 "classmusx_1_1dom_1_1others_1_1Staff.html#a5f5673a3186d7261bbc96dddd096114c":[2,0,1,0,3,64,20],
 "classmusx_1_1dom_1_1others_1_1Staff.html#a618b38de7b2b463db5112940b801c588":[2,0,1,0,3,64,53],
 "classmusx_1_1dom_1_1others_1_1Staff.html#a618b38de7b2b463db5112940b801c588":[1,0,1,0,3,64,53],
@@ -241,13 +249,5 @@ var NAVTREEINDEX24 =
 "classmusx_1_1dom_1_1others_1_1StaffStyleAssign.html":[2,0,1,0,3,77],
 "classmusx_1_1dom_1_1others_1_1StaffStyleAssign.html#a27ac2d07077b4ca35aa224b44337fa5d":[1,0,1,0,3,77,3],
 "classmusx_1_1dom_1_1others_1_1StaffStyleAssign.html#a27ac2d07077b4ca35aa224b44337fa5d":[2,0,1,0,3,77,3],
-"classmusx_1_1dom_1_1others_1_1StaffStyleAssign.html#a5ff48c44dda4b97ba8875d8363112ff4":[1,0,1,0,3,77,2],
-"classmusx_1_1dom_1_1others_1_1StaffStyleAssign.html#a5ff48c44dda4b97ba8875d8363112ff4":[2,0,1,0,3,77,2],
-"classmusx_1_1dom_1_1others_1_1StaffStyleAssign.html#aa615ca1c6fec6da3338f2a3eec31f3dd":[2,0,1,0,3,77,0],
-"classmusx_1_1dom_1_1others_1_1StaffStyleAssign.html#aa615ca1c6fec6da3338f2a3eec31f3dd":[1,0,1,0,3,77,0],
-"classmusx_1_1dom_1_1others_1_1StaffStyleAssign.html#af54dd0f2ef09fbf838fa985a2359644a":[1,0,1,0,3,77,1],
-"classmusx_1_1dom_1_1others_1_1StaffStyleAssign.html#af54dd0f2ef09fbf838fa985a2359644a":[2,0,1,0,3,77,1],
-"classmusx_1_1dom_1_1others_1_1StaffStyle_1_1Masks.html":[2,0,1,0,3,76,0],
-"classmusx_1_1dom_1_1others_1_1StaffStyle_1_1Masks.html":[1,0,1,0,3,76,0],
-"classmusx_1_1dom_1_1others_1_1StaffStyle_1_1Masks.html#a00ea373c9a96e48bd940b62cbe02c8c1":[1,0,1,0,3,76,0,31]
+"classmusx_1_1dom_1_1others_1_1StaffStyleAssign.html#a5ff48c44dda4b97ba8875d8363112ff4":[1,0,1,0,3,77,2]
 };
