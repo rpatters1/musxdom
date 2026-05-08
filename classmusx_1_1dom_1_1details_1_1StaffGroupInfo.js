@@ -1,6 +1,7 @@
 var classmusx_1_1dom_1_1details_1_1StaffGroupInfo =
 [
     [ "StaffGroupInfo", "classmusx_1_1dom_1_1details_1_1StaffGroupInfo.html#a3b8657de6c0919e24e983019ed805a7e", null ],
+    [ "calcIsSingleInstrumentSection", "classmusx_1_1dom_1_1details_1_1StaffGroupInfo.html#ad8317f23eb5f46a651eaf45a8566b80c", null ],
     [ "iterateStaves", "classmusx_1_1dom_1_1details_1_1StaffGroupInfo.html#adf05ab035de85c9dc4bd194eeeebef41", null ],
     [ "numStaves", "classmusx_1_1dom_1_1details_1_1StaffGroupInfo.html#a7a5b92ca5519326569bcadc26cef58ef", null ],
     [ "endSlot", "classmusx_1_1dom_1_1details_1_1StaffGroupInfo.html#a4c79b042fef2d07fd0c9cc9817ae50ba", null ],

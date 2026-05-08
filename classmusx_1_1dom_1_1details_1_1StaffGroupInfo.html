@@ -118,6 +118,9 @@ std::optional&lt; size_t &gt;&#160;</td><td class="memItemRight" valign="bottom"
 <tr class="memitem:adf05ab035de85c9dc4bd194eeeebef41" id="r_adf05ab035de85c9dc4bd194eeeebef41"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1details_1_1StaffGroupInfo.html#adf05ab035de85c9dc4bd194eeeebef41">iterateStaves</a> (<a class="el" href="namespacemusx_1_1dom.html#a3d5af8a8174c235d3292c076def44817">MeasCmper</a> measId, <a class="el" href="namespacemusx_1_1dom.html#a907ef641c247f1a5dbe75bbc972661f5">Edu</a> eduPosition, std::function&lt; bool(const <a class="el" href="namespacemusx_1_1dom.html#a4223cd531120dbef7acd854c3d2631b8">MusxInstance</a>&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1StaffComposite.html">others::StaffComposite</a> &gt; &amp;)&gt; iterator) const</td></tr>
 <tr class="memdesc:adf05ab035de85c9dc4bd194eeeebef41"><td class="mdescLeft">&#160;</td><td class="mdescRight">Iterates the staves in the group in order according to <a class="el" href="classmusx_1_1dom_1_1details_1_1StaffGroupInfo.html#a8e0a40d4f83ceb970c3840cf43bd2fb9" title="the system staves referred to by startSlot and endSlot">systemStaves</a>.  <br /></td></tr>
 <tr class="separator:adf05ab035de85c9dc4bd194eeeebef41"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad8317f23eb5f46a651eaf45a8566b80c" id="r_ad8317f23eb5f46a651eaf45a8566b80c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1details_1_1StaffGroupInfo.html#ad8317f23eb5f46a651eaf45a8566b80c">calcIsSingleInstrumentSection</a> (<a class="el" href="namespacemusx_1_1dom.html#a3d5af8a8174c235d3292c076def44817">MeasCmper</a> measureId) const</td></tr>
+<tr class="memdesc:ad8317f23eb5f46a651eaf45a8566b80c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if this staff group spans multiple staves with the same exact instrument UUID, excluding groups that represent one logical instrument in the document's instrument map.  <br /></td></tr>
+<tr class="separator:ad8317f23eb5f46a651eaf45a8566b80c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
@@ -185,6 +188,32 @@ std::optional&lt; size_t &gt;&#160;</td><td class="memItemRight" valign="bottom"
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="ad8317f23eb5f46a651eaf45a8566b80c" name="ad8317f23eb5f46a651eaf45a8566b80c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad8317f23eb5f46a651eaf45a8566b80c">&#9670;&#160;</a></span>calcIsSingleInstrumentSection()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool musx::dom::details::StaffGroupInfo::calcIsSingleInstrumentSection </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespacemusx_1_1dom.html#a3d5af8a8174c235d3292c076def44817">MeasCmper</a>&#160;</td>
+          <td class="paramname"><em>measureId</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns true if this staff group spans multiple staves with the same exact instrument UUID, excluding groups that represent one logical instrument in the document's instrument map. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">measureId</td><td>The measure for which to evaluate staff styles and group membership. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a id="af665c36459d1af35f10f12f979357db7" name="af665c36459d1af35f10f12f979357db7"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#af665c36459d1af35f10f12f979357db7">&#9670;&#160;</a></span>getGroupsAtMeasure()</h2>
 

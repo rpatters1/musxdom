@@ -278,7 +278,7 @@ var searchData=
   ['spanspace_275',['spanSpace',['../classmusx_1_1dom_1_1options_1_1BeamOptions.html#a548cf4a5c1c5c931a10cabed3b55d295',1,'musx::dom::options::BeamOptions']]],
   ['special_5fpart_5fextraction_5fsystem_5fid_276',['SPECIAL_PART_EXTRACTION_SYSTEM_ID',['../namespacemusx_1_1dom.html#af126d786c0d562de2e24d358782dea9e',1,'musx::dom']]],
   ['specialpartextractioniulist_277',['specialPartExtractionIUList',['../classmusx_1_1dom_1_1others_1_1PartGlobals.html#a2d1a52c48b402278588db0ff50ebff91',1,'musx::dom::others::PartGlobals']]],
-  ['specialposmode_278',['specialposmode',['../classmusx_1_1dom_1_1options_1_1TieOptions.html#a162a8001811d1d4cb9a354a0e0d2a668',1,'musx::dom::options::TieOptions::specialPosMode'],['../classmusx_1_1dom_1_1options_1_1TieOptions.html#ad53e3cd44d59908f22715495cab187bc',1,'musx::dom::options::TieOptions::SpecialPosMode']]],
+  ['specialposmode_278',['specialposmode',['../classmusx_1_1dom_1_1options_1_1TieOptions.html#ad53e3cd44d59908f22715495cab187bc',1,'musx::dom::options::TieOptions::SpecialPosMode'],['../classmusx_1_1dom_1_1options_1_1TieOptions.html#a162a8001811d1d4cb9a354a0e0d2a668',1,'musx::dom::options::TieOptions::specialPosMode']]],
   ['speedyclef_279',['speedyClef',['../classmusx_1_1dom_1_1others_1_1FretInstrument.html#a203a0ca35091f7d23cb03d8989529106',1,'musx::dom::others::FretInstrument']]],
   ['splashcymbal_280',['SplashCymbal',['../namespacemusx_1_1dom_1_1uuid.html#a350ed36d13c178590da49a2db06a1544',1,'musx::dom::uuid']]],
   ['splitevenly_281',['SplitEvenly',['../classmusx_1_1dom_1_1options_1_1TieOptions.html#a8e717bcfa8a196892b462c27ccb5084fab9e279a647b045b9b8046f152ce466e5',1,'musx::dom::options::TieOptions']]],

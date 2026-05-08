@@ -1,5 +1,7 @@
 var NAVTREEINDEX27 =
 {
+"classmusx_1_1dom_1_1texts_1_1LyricsTextBase.html#aba62017f8e8a23f2657322d1d245c1a1":[1,0,1,0,4,6,2],
+"classmusx_1_1dom_1_1texts_1_1LyricsTextBase.html#aba62017f8e8a23f2657322d1d245c1a1":[2,0,1,0,6,6,2],
 "classmusx_1_1dom_1_1texts_1_1LyricsTextBase.html#ad53b94532b92f2f6a9ddaa892c87f3e5":[2,0,1,0,6,6,0],
 "classmusx_1_1dom_1_1texts_1_1LyricsTextBase.html#ad53b94532b92f2f6a9ddaa892c87f3e5":[1,0,1,0,4,6,0],
 "classmusx_1_1dom_1_1texts_1_1LyricsVerse.html":[1,0,1,0,4,7],
@@ -247,7 +249,5 @@ var NAVTREEINDEX27 =
 "classmusx_1_1xml_1_1tinyxml2_1_1Attribute.html#ae8b5c50a34b3092cedc0e4176941a786":[2,0,1,4,2,0,2],
 "classmusx_1_1xml_1_1tinyxml2_1_1Attribute.html#ae8b5c50a34b3092cedc0e4176941a786":[1,0,1,2,2,0,2],
 "classmusx_1_1xml_1_1tinyxml2_1_1Document.html":[2,0,1,4,2,1],
-"classmusx_1_1xml_1_1tinyxml2_1_1Document.html":[1,0,1,2,2,1],
-"classmusx_1_1xml_1_1tinyxml2_1_1Document.html#a0ea103332330c8bc3e65e9bbb9005148":[1,0,1,2,2,1,1],
-"classmusx_1_1xml_1_1tinyxml2_1_1Document.html#a0ea103332330c8bc3e65e9bbb9005148":[2,0,1,4,2,1,1]
+"classmusx_1_1xml_1_1tinyxml2_1_1Document.html":[1,0,1,2,2,1]
 };
