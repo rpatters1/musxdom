@@ -1853,22 +1853,36 @@ public:
                                     ///< the factory detected from legacy staves or other special circumstances.
     std::unordered_set<StaffCmper> staves; ///< Calculated list of staves in the group
 
-    /// @brief Get the full staff name without Enigma tags
+    /// @brief Get the raw text context for the full staff group name.
+    util::EnigmaParsingContext getFullNameCtx() const;
+
+    /// @brief Get the full staff group name without Enigma tags
     /// @param accidentalStyle The style for accidental subsitution in names like "Clarinet in Bb".
     std::string getFullName(util::EnigmaString::AccidentalStyle accidentalStyle = util::EnigmaString::AccidentalStyle::Ascii) const;
 
-    /// @brief Get the abbreviated staff name without Enigma tags
+    /// @brief Get the raw text context for the abbreviated staff group name.
+    util::EnigmaParsingContext getAbbreviatedNameCtx() const;
+
+    /// @brief Get the abbreviated staff group name without Enigma tags
     /// @param accidentalStyle The style for accidental subsitution in names like "Clarinet in Bb".
     std::string getAbbreviatedName(util::EnigmaString::AccidentalStyle accidentalStyle = util::EnigmaString::AccidentalStyle::Ascii) const;
 
     /// @brief Returns the @ref others::MultiStaffInstrumentGroup for this group if it is part of one. Otherwise nullptr.
     MusxInstance<others::MultiStaffInstrumentGroup> getMultiStaffInstGroup() const;
 
+    /// @brief Returns the raw text context for the full instrument name for this group, with autonumbering context if any.
+    /// @return Full instrument name context if this group is associated with a @ref others::MultiStaffInstrumentGroup. Otherwise #fullNameId context.
+    util::EnigmaParsingContext getFullInstrumentNameCtx() const;
+
     /// @brief Returns the full instrument name for this group without Enigma tags and with autonumbering (if any).
     /// @note Ordinal prefix numbering is currently supported only for English.
     /// @param accidentalStyle The style for accidental subsitution in names like "Clarinet in Bb".
     /// @return Full instrument name if this group is associated with a @ref others::MultiStaffInstrumentGroup. Otherwise #getFullName.
     std::string getFullInstrumentName(util::EnigmaString::AccidentalStyle accidentalStyle = util::EnigmaString::AccidentalStyle::Ascii) const;
+
+    /// @brief Returns the raw text context for the abbreviated instrument name for this group, with autonumbering context if any.
+    /// @return Abbreviated instrument name context if this group is associated with a @ref others::MultiStaffInstrumentGroup. Otherwise #abbrvNameId context.
+    util::EnigmaParsingContext getAbbreviatedInstrumentNameCtx() const;
 
     /// @brief Returns the abbreviated instrument name for this group without Enigma tags and with autonumbering (if any)
     /// @note Ordinal prefix numbering is currently supported only for English.

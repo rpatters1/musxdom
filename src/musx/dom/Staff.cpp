@@ -329,18 +329,17 @@ MusxInstance<details::StaffGroup> Staff::getMultiStaffInstVisualGroup(Cmper forP
 
 util::EnigmaParsingContext Staff::getFullInstrumentNameCtx(Cmper forPartId, bool preferStaffName) const
 {
-    auto block = [&]() -> MusxInstance<TextBlock> {
+    auto parsingContext = [&]() -> util::EnigmaParsingContext {
         if (!preferStaffName || !fullNameTextId) {
             if (auto group = getMultiStaffInstVisualGroup(forPartId)) {
-                return getDocument()->getOthers()->get<TextBlock>(forPartId, group->fullNameId);
+                return group->getFullNameCtx();
             }
         }
-        return getDocument()->getOthers()->get<TextBlock>(forPartId, fullNameTextId);
-    }();
-    if (!block) {
+        if (const auto block = getDocument()->getOthers()->get<TextBlock>(forPartId, fullNameTextId)) {
+            return block->getRawTextCtx(forPartId);
+        }
         return {};
-    }
-    auto parsingContext = block->getRawTextCtx(forPartId);
+    }();
     auto [affix, isPrefix] = calcAutoNumberingAffix();
     parsingContext.affixText = affix;
     parsingContext.affixIsPrefix = isPrefix;
@@ -357,18 +356,17 @@ std::string Staff::getFullInstrumentName(util::EnigmaString::AccidentalStyle acc
 
 util::EnigmaParsingContext Staff::getAbbreviatedInstrumentNameCtx(Cmper forPartId, bool preferStaffName) const
 {
-    auto block = [&]() -> MusxInstance<TextBlock> {
+    auto parsingContext = [&]() -> util::EnigmaParsingContext {
         if (!preferStaffName || !abbrvNameTextId) {
             if (auto group = getMultiStaffInstVisualGroup(forPartId)) {
-                return getDocument()->getOthers()->get<TextBlock>(forPartId, group->abbrvNameId);
+                return group->getAbbreviatedNameCtx();
             }
         }
-        return getDocument()->getOthers()->get<TextBlock>(forPartId, abbrvNameTextId);
-    }();
-    if (!block) {
+        if (const auto block = getDocument()->getOthers()->get<TextBlock>(forPartId, abbrvNameTextId)) {
+            return block->getRawTextCtx(forPartId);
+        }
         return {};
-    }
-    auto parsingContext = block->getRawTextCtx(forPartId);
+    }();
     auto [affix, isPrefix] = calcAutoNumberingAffix();
     parsingContext.affixText = affix;
     parsingContext.affixIsPrefix = isPrefix;
