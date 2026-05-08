@@ -644,14 +644,36 @@ util::EnigmaParsingContext MeasureTextAssign::getRawTextCtx(Cmper forPartId) con
 // ***** StaffGroup *****
 // **********************
 
+util::EnigmaParsingContext StaffGroup::getFullNameCtx() const
+{
+    if (auto textBlock = getDocument()->getOthers()->get<others::TextBlock>(getRequestedPartId(), fullNameId)) {
+        return textBlock->getRawTextCtx(getRequestedPartId());
+    }
+    return {};
+}
+
 std::string StaffGroup::getFullName(util::EnigmaString::AccidentalStyle accidentalStyle) const
 {
-    return others::TextBlock::getText(getDocument(), fullNameId, getRequestedPartId(), true, accidentalStyle); // true: strip enigma tags
+    if (auto ctx = getFullNameCtx()) {
+        return ctx.getText(true, accidentalStyle);
+    }
+    return {};
+}
+
+util::EnigmaParsingContext StaffGroup::getAbbreviatedNameCtx() const
+{
+    if (auto textBlock = getDocument()->getOthers()->get<others::TextBlock>(getRequestedPartId(), abbrvNameId)) {
+        return textBlock->getRawTextCtx(getRequestedPartId());
+    }
+    return {};
 }
 
 std::string StaffGroup::getAbbreviatedName(util::EnigmaString::AccidentalStyle accidentalStyle) const
 {
-    return others::TextBlock::getText(getDocument(), abbrvNameId, getRequestedPartId(), true, accidentalStyle); // true: strip enigma tags
+    if (auto ctx = getAbbreviatedNameCtx()) {
+        return ctx.getText(true, accidentalStyle);
+    }
+    return {};
 }
 
 MusxInstance<others::MultiStaffInstrumentGroup> StaffGroup::getMultiStaffInstGroup() const
@@ -665,24 +687,40 @@ MusxInstance<others::MultiStaffInstrumentGroup> StaffGroup::getMultiStaffInstGro
     return nullptr;
 }
 
-std::string StaffGroup::getFullInstrumentName(util::EnigmaString::AccidentalStyle accidentalStyle) const
+util::EnigmaParsingContext StaffGroup::getFullInstrumentNameCtx() const
 {
     if (auto multiStaffGroup = getMultiStaffInstGroup()) {
         if (auto staff = multiStaffGroup->getFirstStaffInstance()) {
-            return staff->getFullInstrumentName(accidentalStyle);
+            return staff->getFullInstrumentNameCtx(getRequestedPartId());
         }
     }
-    return getFullName(accidentalStyle);
+    return getFullNameCtx();
+}
+
+std::string StaffGroup::getFullInstrumentName(util::EnigmaString::AccidentalStyle accidentalStyle) const
+{
+    if (auto ctx = getFullInstrumentNameCtx()) {
+        return ctx.getText(true, accidentalStyle);
+    }
+    return {};
+}
+
+util::EnigmaParsingContext StaffGroup::getAbbreviatedInstrumentNameCtx() const
+{
+    if (auto multiStaffGroup = getMultiStaffInstGroup()) {
+        if (auto staff = multiStaffGroup->getFirstStaffInstance()) {
+            return staff->getAbbreviatedInstrumentNameCtx(getRequestedPartId());
+        }
+    }
+    return getAbbreviatedNameCtx();
 }
 
 std::string StaffGroup::getAbbreviatedInstrumentName(util::EnigmaString::AccidentalStyle accidentalStyle) const
 {
-    if (auto multiStaffGroup = getMultiStaffInstGroup()) {
-        if (auto staff = multiStaffGroup->getFirstStaffInstance()) {
-            return staff->getAbbreviatedInstrumentName(accidentalStyle);
-        }
+    if (auto ctx = getAbbreviatedInstrumentNameCtx()) {
+        return ctx.getText(true, accidentalStyle);
     }
-    return getAbbreviatedName(accidentalStyle);
+    return {};
 }
 
 // **************************

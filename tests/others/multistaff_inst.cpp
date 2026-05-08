@@ -310,12 +310,24 @@ TEST(MultiStaffGroupTest, PartScoreInstrumentNames)
     EXPECT_EQ(scoreStaff->getFullInstrumentName(), "Piano");
     EXPECT_EQ(scoreStaff->getAbbreviatedInstrumentName(), "Pno.");
     EXPECT_TRUE(scoreStaff->calcShowInstrumentName());
+    auto scoreGroup = scoreStaff->getMultiStaffInstVisualGroup(SCORE_PARTID);
+    ASSERT_TRUE(scoreGroup) << "unable to get score staff group";
+    EXPECT_EQ(scoreGroup->getFullNameCtx().getText(true), "Piano");
+    EXPECT_EQ(scoreGroup->getAbbreviatedNameCtx().getText(true), "Pno.");
+    EXPECT_EQ(scoreGroup->getFullInstrumentNameCtx().getText(true), "Piano");
+    EXPECT_EQ(scoreGroup->getAbbreviatedInstrumentNameCtx().getText(true), "Pno.");
 
     auto part1Staff = others::StaffComposite::createCurrent(doc, 1, 1, 1, 0);
     ASSERT_TRUE(part1Staff) << "unable to get part 1 staff 1";
     EXPECT_EQ(part1Staff->getFullInstrumentName(), "Pianoforte");
     EXPECT_EQ(part1Staff->getAbbreviatedInstrumentName(), "Pnof.");
     EXPECT_FALSE(part1Staff->calcShowInstrumentName());
+    auto part1Group = part1Staff->getMultiStaffInstVisualGroup(1);
+    ASSERT_TRUE(part1Group) << "unable to get part 1 staff group";
+    EXPECT_EQ(part1Group->getFullNameCtx().getText(true), "Pianoforte");
+    EXPECT_EQ(part1Group->getAbbreviatedNameCtx().getText(true), "Pnof.");
+    EXPECT_EQ(part1Group->getFullInstrumentNameCtx().getText(true), "Pianoforte");
+    EXPECT_EQ(part1Group->getAbbreviatedInstrumentNameCtx().getText(true), "Pnof.");
 
     auto part2Staff = others::StaffComposite::createCurrent(doc, 2, 1, 1, 0);
     ASSERT_TRUE(part2Staff) << "unable to get part 2 staff 1";
