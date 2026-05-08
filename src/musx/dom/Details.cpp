@@ -24,6 +24,7 @@
 #include <cstdlib>
 #include <exception>
 #include <type_traits>
+#include <unordered_set>
 
 #include "musx/musx.h"
 
@@ -726,6 +727,71 @@ void StaffGroupInfo::iterateStaves(MeasCmper measId, Edu eduPosition, std::funct
             MUSX_INTEGRITY_ERROR("StaffGroupInfo::iterateStaves could not find staff " + std::to_string(iUsed->staffId) + " in slot " + std::to_string(slot));
         }
     }
+}
+
+bool StaffGroupInfo::calcIsSingleInstrumentSection(MeasCmper measureId) const
+{
+    const auto numGroupStaves = numStaves();
+    if (!numGroupStaves || numGroupStaves.value() < 2) {
+        return false;
+    }
+
+    bool hasUuid = false;
+    bool isSection = true;
+    std::string sectionUuid;
+    std::unordered_set<StaffCmper> groupStaffIds;
+
+    iterateStaves(measureId, 0, [&](const MusxInstance<others::StaffComposite>& staff) {
+        if (!staff->hasInstrumentAssigned()) {
+            isSection = false;
+            return false;
+        }
+        if (!hasUuid) {
+            sectionUuid = staff->instUuid;
+            hasUuid = true;
+        } else if (staff->instUuid != sectionUuid) {
+            isSection = false;
+            return false;
+        }
+        groupStaffIds.insert(staff->getCmper());
+        return true;
+    });
+
+    if (!isSection || !hasUuid || groupStaffIds.size() < 2) {
+        return false;
+    }
+
+    const auto doc = group->getDocument();
+    const auto partId = group->getRequestedPartId();
+    const InstrumentMap* instrumentMap = nullptr;
+    InstrumentMap partInstrumentMap;
+
+    if (partId == SCORE_PARTID) {
+        instrumentMap = &doc->getInstruments();
+    } else {
+        partInstrumentMap = doc->createInstrumentMap(partId);
+        instrumentMap = &partInstrumentMap;
+    }
+
+    for (const auto& instrument : *instrumentMap) {
+        const auto& instInfo = instrument.second;
+        if (instInfo.staves.size() != groupStaffIds.size()) {
+            continue;
+        }
+        bool matchesInstrument = true;
+        for (const auto& staff : instInfo.staves) {
+            const auto staffId = staff.first;
+            if (groupStaffIds.find(staffId) == groupStaffIds.end()) {
+                matchesInstrument = false;
+                break;
+            }
+        }
+        if (matchesInstrument) {
+            return false;
+        }
+    }
+
+    return true;
 }
 
 std::vector<StaffGroupInfo> StaffGroupInfo::getGroupsAtMeasure(MeasCmper measureId, Cmper linkedPartId,

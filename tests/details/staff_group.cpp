@@ -24,6 +24,8 @@
 #include "musx/musx.h"
 #include "test_utils.h"
 
+#include <algorithm>
+
 using namespace musx::dom;
 
 constexpr static musxtest::string_view staffGroupXml = R"xml(
@@ -122,6 +124,141 @@ constexpr static musxtest::string_view staffGroupXml = R"xml(
 </finale>
 )xml";
 
+constexpr static musxtest::string_view singleInstrumentSectionXml = R"xml(
+<?xml version="1.0" encoding="UTF-8"?>
+<finale>
+  <others>
+    <instUsed cmper="0" inci="0">
+      <inst>1</inst>
+      <trackType>staff</trackType>
+      <distFromTop>0</distFromTop>
+      <range>
+        <startMeas>1</startMeas>
+        <startEdu>0</startEdu>
+        <endMeas>32767</endMeas>
+        <endEdu>2147483647</endEdu>
+      </range>
+    </instUsed>
+    <instUsed cmper="0" inci="1">
+      <inst>2</inst>
+      <trackType>staff</trackType>
+      <distFromTop>-288</distFromTop>
+      <range>
+        <startMeas>1</startMeas>
+        <startEdu>0</startEdu>
+        <endMeas>32767</endMeas>
+        <endEdu>2147483647</endEdu>
+      </range>
+    </instUsed>
+    <instUsed cmper="0" inci="2">
+      <inst>3</inst>
+      <trackType>staff</trackType>
+      <distFromTop>-576</distFromTop>
+      <range>
+        <startMeas>1</startMeas>
+        <startEdu>0</startEdu>
+        <endMeas>32767</endMeas>
+        <endEdu>2147483647</endEdu>
+      </range>
+    </instUsed>
+    <instUsed cmper="0" inci="3">
+      <inst>4</inst>
+      <trackType>staff</trackType>
+      <distFromTop>-864</distFromTop>
+      <range>
+        <startMeas>1</startMeas>
+        <startEdu>0</startEdu>
+        <endMeas>32767</endMeas>
+        <endEdu>2147483647</endEdu>
+      </range>
+    </instUsed>
+    <instUsed cmper="0" inci="4">
+      <inst>5</inst>
+      <trackType>staff</trackType>
+      <distFromTop>-1152</distFromTop>
+      <range>
+        <startMeas>1</startMeas>
+        <startEdu>0</startEdu>
+        <endMeas>32767</endMeas>
+        <endEdu>2147483647</endEdu>
+      </range>
+    </instUsed>
+    <multiStaffInstGroup cmper="1">
+      <staffNum1>4</staffNum1>
+      <staffNum2>5</staffNum2>
+    </multiStaffInstGroup>
+    <multiStaffGroupID cmper="1">
+      <staffGroupID>4</staffGroupID>
+    </multiStaffGroupID>
+    <partDef cmper="0">
+      <nameID>1</nameID>
+      <partOrder>0</partOrder>
+      <copies>1</copies>
+      <printPart/>
+    </partDef>
+    <partGlobals cmper="65534">
+      <showTransposed/>
+      <studioViewIUlist>65400</studioViewIUlist>
+    </partGlobals>
+    <staffSpec cmper="1">
+      <staffLines>5</staffLines>
+      <lineSpace>24</lineSpace>
+      <instUuid>2575136d-9927-47bd-a727-f554c169257e</instUuid>
+    </staffSpec>
+    <staffSpec cmper="2">
+      <staffLines>5</staffLines>
+      <lineSpace>24</lineSpace>
+      <instUuid>2575136d-9927-47bd-a727-f554c169257e</instUuid>
+    </staffSpec>
+    <staffSpec cmper="3">
+      <staffLines>5</staffLines>
+      <lineSpace>24</lineSpace>
+      <instUuid>172a455a-d1b9-4a03-aa80-c863d587f209</instUuid>
+    </staffSpec>
+    <staffSpec cmper="4">
+      <staffLines>5</staffLines>
+      <lineSpace>24</lineSpace>
+      <instUuid>776a2734-3f38-4cac-8fa2-90e62b368ec1</instUuid>
+    </staffSpec>
+    <staffSpec cmper="5">
+      <staffLines>5</staffLines>
+      <lineSpace>24</lineSpace>
+      <instUuid>776a2734-3f38-4cac-8fa2-90e62b368ec1</instUuid>
+    </staffSpec>
+  </others>
+  <details>
+    <staffGroup cmper1="0" cmper2="1">
+      <startInst>1</startInst>
+      <endInst>2</endInst>
+      <startMeas>1</startMeas>
+      <endMeas>32767</endMeas>
+      <fullID>101</fullID>
+    </staffGroup>
+    <staffGroup cmper1="0" cmper2="2">
+      <startInst>1</startInst>
+      <endInst>3</endInst>
+      <startMeas>1</startMeas>
+      <endMeas>32767</endMeas>
+      <fullID>102</fullID>
+    </staffGroup>
+    <staffGroup cmper1="0" cmper2="3">
+      <startInst>1</startInst>
+      <endInst>1</endInst>
+      <startMeas>1</startMeas>
+      <endMeas>32767</endMeas>
+      <fullID>103</fullID>
+    </staffGroup>
+    <staffGroup cmper1="0" cmper2="4">
+      <startInst>4</startInst>
+      <endInst>5</endInst>
+      <startMeas>1</startMeas>
+      <endMeas>32767</endMeas>
+      <fullID>104</fullID>
+    </staffGroup>
+  </details>
+</finale>
+)xml";
+
 TEST(StaffGroupTest, PopulateFields)
 {
     auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(staffGroupXml);
@@ -168,4 +305,38 @@ TEST(StaffGroupTest, PopulateFields)
     EXPECT_NE(staffGroup->staves.find(2), staffGroup->staves.end()) << "group contains staff 2";
     EXPECT_NE(staffGroup->staves.find(3), staffGroup->staves.end()) << "group contains staff 3";
     EXPECT_EQ(staffGroup->staves.find(4), staffGroup->staves.end()) << "group does not contain staff 4";
+}
+
+TEST(StaffGroupTest, CalcIsSingleInstrumentSection)
+{
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(singleInstrumentSectionXml);
+    ASSERT_TRUE(doc);
+
+    auto scrollView = doc->getScrollViewStaves(SCORE_PARTID);
+    auto groups = details::StaffGroupInfo::getGroupsAtMeasure(1, SCORE_PARTID, scrollView);
+    ASSERT_EQ(groups.size(), 4);
+
+    auto findGroup = [&](Cmper groupId) {
+        auto it = std::find_if(groups.begin(), groups.end(), [groupId](const details::StaffGroupInfo& groupInfo) {
+            return groupInfo.group->getCmper2() == groupId;
+        });
+        EXPECT_NE(it, groups.end()) << "group " << groupId << " not found";
+        return it;
+    };
+
+    auto fluteSection = findGroup(1);
+    ASSERT_NE(fluteSection, groups.end());
+    EXPECT_TRUE(fluteSection->calcIsSingleInstrumentSection(1));
+
+    auto mixedGroup = findGroup(2);
+    ASSERT_NE(mixedGroup, groups.end());
+    EXPECT_FALSE(mixedGroup->calcIsSingleInstrumentSection(1));
+
+    auto singleStaffGroup = findGroup(3);
+    ASSERT_NE(singleStaffGroup, groups.end());
+    EXPECT_FALSE(singleStaffGroup->calcIsSingleInstrumentSection(1));
+
+    auto pianoInstrument = findGroup(4);
+    ASSERT_NE(pianoInstrument, groups.end());
+    EXPECT_FALSE(pianoInstrument->calcIsSingleInstrumentSection(1));
 }
