@@ -1930,6 +1930,11 @@ public:
     /// @param iterator The iterator function. Returning false from this function terminates iteration.
     void iterateStaves(MeasCmper measId, Edu eduPosition, std::function<bool(const MusxInstance<others::StaffComposite>&)> iterator) const;
 
+    /// @brief Returns true if this staff group spans multiple staves with the same exact instrument UUID,
+    ///        excluding groups that represent one logical instrument in the document's instrument map.
+    /// @param measureId The measure for which to evaluate staff styles and group membership.
+    bool calcIsSingleInstrumentSection(MeasCmper measureId) const;
+
     /// @brief Creates a vector of #StaffGroupInfo instances for the measure, part, and system staves
     /// @param measureId The measure to find.
     /// @param linkedPartId The ID of the linked part in which to find the groups.
