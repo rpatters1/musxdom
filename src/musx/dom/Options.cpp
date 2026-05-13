@@ -52,7 +52,7 @@ ClefOptions::ClefInfo ClefOptions::ClefDef::calcInfo(const MusxInstance<others::
     auto calcPercType = [&]() -> music_theory::ClefType {
         if (auto clefFont = calcFont()) {
             if (clefFont->calcIsSMuFL()) {
-                if (clefChar == smulf_glyph::unpitchedPercussionClef2) {
+                if (clefChar == smufl_glyph::unpitchedPercussionClef2) {
                     return music_theory::ClefType::Percussion2;
                 }
             } else if (clefFont->calcIsSymbolFont()) {
@@ -82,7 +82,7 @@ ClefOptions::ClefInfo ClefOptions::ClefDef::calcInfo(const MusxInstance<others::
             return result;
         }
         if (auto clefFont = calcFont(); clefFont && clefFont->calcIsSMuFL()) {
-            if (clefChar == smulf_glyph::fourStringTabClefSerif || clefChar == smulf_glyph::sixStringTabClefSerif) {
+            if (clefChar == smufl_glyph::fourStringTabClefSerif || clefChar == smufl_glyph::sixStringTabClefSerif) {
                 result = music_theory::ClefType::TabSerif;
             }
         }
