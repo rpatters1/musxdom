@@ -128,6 +128,7 @@ add_executable(musxdomtests
     # music_theory
     music_theory/transpose.cpp
     # util
+    util/arpeggio.cpp
     util/fraction.cpp
     util/svg_arrowheads.cpp
     util/svg_convert.cpp

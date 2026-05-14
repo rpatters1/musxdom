@@ -21,6 +21,7 @@
  */
 #include "musx/musx.h"
 
+#include <algorithm>
 #include <cmath>
 #include <functional>
 #include <limits>
@@ -35,17 +36,17 @@ constexpr double EVPU_PER_STAFF_POSITION = EVPU_PER_SPACE / 2.0;
 
 bool calcIsLikelyArpeggioAssignment(const MusxInstance<details::ArticulationAssign>& assign,
     const MusxInstance<others::ArticulationDef>& def,
-    const EntryInfoPtr& sourceEntry,
+    const EntryInfoPtr& sourceEntryInfo,
     const std::function<bool(const details::ArticulationAssign::SelectedSymbolContext&)>& symbolContextFilter)
 {
-    if (!assign || !def || !sourceEntry) {
+    MUSX_ASSERT_IF(!assign || !def || !sourceEntryInfo) {
         return false;
     }
     if (def->copyMode != others::ArticulationDef::CopyMode::Vertical) {
         return false;
     }
     // Restrict to character-based symbols, matching the importer's arpeggio-char expectation.
-    const auto symbolContext = assign->calcSelectedSymbolContext(sourceEntry);
+    const auto symbolContext = assign->calcSelectedSymbolContext(sourceEntryInfo);
     if (!symbolContext || symbolContext->symbol.isShape) {
         return false;
     }
@@ -57,7 +58,7 @@ bool calcIsLikelyArpeggioAssignment(const MusxInstance<details::ArticulationAssi
 
 bool calcIsCandidateEntry(const EntryInfoPtr& entry, const EntryInfoPtr& source, const ArpeggioSpanOptions& options)
 {
-    if (!entry || !source) {
+    MUSX_ASSERT_IF(!entry || !source) {
         return false;
     }
     const auto entryData = entry->getEntry();
@@ -85,57 +86,52 @@ bool calcIsCandidateEntry(const EntryInfoPtr& entry, const EntryInfoPtr& source,
     return true;
 }
 
-int calcStaffIndex(const MusxInstanceList<others::StaffUsed>& staffOrder, StaffCmper staffId)
+double calcSourceRelativeStaffPosition(int staffPosition, Evpu sourceDistFromTop, Evpu staffDistFromTop)
 {
-    if (const auto index = staffOrder.getIndexForStaff(staffId)) {
-        return static_cast<int>(*index);
-    }
-    return (std::numeric_limits<int>::max)();
+    const double staffOffset = static_cast<double>(sourceDistFromTop - staffDistFromTop) / EVPU_PER_STAFF_POSITION;
+    return staffOffset - static_cast<double>(staffPosition);
 }
 
-bool calcEntryIsAbove(const EntryInfoPtr& a, const EntryInfoPtr& b, const MusxInstanceList<others::StaffUsed>& staffOrder)
+bool calcPositionRangesOverlap(double firstTop, double firstBottom, double secondTop, double secondBottom)
 {
-    if (!a || !b) {
-        return false;
-    }
-    const int aIndex = calcStaffIndex(staffOrder, a.getStaff());
-    const int bIndex = calcStaffIndex(staffOrder, b.getStaff());
-    if (aIndex != bIndex) {
-        return aIndex < bIndex;
-    }
-    const auto [aTop, aBottom] = a.calcTopBottomStaffPositions();
-    const auto [bTop, bBottom] = b.calcTopBottomStaffPositions();
-    if (aTop != bTop) {
-        return aTop > bTop;
-    }
-    return aBottom > bBottom;
+    const double firstMin = std::min(firstTop, firstBottom);
+    const double firstMax = std::max(firstTop, firstBottom);
+    const double secondMin = std::min(secondTop, secondBottom);
+    const double secondMax = std::max(secondTop, secondBottom);
+    return firstMin <= secondMax && secondMin <= firstMax;
 }
 
 } // namespace
 
 std::optional<ArpeggioSpanCandidate> calcArpeggioSpanForAssignment(
-    const EntryInfoPtr& sourceEntry,
+    const EntryInfoPtr& sourceEntryInfo,
     const MusxInstance<details::ArticulationAssign>& assign,
     const ArpeggioSpanOptions& options,
     std::function<bool(const details::ArticulationAssign::SelectedSymbolContext&)> symbolContextFilter)
 {
-    if (!sourceEntry || !assign) {
+    /// @todo refine this function as needed for better precision on edge cases
+    
+    MUSX_ASSERT_IF(!sourceEntryInfo || !assign)
+    {
         return std::nullopt;
     }
-    const auto sourceData = sourceEntry->getEntry();
-    if (!sourceData || !sourceData->isNote || sourceEntry.calcDisplaysAsRest()) {
+    const auto sourceEntry = sourceEntryInfo->getEntry();
+    MUSX_ASSERT_IF(!sourceEntry) {
         return std::nullopt;
     }
-    if (options.skipGraceEntries && sourceData->graceNote) {
+    if (!sourceEntry->isNote || sourceEntryInfo.calcDisplaysAsRest()) {
+        return std::nullopt;
+    }
+    if (options.skipGraceEntries && sourceEntry->graceNote) {
         return std::nullopt;
     }
 
-    auto frame = sourceEntry.getFrame();
-    if (!frame) {
+    auto frame = sourceEntryInfo.getFrame();
+    MUSX_ASSERT_IF(!frame) {
         return std::nullopt;
     }
     auto document = frame->getDocument();
-    if (!document) {
+    MUSX_ASSERT_IF(!document) {
         return std::nullopt;
     }
 
@@ -144,65 +140,74 @@ std::optional<ArpeggioSpanCandidate> calcArpeggioSpanForAssignment(
     if (!def) {
         return std::nullopt;
     }
-    if (!calcIsLikelyArpeggioAssignment(assign, def, sourceEntry, symbolContextFilter)) {
+    if (!calcIsLikelyArpeggioAssignment(assign, def, sourceEntryInfo, symbolContextFilter)) {
         return std::nullopt;
     }
-
-    const auto [sourceTop, sourceBottom] = sourceEntry.calcTopBottomStaffPositions();
-    const int topOffsetPositions = static_cast<int>(std::lround((def->yOffsetMain + assign->vertOffset) / EVPU_PER_STAFF_POSITION));
-    const int bottomOffsetPositions = static_cast<int>(std::lround((def->yOffsetMain + assign->vertOffset + assign->vertAdd) / EVPU_PER_STAFF_POSITION));
-    const int topTarget = sourceTop - topOffsetPositions;
-    const int bottomTarget = sourceBottom - bottomOffsetPositions;
-
-    EntryInfoPtr topEntry;
-    EntryInfoPtr bottomEntry;
-    int topDiff = (std::numeric_limits<int>::max)();
-    int bottomDiff = (std::numeric_limits<int>::max)();
 
     const auto scrollView = document->getScrollViewStaves(partId);
     if (scrollView.empty()) {
         return std::nullopt;
     }
 
-    const MusicRange range(document, sourceEntry.getMeasure(), sourceEntry.calcGlobalElapsedDuration(),
-        sourceEntry.getMeasure(), sourceEntry.calcGlobalElapsedDuration());
+    const auto sourceStaffIndex = scrollView.getIndexForStaff(sourceEntryInfo.getStaff());
+    if (!sourceStaffIndex) {
+        return std::nullopt;
+    }
+    const Evpu sourceDistFromTop = scrollView[*sourceStaffIndex]->distFromTop;
+    const auto [sourceTop, sourceBottom] = sourceEntryInfo.calcTopBottomStaffPositions();
+    const double topTarget = calcSourceRelativeStaffPosition(sourceTop, sourceDistFromTop, sourceDistFromTop)
+        - static_cast<double>(def->yOffsetMain + assign->vertOffset) / EVPU_PER_STAFF_POSITION;
+    const double bottomTarget = calcSourceRelativeStaffPosition(sourceBottom, sourceDistFromTop, sourceDistFromTop)
+        - static_cast<double>(def->yOffsetMain + assign->vertOffset + assign->vertAdd) / EVPU_PER_STAFF_POSITION;
 
-    scrollView.iterateEntries(0, scrollView.size() - 1, range, [&](const EntryInfoPtr& candidate) -> bool {
-        if (!calcIsCandidateEntry(candidate, sourceEntry, options)) {
+    EntryInfoPtr topEntry;
+    EntryInfoPtr bottomEntry;
+    double topEntryPosition = (std::numeric_limits<double>::max)();
+    double bottomEntryPosition = (std::numeric_limits<double>::lowest)();
+
+    const MusicRange range(document, sourceEntryInfo.getMeasure(), sourceEntryInfo.calcGlobalElapsedDuration(),
+        sourceEntryInfo.getMeasure(), sourceEntryInfo.calcGlobalElapsedDuration());
+
+    for (size_t staffIndex = 0; staffIndex < scrollView.size(); ++staffIndex) {
+        const Evpu candidateDistFromTop = scrollView[staffIndex]->distFromTop;
+
+        scrollView.iterateEntries(staffIndex, staffIndex, range, [&](const EntryInfoPtr& candidate) -> bool {
+            if (!calcIsCandidateEntry(candidate, sourceEntryInfo, options)) {
+                return true;
+            }
+            const auto [candTop, candBottom] = candidate.calcTopBottomStaffPositions();
+            const double candidateTop = calcSourceRelativeStaffPosition(candTop, sourceDistFromTop, candidateDistFromTop);
+            const double candidateBottom = calcSourceRelativeStaffPosition(candBottom, sourceDistFromTop, candidateDistFromTop);
+            const bool isSourceEntry = candidate->getEntry()->getEntryNumber() == sourceEntry->getEntryNumber();
+
+            if (!isSourceEntry && !calcPositionRangesOverlap(candidateTop, candidateBottom, topTarget, bottomTarget)) {
+                return true;
+            }
+
+            if (!topEntry || candidateTop < topEntryPosition) {
+                topEntry = candidate;
+                topEntryPosition = candidateTop;
+            }
+            if (!bottomEntry || candidateBottom > bottomEntryPosition) {
+                bottomEntry = candidate;
+                bottomEntryPosition = candidateBottom;
+            }
             return true;
-        }
-        const auto [candTop, candBottom] = candidate.calcTopBottomStaffPositions();
-        const int nextTopDiff = std::abs(candTop - topTarget);
-        if (!topEntry || nextTopDiff < topDiff) {
-            topEntry = candidate;
-            topDiff = nextTopDiff;
-        }
-        const int nextBottomDiff = std::abs(candBottom - bottomTarget);
-        if (!bottomEntry || nextBottomDiff < bottomDiff) {
-            bottomEntry = candidate;
-            bottomDiff = nextBottomDiff;
-        }
-        return true;
-    });
+        });
+    }
 
     if (!topEntry || !bottomEntry) {
         return std::nullopt;
     }
 
     ArpeggioSpanCandidate result;
-    result.sourceEntry = sourceEntry;
+    result.sourceEntry = sourceEntryInfo;
     result.assign = assign;
     result.definition = def;
     result.topEntry = topEntry;
     result.bottomEntry = bottomEntry;
-    result.topStaffPosTarget = topTarget;
-    result.bottomStaffPosTarget = bottomTarget;
-
-    const auto staffOrder = document->getScrollViewStaves(partId);
-    if (calcEntryIsAbove(result.bottomEntry, result.topEntry, staffOrder)) {
-        std::swap(result.topEntry, result.bottomEntry);
-        result.clampedToPartOrStaffBounds = true;
-    }
+    result.topStaffPosTarget = static_cast<int>(std::lround(topTarget));
+    result.bottomStaffPosTarget = static_cast<int>(std::lround(bottomTarget));
 
     return result;
 }

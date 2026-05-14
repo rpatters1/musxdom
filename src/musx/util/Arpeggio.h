@@ -38,8 +38,8 @@ struct ArpeggioSpanCandidate
     dom::MusxInstance<dom::others::ArticulationDef> definition; ///< Resolved articulation definition.
     dom::EntryInfoPtr topEntry; ///< Chosen top entry for the arpeggio span.
     dom::EntryInfoPtr bottomEntry; ///< Chosen bottom entry for the arpeggio span.
-    int topStaffPosTarget{}; ///< Calculated top target position in staff-position units.
-    int bottomStaffPosTarget{}; ///< Calculated bottom target position in staff-position units.
+    int topStaffPosTarget{}; ///< Calculated top target position in source-relative staff-position units; smaller is higher.
+    int bottomStaffPosTarget{}; ///< Calculated bottom target position in source-relative staff-position units; smaller is higher.
     bool clampedToPartOrStaffBounds{}; ///< True if the final result was normalized to a valid top/bottom ordering.
 };
 
