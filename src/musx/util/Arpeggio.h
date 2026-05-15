@@ -30,6 +30,23 @@
 
 namespace musx::util {
 
+/// @brief Resolved or synthesized arpeggio roll direction.
+enum class ArpeggioDirection
+{
+    Auto, ///< Direction is automatic or unknown.
+    Up,   ///< Roll from bottom to top.
+    Down  ///< Roll from top to bottom.
+};
+
+/// @brief Resolved or synthesized arpeggio arrowhead state.
+enum class ArpeggioArrow
+{
+    Auto, ///< Arrow state is automatic or unknown.
+    None, ///< No arrowhead.
+    Up,   ///< Upward arrowhead.
+    Down  ///< Downward arrowhead.
+};
+
 /// @brief Resolved arpeggio span for one articulation assignment.
 struct ArpeggioSpanCandidate
 {
@@ -38,16 +55,15 @@ struct ArpeggioSpanCandidate
     dom::MusxInstance<dom::others::ArticulationDef> definition; ///< Resolved articulation definition.
     dom::EntryInfoPtr topEntry; ///< Chosen top entry for the arpeggio span.
     dom::EntryInfoPtr bottomEntry; ///< Chosen bottom entry for the arpeggio span.
-    int topStaffPosTarget{}; ///< Calculated top target position in source-relative staff-position units; smaller is higher.
-    int bottomStaffPosTarget{}; ///< Calculated bottom target position in source-relative staff-position units; smaller is higher.
-    bool clampedToPartOrStaffBounds{}; ///< True if the final result was normalized to a valid top/bottom ordering.
+    ArpeggioDirection direction{ArpeggioDirection::Auto}; ///< Roll direction when known.
+    ArpeggioArrow arrow{ArpeggioArrow::Auto}; ///< Arrowhead state when known.
 };
 
 /// @brief Options controlling arpeggio span resolution.
 struct ArpeggioSpanOptions
 {
     bool includeHiddenEntries{false}; ///< Include hidden entries in candidate matching.
-    bool skipGraceEntries{true}; ///< Skip grace-note source entries and grace-note candidates.
+    bool skipGraceEntries{false}; ///< Skip grace-note source entries and grace-note candidates.
     bool constrainToSourceStaffOnly{false}; ///< Restrict matching to entries on the source staff only.
 };
 

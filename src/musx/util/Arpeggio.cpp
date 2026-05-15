@@ -206,8 +206,6 @@ std::optional<ArpeggioSpanCandidate> calcArpeggioSpanForAssignment(
     result.definition = def;
     result.topEntry = topEntry;
     result.bottomEntry = bottomEntry;
-    result.topStaffPosTarget = static_cast<int>(std::lround(topTarget));
-    result.bottomStaffPosTarget = static_cast<int>(std::lround(bottomTarget));
 
     return result;
 }
