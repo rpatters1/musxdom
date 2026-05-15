@@ -648,6 +648,9 @@ public:
     bool wordExtOffsetToNotehead{};                ///< "Notehead Alignment: Align to Notehead" (if false: "Stretch to Note Duration")
     bool lyricUseEdgePunctuation{};                ///< reverse of "Ignore SyllableEdgePunctuation"
     std::string lyricPunctuationToIgnore;          ///< If this string is omitted in the xml, the default value is populated in #integrityCheck.
+    bool showAutoNumbersOnVerses{};                ///< Auto-Number -> Verses
+    bool showAutoNumbersOnChoruses{};              ///< Auto-Number -> Choruses
+    bool showAutoNumbersOnSections{};              ///< Auto-Number -> Sections
     AutoNumberingAlign lyricAutoNumType{};         ///< "Automatic Lyric Numbers"
     Efix wordExtLineWidth{};                       ///< "Word Extension Line Width"
 
