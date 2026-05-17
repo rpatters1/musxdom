@@ -74,6 +74,7 @@
 #include "util/EnigmaString.h"
 #include "util/PseudoTieUtils.h"
 #include "util/ShapeRecognize.h"
+#include "util/SmartShapeRecognize.h"
 #include "util/SvgConvert.h"
 #include "util/Logger.h"
 #include "util/TestSupport.h"

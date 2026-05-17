@@ -301,106 +301,9 @@ bool others::SmartShape::iterateEntries(std::function<bool(const EntryInfoPtr&)>
     return staffList->iterateEntries(*startIndex, *endIndex, createGlobalMusicRange(), iterator);
 }
 
-bool others::SmartShape::calcIsPotentialTie(const EntryInfoPtr& forStartEntry) const
-{
-    // 6 EVPU ≈ 1/4 staff space; threshold is applied strictly (|Δ| < 6 EVPU).
-    constexpr Evpu HORIZONTAL_THRESHOLD = 6;
-
-    switch (shapeType) {
-    case ShapeType::SlurAuto:
-    case ShapeType::SlurDown:
-    case ShapeType::SlurUp:
-        break;
-
-    default:
-        return false;
-    }
-
-    if (entryBased) {
-        // both ends must be the same entry for entry-attached
-        const auto startEntryNum = startTermSeg->endPoint->entryNumber;
-        if (startEntryNum != endTermSeg->endPoint->entryNumber || startEntryNum != forStartEntry->getEntry()->getEntryNumber()) {
-            return false;
-        }
-    }  else {
-        if (startTermSeg->endPoint->staffId != endTermSeg->endPoint->staffId) {
-            return false;
-        }
-        const auto thisStartEntry = startTermSeg->endPoint->calcAssociatedEntry();
-        if (!forStartEntry.isSameEntry(thisStartEntry)) {
-            return false;
-        }
-    }
-    // both ends must match up with an equivalent entry for beat-attached
-    auto endEntry = endTermSeg->endPoint->calcAssociatedEntry();
-    if (!endEntry) {
-        return false;
-    }
-    if (forStartEntry.calcDisplaysAsRest() || endEntry.calcDisplaysAsRest()) {
-        return false;
-    }
-    // Allow arpeggiation ties (e.g., C -> CEG): end entry may add pitches, but must contain all start pitches.
-    if (!endEntry.calcContainsPitchContent(forStartEntry)) {
-        return false;
-    }
-    // if either endpoint is inactive, we can't compare the vertical positions, so just permissively allow them
-    // for now.
-    if (entryBased) {
-        if (!startTermSeg->endPointAdj->active || !endTermSeg->endPointAdj->active) {
-            return true;
-        }
-    }
-    const Evpu vertDiff = startTermSeg->endPointAdj->calcVertOffset() - endTermSeg->endPointAdj->calcVertOffset();
-    return std::abs(vertDiff) < HORIZONTAL_THRESHOLD;
-}
-
-bool others::SmartShape::calcIsPotentialForwardTie(const EntryInfoPtr& forStartEntry) const
-{
-    if (!calcIsPotentialTie(forStartEntry)) {
-        return false;
-    }
-    const auto& startEndPoint = *startTermSeg->endPoint;
-    const auto& endEndPoint   = *endTermSeg->endPoint;
-    const int cmp = startEndPoint.compareMetricPosition(endEndPoint);
-    if (cmp) {
-        return cmp < 0;
-    }
-    const auto startOffset = startTermSeg->endPointAdj->calcHorzOffset();
-    const auto endOffset = endTermSeg->endPointAdj->calcHorzOffset();
-    return utils::calcIsPseudoForwardTie(startOffset, endOffset);
-}
-
 NoteInfoPtr others::SmartShape::calcArpeggiatedTieToNote(const EntryInfoPtr& forStartEntry) const
 {
-    if (!calcIsPotentialForwardTie(forStartEntry)) {
-        return {};
-    }
-    const auto entry = forStartEntry->getEntry();
-    MUSX_ASSERT_IF(entry->notes.empty()) {
-        throw std::logic_error("calcIsPotentialForwardTie was true but startEntry had no notes.");
-    }
-    if (entry->notes.size() != 1) {
-        return {};
-    }
-    const auto endEntry = endTermSeg->endPoint->calcAssociatedEntry();
-    MUSX_ASSERT_IF(!endEntry) {
-        throw std::logic_error("calcIsPotentialForwardTie was true but endEntry did not exist.");
-    }
-    if (forStartEntry.isSameEntry(endEntry)) {
-        return {}; // must be a different entry.
-    }
-
-    const auto noteInfoPtr = NoteInfoPtr(forStartEntry, 0);
-    if ((noteInfoPtr->tieStart || forStartEntry.calcIsImmediatelyFollowedBy(endEntry)) && noteInfoPtr.calcTieTo()) {
-        // If Finale already provides a real tie target, this smart shape is not a stand-in.
-        return {};
-    }
-
-    auto endNote = noteInfoPtr.findEqualPitch(endEntry);
-    MUSX_ASSERT_IF(!endNote) {
-        throw std::logic_error("calcIsPotentialForwardTie was true but no matching pitch was found in endEntry.");
-    }
-    return endNote;
+    return musx::util::calcSmartShapeArpeggiatedTieToNote(*this, forStartEntry);
 }
 
 bool others::SmartShape::calcIsSlur() const
@@ -483,28 +386,7 @@ bool others::SmartShape::calcIsDashed() const
 
 bool others::SmartShape::calcIsPseudoTie(utils::PseudoTieMode mode, const EntryInfoPtr& forStartEntry) const
 {
-    switch (mode) {
-    case utils::PseudoTieMode::LaissezVibrer:
-        if (!calcIsPotentialForwardTie(forStartEntry)) {
-            return false;
-        }
-        break;
-
-    case utils::PseudoTieMode::TieEnd:
-        if (!calcIsPotentialTie(forStartEntry)) {
-            return false;
-        }
-        {
-            const auto startOffset = startTermSeg->endPointAdj->calcHorzOffset();
-            const auto endOffset = endTermSeg->endPointAdj->calcHorzOffset();
-            if (!utils::calcIsPseudoBackwardTie(startOffset, endOffset)) {
-                return false;
-            }
-        }
-        break;
-    }
-
-    return startTermSeg->endPoint->compareMetricPosition(*endTermSeg->endPoint) == 0;
+    return musx::util::calcIsSmartShapePseudoTie(*this, mode, forStartEntry);
 }
 
 // ********************************

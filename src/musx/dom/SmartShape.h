@@ -216,12 +216,6 @@ namespace others {
 class SmartShape : public OthersBase
 {
 private:
-    /// @brief Calculates if this smart shape is potentially being used as a tie.
-    bool calcIsPotentialTie(const EntryInfoPtr& forStartEntry) const;
-
-    /// @brief Calculates if this smart shape is potentially being used as a forward tie.
-    bool calcIsPotentialForwardTie(const EntryInfoPtr& forStartEntry) const;
-
 public:
     /** @brief Constructor function */
     explicit SmartShape(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)

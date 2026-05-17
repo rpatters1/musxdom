@@ -699,47 +699,4 @@ KnownShapeDefType recognizeShape(const ShapeDef& shape)
     return KnownShapeDefType::Unrecognized;
 }
 
-using dom::KnownSmartShapeType;
-using dom::others::SmartShape;
-using CL = dom::others::SmartShapeCustomLine;
-
-KnownSmartShapeType recognizeSmartShape(const MusxInstance<SmartShape>& smartShape)
-{
-    if (smartShape->entryBased) {
-        return KnownSmartShapeType::Unrecognized;
-    }
-    if (smartShape->shapeType != SmartShape::ShapeType::CustomLine || smartShape->lineStyleId == 0) {
-        return KnownSmartShapeType::Unrecognized;
-    }
-    const auto customShape = smartShape->getDocument()->getOthers()->get<CL>(smartShape->getRequestedPartId(), smartShape->lineStyleId);
-    if (!customShape) {
-        util::Logger::log(util::Logger::LogLevel::Warning, "Unable to find custom shape for smart shape " + std::to_string(smartShape->getCmper()));
-        return KnownSmartShapeType::Unrecognized;
-    }
-
-    /// @todo probably refactor if we need to recognize other custom shape types
-    if (customShape->lineStyle == CL::LineStyle::Solid && customShape->lineCapStartType == CL::LineCapType::Hook && customShape->lineCapEndType == CL::LineCapType::Hook) {
-        if (music_theory::sign(customShape->lineCapStartHookLength) == music_theory::sign(customShape->lineCapEndHookLength)) {
-            const auto startHook = RightHookLine{ customShape->lineCapStartHookLength, 0 };
-            const auto endHook = RightHookLine{ customShape->lineCapEndHookLength, 0 };
-            if (isRightHookLine(startHook) && isRightHookLine(endHook)) {
-                if (smartShape->startTermSeg->endPoint->compareMetricPosition(*smartShape->endTermSeg->endPoint) != 0) {
-                    return KnownSmartShapeType::Unrecognized;
-                }
-                if (smartShape->startTermSeg->endPointAdj->calcHorzOffset() != smartShape->endTermSeg->endPointAdj->calcHorzOffset()) {
-                    return KnownSmartShapeType::Unrecognized;
-                }
-                const auto vertDiff = smartShape->startTermSeg->endPointAdj->calcVertOffset() - smartShape->endTermSeg->endPointAdj->calcVertOffset();
-                if (vertDiff > 0 && customShape->lineCapStartHookLength < 0) {
-                    return KnownSmartShapeType::VerticalLineRightHooks;
-                } else if (vertDiff < 0 && customShape->lineCapStartHookLength > 0) {
-                    return KnownSmartShapeType::VerticalLineRightHooks;
-                }
-            }
-        }
-    }
-
-    return KnownSmartShapeType::Unrecognized;
-}
-
 } // namespace musx::util
