@@ -223,6 +223,13 @@ public:
     [[nodiscard]]
     const InstrumentInfo& getInstrumentForStaff(StaffCmper staffId) const;
 
+    /// @brief Get the instrument info for the given staffId in the specified part.
+    /// @param partId The linked part to search.
+    /// @param staffId The staffId to find.
+    /// @return The instrument info for the given staff, or std::nullopt if the staff is not mapped to an instrument.
+    [[nodiscard]]
+    std::optional<InstrumentInfo> getInstrumentForStaff(Cmper partId, StaffCmper staffId) const;
+
     /**
      * @brief Builds an instrument map for the specified linked part ID.
      *

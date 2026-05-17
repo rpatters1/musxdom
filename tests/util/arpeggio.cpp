@@ -50,6 +50,66 @@ std::optional<ArpeggioSpanCandidate> calcSpanForEntry(const DocumentPtr& doc, En
     return calcArpeggioSpanForAssignment(sourceEntry, assign, options);
 }
 
+MusxInstance<others::SmartShape> createVerticalHookSmartShape(
+    const DocumentPtr& doc,
+    const EntryInfoPtr& sourceEntry,
+    const EntryInfoPtr& topEntry,
+    const EntryInfoPtr& bottomEntry,
+    StaffCmper endStaffOverride = 0)
+{
+    constexpr Cmper SMART_SHAPE_ID = 9001;
+    constexpr Cmper LINE_STYLE_ID = 9001;
+
+    auto customLine = std::make_shared<others::SmartShapeCustomLine>(
+        doc, SCORE_PARTID, Base::ShareMode::All, LINE_STYLE_ID);
+    customLine->lineStyle = others::SmartShapeCustomLine::LineStyle::Solid;
+    customLine->lineCapStartType = others::SmartShapeCustomLine::LineCapType::Hook;
+    customLine->lineCapEndType = others::SmartShapeCustomLine::LineCapType::Hook;
+
+    const auto [topStaffTop, topStaffBottom] = topEntry.calcTopBottomStaffPositions();
+    const auto [bottomStaffTop, bottomStaffBottom] = bottomEntry.calcTopBottomStaffPositions();
+    const Evpu startY = static_cast<Evpu>(std::min(topStaffTop, topStaffBottom) * (EVPU_PER_SPACE / 2));
+    Evpu endY = static_cast<Evpu>(std::max(bottomStaffTop, bottomStaffBottom) * (EVPU_PER_SPACE / 2));
+    if (startY == endY) {
+        endY += 1;
+    }
+
+    const Evpu hookLength = (startY > endY) ? -24 : 24;
+    customLine->lineCapStartHookLength = hookLength;
+    customLine->lineCapEndHookLength = hookLength;
+
+    doc->getOthers()->add(others::SmartShapeCustomLine::XmlNodeName, customLine);
+
+    auto smartShape = std::make_shared<others::SmartShape>(
+        doc, SCORE_PARTID, Base::ShareMode::All, SMART_SHAPE_ID);
+    smartShape->shapeType = others::SmartShape::ShapeType::CustomLine;
+    smartShape->lineStyleId = LINE_STYLE_ID;
+    smartShape->integrityCheck(smartShape);
+
+    const auto measure = doc->getOthers()->get<others::Measure>(SCORE_PARTID, sourceEntry.getMeasure());
+    MUSX_ASSERT_IF(!measure) {
+        return nullptr;
+    }
+    const auto globalPosition = sourceEntry.calcGlobalElapsedDuration();
+    const auto calcStaffEdu = [&](StaffCmper staffId) {
+        return (globalPosition / measure->calcTimeStretch(staffId)).calcEduDuration();
+    };
+
+    smartShape->startTermSeg->endPoint->staffId = topEntry.getStaff();
+    smartShape->startTermSeg->endPoint->measId = sourceEntry.getMeasure();
+    smartShape->startTermSeg->endPoint->eduPosition = calcStaffEdu(topEntry.getStaff());
+    smartShape->startTermSeg->endPointAdj->active = true;
+    smartShape->startTermSeg->endPointAdj->vertOffset = startY;
+
+    smartShape->endTermSeg->endPoint->staffId = endStaffOverride ? endStaffOverride : bottomEntry.getStaff();
+    smartShape->endTermSeg->endPoint->measId = sourceEntry.getMeasure();
+    smartShape->endTermSeg->endPoint->eduPosition = calcStaffEdu(smartShape->endTermSeg->endPoint->staffId);
+    smartShape->endTermSeg->endPointAdj->active = true;
+    smartShape->endTermSeg->endPointAdj->vertOffset = endY;
+
+    return smartShape;
+}
+
 } // namespace
 
 TEST(ArpeggioUtilTest, FixtureAssignmentsWithoutCrossStaffOrCrossEntrySpanResolveToSelf)
@@ -151,4 +211,43 @@ TEST(ArpeggioUtilTest, Entry147SpansToEntry148Below)
 
     ASSERT_TRUE(span->bottomEntry);
     EXPECT_EQ(span->bottomEntry->getEntry()->getEntryNumber(), 148);
+}
+
+TEST(ArpeggioUtilTest, SmartShapeVerticalHooksResolveBracketSpan)
+{
+    auto doc = createArpeggiosDoc();
+    ASSERT_TRUE(doc);
+
+    auto sourceEntry = EntryInfoPtr::fromEntryNumber(doc, SCORE_PARTID, 136);
+    ASSERT_TRUE(sourceEntry);
+    auto smartShape = createVerticalHookSmartShape(doc, sourceEntry, sourceEntry, sourceEntry);
+    ASSERT_TRUE(smartShape);
+    EXPECT_EQ(recognizeSmartShape(smartShape), KnownSmartShapeType::VerticalLineRightHooks);
+
+    auto span = calcNonArpeggioSpanForSmartShape(sourceEntry, smartShape);
+    ASSERT_TRUE(span.has_value()) << "Expected non-null smart shape bracket span";
+
+    EXPECT_EQ(span->type, ArpeggioSpanType::Bracket);
+    EXPECT_EQ(span->sourceEntry->getEntry()->getEntryNumber(), 136);
+    ASSERT_TRUE(span->topEntry);
+    ASSERT_TRUE(span->bottomEntry);
+    EXPECT_EQ(span->topEntry->getEntry()->getEntryNumber(), 136);
+    EXPECT_EQ(span->bottomEntry->getEntry()->getEntryNumber(), 136);
+}
+
+TEST(ArpeggioUtilTest, SmartShapeVerticalHooksRejectStavesOutsideSourceInstrument)
+{
+    auto doc = createArpeggiosDoc();
+    ASSERT_TRUE(doc);
+
+    auto sourceEntry = EntryInfoPtr::fromEntryNumber(doc, SCORE_PARTID, 136);
+    ASSERT_TRUE(sourceEntry);
+    auto expectedBottom = EntryInfoPtr::fromEntryNumber(doc, SCORE_PARTID, 142);
+    ASSERT_TRUE(expectedBottom);
+
+    auto smartShape = createVerticalHookSmartShape(doc, sourceEntry, sourceEntry, expectedBottom, 32767);
+    ASSERT_TRUE(smartShape);
+    EXPECT_EQ(recognizeSmartShape(smartShape), KnownSmartShapeType::VerticalLineRightHooks);
+
+    EXPECT_FALSE(calcNonArpeggioSpanForSmartShape(sourceEntry, smartShape).has_value());
 }
