@@ -24,8 +24,10 @@
 namespace musx {
 namespace dom {
 enum class KnownShapeDefType;
+enum class KnownSmartShapeType;
 namespace others {
 class ShapeDef;
+class SmartShape;
 } // namespace others
 } // namespace dom
 } // namespace musx
@@ -36,5 +38,10 @@ namespace musx::util {
 /// @param shape The shape definition to evaluate.
 /// @return The recognized type, or dom::KnownShapeDefType::Unrecognized when no match is found.
 dom::KnownShapeDefType recognizeShape(const dom::others::ShapeDef& shape);
+
+/// @brief Recognize well-known Custom Smart Shape patterns.
+/// @param smartShape The shape definition to evaluate.
+/// @return The recognized type, or dom::KnownShapeDefType::Unrecognized when no match is found.
+dom::KnownSmartShapeType recognizeSmartShape(const dom::MusxInstance<dom::others::SmartShape>& smartShape);
 
 } // namespace musx::util

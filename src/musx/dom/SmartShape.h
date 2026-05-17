@@ -45,6 +45,16 @@ namespace others {
     class SmartShapeMeasureAssign;
 }
 
+/// @enum KnownSmartShapeType
+/// @brief Enumerates the custom smart shape types we can recognize semantically.
+enum class KnownSmartShapeType
+{
+    Unrecognized,               ///< Fallback when recognition fails.
+    VerticalLineRightHooks,     ///< Vertical line with short horizontal hooks extending to the right at both ends.
+
+    // Add more known types here
+};
+
 namespace smartshape {
 
 /**

@@ -201,13 +201,40 @@ std::optional<ArpeggioSpanCandidate> calcArpeggioSpanForAssignment(
     }
 
     ArpeggioSpanCandidate result;
+    result.type = ArpeggioSpanType::Normal;
     result.sourceEntry = sourceEntryInfo;
-    result.assign = assign;
-    result.definition = def;
     result.topEntry = topEntry;
     result.bottomEntry = bottomEntry;
 
     return result;
+}
+
+std::optional<ArpeggioSpanCandidate> calcNonArpeggioSpanForAssignment(
+    [[maybe_unused]] const dom::EntryInfoPtr& sourceEntry,
+    [[maybe_unused]] const dom::MusxInstance<dom::details::ArticulationAssign>& assign,
+    [[maybe_unused]] const ArpeggioSpanOptions& options)
+{
+    return std::nullopt;
+}
+
+std::optional<ArpeggioSpanCandidate> calcNonArpeggioSpanForAssignment(
+    [[maybe_unused]] const dom::EntryInfoPtr& sourceEntry,
+    [[maybe_unused]] const dom::MusxInstance<dom::others::MeasureExprAssign>& assign,
+    [[maybe_unused]] const ArpeggioSpanOptions& options)
+{
+    return std::nullopt;
+}
+
+std::optional<ArpeggioSpanCandidate> calcNonArpeggioSpanForSmartShape(
+    [[maybe_unused]] const dom::EntryInfoPtr& sourceEntry,
+    [[maybe_unused]] const dom::MusxInstance<dom::others::SmartShape>& smartShape,
+    [[maybe_unused]] const ArpeggioSpanOptions& options)
+{
+    const auto shapeType = util::recognizeSmartShape(smartShape);
+    if (shapeType == KnownSmartShapeType::VerticalLineRightHooks) {
+        /// @todo calculate span
+    }
+    return std::nullopt;
 }
 
 } // namespace musx::util

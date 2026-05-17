@@ -47,12 +47,18 @@ enum class ArpeggioArrow
     Down  ///< Downward arrowhead.
 };
 
+/// @brief High-level vertical connector type resolved for a span.
+enum class ArpeggioSpanType
+{
+    Normal,  ///< Arpeggio-like vertical connector.
+    Bracket  ///< Non-arpeggio bracket-like vertical connector.
+};
+
 /// @brief Resolved arpeggio span for one articulation assignment.
 struct ArpeggioSpanCandidate
 {
+    ArpeggioSpanType type{ArpeggioSpanType::Normal}; ///< Connector type for the resolved span.
     dom::EntryInfoPtr sourceEntry; ///< Entry that owns the articulation assignment.
-    dom::MusxInstance<dom::details::ArticulationAssign> assign; ///< Source articulation assignment.
-    dom::MusxInstance<dom::others::ArticulationDef> definition; ///< Resolved articulation definition.
     dom::EntryInfoPtr topEntry; ///< Chosen top entry for the arpeggio span.
     dom::EntryInfoPtr bottomEntry; ///< Chosen bottom entry for the arpeggio span.
     ArpeggioDirection direction{ArpeggioDirection::Auto}; ///< Roll direction when known.
@@ -74,5 +80,23 @@ std::optional<ArpeggioSpanCandidate> calcArpeggioSpanForAssignment(
     const dom::MusxInstance<dom::details::ArticulationAssign>& assign,
     const ArpeggioSpanOptions& options = {},
     std::function<bool(const dom::details::ArticulationAssign::SelectedSymbolContext&)> symbolContextFilter = {});
+
+[[nodiscard]]
+std::optional<ArpeggioSpanCandidate> calcNonArpeggioSpanForAssignment(
+    const dom::EntryInfoPtr& sourceEntry,
+    const dom::MusxInstance<dom::details::ArticulationAssign>& assign,
+    const ArpeggioSpanOptions& options = {});
+
+[[nodiscard]]
+std::optional<ArpeggioSpanCandidate> calcNonArpeggioSpanForAssignment(
+    const dom::EntryInfoPtr& sourceEntry,
+    const dom::MusxInstance<dom::others::MeasureExprAssign>& assign,
+    const ArpeggioSpanOptions& options = {});
+
+[[nodiscard]]
+std::optional<ArpeggioSpanCandidate> calcNonArpeggioSpanForSmartShape(
+    const dom::EntryInfoPtr& sourceEntry,
+    const dom::MusxInstance<dom::others::SmartShape>& smartShape,
+    const ArpeggioSpanOptions& options = {});
 
 } // namespace musx::util

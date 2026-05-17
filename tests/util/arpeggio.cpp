@@ -68,9 +68,8 @@ TEST(ArpeggioUtilTest, FixtureAssignmentsWithoutCrossStaffOrCrossEntrySpanResolv
         auto span = calcArpeggioSpanForAssignment(sourceEntry, assign);
         ASSERT_TRUE(span.has_value()) << "Expected non-null arpeggio span for " << entryNumber;
 
+        EXPECT_EQ(span->type, ArpeggioSpanType::Normal);
         EXPECT_EQ(span->sourceEntry->getEntry()->getEntryNumber(), entryNumber);
-        EXPECT_EQ(span->assign->getEntryNumber(), entryNumber);
-        EXPECT_EQ(span->definition->getCmper(), assign->articDef);
         EXPECT_TRUE(span->topEntry);
         EXPECT_TRUE(span->bottomEntry);
 

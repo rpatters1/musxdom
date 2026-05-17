@@ -87,6 +87,98 @@ constexpr static musxtest::string_view shapeXml = R"xml(
 </finale>
     )xml";
 
+constexpr static musxtest::string_view verticalLineRightHooksXml = R"xml(
+<?xml version="1.0" encoding="UTF-8"?>
+<finale>
+    <others>
+        <shapeData cmper="19">
+            <data>20</data><data>3</data><data>902</data><data>-8</data><data>928</data><data>-122</data>
+            <data>1000</data><data>390</data><data>0</data><data>24</data><data>288</data>
+            <data>8</data><data>3</data><data>128</data><data>-24</data><data>0</data>
+            <data>256</data><data>0</data><data>-288</data><data>128</data><data>24</data><data>0</data>
+            <data>20</data><data>3</data><data>902</data><data>-8</data><data>928</data><data>-122</data>
+            <data>1000</data><data>390</data><data>0</data><data>24</data><data>288</data>
+            <data>8</data><data>3</data><data>128</data><data>-24</data><data>0</data>
+            <data>256</data><data>0</data><data>-288</data><data>128</data><data>24</data><data>0</data>
+        </shapeData>
+        <shapeData cmper="21">
+            <data>24</data><data>0</data><data>-2</data><data>2</data><data>24</data><data>-107</data>
+            <data>1000</data><data>1000</data><data>0</data><data>0</data><data>0</data>
+            <data>0</data><data>0</data><data>256</data><data>18</data><data>0</data>
+            <data>0</data><data>0</data><data>-24</data><data>0</data><data>0</data><data>-105</data>
+            <data>24</data><data>1</data>
+        </shapeData>
+        <shapeData cmper="23">
+            <data>20</data><data>10</data><data>3321</data><data>-9</data><data>3347</data><data>-374</data>
+            <data>1000</data><data>1262</data><data>0</data><data>24</data><data>288</data>
+            <data>8</data><data>3</data><data>128</data><data>-24</data><data>0</data>
+            <data>256</data><data>0</data><data>-288</data><data>128</data><data>24</data><data>0</data>
+            <data>20</data><data>10</data><data>3321</data><data>-9</data><data>3347</data><data>-374</data>
+            <data>1000</data><data>1262</data><data>0</data><data>24</data><data>288</data>
+            <data>8</data><data>3</data><data>128</data><data>-24</data><data>0</data>
+            <data>256</data><data>0</data><data>-288</data><data>128</data><data>24</data><data>0</data>
+        </shapeData>
+        <shapeData cmper="43">
+            <data>20</data><data>21</data><data>3918</data><data>39</data><data>3944</data><data>-769</data>
+            <data>1000</data><data>2799</data><data>0</data><data>24</data><data>288</data>
+            <data>8</data><data>3</data><data>128</data><data>-24</data><data>0</data>
+            <data>256</data><data>0</data><data>-288</data><data>128</data><data>24</data><data>0</data>
+            <data>20</data><data>21</data><data>3918</data><data>39</data><data>3944</data><data>-769</data>
+            <data>1000</data><data>2799</data><data>0</data><data>24</data><data>288</data>
+            <data>8</data><data>3</data><data>128</data><data>-24</data><data>0</data>
+            <data>256</data><data>0</data><data>-288</data><data>128</data><data>24</data><data>0</data>
+        </shapeData>
+        <shapeDef cmper="127"><instList>19</instList><dataList>19</dataList><shapeType>expression</shapeType></shapeDef>
+        <shapeDef cmper="128"><instList>21</instList><dataList>21</dataList><shapeType>articulation</shapeType></shapeDef>
+        <shapeDef cmper="129"><instList>23</instList><dataList>23</dataList><shapeType>expression</shapeType></shapeDef>
+        <shapeDef cmper="130"><instList>43</instList><dataList>43</dataList><shapeType>expression</shapeType></shapeDef>
+        <shapeList cmper="19">
+            <instruct><numData>11</numData><tag>startObject</tag></instruct><instruct><numData>1</numData><tag>bracket</tag></instruct>
+            <instruct><numData>1</numData><tag>vertMode</tag></instruct><instruct><numData>1</numData><tag>lineWidth</tag></instruct>
+            <instruct><numData>2</numData><tag>rLineTo</tag></instruct><instruct><numData>1</numData><tag>lineWidth</tag></instruct>
+            <instruct><numData>2</numData><tag>rLineTo</tag></instruct><instruct><numData>1</numData><tag>lineWidth</tag></instruct>
+            <instruct><numData>2</numData><tag>rLineTo</tag></instruct><instruct><tag>stroke</tag></instruct>
+            <instruct><numData>11</numData><tag>startObject</tag></instruct><instruct><numData>1</numData><tag>bracket</tag></instruct>
+            <instruct><numData>1</numData><tag>vertMode</tag></instruct><instruct><numData>1</numData><tag>lineWidth</tag></instruct>
+            <instruct><numData>2</numData><tag>rLineTo</tag></instruct><instruct><numData>1</numData><tag>lineWidth</tag></instruct>
+            <instruct><numData>2</numData><tag>rLineTo</tag></instruct><instruct><numData>1</numData><tag>lineWidth</tag></instruct>
+            <instruct><numData>2</numData><tag>rLineTo</tag></instruct><instruct><tag>stroke</tag></instruct>
+        </shapeList>
+        <shapeList cmper="21">
+            <instruct><numData>11</numData><tag>startObject</tag></instruct><instruct><numData>2</numData><tag>rMoveTo</tag></instruct>
+            <instruct><numData>1</numData><tag>lineWidth</tag></instruct><instruct><numData>2</numData><tag>setDash</tag></instruct>
+            <instruct><numData>2</numData><tag>rLineTo</tag></instruct><instruct><numData>2</numData><tag>rLineTo</tag></instruct>
+            <instruct><numData>2</numData><tag>rLineTo</tag></instruct><instruct><numData>2</numData><tag>rLineTo</tag></instruct>
+            <instruct><tag>stroke</tag></instruct>
+        </shapeList>
+        <shapeList cmper="23">
+            <instruct><numData>11</numData><tag>startObject</tag></instruct><instruct><numData>1</numData><tag>bracket</tag></instruct>
+            <instruct><numData>1</numData><tag>vertMode</tag></instruct><instruct><numData>1</numData><tag>lineWidth</tag></instruct>
+            <instruct><numData>2</numData><tag>rLineTo</tag></instruct><instruct><numData>1</numData><tag>lineWidth</tag></instruct>
+            <instruct><numData>2</numData><tag>rLineTo</tag></instruct><instruct><numData>1</numData><tag>lineWidth</tag></instruct>
+            <instruct><numData>2</numData><tag>rLineTo</tag></instruct><instruct><tag>stroke</tag></instruct>
+            <instruct><numData>11</numData><tag>startObject</tag></instruct><instruct><numData>1</numData><tag>bracket</tag></instruct>
+            <instruct><numData>1</numData><tag>vertMode</tag></instruct><instruct><numData>1</numData><tag>lineWidth</tag></instruct>
+            <instruct><numData>2</numData><tag>rLineTo</tag></instruct><instruct><numData>1</numData><tag>lineWidth</tag></instruct>
+            <instruct><numData>2</numData><tag>rLineTo</tag></instruct><instruct><numData>1</numData><tag>lineWidth</tag></instruct>
+            <instruct><numData>2</numData><tag>rLineTo</tag></instruct><instruct><tag>stroke</tag></instruct>
+        </shapeList>
+        <shapeList cmper="43">
+            <instruct><numData>11</numData><tag>startObject</tag></instruct><instruct><numData>1</numData><tag>bracket</tag></instruct>
+            <instruct><numData>1</numData><tag>vertMode</tag></instruct><instruct><numData>1</numData><tag>lineWidth</tag></instruct>
+            <instruct><numData>2</numData><tag>rLineTo</tag></instruct><instruct><numData>1</numData><tag>lineWidth</tag></instruct>
+            <instruct><numData>2</numData><tag>rLineTo</tag></instruct><instruct><numData>1</numData><tag>lineWidth</tag></instruct>
+            <instruct><numData>2</numData><tag>rLineTo</tag></instruct><instruct><tag>stroke</tag></instruct>
+            <instruct><numData>11</numData><tag>startObject</tag></instruct><instruct><numData>1</numData><tag>bracket</tag></instruct>
+            <instruct><numData>1</numData><tag>vertMode</tag></instruct><instruct><numData>1</numData><tag>lineWidth</tag></instruct>
+            <instruct><numData>2</numData><tag>rLineTo</tag></instruct><instruct><numData>1</numData><tag>lineWidth</tag></instruct>
+            <instruct><numData>2</numData><tag>rLineTo</tag></instruct><instruct><numData>1</numData><tag>lineWidth</tag></instruct>
+            <instruct><numData>2</numData><tag>rLineTo</tag></instruct><instruct><tag>stroke</tag></instruct>
+        </shapeList>
+    </others>
+</finale>
+)xml";
+
 TEST(ShapeDefTest, PopulateFields)
 {
     auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(shapeXml);
@@ -217,6 +309,55 @@ TEST(ShapeDefTest, RecognizeShapes)
         EXPECT_EQ(shape->getCmper(), expectedCmpers[x]) << "shape cmper " << shape->getCmper() << " is not expected value " << expectedCmpers[x];
         EXPECT_EQ(shape->recognize(), expectedTypes[x]) << "recognized shape type is not the expected value for cmper " << shape->getCmper();
         x++;
+    }
+}
+
+TEST(ShapeDefTest, RecognizeVerticalLineRightHooks)
+{
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(verticalLineRightHooksXml);
+    ASSERT_TRUE(doc);
+
+    for (const auto cmper : {Cmper{127}, Cmper{128}, Cmper{129}, Cmper{130}}) {
+        const auto shape = doc->getOthers()->get<others::ShapeDef>(SCORE_PARTID, cmper);
+        ASSERT_TRUE(shape) << "missing shapeDef " << cmper;
+        EXPECT_EQ(shape->recognize(), KnownShapeDefType::VerticalLineRightHooks)
+            << "recognized shape type is not the expected value for cmper " << cmper;
+    }
+}
+
+TEST(ShapeDefTest, RecognizeOnlyExpectedShapesInPattersonDefault)
+{
+    std::vector<char> enigmaXml;
+    musxtest::readFile(musxtest::getInputPath() / "reference" / "PattersonDefault.enigmaxml", enigmaXml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(enigmaXml);
+    ASSERT_TRUE(doc);
+
+    const std::vector<std::pair<Cmper, KnownShapeDefType>> expectedRecognized = {
+        {91, KnownShapeDefType::PedalArrowheadDown},
+        {92, KnownShapeDefType::PedalArrowheadUp},
+        {93, KnownShapeDefType::PedalArrowheadShortUpDownLongUp},
+        {94, KnownShapeDefType::PedalArrowheadLongUpDownShortUp},
+        {95, KnownShapeDefType::Blank},
+        {120, KnownShapeDefType::PedalArrowheadDown},
+        {121, KnownShapeDefType::PedalArrowheadUp},
+        {122, KnownShapeDefType::PedalArrowheadLongUpDownShortUp},
+        {123, KnownShapeDefType::PedalArrowheadShortUpDownLongUp},
+        {124, KnownShapeDefType::TenutoMark},
+        {125, KnownShapeDefType::SlurTieCurveRight},
+        {126, KnownShapeDefType::SlurTieCurveRight},
+    };
+
+    auto shapes = doc->getOthers()->getArray<others::ShapeDef>(SCORE_PARTID);
+    ASSERT_EQ(shapes.size(), 143);
+
+    for (const auto& shape : shapes) {
+        const auto expected = std::find_if(expectedRecognized.begin(), expectedRecognized.end(),
+            [&](const auto& entry) { return entry.first == shape->getCmper(); });
+        const auto expectedType = expected != expectedRecognized.end()
+            ? expected->second
+            : KnownShapeDefType::Unrecognized;
+        EXPECT_EQ(shape->recognize(), expectedType)
+            << "unexpected recognition result for PattersonDefault shapeDef " << shape->getCmper();
     }
 }
 

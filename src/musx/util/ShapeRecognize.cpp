@@ -35,6 +35,8 @@
 namespace musx::util {
 namespace {
 
+using dom::MusxInstance;
+
 using dom::KnownShapeDefType;
 using dom::ShapeDefInstruction;
 using dom::ShapeDefInstructionType;
@@ -67,6 +69,8 @@ constexpr dom::Evpu SLUR_TIE_HORIZONTAL_TOLERANCE_EVPU = 6; // 1/4 space express
 constexpr dom::Evpu16ths SLUR_TIE_HORIZONTAL_TOLERANCE_16THS = SLUR_TIE_HORIZONTAL_TOLERANCE_EVPU * 16;
 constexpr int SLUR_TIE_BOUND_SAMPLE_COUNT = 32;
 constexpr double SLUR_TIE_VERTICAL_SCALE_THRESHOLD = 4.0;
+constexpr dom::Evpu RIGHT_HOOK_MAX_LENGTH_EVPU = 48;
+constexpr dom::Evpu RIGHT_HOOK_VERTICAL_TOLERANCE_EVPU = 1;
 
 static dom::Evpu16ths evpuTo16ths(dom::Evpu value)
 {
@@ -308,6 +312,118 @@ static ShapeRecognitionCandidate makePedalArrowheadRecognizer(
     return makeSequenceRecognizer(type, std::move(expectations), skipPredicate);
 }
 
+struct RightHookLine
+{
+    dom::Evpu dx{};
+    dom::Evpu dy{};
+};
+
+struct RightHookState
+{
+    std::vector<RightHookLine> currentPath;
+    bool recognizedPath = false;
+};
+
+static bool isRightHookLine(const RightHookLine& line)
+{
+    return std::abs(line.dy) <= RIGHT_HOOK_VERTICAL_TOLERANCE_EVPU
+        && std::abs(line.dx) > 0
+        && std::abs(line.dx) <= RIGHT_HOOK_MAX_LENGTH_EVPU;
+}
+
+static bool isVerticalLine(const RightHookLine& line)
+{
+    return line.dx == 0 && line.dy != 0;
+}
+
+static bool isRightHookedVerticalPath(const std::vector<RightHookLine>& path)
+{
+    if (path.size() < 3) {
+        return false;
+    }
+
+    const auto& first = path.front();
+    const auto& last = path.back();
+    if (!isRightHookLine(first) || !isRightHookLine(last)) {
+        return false;
+    }
+
+    // Finale draws this shape from the right end of one hook to the vertical
+    // stroke, then from the vertical stroke to the right end of the other hook.
+    if (first.dx >= 0 || last.dx <= 0) {
+        return false;
+    }
+
+    dom::Evpu verticalLength = 0;
+    for (size_t i = 1; i + 1 < path.size(); ++i) {
+        if (!isVerticalLine(path[i])) {
+            return false;
+        }
+        verticalLength += std::abs(path[i].dy);
+    }
+
+    return verticalLength > 0;
+}
+
+static ShapeRecognitionCandidate makeVerticalLineRightHooksRecognizer()
+{
+    auto state = std::make_shared<RightHookState>();
+
+    ShapeRecognitionCandidate candidate;
+    candidate.type = KnownShapeDefType::VerticalLineRightHooks;
+
+    candidate.consume = [state](const ShapeDefInstruction::Decoded& inst) -> ShapeRecognitionStepResult {
+        if (!inst.valid()) {
+            return ShapeRecognitionStepResult::Reject;
+        }
+
+        switch (inst.type) {
+        case ShapeDefInstructionType::StartObject:
+        case ShapeDefInstructionType::StartGroup:
+        case ShapeDefInstructionType::EndGroup:
+        case ShapeDefInstructionType::Bracket:
+        case ShapeDefInstructionType::VerticalMode:
+        case ShapeDefInstructionType::LineWidth:
+            return ShapeRecognitionStepResult::Continue;
+
+        case ShapeDefInstructionType::SetDash:
+            return isZeroSpaceDash(inst) ? ShapeRecognitionStepResult::Continue : ShapeRecognitionStepResult::Reject;
+
+        case ShapeDefInstructionType::RMoveTo:
+            return state->currentPath.empty() ? ShapeRecognitionStepResult::Continue : ShapeRecognitionStepResult::Reject;
+
+        case ShapeDefInstructionType::RLineTo: {
+            const auto* data = std::get_if<ShapeDefInstruction::RLineTo>(&inst.data);
+            if (!data) {
+                return ShapeRecognitionStepResult::Reject;
+            }
+            if (data->dx == 0 && data->dy == 0) {
+                return ShapeRecognitionStepResult::Continue;
+            }
+            state->currentPath.push_back({data->dx, data->dy});
+            return ShapeRecognitionStepResult::Continue;
+        }
+
+        case ShapeDefInstructionType::Stroke:
+            if (!isRightHookedVerticalPath(state->currentPath)) {
+                return ShapeRecognitionStepResult::Reject;
+            }
+            state->currentPath.clear();
+            state->recognizedPath = true;
+            return ShapeRecognitionStepResult::Continue;
+
+        default:
+            return ShapeRecognitionStepResult::Reject;
+        }
+    };
+
+    candidate.finalize = [state]() -> bool {
+        return state->recognizedPath && state->currentPath.empty();
+    };
+
+    return candidate;
+}
+
 struct SlurTieContour
 {
     dom::Evpu16ths startX = 0;
@@ -316,6 +432,7 @@ struct SlurTieContour
     dom::Evpu16ths endY = 0;
     dom::Evpu16ths deltaX = 0;
     dom::Evpu16ths deltaY = 0;
+    bool scaledY = false;
 };
 
 struct SlurTieState
@@ -397,6 +514,7 @@ static ShapeRecognitionCandidate makeSlurTieRecognizer(SlurTieDirection directio
                 contour.startY = scaledY->first;
                 contour.endY = scaledY->second;
                 contour.deltaY = contour.endY - contour.startY;
+                contour.scaledY = true;
             } else {
                 contour.startY = evpuTo16ths(startYEvpu);
                 contour.deltaY = slur->edy;
@@ -460,7 +578,13 @@ static ShapeRecognitionCandidate makeSlurTieRecognizer(SlurTieDirection directio
         }
 
         const dom::Evpu16ths diff = std::abs(startSeparation - endSeparation);
-        if (diff > SLUR_TIE_HORIZONTAL_TOLERANCE_16THS) {
+        const bool hasParallelContours = diff <= SLUR_TIE_HORIZONTAL_TOLERANCE_16THS;
+        const bool hasScaledContour = std::any_of(state->contours.begin(), state->contours.end(),
+            [](const SlurTieContour& contour) { return contour.scaledY; });
+        const bool hasTaperedContours = state->contours.size() > 1
+            && !hasScaledContour
+            && (std::min)(std::abs(startSeparation), std::abs(endSeparation)) <= SLUR_TIE_HORIZONTAL_TOLERANCE_16THS;
+        if (!hasParallelContours && !hasTaperedContours) {
             return false;
         }
 
@@ -499,6 +623,7 @@ static ShapeRecognitionCandidates createShapeRecognizers(const ShapeDef& shape)
     if (allowsShapeType({ShapeDef::ShapeType::Articulation, ShapeDef::ShapeType::Expression})) {
         candidates.push_back(makeSlurTieRecognizer(SlurTieDirection::CurveRight));
         candidates.push_back(makeSlurTieRecognizer(SlurTieDirection::CurveLeft));
+        candidates.push_back(makeVerticalLineRightHooksRecognizer());
     }
     if (allowsShapeType({ShapeDef::ShapeType::Arrowhead})) {
         candidates.push_back(makePedalArrowheadRecognizer(
@@ -572,6 +697,49 @@ KnownShapeDefType recognizeShape(const ShapeDef& shape)
     }
 
     return KnownShapeDefType::Unrecognized;
+}
+
+using dom::KnownSmartShapeType;
+using dom::others::SmartShape;
+using CL = dom::others::SmartShapeCustomLine;
+
+KnownSmartShapeType recognizeSmartShape(const MusxInstance<SmartShape>& smartShape)
+{
+    if (smartShape->entryBased) {
+        return KnownSmartShapeType::Unrecognized;
+    }
+    if (smartShape->shapeType != SmartShape::ShapeType::CustomLine || smartShape->lineStyleId == 0) {
+        return KnownSmartShapeType::Unrecognized;
+    }
+    const auto customShape = smartShape->getDocument()->getOthers()->get<CL>(smartShape->getRequestedPartId(), smartShape->lineStyleId);
+    if (!customShape) {
+        util::Logger::log(util::Logger::LogLevel::Warning, "Unable to find custom shape for smart shape " + std::to_string(smartShape->getCmper()));
+        return KnownSmartShapeType::Unrecognized;
+    }
+
+    /// @todo probably refactor if we need to recognize other custom shape types
+    if (customShape->lineStyle == CL::LineStyle::Solid && customShape->lineCapStartType == CL::LineCapType::Hook && customShape->lineCapEndType == CL::LineCapType::Hook) {
+        if (music_theory::sign(customShape->lineCapStartHookLength) == music_theory::sign(customShape->lineCapEndHookLength)) {
+            const auto startHook = RightHookLine{ customShape->lineCapStartHookLength, 0 };
+            const auto endHook = RightHookLine{ customShape->lineCapEndHookLength, 0 };
+            if (isRightHookLine(startHook) && isRightHookLine(endHook)) {
+                if (smartShape->startTermSeg->endPoint->compareMetricPosition(*smartShape->endTermSeg->endPoint) != 0) {
+                    return KnownSmartShapeType::Unrecognized;
+                }
+                if (smartShape->startTermSeg->endPointAdj->calcHorzOffset() != smartShape->endTermSeg->endPointAdj->calcHorzOffset()) {
+                    return KnownSmartShapeType::Unrecognized;
+                }
+                const auto vertDiff = smartShape->startTermSeg->endPointAdj->calcVertOffset() - smartShape->endTermSeg->endPointAdj->calcVertOffset();
+                if (vertDiff > 0 && customShape->lineCapStartHookLength < 0) {
+                    return KnownSmartShapeType::VerticalLineRightHooks;
+                } else if (vertDiff < 0 && customShape->lineCapStartHookLength > 0) {
+                    return KnownSmartShapeType::VerticalLineRightHooks;
+                }
+            }
+        }
+    }
+
+    return KnownSmartShapeType::Unrecognized;
 }
 
 } // namespace musx::util

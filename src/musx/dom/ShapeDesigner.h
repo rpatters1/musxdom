@@ -46,6 +46,7 @@ enum class KnownShapeDefType
     PedalArrowheadUp,           ///< Upward wedge used for pedal markings.
     PedalArrowheadShortUpDownLongUp, ///< Pedal arrowhead: short up, down, long up.
     PedalArrowheadLongUpDownShortUp, ///< Pedal arrowhead: long up, down, short up.
+    VerticalLineRightHooks,     ///< Vertical line with short horizontal hooks extending to the right at both ends.
 
     // Add more known types here
 };
