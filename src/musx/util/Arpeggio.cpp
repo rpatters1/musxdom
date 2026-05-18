@@ -105,10 +105,10 @@ double calcSourceRelativeEvpu(Evpu evpu, Evpu sourceDistFromTop, Evpu staffDistF
 
 bool calcPositionRangesOverlap(double firstTop, double firstBottom, double secondTop, double secondBottom)
 {
-    const double firstMin = std::min(firstTop, firstBottom);
-    const double firstMax = std::max(firstTop, firstBottom);
-    const double secondMin = std::min(secondTop, secondBottom);
-    const double secondMax = std::max(secondTop, secondBottom);
+    const double firstMin = (std::min)(firstTop, firstBottom);
+    const double firstMax = (std::max)(firstTop, firstBottom);
+    const double secondMin = (std::min)(secondTop, secondBottom);
+    const double secondMax = (std::max)(secondTop, secondBottom);
     return firstMin <= secondMax && secondMin <= firstMax;
 }
 
@@ -141,8 +141,8 @@ std::optional<std::pair<double, double>> calcSourceInstrumentEvpuBounds(
         const double staffBottom = calcSourceRelativeEvpuFromStaffPosition(
             staff->calcBottomLinePosition(), sourceDistFromTop, staffDistFromTop);
 
-        instrumentTop = std::min(instrumentTop, std::min(staffTop, staffBottom));
-        instrumentBottom = std::max(instrumentBottom, std::max(staffTop, staffBottom));
+        instrumentTop = (std::min)(instrumentTop, (std::min)(staffTop, staffBottom));
+        instrumentBottom = (std::max)(instrumentBottom, (std::max)(staffTop, staffBottom));
     }
 
     if (instrumentTop == (std::numeric_limits<double>::max)()
@@ -211,8 +211,8 @@ std::optional<ArpeggioSpanCandidate> calcNonArpeggioSpanForVerticalTargets(
         return std::nullopt;
     }
 
-    const double targetTop = std::min(startTarget, endTarget);
-    const double targetBottom = std::max(startTarget, endTarget);
+    const double targetTop = (std::min)(startTarget, endTarget);
+    const double targetBottom = (std::max)(startTarget, endTarget);
     if (targetTop < sourceInstrumentBounds->first || targetBottom > sourceInstrumentBounds->second) {
         return std::nullopt;
     }

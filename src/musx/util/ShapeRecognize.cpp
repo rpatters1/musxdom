@@ -712,8 +712,8 @@ std::optional<std::pair<double, double>> calcVerticalLineRightHooksLocalYBounds(
     bool unsupported = false;
 
     const auto updateY = [&](double y) {
-        minY = minY ? std::min(*minY, y) : y;
-        maxY = maxY ? std::max(*maxY, y) : y;
+        minY = minY ? (std::min)(*minY, y) : y;
+        maxY = maxY ? (std::max)(*maxY, y) : y;
     };
 
     const auto startObject = [&](dom::Evpu originY, int rawScaleY, int rotation) {
