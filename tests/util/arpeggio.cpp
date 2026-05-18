@@ -81,7 +81,19 @@ MusxInstance<others::SmartShape> createVerticalHookSmartShape(
         endY += 1;
     }
 
-    const Evpu hookLength = (startY > endY) ? 24 : -24;
+    const StaffCmper startStaff = topEntry.getStaff();
+    const StaffCmper endStaff = endStaffOverride ? endStaffOverride : bottomEntry.getStaff();
+    const auto scrollView = doc->getScrollViewStaves(SCORE_PARTID);
+    const auto startStaffIndex = scrollView.getIndexForStaff(startStaff);
+    const auto endStaffIndex = scrollView.getIndexForStaff(endStaff);
+    MUSX_ASSERT_IF(!startStaffIndex || !endStaffIndex) {
+        return nullptr;
+    }
+    const Evpu sourceDistFromTop = scrollView[*startStaffIndex]->distFromTop;
+    const double startPosition = static_cast<double>(sourceDistFromTop - scrollView[*startStaffIndex]->distFromTop - startY);
+    const double endPosition = static_cast<double>(sourceDistFromTop - scrollView[*endStaffIndex]->distFromTop - endY);
+    const double vertDiff = endPosition - startPosition;
+    const Evpu hookLength = (vertDiff < 0) ? -24 : 24;
     customLine->lineCapStartHookLength = hookLength;
     customLine->lineCapEndHookLength = hookLength;
 
@@ -102,13 +114,13 @@ MusxInstance<others::SmartShape> createVerticalHookSmartShape(
         return (globalPosition / measure->calcTimeStretch(staffId)).calcEduDuration();
     };
 
-    smartShape->startTermSeg->endPoint->staffId = topEntry.getStaff();
+    smartShape->startTermSeg->endPoint->staffId = startStaff;
     smartShape->startTermSeg->endPoint->measId = sourceEntry.getMeasure();
     smartShape->startTermSeg->endPoint->eduPosition = calcStaffEdu(topEntry.getStaff());
     smartShape->startTermSeg->endPointAdj->active = true;
     smartShape->startTermSeg->endPointAdj->vertOffset = startY;
 
-    smartShape->endTermSeg->endPoint->staffId = endStaffOverride ? endStaffOverride : bottomEntry.getStaff();
+    smartShape->endTermSeg->endPoint->staffId = endStaff;
     smartShape->endTermSeg->endPoint->measId = sourceEntry.getMeasure();
     smartShape->endTermSeg->endPoint->eduPosition = calcStaffEdu(smartShape->endTermSeg->endPoint->staffId);
     smartShape->endTermSeg->endPointAdj->active = true;
@@ -252,8 +264,24 @@ TEST(ArpeggioUtilTest, SmartShapeVerticalHooksRejectStavesOutsideSourceInstrumen
     auto expectedBottom = EntryInfoPtr::fromEntryNumber(doc, SCORE_PARTID, 158);
     ASSERT_TRUE(expectedBottom);
 
-    auto smartShape = createVerticalHookSmartShape(doc, sourceEntry, sourceEntry, expectedBottom, 32767);
+    auto smartShape = createVerticalHookSmartShape(doc, sourceEntry, sourceEntry, expectedBottom, 3);
     ASSERT_TRUE(smartShape);
+    EXPECT_EQ(recognizeSmartShape(smartShape), KnownSmartShapeType::VerticalLineRightHooks);
+
+    EXPECT_FALSE(calcNonArpeggioSpanForSmartShape(smartShape).has_value());
+}
+
+TEST(ArpeggioUtilTest, SmartShapeVerticalHooksRejectBar5WhenVerticalExtentExceedsSourceInstrument)
+{
+    auto doc = createNonArpeggiosDoc();
+    ASSERT_TRUE(doc);
+
+    auto smartShape = doc->getOthers()->get<others::SmartShape>(SCORE_PARTID, 6);
+    ASSERT_TRUE(smartShape);
+    ASSERT_EQ(smartShape->startTermSeg->endPoint->measId, 5);
+    ASSERT_EQ(smartShape->endTermSeg->endPoint->measId, 5);
+    ASSERT_EQ(smartShape->startTermSeg->endPoint->staffId, 1);
+    ASSERT_EQ(smartShape->endTermSeg->endPoint->staffId, 1);
     EXPECT_EQ(recognizeSmartShape(smartShape), KnownSmartShapeType::VerticalLineRightHooks);
 
     EXPECT_FALSE(calcNonArpeggioSpanForSmartShape(smartShape).has_value());

@@ -139,8 +139,18 @@ KnownSmartShapeType recognizeSmartShape(const SmartShape& smartShape)
                 if (smartShape.startTermSeg->endPointAdj->calcHorzOffset() != smartShape.endTermSeg->endPointAdj->calcHorzOffset()) {
                     return KnownSmartShapeType::Unrecognized;
                 }
-                const auto vertDiff = smartShape.startTermSeg->endPointAdj->calcVertOffset()
-                    - smartShape.endTermSeg->endPointAdj->calcVertOffset();
+                const auto scrollView = smartShape.getDocument()->getScrollViewStaves(smartShape.getRequestedPartId());
+                const auto startStaffIndex = scrollView.getIndexForStaff(smartShape.startTermSeg->endPoint->staffId);
+                const auto endStaffIndex = scrollView.getIndexForStaff(smartShape.endTermSeg->endPoint->staffId);
+                if (!startStaffIndex || !endStaffIndex) {
+                    return KnownSmartShapeType::Unrecognized;
+                }
+                const dom::Evpu sourceDistFromTop = scrollView[*startStaffIndex]->distFromTop;
+                const double startPosition = static_cast<double>(sourceDistFromTop - scrollView[*startStaffIndex]->distFromTop
+                    - smartShape.startTermSeg->endPointAdj->calcVertOffset());
+                const double endPosition = static_cast<double>(sourceDistFromTop - scrollView[*endStaffIndex]->distFromTop
+                    - smartShape.endTermSeg->endPointAdj->calcVertOffset());
+                const double vertDiff = endPosition - startPosition;
                 if (vertDiff < 0 && customShape->lineCapStartHookLength < 0) {
                     return KnownSmartShapeType::VerticalLineRightHooks;
                 } else if (vertDiff > 0 && customShape->lineCapStartHookLength > 0) {

@@ -112,6 +112,47 @@ bool calcPositionRangesOverlap(double firstTop, double firstBottom, double secon
     return firstMin <= secondMax && secondMin <= firstMax;
 }
 
+std::optional<std::pair<double, double>> calcSourceInstrumentEvpuBounds(
+    const DocumentPtr& document,
+    const MusxInstanceList<others::StaffUsed>& scrollView,
+    const InstrumentInfo& sourceInstrument,
+    Cmper partId,
+    MeasCmper measureId,
+    Edu eduPosition,
+    Evpu sourceDistFromTop)
+{
+    double instrumentTop = (std::numeric_limits<double>::max)();
+    double instrumentBottom = (std::numeric_limits<double>::lowest)();
+
+    for (size_t staffIndex = 0; staffIndex < scrollView.size(); ++staffIndex) {
+        const StaffCmper staffId = scrollView[staffIndex]->staffId;
+        if (sourceInstrument.staves.find(staffId) == sourceInstrument.staves.end()) {
+            continue;
+        }
+
+        const auto staff = others::StaffComposite::createCurrent(document, partId, staffId, measureId, eduPosition);
+        if (!staff) {
+            continue;
+        }
+
+        const Evpu staffDistFromTop = scrollView[staffIndex]->distFromTop;
+        const double staffTop = calcSourceRelativeEvpuFromStaffPosition(
+            staff->calcTopLinePosition(), sourceDistFromTop, staffDistFromTop);
+        const double staffBottom = calcSourceRelativeEvpuFromStaffPosition(
+            staff->calcBottomLinePosition(), sourceDistFromTop, staffDistFromTop);
+
+        instrumentTop = std::min(instrumentTop, std::min(staffTop, staffBottom));
+        instrumentBottom = std::max(instrumentBottom, std::max(staffTop, staffBottom));
+    }
+
+    if (instrumentTop == (std::numeric_limits<double>::max)()
+        || instrumentBottom == (std::numeric_limits<double>::lowest)()) {
+        return std::nullopt;
+    }
+
+    return std::make_pair(instrumentTop, instrumentBottom);
+}
+
 } // namespace
 
 std::optional<ArpeggioSpanCandidate> calcArpeggioSpanForAssignment(
@@ -289,12 +330,6 @@ std::optional<ArpeggioSpanCandidate> calcNonArpeggioSpanForSmartShape(
         return std::nullopt;
     }
 
-    // Non-arpeggio smart-shape spans are only valid within the source instrument.
-    if (sourceInstrument->staves.find(smartShape->startTermSeg->endPoint->staffId) == sourceInstrument->staves.end()
-        || sourceInstrument->staves.find(smartShape->endTermSeg->endPoint->staffId) == sourceInstrument->staves.end()) {
-        return std::nullopt;
-    }
-
     if (smartShape->startTermSeg->endPoint->measId != sourceEntryInfo.getMeasure()
         || smartShape->endTermSeg->endPoint->measId != sourceEntryInfo.getMeasure()
         || smartShape->startTermSeg->endPoint->calcGlobalPosition() != sourceEntryInfo.calcGlobalElapsedDuration()
@@ -311,6 +346,22 @@ std::optional<ArpeggioSpanCandidate> calcNonArpeggioSpanForSmartShape(
         smartShape->endTermSeg->endPointAdj->calcVertOffset(),
         sourceDistFromTop,
         scrollView[*endStaffIndex]->distFromTop);
+    const auto sourceInstrumentBounds = calcSourceInstrumentEvpuBounds(
+        document,
+        scrollView,
+        *sourceInstrument,
+        partId,
+        sourceEntryInfo.getMeasure(),
+        sourceEntryInfo.calcGlobalElapsedDuration().calcEduDuration(),
+        sourceDistFromTop);
+    if (!sourceInstrumentBounds) {
+        return std::nullopt;
+    }
+    const double targetTop = std::min(startTarget, endTarget);
+    const double targetBottom = std::max(startTarget, endTarget);
+    if (targetTop < sourceInstrumentBounds->first || targetBottom > sourceInstrumentBounds->second) {
+        return std::nullopt;
+    }
 
     EntryInfoPtr topEntry;
     EntryInfoPtr bottomEntry;
