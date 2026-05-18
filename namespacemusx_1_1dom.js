@@ -924,7 +924,12 @@ var namespacemusx_1_1dom =
       [ "PedalArrowheadDown", "namespacemusx_1_1dom.html#a16d85e8ed9439b9a2ef071d38ffa0fd7a19f4a97c0630dd7154455bab51c5e4fe", null ],
       [ "PedalArrowheadUp", "namespacemusx_1_1dom.html#a16d85e8ed9439b9a2ef071d38ffa0fd7a59735bf84a9f0da1b032ed34bc0d6161", null ],
       [ "PedalArrowheadShortUpDownLongUp", "namespacemusx_1_1dom.html#a16d85e8ed9439b9a2ef071d38ffa0fd7a088e918e332375bfeb20c4168e0196a5", null ],
-      [ "PedalArrowheadLongUpDownShortUp", "namespacemusx_1_1dom.html#a16d85e8ed9439b9a2ef071d38ffa0fd7a9bf7fd8cfe4d0efe1365f0666ef286b7", null ]
+      [ "PedalArrowheadLongUpDownShortUp", "namespacemusx_1_1dom.html#a16d85e8ed9439b9a2ef071d38ffa0fd7a9bf7fd8cfe4d0efe1365f0666ef286b7", null ],
+      [ "VerticalLineRightHooks", "namespacemusx_1_1dom.html#a16d85e8ed9439b9a2ef071d38ffa0fd7acc794282ee76f747268ab52530f95768", null ]
+    ] ],
+    [ "KnownSmartShapeType", "namespacemusx_1_1dom.html#a1a00dcadafbe5dfc91e5d1cde4f5ff5e", [
+      [ "Unrecognized", "namespacemusx_1_1dom.html#a1a00dcadafbe5dfc91e5d1cde4f5ff5ea7f5f743ac34344aeb26849015b4b3dae", null ],
+      [ "VerticalLineRightHooks", "namespacemusx_1_1dom.html#a1a00dcadafbe5dfc91e5d1cde4f5ff5eacc794282ee76f747268ab52530f95768", null ]
     ] ],
     [ "LyricTextType", "namespacemusx_1_1dom.html#a15ce5f78a9bdae32abc605711086c991", [
       [ "Verse", "namespacemusx_1_1dom.html#a15ce5f78a9bdae32abc605711086c991a98cc99adc12166c3d8f086c0ccc2cde9", null ],

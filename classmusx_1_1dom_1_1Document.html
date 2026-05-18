@@ -208,6 +208,9 @@ const std::optional&lt; std::filesystem::path &gt; &amp;&#160;</td><td class="me
 <tr class="memitem:a58f73fe5524281814278b6dbcd3fe871" id="r_a58f73fe5524281814278b6dbcd3fe871"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="structmusx_1_1dom_1_1InstrumentInfo.html">InstrumentInfo</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1Document.html#a58f73fe5524281814278b6dbcd3fe871">getInstrumentForStaff</a> (<a class="el" href="namespacemusx_1_1dom.html#ada2c0787f5b7cb764d2a344d491ab99c">StaffCmper</a> staffId) const</td></tr>
 <tr class="memdesc:a58f73fe5524281814278b6dbcd3fe871"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the instrument info for the given staffId.  <br /></td></tr>
 <tr class="separator:a58f73fe5524281814278b6dbcd3fe871"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5019553e0d13e9718e6b380b3f1b83d0" id="r_a5019553e0d13e9718e6b380b3f1b83d0"><td class="memItemLeft" align="right" valign="top">std::optional&lt; <a class="el" href="structmusx_1_1dom_1_1InstrumentInfo.html">InstrumentInfo</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1Document.html#a5019553e0d13e9718e6b380b3f1b83d0">getInstrumentForStaff</a> (<a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> partId, <a class="el" href="namespacemusx_1_1dom.html#ada2c0787f5b7cb764d2a344d491ab99c">StaffCmper</a> staffId) const</td></tr>
+<tr class="memdesc:a5019553e0d13e9718e6b380b3f1b83d0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the instrument info for the given staffId in the specified part.  <br /></td></tr>
+<tr class="separator:a5019553e0d13e9718e6b380b3f1b83d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad7512a1daf902e8580a8b4418a31ded8" id="r_ad7512a1daf902e8580a8b4418a31ded8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemusx_1_1dom.html#af9192bccf9b3700caeb880975e768c69">InstrumentMap</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1Document.html#ad7512a1daf902e8580a8b4418a31ded8">createInstrumentMap</a> (<a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> forPartId) const</td></tr>
 <tr class="memdesc:ad7512a1daf902e8580a8b4418a31ded8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Builds an instrument map for the specified linked part ID.  <br /></td></tr>
 <tr class="separator:ad7512a1daf902e8580a8b4418a31ded8"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -438,8 +441,46 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>musx::factory::Docum
 
 </div>
 </div>
+<a id="a5019553e0d13e9718e6b380b3f1b83d0" name="a5019553e0d13e9718e6b380b3f1b83d0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5019553e0d13e9718e6b380b3f1b83d0">&#9670;&#160;</a></span>getInstrumentForStaff() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::optional&lt; <a class="el" href="structmusx_1_1dom_1_1InstrumentInfo.html">InstrumentInfo</a> &gt; musx::dom::Document::getInstrumentForStaff </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a>&#160;</td>
+          <td class="paramname"><em>partId</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacemusx_1_1dom.html#ada2c0787f5b7cb764d2a344d491ab99c">StaffCmper</a>&#160;</td>
+          <td class="paramname"><em>staffId</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get the instrument info for the given staffId in the specified part. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">partId</td><td>The linked part to search. </td></tr>
+    <tr><td class="paramname">staffId</td><td>The staffId to find. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The instrument info for the given staff, or std::nullopt if the staff is not mapped to an instrument. </dd></dl>
+
+</div>
+</div>
 <a id="a58f73fe5524281814278b6dbcd3fe871" name="a58f73fe5524281814278b6dbcd3fe871"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a58f73fe5524281814278b6dbcd3fe871">&#9670;&#160;</a></span>getInstrumentForStaff()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a58f73fe5524281814278b6dbcd3fe871">&#9670;&#160;</a></span>getInstrumentForStaff() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">

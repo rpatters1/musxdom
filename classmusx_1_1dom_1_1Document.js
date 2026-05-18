@@ -15,6 +15,7 @@ var classmusx_1_1dom_1_1Document =
     [ "getEntries", "classmusx_1_1dom_1_1Document.html#ae196757dfb2f417d75f9510a18b157dc", null ],
     [ "getHeader", "classmusx_1_1dom_1_1Document.html#aa1299858559ac9bb595ab00e67ea0102", null ],
     [ "getHeader", "classmusx_1_1dom_1_1Document.html#a4fda0345262db437ca2e79438dd2f9d4", null ],
+    [ "getInstrumentForStaff", "classmusx_1_1dom_1_1Document.html#a5019553e0d13e9718e6b380b3f1b83d0", null ],
     [ "getInstrumentForStaff", "classmusx_1_1dom_1_1Document.html#a58f73fe5524281814278b6dbcd3fe871", null ],
     [ "getInstruments", "classmusx_1_1dom_1_1Document.html#a5f737b924b967fc0cfe22d79c763c164", null ],
     [ "getMaxBlankPages", "classmusx_1_1dom_1_1Document.html#a5a4d0b7008895e9e59d721475331f6be", null ],
