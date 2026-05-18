@@ -21,6 +21,11 @@
  */
 #pragma once
 
+#include <optional>
+#include <utility>
+
+#include "musx/util/SmartShapeRecognize.h"
+
 namespace musx {
 namespace dom {
 enum class KnownShapeDefType;
@@ -36,5 +41,10 @@ namespace musx::util {
 /// @param shape The shape definition to evaluate.
 /// @return The recognized type, or dom::KnownShapeDefType::Unrecognized when no match is found.
 dom::KnownShapeDefType recognizeShape(const dom::others::ShapeDef& shape);
+
+/// @brief Calculate the local Y extents of a recognized vertical line with right hooks.
+/// @param shape The shape definition to evaluate.
+/// @return The minimum and maximum local Shape Designer Y coordinates, or std::nullopt if the shape is not supported.
+std::optional<std::pair<double, double>> calcVerticalLineRightHooksLocalYBounds(const dom::others::ShapeDef& shape);
 
 } // namespace musx::util

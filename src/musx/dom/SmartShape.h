@@ -45,6 +45,16 @@ namespace others {
     class SmartShapeMeasureAssign;
 }
 
+/// @enum KnownSmartShapeType
+/// @brief Enumerates the custom smart shape types we can recognize semantically.
+enum class KnownSmartShapeType
+{
+    Unrecognized,               ///< Fallback when recognition fails.
+    VerticalLineRightHooks,     ///< Vertical line with short horizontal hooks extending to the right at both ends.
+
+    // Add more known types here
+};
+
 namespace smartshape {
 
 /**
@@ -206,12 +216,6 @@ namespace others {
 class SmartShape : public OthersBase
 {
 private:
-    /// @brief Calculates if this smart shape is potentially being used as a tie.
-    bool calcIsPotentialTie(const EntryInfoPtr& forStartEntry) const;
-
-    /// @brief Calculates if this smart shape is potentially being used as a forward tie.
-    bool calcIsPotentialForwardTie(const EntryInfoPtr& forStartEntry) const;
-
 public:
     /** @brief Constructor function */
     explicit SmartShape(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)

@@ -542,8 +542,8 @@ TimeSignature::TimeSignature(const DocumentWeakPtr& document, int beats, Edu uni
 std::optional<char32_t> TimeSignature::getAbbreviatedSymbol() const
 {
     auto musicChars = getDocument()->getOptions()->get<options::MusicSymbolOptions>();
-    const char32_t commonTimeSymbol = musicChars ? musicChars->timeSigAbrvCommon : smulf_glyph::timeSigCommon;
-    const char32_t cutTimeSymbol = musicChars ? musicChars->timeSigAbrvCut : smulf_glyph::timeSigCutCommon;
+    const char32_t commonTimeSymbol = musicChars ? musicChars->timeSigAbrvCommon : smufl_glyph::timeSigCommon;
+    const char32_t cutTimeSymbol = musicChars ? musicChars->timeSigAbrvCut : smufl_glyph::timeSigCutCommon;
     switch (m_abbreviation) {
         case Abbreviation::Abbreviated:
             if (isCutTime()) {
