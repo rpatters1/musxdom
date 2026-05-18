@@ -153,6 +153,123 @@ std::optional<std::pair<double, double>> calcSourceInstrumentEvpuBounds(
     return std::make_pair(instrumentTop, instrumentBottom);
 }
 
+std::optional<ArpeggioSpanCandidate> calcNonArpeggioSpanForVerticalTargets(
+    const EntryInfoPtr& sourceEntryInfo,
+    double startTarget,
+    double endTarget,
+    const ArpeggioSpanOptions& options)
+{
+    MUSX_ASSERT_IF(!sourceEntryInfo) {
+        return std::nullopt;
+    }
+    const auto sourceEntry = sourceEntryInfo->getEntry();
+    MUSX_ASSERT_IF(!sourceEntry) {
+        return std::nullopt;
+    }
+    if (!sourceEntry->isNote || sourceEntryInfo.calcDisplaysAsRest()) {
+        return std::nullopt;
+    }
+    if (options.skipGraceEntries && sourceEntry->graceNote) {
+        return std::nullopt;
+    }
+
+    auto frame = sourceEntryInfo.getFrame();
+    MUSX_ASSERT_IF(!frame) {
+        return std::nullopt;
+    }
+    auto document = frame->getDocument();
+    MUSX_ASSERT_IF(!document) {
+        return std::nullopt;
+    }
+
+    const Cmper partId = frame->getRequestedPartId();
+    const auto scrollView = document->getScrollViewStaves(partId);
+    if (scrollView.empty()) {
+        return std::nullopt;
+    }
+
+    const auto sourceStaffIndex = scrollView.getIndexForStaff(sourceEntryInfo.getStaff());
+    if (!sourceStaffIndex) {
+        return std::nullopt;
+    }
+
+    const auto sourceInstrument = document->getInstrumentForStaff(partId, sourceEntryInfo.getStaff());
+    if (!sourceInstrument) {
+        return std::nullopt;
+    }
+
+    const Evpu sourceDistFromTop = scrollView[*sourceStaffIndex]->distFromTop;
+    const auto sourceInstrumentBounds = calcSourceInstrumentEvpuBounds(
+        document,
+        scrollView,
+        *sourceInstrument,
+        partId,
+        sourceEntryInfo.getMeasure(),
+        sourceEntryInfo.calcGlobalElapsedDuration().calcEduDuration(),
+        sourceDistFromTop);
+    if (!sourceInstrumentBounds) {
+        return std::nullopt;
+    }
+
+    const double targetTop = std::min(startTarget, endTarget);
+    const double targetBottom = std::max(startTarget, endTarget);
+    if (targetTop < sourceInstrumentBounds->first || targetBottom > sourceInstrumentBounds->second) {
+        return std::nullopt;
+    }
+
+    EntryInfoPtr topEntry;
+    EntryInfoPtr bottomEntry;
+    double topEntryPosition = (std::numeric_limits<double>::max)();
+    double bottomEntryPosition = (std::numeric_limits<double>::lowest)();
+
+    const MusicRange range(document, sourceEntryInfo.getMeasure(), sourceEntryInfo.calcGlobalElapsedDuration(),
+        sourceEntryInfo.getMeasure(), sourceEntryInfo.calcGlobalElapsedDuration());
+
+    for (size_t staffIndex = 0; staffIndex < scrollView.size(); ++staffIndex) {
+        const StaffCmper candidateStaff = scrollView[staffIndex]->staffId;
+        if (sourceInstrument->staves.find(candidateStaff) == sourceInstrument->staves.end()) {
+            continue;
+        }
+
+        const Evpu candidateDistFromTop = scrollView[staffIndex]->distFromTop;
+        scrollView.iterateEntries(staffIndex, staffIndex, range, [&](const EntryInfoPtr& candidate) -> bool {
+            if (!calcIsCandidateEntry(candidate, sourceEntryInfo, options)) {
+                return true;
+            }
+
+            const auto [candTop, candBottom] = candidate.calcTopBottomStaffPositions();
+            const double candidateTop = calcSourceRelativeEvpuFromStaffPosition(candTop, sourceDistFromTop, candidateDistFromTop);
+            const double candidateBottom = calcSourceRelativeEvpuFromStaffPosition(candBottom, sourceDistFromTop, candidateDistFromTop);
+            const bool isSourceEntry = candidate->getEntry()->getEntryNumber() == sourceEntry->getEntryNumber();
+
+            if (!isSourceEntry && !calcPositionRangesOverlap(candidateTop, candidateBottom, startTarget, endTarget)) {
+                return true;
+            }
+
+            if (!topEntry || candidateTop < topEntryPosition) {
+                topEntry = candidate;
+                topEntryPosition = candidateTop;
+            }
+            if (!bottomEntry || candidateBottom > bottomEntryPosition) {
+                bottomEntry = candidate;
+                bottomEntryPosition = candidateBottom;
+            }
+            return true;
+        });
+    }
+
+    if (!topEntry || !bottomEntry) {
+        return std::nullopt;
+    }
+
+    ArpeggioSpanCandidate result;
+    result.type = ArpeggioSpanType::Bracket;
+    result.sourceEntry = sourceEntryInfo;
+    result.topEntry = topEntry;
+    result.bottomEntry = bottomEntry;
+    return result;
+}
+
 } // namespace
 
 std::optional<ArpeggioSpanCandidate> calcArpeggioSpanForAssignment(
@@ -261,19 +378,65 @@ std::optional<ArpeggioSpanCandidate> calcArpeggioSpanForAssignment(
 }
 
 std::optional<ArpeggioSpanCandidate> calcNonArpeggioSpanForAssignment(
-    [[maybe_unused]] const dom::EntryInfoPtr& sourceEntry,
-    [[maybe_unused]] const dom::MusxInstance<dom::details::ArticulationAssign>& assign,
-    [[maybe_unused]] const ArpeggioSpanOptions& options)
+    const dom::EntryInfoPtr&,
+    const dom::MusxInstance<dom::details::ArticulationAssign>&,
+    const ArpeggioSpanOptions&)
 {
     return std::nullopt;
 }
 
 std::optional<ArpeggioSpanCandidate> calcNonArpeggioSpanForAssignment(
-    [[maybe_unused]] const dom::EntryInfoPtr& sourceEntry,
-    [[maybe_unused]] const dom::MusxInstance<dom::others::MeasureExprAssign>& assign,
-    [[maybe_unused]] const ArpeggioSpanOptions& options)
+    const dom::MusxInstance<dom::others::MeasureExprAssign>& assign,
+    const ArpeggioSpanOptions& options)
 {
-    return std::nullopt;
+    MUSX_ASSERT_IF(!assign) {
+        return std::nullopt;
+    }
+
+    const auto sourceEntryInfo = assign->calcAssociatedEntry();
+    if (!sourceEntryInfo) {
+        return std::nullopt;
+    }
+
+    const auto shapeExpression = assign->getShapeExpression();
+    if (!shapeExpression) {
+        return std::nullopt;
+    }
+    const auto shape = shapeExpression->getShape();
+    if (!shape) {
+        return std::nullopt;
+    }
+
+    const auto localYBounds = calcVerticalLineRightHooksLocalYBounds(*shape);
+    if (!localYBounds) {
+        return std::nullopt;
+    }
+
+    auto frame = sourceEntryInfo.getFrame();
+    MUSX_ASSERT_IF(!frame) {
+        return std::nullopt;
+    }
+    auto document = frame->getDocument();
+    MUSX_ASSERT_IF(!document) {
+        return std::nullopt;
+    }
+
+    const Cmper partId = frame->getRequestedPartId();
+    const auto scrollView = document->getScrollViewStaves(partId);
+    const auto sourceStaffIndex = scrollView.getIndexForStaff(sourceEntryInfo.getStaff());
+    const StaffCmper assignedStaffId = assign->calcAssignedStaffId(/*forPageView*/false);
+    const auto assignedStaffIndex = scrollView.getIndexForStaff(assignedStaffId);
+    if (!sourceStaffIndex || !assignedStaffIndex) {
+        return std::nullopt;
+    }
+
+    const Evpu sourceDistFromTop = scrollView[*sourceStaffIndex]->distFromTop;
+    const Evpu assignedDistFromTop = scrollView[*assignedStaffIndex]->distFromTop;
+    const double staffOffset = static_cast<double>(sourceDistFromTop - assignedDistFromTop);
+    const double startTarget = staffOffset - (static_cast<double>(assign->vertEvpuOff) + localYBounds->first);
+    const double endTarget = staffOffset - (static_cast<double>(assign->vertEvpuOff) + localYBounds->second);
+
+    return calcNonArpeggioSpanForVerticalTargets(sourceEntryInfo, startTarget, endTarget, options);
 }
 
 std::optional<ArpeggioSpanCandidate> calcNonArpeggioSpanForSmartShape(
@@ -289,12 +452,6 @@ std::optional<ArpeggioSpanCandidate> calcNonArpeggioSpanForSmartShape(
     }
     const auto sourceEntry = sourceEntryInfo->getEntry();
     MUSX_ASSERT_IF(!sourceEntry) {
-        return std::nullopt;
-    }
-    if (!sourceEntry->isNote || sourceEntryInfo.calcDisplaysAsRest()) {
-        return std::nullopt;
-    }
-    if (options.skipGraceEntries && sourceEntry->graceNote) {
         return std::nullopt;
     }
 
@@ -325,11 +482,6 @@ std::optional<ArpeggioSpanCandidate> calcNonArpeggioSpanForSmartShape(
         return std::nullopt;
     }
 
-    const auto sourceInstrument = document->getInstrumentForStaff(partId, sourceEntryInfo.getStaff());
-    if (!sourceInstrument) {
-        return std::nullopt;
-    }
-
     if (smartShape->startTermSeg->endPoint->measId != sourceEntryInfo.getMeasure()
         || smartShape->endTermSeg->endPoint->measId != sourceEntryInfo.getMeasure()
         || smartShape->startTermSeg->endPoint->calcGlobalPosition() != sourceEntryInfo.calcGlobalElapsedDuration()
@@ -346,74 +498,7 @@ std::optional<ArpeggioSpanCandidate> calcNonArpeggioSpanForSmartShape(
         smartShape->endTermSeg->endPointAdj->calcVertOffset(),
         sourceDistFromTop,
         scrollView[*endStaffIndex]->distFromTop);
-    const auto sourceInstrumentBounds = calcSourceInstrumentEvpuBounds(
-        document,
-        scrollView,
-        *sourceInstrument,
-        partId,
-        sourceEntryInfo.getMeasure(),
-        sourceEntryInfo.calcGlobalElapsedDuration().calcEduDuration(),
-        sourceDistFromTop);
-    if (!sourceInstrumentBounds) {
-        return std::nullopt;
-    }
-    const double targetTop = std::min(startTarget, endTarget);
-    const double targetBottom = std::max(startTarget, endTarget);
-    if (targetTop < sourceInstrumentBounds->first || targetBottom > sourceInstrumentBounds->second) {
-        return std::nullopt;
-    }
-
-    EntryInfoPtr topEntry;
-    EntryInfoPtr bottomEntry;
-    double topEntryPosition = (std::numeric_limits<double>::max)();
-    double bottomEntryPosition = (std::numeric_limits<double>::lowest)();
-
-    const MusicRange range(document, sourceEntryInfo.getMeasure(), sourceEntryInfo.calcGlobalElapsedDuration(),
-        sourceEntryInfo.getMeasure(), sourceEntryInfo.calcGlobalElapsedDuration());
-
-    for (size_t staffIndex = 0; staffIndex < scrollView.size(); ++staffIndex) {
-        const StaffCmper candidateStaff = scrollView[staffIndex]->staffId;
-        if (sourceInstrument->staves.find(candidateStaff) == sourceInstrument->staves.end()) {
-            continue;
-        }
-
-        const Evpu candidateDistFromTop = scrollView[staffIndex]->distFromTop;
-        scrollView.iterateEntries(staffIndex, staffIndex, range, [&](const EntryInfoPtr& candidate) -> bool {
-            if (!calcIsCandidateEntry(candidate, sourceEntryInfo, options)) {
-                return true;
-            }
-
-            const auto [candTop, candBottom] = candidate.calcTopBottomStaffPositions();
-            const double candidateTop = calcSourceRelativeEvpuFromStaffPosition(candTop, sourceDistFromTop, candidateDistFromTop);
-            const double candidateBottom = calcSourceRelativeEvpuFromStaffPosition(candBottom, sourceDistFromTop, candidateDistFromTop);
-            const bool isSourceEntry = candidate->getEntry()->getEntryNumber() == sourceEntry->getEntryNumber();
-
-            if (!isSourceEntry && !calcPositionRangesOverlap(candidateTop, candidateBottom, startTarget, endTarget)) {
-                return true;
-            }
-
-            if (!topEntry || candidateTop < topEntryPosition) {
-                topEntry = candidate;
-                topEntryPosition = candidateTop;
-            }
-            if (!bottomEntry || candidateBottom > bottomEntryPosition) {
-                bottomEntry = candidate;
-                bottomEntryPosition = candidateBottom;
-            }
-            return true;
-        });
-    }
-
-    if (!topEntry || !bottomEntry) {
-        return std::nullopt;
-    }
-
-    ArpeggioSpanCandidate result;
-    result.type = ArpeggioSpanType::Bracket;
-    result.sourceEntry = sourceEntryInfo;
-    result.topEntry = topEntry;
-    result.bottomEntry = bottomEntry;
-    return result;
+    return calcNonArpeggioSpanForVerticalTargets(sourceEntryInfo, startTarget, endTarget, options);
 }
 
 } // namespace musx::util

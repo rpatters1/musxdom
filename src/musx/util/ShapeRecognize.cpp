@@ -699,4 +699,77 @@ KnownShapeDefType recognizeShape(const ShapeDef& shape)
     return KnownShapeDefType::Unrecognized;
 }
 
+std::optional<std::pair<double, double>> calcVerticalLineRightHooksLocalYBounds(const ShapeDef& shape)
+{
+    if (shape.recognize() != KnownShapeDefType::VerticalLineRightHooks) {
+        return std::nullopt;
+    }
+
+    std::optional<double> currentY;
+    double scaleY = 1.0;
+    std::optional<double> minY;
+    std::optional<double> maxY;
+    bool unsupported = false;
+
+    const auto updateY = [&](double y) {
+        minY = minY ? std::min(*minY, y) : y;
+        maxY = maxY ? std::max(*maxY, y) : y;
+    };
+
+    const auto startObject = [&](dom::Evpu originY, int rawScaleY, int rotation) {
+        if (rotation != 0) {
+            unsupported = true;
+            return false;
+        }
+        currentY = static_cast<double>(originY);
+        scaleY = static_cast<double>(rawScaleY) / 1000.0;
+        return true;
+    };
+
+    shape.iterateInstructions([&](const ShapeDefInstruction::Decoded& inst) {
+        if (!inst.valid()) {
+            unsupported = true;
+            return false;
+        }
+
+        switch (inst.type) {
+        case ShapeDefInstructionType::StartObject: {
+            const auto* data = std::get_if<ShapeDefInstruction::StartObject>(&inst.data);
+            return data && startObject(data->originY, data->scaleY, data->rotation);
+        }
+        case ShapeDefInstructionType::StartGroup: {
+            const auto* data = std::get_if<ShapeDefInstruction::StartGroup>(&inst.data);
+            return data && startObject(data->originY, data->scaleY, data->rotation);
+        }
+        case ShapeDefInstructionType::RMoveTo: {
+            const auto* data = std::get_if<ShapeDefInstruction::RMoveTo>(&inst.data);
+            if (!data || !currentY) {
+                unsupported = true;
+                return false;
+            }
+            *currentY += static_cast<double>(data->dy) * scaleY;
+            return true;
+        }
+        case ShapeDefInstructionType::RLineTo: {
+            const auto* data = std::get_if<ShapeDefInstruction::RLineTo>(&inst.data);
+            if (!data || !currentY) {
+                unsupported = true;
+                return false;
+            }
+            updateY(*currentY);
+            *currentY += static_cast<double>(data->dy) * scaleY;
+            updateY(*currentY);
+            return true;
+        }
+        default:
+            return true;
+        }
+    });
+
+    if (unsupported || !minY || !maxY) {
+        return std::nullopt;
+    }
+    return std::make_pair(*minY, *maxY);
+}
+
 } // namespace musx::util

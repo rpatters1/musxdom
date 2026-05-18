@@ -57,6 +57,15 @@ std::optional<ArpeggioSpanCandidate> calcSpanForEntry(const DocumentPtr& doc, En
     return calcArpeggioSpanForAssignment(sourceEntry, assign, options);
 }
 
+std::optional<ArpeggioSpanCandidate> calcMeasureExpressionSpan(const DocumentPtr& doc, MeasCmper measureId)
+{
+    auto assign = doc->getOthers()->get<others::MeasureExprAssign>(SCORE_PARTID, measureId, 0);
+    if (!assign) {
+        return std::nullopt;
+    }
+    return calcNonArpeggioSpanForAssignment(assign);
+}
+
 MusxInstance<others::SmartShape> createVerticalHookSmartShape(
     const DocumentPtr& doc,
     const EntryInfoPtr& sourceEntry,
@@ -230,6 +239,46 @@ TEST(ArpeggioUtilTest, Entry147SpansToEntry148Below)
 
     ASSERT_TRUE(span->bottomEntry);
     EXPECT_EQ(span->bottomEntry->getEntry()->getEntryNumber(), 148);
+}
+
+TEST(ArpeggioUtilTest, MeasureExpressionVerticalHooksResolveSingleStaffBracketSpan)
+{
+    auto doc = createNonArpeggiosDoc();
+    ASSERT_TRUE(doc);
+
+    auto span = calcMeasureExpressionSpan(doc, 2);
+    ASSERT_TRUE(span.has_value()) << "Expected non-null measure expression bracket span";
+
+    EXPECT_EQ(span->type, ArpeggioSpanType::Bracket);
+    EXPECT_EQ(span->sourceEntry->getEntry()->getEntryNumber(), 129);
+    ASSERT_TRUE(span->topEntry);
+    ASSERT_TRUE(span->bottomEntry);
+    EXPECT_EQ(span->topEntry->getEntry()->getEntryNumber(), 129);
+    EXPECT_EQ(span->bottomEntry->getEntry()->getEntryNumber(), 129);
+}
+
+TEST(ArpeggioUtilTest, MeasureExpressionVerticalHooksResolveCrossStaffBracketSpan)
+{
+    auto doc = createNonArpeggiosDoc();
+    ASSERT_TRUE(doc);
+
+    auto span = calcMeasureExpressionSpan(doc, 6);
+    ASSERT_TRUE(span.has_value()) << "Expected non-null measure expression bracket span";
+
+    EXPECT_EQ(span->type, ArpeggioSpanType::Bracket);
+    EXPECT_EQ(span->sourceEntry->getEntry()->getEntryNumber(), 173);
+    ASSERT_TRUE(span->topEntry);
+    ASSERT_TRUE(span->bottomEntry);
+    EXPECT_EQ(span->topEntry->getEntry()->getEntryNumber(), 173);
+    EXPECT_EQ(span->bottomEntry->getEntry()->getEntryNumber(), 176);
+}
+
+TEST(ArpeggioUtilTest, MeasureExpressionVerticalHooksRejectWhenVerticalExtentExceedsSourceInstrument)
+{
+    auto doc = createNonArpeggiosDoc();
+    ASSERT_TRUE(doc);
+
+    EXPECT_FALSE(calcMeasureExpressionSpan(doc, 7).has_value());
 }
 
 TEST(ArpeggioUtilTest, SmartShapeVerticalHooksResolveBracketSpan)
