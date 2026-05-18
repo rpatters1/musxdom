@@ -33,7 +33,14 @@ DocumentPtr createArpeggiosDoc()
 {
     std::vector<char> xml;
     musxtest::readFile(musxtest::getInputPath() / "arpeggios.enigmaxml", xml);
-    return musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
+    return musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml);
+}
+
+DocumentPtr createNonArpeggiosDoc()
+{
+    std::vector<char> xml;
+    musxtest::readFile(musxtest::getInputPath() / "nonArpeggios.enigmaxml", xml);
+    return musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(xml);
 }
 
 std::optional<ArpeggioSpanCandidate> calcSpanForEntry(const DocumentPtr& doc, EntryNumber entryNumber,
@@ -74,7 +81,7 @@ MusxInstance<others::SmartShape> createVerticalHookSmartShape(
         endY += 1;
     }
 
-    const Evpu hookLength = (startY > endY) ? -24 : 24;
+    const Evpu hookLength = (startY > endY) ? 24 : -24;
     customLine->lineCapStartHookLength = hookLength;
     customLine->lineCapEndHookLength = hookLength;
 
@@ -215,39 +222,39 @@ TEST(ArpeggioUtilTest, Entry147SpansToEntry148Below)
 
 TEST(ArpeggioUtilTest, SmartShapeVerticalHooksResolveBracketSpan)
 {
-    auto doc = createArpeggiosDoc();
+    auto doc = createNonArpeggiosDoc();
     ASSERT_TRUE(doc);
 
-    auto sourceEntry = EntryInfoPtr::fromEntryNumber(doc, SCORE_PARTID, 136);
+    auto sourceEntry = EntryInfoPtr::fromEntryNumber(doc, SCORE_PARTID, 153);
     ASSERT_TRUE(sourceEntry);
     auto smartShape = createVerticalHookSmartShape(doc, sourceEntry, sourceEntry, sourceEntry);
     ASSERT_TRUE(smartShape);
     EXPECT_EQ(recognizeSmartShape(smartShape), KnownSmartShapeType::VerticalLineRightHooks);
 
-    auto span = calcNonArpeggioSpanForSmartShape(sourceEntry, smartShape);
+    auto span = calcNonArpeggioSpanForSmartShape(smartShape);
     ASSERT_TRUE(span.has_value()) << "Expected non-null smart shape bracket span";
 
     EXPECT_EQ(span->type, ArpeggioSpanType::Bracket);
-    EXPECT_EQ(span->sourceEntry->getEntry()->getEntryNumber(), 136);
+    EXPECT_EQ(span->sourceEntry->getEntry()->getEntryNumber(), 153);
     ASSERT_TRUE(span->topEntry);
     ASSERT_TRUE(span->bottomEntry);
-    EXPECT_EQ(span->topEntry->getEntry()->getEntryNumber(), 136);
-    EXPECT_EQ(span->bottomEntry->getEntry()->getEntryNumber(), 136);
+    EXPECT_EQ(span->topEntry->getEntry()->getEntryNumber(), 153);
+    EXPECT_EQ(span->bottomEntry->getEntry()->getEntryNumber(), 153);
 }
 
 TEST(ArpeggioUtilTest, SmartShapeVerticalHooksRejectStavesOutsideSourceInstrument)
 {
-    auto doc = createArpeggiosDoc();
+    auto doc = createNonArpeggiosDoc();
     ASSERT_TRUE(doc);
 
-    auto sourceEntry = EntryInfoPtr::fromEntryNumber(doc, SCORE_PARTID, 136);
+    auto sourceEntry = EntryInfoPtr::fromEntryNumber(doc, SCORE_PARTID, 153);
     ASSERT_TRUE(sourceEntry);
-    auto expectedBottom = EntryInfoPtr::fromEntryNumber(doc, SCORE_PARTID, 142);
+    auto expectedBottom = EntryInfoPtr::fromEntryNumber(doc, SCORE_PARTID, 158);
     ASSERT_TRUE(expectedBottom);
 
     auto smartShape = createVerticalHookSmartShape(doc, sourceEntry, sourceEntry, expectedBottom, 32767);
     ASSERT_TRUE(smartShape);
     EXPECT_EQ(recognizeSmartShape(smartShape), KnownSmartShapeType::VerticalLineRightHooks);
 
-    EXPECT_FALSE(calcNonArpeggioSpanForSmartShape(sourceEntry, smartShape).has_value());
+    EXPECT_FALSE(calcNonArpeggioSpanForSmartShape(smartShape).has_value());
 }

@@ -89,13 +89,11 @@ std::optional<ArpeggioSpanCandidate> calcNonArpeggioSpanForAssignment(
 
 [[nodiscard]]
 std::optional<ArpeggioSpanCandidate> calcNonArpeggioSpanForAssignment(
-    const dom::EntryInfoPtr& sourceEntry,
     const dom::MusxInstance<dom::others::MeasureExprAssign>& assign,
     const ArpeggioSpanOptions& options = {});
 
 [[nodiscard]]
 std::optional<ArpeggioSpanCandidate> calcNonArpeggioSpanForSmartShape(
-    const dom::EntryInfoPtr& sourceEntry,
     const dom::MusxInstance<dom::others::SmartShape>& smartShape,
     const ArpeggioSpanOptions& options = {});
 

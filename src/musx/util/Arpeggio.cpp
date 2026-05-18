@@ -236,11 +236,14 @@ std::optional<ArpeggioSpanCandidate> calcNonArpeggioSpanForAssignment(
 }
 
 std::optional<ArpeggioSpanCandidate> calcNonArpeggioSpanForSmartShape(
-    const dom::EntryInfoPtr& sourceEntryInfo,
     const dom::MusxInstance<dom::others::SmartShape>& smartShape,
     const ArpeggioSpanOptions& options)
 {
-    MUSX_ASSERT_IF(!sourceEntryInfo || !smartShape) {
+    MUSX_ASSERT_IF(!smartShape) {
+        return std::nullopt;
+    }
+    const auto sourceEntryInfo = smartShape->startTermSeg->endPoint->calcAssociatedEntry(/*findExact*/true);
+    if (!sourceEntryInfo) {
         return std::nullopt;
     }
     const auto sourceEntry = sourceEntryInfo->getEntry();

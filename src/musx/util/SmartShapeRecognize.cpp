@@ -34,20 +34,12 @@ using dom::NoteInfoPtr;
 using dom::others::SmartShape;
 using CL = dom::others::SmartShapeCustomLine;
 
-constexpr dom::Evpu RIGHT_HOOK_MAX_LENGTH_EVPU = 48;
-constexpr dom::Evpu RIGHT_HOOK_VERTICAL_TOLERANCE_EVPU = 1;
+constexpr dom::Efix RIGHT_HOOK_MAX_LENGTH_EVPU = 48 * dom::EFIX_PER_EVPU;
 
-struct RightHookLine
+static bool isRightHookLine(const dom::Evpu hookLength)
 {
-    dom::Evpu dx{};
-    dom::Evpu dy{};
-};
-
-static bool isRightHookLine(const RightHookLine& line)
-{
-    return std::abs(line.dy) <= RIGHT_HOOK_VERTICAL_TOLERANCE_EVPU
-        && std::abs(line.dx) > 0
-        && std::abs(line.dx) <= RIGHT_HOOK_MAX_LENGTH_EVPU;
+    return std::abs(hookLength) > 0
+        && std::abs(hookLength) <= RIGHT_HOOK_MAX_LENGTH_EVPU;
 }
 
 static bool calcIsPotentialTie(const SmartShape& smartShape, const dom::EntryInfoPtr& forStartEntry)
@@ -140,9 +132,7 @@ KnownSmartShapeType recognizeSmartShape(const SmartShape& smartShape)
         && customShape->lineCapStartType == CL::LineCapType::Hook
         && customShape->lineCapEndType == CL::LineCapType::Hook) {
         if (music_theory::sign(customShape->lineCapStartHookLength) == music_theory::sign(customShape->lineCapEndHookLength)) {
-            const auto startHook = RightHookLine{ customShape->lineCapStartHookLength, 0 };
-            const auto endHook = RightHookLine{ customShape->lineCapEndHookLength, 0 };
-            if (isRightHookLine(startHook) && isRightHookLine(endHook)) {
+            if (isRightHookLine(customShape->lineCapStartHookLength) && isRightHookLine(customShape->lineCapEndHookLength)) {
                 if (smartShape.startTermSeg->endPoint->compareMetricPosition(*smartShape.endTermSeg->endPoint) != 0) {
                     return KnownSmartShapeType::Unrecognized;
                 }
@@ -151,9 +141,9 @@ KnownSmartShapeType recognizeSmartShape(const SmartShape& smartShape)
                 }
                 const auto vertDiff = smartShape.startTermSeg->endPointAdj->calcVertOffset()
                     - smartShape.endTermSeg->endPointAdj->calcVertOffset();
-                if (vertDiff > 0 && customShape->lineCapStartHookLength < 0) {
+                if (vertDiff < 0 && customShape->lineCapStartHookLength < 0) {
                     return KnownSmartShapeType::VerticalLineRightHooks;
-                } else if (vertDiff < 0 && customShape->lineCapStartHookLength > 0) {
+                } else if (vertDiff > 0 && customShape->lineCapStartHookLength > 0) {
                     return KnownSmartShapeType::VerticalLineRightHooks;
                 }
             }
