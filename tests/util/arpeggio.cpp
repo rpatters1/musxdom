@@ -281,6 +281,27 @@ TEST(ArpeggioUtilTest, MeasureExpressionVerticalHooksRejectWhenVerticalExtentExc
     EXPECT_FALSE(calcMeasureExpressionSpan(doc, 7).has_value());
 }
 
+TEST(ArpeggioUtilTest, ArticulationVerticalHooksResolveSourceEntryBracketSpan)
+{
+    auto doc = createNonArpeggiosDoc();
+    ASSERT_TRUE(doc);
+
+    auto sourceEntry = EntryInfoPtr::fromEntryNumber(doc, SCORE_PARTID, 131);
+    ASSERT_TRUE(sourceEntry);
+    auto assign = doc->getDetails()->get<details::ArticulationAssign>(SCORE_PARTID, 131, 0);
+    ASSERT_TRUE(assign);
+
+    auto span = calcNonArpeggioSpanForAssignment(sourceEntry, assign);
+    ASSERT_TRUE(span.has_value()) << "Expected non-null articulation bracket span";
+
+    EXPECT_EQ(span->type, ArpeggioSpanType::Bracket);
+    EXPECT_EQ(span->sourceEntry->getEntry()->getEntryNumber(), 131);
+    ASSERT_TRUE(span->topEntry);
+    ASSERT_TRUE(span->bottomEntry);
+    EXPECT_EQ(span->topEntry->getEntry()->getEntryNumber(), 131);
+    EXPECT_EQ(span->bottomEntry->getEntry()->getEntryNumber(), 131);
+}
+
 TEST(ArpeggioUtilTest, SmartShapeVerticalHooksResolveBracketSpan)
 {
     auto doc = createNonArpeggiosDoc();

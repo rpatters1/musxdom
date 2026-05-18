@@ -378,11 +378,45 @@ std::optional<ArpeggioSpanCandidate> calcArpeggioSpanForAssignment(
 }
 
 std::optional<ArpeggioSpanCandidate> calcNonArpeggioSpanForAssignment(
-    const dom::EntryInfoPtr&,
-    const dom::MusxInstance<dom::details::ArticulationAssign>&,
-    const ArpeggioSpanOptions&)
+    const dom::EntryInfoPtr& sourceEntryInfo,
+    const dom::MusxInstance<dom::details::ArticulationAssign>& assign,
+    const ArpeggioSpanOptions& options)
 {
-    return std::nullopt;
+    MUSX_ASSERT_IF(!sourceEntryInfo || !assign) {
+        return std::nullopt;
+    }
+    const auto sourceEntry = sourceEntryInfo->getEntry();
+    MUSX_ASSERT_IF(!sourceEntry) {
+        return std::nullopt;
+    }
+    if (!sourceEntry->isNote || sourceEntryInfo.calcDisplaysAsRest()) {
+        return std::nullopt;
+    }
+    if (options.skipGraceEntries && sourceEntry->graceNote) {
+        return std::nullopt;
+    }
+
+    const auto symbolContext = assign->calcSelectedSymbolContext(sourceEntryInfo);
+    if (!symbolContext || !symbolContext->symbol.isShape || !symbolContext->symbol.shapeId) {
+        return std::nullopt;
+    }
+
+    const auto document = assign->getDocument();
+    MUSX_ASSERT_IF(!document) {
+        return std::nullopt;
+    }
+    const auto shape = document->getOthers()->get<others::ShapeDef>(
+        assign->getRequestedPartId(), symbolContext->symbol.shapeId);
+    if (!shape || shape->recognize() != KnownShapeDefType::VerticalLineRightHooks) {
+        return std::nullopt;
+    }
+
+    ArpeggioSpanCandidate result;
+    result.type = ArpeggioSpanType::Bracket;
+    result.sourceEntry = sourceEntryInfo;
+    result.topEntry = sourceEntryInfo;
+    result.bottomEntry = sourceEntryInfo;
+    return result;
 }
 
 std::optional<ArpeggioSpanCandidate> calcNonArpeggioSpanForAssignment(
