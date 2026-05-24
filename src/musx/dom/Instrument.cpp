@@ -20,13 +20,44 @@
  * THE SOFTWARE.
  */
 
+#include "musx/dom/Instrument.h"
+
 #include <algorithm>
+#include <iterator>
+#include <map>
+#include <set>
 #include <utility>
 
-#include "musx/dom/Instrument.h"
+#include "musx/musx.h"
 
 namespace musx {
 namespace dom {
+
+namespace {
+
+using StaffStyleInstrumentSpans = std::map<MusicPoint, std::optional<MusicPoint>>;
+
+StaffStyleInstrumentSpans collectStaffStyleInstrumentSpans(const DocumentPtr& document, Cmper partId, StaffCmper staffId)
+{
+    StaffStyleInstrumentSpans result;
+    const auto assignments = document->getOthers()->getArray<others::StaffStyleAssign>(partId, staffId);
+    for (const auto& assignment : assignments) {
+        const auto style = assignment->getStaffStyle();
+        if (style && style->containsInstrumentChange()) {
+            const auto start = MusicPoint(assignment->startMeas, util::Fraction::fromEdu(assignment->startEdu));
+            result.emplace(start, assignment->nextLocation(staffId));
+        }
+    }
+    return result;
+}
+
+std::string formatMusicPoint(const MusicPoint& point)
+{
+    return "measure " + std::to_string(point.measureId)
+        + ", edu " + std::to_string(point.position.calcEduDuration());
+}
+
+} // namespace
 
 std::vector<StaffCmper> InstrumentInfo::getSequentialStaves() const
 {
@@ -38,6 +69,68 @@ std::vector<StaffCmper> InstrumentInfo::getSequentialStaves() const
     result.reserve(sorted.size());
     for (const auto& [staffId, _] : sorted) {
         result.push_back(staffId);
+    }
+    return result;
+}
+
+InstrumentInfo::InstrumentChangeEvents InstrumentInfo::getChanges() const
+{
+    const auto sequentialStaves = getSequentialStaves();
+    if (sequentialStaves.empty()) {
+        return {};
+    }
+
+    const auto document = getDocument();
+    const auto partId = getPartId();
+    const auto topStaffId = sequentialStaves.front();
+    const auto topStaffEvents = collectStaffStyleInstrumentSpans(document, partId, topStaffId);
+    StaffStyleInstrumentSpans acceptedEvents = topStaffEvents;
+
+    for (auto staffIt = std::next(sequentialStaves.begin()); staffIt != sequentialStaves.end(); ++staffIt) {
+        const auto staffId = *staffIt;
+        const auto staffEvents = collectStaffStyleInstrumentSpans(document, partId, staffId);
+        for (auto eventIt = acceptedEvents.begin(); eventIt != acceptedEvents.end();) {
+            const auto staffEventIt = staffEvents.find(eventIt->first);
+            if (staffEventIt == staffEvents.end() || staffEventIt->second != eventIt->second) {
+                util::Logger::log(util::Logger::LogLevel::Warning,
+                    "Ignoring instrument change for top staff " + std::to_string(topStaffId)
+                    + " at " + formatMusicPoint(eventIt->first)
+                    + " because staff " + std::to_string(staffId) + " has no aligned instrument change.");
+                eventIt = acceptedEvents.erase(eventIt);
+            } else {
+                ++eventIt;
+            }
+        }
+        for (const auto& [staffChangeStart, staffRevert] : staffEvents) {
+            const auto topEventIt = topStaffEvents.find(staffChangeStart);
+            if (topEventIt == topStaffEvents.end() || topEventIt->second != staffRevert) {
+                util::Logger::log(util::Logger::LogLevel::Warning,
+                    "Ignoring instrument change for staff " + std::to_string(staffId)
+                    + " at " + formatMusicPoint(staffChangeStart)
+                    + " because top staff " + std::to_string(topStaffId) + " has no aligned instrument change.");
+            }
+        }
+    }
+
+    std::set<MusicPoint> changePositions;
+    changePositions.emplace(MusicPoint{});
+    for (const auto& [start, revert] : acceptedEvents) {
+        changePositions.emplace(start);
+        if (revert) {
+            changePositions.emplace(*revert);
+        }
+    }
+
+    InstrumentChangeEvents result;
+    for (const auto& position : changePositions) {
+        auto topStaffComposite = others::StaffComposite::createCurrent(document, partId, topStaffId, position.measureId, position.position.calcEduDuration());
+        if (!topStaffComposite) {
+            util::Logger::log(util::Logger::LogLevel::Warning,
+                "Unable to create top staff composite for instrument change on staff " + std::to_string(topStaffId)
+                + " at " + formatMusicPoint(position) + ".");
+            continue;
+        }
+        result.emplace(position, topStaffComposite);
     }
     return result;
 }

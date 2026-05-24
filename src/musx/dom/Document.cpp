@@ -211,7 +211,7 @@ InstrumentMap Document::createInstrumentMap(Cmper forPartId) const
                 if (multiStaffInstsFound.find(rawStaff->multiStaffInstId) == multiStaffInstsFound.end()) {
                     if (auto multiStaffInst = getOthers()->get<others::MultiStaffInstrumentGroup>(forPartId, rawStaff->multiStaffInstId)) {
                         multiStaffInstsFound.emplace(rawStaff->multiStaffInstId);
-                        const auto [it, created] = result.emplace(rawStaff->getCmper(), InstrumentInfo());
+                        const auto [it, created] = result.emplace(rawStaff->getCmper(), InstrumentInfo(m_self, forPartId));
                         MUSX_ASSERT_IF(!created) {
                             throw std::logic_error("Attempted to insert multi-instrument id " + std::to_string(rawStaff->multiStaffInstId) + " more than once.");
                         }
@@ -261,7 +261,7 @@ InstrumentMap Document::createInstrumentMap(Cmper forPartId) const
                     return false;
                 });
                 if (!candidateStaves.empty()) {
-                    auto [instIt, created] = result.emplace(topStaff->getCmper(), InstrumentInfo());
+                    auto [instIt, created] = result.emplace(topStaff->getCmper(), InstrumentInfo(m_self, forPartId));
                     auto& [top, instInfo] = *instIt;
                     if (created || instInfo.staffGroupId == 0 || group->getCmper2() == instInfo.staffGroupId) {
                         if (instInfo.staffGroupId == 0) {
@@ -280,7 +280,7 @@ InstrumentMap Document::createInstrumentMap(Cmper forPartId) const
     }
     for (const auto& staffItem : scrollView) {
         if (mappedStaves.find(staffItem->staffId) == mappedStaves.end()) {
-            const auto [it, created] = result.emplace(staffItem->staffId, InstrumentInfo());
+            const auto [it, created] = result.emplace(staffItem->staffId, InstrumentInfo(m_self, forPartId));
             MUSX_ASSERT_IF(!created) {
                 throw std::logic_error("Attempted to insert single-instrument id " + std::to_string(staffItem->staffId) + " that was already mapped.");
             }

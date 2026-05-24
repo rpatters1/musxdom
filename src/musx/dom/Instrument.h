@@ -22,13 +22,18 @@
 #pragma once
 
 #include <cstddef>
+#include <map>
 #include <unordered_map>
 #include <vector>
 
-#include "BaseClasses.h"
+#include "CommonClasses.h"
 
 namespace musx {
 namespace dom {
+
+namespace others {
+class StaffComposite;
+}
 
 /**
  * @class InstrumentInfo
@@ -39,14 +44,33 @@ namespace dom {
  */
 class InstrumentMap;
 
-struct InstrumentInfo
+class InstrumentInfo : public DocumentElement
 {
+public:
+    /// @brief Effective top-staff states keyed by the musical location where each state begins.
+    using InstrumentChangeEvents = std::map<MusicPoint, MusxInstance<others::StaffComposite>>;
+
+    /// @brief Constructs an empty instrument info for a score or linked part.
+    /// @param document The document this instrument belongs to.
+    /// @param partId The score or linked part ID represented by this instrument.
+    explicit InstrumentInfo(const DocumentWeakPtr& document, Cmper partId = SCORE_PARTID)
+        : DocumentElement(document, partId) {}
+
     std::unordered_map<StaffCmper, size_t> staves;  ///< List of each staffId with its sequence index from top to bottom.
     Cmper staffGroupId{};                           ///< The @ref details::StaffGroup that visually represents the instrument. (May be zero.)
     Cmper multistaffGroupId{};                      ///< The @ref others::MultiStaffInstrumentGroup that defines the instrument. (May be zero.)
 
     /// @brief Returns the staffIds in sequence as they appear in Scroll View in the score.
     std::vector<StaffCmper> getSequentialStaves() const;
+
+    /// @brief Returns effective instrument states for this logical instrument.
+    ///
+    /// Instrument changes are recognized only when every staff in the logical instrument has an aligned
+    /// @ref others::StaffStyleAssign whose @ref others::StaffStyle::containsInstrumentChange returns true.
+    /// Reversion to the base staff instrument is represented by an additional change at the first location
+    /// after the staff style assignment. If no changes are found, the result contains one change at the start
+    /// of the document.
+    InstrumentChangeEvents getChanges() const;
 };
 
 /// @brief A list of instruments, which may be single- or multi-staff.
