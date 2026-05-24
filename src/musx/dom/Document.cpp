@@ -197,7 +197,7 @@ MusxInstance<others::StaffSystem> Document::calcSystemFromMeasure(Cmper partId, 
 
 InstrumentMap Document::createInstrumentMap(Cmper forPartId) const
 {
-    InstrumentMap result;
+    InstrumentMap result(m_self, forPartId);
 
     const auto scrollView = getScrollViewStaves(forPartId);
     if (scrollView.empty()) {
@@ -508,39 +508,6 @@ std::optional<std::filesystem::path> Document::resolveExternalGraphicPath(Cmper 
     }
 
     return std::nullopt;
-}
-
-// **************************
-// ***** InstrumentInfo *****
-// **************************
-
-std::vector<StaffCmper> InstrumentInfo::getSequentialStaves() const
-{
-    std::vector<std::pair<StaffCmper, size_t>> sorted(staves.begin(), staves.end());
-    std::sort(sorted.begin(), sorted.end(),
-              [](const auto& a, const auto& b) { return a.second < b.second; });
-
-    std::vector<StaffCmper> result;
-    result.reserve(sorted.size());
-    for (const auto& [staffId, _] : sorted) {
-        result.push_back(staffId);
-    }
-    return result;
-}
-
-const InstrumentInfo* InstrumentInfo::getInstrumentForStaff(const InstrumentMap& map, StaffCmper staffId)
-{
-    const auto& instIt = map.find(staffId);
-    if (instIt != map.end()) {
-        return &instIt->second;
-    } else {
-        for (const auto& [top, info] : map) {
-            if (info.staves.find(staffId) != info.staves.end()) {
-                return &info;
-            }
-        }
-    }
-    return nullptr;
 }
 
 } // namespace dom

@@ -30,6 +30,7 @@
 #include <vector>
 
 #include "Header.h"
+#include "Instrument.h"
 #include "ObjectPool.h"
 #include "MusxInstance.h"
 
@@ -51,9 +52,7 @@ namespace dom {
 
 using namespace header;
 
-struct InstrumentInfo;
 enum class KnownShapeDefType;
-using InstrumentMap = std::unordered_map<StaffCmper, InstrumentInfo>; ///< A list of instruments, which may be single- or multi-staff
 using EmbeddedGraphicBlob = std::vector<uint8_t>; ///< Raw bytes for one embedded graphic payload from a musx archive.
 
 /// @brief Embedded graphic payload from a musx archive entry.
@@ -64,24 +63,6 @@ struct EmbeddedGraphicData
 };
 
 using EmbeddedGraphicsMap = std::unordered_map<Cmper, EmbeddedGraphicData>; ///< Embedded graphics keyed by cmper (filename stem in musx archive).
-/// @class InstrumentInfo
-/// @brief Represents information about each instrument in the document. This is calculated from the staves,
-/// staff groups, and multistaff instrument groups.
-struct InstrumentInfo
-{
-    std::unordered_map<StaffCmper, size_t> staves;  ///< List of each staffId with its sequence index from top to bottom.
-    Cmper staffGroupId{};                           ///< The @ref details::StaffGroup that visually represents the instrument. (May be zero.)
-    Cmper multistaffGroupId{};                      ///< The @ref others::MultiStaffInstrumentGroup that defines the instrument. (May be zero.)
-
-    /// @brief Returns the staffIds in sequence as they appear in Scroll View in the score.
-    std::vector<StaffCmper> getSequentialStaves() const;
-
-    /// @brief Get the instrument info for the given staffId in the given map
-    /// @param map The map to search.
-    /// @param staffId The staffId to find.
-    /// @return The InstrumentInfo for the @p staffId or null if not found.
-    static const InstrumentInfo* getInstrumentForStaff(const InstrumentMap& map, StaffCmper staffId);
-};
 
 /// @enum PartVoicingPolicy
 /// @brief Controls whether Finale-style part voicing is applied when iterating entries via
