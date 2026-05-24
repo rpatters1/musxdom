@@ -47,8 +47,27 @@ class InstrumentMap;
 class InstrumentInfo : public DocumentElement
 {
 public:
+    /// @brief Stable identity for a distinct instrument used by this logical instrument.
+    struct InstrumentIdentity {
+        std::string instUuid; ///< The effective instrument UUID.
+
+        /// @brief Equality comparison operator.
+        bool operator==(const InstrumentIdentity& other) const
+        { return instUuid == other.instUuid; }
+
+        /// @brief Ordering operator for use in ordered containers.
+        bool operator<(const InstrumentIdentity& other) const
+        { return instUuid < other.instUuid; }
+    };
+
+    /// @brief Effective instrument state beginning at a musical location.
+    struct InstrumentChange {
+        InstrumentIdentity identity;                               ///< Stable identity for the effective instrument.
+        MusxInstance<others::StaffComposite> topStaffComposite;    ///< Effective state of the top staff.
+    };
+
     /// @brief Effective top-staff states keyed by the musical location where each state begins.
-    using InstrumentChangeEvents = std::map<MusicPoint, MusxInstance<others::StaffComposite>>;
+    using InstrumentChangeEvents = std::map<MusicPoint, InstrumentChange>;
 
     /// @brief Constructs an empty instrument info for a score or linked part.
     /// @param document The document this instrument belongs to.
@@ -71,6 +90,13 @@ public:
     /// after the staff style assignment. If no changes are found, the result contains one change at the start
     /// of the document.
     InstrumentChangeEvents getChanges() const;
+
+    /// @brief Returns the unique instrument identities in order of first appearance.
+    std::vector<InstrumentIdentity> getInstrumentIdentities() const;
+
+    /// @brief Returns the instrument identity in effect at the specified music point.
+    /// @throws std::logic_error if no identity is in effect at @p point.
+    InstrumentIdentity getInstrumentIdentityAt(MusicPoint point) const;
 };
 
 /// @brief A list of instruments, which may be single- or multi-staff.

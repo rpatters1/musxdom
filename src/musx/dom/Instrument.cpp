@@ -35,7 +35,14 @@ namespace dom {
 
 namespace {
 
-using StaffStyleInstrumentSpans = std::map<MusicPoint, std::optional<MusicPoint>>;
+struct StaffStyleInstrumentSpan {
+    std::string instUuid;
+    std::optional<MusicPoint> revertPosition;
+
+    bool operator==(const StaffStyleInstrumentSpan& other) const = default;
+};
+
+using StaffStyleInstrumentSpans = std::map<MusicPoint, StaffStyleInstrumentSpan>;
 
 StaffStyleInstrumentSpans collectStaffStyleInstrumentSpans(const DocumentPtr& document, Cmper partId, StaffCmper staffId)
 {
@@ -45,7 +52,7 @@ StaffStyleInstrumentSpans collectStaffStyleInstrumentSpans(const DocumentPtr& do
         const auto style = assignment->getStaffStyle();
         if (style && style->containsInstrumentChange()) {
             const auto start = MusicPoint(assignment->startMeas, util::Fraction::fromEdu(assignment->startEdu));
-            result.emplace(start, assignment->nextLocation(staffId));
+            result.emplace(start, StaffStyleInstrumentSpan{ style->instUuid, assignment->nextLocation(staffId) });
         }
     }
     return result;
@@ -114,10 +121,10 @@ InstrumentInfo::InstrumentChangeEvents InstrumentInfo::getChanges() const
 
     std::set<MusicPoint> changePositions;
     changePositions.emplace(MusicPoint{});
-    for (const auto& [start, revert] : acceptedEvents) {
+    for (const auto& [start, span] : acceptedEvents) {
         changePositions.emplace(start);
-        if (revert) {
-            changePositions.emplace(*revert);
+        if (span.revertPosition) {
+            changePositions.emplace(*span.revertPosition);
         }
     }
 
@@ -130,9 +137,32 @@ InstrumentInfo::InstrumentChangeEvents InstrumentInfo::getChanges() const
                 + " at " + formatMusicPoint(position) + ".");
             continue;
         }
-        result.emplace(position, topStaffComposite);
+        const auto identity = InstrumentIdentity{ topStaffComposite->instUuid };
+        result.emplace(position, InstrumentChange{ identity, topStaffComposite });
     }
     return result;
+}
+
+std::vector<InstrumentInfo::InstrumentIdentity> InstrumentInfo::getInstrumentIdentities() const
+{
+    std::vector<InstrumentIdentity> result;
+    std::set<InstrumentIdentity> seen;
+    for (const auto& [_, change] : getChanges()) {
+        if (seen.insert(change.identity).second) {
+            result.emplace_back(change.identity);
+        }
+    }
+    return result;
+}
+
+InstrumentInfo::InstrumentIdentity InstrumentInfo::getInstrumentIdentityAt(MusicPoint point) const
+{
+    const auto changes = getChanges();
+    const auto it = changes.upper_bound(point);
+    MUSX_ASSERT_IF(it == changes.begin()) {
+        throw std::logic_error("No instrument identity found at " + formatMusicPoint(point) + ".");
+    }
+    return std::prev(it)->second.identity;
 }
 
 const InstrumentInfo* InstrumentMap::getInstrumentForStaff(StaffCmper staffId) const
