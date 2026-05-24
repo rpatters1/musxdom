@@ -87,7 +87,6 @@ enum class PartVoicingPolicy
 class Document
 {
 public:
-
     /**  @brief Retrieves the header */
     [[nodiscard]]
     HeaderPtr& getHeader() { return m_header; }
@@ -187,7 +186,13 @@ public:
 
     /// @brief Returns the instrument map for this document. It is computed by the factory.
     [[nodiscard]]
-    const InstrumentMap& getInstruments() const { return m_instruments; }
+    const InstrumentMap& getInstruments() const
+    {
+        MUSX_ASSERT_IF(!m_instruments.has_value()) {
+            throw std::logic_error("Attempted to retrieve instrument map before it was constructed.");
+        }
+        return m_instruments.value();
+    }
 
     /// @brief Returns the path to the musx (or EnigmaXML) file used to create this document, if provided.
     [[nodiscard]]
@@ -268,7 +273,8 @@ private:
 
     int m_maxBlankPages{};      ///< The maximum number of leading blank pages in any part.
 
-    InstrumentMap m_instruments; ///< List of instruments in the document, indexed by the top staff in each instrument in Scroll View of the score.
+    std::optional<InstrumentMap> m_instruments = std::nullopt; ///< List of instruments in the document,
+                                ///< indexed by the top staff in each instrument in Scroll View of the score.
                                 ///< This computed by the factory.
 
     PartVoicingPolicy m_partVoicingPolicy{};    ///< The part voicing policy in effect for this document.

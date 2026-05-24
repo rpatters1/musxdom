@@ -25,8 +25,7 @@
 #include <unordered_map>
 #include <vector>
 
-#include "musx/dom/DocumentView.h"
-#include "musx/dom/Fundamentals.h"
+#include "BaseClasses.h"
 
 namespace musx {
 namespace dom {
@@ -60,23 +59,17 @@ struct InstrumentInfo
 ///
 /// This is not a Finale data class. It is a normalized, interchange-oriented view of the logical
 /// instruments available in a score or linked part.
-class InstrumentMap : public DocumentViewBase, public std::unordered_map<StaffCmper, InstrumentInfo>
+class InstrumentMap : public DocumentElement, public std::unordered_map<StaffCmper, InstrumentInfo>
 {
 public:
     using Base = std::unordered_map<StaffCmper, InstrumentInfo>;
     using Base::Base;
 
-    /// @brief Constructs an empty instrument map for the score.
-    InstrumentMap() = default;
-
     /// @brief Constructs an empty instrument map for a score or linked part.
     /// @param document The document this map describes.
     /// @param partId The score or linked part ID represented by this map.
     explicit InstrumentMap(const DocumentWeakPtr& document, Cmper partId = SCORE_PARTID)
-        : DocumentViewBase(document, partId) {}
-
-    /// @brief Returns the score or linked part ID represented by this map.
-    Cmper getPartId() const { return getRequestedPartId(); }
+        : DocumentElement(document, partId) {}
 };
 
 } // namespace dom

@@ -29,6 +29,7 @@
 #include <utility>
 
 #include "Fundamentals.h"
+#include "DocumentElement.h"
 
 namespace musx {
 namespace dom {
@@ -62,31 +63,18 @@ class StaffComposite;
  * @tparam T The object type stored in the list (e.g., StaffUsed, SmartShape, etc.).
  */
 template <typename T>
-class MusxInstanceListBase : public std::vector<MusxInstance<T>>
+class MusxInstanceListBase : public DocumentElement, public std::vector<MusxInstance<T>>
 {
     using VectorType = std::vector<MusxInstance<T>>;
+    Cmper getPartId() const = delete;
 
 public:
     /// @brief Default constructor.
     explicit MusxInstanceListBase(const std::weak_ptr<Document>& document, Cmper partId)
-        : m_document(document), m_partId(partId) {}
+        : DocumentElement(document, partId) {}
 
     /// @brief Gets the part id that was used to create this list
-    Cmper getRequestedPartId() const { return m_partId; }
-
-    /// @brief Gets the document that was used to create this list
-    std::shared_ptr<Document> getDocument() const
-    {
-        auto document = m_document.lock();
-        MUSX_ASSERT_IF(!document) {
-            throw std::logic_error("Document pointer is no longer valid.");
-        }
-        return document;
-    }
-
-private:
-    std::weak_ptr<Document> m_document;
-    Cmper m_partId;
+    Cmper getRequestedPartId() const { return DocumentElement::getPartId(); }
 };
 
 /**
@@ -192,6 +180,22 @@ public:
     /// @param ptr Pointer to the object. No copy is made.
     explicit DeferredReference(const T* ptr) noexcept : m_ref(ptr) {}
 
+    /**
+     * @brief Binds this DeferredReference to an existing object without taking ownership.
+     *
+     * Any previously owned object is destroyed and the DeferredReference becomes
+     * a non-owning reference to @p ref.
+     *
+     * @param ref The object to reference.
+     * @return A const reference to the bound object.
+     */
+    const T& bind(const T& ref) noexcept
+    {
+        m_owned.reset();
+        m_ref = std::addressof(ref);
+        return *m_ref;
+    }
+
     /// @brief Moves a value into owned storage and binds to it.
     ///
     /// This replaces any previous binding (owned or non-owned) and ensures
@@ -219,8 +223,8 @@ public:
     const T& operator*() const noexcept { return *m_ref; }
 
 private:
-    std::optional<OwnedT> m_owned{}; ///< Optional owned storage (constructed on demand)
-    const T* m_ref = nullptr;        ///< Pointer to the referenced or owned object
+    std::optional<OwnedT> m_owned = std::nullopt;   ///< Optional owned storage (constructed on demand)
+    const T* m_ref = nullptr;                       ///< Pointer to the referenced or owned object
 };
 
 #ifndef DOXYGEN_SHOULD_IGNORE_THIS

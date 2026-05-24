@@ -37,26 +37,24 @@ using DocumentPtr = std::shared_ptr<Document>;
 using DocumentWeakPtr = std::weak_ptr<Document>;
 
 /**
- * @class DocumentViewBase
- * @brief Base class for calculated document views.
+ * @class DocumentElement
+ * @brief Base for DOM classes that belong to a Document.
  *
- * This is not a Finale data class and is not populated directly from EnigmaXML. It provides document
- * and requested-part context for normalized, interchange-oriented views calculated from the DOM.
+ * This base provides a document context with a part id.
  */
-class DocumentViewBase
+class DocumentElement
 {
 public:
-    /// @brief Constructs an empty document view for the score.
-    DocumentViewBase() = default;
+    /**
+     * @brief Virtual destructor for polymorphic behavior.
+     */
+    virtual ~DocumentElement() noexcept(false) = default;
 
-    /// @brief Constructs a document view.
-    /// @param document The document this view describes.
-    /// @param requestedPartId The score or linked part ID represented by this view.
-    DocumentViewBase(const DocumentWeakPtr& document, Cmper requestedPartId = SCORE_PARTID)
-        : m_document(document), m_requestedPartId(requestedPartId) {}
-
-    /// @brief Gets a pointer to the document this view describes.
-    /// @return A pointer to the document instance.
+    /**
+     * @brief Gets a reference to the Document.
+     *
+     * @return A pointer to the Document instance.
+     */
     DocumentPtr getDocument() const
     {
         auto document = m_document.lock();
@@ -66,12 +64,33 @@ public:
         return document;
     }
 
-    /// @brief Returns the score or linked part ID represented by this view.
-    Cmper getRequestedPartId() const { return m_requestedPartId; }
+    /**
+     * @brief Gets the part id associated with this instance.
+     */
+    Cmper getPartId() const { return m_partId; }
+
+protected:
+    /**
+     * @brief Constructs the document element.
+     *
+     * @param document A weak pointer to the parent document.
+     * @param partId The part id associated with this instance.
+     */
+    DocumentElement(const DocumentWeakPtr& document, Cmper partId)
+        : m_document(document), m_partId(partId) {}
+
+    DocumentElement(const DocumentElement&) = default;        ///< explicit default copy constructor
+    DocumentElement(DocumentElement&&) noexcept = default;    ///< explicit default move constructor
+
+    /// @brief no-op copy assignment operator allows subclasses to copy their values.
+    DocumentElement& operator=(const DocumentElement&) { return *this; }
+
+    /// @brief no-op move assignment operator allows subclasses to move their values.
+    DocumentElement& operator=(DocumentElement&&) noexcept { return *this; }
 
 private:
-    DocumentWeakPtr m_document;
-    Cmper m_requestedPartId{SCORE_PARTID};
+    const DocumentWeakPtr m_document{};
+    const Cmper m_partId{};
 };
 
 } // namespace dom

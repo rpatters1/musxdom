@@ -801,14 +801,12 @@ bool StaffGroupInfo::calcIsSingleInstrumentSection(MeasCmper measureId) const
 
     const auto doc = group->getDocument();
     const auto partId = group->getRequestedPartId();
-    const InstrumentMap* instrumentMap = nullptr;
-    InstrumentMap partInstrumentMap;
+    DeferredReference<InstrumentMap> instrumentMap;
 
     if (partId == SCORE_PARTID) {
-        instrumentMap = &doc->getInstruments();
+        instrumentMap.bind(doc->getInstruments());
     } else {
-        partInstrumentMap = doc->createInstrumentMap(partId);
-        instrumentMap = &partInstrumentMap;
+        instrumentMap.emplace(doc->createInstrumentMap(partId));
     }
 
     for (const auto& instrument : *instrumentMap) {

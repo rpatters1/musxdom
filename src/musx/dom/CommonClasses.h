@@ -313,7 +313,7 @@ public:
     /// @return A unique pointer to a transposer for this key.
     std::unique_ptr<music_theory::Transposer> createTransposer(int displacement, int alteration) const;
 
-    void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
+    void integrityCheck(const std::shared_ptr<EnigmaBase>& ptrToThis) override
     {
         this->CommonClassBase::integrityCheck(ptrToThis);
         if (key >= 0x8000) {

@@ -67,7 +67,7 @@ class TypeRegistry
 {
 private:
     using VariantType = std::variant<Types*...>;
-    using Base = dom::Base;
+    using Base = dom::EnigmaBase;
 
     /**
      * @brief A compile-time registry of types, each associated with an XML node name.
@@ -125,10 +125,10 @@ public:
     struct CreatedInstanceInfo
     {
         /// @brief Constructor
-        CreatedInstanceInfo(std::shared_ptr<Base> inst, std::string_view nodeName)
+        CreatedInstanceInfo(std::shared_ptr<EnigmaBase> inst, std::string_view nodeName)
             : instance(inst), xmlNodeName(nodeName) {}
 
-        std::shared_ptr<Base> instance; ///< The newly created instance.
+        std::shared_ptr<EnigmaBase> instance; ///< The newly created instance.
         std::string_view xmlNodeName;   ///< The static std::string_view containing the instance's node name.
     };
 
@@ -158,16 +158,16 @@ public:
             [&](auto const& ptr) -> CreatedInstanceInfo {
                 using T = std::remove_pointer_t<std::remove_reference_t<decltype(ptr)>>;
                 // Only enable this part if T is constructible with Args...
-                if constexpr (std::is_constructible_v<T, const DocumentPtr&, Cmper, Base::ShareMode, Args...>) {
+                if constexpr (std::is_constructible_v<T, const DocumentPtr&, Cmper, EnigmaBase::ShareMode, Args...>) {
                     auto partAttr = node->findAttribute("part");
                     Cmper partId = partAttr ? partAttr->getValueAs<Cmper>() : SCORE_PARTID; // zero is the score ID
-                    auto shareMode = Base::ShareMode::All;
+                    auto shareMode = EnigmaBase::ShareMode::All;
                     if (auto shareAttr = node->findAttribute("shared")) {
-                        shareMode = shareAttr->getValueAs<bool>() ? Base::ShareMode::Partial : Base::ShareMode::None;
+                        shareMode = shareAttr->getValueAs<bool>() ? EnigmaBase::ShareMode::Partial : EnigmaBase::ShareMode::None;
                     }
                     auto instance = std::make_shared<T>(document, partId, shareMode, std::forward<Args>(args)...);
                     if constexpr (!std::is_same_v<PoolPtr, ::musx::dom::EntryPoolPtr>) {
-                        if (instance->getShareMode() == Base::ShareMode::Partial) {
+                        if (instance->getShareMode() == EnigmaBase::ShareMode::Partial) {
                             for (auto child = node->getFirstChildElement(); child; child = child->getNextSibling()) {
                                 instance->addUnlinkedNode(child->getTagName());
                             }

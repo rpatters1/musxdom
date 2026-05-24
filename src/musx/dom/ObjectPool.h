@@ -206,8 +206,8 @@ public:
         }
         if (shareModeIt == m_shareMode.end()) {
             m_shareMode.emplace(poolIt->first.nodeId, object->getShareMode());
-        } else if (object->getShareMode() != shareModeIt->second && object->getShareMode() != Base::ShareMode::All) {
-            if (shareModeIt->second == Base::ShareMode::All) {
+        } else if (object->getShareMode() != shareModeIt->second && object->getShareMode() != EnigmaBase::ShareMode::All) {
+            if (shareModeIt->second == EnigmaBase::ShareMode::All) {
                 m_shareMode[poolIt->first.nodeId] = object->getShareMode();
             } else {
                 MUSX_INTEGRITY_ERROR("Share mode for added " + std::string(poolIt->first.nodeId) + " object [" + std::to_string(int(object->getShareMode()))
@@ -259,7 +259,7 @@ public:
     template <typename T>
     MusxInstanceList<T> getArrayForPart(const ObjectKey& key) const
     {
-        Base::ShareMode forShareMode = Base::ShareMode::All;
+        EnigmaBase::ShareMode forShareMode = EnigmaBase::ShareMode::All;
         if (key.partId != SCORE_PARTID) {
             auto it = m_shareMode.find(key.nodeId);
             // If the nodeId is not found in m_shareMode, it means the document contains no instances,
@@ -269,12 +269,12 @@ public:
             }
         }
 
-        if (key.partId == SCORE_PARTID || forShareMode == Base::ShareMode::None) {
+        if (key.partId == SCORE_PARTID || forShareMode == EnigmaBase::ShareMode::None) {
             return getArray<T>(key, key.partId);
         }
         ObjectKey scoreKey(key);
         scoreKey.partId = SCORE_PARTID;
-        if (forShareMode == Base::ShareMode::All) {
+        if (forShareMode == EnigmaBase::ShareMode::All) {
             return getArray<T>(scoreKey, key.partId);
         }
 
@@ -361,7 +361,7 @@ public:
         } else {
             // if this is for a part, do not search score for unshared types.
             auto it = m_shareMode.find(key.nodeId);
-            if (it != m_shareMode.end() && it->second == Base::ShareMode::None) {
+            if (it != m_shareMode.end() && it->second == EnigmaBase::ShareMode::None) {
                 return nullptr;
             }
         }
@@ -392,13 +392,13 @@ public:
     /// @brief Constructs the object pool
     /// @param document THe document for this pool.
     /// @param knownShareModes Optional parameter that specifies known share modes for certain elements.
-    /// These can be particurly important for Base::ShareMode::None because there may be no parts containing them.
-    ObjectPool(const DocumentWeakPtr& document, const std::unordered_map<std::string_view, dom::Base::ShareMode>& knownShareModes = {})
+    /// These can be particurly important for EnigmaBase::ShareMode::None because there may be no parts containing them.
+    ObjectPool(const DocumentWeakPtr& document, const std::unordered_map<std::string_view, dom::EnigmaBase::ShareMode>& knownShareModes = {})
         : m_document(document), m_shareMode(knownShareModes) {}
 
 private:
     DocumentWeakPtr m_document;
-    std::unordered_map<std::string_view, dom::Base::ShareMode> m_shareMode;
+    std::unordered_map<std::string_view, dom::EnigmaBase::ShareMode> m_shareMode;
 
     std::map<ObjectKey, ObjectPtr> m_pool;
 };
@@ -419,7 +419,7 @@ public:
     /** @brief Scalar version of #ObjectPool::add */
     void add(std::string_view nodeName, const std::shared_ptr<OptionsBase>& instance)
     {
-        const Base* basePtr = instance.get();
+        const EnigmaBase* basePtr = instance.get();
         if (basePtr->getSourcePartId() != SCORE_PARTID) {
             MUSX_INTEGRITY_ERROR("Options node " + std::string(nodeName) + " hase non-score part id [" + std::to_string(basePtr->getSourcePartId()) + "]");
         }
@@ -463,16 +463,16 @@ class OthersPool
 public:
     /// @brief Constructor
     OthersPool(const DocumentWeakPtr& document) : m_pool(document, {
-        { others::BeatChartElement::XmlNodeName, Base::ShareMode::None },
-        { others::StaffUsed::XmlNodeName, Base::ShareMode::None },
-        { others::SystemLock::XmlNodeName, Base::ShareMode::None },
-        { others::MultimeasureRest::XmlNodeName, Base::ShareMode::None },
-        { others::MultiStaffGroupId::XmlNodeName, Base::ShareMode::None },
-        { others::Page::XmlNodeName, Base::ShareMode::None },
-        { others::PartGlobals::XmlNodeName, Base::ShareMode::None },
-        { others::PartVoicing::XmlNodeName, Base::ShareMode::None },
-        { others::StaffSystem::XmlNodeName, Base::ShareMode::None },
-        { others::StaffStyleAssign::XmlNodeName, Base::ShareMode::None },
+        { others::BeatChartElement::XmlNodeName, EnigmaBase::ShareMode::None },
+        { others::StaffUsed::XmlNodeName, EnigmaBase::ShareMode::None },
+        { others::SystemLock::XmlNodeName, EnigmaBase::ShareMode::None },
+        { others::MultimeasureRest::XmlNodeName, EnigmaBase::ShareMode::None },
+        { others::MultiStaffGroupId::XmlNodeName, EnigmaBase::ShareMode::None },
+        { others::Page::XmlNodeName, EnigmaBase::ShareMode::None },
+        { others::PartGlobals::XmlNodeName, EnigmaBase::ShareMode::None },
+        { others::PartVoicing::XmlNodeName, EnigmaBase::ShareMode::None },
+        { others::StaffSystem::XmlNodeName, EnigmaBase::ShareMode::None },
+        { others::StaffStyleAssign::XmlNodeName, EnigmaBase::ShareMode::None },
         // add other known sharemode none items as they are identified.
     }) {}
 
@@ -513,9 +513,9 @@ class DetailsPool
 public:
     /// @brief Constructor
     DetailsPool(const DocumentWeakPtr& document) : m_pool(document, {
-        { details::CenterShape::XmlNodeName, Base::ShareMode::None },
-        { details::StaffGroup::XmlNodeName, Base::ShareMode::None },
-        { details::StaffSize::XmlNodeName, Base::ShareMode::None },
+        { details::CenterShape::XmlNodeName, EnigmaBase::ShareMode::None },
+        { details::StaffGroup::XmlNodeName, EnigmaBase::ShareMode::None },
+        { details::StaffSize::XmlNodeName, EnigmaBase::ShareMode::None },
         // add other known sharemode none items as they are identified.
     }) {}
 
@@ -634,7 +634,7 @@ public:
     /** @brief Texts version of #ObjectPool::add */
     void add(std::string_view nodeName, const std::shared_ptr<TextsBase>& instance)
     {
-        const Base* basePtr = instance.get();
+        const EnigmaBase* basePtr = instance.get();
         if (basePtr->getSourcePartId() != SCORE_PARTID) {
             MUSX_INTEGRITY_ERROR("Texts node " + std::string(nodeName) + " hase non-score part id [" + std::to_string(basePtr->getSourcePartId()) + "]");
         }

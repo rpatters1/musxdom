@@ -253,12 +253,12 @@ unsigned calcNumberOfBeamsInEdu(Edu duration);
  *
  * This class is identified by the XML node name "note".
  */
-class Note : public Base
+class Note : public EnigmaBase
 {
 public:
     /** @brief Constructor function */
     explicit Note(const DocumentWeakPtr& document, NoteNumber noteId)
-        : Base(document, 0, ShareMode::All), m_noteId(noteId)
+        : EnigmaBase(document, 0, ShareMode::All), m_noteId(noteId)
     {
     }
 
@@ -352,7 +352,7 @@ private:
  *
  * This class is identified by the XML node name "entry".
  */
-class Entry : public Base
+class Entry : public EnigmaBase
 {
 public:
     /** @brief Constructor function
@@ -360,7 +360,7 @@ public:
      * The partId and shareMode values should always be 0 and ShareMode::All, but they are required by the factory function.
     */
     explicit Entry(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, EntryNumber entnum, EntryNumber prev, EntryNumber next)
-        : Base(document, partId, shareMode), m_entnum(entnum), m_prev(prev), m_next(next)
+        : EnigmaBase(document, partId, shareMode), m_entnum(entnum), m_prev(prev), m_next(next)
     {
     }
 
@@ -480,9 +480,9 @@ public:
     bool isPossibleFullMeasureRest() const
     { return !isNote && !isHidden && duration == Edu(NoteType::Whole); }
 
-    void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
+    void integrityCheck(const std::shared_ptr<EnigmaBase>& ptrToThis) override
     {
-        this->Base::integrityCheck(ptrToThis);
+        this->EnigmaBase::integrityCheck(ptrToThis);
         if (size_t(numNotes) != notes.size()) {
             MUSX_INTEGRITY_ERROR("Entry " + std::to_string(m_entnum) + " has an incorrect number of notes.");
         }

@@ -47,7 +47,7 @@ public:
     size_t length{};                            ///< Declared byte length.
     std::vector<std::uint8_t> aliasHandle{};    ///< Opaque blob (decoded from hex text)
 
-    void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
+    void integrityCheck(const std::shared_ptr<EnigmaBase>& ptrToThis) override
     {
         OthersBase::integrityCheck(ptrToThis);
         if (length != aliasHandle.size()) {
@@ -130,7 +130,7 @@ public:
     size_t length{};                                ///< Declared byte length.
     std::vector<std::uint8_t> urlBookmarkData{};    ///< Opaque blob decoded from hex text.
 
-    void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
+    void integrityCheck(const std::shared_ptr<EnigmaBase>& ptrToThis) override
     {
         OthersBase::integrityCheck(ptrToThis);
         if (length != urlBookmarkData.size()) {
@@ -241,7 +241,7 @@ public:
     bool isMultiAssignedThruLastPage() const
     { return isMultiPage() && endPage == 0; }
 
-    void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
+    void integrityCheck(const std::shared_ptr<EnigmaBase>& ptrToThis) override
     {
         this->OthersBase::integrityCheck(ptrToThis);
         if (getCmper() != 0) {

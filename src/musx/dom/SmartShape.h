@@ -235,7 +235,7 @@ public:
         std::shared_ptr<smartshape::EndPointAdjustment> breakAdj;       ///< System break adjustment for first or last system (depending which endpoint it is)
                                                                         ///< Systems other than the first or last are controlled with instances of @ref details::CenterShape.
 
-        void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
+        void integrityCheck(const std::shared_ptr<EnigmaBase>& ptrToThis) override
         {
             ContainedClassBase::integrityCheck(ptrToThis);
             if (!endPoint) {
@@ -427,7 +427,7 @@ public:
     /// @return True if all items were iterated. False if the @p iterator returned false and exited early.
     bool iterateEntries(std::function<bool(const EntryInfoPtr&)> iterator, DeferredReference<MusxInstanceList<StaffUsed>> staffList = {}) const;
 
-    void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
+    void integrityCheck(const std::shared_ptr<EnigmaBase>& ptrToThis) override
     {
         OthersBase::integrityCheck(ptrToThis);
         if (!startTermSeg) {
@@ -476,7 +476,7 @@ public:
     {
     public:
     /// @brief Constructor function
-        explicit CharParams(const MusxInstance<Base>& parent)
+        explicit CharParams(const MusxInstance<EnigmaBase>& parent)
             : ContainedClassBase(parent), font(std::make_shared<FontInfo>(parent->getDocument()))
         {
         }
@@ -587,7 +587,7 @@ public:
     util::EnigmaParsingContext getCenterAbbrRawTextCtx(Cmper forPartId) const
     { return getRawTextCtx(forPartId, centerAbbrRawTextId); }
 
-    void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
+    void integrityCheck(const std::shared_ptr<EnigmaBase>& ptrToThis) override
     {
         OthersBase::integrityCheck(ptrToThis);
 
@@ -672,7 +672,7 @@ public:
     std::shared_ptr<smartshape::EndPointAdjustment> endBreakAdj;   ///< Adjustment at the end break (xml: `<endBreakAdj>`)
     std::shared_ptr<smartshape::ControlPointAdjustment> ctlPtAdj;  ///< Manual adjustments made to this center shape.
 
-    void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
+    void integrityCheck(const std::shared_ptr<EnigmaBase>& ptrToThis) override
     {
         if (!startBreakAdj) {
             startBreakAdj = std::make_shared<smartshape::EndPointAdjustment>(ptrToThis);
