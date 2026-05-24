@@ -121,8 +121,10 @@ public:
         m_unlinkedNodes.insert(nodeName);
     }
 
+    /// @brief Performs a final consistency check after population.
     virtual void integrityCheck([[maybe_unused]] const std::shared_ptr<EnigmaBase>& ptrToThis) { }
 
+    /// @brief Returns true if all fields are required for valid input.
     virtual bool requireAllFields() const { return true; }
 
 protected:

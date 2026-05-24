@@ -118,7 +118,8 @@ public:
     {
         MusxInstance<others::ArticulationDef> definition;   ///< The associated articulation definition.
         others::ArticulationDef::SelectedSymbol symbol;     ///< Information about the selected symbol.
-        VerticalPlacement placement = VerticalPlacement::NotApplicable; //< whether the symbol is fixed above, fixed below, or floats.
+        /// @brief The resolved placement for the selected symbol.
+        VerticalPlacement placement = VerticalPlacement::NotApplicable;
     };
 
 private:

@@ -63,18 +63,45 @@ class StaffComposite;
  * @tparam T The object type stored in the list (e.g., StaffUsed, SmartShape, etc.).
  */
 template <typename T>
-class MusxInstanceListBase : public DocumentElement, public std::vector<MusxInstance<T>>
+// Private inheritance keeps the vector implementation detail out of the public API and avoids any
+// accidental polymorphic use of a standard container with a non-virtual destructor.
+class MusxInstanceListBase : public DocumentElement, private std::vector<MusxInstance<T>>
 {
-    using VectorType = std::vector<MusxInstance<T>>;
     Cmper getPartId() const = delete;
 
 public:
+    using typename std::vector<MusxInstance<T>>::value_type;
+    using typename std::vector<MusxInstance<T>>::allocator_type;
+    using typename std::vector<MusxInstance<T>>::size_type;
+    using typename std::vector<MusxInstance<T>>::difference_type;
+    using typename std::vector<MusxInstance<T>>::reference;
+    using typename std::vector<MusxInstance<T>>::const_reference;
+    using typename std::vector<MusxInstance<T>>::pointer;
+    using typename std::vector<MusxInstance<T>>::const_pointer;
+    using typename std::vector<MusxInstance<T>>::iterator;
+    using typename std::vector<MusxInstance<T>>::const_iterator;
+    using typename std::vector<MusxInstance<T>>::reverse_iterator;
+    using typename std::vector<MusxInstance<T>>::const_reverse_iterator;
+
     /// @brief Default constructor.
     explicit MusxInstanceListBase(const std::weak_ptr<Document>& document, Cmper partId)
         : DocumentElement(document, partId) {}
 
     /// @brief Gets the part id that was used to create this list
     Cmper getRequestedPartId() const { return DocumentElement::getPartId(); }
+
+    using std::vector<MusxInstance<T>>::begin;
+    using std::vector<MusxInstance<T>>::end;
+    using std::vector<MusxInstance<T>>::empty;
+    using std::vector<MusxInstance<T>>::size;
+    using std::vector<MusxInstance<T>>::reserve;
+    using std::vector<MusxInstance<T>>::clear;
+    using std::vector<MusxInstance<T>>::emplace_back;
+    using std::vector<MusxInstance<T>>::push_back;
+    using std::vector<MusxInstance<T>>::operator[];
+    using std::vector<MusxInstance<T>>::at;
+    using std::vector<MusxInstance<T>>::front;
+    using std::vector<MusxInstance<T>>::back;
 };
 
 /**

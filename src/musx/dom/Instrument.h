@@ -103,17 +103,46 @@ public:
 ///
 /// This is not a Finale data class. It is a normalized, interchange-oriented view of the logical
 /// instruments available in a score or linked part.
-class InstrumentMap : public DocumentElement, public std::unordered_map<StaffCmper, InstrumentInfo>
+class InstrumentMap : public DocumentElement, private std::unordered_map<StaffCmper, InstrumentInfo>
 {
+    // Private inheritance keeps the map implementation detail out of the public API and avoids any
+    // accidental polymorphic use of a standard container with a non-virtual destructor.
 public:
-    using Base = std::unordered_map<StaffCmper, InstrumentInfo>;
-    using Base::Base;
+    using typename std::unordered_map<StaffCmper, InstrumentInfo>::key_type;
+    using typename std::unordered_map<StaffCmper, InstrumentInfo>::mapped_type;
+    using typename std::unordered_map<StaffCmper, InstrumentInfo>::value_type;
+    using typename std::unordered_map<StaffCmper, InstrumentInfo>::hasher;
+    using typename std::unordered_map<StaffCmper, InstrumentInfo>::key_equal;
+    using typename std::unordered_map<StaffCmper, InstrumentInfo>::allocator_type;
+    using typename std::unordered_map<StaffCmper, InstrumentInfo>::size_type;
+    using typename std::unordered_map<StaffCmper, InstrumentInfo>::difference_type;
+    using typename std::unordered_map<StaffCmper, InstrumentInfo>::reference;
+    using typename std::unordered_map<StaffCmper, InstrumentInfo>::const_reference;
+    using typename std::unordered_map<StaffCmper, InstrumentInfo>::pointer;
+    using typename std::unordered_map<StaffCmper, InstrumentInfo>::const_pointer;
+    using typename std::unordered_map<StaffCmper, InstrumentInfo>::iterator;
+    using typename std::unordered_map<StaffCmper, InstrumentInfo>::const_iterator;
+    using typename std::unordered_map<StaffCmper, InstrumentInfo>::local_iterator;
+    using typename std::unordered_map<StaffCmper, InstrumentInfo>::const_local_iterator;
 
     /// @brief Constructs an empty instrument map for a score or linked part.
     /// @param document The document this map describes.
     /// @param partId The score or linked part ID represented by this map.
     explicit InstrumentMap(const DocumentWeakPtr& document, Cmper partId = SCORE_PARTID)
         : DocumentElement(document, partId) {}
+
+    using std::unordered_map<StaffCmper, InstrumentInfo>::begin;
+    using std::unordered_map<StaffCmper, InstrumentInfo>::end;
+    using std::unordered_map<StaffCmper, InstrumentInfo>::empty;
+    using std::unordered_map<StaffCmper, InstrumentInfo>::size;
+    using std::unordered_map<StaffCmper, InstrumentInfo>::clear;
+    using std::unordered_map<StaffCmper, InstrumentInfo>::find;
+    using std::unordered_map<StaffCmper, InstrumentInfo>::count;
+    using std::unordered_map<StaffCmper, InstrumentInfo>::emplace;
+    using std::unordered_map<StaffCmper, InstrumentInfo>::insert;
+    using std::unordered_map<StaffCmper, InstrumentInfo>::erase;
+    using std::unordered_map<StaffCmper, InstrumentInfo>::operator[];
+    using std::unordered_map<StaffCmper, InstrumentInfo>::at;
 
     /// @brief Get the instrument info for the given staffId in the given map
     /// @param staffId The staffId to find.
