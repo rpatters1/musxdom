@@ -310,7 +310,7 @@ InstrumentMap Document::createInstrumentMap(Cmper forPartId) const
 
 const InstrumentInfo& Document::getInstrumentForStaff(StaffCmper staffId) const
 {
-    auto result = InstrumentInfo::getInstrumentForStaff(getInstruments(), staffId);
+    auto result = getInstruments().getInstrumentForStaff(staffId);
     MUSX_ASSERT_IF(!result) { // flag this as early as possible, because getting here is a program bug.
         throw std::logic_error("Staff " + std::to_string(staffId) + " was not mapped to an instrument.");
     }
@@ -320,13 +320,13 @@ const InstrumentInfo& Document::getInstrumentForStaff(StaffCmper staffId) const
 std::optional<InstrumentInfo> Document::getInstrumentForStaff(Cmper partId, StaffCmper staffId) const
 {
     if (partId == SCORE_PARTID) {
-        if (const auto result = InstrumentInfo::getInstrumentForStaff(getInstruments(), staffId)) {
+        if (const auto result = getInstruments().getInstrumentForStaff(staffId)) {
             return *result;
         }
         return std::nullopt;
     }
     const auto partInstrumentMap = createInstrumentMap(partId);
-    if (const auto result = InstrumentInfo::getInstrumentForStaff(partInstrumentMap, staffId)) {
+    if (const auto result = partInstrumentMap.getInstrumentForStaff(staffId)) {
         return *result;
     }
     return std::nullopt;

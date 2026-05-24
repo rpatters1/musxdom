@@ -93,5 +93,25 @@ private:
     const Cmper m_partId{};
 };
 
+/**
+ * @class DocumentElementNoPart
+ * @brief Base for DOM classes that belong to a Document.
+ *
+ * This base provides a document context with a part id.
+ */
+class DocumentElementNoPart : public DocumentElement
+{
+    Cmper getPartId() const = delete;
+
+public:
+    /**
+     * @brief Constructs the document element (with no meaningful associated part)
+     *
+     * @param document A weak pointer to the parent document.
+     */
+    DocumentElementNoPart(const DocumentWeakPtr& document)
+        : DocumentElement(document, SCORE_PARTID) {}
+};
+
 } // namespace dom
 } // namespace musx

@@ -64,7 +64,8 @@ class GFrameHold;
  * This class retrieves the appropriate @ref GFrameHold from a Document using part, instrument, and measure IDs,
  * and enables part-aware operations like iterating over EntryFrame objects.
  */
-class GFrameHoldContext {
+class GFrameHoldContext
+{
 public:
     /**
      * @brief Constructs a context-aware @ref GFrameHold wrapper.

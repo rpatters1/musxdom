@@ -491,7 +491,7 @@ bool MusicRange::contains(const EntryInfoPtr& entryInfo) const
 // *************************
 
 TimeSignature::TimeSignature(const DocumentWeakPtr& document, int beats, Edu unit, bool hasCompositeTop, bool hasCompositeBottom, Abbreviation abbreviate)
-    : CommonClassBase(document), m_abbreviation(abbreviate)
+    : DocumentElementNoPart(document), m_abbreviation(abbreviate)
 {
     auto tops = [&]() -> std::vector<std::vector<util::Fraction>> {
         if (hasCompositeTop) {

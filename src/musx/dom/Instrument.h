@@ -47,12 +47,6 @@ struct InstrumentInfo
 
     /// @brief Returns the staffIds in sequence as they appear in Scroll View in the score.
     std::vector<StaffCmper> getSequentialStaves() const;
-
-    /// @brief Get the instrument info for the given staffId in the given map
-    /// @param map The map to search.
-    /// @param staffId The staffId to find.
-    /// @return The InstrumentInfo for the @p staffId or null if not found.
-    static const InstrumentInfo* getInstrumentForStaff(const InstrumentMap& map, StaffCmper staffId);
 };
 
 /// @brief A list of instruments, which may be single- or multi-staff.
@@ -70,6 +64,11 @@ public:
     /// @param partId The score or linked part ID represented by this map.
     explicit InstrumentMap(const DocumentWeakPtr& document, Cmper partId = SCORE_PARTID)
         : DocumentElement(document, partId) {}
+
+    /// @brief Get the instrument info for the given staffId in the given map
+    /// @param staffId The staffId to find.
+    /// @return The InstrumentInfo for the @p staffId or null if not found.
+    const InstrumentInfo* getInstrumentForStaff(StaffCmper staffId) const;
 };
 
 } // namespace dom

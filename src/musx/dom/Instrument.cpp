@@ -42,13 +42,13 @@ std::vector<StaffCmper> InstrumentInfo::getSequentialStaves() const
     return result;
 }
 
-const InstrumentInfo* InstrumentInfo::getInstrumentForStaff(const InstrumentMap& map, StaffCmper staffId)
+const InstrumentInfo* InstrumentMap::getInstrumentForStaff(StaffCmper staffId) const
 {
-    const auto& instIt = map.find(staffId);
-    if (instIt != map.end()) {
+    const auto& instIt = this->find(staffId);
+    if (instIt != this->end()) {
         return &instIt->second;
     } else {
-        for (const auto& [top, info] : map) {
+        for (const auto& [top, info] : *this) {
             if (info.staves.find(staffId) != info.staves.end()) {
                 return &info;
             }

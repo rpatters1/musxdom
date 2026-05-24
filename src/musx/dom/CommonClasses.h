@@ -370,7 +370,7 @@ public:
  * @class LyricsSyllableInfo
  * @brief Contains the syllable information for a single syllable. (See @ref texts::LyricsTextBase)
  */
-class LyricsSyllableInfo : CommonClassBase
+class LyricsSyllableInfo : DocumentElementNoPart
 {
 public:
     std::string syllable;       ///< the syllable text with no hyphenation or font information.
@@ -399,7 +399,7 @@ private:
     /// @param underscores The number of trailing underscores stripped.
     /// @param enigmaStylesIndex The enigma style (in LyricsTextBase) for this syllable.
     LyricsSyllableInfo(const DocumentWeakPtr& document, const std::string text, bool before, bool after, int underscores, std::vector<StyleSpan>&& enigmaStyleMap)
-        : CommonClassBase(document), syllable(text), hasHyphenBefore(before), hasHyphenAfter(after), strippedUnderscores(underscores), m_enigmaStyleMap(std::move(enigmaStyleMap))
+        : DocumentElementNoPart(document), syllable(text), hasHyphenBefore(before), hasHyphenAfter(after), strippedUnderscores(underscores), m_enigmaStyleMap(std::move(enigmaStyleMap))
     {
     }
 
@@ -488,7 +488,7 @@ public:
  * The class is agnostic as to whether the positions are global- or staff-position values. The consuming code
  * makes this determination.
  */
-class MusicRange : public CommonClassBase
+class MusicRange : public DocumentElementNoPart
 {
 public:
     /// @brief Constructs a MusicRange object.
@@ -507,7 +507,7 @@ public:
     /// @param startPoint The starting point of the range.
     /// @param endPoint The ending point of the range.
     explicit MusicRange(const DocumentWeakPtr& document, MusicPoint startPoint, MusicPoint endPoint)
-        : CommonClassBase(document), start(startPoint), end(endPoint)
+        : DocumentElementNoPart(document), start(startPoint), end(endPoint)
     {
     }
 
@@ -541,7 +541,7 @@ public:
  * @class TimeSignature
  * @brief Shared time signature class that is derived from other classes. (See @ref others::Measure)
  */
-class TimeSignature : public CommonClassBase
+class TimeSignature : public DocumentElementNoPart
 {
 public:
     /// @enum Abbreviation
@@ -642,7 +642,7 @@ private:
 
     /// @brief Constructor for components.
     explicit TimeSignature(const DocumentWeakPtr& document, const TimeSigComponent& timeSigUnit, Abbreviation abbreviate = {})
-        : CommonClassBase(document), m_abbreviation(abbreviate)
+        : DocumentElementNoPart(document), m_abbreviation(abbreviate)
     {
         components.push_back(timeSigUnit);
     }
