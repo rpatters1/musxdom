@@ -39,7 +39,11 @@ struct StaffStyleInstrumentSpan {
     std::string instUuid;
     std::optional<MusicPoint> revertPosition;
 
-    bool operator==(const StaffStyleInstrumentSpan& other) const = default;
+    bool operator==(const StaffStyleInstrumentSpan& other) const
+    { return instUuid == other.instUuid && revertPosition == other.revertPosition; }
+
+    bool operator!=(const StaffStyleInstrumentSpan& other) const
+    { return !(*this == other); }
 };
 
 using StaffStyleInstrumentSpans = std::map<MusicPoint, StaffStyleInstrumentSpan>;
