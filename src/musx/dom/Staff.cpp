@@ -663,7 +663,7 @@ std::vector<LyricsLineInfo> Staff::createLyricsLineInfo(SystemCmper systemId) co
 
 bool Staff::hasInstrumentAssigned() const
 {
-    if (instUuid.empty() || instUuid == uuid::BlankStaff || instUuid == uuid::Unknown) {
+    if (instUuid.empty() || instUuid == uuid::BlankStaff || instUuid == uuid::BlankStaff2 || instUuid == uuid::Unknown) {
         return false;
     }
     return true;

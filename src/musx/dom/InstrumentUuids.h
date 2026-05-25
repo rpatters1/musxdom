@@ -33,6 +33,7 @@ namespace dom {
 namespace uuid {
 
 inline constexpr std::string_view BlankStaff = "54422b22-4627-4100-abbf-064eedc15fe3"; ///< Blank Staff
+inline constexpr std::string_view BlankStaff2 = "00000000-4627-4100-abbf-064eedc15fe3"; ///< Blank Staff 2 (observed in some files)
 inline constexpr std::string_view GrandStaff = "24b4c18d-6f6a-461c-983f-e0b0c3abcdbc"; ///< Grand Staff
 inline constexpr std::string_view Unknown = "a925648a-abc9-4dc7-a619-a6ce355ad33c"; ///< Unknown Instrument
 

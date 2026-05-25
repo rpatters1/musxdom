@@ -476,7 +476,8 @@ std::optional<MusicPoint> MusicRange::nextLocation(const std::optional<StaffCmpe
         }
         result = MusicPoint(nextMeas, util::Fraction::fromEdu(nextEdu));
     } else {
-        MUSX_INTEGRITY_ERROR("MusicRange has invalid end measure " + std::to_string(end.measureId));
+        // music ranges are explicitly allowed to be beyond the end of a document, so treat this as a verbose message.
+        util::Logger::log(util::Logger::LogLevel::Verbose, "MusicRange has invalid end measure " + std::to_string(end.measureId));
     }
     return result;
 }
