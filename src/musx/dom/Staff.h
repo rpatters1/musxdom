@@ -152,7 +152,7 @@ public:
         /// @brief Returns true if the input has the same contents as this.
         bool isSame(const Transposition& other) const;
 
-        void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
+        void integrityCheck(const std::shared_ptr<EnigmaBase>& ptrToThis) override
         {
             ContainedClassBase::integrityCheck(ptrToThis);
             Cmper thisCmper = 0;
@@ -468,7 +468,7 @@ public:
     /// there is an instrument change.
     bool calcIsSameNotationStyle(const Staff& other) const;
 
-    void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
+    void integrityCheck(const std::shared_ptr<EnigmaBase>& ptrToThis) override
     {
         OthersBase::integrityCheck(ptrToThis);
         if (!staffLines && !customStaff) {
@@ -520,7 +520,7 @@ protected:
 
     /// @brief Separate creator for masks.
     /// @param ptrToSelf This allows both external subclass creation (StaffComposite) and shared_from_this
-    void createMasks(const MusxInstance<Base>& ptrToSelf)
+    void createMasks(const MusxInstance<EnigmaBase>& ptrToSelf)
     {
         masks = std::make_shared<Masks>(ptrToSelf);
     }
@@ -621,7 +621,7 @@ public:
     static MusxInstanceList<StaffStyle> findAllOverlappingStyles(const DocumentPtr& document,
         Cmper partId, StaffCmper staffId, MeasCmper measId, Edu eduPosition);
 
-    void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
+    void integrityCheck(const std::shared_ptr<EnigmaBase>& ptrToThis) override
     {
         if (!masks) {
             // Finale allows creation of staff styles with no masks, so this is just a verbose comment
@@ -662,7 +662,7 @@ public:
     /// @throws musx::dom::integrity_error if compiled to throw integrity errors
     MusxInstance<StaffStyle> getStaffStyle() const;
 
-    void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
+    void integrityCheck(const std::shared_ptr<EnigmaBase>& ptrToThis) override
     {
         EnigmaMusicRange::integrityCheck(ptrToThis);
         if (!styleId) {

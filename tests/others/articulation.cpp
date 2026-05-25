@@ -217,7 +217,7 @@ TEST(ArticulationAssignTest, CalcSelectedSymbolContextHonorsOverridePlacement)
     ASSERT_TRUE(entryInfo);
     ASSERT_TRUE(entryInfo.calcUpStem());
 
-    details::ArticulationAssign assign(defDoc, SCORE_PARTID, Base::ShareMode::All, 0, 0);
+    details::ArticulationAssign assign(defDoc, SCORE_PARTID, EnigmaBase::ShareMode::All, 0, 0);
     assign.articDef = 8;
     assign.overridePlacement = true;
     assign.aboveEntry = false;
@@ -256,7 +256,7 @@ TEST(ArticulationAssignTest, CalcSelectedSymbolContextFloatsAboveEntryInMultiLay
     ASSERT_TRUE(upperEntry.calcUpStem());
     ASSERT_FALSE(lowerEntry.calcUpStem());
 
-    details::ArticulationAssign assign(defDoc, SCORE_PARTID, Base::ShareMode::All, 0, 0);
+    details::ArticulationAssign assign(defDoc, SCORE_PARTID, EnigmaBase::ShareMode::All, 0, 0);
     assign.articDef = 8;
 
     const auto upperContext = assign.calcSelectedSymbolContext(upperEntry);
@@ -318,7 +318,7 @@ TEST(ArticulationAssignTest, CalcSelectedSymbolContextKeepsBelowEntryFixedInMult
     ASSERT_TRUE(upperEntry.calcUpStem());
     ASSERT_FALSE(lowerEntry.calcUpStem());
 
-    details::ArticulationAssign assign(defDoc, SCORE_PARTID, Base::ShareMode::All, 0, 0);
+    details::ArticulationAssign assign(defDoc, SCORE_PARTID, EnigmaBase::ShareMode::All, 0, 0);
     assign.articDef = 42;
 
     const auto upperContext = assign.calcSelectedSymbolContext(upperEntry);

@@ -92,7 +92,7 @@ public:
     /// #details::Bracket::horzAdjLeft member controls the order in which they display.
     MusxInstanceList<details::Bracket> getBrackets() const;
 
-    void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
+    void integrityCheck(const std::shared_ptr<EnigmaBase>& ptrToThis) override
     {
         this->OthersBase::integrityCheck(ptrToThis);
         if (!keySig) {

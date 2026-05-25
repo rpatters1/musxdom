@@ -676,7 +676,7 @@ public:
     std::unordered_map<SyllablePosStyleType, std::shared_ptr<SyllablePosStyle>> syllablePosStyles;     ///< Syllable positioning styles
     std::unordered_map<WordExtConnectStyleType, std::shared_ptr<WordExtConnectStyle>> wordExtConnectStyles; ///< Word extension connection styles
 
-    void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
+    void integrityCheck(const std::shared_ptr<EnigmaBase>& ptrToThis) override
     {
         this->OptionsBase::integrityCheck(ptrToThis);
         if (!altHyphenFont) {
@@ -959,7 +959,7 @@ public:
     bool drawOutline{};             ///< "Show border around colored noteheads"
     std::vector<std::shared_ptr<NoteColor>> noteColors{}; ///< Notehead colors, one per pitch-class.
 
-    void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
+    void integrityCheck(const std::shared_ptr<EnigmaBase>& ptrToThis) override
     {
         this->OptionsBase::integrityCheck(ptrToThis);
         const size_t currentSize = noteColors.size();
@@ -1546,7 +1546,7 @@ public:
         std::shared_ptr<FontInfo> symFont;        ///< Symbol font (Percent-based size is a percent of the preceding font size in the Enigma string.)
         char32_t symChar{};                       ///< Symbol character
 
-        void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
+        void integrityCheck(const std::shared_ptr<EnigmaBase>& ptrToThis) override
         {
             this->ContainedClassBase::integrityCheck(ptrToThis);
             if (!symFont) {

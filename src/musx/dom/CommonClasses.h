@@ -313,7 +313,7 @@ public:
     /// @return A unique pointer to a transposer for this key.
     std::unique_ptr<music_theory::Transposer> createTransposer(int displacement, int alteration) const;
 
-    void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
+    void integrityCheck(const std::shared_ptr<EnigmaBase>& ptrToThis) override
     {
         this->CommonClassBase::integrityCheck(ptrToThis);
         if (key >= 0x8000) {
@@ -370,7 +370,7 @@ public:
  * @class LyricsSyllableInfo
  * @brief Contains the syllable information for a single syllable. (See @ref texts::LyricsTextBase)
  */
-class LyricsSyllableInfo : CommonClassBase
+class LyricsSyllableInfo : DocumentElementNoPart
 {
 public:
     std::string syllable;       ///< the syllable text with no hyphenation or font information.
@@ -399,7 +399,7 @@ private:
     /// @param underscores The number of trailing underscores stripped.
     /// @param enigmaStylesIndex The enigma style (in LyricsTextBase) for this syllable.
     LyricsSyllableInfo(const DocumentWeakPtr& document, const std::string text, bool before, bool after, int underscores, std::vector<StyleSpan>&& enigmaStyleMap)
-        : CommonClassBase(document), syllable(text), hasHyphenBefore(before), hasHyphenAfter(after), strippedUnderscores(underscores), m_enigmaStyleMap(std::move(enigmaStyleMap))
+        : DocumentElementNoPart(document), syllable(text), hasHyphenBefore(before), hasHyphenAfter(after), strippedUnderscores(underscores), m_enigmaStyleMap(std::move(enigmaStyleMap))
     {
     }
 
@@ -409,7 +409,77 @@ private:
 };
 
 /**
+ * @class MusicPoint
+ * @brief Utility class that represents a single location in musical time.
  *
+ * This class is used to specify a point in musical time using a measure and a
+ * @ref util::Fraction position within that measure. The position is expressed
+ * as a fraction of a whole note, so `1/4` is a quarter-note position.
+ *
+ * The class is agnostic as to whether the position is a global- or staff-position
+ * value. The consuming code makes this determination.
+ */
+class MusicPoint
+{
+public:
+    /// @brief Constructs a MusicPoint at measure 1, position 0.
+    constexpr MusicPoint() = default;
+
+    /// @brief Constructs a MusicPoint object.
+    /// @param measId The measure ID.
+    /// @param pos The position within the measure.
+    constexpr MusicPoint(MeasCmper measId, util::Fraction pos)
+        : measureId(measId), position(pos)
+    {
+    }
+
+    MeasCmper measureId{1};        ///< Measure ID of the point.
+    util::Fraction position{};     ///< Position within the measure, where 1/4 is a quarter note value.
+
+    /// @brief Equality comparison operator.
+    /// @param other The other point to compare.
+    /// @return True if both the measure and position match.
+    [[nodiscard]]
+    constexpr bool operator==(const MusicPoint& other) const
+    { return measureId == other.measureId && position == other.position; }
+
+    /// @brief Inequality comparison operator.
+    /// @param other The other point to compare.
+    /// @return True if either the measure or position differs.
+    [[nodiscard]]
+    constexpr bool operator!=(const MusicPoint& other) const
+    { return !(*this == other); }
+
+    /// @brief Less-than comparison operator.
+    /// @param other The other point to compare.
+    /// @return True if this point occurs before @p other.
+    [[nodiscard]]
+    constexpr bool operator<(const MusicPoint& other) const
+    { return measureId < other.measureId || (measureId == other.measureId && position < other.position); }
+
+    /// @brief Less-than-or-equal-to comparison operator.
+    /// @param other The other point to compare.
+    /// @return True if this point occurs at or before @p other.
+    [[nodiscard]]
+    constexpr bool operator<=(const MusicPoint& other) const
+    { return *this < other || *this == other; }
+
+    /// @brief Greater-than comparison operator.
+    /// @param other The other point to compare.
+    /// @return True if this point occurs after @p other.
+    [[nodiscard]]
+    constexpr bool operator>(const MusicPoint& other) const
+    { return other < *this; }
+
+    /// @brief Greater-than-or-equal-to comparison operator.
+    /// @param other The other point to compare.
+    /// @return True if this point occurs at or after @p other.
+    [[nodiscard]]
+    constexpr bool operator>=(const MusicPoint& other) const
+    { return other <= *this; }
+};
+
+/**
  * @class MusicRange
  * @brief Utility class that represents of a range of musical time.
  *
@@ -418,7 +488,7 @@ private:
  * The class is agnostic as to whether the positions are global- or staff-position values. The consuming code
  * makes this determination.
  */
-class MusicRange : public CommonClassBase
+class MusicRange : public DocumentElementNoPart
 {
 public:
     /// @brief Constructs a MusicRange object.
@@ -428,23 +498,32 @@ public:
     /// @param endMeasId The end measure ID.
     /// @param endPos The end position. (Caller determines whether position is global- or staff-level.)
     explicit MusicRange(const DocumentWeakPtr& document, MeasCmper startMeasId, util::Fraction startPos, MeasCmper endMeasId, util::Fraction endPos)
-        : CommonClassBase(document), startMeasureId(startMeasId), startPosition(startPos), endMeasureId(endMeasId), endPosition(endPos)
+        : MusicRange(document, MusicPoint(startMeasId, startPos), MusicPoint(endMeasId, endPos))
     {
     }
 
-    MeasCmper startMeasureId{};         ///< Starting measure in the range.
-    util::Fraction startPosition{};     ///< Starting position (where 1/4 is a quarter note value) in the range.
-    MeasCmper endMeasureId{};           ///< Ending measure in the range.
-    util::Fraction endPosition{};       ///< Ending position (where 1/4 is a quarter note value) in the range.
+    /// @brief Constructs a MusicRange object.
+    /// @param document Shared pointer to the document.
+    /// @param startPoint The starting point of the range.
+    /// @param endPoint The ending point of the range.
+    explicit MusicRange(const DocumentWeakPtr& document, MusicPoint startPoint, MusicPoint endPoint)
+        : DocumentElementNoPart(document), start(startPoint), end(endPoint)
+    {
+    }
+
+    MusicPoint start;   ///< Starting point in the range.
+    MusicPoint end;     ///< Ending point in the range.
 
     /// @brief Returns true of the given metric location is contained in this MusicRange instance.
     /// @param measId The measure ID to search for.
-    /// @param eduPosition The fractional position within the measure to search for.
-    bool contains(MeasCmper measId, util::Fraction eduPosition) const
-    {
-        return (startMeasureId < measId || (startMeasureId == measId && startPosition <= eduPosition)) &&
-               (endMeasureId > measId || (endMeasureId == measId && endPosition >= eduPosition));
-    }
+    /// @param position The fractional position within the measure to search for.
+    bool contains(MeasCmper measId, util::Fraction position) const
+    { return contains(MusicPoint(measId, position)); }
+
+    /// @brief Returns true if the given metric location is contained in this MusicRange instance.
+    /// @param point The metric location to search for.
+    bool contains(const MusicPoint& point) const
+    { return start <= point && point <= end; }
 
     /// @brief Returns true if the metric location of the specified entry is contained in this MusicRange instance.
     // The MusicRange must be expressed in the Staff EDUs of the entry.
@@ -453,19 +532,16 @@ public:
 
     /// @brief Returns the next metric location following the music range.
     /// @param forStaff If provided, calculates the next metric location using staff-level Edus.
-    /// @return An optional std::pair containing
-    ///         - MeasCmper: the measure of the next location
-    ///         - Edu: the location within the measure of the next location
-    ///         Return std::nullopt if the next location is past the end of the document, or other error.
+    /// @return The next location, or std::nullopt if it is past the end of the document or cannot be calculated.
     [[nodiscard]]
-    std::optional<std::pair<MeasCmper, Edu>> nextLocation(const std::optional<StaffCmper>& forStaff = std::nullopt) const;
+    std::optional<MusicPoint> nextLocation(const std::optional<StaffCmper>& forStaff = std::nullopt) const;
 };
 
 /**
  * @class TimeSignature
  * @brief Shared time signature class that is derived from other classes. (See @ref others::Measure)
  */
-class TimeSignature : public CommonClassBase
+class TimeSignature : public DocumentElementNoPart
 {
 public:
     /// @enum Abbreviation
@@ -566,7 +642,7 @@ private:
 
     /// @brief Constructor for components.
     explicit TimeSignature(const DocumentWeakPtr& document, const TimeSigComponent& timeSigUnit, Abbreviation abbreviate = {})
-        : CommonClassBase(document), m_abbreviation(abbreviate)
+        : DocumentElementNoPart(document), m_abbreviation(abbreviate)
     {
         components.push_back(timeSigUnit);
     }
@@ -681,11 +757,8 @@ public:
 
     /// @brief Returns the next metric location following the music range.
     /// @param forStaff If provided, calculates the next metric location using staff-level Edus.
-    /// @return An optional std::pair containing
-    ///         - MeasCmper: the measure of the next location
-    ///         - Edu: the location within the measure of the next location
-    ///         Return std::nullopt if the next location is past the end of the document, or other error.
-    std::optional<std::pair<MeasCmper, Edu>> nextLocation(const std::optional<StaffCmper>& forStaff = std::nullopt) const
+    /// @return The next location, or std::nullopt if it is past the end of the document or cannot be calculated.
+    std::optional<MusicPoint> nextLocation(const std::optional<StaffCmper>& forStaff = std::nullopt) const
     { return createMusicRange().nextLocation(forStaff); }
 
     static const xml::XmlElementArray<EnigmaMusicRange>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.

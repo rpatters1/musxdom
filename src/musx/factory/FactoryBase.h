@@ -280,7 +280,7 @@ struct FieldPopulator : public FactoryBase
             std::get<1>(*it)(fieldElement, instance);
         } else {
             const bool requireFields = [instance]() {
-                if constexpr (std::is_base_of_v<Base, T>) {
+                if constexpr (std::is_base_of_v<EnigmaBase, T>) {
                     return instance->requireAllFields();
                 } else {
                     return true;
@@ -301,7 +301,7 @@ struct FieldPopulator : public FactoryBase
                 populateField(instance, child);
             }
         }
-        if constexpr (std::is_base_of_v<Base, T>) {
+        if constexpr (std::is_base_of_v<EnigmaBase, T>) {
             instance->integrityCheck(instance);
         }
     }
@@ -400,8 +400,8 @@ inline bool populateBoolean(const XmlElementPtr& element, const std::shared_ptr<
         return true;
     }
 
-    if constexpr (std::is_base_of_v<Base, T>) {
-        const Base& instAsBase = *instance;
+    if constexpr (std::is_base_of_v<EnigmaBase, T>) {
+        const EnigmaBase& instAsBase = *instance;
         return instAsBase.getSourcePartId() == SCORE_PARTID; // return false if this is a part
     } else {
         return false; // I don't think we'll ever get an `offInPart` for the score, so assume it is for a part if we aren't a Base subclass

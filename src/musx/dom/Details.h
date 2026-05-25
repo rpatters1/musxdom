@@ -118,7 +118,8 @@ public:
     {
         MusxInstance<others::ArticulationDef> definition;   ///< The associated articulation definition.
         others::ArticulationDef::SelectedSymbol symbol;     ///< Information about the selected symbol.
-        VerticalPlacement placement = VerticalPlacement::NotApplicable; //< whether the symbol is fixed above, fixed below, or floats.
+        /// @brief The resolved placement for the selected symbol.
+        VerticalPlacement placement = VerticalPlacement::NotApplicable;
     };
 
 private:
@@ -665,7 +666,7 @@ public:
 
     /// @brief Constructor for embedded instances.
     explicit Bracket(const DocumentWeakPtr& document)
-        : DetailsBase(document, SCORE_PARTID, Base::ShareMode::All, Cmper{}, Cmper{}, Inci{})
+        : DetailsBase(document, SCORE_PARTID, EnigmaBase::ShareMode::All, Cmper{}, Cmper{}, Inci{})
     {
     }
 
@@ -1095,7 +1096,7 @@ public:
     std::vector<std::shared_ptr<Cell>> cells;   ///< Array of fretboard cells.
     std::vector<std::shared_ptr<Barre>> barres; ///< Array of fretboard barres.
 
-    void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
+    void integrityCheck(const std::shared_ptr<EnigmaBase>& ptrToThis) override
     {
         this->DetailsBase::integrityCheck(ptrToThis);
         if (numFretCells != int(cells.size())) {
@@ -1174,7 +1175,7 @@ public:
     /// @return true if all entries iterated, false if the iterator function exited early by returning false.
     bool iterateRawEntries(std::function<bool(const MusxInstance<Entry>&, LayerIndex)> iterator) const;
 
-    void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
+    void integrityCheck(const std::shared_ptr<EnigmaBase>& ptrToThis) override
     {
         this->DetailsBase::integrityCheck(ptrToThis);
         if (clefListId && clefId.has_value()) {
@@ -1237,7 +1238,7 @@ public:
     /// @return The display time signature if there is one, otherwise the actual time signature.
     MusxInstance<TimeSignature> createDisplayTimeSignature() const;
 
-    void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
+    void integrityCheck(const std::shared_ptr<EnigmaBase>& ptrToThis) override
     {
         DetailsBase::integrityCheck(ptrToThis);
         if (hasKey && !keySig) {
@@ -1270,7 +1271,7 @@ public:
         return static_cast<int16_t>(getCmper2());
     }
 
-    void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
+    void integrityCheck(const std::shared_ptr<EnigmaBase>& ptrToThis) override
     {
         DetailsBase::integrityCheck(ptrToThis);
         if (std::abs(getAlterationValue()) > MAX_ALTERATIONS) {
@@ -1677,7 +1678,7 @@ public:
         return 0;
     }
 
-    void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
+    void integrityCheck(const std::shared_ptr<EnigmaBase>& ptrToThis) override
     {
         EntryDetailsBase::integrityCheck(ptrToThis);
         if (!mask) {
@@ -1730,7 +1731,7 @@ public:
     bool arrangedByPitch{};     ///< If true, the shapes correspond to pitches (C, D, E, F, G, A, B).
                                 ///< If false, the shapes correspond to scale degrees 0..6 in the key signauture.
 
-    void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
+    void integrityCheck(const std::shared_ptr<EnigmaBase>& ptrToThis) override
     {
         this->DetailsBase::integrityCheck(ptrToThis);
         const size_t currentSize = noteShapes.size();
@@ -1792,7 +1793,7 @@ public:
      * @param cmper1 In modern Finale files, all groups have 0 for cmper1. In legacy files this was a cmper for a @ref others::StaffUsed list.
      * @param cmper2 The identifier for the StaffGroup.
      */
-    StaffGroup(const DocumentWeakPtr& document, Cmper partId, Base::ShareMode shareMode, Cmper cmper1, Cmper cmper2)
+    StaffGroup(const DocumentWeakPtr& document, Cmper partId, EnigmaBase::ShareMode shareMode, Cmper cmper1, Cmper cmper2)
         : DetailsBase(document, partId, shareMode, cmper1, cmper2) {}
 
     /** @brief Enum for barline justification */
@@ -1894,7 +1895,7 @@ public:
     bool isAllMeasures() const
     { return (startMeas == 1 && endMeas == (std::numeric_limits<MeasCmper>::max)()); }
 
-    void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
+    void integrityCheck(const std::shared_ptr<EnigmaBase>& ptrToThis) override
     {
         this->DetailsBase::integrityCheck(ptrToThis);
         if (endMeas <= startMeas || startMeas <= 0) {
@@ -2069,7 +2070,7 @@ class TieAlterBase : public NoteDetailsBase
 {
 public:
     /** @brief Constructor function */
-    explicit TieAlterBase(const DocumentWeakPtr& document, Cmper partId, Base::ShareMode shareMode, EntryNumber entnum, Inci inci)
+    explicit TieAlterBase(const DocumentWeakPtr& document, Cmper partId, EnigmaBase::ShareMode shareMode, EntryNumber entnum, Inci inci)
         : NoteDetailsBase(document, partId, shareMode, entnum, inci)
     {
     }

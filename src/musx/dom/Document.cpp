@@ -197,7 +197,7 @@ MusxInstance<others::StaffSystem> Document::calcSystemFromMeasure(Cmper partId, 
 
 InstrumentMap Document::createInstrumentMap(Cmper forPartId) const
 {
-    InstrumentMap result;
+    InstrumentMap result(m_self, forPartId);
 
     const auto scrollView = getScrollViewStaves(forPartId);
     if (scrollView.empty()) {
@@ -211,7 +211,7 @@ InstrumentMap Document::createInstrumentMap(Cmper forPartId) const
                 if (multiStaffInstsFound.find(rawStaff->multiStaffInstId) == multiStaffInstsFound.end()) {
                     if (auto multiStaffInst = getOthers()->get<others::MultiStaffInstrumentGroup>(forPartId, rawStaff->multiStaffInstId)) {
                         multiStaffInstsFound.emplace(rawStaff->multiStaffInstId);
-                        const auto [it, created] = result.emplace(rawStaff->getCmper(), InstrumentInfo());
+                        const auto [it, created] = result.emplace(rawStaff->getCmper(), InstrumentInfo(m_self, forPartId));
                         MUSX_ASSERT_IF(!created) {
                             throw std::logic_error("Attempted to insert multi-instrument id " + std::to_string(rawStaff->multiStaffInstId) + " more than once.");
                         }
@@ -261,7 +261,7 @@ InstrumentMap Document::createInstrumentMap(Cmper forPartId) const
                     return false;
                 });
                 if (!candidateStaves.empty()) {
-                    auto [instIt, created] = result.emplace(topStaff->getCmper(), InstrumentInfo());
+                    auto [instIt, created] = result.emplace(topStaff->getCmper(), InstrumentInfo(m_self, forPartId));
                     auto& [top, instInfo] = *instIt;
                     if (created || instInfo.staffGroupId == 0 || group->getCmper2() == instInfo.staffGroupId) {
                         if (instInfo.staffGroupId == 0) {
@@ -280,7 +280,7 @@ InstrumentMap Document::createInstrumentMap(Cmper forPartId) const
     }
     for (const auto& staffItem : scrollView) {
         if (mappedStaves.find(staffItem->staffId) == mappedStaves.end()) {
-            const auto [it, created] = result.emplace(staffItem->staffId, InstrumentInfo());
+            const auto [it, created] = result.emplace(staffItem->staffId, InstrumentInfo(m_self, forPartId));
             MUSX_ASSERT_IF(!created) {
                 throw std::logic_error("Attempted to insert single-instrument id " + std::to_string(staffItem->staffId) + " that was already mapped.");
             }
@@ -310,7 +310,7 @@ InstrumentMap Document::createInstrumentMap(Cmper forPartId) const
 
 const InstrumentInfo& Document::getInstrumentForStaff(StaffCmper staffId) const
 {
-    auto result = InstrumentInfo::getInstrumentForStaff(m_instruments, staffId);
+    auto result = getInstruments().getInstrumentForStaff(staffId);
     MUSX_ASSERT_IF(!result) { // flag this as early as possible, because getting here is a program bug.
         throw std::logic_error("Staff " + std::to_string(staffId) + " was not mapped to an instrument.");
     }
@@ -320,13 +320,13 @@ const InstrumentInfo& Document::getInstrumentForStaff(StaffCmper staffId) const
 std::optional<InstrumentInfo> Document::getInstrumentForStaff(Cmper partId, StaffCmper staffId) const
 {
     if (partId == SCORE_PARTID) {
-        if (const auto result = InstrumentInfo::getInstrumentForStaff(m_instruments, staffId)) {
+        if (const auto result = getInstruments().getInstrumentForStaff(staffId)) {
             return *result;
         }
         return std::nullopt;
     }
     const auto partInstrumentMap = createInstrumentMap(partId);
-    if (const auto result = InstrumentInfo::getInstrumentForStaff(partInstrumentMap, staffId)) {
+    if (const auto result = partInstrumentMap.getInstrumentForStaff(staffId)) {
         return *result;
     }
     return std::nullopt;
@@ -508,39 +508,6 @@ std::optional<std::filesystem::path> Document::resolveExternalGraphicPath(Cmper 
     }
 
     return std::nullopt;
-}
-
-// **************************
-// ***** InstrumentInfo *****
-// **************************
-
-std::vector<StaffCmper> InstrumentInfo::getSequentialStaves() const
-{
-    std::vector<std::pair<StaffCmper, size_t>> sorted(staves.begin(), staves.end());
-    std::sort(sorted.begin(), sorted.end(),
-              [](const auto& a, const auto& b) { return a.second < b.second; });
-
-    std::vector<StaffCmper> result;
-    result.reserve(sorted.size());
-    for (const auto& [staffId, _] : sorted) {
-        result.push_back(staffId);
-    }
-    return result;
-}
-
-const InstrumentInfo* InstrumentInfo::getInstrumentForStaff(const InstrumentMap& map, StaffCmper staffId)
-{
-    const auto& instIt = map.find(staffId);
-    if (instIt != map.end()) {
-        return &instIt->second;
-    } else {
-        for (const auto& [top, info] : map) {
-            if (info.staves.find(staffId) != info.staves.end()) {
-                return &info;
-            }
-        }
-    }
-    return nullptr;
 }
 
 } // namespace dom

@@ -77,7 +77,7 @@ MusxInstance<others::SmartShape> createVerticalHookSmartShape(
     constexpr Cmper LINE_STYLE_ID = 9001;
 
     auto customLine = std::make_shared<others::SmartShapeCustomLine>(
-        doc, SCORE_PARTID, Base::ShareMode::All, LINE_STYLE_ID);
+        doc, SCORE_PARTID, EnigmaBase::ShareMode::All, LINE_STYLE_ID);
     customLine->lineStyle = others::SmartShapeCustomLine::LineStyle::Solid;
     customLine->lineCapStartType = others::SmartShapeCustomLine::LineCapType::Hook;
     customLine->lineCapEndType = others::SmartShapeCustomLine::LineCapType::Hook;
@@ -109,7 +109,7 @@ MusxInstance<others::SmartShape> createVerticalHookSmartShape(
     doc->getOthers()->add(others::SmartShapeCustomLine::XmlNodeName, customLine);
 
     auto smartShape = std::make_shared<others::SmartShape>(
-        doc, SCORE_PARTID, Base::ShareMode::All, SMART_SHAPE_ID);
+        doc, SCORE_PARTID, EnigmaBase::ShareMode::All, SMART_SHAPE_ID);
     smartShape->shapeType = others::SmartShape::ShapeType::CustomLine;
     smartShape->lineStyleId = LINE_STYLE_ID;
     smartShape->integrityCheck(smartShape);

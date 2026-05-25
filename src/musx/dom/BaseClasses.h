@@ -30,7 +30,9 @@
 
 #include "musx/dom/Fundamentals.h"
 #include "musx/xml/XmlInterface.h"
+#include "musx/util/EnigmaString.h"
 #include "musx/util/Logger.h"
+#include "DocumentElement.h"
 #include "MusxInstance.h"
 
 namespace musx {
@@ -49,12 +51,6 @@ class integrity_error : public std::runtime_error
 public:
     using std::runtime_error::runtime_error;
 };
-
-class Document;
-/** @brief Shared `Document` pointer */
-using DocumentPtr = std::shared_ptr<Document>;
-/** @brief Shared weak `Document` pointer */
-using DocumentWeakPtr = std::weak_ptr<Document>;
 
 #ifndef DOXYGEN_SHOULD_IGNORE_THIS
 class PartContextCloner {
@@ -76,11 +72,15 @@ public:
 #endif
 
 /**
- * @class Base
- * @brief Base class to enforce polymorphism across all DOM classes.
+ * @class EnigmaBase
+ * @brief Base for DOM classes that are represented in EnigmaData.
+ *
+ * This base provides shared Enigma-specific context: source part id and share mode.
  */
-class Base
+class EnigmaBase : public DocumentElement
 {
+    Cmper getPartId() const = delete;
+
 public:
     /// @brief The container type for shared nodes
     using SharedNodes = std::set<std::string>;
@@ -89,30 +89,10 @@ public:
     /// @brief Describes how this instance is shared between part and score.
     enum class ShareMode
     {
-        // this enum was giving Doxygen fits until I switched to using the slash-splat-bang-lt comment commands.
         All,            /*!< All parts and score always share (no "share" attribute). Default. */
         Partial,        /*!< Part and score share some attributes and have their own unlinked versions of others. (attribute "share"="true") */
         None            /*!< Each part and score has its own version of the DOM class. (attribute "share"="false") */
     };
-
-    /**
-     * @brief Virtual destructor for polymorphic behavior.
-     */
-    virtual ~Base() noexcept(false) = default;
-
-    /**
-     * @brief Gets a reference to the Document.
-     *
-     * @return A pointer to the Document instance.
-     */
-    DocumentPtr getDocument() const
-    {
-        auto document = m_document.lock();
-        MUSX_ASSERT_IF(!document) {
-            throw std::logic_error("Document pointer is no longer valid.");
-        }
-        return document;
-    }
 
     /**
      * @brief Gets the *source* partId for this instance. If an instance is fully shared with the score,
@@ -121,7 +101,7 @@ public:
      * @warning This value is often different than the value used to retrieve the instance. Normally you
      * should not use it to retrieve another instance.
      */
-    Cmper getSourcePartId() const { return m_sourcePartId; }
+    Cmper getSourcePartId() const { return DocumentElement::getPartId(); }
 
     /**
      * @brief Gets the sharing mode for this instance.
@@ -134,69 +114,50 @@ public:
     const SharedNodes& getUnlinkedNodes() const { return m_unlinkedNodes; }
 
     /**
-     * @brief Adds a shared node for this instance
+     * @brief Adds a shared node for this instance.
      */
     void addUnlinkedNode(const std::string& nodeName)
     {
         m_unlinkedNodes.insert(nodeName);
     }
 
-    /**
-     * @brief Allows a class to determine if it has been properly contructed by the factory and fix issues that it can,
-     * such as creating default instances of contained classes.
-     *
-     * The default implementation should always be called inside an overridden implementation.
-     *
-     * @param ptrToThis This instance in a shared_ptr. (Avoids need for shared_from_this.)
-     *
-     * @throws #musx::dom::integrity_error if there is a problem.
-     */
-    virtual void integrityCheck([[maybe_unused]]const std::shared_ptr<Base>& ptrToThis) { }
+    /// @brief Performs a final consistency check after population.
+    virtual void integrityCheck([[maybe_unused]] const std::shared_ptr<EnigmaBase>& ptrToThis) { }
 
-    /**
-     * @brief Specifies if the parser should alert (print or throw) when an unknown xml tag is found for this class.
-     *
-     * Some classes make it difficult to discover all the possible xml tags that might be used for all its options.
-     * An example is @ref others::TextBlock. By overriding this function, a class can allow its members to be discovered
-     * as needed without causing error messages or throwing exceptions.
-     *
-     * @remark This value only escapes errors on fields. Enum values must still have all values provided to avoid
-     * error messages or exceptions.
-     */
+    /// @brief Returns true if all fields are required for valid input.
     virtual bool requireAllFields() const { return true; }
 
 protected:
     /**
      * @brief Constructs the base class.
      *
-     * @param document A weak pointer to the parent document
-     * @param partId The part ID for this instance, or zero if for score.
+     * @param document A weak pointer to the parent document.
+     * @param partId The source part id for this instance.
      * @param shareMode The @ref ShareMode for this instance.
      */
-    Base(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode)
-        : m_document(document), m_sourcePartId(partId), m_shareMode(shareMode) {}
+    EnigmaBase(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode)
+        : DocumentElement(document, partId), m_shareMode(shareMode) {}
 
-    Base(const Base&) = default;        ///< explicit default copy constructor
-    Base(Base&&) noexcept = default;    ///< explicit default move constructor
+    EnigmaBase(const EnigmaBase&) = default;        ///< explicit default copy constructor
+    EnigmaBase(EnigmaBase&&) noexcept = default;    ///< explicit default move constructor
 
     /// @brief no-op copy assignment operator allows subclasses to copy their values.
-    Base& operator=(const Base&) { return *this; }
+    EnigmaBase& operator=(const EnigmaBase&) { return *this; }
+
     /// @brief no-op move assignment operator allows subclasses to move their values.
-    Base& operator=(Base&&) noexcept { return *this; }
+    EnigmaBase& operator=(EnigmaBase&&) noexcept { return *this; }
 
 private:
-    const DocumentWeakPtr m_document;
-    const Cmper m_sourcePartId;
     const ShareMode m_shareMode;
     SharedNodes m_unlinkedNodes;
 };
 
 /**
  * @class CommonClassBase
- * @brief Base class for classes that are commonly used among others, details, entries, and/or texts.
+ * @brief EnigmaBase class for classes that are commonly used among others, details, entries, and/or texts.
  * They can be constructed in atypical contexts, so their Part and Sharing info is not meaningful.
  */
-class CommonClassBase : public Base
+class CommonClassBase : public EnigmaBase
 {
     Cmper getSourcePartId() const = delete; ///< meaningless for this base class (always SCORE_PARTID)
 
@@ -207,20 +168,20 @@ public:
      * @param document A weak pointer to the parent document.
      */
     CommonClassBase(const DocumentWeakPtr& document)
-        : Base(document, SCORE_PARTID, ShareMode::All) {}
+        : EnigmaBase(document, SCORE_PARTID, ShareMode::All) {}
 
 protected:
     // Because the part ID and share mode are hard-coded for this category of classes,
-    // these Base functions do not return useful results.
-    using Base::getShareMode;
-    using Base::getUnlinkedNodes;
+    // these EnigmaBase functions do not return useful results.
+    using EnigmaBase::getShareMode;
+    using EnigmaBase::getUnlinkedNodes;
 };
 
 /**
  * @class ContainedClassBase
- * @brief Base class for classes that are contained by other classes.
+ * @brief EnigmaBase class for classes that are contained by other classes.
  */
-class ContainedClassBase : public Base
+class ContainedClassBase : public EnigmaBase
 {
     Cmper getSourcePartId() const = delete; ///< meaningless for this base class (always SCORE_PARTID)
 
@@ -230,19 +191,19 @@ public:
      *
      * @param parent A shared pointer to the parent document.
      */
-    ContainedClassBase(const MusxInstance<Base>& parent)
-        : Base(parent->getDocument(), SCORE_PARTID, ShareMode::All), m_parent(parent)
+    ContainedClassBase(const MusxInstance<EnigmaBase>& parent)
+        : EnigmaBase(parent->getDocument(), SCORE_PARTID, ShareMode::All), m_parent(parent)
     {}
 
     /// @brief Get the parent.
-    template <typename ParentClass = Base>
+    template <typename ParentClass = EnigmaBase>
     MusxInstance<ParentClass> getParent() const
     {
         auto result = m_parent.lock();
         MUSX_ASSERT_IF (!result) {
             throw std::logic_error("Attempt to get parent of contained class, but the parent is no longer allocated.");
         }
-        if constexpr (std::is_same_v<Base, ParentClass>) {
+        if constexpr (std::is_same_v<EnigmaBase, ParentClass>) {
             return result;
         } else {
             return std::dynamic_pointer_cast<const ParentClass>(result);
@@ -250,15 +211,15 @@ public:
     }
 
 private:
-    const MusxInstanceWeak<Base> m_parent;
+    const MusxInstanceWeak<EnigmaBase> m_parent;
 };
 
 /**
- * @brief Base class for all "options" types.
+ * @brief EnigmaBase class for all "options" types.
  *
  * Options types derive from this base class so they can reside in the options pool.
  */
-class OptionsBase : public Base {
+class OptionsBase : public EnigmaBase {
     Cmper getSourcePartId() const = delete; ///< meaningless for this base class (always SCORE_PARTID)
 
 protected:
@@ -270,16 +231,16 @@ protected:
      * @param shareMode Always `ShareMode::All`. This parameter is needed for the generic factory routine.
      */
     OptionsBase(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode)
-        : Base(document, partId, shareMode) {}
+        : EnigmaBase(document, partId, shareMode) {}
 };
 
 /**
- * @brief Base class for all "others" types.
+ * @brief EnigmaBase class for all "others" types.
  *
  * This class provides common attributes and methods for handling
  * "others" types in the DOM, including `cmper` and `inci`.
  */
-class OthersBase : public Base
+class OthersBase : public EnigmaBase
 {
     /// @brief Private setter for requested part id.
     void setRequestedPartId(Cmper newValue) { m_requestedPartId = newValue; }
@@ -297,13 +258,13 @@ protected:
      * @param inci The array index (`Inci`).
      */
     OthersBase(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper, std::optional<Inci> inci = std::nullopt)
-        : Base(document, partId, shareMode), m_requestedPartId(partId), m_cmper(cmper), m_inci(inci) {}
+        : EnigmaBase(document, partId, shareMode), m_requestedPartId(partId), m_cmper(cmper), m_inci(inci) {}
 
     /// @brief Assignment operator delegates to base, preserving OthersBase state.
     OthersBase& operator=(const OthersBase& other)
     {
         if (this != &other) {
-            this->Base::operator=(other);
+            this->EnigmaBase::operator=(other);
         }
         return *this;
     }
@@ -311,7 +272,7 @@ protected:
     OthersBase& operator=(OthersBase&& other) noexcept
     {
         if (this != &other) {
-            this->Base::operator=(other);
+            this->EnigmaBase::operator=(other);
         }
         return *this;
     }
@@ -372,8 +333,8 @@ public:
         return std::find(v.begin(), v.end(), value) != v.end();
     }
 
-    /// @brief Override of #Base::integrityCheck
-    void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
+    /// @brief Override of #EnigmaBase::integrityCheck
+    void integrityCheck(const std::shared_ptr<EnigmaBase>& ptrToThis) override
     {
         OthersBase::integrityCheck(ptrToThis);
         if constexpr (REQUIRED_SIZE > 0) {
@@ -406,12 +367,12 @@ public:
 };
 
 /**
- * @brief Base class for all "details" types.
+ * @brief EnigmaBase class for all "details" types.
  *
  * This class provides common attributes and methods for handling
  * "details" types in the DOM, including `cmper1`, `cmper2`, and `inci`.
  */
-class DetailsBase : public Base
+class DetailsBase : public EnigmaBase
 {
     /// @brief Private setter for requested part id.
     void setRequestedPartId(Cmper newValue) { m_requestedPartId = newValue; }
@@ -430,13 +391,13 @@ protected:
      * @param inci The array index (`Inci`).
      */
     DetailsBase(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper1, Cmper cmper2, std::optional<Inci> inci = std::nullopt)
-        : Base(document, partId, shareMode), m_requestedPartId(partId), m_cmper1(cmper1), m_cmper2(cmper2), m_inci(inci) {}
+        : EnigmaBase(document, partId, shareMode), m_requestedPartId(partId), m_cmper1(cmper1), m_cmper2(cmper2), m_inci(inci) {}
 
     /// @brief Assignment operator delegates to base, preserving OthersBase state.
     DetailsBase& operator=(const DetailsBase& other)
     {
         if (this != &other) {
-            this->Base::operator=(other);
+            this->EnigmaBase::operator=(other);
         }
         return *this;
     }
@@ -444,7 +405,7 @@ protected:
     DetailsBase& operator=(DetailsBase&& other) noexcept
     {
         if (this != &other) {
-            this->Base::operator=(other);
+            this->EnigmaBase::operator=(other);
         }
         return *this;
     }
@@ -481,7 +442,7 @@ private:
 };
 
 /**
- * @brief Base class for all "details" types that use `entnum` rather than `cmper` and `cmper`.
+ * @brief EnigmaBase class for all "details" types that use `entnum` rather than `cmper` and `cmper`.
  */
 class EntryDetailsBase : public DetailsBase
 {
@@ -549,8 +510,8 @@ public:
     std::vector<ElementType> values;    ///< Values in the array
                                         ///< Guaranteed to have REQUIRED_SIZE elements.
 
-    /// @brief Override of #Base::integrityCheck
-    void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
+    /// @brief Override of #EnigmaBase::integrityCheck
+    void integrityCheck(const std::shared_ptr<EnigmaBase>& ptrToThis) override
     {
         DetailsBase::integrityCheck(ptrToThis);
         if constexpr (REQUIRED_SIZE > 0) {
@@ -564,7 +525,7 @@ public:
     }
 };
 
-/// @brief Base class note details. Note details are entry details associated with a note ID.
+/// @brief EnigmaBase class note details. Note details are entry details associated with a note ID.
 class NoteDetailsBase : public EntryDetailsBase
 {
 public:
@@ -578,11 +539,11 @@ protected:
 
 class FontInfo;
 /**
- * @brief Base class for all text blocks.
+ * @brief EnigmaBase class for all text blocks.
  *
  * Options types derive from this base class so they can reside in the text pool.
  */
-class TextsBase : public Base
+class TextsBase : public EnigmaBase
 {
     Cmper getSourcePartId() const = delete; ///< meaningless for this base class (always SCORE_PARTID)
 
@@ -596,7 +557,7 @@ public:
      * @param textNumber The text number (`Cmper`).
      */
     TextsBase(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper textNumber)
-        : Base(document, partId, shareMode), m_textNumber(textNumber) {}
+        : EnigmaBase(document, partId, shareMode), m_textNumber(textNumber) {}
 
     std::string text;    ///< Raw Enigma string (with Enigma string tags), encoded UTF-8.
 

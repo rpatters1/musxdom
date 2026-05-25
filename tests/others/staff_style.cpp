@@ -190,6 +190,81 @@ TEST(StaffStyleInstrument, DetectInstrumentChange)
     }
 }
 
+TEST(StaffStyleInstrument, InstrumentChangeIdentityReuseInPart1)
+{
+    std::vector<char> xml;
+    musxtest::readFile(musxtest::getInputPath() / "inst_change2.enigmaxml", xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(xml);
+    ASSERT_TRUE(doc);
+
+    auto part1Map = doc->createInstrumentMap(1);
+    const auto* instrument = part1Map.getInstrumentForStaff(1);
+    ASSERT_TRUE(instrument);
+
+    const auto changes = instrument->getChanges();
+    ASSERT_EQ(changes.size(), 6u);
+
+    const auto rawIdentity = instrument->getInstrumentIdentityAt(MusicPoint{});
+    const auto staffStyle28Identity = instrument->getInstrumentIdentityAt(MusicPoint(4, musx::util::Fraction{}));
+    const auto rawAgainIdentity = instrument->getInstrumentIdentityAt(MusicPoint(7, musx::util::Fraction{}));
+    const auto staffStyle29Identity = instrument->getInstrumentIdentityAt(MusicPoint(10, musx::util::Fraction{}));
+    const auto staffStyle28AgainIdentity = instrument->getInstrumentIdentityAt(MusicPoint(13, musx::util::Fraction{}));
+    const auto rawFinalIdentity = instrument->getInstrumentIdentityAt(MusicPoint(17, musx::util::Fraction{}));
+
+    EXPECT_EQ(rawIdentity.instUuid, uuid::Flute);
+    EXPECT_EQ(staffStyle28Identity.instUuid, uuid::ClarinetBFlat);
+    EXPECT_EQ(staffStyle29Identity.instUuid, uuid::AltoSax);
+    EXPECT_EQ(rawIdentity, rawAgainIdentity);
+    EXPECT_EQ(rawIdentity, rawFinalIdentity);
+    EXPECT_EQ(staffStyle28Identity, staffStyle28AgainIdentity);
+    EXPECT_NE(rawIdentity, staffStyle28Identity);
+    EXPECT_NE(staffStyle28Identity, staffStyle29Identity);
+
+    const auto identities = instrument->getInstrumentIdentities();
+    ASSERT_EQ(identities.size(), 3u);
+    EXPECT_EQ(identities[0], rawIdentity);
+    EXPECT_EQ(identities[1], staffStyle28Identity);
+    EXPECT_EQ(identities[2], staffStyle29Identity);
+
+    EXPECT_EQ(changes.at(MusicPoint{}).identity, rawIdentity);
+    EXPECT_EQ(changes.at(MusicPoint(4, musx::util::Fraction{})).identity, staffStyle28Identity);
+    EXPECT_EQ(changes.at(MusicPoint(7, musx::util::Fraction{})).identity, rawAgainIdentity);
+    EXPECT_EQ(changes.at(MusicPoint(10, musx::util::Fraction{})).identity, staffStyle29Identity);
+    EXPECT_EQ(changes.at(MusicPoint(13, musx::util::Fraction{})).identity, staffStyle28AgainIdentity);
+    EXPECT_EQ(changes.at(MusicPoint(17, musx::util::Fraction{})).identity, rawFinalIdentity);
+}
+
+TEST(StaffStyleInstrument, InstrumentChangeIdentityReuseInPart2)
+{
+    std::vector<char> xml;
+    musxtest::readFile(musxtest::getInputPath() / "inst_change2.enigmaxml", xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(xml);
+    ASSERT_TRUE(doc);
+
+    auto part2Map = doc->createInstrumentMap(2);
+    const auto* instrument = part2Map.getInstrumentForStaff(2);
+    ASSERT_TRUE(instrument);
+
+    const auto changes = instrument->getChanges();
+    ASSERT_EQ(changes.size(), 2u);
+
+    const auto pianoIdentity = instrument->getInstrumentIdentityAt(MusicPoint{});
+    const auto harpsichordIdentity = instrument->getInstrumentIdentityAt(MusicPoint(6, musx::util::Fraction{}));
+
+    EXPECT_EQ(pianoIdentity.instUuid, uuid::Piano);
+    EXPECT_EQ(harpsichordIdentity.instUuid, uuid::Harpsichord);
+    EXPECT_NE(pianoIdentity, harpsichordIdentity);
+
+    const auto identities = instrument->getInstrumentIdentities();
+    ASSERT_EQ(identities.size(), 2u);
+    EXPECT_EQ(identities[0], pianoIdentity);
+    EXPECT_EQ(identities[1], harpsichordIdentity);
+
+    EXPECT_EQ(changes.at(MusicPoint{}).identity, pianoIdentity);
+    EXPECT_EQ(changes.at(MusicPoint(6, musx::util::Fraction{})).identity, harpsichordIdentity);
+    EXPECT_EQ(instrument->getInstrumentIdentityAt(MusicPoint(6, musx::util::Fraction{})), harpsichordIdentity);
+}
+
 TEST(StaffStyleChange, DetectDifferentScorePart)
 {
     std::vector<char> xml;

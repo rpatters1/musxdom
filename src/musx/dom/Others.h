@@ -400,7 +400,7 @@ public:
     Evpu endPos{};     ///< End position of the beat span
     Evpu minPos{};     ///< Minimum position (see remarks in the class-level description of @ref BeatChartElement)
 
-    void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
+    void integrityCheck(const std::shared_ptr<EnigmaBase>& ptrToThis) override
     {
         OthersBase::integrityCheck(ptrToThis);
         if (control && getInci() != 0) {
@@ -654,7 +654,7 @@ public:
      */
     MusxInstanceList<Entry> getEntries() const;
 
-    void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
+    void integrityCheck(const std::shared_ptr<EnigmaBase>& ptrToThis) override
     {
         this->OthersBase::integrityCheck(ptrToThis);
         if (startTime && (startEntry || endEntry)) {
@@ -750,7 +750,7 @@ public:
     std::string name;        ///< Style name. (xml node `<name>`)
     std::string fretNumText; ///< Label preceding fret number (e.g., "fr."). (xml node `<fretNumText>`)
 
-    void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
+    void integrityCheck(const std::shared_ptr<EnigmaBase>& ptrToThis) override
     {
         this->OthersBase::integrityCheck(ptrToThis);
         if (!fretNumFont) {
@@ -806,7 +806,7 @@ public:
                                     ///< above the previous value. (xml node is `<diatonic>`)
     ClefIndex speedyClef{};         ///< The clef to use when entering notes for this instrument in Speedy Entry.
 
-    void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
+    void integrityCheck(const std::shared_ptr<EnigmaBase>& ptrToThis) override
     {
         this->OthersBase::integrityCheck(ptrToThis);
         if (numStrings != int(strings.size())) {
@@ -1100,7 +1100,7 @@ public:
     /// @return The created staff list set. If #staffList is zero, it will never find any staves for the staff list.
     CategoryStaffListSet createStaffListSet() const;
 
-    void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
+    void integrityCheck(const std::shared_ptr<EnigmaBase>& ptrToThis) override
     {
         this->OthersBase::integrityCheck(ptrToThis);
         if (!textFont) {
@@ -1301,7 +1301,7 @@ public:
         return calcDuration() / calcDuration(forStaff);
     }
 
-    void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
+    void integrityCheck(const std::shared_ptr<EnigmaBase>& ptrToThis) override
     {
         this->OthersBase::integrityCheck(ptrToThis);
         if (!globalKeySig) {
@@ -1439,7 +1439,7 @@ public:
     /// @brief Calculates if this assignment is hidden by alternate notation.
     bool calcIsHiddenByAlternateNotation() const;
 
-    void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
+    void integrityCheck(const std::shared_ptr<EnigmaBase>& ptrToThis) override
     {
         this->OthersBase::integrityCheck(ptrToThis);
         if (!textExprId && !shapeExprId) {
@@ -1517,7 +1517,7 @@ public:
         AlignJustify multipleJustify{}; ///< Justification for mid-system numbers.
         AlignJustify mmRestJustify{}; ///< Justification for multi-measure rest ranges.
 
-        void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
+        void integrityCheck(const std::shared_ptr<EnigmaBase>& ptrToThis) override
         {
             this->ContainedClassBase::integrityCheck(ptrToThis);
             if (!startFont) {
@@ -1583,7 +1583,7 @@ public:
     /// @return The last visible number or std::nullopt if no measure in the region is included in numbering. (See #Measure::noMeasNum.)
     std::optional<int> calcLastDisplayNumber() const;
 
-    void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
+    void integrityCheck(const std::shared_ptr<EnigmaBase>& ptrToThis) override
     {
         this->OthersBase::integrityCheck(ptrToThis);
         if (!scoreData) {
@@ -1636,7 +1636,7 @@ public:
     /// @brief Calculates if the number on this multimeasure rest is visible.
     bool calcIsNumberVisible() const { return calcNumberOfMeasures() >= numStart; }
 
-    void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
+    void integrityCheck(const std::shared_ptr<EnigmaBase>& ptrToThis) override
     {
         this->OthersBase::integrityCheck(ptrToThis);
         if (nextMeas <= getStartMeasure()) {
@@ -1704,7 +1704,7 @@ public:
     /// @param document
     static void calcAllMultiStaffGroupIds(const DocumentPtr& document);
 
-    void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
+    void integrityCheck(const std::shared_ptr<EnigmaBase>& ptrToThis) override
     {
         OthersBase::integrityCheck(ptrToThis);
         if (staffNums.empty()) {
@@ -1912,7 +1912,7 @@ public:
     bool isMultiAssignedThruLastPage() const
     { return isMultiPage() && endPage == 0; }
 
-    void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
+    void integrityCheck(const std::shared_ptr<EnigmaBase>& ptrToThis) override
     {
         this->OthersBase::integrityCheck(ptrToThis);
         if (getCmper() != 0) {
@@ -2315,7 +2315,7 @@ public:
     /// @return The created staff list set. If #staffList is zero, it will never find any staves for the staff list.
     RepeatStaffListSet createStaffListSet() const;
 
-    void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
+    void integrityCheck(const std::shared_ptr<EnigmaBase>& ptrToThis) override
     {
         OthersBase::integrityCheck(ptrToThis);
         if (trigger != RepeatTriggerType::OnPass) {
@@ -2790,7 +2790,7 @@ public:
     ///         - util::Fraction: The scaling of the staff with the maximum (largest) scaling factor
     std::pair<util::Fraction, util::Fraction> calcMinMaxStaffSizes() const;
 
-    void integrityCheck(const std::shared_ptr<Base>& ptrToThis) override
+    void integrityCheck(const std::shared_ptr<EnigmaBase>& ptrToThis) override
     {
         this->OthersBase::integrityCheck(ptrToThis);
         if (startMeas == 0 || endMeas == 0) {

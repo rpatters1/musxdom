@@ -458,12 +458,12 @@ std::optional<music_theory::DiatonicMode> KeySignature::calcDiatonicMode() const
 // ***** MusicRange *****
 // **********************
 
-std::optional<std::pair<MeasCmper, Edu>> MusicRange::nextLocation(const std::optional<StaffCmper>& forStaff) const
+std::optional<MusicPoint> MusicRange::nextLocation(const std::optional<StaffCmper>& forStaff) const
 {
-    std::optional<std::pair<MeasCmper, Edu>> result;
-    const Edu endEdu = endPosition.calcEduDuration();
-    if (auto currMeasure = getDocument()->getOthers()->get<others::Measure>(SCORE_PARTID, endMeasureId)) {
-        MeasCmper nextMeas = endMeasureId;
+    std::optional<MusicPoint> result;
+    const Edu endEdu = end.position.calcEduDuration();
+    if (auto currMeasure = getDocument()->getOthers()->get<others::Measure>(SCORE_PARTID, end.measureId)) {
+        MeasCmper nextMeas = end.measureId;
         const Edu maxEdu = currMeasure->calcDuration(forStaff).calcEduDuration() - 1;
         Edu nextEdu = 0;
         if (endEdu < maxEdu) {
@@ -474,9 +474,10 @@ std::optional<std::pair<MeasCmper, Edu>> MusicRange::nextLocation(const std::opt
                 return std::nullopt;
             }
         }
-        result = std::make_pair(nextMeas, nextEdu);
+        result = MusicPoint(nextMeas, util::Fraction::fromEdu(nextEdu));
     } else {
-        MUSX_INTEGRITY_ERROR("MusicRange has invalid end measure " + std::to_string(endMeasureId));
+        // music ranges are explicitly allowed to be beyond the end of a document, so treat this as a verbose message.
+        util::Logger::log(util::Logger::LogLevel::Verbose, "MusicRange has invalid end measure " + std::to_string(end.measureId));
     }
     return result;
 }
@@ -491,7 +492,7 @@ bool MusicRange::contains(const EntryInfoPtr& entryInfo) const
 // *************************
 
 TimeSignature::TimeSignature(const DocumentWeakPtr& document, int beats, Edu unit, bool hasCompositeTop, bool hasCompositeBottom, Abbreviation abbreviate)
-    : CommonClassBase(document), m_abbreviation(abbreviate)
+    : DocumentElementNoPart(document), m_abbreviation(abbreviate)
 {
     auto tops = [&]() -> std::vector<std::vector<util::Fraction>> {
         if (hasCompositeTop) {

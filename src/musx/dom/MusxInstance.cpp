@@ -85,7 +85,7 @@ bool MusxInstanceList<others::StaffUsed>::iterateEntries(size_t startIndex, size
 
     for (S x = start; ; x += step) {
         const StaffCmper staffId = (*this)[static_cast<size_t>(x)]->staffId;
-        for (MeasCmper nextMeasId = range.startMeasureId; nextMeasId <= range.endMeasureId; nextMeasId++) {
+        for (MeasCmper nextMeasId = range.start.measureId; nextMeasId <= range.end.measureId; nextMeasId++) {
             if (auto gfHold = details::GFrameHoldContext(getDocument(), getRequestedPartId(), staffId, nextMeasId)) {
                 const bool result = gfHold.iterateEntries([&](const EntryInfoPtr& entryInfo) -> bool {
                     if (range.contains(nextMeasId, entryInfo.calcGlobalElapsedDuration())) {

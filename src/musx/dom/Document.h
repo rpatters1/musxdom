@@ -30,6 +30,7 @@
 #include <vector>
 
 #include "Header.h"
+#include "Instrument.h"
 #include "ObjectPool.h"
 #include "MusxInstance.h"
 
@@ -51,9 +52,7 @@ namespace dom {
 
 using namespace header;
 
-struct InstrumentInfo;
 enum class KnownShapeDefType;
-using InstrumentMap = std::unordered_map<StaffCmper, InstrumentInfo>; ///< A list of instruments, which may be single- or multi-staff
 using EmbeddedGraphicBlob = std::vector<uint8_t>; ///< Raw bytes for one embedded graphic payload from a musx archive.
 
 /// @brief Embedded graphic payload from a musx archive entry.
@@ -64,24 +63,6 @@ struct EmbeddedGraphicData
 };
 
 using EmbeddedGraphicsMap = std::unordered_map<Cmper, EmbeddedGraphicData>; ///< Embedded graphics keyed by cmper (filename stem in musx archive).
-/// @class InstrumentInfo
-/// @brief Represents information about each instrument in the document. This is calculated from the staves,
-/// staff groups, and multistaff instrument groups.
-struct InstrumentInfo
-{
-    std::unordered_map<StaffCmper, size_t> staves;  ///< List of each staffId with its sequence index from top to bottom.
-    Cmper staffGroupId{};                           ///< The @ref details::StaffGroup that visually represents the instrument. (May be zero.)
-    Cmper multistaffGroupId{};                      ///< The @ref others::MultiStaffInstrumentGroup that defines the instrument. (May be zero.)
-
-    /// @brief Returns the staffIds in sequence as they appear in Scroll View in the score.
-    std::vector<StaffCmper> getSequentialStaves() const;
-
-    /// @brief Get the instrument info for the given staffId in the given map
-    /// @param map The map to search.
-    /// @param staffId The staffId to find.
-    /// @return The InstrumentInfo for the @p staffId or null if not found.
-    static const InstrumentInfo* getInstrumentForStaff(const InstrumentMap& map, StaffCmper staffId);
-};
 
 /// @enum PartVoicingPolicy
 /// @brief Controls whether Finale-style part voicing is applied when iterating entries via
@@ -106,7 +87,6 @@ enum class PartVoicingPolicy
 class Document
 {
 public:
-
     /**  @brief Retrieves the header */
     [[nodiscard]]
     HeaderPtr& getHeader() { return m_header; }
@@ -206,7 +186,13 @@ public:
 
     /// @brief Returns the instrument map for this document. It is computed by the factory.
     [[nodiscard]]
-    const InstrumentMap& getInstruments() const { return m_instruments; }
+    const InstrumentMap& getInstruments() const
+    {
+        MUSX_ASSERT_IF(!m_instruments.has_value()) {
+            throw std::logic_error("Attempted to retrieve instrument map before it was constructed.");
+        }
+        return m_instruments.value();
+    }
 
     /// @brief Returns the path to the musx (or EnigmaXML) file used to create this document, if provided.
     [[nodiscard]]
@@ -287,7 +273,8 @@ private:
 
     int m_maxBlankPages{};      ///< The maximum number of leading blank pages in any part.
 
-    InstrumentMap m_instruments; ///< List of instruments in the document, indexed by the top staff in each instrument in Scroll View of the score.
+    std::optional<InstrumentMap> m_instruments = std::nullopt; ///< List of instruments in the document,
+                                ///< indexed by the top staff in each instrument in Scroll View of the score.
                                 ///< This computed by the factory.
 
     PartVoicingPolicy m_partVoicingPolicy{};    ///< The part voicing policy in effect for this document.

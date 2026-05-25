@@ -91,6 +91,18 @@ std::string formatPerfTime(double secondsValue, int format)
 }
 } // namespace
 
+EnigmaStyles::EnigmaStyles(const std::weak_ptr<dom::Document>& document)
+    : font(std::make_shared<dom::FontInfo>(document))
+{
+}
+
+EnigmaStyles EnigmaStyles::createDeepCopy() const
+{
+    EnigmaStyles result = *this;
+    result.font = std::make_shared<dom::FontInfo>(*this->font);
+    return result;
+}
+
 std::string EnigmaString::toU8(char32_t cp)
 {
     if (cp == 0) {
