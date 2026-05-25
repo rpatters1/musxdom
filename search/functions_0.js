@@ -7,7 +7,7 @@ var searchData=
   ['addautonumbering_4',['addAutoNumbering',['../classmusx_1_1dom_1_1others_1_1Staff.html#a428918fb57d8ff9b01b34f953b080904',1,'musx::dom::others::Staff']]],
   ['addentry_5',['addEntry',['../classmusx_1_1dom_1_1EntryFrame.html#a6352800f5a3791aa5cc988867ac1a5ad',1,'musx::dom::EntryFrame']]],
   ['addresolver_6',['addResolver',['../classmusx_1_1factory_1_1ElementLinker.html#a915e2cf07b3f5d45f06249c7caaeaf9f',1,'musx::factory::ElementLinker']]],
-  ['addunlinkednode_7',['addUnlinkedNode',['../classmusx_1_1dom_1_1Base.html#ab65d4a6942a09ecc3a2b6ae5c96d434a',1,'musx::dom::Base']]],
+  ['addunlinkednode_7',['addUnlinkedNode',['../classmusx_1_1dom_1_1EnigmaBase.html#a661cfa916bbefd7ee30ed777af97491f',1,'musx::dom::EnigmaBase']]],
   ['alteration_8',['alteration',['../classmusic__theory_1_1Transposer.html#a550fc30dbc918d850cd12599248b001c',1,'music_theory::Transposer']]],
   ['alternatenotationoptions_9',['AlternateNotationOptions',['../classmusx_1_1dom_1_1options_1_1AlternateNotationOptions.html#aac0fb2957450455a7f5f6c8dd5e11ecd',1,'musx::dom::options::AlternateNotationOptions']]],
   ['articulationassign_10',['ArticulationAssign',['../classmusx_1_1dom_1_1details_1_1ArticulationAssign.html#a045264b0f6ff881411fddbb01e546fa6',1,'musx::dom::details::ArticulationAssign']]],

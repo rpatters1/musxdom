@@ -7,7 +7,7 @@ var classmusx_1_1dom_1_1others_1_1StaffSystem =
     [ "calcSystemScaling", "classmusx_1_1dom_1_1others_1_1StaffSystem.html#a0a69cd425e0dde3521710a337c3e6783", null ],
     [ "getLastMeasure", "classmusx_1_1dom_1_1others_1_1StaffSystem.html#ac38cf2f59a255aace72e32eaafd8e35a", null ],
     [ "getPage", "classmusx_1_1dom_1_1others_1_1StaffSystem.html#add8d95778750e13767c6337044ebdafa", null ],
-    [ "integrityCheck", "classmusx_1_1dom_1_1others_1_1StaffSystem.html#ad57eb1688ce7bc557707e8fc3b288bcd", null ],
+    [ "integrityCheck", "classmusx_1_1dom_1_1others_1_1StaffSystem.html#a7e37b5ba98bd7a500b6f489fcf8772ec", null ],
     [ "bottom", "classmusx_1_1dom_1_1others_1_1StaffSystem.html#a7d519be5fbe7913049ec1a48c1581463", null ],
     [ "distanceToPrev", "classmusx_1_1dom_1_1others_1_1StaffSystem.html#a6dec78d53cbd40181c6195e7cd78ffdc", null ],
     [ "endMeas", "classmusx_1_1dom_1_1others_1_1StaffSystem.html#ab84d4ab7afe06f2331e6a739e93f2a12", null ],

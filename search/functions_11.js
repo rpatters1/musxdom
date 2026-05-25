@@ -26,7 +26,7 @@ var searchData=
   ['smartshapeoptions_23',['SmartShapeOptions',['../classmusx_1_1dom_1_1options_1_1SmartShapeOptions.html#a56cd4e97b860e30b3a8eaf383b972932',1,'musx::dom::options::SmartShapeOptions']]],
   ['snaplocationtoentryorkeep_24',['snapLocationToEntryOrKeep',['../classmusx_1_1dom_1_1details_1_1GFrameHoldContext.html#a885e37dc1384cdf2dcb26680d5fcd142',1,'musx::dom::details::GFrameHoldContext']]],
   ['staff_25',['Staff',['../classmusx_1_1dom_1_1others_1_1Staff.html#a6b2463c519cd866520ed2116151334b5',1,'musx::dom::others::Staff']]],
-  ['staffgroup_26',['StaffGroup',['../classmusx_1_1dom_1_1details_1_1StaffGroup.html#a9cc08eb744c1b6ac9087f16ff99dbcfd',1,'musx::dom::details::StaffGroup']]],
+  ['staffgroup_26',['StaffGroup',['../classmusx_1_1dom_1_1details_1_1StaffGroup.html#ae13646cb56c9401a88f11d50b24159b7',1,'musx::dom::details::StaffGroup']]],
   ['staffgroupinfo_27',['StaffGroupInfo',['../classmusx_1_1dom_1_1details_1_1StaffGroupInfo.html#a3b8657de6c0919e24e983019ed805a7e',1,'musx::dom::details::StaffGroupInfo']]],
   ['stafflistset_28',['StaffListSet',['../classmusx_1_1dom_1_1others_1_1StaffListSet.html#a3ec5b78b5ab56f6969cb0f0eb64187cd',1,'musx::dom::others::StaffListSet']]],
   ['staffoptions_29',['StaffOptions',['../classmusx_1_1dom_1_1options_1_1StaffOptions.html#af1602f801dd9ee76f7f64a9dbd687413',1,'musx::dom::options::StaffOptions']]],

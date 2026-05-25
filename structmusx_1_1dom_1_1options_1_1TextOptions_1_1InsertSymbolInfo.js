@@ -1,7 +1,7 @@
 var structmusx_1_1dom_1_1options_1_1TextOptions_1_1InsertSymbolInfo =
 [
-    [ "ContainedClassBase", "structmusx_1_1dom_1_1options_1_1TextOptions_1_1InsertSymbolInfo.html#a53872e9c0b07633f81f5780d7ba13b9f", null ],
-    [ "integrityCheck", "structmusx_1_1dom_1_1options_1_1TextOptions_1_1InsertSymbolInfo.html#a571624d0e1a4c8828675f19db18dcdce", null ],
+    [ "ContainedClassBase", "structmusx_1_1dom_1_1options_1_1TextOptions_1_1InsertSymbolInfo.html#a3e1b557e7c6827ba497c48cad3022f95", null ],
+    [ "integrityCheck", "structmusx_1_1dom_1_1options_1_1TextOptions_1_1InsertSymbolInfo.html#af200cadce559f5246025b0f2e837a47c", null ],
     [ "baselineShiftPerc", "structmusx_1_1dom_1_1options_1_1TextOptions_1_1InsertSymbolInfo.html#a8038c695540334a67aee1b2ba42deb00", null ],
     [ "symChar", "structmusx_1_1dom_1_1options_1_1TextOptions_1_1InsertSymbolInfo.html#a64dddac4922d9997b963af2eb0c65632", null ],
     [ "symFont", "structmusx_1_1dom_1_1options_1_1TextOptions_1_1InsertSymbolInfo.html#a5dea2d4320cb8e07057969ff5a644a7f", null ],

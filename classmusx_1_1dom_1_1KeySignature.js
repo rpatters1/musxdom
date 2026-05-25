@@ -15,7 +15,7 @@ var classmusx_1_1dom_1_1KeySignature =
     [ "getAlteration", "classmusx_1_1dom_1_1KeySignature.html#a1e31adcf3652b951c0280aa4dd42ca4c", null ],
     [ "getKeyMode", "classmusx_1_1dom_1_1KeySignature.html#a08a72c52d3dba53ad96f88b47e2f3d78", null ],
     [ "getOctaveDisplacement", "classmusx_1_1dom_1_1KeySignature.html#a69c8e8176511a3ad8e5d50c0e0ed424a", null ],
-    [ "integrityCheck", "classmusx_1_1dom_1_1KeySignature.html#a212ea816c3563a536f04b19ab3f2581f", null ],
+    [ "integrityCheck", "classmusx_1_1dom_1_1KeySignature.html#a07b41ad44a1675e5a340fced00065f50", null ],
     [ "isBuiltIn", "classmusx_1_1dom_1_1KeySignature.html#a49c630a5adbb73e575424c4678db7c83", null ],
     [ "isLinear", "classmusx_1_1dom_1_1KeySignature.html#a3ea0ce268d5f02f11ab41151461b448f", null ],
     [ "isMajor", "classmusx_1_1dom_1_1KeySignature.html#acda0305bc2f61b1bf734baa69f6a6d70", null ],

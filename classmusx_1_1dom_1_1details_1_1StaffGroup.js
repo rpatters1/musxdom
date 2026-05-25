@@ -11,7 +11,7 @@ var classmusx_1_1dom_1_1details_1_1StaffGroup =
       [ "AsGroup", "classmusx_1_1dom_1_1details_1_1StaffGroup.html#affdade9e4ba223ac57453b279f3e37cda48060aa7465ec95ec6e9fd7a8e609e04", null ],
       [ "None", "classmusx_1_1dom_1_1details_1_1StaffGroup.html#affdade9e4ba223ac57453b279f3e37cda6adf97f83acf6453d4a6a4b1070f3754", null ]
     ] ],
-    [ "StaffGroup", "classmusx_1_1dom_1_1details_1_1StaffGroup.html#a9cc08eb744c1b6ac9087f16ff99dbcfd", null ],
+    [ "StaffGroup", "classmusx_1_1dom_1_1details_1_1StaffGroup.html#ae13646cb56c9401a88f11d50b24159b7", null ],
     [ "getAbbreviatedInstrumentName", "classmusx_1_1dom_1_1details_1_1StaffGroup.html#a2d41e89e2d8bda9292543133a64f6f34", null ],
     [ "getAbbreviatedInstrumentNameCtx", "classmusx_1_1dom_1_1details_1_1StaffGroup.html#a7b61704b79dd1febdfb7803e14ffd21e", null ],
     [ "getAbbreviatedName", "classmusx_1_1dom_1_1details_1_1StaffGroup.html#a522fa14dc0f0cdef500b8a8799553cd2", null ],
@@ -21,7 +21,7 @@ var classmusx_1_1dom_1_1details_1_1StaffGroup =
     [ "getFullName", "classmusx_1_1dom_1_1details_1_1StaffGroup.html#abb02f772315f32f003af1cbd00329816", null ],
     [ "getFullNameCtx", "classmusx_1_1dom_1_1details_1_1StaffGroup.html#a7c92ebc2493e761697d57bac34c86d23", null ],
     [ "getMultiStaffInstGroup", "classmusx_1_1dom_1_1details_1_1StaffGroup.html#ad8af3f6660c88c5e4ee3ae84d07b872c", null ],
-    [ "integrityCheck", "classmusx_1_1dom_1_1details_1_1StaffGroup.html#aa918dbffc9eea1e36e5c4a404f98df96", null ],
+    [ "integrityCheck", "classmusx_1_1dom_1_1details_1_1StaffGroup.html#a6d282c8d680f9e41dd3a0a8178edce55", null ],
     [ "isAllMeasures", "classmusx_1_1dom_1_1details_1_1StaffGroup.html#a33803bfcc8d55829b7f5bc167de7a0f6", null ],
     [ "abbrvNameAlign", "classmusx_1_1dom_1_1details_1_1StaffGroup.html#a7398aa1fd6718d1321acfdf2238441ce", null ],
     [ "abbrvNameExpand", "classmusx_1_1dom_1_1details_1_1StaffGroup.html#a0959e3ac3bebc25fea61d7c72f0224b8", null ],

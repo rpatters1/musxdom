@@ -101,7 +101,7 @@ $(document).ready(function(){initNavTree('classmusx_1_1dom_1_1ObjectPool.html','
 </div><!--header-->
 <div class="contents">
 
-<p>A pool that manages collections of <code><a class="el" href="classmusx_1_1dom_1_1OthersBase.html" title="Base class for all &quot;others&quot; types.">OthersBase</a></code> objects, organized by XML node names and <code>Cmper</code> values.  
+<p>A pool that manages collections of <code><a class="el" href="classmusx_1_1dom_1_1OthersBase.html" title="EnigmaBase class for all &quot;others&quot; types.">OthersBase</a></code> objects, organized by XML node names and <code>Cmper</code> values.  
  <a href="classmusx_1_1dom_1_1ObjectPool.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="ObjectPool_8h_source.html">ObjectPool.h</a>&gt;</code></p>
@@ -148,14 +148,14 @@ virtual&#160;</td><td class="memItemRight" valign="bottom"><b>~ObjectPool</b> ()
 <tr class="memitem:addf661a4327a0748043216b0824a3ab6"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="namespacemusx_1_1dom.html#a4223cd531120dbef7acd854c3d2631b8">MusxInstance</a>&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1ObjectPool.html#addf661a4327a0748043216b0824a3ab6">getEffectiveForPart</a> (const <a class="el" href="structmusx_1_1dom_1_1ObjectPool_1_1ObjectKey.html">ObjectKey</a> &amp;key) const</td></tr>
 <tr class="memdesc:addf661a4327a0748043216b0824a3ab6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the first (and usually only) object of a specific type from the pool for a part.  <br /></td></tr>
 <tr class="separator:addf661a4327a0748043216b0824a3ab6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a20457025039eff1abba8c2e81cb4d25c" id="r_a20457025039eff1abba8c2e81cb4d25c"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1ObjectPool.html#a20457025039eff1abba8c2e81cb4d25c">ObjectPool</a> (const <a class="el" href="namespacemusx_1_1dom.html#aa76356b1ad3580081294898c79615c4d">DocumentWeakPtr</a> &amp;document, const std::unordered_map&lt; std::string_view, <a class="el" href="classmusx_1_1dom_1_1Base.html#ac50192040fe22fca9805ae4af5d88b4d">dom::Base::ShareMode</a> &gt; &amp;knownShareModes={})</td></tr>
-<tr class="memdesc:a20457025039eff1abba8c2e81cb4d25c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs the object pool.  <br /></td></tr>
-<tr class="separator:a20457025039eff1abba8c2e81cb4d25c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0ae0ef4e948779d7230251dcc5ab73b2" id="r_a0ae0ef4e948779d7230251dcc5ab73b2"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1ObjectPool.html#a0ae0ef4e948779d7230251dcc5ab73b2">ObjectPool</a> (const <a class="el" href="namespacemusx_1_1dom.html#aa76356b1ad3580081294898c79615c4d">DocumentWeakPtr</a> &amp;document, const std::unordered_map&lt; std::string_view, <a class="el" href="classmusx_1_1dom_1_1EnigmaBase.html#ac655bdce0724d5e32cfcd6203c9a5d1f">dom::EnigmaBase::ShareMode</a> &gt; &amp;knownShareModes={})</td></tr>
+<tr class="memdesc:a0ae0ef4e948779d7230251dcc5ab73b2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs the object pool.  <br /></td></tr>
+<tr class="separator:a0ae0ef4e948779d7230251dcc5ab73b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><div class="compoundTemplParams">template&lt;typename ObjectBaseType&gt;<br />
-class musx::dom::ObjectPool&lt; ObjectBaseType &gt;</div><p>A pool that manages collections of <code><a class="el" href="classmusx_1_1dom_1_1OthersBase.html" title="Base class for all &quot;others&quot; types.">OthersBase</a></code> objects, organized by XML node names and <code>Cmper</code> values. </p>
-<p>This class provides functionality to store and retrieve objects derived from a <code><a class="el" href="classmusx_1_1dom_1_1Base.html" title="Base class to enforce polymorphism across all DOM classes.">Base</a></code> object type, It supports dynamic retrieval of objects cast to their specific derived types.</p>
+class musx::dom::ObjectPool&lt; ObjectBaseType &gt;</div><p>A pool that manages collections of <code><a class="el" href="classmusx_1_1dom_1_1OthersBase.html" title="EnigmaBase class for all &quot;others&quot; types.">OthersBase</a></code> objects, organized by XML node names and <code>Cmper</code> values. </p>
+<p>This class provides functionality to store and retrieve objects derived from a <code>Base</code> object type, It supports dynamic retrieval of objects cast to their specific derived types.</p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
     <tr><td class="paramname">ObjectBaseType</td><td>the base type for the objects in the pool </td></tr>
@@ -163,8 +163,8 @@ class musx::dom::ObjectPool&lt; ObjectBaseType &gt;</div><p>A pool that manages 
   </dd>
 </dl>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a20457025039eff1abba8c2e81cb4d25c" name="a20457025039eff1abba8c2e81cb4d25c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a20457025039eff1abba8c2e81cb4d25c">&#9670;&#160;</a></span>ObjectPool()</h2>
+<a id="a0ae0ef4e948779d7230251dcc5ab73b2" name="a0ae0ef4e948779d7230251dcc5ab73b2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0ae0ef4e948779d7230251dcc5ab73b2">&#9670;&#160;</a></span>ObjectPool()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -183,7 +183,7 @@ template&lt;typename ObjectBaseType &gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::unordered_map&lt; std::string_view, <a class="el" href="classmusx_1_1dom_1_1Base.html#ac50192040fe22fca9805ae4af5d88b4d">dom::Base::ShareMode</a> &gt; &amp;&#160;</td>
+          <td class="paramtype">const std::unordered_map&lt; std::string_view, <a class="el" href="classmusx_1_1dom_1_1EnigmaBase.html#ac655bdce0724d5e32cfcd6203c9a5d1f">dom::EnigmaBase::ShareMode</a> &gt; &amp;&#160;</td>
           <td class="paramname"><em>knownShareModes</em> = <code>{}</code>&#160;</td>
         </tr>
         <tr>
@@ -203,7 +203,7 @@ template&lt;typename ObjectBaseType &gt; </div>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">document</td><td>THe document for this pool. </td></tr>
-    <tr><td class="paramname">knownShareModes</td><td>Optional parameter that specifies known share modes for certain elements. These can be particurly important for <a class="el" href="classmusx_1_1dom_1_1Base.html#ac50192040fe22fca9805ae4af5d88b4da6adf97f83acf6453d4a6a4b1070f3754">Base::ShareMode::None</a> because there may be no parts containing them. </td></tr>
+    <tr><td class="paramname">knownShareModes</td><td>Optional parameter that specifies known share modes for certain elements. These can be particurly important for <a class="el" href="classmusx_1_1dom_1_1EnigmaBase.html#ac655bdce0724d5e32cfcd6203c9a5d1fa6adf97f83acf6453d4a6a4b1070f3754">EnigmaBase::ShareMode::None</a> because there may be no parts containing them. </td></tr>
   </table>
   </dd>
 </dl>
@@ -400,7 +400,7 @@ template&lt;typename T &gt; </div>
 <p>If the requestedPartId differs from the sourcePartId, a copy of the source is returned with the requestedPartId set correctly.</p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
-    <tr><td class="paramname">T</td><td>The derived type of <code><a class="el" href="classmusx_1_1dom_1_1OthersBase.html" title="Base class for all &quot;others&quot; types.">OthersBase</a></code> to retrieve. Must have a <code>constexpr static std::string_view XmlNodeName</code> member. </td></tr>
+    <tr><td class="paramname">T</td><td>The derived type of <code><a class="el" href="classmusx_1_1dom_1_1OthersBase.html" title="EnigmaBase class for all &quot;others&quot; types.">OthersBase</a></code> to retrieve. Must have a <code>constexpr static std::string_view XmlNodeName</code> member. </td></tr>
   </table>
   </dd>
 </dl>
@@ -447,7 +447,7 @@ template&lt;typename T &gt; </div>
 <p>If no part item exists, returns the score item.</p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
-    <tr><td class="paramname">T</td><td>The derived type of <code><a class="el" href="classmusx_1_1dom_1_1OthersBase.html" title="Base class for all &quot;others&quot; types.">OthersBase</a></code> to retrieve. Must have a <code>constexpr static std::string_view XmlNodeName</code> member. </td></tr>
+    <tr><td class="paramname">T</td><td>The derived type of <code><a class="el" href="classmusx_1_1dom_1_1OthersBase.html" title="EnigmaBase class for all &quot;others&quot; types.">OthersBase</a></code> to retrieve. Must have a <code>constexpr static std::string_view XmlNodeName</code> member. </td></tr>
   </table>
   </dd>
 </dl>
@@ -493,7 +493,7 @@ template&lt;typename T &gt; </div>
 <dl class="section warning"><dt>Warning</dt><dd>The returned value is the source item from the pool and is guaranteed not to be a copy. Because of this, it does not reflect the requested part id. External callers should not directly call this function.</dd></dl>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
-    <tr><td class="paramname">T</td><td>The derived type of <code><a class="el" href="classmusx_1_1dom_1_1OthersBase.html" title="Base class for all &quot;others&quot; types.">OthersBase</a></code> to retrieve. Must have a <code>constexpr static std::string_view XmlNodeName</code> member. </td></tr>
+    <tr><td class="paramname">T</td><td>The derived type of <code><a class="el" href="classmusx_1_1dom_1_1OthersBase.html" title="EnigmaBase class for all &quot;others&quot; types.">OthersBase</a></code> to retrieve. Must have a <code>constexpr static std::string_view XmlNodeName</code> member. </td></tr>
   </table>
   </dd>
 </dl>

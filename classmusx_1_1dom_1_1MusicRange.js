@@ -1,11 +1,11 @@
 var classmusx_1_1dom_1_1MusicRange =
 [
     [ "MusicRange", "classmusx_1_1dom_1_1MusicRange.html#a31fc2d57d874e28b9702f74092382de4", null ],
+    [ "MusicRange", "classmusx_1_1dom_1_1MusicRange.html#aad46256a5a1ad8afa2764826fdae1ac1", null ],
     [ "contains", "classmusx_1_1dom_1_1MusicRange.html#a599ba068a6adae659415b6766d71b541", null ],
-    [ "contains", "classmusx_1_1dom_1_1MusicRange.html#a354c2aa0e00c3ceb957531df883b5d93", null ],
-    [ "nextLocation", "classmusx_1_1dom_1_1MusicRange.html#a0792f729cdacb3ca5e04fa3d24853adf", null ],
-    [ "endMeasureId", "classmusx_1_1dom_1_1MusicRange.html#ab815aaa995862bebe153e5d39e5e5a7d", null ],
-    [ "endPosition", "classmusx_1_1dom_1_1MusicRange.html#a19f88b4ff9bea459c7222b5d15d73b28", null ],
-    [ "startMeasureId", "classmusx_1_1dom_1_1MusicRange.html#ae1b6ed21ac6052f10047597fc013f07b", null ],
-    [ "startPosition", "classmusx_1_1dom_1_1MusicRange.html#aa516ce671fe13c073cc064ff0accf76c", null ]
+    [ "contains", "classmusx_1_1dom_1_1MusicRange.html#a7ca8c1755b9febef1c545a9948b24f5b", null ],
+    [ "contains", "classmusx_1_1dom_1_1MusicRange.html#a6ac8b7e6bd210da4aa12e42364f478d3", null ],
+    [ "nextLocation", "classmusx_1_1dom_1_1MusicRange.html#a441e11c8bd35ef76d2b2058ca6fe5451", null ],
+    [ "end", "classmusx_1_1dom_1_1MusicRange.html#a0ac60ad5c40adca6adf44cb0ca4a0f81", null ],
+    [ "start", "classmusx_1_1dom_1_1MusicRange.html#a6775b31430fd6d39f6d443ba1c300544", null ]
 ];

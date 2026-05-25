@@ -4,7 +4,7 @@ var searchData=
   ['shape_1',['shape',['../classmusx_1_1dom_1_1others_1_1Enclosure.html#aa9acc76c0201ce8e994305b07e257256',1,'musx::dom::others::Enclosure::Shape'],['../classmusx_1_1dom_1_1details_1_1FretboardDiagram.html#a6d4d2c889167564a58c02dcdc073f231',1,'musx::dom::details::FretboardDiagram::Shape']]],
   ['shapedefinstructiontype_2',['ShapeDefInstructionType',['../namespacemusx_1_1dom.html#a93764339b56e531ea37af5181b20b113',1,'musx::dom']]],
   ['shapetype_3',['ShapeType',['../classmusx_1_1dom_1_1others_1_1SmartShape.html#a7b869b52ed9d931b235b79d2c4ed1e6f',1,'musx::dom::others::SmartShape']]],
-  ['sharemode_4',['ShareMode',['../classmusx_1_1dom_1_1Base.html#ac50192040fe22fca9805ae4af5d88b4d',1,'musx::dom::Base']]],
+  ['sharemode_4',['ShareMode',['../classmusx_1_1dom_1_1EnigmaBase.html#ac655bdce0724d5e32cfcd6203c9a5d1f',1,'musx::dom::EnigmaBase']]],
   ['showclefmode_5',['ShowClefMode',['../namespacemusx_1_1dom.html#a09b81b6535bd382e3afc1a00ba080215',1,'musx::dom']]],
   ['showkeysigmode_6',['ShowKeySigMode',['../classmusx_1_1dom_1_1others_1_1Measure.html#a6276b8b88fe43f72e357aef1c4f2a70a',1,'musx::dom::others::Measure']]],
   ['showstafflist_7',['ShowStaffList',['../classmusx_1_1dom_1_1others_1_1MeasureExprAssign.html#a086834c0cd00799bce31cdc0522ce0d3',1,'musx::dom::others::MeasureExprAssign']]],

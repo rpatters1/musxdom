@@ -12,7 +12,7 @@ var classmusx_1_1dom_1_1others_1_1PageTextAssign =
     [ "calcStartPageNumber", "classmusx_1_1dom_1_1others_1_1PageTextAssign.html#ad3caf0e6c46d3a590d14dd7cb8193b26", null ],
     [ "getRawTextCtx", "classmusx_1_1dom_1_1others_1_1PageTextAssign.html#a7ad1815a48ef4a7c37a961ac4c4b7813", null ],
     [ "getTextBlock", "classmusx_1_1dom_1_1others_1_1PageTextAssign.html#a8f188b8fdd37e44c2827dec56776e87f", null ],
-    [ "integrityCheck", "classmusx_1_1dom_1_1others_1_1PageTextAssign.html#a1125fb45611c0987f1737efa1d2ecd0e", null ],
+    [ "integrityCheck", "classmusx_1_1dom_1_1others_1_1PageTextAssign.html#a759eb22ac313afbbaeb45053e9d5ce45", null ],
     [ "isMultiAssignedThruLastPage", "classmusx_1_1dom_1_1others_1_1PageTextAssign.html#abedc2ce3c8e6d612e956a8ec1bf1c154", null ],
     [ "isMultiPage", "classmusx_1_1dom_1_1others_1_1PageTextAssign.html#aef23981ba0f98f17ba27ffaf2039c6ab", null ],
     [ "block", "classmusx_1_1dom_1_1others_1_1PageTextAssign.html#afa4a54eb6f683ab9729b50a595ee3da0", null ],

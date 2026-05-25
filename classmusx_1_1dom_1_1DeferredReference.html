@@ -116,6 +116,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a3e23dad54ea7d4ed233acf39d72d70e9" id="r_a3e23dad54ea7d4ed233acf39d72d70e9"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1DeferredReference.html#a3e23dad54ea7d4ed233acf39d72d70e9">DeferredReference</a> (const T *ptr) noexcept</td></tr>
 <tr class="memdesc:a3e23dad54ea7d4ed233acf39d72d70e9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a non-owning <a class="el" href="classmusx_1_1dom_1_1DeferredReference.html" title="Wraps a reference to an existing object or owns a temporary value if needed.">DeferredReference</a> bound to a pointer.  <br /></td></tr>
 <tr class="separator:a3e23dad54ea7d4ed233acf39d72d70e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4f63c03719e755874cb9a0ae69a05c2b" id="r_a4f63c03719e755874cb9a0ae69a05c2b"><td class="memItemLeft" align="right" valign="top">const T &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1DeferredReference.html#a4f63c03719e755874cb9a0ae69a05c2b">bind</a> (const T &amp;ref) noexcept</td></tr>
+<tr class="memdesc:a4f63c03719e755874cb9a0ae69a05c2b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Binds this <a class="el" href="classmusx_1_1dom_1_1DeferredReference.html" title="Wraps a reference to an existing object or owns a temporary value if needed.">DeferredReference</a> to an existing object without taking ownership.  <br /></td></tr>
+<tr class="separator:a4f63c03719e755874cb9a0ae69a05c2b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6bf38324e5d6b10c0a7f4ec313d2afc0" id="r_a6bf38324e5d6b10c0a7f4ec313d2afc0"><td class="memItemLeft" align="right" valign="top">const T &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1DeferredReference.html#a6bf38324e5d6b10c0a7f4ec313d2afc0">emplace</a> (OwnedT &amp;&amp;value) noexcept(std::is_nothrow_move_constructible_v&lt; OwnedT &gt;)</td></tr>
 <tr class="memdesc:a6bf38324e5d6b10c0a7f4ec313d2afc0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Moves a value into owned storage and binds to it.  <br /></td></tr>
 <tr class="separator:a6bf38324e5d6b10c0a7f4ec313d2afc0"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -150,7 +153,7 @@ class musx::dom::DeferredReference&lt; T &gt;</div><p>Wraps a reference to an ex
 <div class="line">func(f);                        <span class="comment">// non-owning, no copy</span></div>
 <div class="line">func();                         <span class="comment">// omitted (empty), function will emplace()</span></div>
 <div class="line">func(<a class="code hl_function" href="classmusx_1_1dom_1_1DeferredReference.html#a67e9fd2926e7f12fd45a47b2169c8628">DeferredReference</a>{&amp;f});    <span class="comment">// explicit pointer form</span></div>
-<div class="ttc" id="aclassmusx_1_1dom_1_1DeferredReference_html"><div class="ttname"><a href="classmusx_1_1dom_1_1DeferredReference.html">musx::dom::DeferredReference</a></div><div class="ttdoc">Wraps a reference to an existing object or owns a temporary value if needed.</div><div class="ttdef"><b>Definition</b> MusxInstance.h:179</div></div>
+<div class="ttc" id="aclassmusx_1_1dom_1_1DeferredReference_html"><div class="ttname"><a href="classmusx_1_1dom_1_1DeferredReference.html">musx::dom::DeferredReference</a></div><div class="ttdoc">Wraps a reference to an existing object or owns a temporary value if needed.</div><div class="ttdef"><b>Definition</b> MusxInstance.h:194</div></div>
 <div class="ttc" id="aclassmusx_1_1dom_1_1DeferredReference_html_a67e9fd2926e7f12fd45a47b2169c8628"><div class="ttname"><a href="classmusx_1_1dom_1_1DeferredReference.html#a67e9fd2926e7f12fd45a47b2169c8628">musx::dom::DeferredReference::DeferredReference</a></div><div class="ttdeci">DeferredReference() noexcept=default</div><div class="ttdoc">Constructs an empty DeferredReference with no bound reference.</div></div>
 </div><!-- fragment --><dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
@@ -232,6 +235,44 @@ template&lt;class T &gt; </div>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="a4f63c03719e755874cb9a0ae69a05c2b" name="a4f63c03719e755874cb9a0ae69a05c2b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4f63c03719e755874cb9a0ae69a05c2b">&#9670;&#160;</a></span>bind()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const T &amp; <a class="el" href="classmusx_1_1dom_1_1DeferredReference.html">musx::dom::DeferredReference</a>&lt; T &gt;::bind </td>
+          <td>(</td>
+          <td class="paramtype">const T &amp;&#160;</td>
+          <td class="paramname"><em>ref</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Binds this <a class="el" href="classmusx_1_1dom_1_1DeferredReference.html" title="Wraps a reference to an existing object or owns a temporary value if needed.">DeferredReference</a> to an existing object without taking ownership. </p>
+<p>Any previously owned object is destroyed and the <a class="el" href="classmusx_1_1dom_1_1DeferredReference.html" title="Wraps a reference to an existing object or owns a temporary value if needed.">DeferredReference</a> becomes a non-owning reference to <code>ref</code>.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">ref</td><td>The object to reference. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A const reference to the bound object. </dd></dl>
+
+</div>
+</div>
 <a id="a6bf38324e5d6b10c0a7f4ec313d2afc0" name="a6bf38324e5d6b10c0a7f4ec313d2afc0"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a6bf38324e5d6b10c0a7f4ec313d2afc0">&#9670;&#160;</a></span>emplace()</h2>
 

@@ -2,7 +2,7 @@ var classmusx_1_1dom_1_1options_1_1NoteRestOptions =
 [
     [ "NoteColor", "classmusx_1_1dom_1_1options_1_1NoteRestOptions_1_1NoteColor.html", "classmusx_1_1dom_1_1options_1_1NoteRestOptions_1_1NoteColor" ],
     [ "NoteRestOptions", "classmusx_1_1dom_1_1options_1_1NoteRestOptions.html#a25a07912c17953424feb2756efc155f3", null ],
-    [ "integrityCheck", "classmusx_1_1dom_1_1options_1_1NoteRestOptions.html#a50e4c6b4c2a5e317f30de224aa4c0ebb", null ],
+    [ "integrityCheck", "classmusx_1_1dom_1_1options_1_1NoteRestOptions.html#a677059a5a5fa04b93b8d7054cbc50a7d", null ],
     [ "doCrossStaffNotes", "classmusx_1_1dom_1_1options_1_1NoteRestOptions.html#ab82d8edb215beac6a7a2194bf04675f1", null ],
     [ "doShapeNotes", "classmusx_1_1dom_1_1options_1_1NoteRestOptions.html#a6af968ccb8c2ee495aed23e0c108495b", null ],
     [ "drawOutline", "classmusx_1_1dom_1_1options_1_1NoteRestOptions.html#a9e486a714fef8d93c8ea202f7387897e", null ],

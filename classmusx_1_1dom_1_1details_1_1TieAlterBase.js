@@ -24,7 +24,7 @@ var classmusx_1_1dom_1_1details_1_1TieAlterBase =
       [ "Under", "classmusx_1_1dom_1_1details_1_1TieAlterBase.html#a01450d31978c4de387ad4b1f80c9083da02552d3c116b8a96f9ff0001b6ae661c", null ],
       [ "Over", "classmusx_1_1dom_1_1details_1_1TieAlterBase.html#a01450d31978c4de387ad4b1f80c9083daef087651eb482bae4624478696f4ad4f", null ]
     ] ],
-    [ "TieAlterBase", "classmusx_1_1dom_1_1details_1_1TieAlterBase.html#a52e941181985556c5826ae4bd9c2b8c7", null ],
+    [ "TieAlterBase", "classmusx_1_1dom_1_1details_1_1TieAlterBase.html#a966dee9c6efb894794e860df2181a1af", null ],
     [ "getNoteId", "classmusx_1_1dom_1_1details_1_1TieAlterBase.html#a32610382c8a6ff5be9d7e8f92d7150e8", null ],
     [ "afterMultiDotsLocal", "classmusx_1_1dom_1_1details_1_1TieAlterBase.html#a36ab7f8b145e83cc5df0ac4635dd506e", null ],
     [ "afterMultiDotsOn", "classmusx_1_1dom_1_1details_1_1TieAlterBase.html#a867ed7cc3a4daf051522436161b52964", null ],

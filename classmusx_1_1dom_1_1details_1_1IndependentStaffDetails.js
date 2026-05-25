@@ -3,7 +3,7 @@ var classmusx_1_1dom_1_1details_1_1IndependentStaffDetails =
     [ "IndependentStaffDetails", "classmusx_1_1dom_1_1details_1_1IndependentStaffDetails.html#a6d541a6a739c919fc3b6baeebef32be9", null ],
     [ "createDisplayTimeSignature", "classmusx_1_1dom_1_1details_1_1IndependentStaffDetails.html#ad3e463bb257c5c6e107fea9cc968172e", null ],
     [ "createTimeSignature", "classmusx_1_1dom_1_1details_1_1IndependentStaffDetails.html#a1b886e89a411b137c1647e7102c934e0", null ],
-    [ "integrityCheck", "classmusx_1_1dom_1_1details_1_1IndependentStaffDetails.html#abca06f386495146a4fb0a6d62a80b125", null ],
+    [ "integrityCheck", "classmusx_1_1dom_1_1details_1_1IndependentStaffDetails.html#a73d68fa19aed0b2e28a2150dae38c575", null ],
     [ "altDenTsig", "classmusx_1_1dom_1_1details_1_1IndependentStaffDetails.html#a9094cbd50203570c534cc252000b4522", null ],
     [ "altNumTsig", "classmusx_1_1dom_1_1details_1_1IndependentStaffDetails.html#a4c7770e1d0fd95dd6246a08c2fdc350b", null ],
     [ "beats", "classmusx_1_1dom_1_1details_1_1IndependentStaffDetails.html#ae79c5ed043efa63b99df229133337cb8", null ],

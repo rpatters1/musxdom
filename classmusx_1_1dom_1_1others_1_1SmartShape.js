@@ -69,7 +69,7 @@ var classmusx_1_1dom_1_1others_1_1SmartShape =
     [ "calcIsSlur", "classmusx_1_1dom_1_1others_1_1SmartShape.html#a1ef3af1cb9ad01fb49cf3fc8fe395025", null ],
     [ "createGlobalMusicRange", "classmusx_1_1dom_1_1others_1_1SmartShape.html#ade57de9fbb397dcee362925c636d29bd", null ],
     [ "createMusicRange", "classmusx_1_1dom_1_1others_1_1SmartShape.html#a90603f232daf80405ea7bf56f840392a", null ],
-    [ "integrityCheck", "classmusx_1_1dom_1_1others_1_1SmartShape.html#ad5faca45c7d8f9e3376fbde6405d109d", null ],
+    [ "integrityCheck", "classmusx_1_1dom_1_1others_1_1SmartShape.html#a7ad6f30fe7066c2dce90eb3db694d401", null ],
     [ "iterateEntries", "classmusx_1_1dom_1_1others_1_1SmartShape.html#a247e5ea76b94a8de228db134de7092c1", null ],
     [ "endLyricNum", "classmusx_1_1dom_1_1others_1_1SmartShape.html#a8788a59bf45fc907bdc16daa4d3d639d", null ],
     [ "endLyricType", "classmusx_1_1dom_1_1others_1_1SmartShape.html#a2c6f50d410ca198a830b429394844010", null ],
