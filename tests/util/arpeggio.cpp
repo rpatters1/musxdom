@@ -207,6 +207,93 @@ TEST(ArpeggioUtilTest, SymbolFilterCanRejectAssignment)
     EXPECT_FALSE(rejected.has_value());
 }
 
+TEST(ArpeggioUtilTest, StaffOriginOffsetResolverCanOverrideScrollViewProxy)
+{
+    auto doc = createArpeggiosDoc();
+    ASSERT_TRUE(doc);
+
+    auto sourceEntry = EntryInfoPtr::fromEntryNumber(doc, SCORE_PARTID, 136);
+    ASSERT_TRUE(sourceEntry);
+    auto assign = doc->getDetails()->get<details::ArticulationAssign>(SCORE_PARTID, 136, 0);
+    ASSERT_TRUE(assign);
+
+    ArpeggioSpanOptions options;
+    options.staffOriginOffsetResolver = [](const DocumentPtr&, Cmper, const StaffOriginOffsetRequest& request) {
+        if (request.targetStaffId != request.sourceStaffId) {
+            return StaffOriginOffsetResolverResult { StaffOriginOffsetResolverDecision::Unavailable, 0.0 };
+        }
+        return StaffOriginOffsetResolverResult { StaffOriginOffsetResolverDecision::Offset, 0.0 };
+    };
+
+    auto span = calcArpeggioSpanForAssignment(sourceEntry, assign, options);
+    ASSERT_TRUE(span.has_value());
+    EXPECT_EQ(span->topEntry->getEntry()->getEntryNumber(), 136);
+    EXPECT_EQ(span->bottomEntry->getEntry()->getEntryNumber(), 136);
+}
+
+TEST(ArpeggioUtilTest, StaffOriginOffsetResolverUnavailableSuppressesScrollViewProxy)
+{
+    auto doc = createArpeggiosDoc();
+    ASSERT_TRUE(doc);
+
+    auto sourceEntry = EntryInfoPtr::fromEntryNumber(doc, SCORE_PARTID, 136);
+    ASSERT_TRUE(sourceEntry);
+    auto assign = doc->getDetails()->get<details::ArticulationAssign>(SCORE_PARTID, 136, 0);
+    ASSERT_TRUE(assign);
+
+    ArpeggioSpanOptions options;
+    options.staffOriginOffsetResolver = [](const DocumentPtr&, Cmper, const StaffOriginOffsetRequest&) {
+        return StaffOriginOffsetResolverResult { StaffOriginOffsetResolverDecision::Unavailable, 0.0 };
+    };
+
+    EXPECT_FALSE(calcArpeggioSpanForAssignment(sourceEntry, assign, options).has_value());
+}
+
+TEST(ArpeggioUtilTest, StaffOriginOffsetResolverNotHandledFallsBackToScrollViewProxy)
+{
+    auto doc = createArpeggiosDoc();
+    ASSERT_TRUE(doc);
+
+    auto sourceEntry = EntryInfoPtr::fromEntryNumber(doc, SCORE_PARTID, 136);
+    ASSERT_TRUE(sourceEntry);
+    auto assign = doc->getDetails()->get<details::ArticulationAssign>(SCORE_PARTID, 136, 0);
+    ASSERT_TRUE(assign);
+
+    ArpeggioSpanOptions options;
+    options.staffOriginOffsetResolver = [](const DocumentPtr&, Cmper, const StaffOriginOffsetRequest&) {
+        return StaffOriginOffsetResolverResult { StaffOriginOffsetResolverDecision::NotHandled, 0.0 };
+    };
+
+    auto span = calcArpeggioSpanForAssignment(sourceEntry, assign, options);
+    ASSERT_TRUE(span.has_value());
+    EXPECT_EQ(span->bottomEntry->getEntry()->getEntryNumber(), 142);
+}
+
+TEST(ArpeggioUtilTest, StaffOriginOffsetScrollViewProxyMatchesScrollViewDistances)
+{
+    auto doc = createArpeggiosDoc();
+    ASSERT_TRUE(doc);
+
+    auto sourceEntry = EntryInfoPtr::fromEntryNumber(doc, SCORE_PARTID, 136);
+    ASSERT_TRUE(sourceEntry);
+    const auto scrollView = doc->getScrollViewStaves(SCORE_PARTID);
+    const auto sourceStaffIndex = scrollView.getIndexForStaff(sourceEntry.getStaff());
+    const auto lowerStaffIndex = scrollView.getIndexForStaff(2);
+    ASSERT_TRUE(sourceStaffIndex);
+    ASSERT_TRUE(lowerStaffIndex);
+
+    StaffOriginOffsetRequest request;
+    request.sourceStaffId = sourceEntry.getStaff();
+    request.targetStaffId = 2;
+    request.measureId = sourceEntry.getMeasure();
+    request.eduPosition = sourceEntry.calcGlobalElapsedDuration().calcEduDuration();
+
+    auto proxyResult = calcStaffOriginOffsetUsingScrollViewProxy(doc, SCORE_PARTID, request);
+    ASSERT_EQ(proxyResult.decision, StaffOriginOffsetResolverDecision::Offset);
+    EXPECT_EQ(proxyResult.targetOriginOffsetEvpu,
+        static_cast<double>(scrollView[*sourceStaffIndex]->distFromTop - scrollView[*lowerStaffIndex]->distFromTop));
+}
+
 TEST(ArpeggioUtilTest, Entry136SpansToEntry142Below)
 {
     auto doc = createArpeggiosDoc();

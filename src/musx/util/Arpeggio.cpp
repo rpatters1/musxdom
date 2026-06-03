@@ -86,21 +86,46 @@ bool calcIsCandidateEntry(const EntryInfoPtr& entry, const EntryInfoPtr& source,
     return true;
 }
 
-double calcSourceRelativeStaffPosition(int staffPosition, Evpu sourceDistFromTop, Evpu staffDistFromTop)
+double calcSourceRelativeEvpuFromStaffPosition(int staffPosition, double staffOriginOffset)
 {
-    const double staffOffset = static_cast<double>(sourceDistFromTop - staffDistFromTop) / EVPU_PER_STAFF_POSITION;
-    return staffOffset - static_cast<double>(staffPosition);
+    return staffOriginOffset - static_cast<double>(staffPosition) * EVPU_PER_STAFF_POSITION;
 }
 
-double calcSourceRelativeEvpuFromStaffPosition(int staffPosition, Evpu sourceDistFromTop, Evpu staffDistFromTop)
+double calcSourceRelativeEvpu(Evpu evpu, double staffOriginOffset)
 {
-    return static_cast<double>(sourceDistFromTop - staffDistFromTop)
-        - static_cast<double>(staffPosition) * EVPU_PER_STAFF_POSITION;
+    return staffOriginOffset - static_cast<double>(evpu);
 }
 
-double calcSourceRelativeEvpu(Evpu evpu, Evpu sourceDistFromTop, Evpu staffDistFromTop)
+std::optional<double> calcStaffOriginOffset(
+    const DocumentPtr& document,
+    Cmper partId,
+    StaffCmper sourceStaffId,
+    StaffCmper targetStaffId,
+    MeasCmper measureId,
+    Edu eduPosition,
+    const ArpeggioSpanOptions& options)
 {
-    return static_cast<double>(sourceDistFromTop - staffDistFromTop - evpu);
+    StaffOriginOffsetRequest request;
+    request.sourceStaffId = sourceStaffId;
+    request.targetStaffId = targetStaffId;
+    request.measureId = measureId;
+    request.eduPosition = eduPosition;
+
+    if (options.staffOriginOffsetResolver) {
+        const auto result = options.staffOriginOffsetResolver(document, partId, request);
+        if (result.decision == StaffOriginOffsetResolverDecision::Offset) {
+            return result.targetOriginOffsetEvpu;
+        }
+        if (result.decision == StaffOriginOffsetResolverDecision::Unavailable) {
+            return std::nullopt;
+        }
+    }
+
+    const auto fallbackResult = calcStaffOriginOffsetUsingScrollViewProxy(document, partId, request);
+    if (fallbackResult.decision == StaffOriginOffsetResolverDecision::Offset) {
+        return fallbackResult.targetOriginOffsetEvpu;
+    }
+    return std::nullopt;
 }
 
 bool calcPositionRangesOverlap(double firstTop, double firstBottom, double secondTop, double secondBottom)
@@ -117,9 +142,10 @@ std::optional<std::pair<double, double>> calcSourceInstrumentEvpuBounds(
     const MusxInstanceList<others::StaffUsed>& scrollView,
     const InstrumentInfo& sourceInstrument,
     Cmper partId,
+    const EntryInfoPtr& sourceEntryInfo,
     MeasCmper measureId,
     Edu eduPosition,
-    Evpu sourceDistFromTop)
+    const ArpeggioSpanOptions& options)
 {
     double instrumentTop = (std::numeric_limits<double>::max)();
     double instrumentBottom = (std::numeric_limits<double>::lowest)();
@@ -135,11 +161,13 @@ std::optional<std::pair<double, double>> calcSourceInstrumentEvpuBounds(
             continue;
         }
 
-        const Evpu staffDistFromTop = scrollView[staffIndex]->distFromTop;
-        const double staffTop = calcSourceRelativeEvpuFromStaffPosition(
-            staff->calcTopLinePosition(), sourceDistFromTop, staffDistFromTop);
-        const double staffBottom = calcSourceRelativeEvpuFromStaffPosition(
-            staff->calcBottomLinePosition(), sourceDistFromTop, staffDistFromTop);
+        const auto staffOriginOffset = calcStaffOriginOffset(
+            document, partId, sourceEntryInfo.getStaff(), staffId, measureId, eduPosition, options);
+        if (!staffOriginOffset) {
+            continue;
+        }
+        const double staffTop = calcSourceRelativeEvpuFromStaffPosition(staff->calcTopLinePosition(), *staffOriginOffset);
+        const double staffBottom = calcSourceRelativeEvpuFromStaffPosition(staff->calcBottomLinePosition(), *staffOriginOffset);
 
         instrumentTop = (std::min)(instrumentTop, (std::min)(staffTop, staffBottom));
         instrumentBottom = (std::max)(instrumentBottom, (std::max)(staffTop, staffBottom));
@@ -188,25 +216,20 @@ std::optional<ArpeggioSpanCandidate> calcNonArpeggioSpanForVerticalTargets(
         return std::nullopt;
     }
 
-    const auto sourceStaffIndex = scrollView.getIndexForStaff(sourceEntryInfo.getStaff());
-    if (!sourceStaffIndex) {
-        return std::nullopt;
-    }
-
     const auto sourceInstrument = document->getInstrumentForStaff(partId, sourceEntryInfo.getStaff());
     if (!sourceInstrument) {
         return std::nullopt;
     }
 
-    const Evpu sourceDistFromTop = scrollView[*sourceStaffIndex]->distFromTop;
     const auto sourceInstrumentBounds = calcSourceInstrumentEvpuBounds(
         document,
         scrollView,
         *sourceInstrument,
         partId,
+        sourceEntryInfo,
         sourceEntryInfo.getMeasure(),
         sourceEntryInfo.calcGlobalElapsedDuration().calcEduDuration(),
-        sourceDistFromTop);
+        options);
     if (!sourceInstrumentBounds) {
         return std::nullopt;
     }
@@ -231,15 +254,25 @@ std::optional<ArpeggioSpanCandidate> calcNonArpeggioSpanForVerticalTargets(
             continue;
         }
 
-        const Evpu candidateDistFromTop = scrollView[staffIndex]->distFromTop;
+        const auto candidateStaffOriginOffset = calcStaffOriginOffset(
+            document,
+            partId,
+            sourceEntryInfo.getStaff(),
+            candidateStaff,
+            sourceEntryInfo.getMeasure(),
+            sourceEntryInfo.calcGlobalElapsedDuration().calcEduDuration(),
+            options);
+        if (!candidateStaffOriginOffset) {
+            continue;
+        }
         scrollView.iterateEntries(staffIndex, staffIndex, range, [&](const EntryInfoPtr& candidate) -> bool {
             if (!calcIsCandidateEntry(candidate, sourceEntryInfo, options)) {
                 return true;
             }
 
             const auto [candTop, candBottom] = candidate.calcTopBottomStaffPositions();
-            const double candidateTop = calcSourceRelativeEvpuFromStaffPosition(candTop, sourceDistFromTop, candidateDistFromTop);
-            const double candidateBottom = calcSourceRelativeEvpuFromStaffPosition(candBottom, sourceDistFromTop, candidateDistFromTop);
+            const double candidateTop = calcSourceRelativeEvpuFromStaffPosition(candTop, *candidateStaffOriginOffset);
+            const double candidateBottom = calcSourceRelativeEvpuFromStaffPosition(candBottom, *candidateStaffOriginOffset);
             const bool isSourceEntry = candidate->getEntry()->getEntryNumber() == sourceEntry->getEntryNumber();
 
             if (!isSourceEntry && !calcPositionRangesOverlap(candidateTop, candidateBottom, startTarget, endTarget)) {
@@ -312,21 +345,11 @@ std::optional<ArpeggioSpanCandidate> calcArpeggioSpanForAssignment(
         return std::nullopt;
     }
 
-    const auto scrollView = document->getScrollViewStaves(partId);
-    if (scrollView.empty()) {
-        return std::nullopt;
-    }
-
-    const auto sourceStaffIndex = scrollView.getIndexForStaff(sourceEntryInfo.getStaff());
-    if (!sourceStaffIndex) {
-        return std::nullopt;
-    }
-    const Evpu sourceDistFromTop = scrollView[*sourceStaffIndex]->distFromTop;
     const auto [sourceTop, sourceBottom] = sourceEntryInfo.calcTopBottomStaffPositions();
-    const double topTarget = calcSourceRelativeStaffPosition(sourceTop, sourceDistFromTop, sourceDistFromTop)
-        - static_cast<double>(def->yOffsetMain + assign->vertOffset) / EVPU_PER_STAFF_POSITION;
-    const double bottomTarget = calcSourceRelativeStaffPosition(sourceBottom, sourceDistFromTop, sourceDistFromTop)
-        - static_cast<double>(def->yOffsetMain + assign->vertOffset + assign->vertAdd) / EVPU_PER_STAFF_POSITION;
+    const double topTarget = calcSourceRelativeEvpuFromStaffPosition(sourceTop, 0.0)
+        - static_cast<double>(def->yOffsetMain + assign->vertOffset);
+    const double bottomTarget = calcSourceRelativeEvpuFromStaffPosition(sourceBottom, 0.0)
+        - static_cast<double>(def->yOffsetMain + assign->vertOffset + assign->vertAdd);
 
     EntryInfoPtr topEntry;
     EntryInfoPtr bottomEntry;
@@ -336,16 +359,31 @@ std::optional<ArpeggioSpanCandidate> calcArpeggioSpanForAssignment(
     const MusicRange range(document, sourceEntryInfo.getMeasure(), sourceEntryInfo.calcGlobalElapsedDuration(),
         sourceEntryInfo.getMeasure(), sourceEntryInfo.calcGlobalElapsedDuration());
 
+    const auto scrollView = document->getScrollViewStaves(partId);
+    if (scrollView.empty()) {
+        return std::nullopt;
+    }
     for (size_t staffIndex = 0; staffIndex < scrollView.size(); ++staffIndex) {
-        const Evpu candidateDistFromTop = scrollView[staffIndex]->distFromTop;
+        const StaffCmper candidateStaff = scrollView[staffIndex]->staffId;
+        const auto candidateStaffOriginOffset = calcStaffOriginOffset(
+            document,
+            partId,
+            sourceEntryInfo.getStaff(),
+            candidateStaff,
+            sourceEntryInfo.getMeasure(),
+            sourceEntryInfo.calcGlobalElapsedDuration().calcEduDuration(),
+            options);
+        if (!candidateStaffOriginOffset) {
+            continue;
+        }
 
         scrollView.iterateEntries(staffIndex, staffIndex, range, [&](const EntryInfoPtr& candidate) -> bool {
             if (!calcIsCandidateEntry(candidate, sourceEntryInfo, options)) {
                 return true;
             }
             const auto [candTop, candBottom] = candidate.calcTopBottomStaffPositions();
-            const double candidateTop = calcSourceRelativeStaffPosition(candTop, sourceDistFromTop, candidateDistFromTop);
-            const double candidateBottom = calcSourceRelativeStaffPosition(candBottom, sourceDistFromTop, candidateDistFromTop);
+            const double candidateTop = calcSourceRelativeEvpuFromStaffPosition(candTop, *candidateStaffOriginOffset);
+            const double candidateBottom = calcSourceRelativeEvpuFromStaffPosition(candBottom, *candidateStaffOriginOffset);
             const bool isSourceEntry = candidate->getEntry()->getEntryNumber() == sourceEntry->getEntryNumber();
 
             if (!isSourceEntry && !calcPositionRangesOverlap(candidateTop, candidateBottom, topTarget, bottomTarget)) {
@@ -456,19 +494,21 @@ std::optional<ArpeggioSpanCandidate> calcNonArpeggioSpanForAssignment(
     }
 
     const Cmper partId = frame->getRequestedPartId();
-    const auto scrollView = document->getScrollViewStaves(partId);
-    const auto sourceStaffIndex = scrollView.getIndexForStaff(sourceEntryInfo.getStaff());
     const StaffCmper assignedStaffId = assign->calcAssignedStaffId(/*forPageView*/false);
-    const auto assignedStaffIndex = scrollView.getIndexForStaff(assignedStaffId);
-    if (!sourceStaffIndex || !assignedStaffIndex) {
+    const auto assignedStaffOriginOffset = calcStaffOriginOffset(
+        document,
+        partId,
+        sourceEntryInfo.getStaff(),
+        assignedStaffId,
+        sourceEntryInfo.getMeasure(),
+        sourceEntryInfo.calcGlobalElapsedDuration().calcEduDuration(),
+        options);
+    if (!assignedStaffOriginOffset) {
         return std::nullopt;
     }
 
-    const Evpu sourceDistFromTop = scrollView[*sourceStaffIndex]->distFromTop;
-    const Evpu assignedDistFromTop = scrollView[*assignedStaffIndex]->distFromTop;
-    const double staffOffset = static_cast<double>(sourceDistFromTop - assignedDistFromTop);
-    const double startTarget = staffOffset - (static_cast<double>(assign->vertEvpuOff) + localYBounds->first);
-    const double endTarget = staffOffset - (static_cast<double>(assign->vertEvpuOff) + localYBounds->second);
+    const double startTarget = *assignedStaffOriginOffset - (static_cast<double>(assign->vertEvpuOff) + localYBounds->first);
+    const double endTarget = *assignedStaffOriginOffset - (static_cast<double>(assign->vertEvpuOff) + localYBounds->second);
 
     return calcNonArpeggioSpanForVerticalTargets(sourceEntryInfo, startTarget, endTarget, options);
 }
@@ -502,20 +542,7 @@ std::optional<ArpeggioSpanCandidate> calcNonArpeggioSpanForSmartShape(
     MUSX_ASSERT_IF(!document) {
         return std::nullopt;
     }
-
     const Cmper partId = frame->getRequestedPartId();
-    const auto scrollView = document->getScrollViewStaves(partId);
-    if (scrollView.empty()) {
-        return std::nullopt;
-    }
-
-    const auto sourceStaffIndex = scrollView.getIndexForStaff(sourceEntryInfo.getStaff());
-    const auto startStaffIndex = scrollView.getIndexForStaff(smartShape->startTermSeg->endPoint->staffId);
-    const auto endStaffIndex = scrollView.getIndexForStaff(smartShape->endTermSeg->endPoint->staffId);
-    if (!sourceStaffIndex || !startStaffIndex || !endStaffIndex) {
-        return std::nullopt;
-    }
-
     if (smartShape->startTermSeg->endPoint->measId != sourceEntryInfo.getMeasure()
         || smartShape->endTermSeg->endPoint->measId != sourceEntryInfo.getMeasure()
         || smartShape->startTermSeg->endPoint->calcGlobalPosition() != sourceEntryInfo.calcGlobalElapsedDuration()
@@ -523,15 +550,32 @@ std::optional<ArpeggioSpanCandidate> calcNonArpeggioSpanForSmartShape(
         return std::nullopt;
     }
 
-    const Evpu sourceDistFromTop = scrollView[*sourceStaffIndex]->distFromTop;
+    const auto startStaffOriginOffset = calcStaffOriginOffset(
+        document,
+        partId,
+        sourceEntryInfo.getStaff(),
+        smartShape->startTermSeg->endPoint->staffId,
+        sourceEntryInfo.getMeasure(),
+        sourceEntryInfo.calcGlobalElapsedDuration().calcEduDuration(),
+        options);
+    const auto endStaffOriginOffset = calcStaffOriginOffset(
+        document,
+        partId,
+        sourceEntryInfo.getStaff(),
+        smartShape->endTermSeg->endPoint->staffId,
+        sourceEntryInfo.getMeasure(),
+        sourceEntryInfo.calcGlobalElapsedDuration().calcEduDuration(),
+        options);
+    if (!startStaffOriginOffset || !endStaffOriginOffset) {
+        return std::nullopt;
+    }
+
     const double startTarget = calcSourceRelativeEvpu(
         smartShape->startTermSeg->endPointAdj->calcVertOffset(),
-        sourceDistFromTop,
-        scrollView[*startStaffIndex]->distFromTop);
+        *startStaffOriginOffset);
     const double endTarget = calcSourceRelativeEvpu(
         smartShape->endTermSeg->endPointAdj->calcVertOffset(),
-        sourceDistFromTop,
-        scrollView[*endStaffIndex]->distFromTop);
+        *endStaffOriginOffset);
     return calcNonArpeggioSpanForVerticalTargets(sourceEntryInfo, startTarget, endTarget, options);
 }
 
