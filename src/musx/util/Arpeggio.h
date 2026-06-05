@@ -23,6 +23,7 @@
 
 #include <functional>
 #include <optional>
+#include <string>
 
 #include "musx/dom/Details.h"
 #include "musx/dom/Entries.h"
@@ -64,6 +65,9 @@ struct ArpeggioSpanCandidate
     dom::EntryInfoPtr bottomEntry; ///< Chosen bottom entry for the arpeggio span.
     ArpeggioDirection direction{ArpeggioDirection::Auto}; ///< Roll direction when known.
     ArpeggioArrow arrow{ArpeggioArrow::Auto}; ///< Arrowhead state when known.
+
+    [[nodiscard]] std::string key() const;
+        ///< Stable identity key for deduplicating equivalent span candidates.
 };
 
 /// @brief Options controlling arpeggio span resolution.
@@ -73,7 +77,7 @@ struct ArpeggioSpanOptions
     bool skipGraceEntries{false}; ///< Skip grace-note source entries and grace-note candidates.
     bool constrainToSourceStaffOnly{false}; ///< Restrict matching to entries on the source staff only.
     StaffOriginOffsetResolver staffOriginOffsetResolver;
-        ///< Optional caller-provided staff origin offset resolver. If unhandled, the scroll-view proxy is used.
+        ///< Optional caller-provided staff origin offset resolver. If unhandled, the system-staff proxy is used.
 };
 
 /// @brief Resolve top/bottom entries for one articulation assignment interpreted as an arpeggio.

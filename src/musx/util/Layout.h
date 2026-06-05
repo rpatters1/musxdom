@@ -24,6 +24,7 @@
 #include <functional>
 
 #include "musx/dom/DocumentElement.h"
+#include "musx/dom/MusxInstance.h"
 
 namespace musx::util {
 
@@ -57,7 +58,24 @@ using StaffOriginOffsetResolver = std::function<StaffOriginOffsetResolverResult(
     dom::Cmper partId,
     const StaffOriginOffsetRequest& request)>;
 
-/// @brief Resolve a staff origin offset request using musxdom's scroll-view proxy logic.
+/// @brief Return the system staff list for @p measureId, falling back to Scroll View if no system list is available.
+[[nodiscard]]
+dom::MusxInstanceList<dom::others::StaffUsed> calcSystemStavesOrScrollView(
+    const dom::DocumentPtr& document,
+    dom::Cmper partId,
+    dom::MeasCmper measureId);
+
+/// @brief Resolve a staff origin offset request using musxdom's system-staff proxy logic.
+/// @details Uses the @ref dom::others::StaffUsed list for the system containing @ref StaffOriginOffsetRequest::measureId
+/// when available, falling back to Scroll View only when no system staff list can be resolved.
+[[nodiscard]]
+StaffOriginOffsetResolverResult calcStaffOriginOffsetUsingSystemStaffProxy(
+    const dom::DocumentPtr& document,
+    dom::Cmper partId,
+    const StaffOriginOffsetRequest& request);
+
+/// @brief Compatibility wrapper for the original scroll-view proxy API.
+/// @details This now delegates to @ref calcStaffOriginOffsetUsingSystemStaffProxy.
 [[nodiscard]]
 StaffOriginOffsetResolverResult calcStaffOriginOffsetUsingScrollViewProxy(
     const dom::DocumentPtr& document,

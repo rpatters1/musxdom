@@ -231,7 +231,7 @@ TEST(ArpeggioUtilTest, StaffOriginOffsetResolverCanOverrideScrollViewProxy)
     EXPECT_EQ(span->bottomEntry->getEntry()->getEntryNumber(), 136);
 }
 
-TEST(ArpeggioUtilTest, StaffOriginOffsetResolverUnavailableSuppressesScrollViewProxy)
+TEST(ArpeggioUtilTest, StaffOriginOffsetResolverUnavailableSuppressesSystemProxy)
 {
     auto doc = createArpeggiosDoc();
     ASSERT_TRUE(doc);
@@ -249,7 +249,7 @@ TEST(ArpeggioUtilTest, StaffOriginOffsetResolverUnavailableSuppressesScrollViewP
     EXPECT_FALSE(calcArpeggioSpanForAssignment(sourceEntry, assign, options).has_value());
 }
 
-TEST(ArpeggioUtilTest, StaffOriginOffsetResolverNotHandledFallsBackToScrollViewProxy)
+TEST(ArpeggioUtilTest, StaffOriginOffsetResolverNotHandledFallsBackToSystemProxy)
 {
     auto doc = createArpeggiosDoc();
     ASSERT_TRUE(doc);
@@ -269,16 +269,16 @@ TEST(ArpeggioUtilTest, StaffOriginOffsetResolverNotHandledFallsBackToScrollViewP
     EXPECT_EQ(span->bottomEntry->getEntry()->getEntryNumber(), 142);
 }
 
-TEST(ArpeggioUtilTest, StaffOriginOffsetScrollViewProxyMatchesScrollViewDistances)
+TEST(ArpeggioUtilTest, StaffOriginOffsetSystemProxyMatchesSystemDistances)
 {
     auto doc = createArpeggiosDoc();
     ASSERT_TRUE(doc);
 
     auto sourceEntry = EntryInfoPtr::fromEntryNumber(doc, SCORE_PARTID, 136);
     ASSERT_TRUE(sourceEntry);
-    const auto scrollView = doc->getScrollViewStaves(SCORE_PARTID);
-    const auto sourceStaffIndex = scrollView.getIndexForStaff(sourceEntry.getStaff());
-    const auto lowerStaffIndex = scrollView.getIndexForStaff(2);
+    const auto systemStaves = calcSystemStavesOrScrollView(doc, SCORE_PARTID, sourceEntry.getMeasure());
+    const auto sourceStaffIndex = systemStaves.getIndexForStaff(sourceEntry.getStaff());
+    const auto lowerStaffIndex = systemStaves.getIndexForStaff(2);
     ASSERT_TRUE(sourceStaffIndex);
     ASSERT_TRUE(lowerStaffIndex);
 
@@ -288,10 +288,10 @@ TEST(ArpeggioUtilTest, StaffOriginOffsetScrollViewProxyMatchesScrollViewDistance
     request.measureId = sourceEntry.getMeasure();
     request.eduPosition = sourceEntry.calcGlobalElapsedDuration().calcEduDuration();
 
-    auto proxyResult = calcStaffOriginOffsetUsingScrollViewProxy(doc, SCORE_PARTID, request);
+    auto proxyResult = calcStaffOriginOffsetUsingSystemStaffProxy(doc, SCORE_PARTID, request);
     ASSERT_EQ(proxyResult.decision, StaffOriginOffsetResolverDecision::Offset);
     EXPECT_EQ(proxyResult.targetOriginOffsetEvpu,
-        static_cast<double>(scrollView[*sourceStaffIndex]->distFromTop - scrollView[*lowerStaffIndex]->distFromTop));
+        static_cast<double>(systemStaves[*sourceStaffIndex]->distFromTop - systemStaves[*lowerStaffIndex]->distFromTop));
 }
 
 TEST(ArpeggioUtilTest, Entry136SpansToEntry142Below)
