@@ -30,9 +30,27 @@ using namespace musx::dom;
 
 namespace musx::util {
 
+std::string ArpeggioSpanCandidate::key() const
+{
+    const auto entryKey = [](const dom::EntryInfoPtr& entry) -> std::string {
+        if (!entry) {
+            return "0";
+        }
+        return std::to_string(entry->getEntry()->getEntryNumber());
+    };
+    return std::to_string(static_cast<int>(type))
+        + ":" + std::to_string(static_cast<int>(direction))
+        + ":" + std::to_string(static_cast<int>(arrow))
+        + ":" + entryKey(sourceEntry)
+        + ":" + entryKey(topEntry)
+        + ":" + entryKey(bottomEntry);
+}
+
 namespace {
 
 constexpr double EVPU_PER_STAFF_POSITION = EVPU_PER_SPACE / 2.0;
+constexpr double ARPEGGIO_VERTICAL_SEGMENT_ASCENT = 2.0 * EVPU_PER_SPACE;
+constexpr double NON_ARPEGGIO_INSTRUMENT_BOUND_SLOP = 1.5 * EVPU_PER_SPACE;
 
 bool calcIsLikelyArpeggioAssignment(const MusxInstance<details::ArticulationAssign>& assign,
     const MusxInstance<others::ArticulationDef>& def,
@@ -96,6 +114,11 @@ double calcSourceRelativeEvpu(Evpu evpu, double staffOriginOffset)
     return staffOriginOffset - static_cast<double>(evpu);
 }
 
+double roundToNearestHalfSpace(double evpu)
+{
+    return std::round(evpu / EVPU_PER_STAFF_POSITION) * EVPU_PER_STAFF_POSITION;
+}
+
 std::optional<double> calcStaffOriginOffset(
     const DocumentPtr& document,
     Cmper partId,
@@ -121,7 +144,7 @@ std::optional<double> calcStaffOriginOffset(
         }
     }
 
-    const auto fallbackResult = calcStaffOriginOffsetUsingScrollViewProxy(document, partId, request);
+    const auto fallbackResult = calcStaffOriginOffsetUsingSystemStaffProxy(document, partId, request);
     if (fallbackResult.decision == StaffOriginOffsetResolverDecision::Offset) {
         return fallbackResult.targetOriginOffsetEvpu;
     }
@@ -139,7 +162,7 @@ bool calcPositionRangesOverlap(double firstTop, double firstBottom, double secon
 
 std::optional<std::pair<double, double>> calcSourceInstrumentEvpuBounds(
     const DocumentPtr& document,
-    const MusxInstanceList<others::StaffUsed>& scrollView,
+    const MusxInstanceList<others::StaffUsed>& staffList,
     const InstrumentInfo& sourceInstrument,
     Cmper partId,
     const EntryInfoPtr& sourceEntryInfo,
@@ -149,9 +172,10 @@ std::optional<std::pair<double, double>> calcSourceInstrumentEvpuBounds(
 {
     double instrumentTop = (std::numeric_limits<double>::max)();
     double instrumentBottom = (std::numeric_limits<double>::lowest)();
+    const MusicRange range(document, measureId, Fraction::fromEdu(eduPosition), measureId, Fraction::fromEdu(eduPosition));
 
-    for (size_t staffIndex = 0; staffIndex < scrollView.size(); ++staffIndex) {
-        const StaffCmper staffId = scrollView[staffIndex]->staffId;
+    for (size_t staffIndex = 0; staffIndex < staffList.size(); ++staffIndex) {
+        const StaffCmper staffId = staffList[staffIndex]->staffId;
         if (sourceInstrument.staves.find(staffId) == sourceInstrument.staves.end()) {
             continue;
         }
@@ -171,6 +195,20 @@ std::optional<std::pair<double, double>> calcSourceInstrumentEvpuBounds(
 
         instrumentTop = (std::min)(instrumentTop, (std::min)(staffTop, staffBottom));
         instrumentBottom = (std::max)(instrumentBottom, (std::max)(staffTop, staffBottom));
+
+        staffList.iterateEntries(staffIndex, staffIndex, range, [&](const EntryInfoPtr& candidate) -> bool {
+            if (!calcIsCandidateEntry(candidate, sourceEntryInfo, options)) {
+                return true;
+            }
+
+            const auto [candTop, candBottom] = candidate.calcTopBottomStaffPositions();
+            const double candidateTop = calcSourceRelativeEvpuFromStaffPosition(candTop, *staffOriginOffset);
+            const double candidateBottom = calcSourceRelativeEvpuFromStaffPosition(candBottom, *staffOriginOffset);
+
+            instrumentTop = (std::min)(instrumentTop, (std::min)(candidateTop, candidateBottom));
+            instrumentBottom = (std::max)(instrumentBottom, (std::max)(candidateTop, candidateBottom));
+            return true;
+        });
     }
 
     if (instrumentTop == (std::numeric_limits<double>::max)()
@@ -178,7 +216,9 @@ std::optional<std::pair<double, double>> calcSourceInstrumentEvpuBounds(
         return std::nullopt;
     }
 
-    return std::make_pair(instrumentTop, instrumentBottom);
+    return std::make_pair(
+        instrumentTop - NON_ARPEGGIO_INSTRUMENT_BOUND_SLOP,
+        instrumentBottom + NON_ARPEGGIO_INSTRUMENT_BOUND_SLOP);
 }
 
 std::optional<ArpeggioSpanCandidate> calcNonArpeggioSpanForVerticalTargets(
@@ -200,6 +240,8 @@ std::optional<ArpeggioSpanCandidate> calcNonArpeggioSpanForVerticalTargets(
     if (options.skipGraceEntries && sourceEntry->graceNote) {
         return std::nullopt;
     }
+    startTarget = roundToNearestHalfSpace(startTarget);
+    endTarget = roundToNearestHalfSpace(endTarget);
 
     auto frame = sourceEntryInfo.getFrame();
     MUSX_ASSERT_IF(!frame) {
@@ -211,8 +253,8 @@ std::optional<ArpeggioSpanCandidate> calcNonArpeggioSpanForVerticalTargets(
     }
 
     const Cmper partId = frame->getRequestedPartId();
-    const auto scrollView = document->getScrollViewStaves(partId);
-    if (scrollView.empty()) {
+    const auto staffList = calcSystemStavesOrScrollView(document, partId, sourceEntryInfo.getMeasure());
+    if (staffList.empty()) {
         return std::nullopt;
     }
 
@@ -223,7 +265,7 @@ std::optional<ArpeggioSpanCandidate> calcNonArpeggioSpanForVerticalTargets(
 
     const auto sourceInstrumentBounds = calcSourceInstrumentEvpuBounds(
         document,
-        scrollView,
+        staffList,
         *sourceInstrument,
         partId,
         sourceEntryInfo,
@@ -236,6 +278,11 @@ std::optional<ArpeggioSpanCandidate> calcNonArpeggioSpanForVerticalTargets(
 
     const double targetTop = (std::min)(startTarget, endTarget);
     const double targetBottom = (std::max)(startTarget, endTarget);
+    // Non-arpeggio vertical hooks are inferred from ambiguous shapes, so keep them within the
+    // source logical Instrument as a conservative guard against false positives. The instrument
+    // bounds include same-location entries plus a little slop because notes may legitimately sit
+    // outside the outer staff lines. Normal arpeggio articulations are handled differently below
+    // because Finale does not constrain their spans to logical Instruments.
     if (targetTop < sourceInstrumentBounds->first || targetBottom > sourceInstrumentBounds->second) {
         return std::nullopt;
     }
@@ -248,8 +295,8 @@ std::optional<ArpeggioSpanCandidate> calcNonArpeggioSpanForVerticalTargets(
     const MusicRange range(document, sourceEntryInfo.getMeasure(), sourceEntryInfo.calcGlobalElapsedDuration(),
         sourceEntryInfo.getMeasure(), sourceEntryInfo.calcGlobalElapsedDuration());
 
-    for (size_t staffIndex = 0; staffIndex < scrollView.size(); ++staffIndex) {
-        const StaffCmper candidateStaff = scrollView[staffIndex]->staffId;
+    for (size_t staffIndex = 0; staffIndex < staffList.size(); ++staffIndex) {
+        const StaffCmper candidateStaff = staffList[staffIndex]->staffId;
         if (sourceInstrument->staves.find(candidateStaff) == sourceInstrument->staves.end()) {
             continue;
         }
@@ -265,7 +312,7 @@ std::optional<ArpeggioSpanCandidate> calcNonArpeggioSpanForVerticalTargets(
         if (!candidateStaffOriginOffset) {
             continue;
         }
-        scrollView.iterateEntries(staffIndex, staffIndex, range, [&](const EntryInfoPtr& candidate) -> bool {
+        staffList.iterateEntries(staffIndex, staffIndex, range, [&](const EntryInfoPtr& candidate) -> bool {
             if (!calcIsCandidateEntry(candidate, sourceEntryInfo, options)) {
                 return true;
             }
@@ -345,11 +392,13 @@ std::optional<ArpeggioSpanCandidate> calcArpeggioSpanForAssignment(
         return std::nullopt;
     }
 
-    const auto [sourceTop, sourceBottom] = sourceEntryInfo.calcTopBottomStaffPositions();
-    const double topTarget = calcSourceRelativeEvpuFromStaffPosition(sourceTop, 0.0)
-        - static_cast<double>(def->yOffsetMain + assign->vertOffset);
-    const double bottomTarget = calcSourceRelativeEvpuFromStaffPosition(sourceBottom, 0.0)
-        - static_cast<double>(def->yOffsetMain + assign->vertOffset + assign->vertAdd);
+    const int sourceTop = sourceEntryInfo.calcTopBottomStaffPositions().first;
+    const double verticalOrigin = calcSourceRelativeEvpuFromStaffPosition(sourceTop, 0.0);
+    const double topTarget = roundToNearestHalfSpace(verticalOrigin
+        - static_cast<double>(def->yOffsetMain + assign->vertOffset)
+        - ARPEGGIO_VERTICAL_SEGMENT_ASCENT);
+    const double bottomTarget = roundToNearestHalfSpace(verticalOrigin
+        - static_cast<double>(def->yOffsetMain + assign->vertOffset + assign->vertAdd));
 
     EntryInfoPtr topEntry;
     EntryInfoPtr bottomEntry;
@@ -359,12 +408,15 @@ std::optional<ArpeggioSpanCandidate> calcArpeggioSpanForAssignment(
     const MusicRange range(document, sourceEntryInfo.getMeasure(), sourceEntryInfo.calcGlobalElapsedDuration(),
         sourceEntryInfo.getMeasure(), sourceEntryInfo.calcGlobalElapsedDuration());
 
-    const auto scrollView = document->getScrollViewStaves(partId);
-    if (scrollView.empty()) {
+    const auto staffList = calcSystemStavesOrScrollView(document, partId, sourceEntryInfo.getMeasure());
+    if (staffList.empty()) {
         return std::nullopt;
     }
-    for (size_t staffIndex = 0; staffIndex < scrollView.size(); ++staffIndex) {
-        const StaffCmper candidateStaff = scrollView[staffIndex]->staffId;
+    // Intentionally scan all staves in the active system rather than only the source logical Instrument.
+    // Finale arpeggio articulations can span across Instrument boundaries; logical Instruments
+    // are a musxdom/caller convenience and should not truncate explicit arpeggio spans.
+    for (size_t staffIndex = 0; staffIndex < staffList.size(); ++staffIndex) {
+        const StaffCmper candidateStaff = staffList[staffIndex]->staffId;
         const auto candidateStaffOriginOffset = calcStaffOriginOffset(
             document,
             partId,
@@ -377,7 +429,7 @@ std::optional<ArpeggioSpanCandidate> calcArpeggioSpanForAssignment(
             continue;
         }
 
-        scrollView.iterateEntries(staffIndex, staffIndex, range, [&](const EntryInfoPtr& candidate) -> bool {
+        staffList.iterateEntries(staffIndex, staffIndex, range, [&](const EntryInfoPtr& candidate) -> bool {
             if (!calcIsCandidateEntry(candidate, sourceEntryInfo, options)) {
                 return true;
             }

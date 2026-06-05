@@ -21,12 +21,56 @@
  */
 #include "musx/util/Layout.h"
 
-#include "music_theory/music_theory.hpp"
-#include "musx/dom/Document.h"
+#include "musx/musx.h"
 
 namespace musx::util {
 
-StaffOriginOffsetResolverResult calcStaffOriginOffsetUsingScrollViewProxy(
+namespace {
+
+StaffOriginOffsetResolverResult calcStaffOriginOffsetUsingStaffList(
+    const dom::MusxInstanceList<dom::others::StaffUsed>& staffList,
+    const StaffOriginOffsetRequest& request)
+{
+    const auto sourceStaffIndex = staffList.getIndexForStaff(request.sourceStaffId);
+    const auto targetStaffIndex = staffList.getIndexForStaff(request.targetStaffId);
+    if (!sourceStaffIndex || !targetStaffIndex) {
+        return { StaffOriginOffsetResolverDecision::Unavailable, 0.0 };
+    }
+
+    return {
+        StaffOriginOffsetResolverDecision::Offset,
+        static_cast<double>(staffList[*sourceStaffIndex]->distFromTop - staffList[*targetStaffIndex]->distFromTop)
+    };
+}
+
+} // namespace
+
+dom::MusxInstanceList<dom::others::StaffUsed> calcSystemStavesOrScrollView(
+    const dom::DocumentPtr& document,
+    dom::Cmper partId,
+    dom::MeasCmper measureId)
+{
+    MUSX_ASSERT_IF(!document) {
+        return dom::MusxInstanceList<dom::others::StaffUsed>(dom::DocumentWeakPtr{}, partId);
+    }
+
+    if (measureId > 0) {
+        const auto systems = document->getOthers()->getArray<dom::others::StaffSystem>(partId);
+        for (const auto& system : systems) {
+            if (measureId >= system->startMeas && measureId < system->endMeas) {
+                auto systemStaves = document->getOthers()->getArray<dom::others::StaffUsed>(partId, system->getCmper());
+                if (!systemStaves.empty()) {
+                    return systemStaves;
+                }
+                break;
+            }
+        }
+    }
+
+    return document->getScrollViewStaves(partId);
+}
+
+StaffOriginOffsetResolverResult calcStaffOriginOffsetUsingSystemStaffProxy(
     const dom::DocumentPtr& document,
     dom::Cmper partId,
     const StaffOriginOffsetRequest& request)
@@ -35,17 +79,20 @@ StaffOriginOffsetResolverResult calcStaffOriginOffsetUsingScrollViewProxy(
         return { StaffOriginOffsetResolverDecision::Unavailable, 0.0 };
     }
 
-    const auto scrollView = document->getScrollViewStaves(partId);
-    const auto sourceStaffIndex = scrollView.getIndexForStaff(request.sourceStaffId);
-    const auto targetStaffIndex = scrollView.getIndexForStaff(request.targetStaffId);
-    if (!sourceStaffIndex || !targetStaffIndex) {
+    const auto staffList = calcSystemStavesOrScrollView(document, partId, request.measureId);
+    if (staffList.empty()) {
         return { StaffOriginOffsetResolverDecision::Unavailable, 0.0 };
     }
 
-    return {
-        StaffOriginOffsetResolverDecision::Offset,
-        static_cast<double>(scrollView[*sourceStaffIndex]->distFromTop - scrollView[*targetStaffIndex]->distFromTop)
-    };
+    return calcStaffOriginOffsetUsingStaffList(staffList, request);
+}
+
+StaffOriginOffsetResolverResult calcStaffOriginOffsetUsingScrollViewProxy(
+    const dom::DocumentPtr& document,
+    dom::Cmper partId,
+    const StaffOriginOffsetRequest& request)
+{
+    return calcStaffOriginOffsetUsingSystemStaffProxy(document, partId, request);
 }
 
 } // namespace musx::util
