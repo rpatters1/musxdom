@@ -301,6 +301,8 @@ var annotated_dup =
         [ "EnigmaStyles", "structmusx_1_1util_1_1EnigmaStyles.html", "structmusx_1_1util_1_1EnigmaStyles" ],
         [ "Fraction", "classmusx_1_1util_1_1Fraction.html", "classmusx_1_1util_1_1Fraction" ],
         [ "Logger", "classmusx_1_1util_1_1Logger.html", "classmusx_1_1util_1_1Logger" ],
+        [ "StaffOriginOffsetRequest", "structmusx_1_1util_1_1StaffOriginOffsetRequest.html", "structmusx_1_1util_1_1StaffOriginOffsetRequest" ],
+        [ "StaffOriginOffsetResolverResult", "structmusx_1_1util_1_1StaffOriginOffsetResolverResult.html", "structmusx_1_1util_1_1StaffOriginOffsetResolverResult" ],
         [ "SvgConvert", "classmusx_1_1util_1_1SvgConvert.html", "classmusx_1_1util_1_1SvgConvert" ],
         [ "TestConfiguration", "classmusx_1_1util_1_1TestConfiguration.html", null ],
         [ "Tie", "classmusx_1_1util_1_1Tie.html", "classmusx_1_1util_1_1Tie" ]

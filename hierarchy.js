@@ -425,6 +425,8 @@ var hierarchy =
     [ "musx::dom::ShapeDefInstruction::Slur", "structmusx_1_1dom_1_1ShapeDefInstruction_1_1Slur.html", null ],
     [ "musx::dom::details::StaffGroupInfo", "classmusx_1_1dom_1_1details_1_1StaffGroupInfo.html", null ],
     [ "musx::dom::others::StaffListSet< ScoreList, PartsList, ScoreForcedList, PartsForcedList >", "classmusx_1_1dom_1_1others_1_1StaffListSet.html", null ],
+    [ "musx::util::StaffOriginOffsetRequest", "structmusx_1_1util_1_1StaffOriginOffsetRequest.html", null ],
+    [ "musx::util::StaffOriginOffsetResolverResult", "structmusx_1_1util_1_1StaffOriginOffsetResolverResult.html", null ],
     [ "musx::dom::ShapeDefInstruction::StartGroup", "structmusx_1_1dom_1_1ShapeDefInstruction_1_1StartGroup.html", null ],
     [ "musx::dom::ShapeDefInstruction::StartObject", "structmusx_1_1dom_1_1ShapeDefInstruction_1_1StartObject.html", null ],
     [ "musx::dom::options::StemOptions::StemConnection", "classmusx_1_1dom_1_1options_1_1StemOptions_1_1StemConnection.html", null ],
