@@ -1,5 +1,6 @@
 var structmusx_1_1util_1_1ArpeggioSpanCandidate =
 [
+    [ "key", "structmusx_1_1util_1_1ArpeggioSpanCandidate.html#aac367b8de97dbae25da75a181fda3f8b", null ],
     [ "arrow", "structmusx_1_1util_1_1ArpeggioSpanCandidate.html#aa36ceb8aff2f28d31f819d54668eb67d", null ],
     [ "bottomEntry", "structmusx_1_1util_1_1ArpeggioSpanCandidate.html#a8c3267839223b9ca0c6ec3d03b7f638b", null ],
     [ "direction", "structmusx_1_1util_1_1ArpeggioSpanCandidate.html#a91e3ef85d88d08591d7172450c1952f2", null ],
