@@ -114,6 +114,11 @@ double calcSourceRelativeEvpu(Evpu evpu, double staffOriginOffset)
     return staffOriginOffset - static_cast<double>(evpu);
 }
 
+double roundToNearestHalfSpace(double evpu)
+{
+    return std::round(evpu / EVPU_PER_STAFF_POSITION) * EVPU_PER_STAFF_POSITION;
+}
+
 std::optional<double> calcStaffOriginOffset(
     const DocumentPtr& document,
     Cmper partId,
@@ -235,6 +240,8 @@ std::optional<ArpeggioSpanCandidate> calcNonArpeggioSpanForVerticalTargets(
     if (options.skipGraceEntries && sourceEntry->graceNote) {
         return std::nullopt;
     }
+    startTarget = roundToNearestHalfSpace(startTarget);
+    endTarget = roundToNearestHalfSpace(endTarget);
 
     auto frame = sourceEntryInfo.getFrame();
     MUSX_ASSERT_IF(!frame) {
@@ -387,11 +394,11 @@ std::optional<ArpeggioSpanCandidate> calcArpeggioSpanForAssignment(
 
     const int sourceTop = sourceEntryInfo.calcTopBottomStaffPositions().first;
     const double verticalOrigin = calcSourceRelativeEvpuFromStaffPosition(sourceTop, 0.0);
-    const double topTarget = verticalOrigin
+    const double topTarget = roundToNearestHalfSpace(verticalOrigin
         - static_cast<double>(def->yOffsetMain + assign->vertOffset)
-        - ARPEGGIO_VERTICAL_SEGMENT_ASCENT;
-    const double bottomTarget = verticalOrigin
-        - static_cast<double>(def->yOffsetMain + assign->vertOffset + assign->vertAdd);
+        - ARPEGGIO_VERTICAL_SEGMENT_ASCENT);
+    const double bottomTarget = roundToNearestHalfSpace(verticalOrigin
+        - static_cast<double>(def->yOffsetMain + assign->vertOffset + assign->vertAdd));
 
     EntryInfoPtr topEntry;
     EntryInfoPtr bottomEntry;
