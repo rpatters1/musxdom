@@ -27,6 +27,7 @@
 #include "musx/dom/Details.h"
 #include "musx/dom/Entries.h"
 #include "musx/dom/Others.h"
+#include "musx/util/Layout.h"
 
 namespace musx::util {
 
@@ -71,6 +72,8 @@ struct ArpeggioSpanOptions
     bool includeHiddenEntries{false}; ///< Include hidden entries in candidate matching.
     bool skipGraceEntries{false}; ///< Skip grace-note source entries and grace-note candidates.
     bool constrainToSourceStaffOnly{false}; ///< Restrict matching to entries on the source staff only.
+    StaffOriginOffsetResolver staffOriginOffsetResolver;
+        ///< Optional caller-provided staff origin offset resolver. If unhandled, the scroll-view proxy is used.
 };
 
 /// @brief Resolve top/bottom entries for one articulation assignment interpreted as an arpeggio.
