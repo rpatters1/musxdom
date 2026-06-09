@@ -2554,6 +2554,34 @@ ClefIndex details::GFrameHoldContext::calcClefIndexAt(Edu position) const
 bool details::GFrameHoldContext::calcIsCuesOnly(bool includeVisibleInScore) const
 {
     bool foundCue = false;
+    const bool completed = scanCueLayers(includeVisibleInScore, [&](LayerIndex, bool isCueLayer) {
+        if (!isCueLayer) {
+            return false;
+        }
+        foundCue = true;
+        return true;
+    });
+    return completed && foundCue;
+}
+
+details::GFrameHoldContext::CueSummary details::GFrameHoldContext::calcCueSummary(bool includeVisibleInScore) const
+{
+    bool foundNonCue = false;
+    CueSummary result;
+    scanCueLayers(includeVisibleInScore, [&](LayerIndex layerIndex, bool isCueLayer) {
+        if (isCueLayer) {
+            result.cueLayers.push_back(layerIndex);
+        } else {
+            foundNonCue = true;
+        }
+        return true;
+    });
+    result.isCueHold = !foundNonCue && !result.cueLayers.empty();
+    return result;
+}
+
+bool details::GFrameHoldContext::scanCueLayers(bool includeVisibleInScore, std::function<bool(LayerIndex, bool)> visitor) const
+{
     for (LayerIndex layerIndex = 0; layerIndex < m_hold->frames.size(); layerIndex++) {
         if (!calcPolicyVoicingIncludesLayer(layerIndex)) {
             continue;
@@ -2565,15 +2593,13 @@ bool details::GFrameHoldContext::calcIsCuesOnly(bool includeVisibleInScore) cons
                 continue;
             }
             if (auto entryFrame = createEntryFrame(layerIndex)) {
-                if (entryFrame->calcIsCueFrame(includeVisibleInScore)) {
-                    foundCue = true;
-                } else {
-                    return false; // non-cue frame found, so this is not a cue frame
+                if (!visitor(layerIndex, entryFrame->calcIsCueFrame(includeVisibleInScore))) {
+                    return false;
                 }
             }
         }
     }
-    return foundCue;
+    return true;
 }
 
 EntryInfoPtr details::GFrameHoldContext::calcNearestEntry(util::Fraction position, bool findExact, std::optional<LayerIndex> matchLayer,

@@ -40,4 +40,15 @@ TEST(Cues, TestIndependentTime)
 
     EXPECT_FALSE(entryFrame->calcIsCueFrame());
     EXPECT_TRUE(entryFrame->calcIsCueFrame(/*includeInVisibileInScore*/ true));
+
+    auto cueSummary = gfhold.calcCueSummary();
+    EXPECT_FALSE(cueSummary.isCueHold);
+    EXPECT_TRUE(cueSummary.cueLayers.empty());
+    EXPECT_FALSE(gfhold.calcIsCuesOnly());
+
+    cueSummary = gfhold.calcCueSummary(/*includeInVisibileInScore*/ true);
+    EXPECT_TRUE(cueSummary.isCueHold);
+    ASSERT_EQ(cueSummary.cueLayers.size(), 1);
+    EXPECT_EQ(cueSummary.cueLayers[0], 3);
+    EXPECT_TRUE(gfhold.calcIsCuesOnly(/*includeInVisibileInScore*/ true));
 }
