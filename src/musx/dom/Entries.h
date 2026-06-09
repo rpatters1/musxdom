@@ -25,6 +25,7 @@
 #include <map>
 #include <tuple>
 #include <utility>
+#include <vector>
 
 #include "musx/util/Fraction.h"
 #include "BaseClasses.h"
@@ -67,6 +68,17 @@ class GFrameHold;
 class GFrameHoldContext
 {
 public:
+    /// @brief Summary of cue information for a @ref GFrameHold in this context.
+    struct CueSummary
+    {
+        std::vector<LayerIndex> cueLayers; ///< 0-based layer indices whose frames are cue frames.
+        bool isCueHold{};                  ///< True if the hold contains only cue frames and full-measure rests.
+
+        /// @brief Allows clean bool comparisons in `if` statements
+        explicit operator bool() const
+        { return isCueHold; }
+    };
+
     /**
      * @brief Constructs a context-aware @ref GFrameHold wrapper.
      *
@@ -175,6 +187,11 @@ public:
     [[nodiscard]]
     bool calcIsCuesOnly(bool includeVisibleInScore = false) const;
 
+    /// @brief Calculates cue layers and whether this hold is comprised only of cue frames and full-measure rests.
+    /// @param includeVisibleInScore If true, include cues that are visible in the score.
+    [[nodiscard]]
+    CueSummary calcCueSummary(bool includeVisibleInScore = false) const;
+
     /// @brief Calculates the nearest non-grace-note entry at the given @p position.
     /// @param position The measure position to find.
     /// @param findExact If true, only find an entry that matches to within 1 evpu. Otherwise find the closest entry in the measure.
@@ -221,6 +238,10 @@ public:
     util::Fraction getTimeOffset() const { return m_timeOffset; }
 
 private:
+    /// @brief Scans non-rest content layers and calls @p visitor with whether each layer is a cue layer.
+    /// @return true if all content layers were scanned, false if @p visitor stopped the scan.
+    bool scanCueLayers(bool includeVisibleInScore, std::function<bool(LayerIndex, bool)> visitor) const;
+
     MusxInstance<GFrameHold> m_hold;                    ///< The resolved GFrameHold object, or null if not found.
     Cmper m_requestedPartId{};                          ///< The requested part context.
     util::Fraction m_timeOffset;                        ///< The time offset to apply to entry frames.
