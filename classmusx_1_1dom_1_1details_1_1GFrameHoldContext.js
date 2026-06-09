@@ -1,9 +1,11 @@
 var classmusx_1_1dom_1_1details_1_1GFrameHoldContext =
 [
+    [ "CueSummary", "structmusx_1_1dom_1_1details_1_1GFrameHoldContext_1_1CueSummary.html", "structmusx_1_1dom_1_1details_1_1GFrameHoldContext_1_1CueSummary" ],
     [ "GFrameHoldContext", "classmusx_1_1dom_1_1details_1_1GFrameHoldContext.html#a981066205691c56fd4b0963c0ac243dd", null ],
     [ "GFrameHoldContext", "classmusx_1_1dom_1_1details_1_1GFrameHoldContext.html#a16afc3c00643ca4cc37d3c8e5b2816dd", null ],
     [ "calcClefIndexAt", "classmusx_1_1dom_1_1details_1_1GFrameHoldContext.html#af7dfee19597fcc58f5a0e518a9cb58d1", null ],
     [ "calcClefIndexAt", "classmusx_1_1dom_1_1details_1_1GFrameHoldContext.html#a8fff05d40b94995cc544370b58f59af3", null ],
+    [ "calcCueSummary", "classmusx_1_1dom_1_1details_1_1GFrameHoldContext.html#a3fd58336a1c22207218c7c0556e8a779", null ],
     [ "calcIsCuesOnly", "classmusx_1_1dom_1_1details_1_1GFrameHoldContext.html#aa0e3d30b4a276c376b3e4b3a18d5d25d", null ],
     [ "calcMinLegacyPickupSpacer", "classmusx_1_1dom_1_1details_1_1GFrameHoldContext.html#a904e4afe0ed1e60e508d488f00b2fff4", null ],
     [ "calcNearestEntry", "classmusx_1_1dom_1_1details_1_1GFrameHoldContext.html#ad890c3c39670e1c45c68d9f3cd45d765", null ],

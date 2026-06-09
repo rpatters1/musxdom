@@ -3,7 +3,7 @@ var searchData=
   ['babendil_0',['Babendil',['../namespacemusx_1_1dom_1_1uuid.html#a3c82b25c6ed636ce57cbc1a8c7c99540',1,'musx::dom::uuid']]],
   ['backrepeatdot_1',['backRepeatDot',['../classmusx_1_1dom_1_1options_1_1MusicSymbolOptions.html#a7db3fa8b8921d070d33e692a1cd977c5',1,'musx::dom::options::MusicSymbolOptions']]],
   ['backspaceextra_2',['backSpaceExtra',['../classmusx_1_1dom_1_1others_1_1Measure.html#a237dd9c7124c500aa34530a9ee227267',1,'musx::dom::others::Measure']]],
-  ['backtobackstyle_3',['backtobackstyle',['../classmusx_1_1dom_1_1options_1_1RepeatOptions.html#a3721c724bf35905e52d0360cf05eb269',1,'musx::dom::options::RepeatOptions::backToBackStyle'],['../classmusx_1_1dom_1_1options_1_1RepeatOptions.html#a371657b833569796518bf7f6dc8be94a',1,'musx::dom::options::RepeatOptions::BackToBackStyle']]],
+  ['backtobackstyle_3',['backtobackstyle',['../classmusx_1_1dom_1_1options_1_1RepeatOptions.html#a371657b833569796518bf7f6dc8be94a',1,'musx::dom::options::RepeatOptions::BackToBackStyle'],['../classmusx_1_1dom_1_1options_1_1RepeatOptions.html#a3721c724bf35905e52d0360cf05eb269',1,'musx::dom::options::RepeatOptions::backToBackStyle']]],
   ['backwarddothpos_4',['backwardDotHPos',['../classmusx_1_1dom_1_1options_1_1RepeatOptions.html#a1efedafe5f209644b4891241e3a4dae3',1,'musx::dom::options::RepeatOptions']]],
   ['backwardsrepeatbar_5',['backwardsRepeatBar',['../classmusx_1_1dom_1_1others_1_1Measure.html#af6017f85a0661773313e0d2a639cddc2',1,'musx::dom::others::Measure']]],
   ['baglama_6',['Baglama',['../namespacemusx_1_1dom_1_1uuid.html#ab12672afb32cb53222f99b441fcdd441',1,'musx::dom::uuid']]],

@@ -93,6 +93,7 @@ $(document).ready(function(){initNavTree('classmusx_1_1dom_1_1details_1_1GFrameH
 
 <div class="header">
   <div class="summary">
+<a href="#nested-classes">Classes</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="classmusx_1_1dom_1_1details_1_1GFrameHoldContext-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">musx::dom::details::GFrameHoldContext Class Reference</div></div>
@@ -104,6 +105,12 @@ $(document).ready(function(){initNavTree('classmusx_1_1dom_1_1details_1_1GFrameH
 
 <p><code>#include &lt;<a class="el" href="Entries_8h_source.html">Entries.h</a>&gt;</code></p>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
+Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmusx_1_1dom_1_1details_1_1GFrameHoldContext_1_1CueSummary.html">CueSummary</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Summary of cue information for a <a class="el" href="classmusx_1_1dom_1_1details_1_1GFrameHold.html">GFrameHold</a> in this context.  <a href="structmusx_1_1dom_1_1details_1_1GFrameHoldContext_1_1CueSummary.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a981066205691c56fd4b0963c0ac243dd" id="r_a981066205691c56fd4b0963c0ac243dd"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1details_1_1GFrameHoldContext.html#a981066205691c56fd4b0963c0ac243dd">GFrameHoldContext</a> (const <a class="el" href="namespacemusx_1_1dom.html#ac52edbaa60f81ba3df76ee77b37e95fd">DocumentPtr</a> &amp;document, <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> partId, <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> staffId, <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> measureId, <a class="el" href="classmusx_1_1util_1_1Fraction.html">util::Fraction</a> timeOffset=0)</td></tr>
@@ -148,6 +155,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aa0e3d30b4a276c376b3e4b3a18d5d25d" id="r_aa0e3d30b4a276c376b3e4b3a18d5d25d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1details_1_1GFrameHoldContext.html#aa0e3d30b4a276c376b3e4b3a18d5d25d">calcIsCuesOnly</a> (bool includeVisibleInScore=false) const</td></tr>
 <tr class="memdesc:aa0e3d30b4a276c376b3e4b3a18d5d25d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates if this staff in this measure contains only a cue layer and full-measure rest layers.  <br /></td></tr>
 <tr class="separator:aa0e3d30b4a276c376b3e4b3a18d5d25d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3fd58336a1c22207218c7c0556e8a779" id="r_a3fd58336a1c22207218c7c0556e8a779"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structmusx_1_1dom_1_1details_1_1GFrameHoldContext_1_1CueSummary.html">CueSummary</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1details_1_1GFrameHoldContext.html#a3fd58336a1c22207218c7c0556e8a779">calcCueSummary</a> (bool includeVisibleInScore=false) const</td></tr>
+<tr class="memdesc:a3fd58336a1c22207218c7c0556e8a779"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates cue layers and whether this hold is comprised only of cue frames and full-measure rests.  <br /></td></tr>
+<tr class="separator:a3fd58336a1c22207218c7c0556e8a779"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad890c3c39670e1c45c68d9f3cd45d765" id="r_ad890c3c39670e1c45c68d9f3cd45d765"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1details_1_1GFrameHoldContext.html#ad890c3c39670e1c45c68d9f3cd45d765">calcNearestEntry</a> (<a class="el" href="classmusx_1_1util_1_1Fraction.html">util::Fraction</a> position, bool findExact=true, std::optional&lt; <a class="el" href="namespacemusx_1_1dom.html#a58ecc2c31e1c1ff88267f87f028b5981">LayerIndex</a> &gt; matchLayer=std::nullopt, <a class="el" href="namespacemusx_1_1dom.html#a2ce10a96e600e1368dd4b8cefdf12d5b">MatchVoice</a> matchVoice=<a class="el" href="namespacemusx_1_1dom.html#a2ce10a96e600e1368dd4b8cefdf12d5baed36a1ef76a59ee3f15180e0441188ad">MatchVoice::Any</a>, <a class="el" href="classmusx_1_1util_1_1Fraction.html">util::Fraction</a> atGraceNoteDuration=0) const</td></tr>
 <tr class="memdesc:ad890c3c39670e1c45c68d9f3cd45d765"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the nearest non-grace-note entry at the given <code>position</code>.  <br /></td></tr>
 <tr class="separator:ad890c3c39670e1c45c68d9f3cd45d765"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -323,6 +333,32 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>calcPolicyVoicingIncl
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">position</td><td>The <em>staff-level</em> position of the clef. (The staff-level matters for Independent Key Signature staves.) </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a3fd58336a1c22207218c7c0556e8a779" name="a3fd58336a1c22207218c7c0556e8a779"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3fd58336a1c22207218c7c0556e8a779">&#9670;&#160;</a></span>calcCueSummary()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structmusx_1_1dom_1_1details_1_1GFrameHoldContext_1_1CueSummary.html">details::GFrameHoldContext::CueSummary</a> musx::dom::details::GFrameHoldContext::calcCueSummary </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>includeVisibleInScore</em> = <code>false</code></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Calculates cue layers and whether this hold is comprised only of cue frames and full-measure rests. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">includeVisibleInScore</td><td>If true, include cues that are visible in the score. </td></tr>
   </table>
   </dd>
 </dl>
