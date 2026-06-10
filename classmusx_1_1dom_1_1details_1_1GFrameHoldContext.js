@@ -9,6 +9,7 @@ var classmusx_1_1dom_1_1details_1_1GFrameHoldContext =
     [ "calcIsCuesOnly", "classmusx_1_1dom_1_1details_1_1GFrameHoldContext.html#aa0e3d30b4a276c376b3e4b3a18d5d25d", null ],
     [ "calcMinLegacyPickupSpacer", "classmusx_1_1dom_1_1details_1_1GFrameHoldContext.html#a904e4afe0ed1e60e508d488f00b2fff4", null ],
     [ "calcNearestEntry", "classmusx_1_1dom_1_1details_1_1GFrameHoldContext.html#ad890c3c39670e1c45c68d9f3cd45d765", null ],
+    [ "calcNearestEntryAtGraceIndex", "classmusx_1_1dom_1_1details_1_1GFrameHoldContext.html#afd49a77fc477e976c1a33d10bb425f0b", null ],
     [ "calcPolicyVoicingIncludesLayer", "classmusx_1_1dom_1_1details_1_1GFrameHoldContext.html#ab32ace295dddee96d8f7dd41086b8423", null ],
     [ "calcVoices", "classmusx_1_1dom_1_1details_1_1GFrameHoldContext.html#a50f8aa19e33a4cc5aa5fd9053b2a0592", null ],
     [ "calcVoicingIncludesLayer", "classmusx_1_1dom_1_1details_1_1GFrameHoldContext.html#ab0022d7cc68c332bfb806cafa5ff477f", null ],
