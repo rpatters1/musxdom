@@ -612,7 +612,7 @@ TEST(ExpressionAssignments, Voice2Entries)
     EXPECT_FALSE(exps[0]->calcAssociatedEntry());
 
     EXPECT_FALSE(exps[1]->voice2);
-    EXPECT_FALSE(exps[1]->calcAssociatedEntry());
+    EXPECT_TRUE(exps[1]->calcAssociatedEntry());
 }
 
 TEST(ExpressionAssignments, HiddenByAltNotation)

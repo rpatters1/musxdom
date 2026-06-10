@@ -196,25 +196,25 @@ public:
     /// @param position The measure position to find.
     /// @param findExact If true, only find an entry that matches to within 1 evpu. Otherwise find the closest entry in the measure.
     /// @param matchLayer If specified, only find entries in this 0-based layer index. (Values 0..3)
-    /// @param matchVoice Determines which voice(s) are candidates. Use #MatchVoice::Any (the default) to accept either voice,
-    /// #MatchVoice::Voice1 for voice 1 only, or #MatchVoice::Voice2 for voice 2 only.
+    /// @param matchVoice Determines which voice(s) are candidates. Use #MatchVoice::Default (the default) to accept either voice
+    /// while preferring voice 1 when both voices coincide, or #MatchVoice::Voice2 to require voice 2.
     /// @param atGraceNoteDuration Match on this grace note duration. When it is zero, grace notes are skipped.
     /// @return The entry if found, otherwise `nullptr`.
     [[nodiscard]]
     EntryInfoPtr calcNearestEntry(util::Fraction position, bool findExact = true, std::optional<LayerIndex> matchLayer = std::nullopt,
-        MatchVoice matchVoice = MatchVoice::Any, util::Fraction atGraceNoteDuration = 0) const;
+        MatchVoice matchVoice = MatchVoice::Default, util::Fraction atGraceNoteDuration = 0) const;
 
     /// @brief Calculates the nearest entry at the given @p position and @p graceNoteIndex.
     /// @param position The measure position to find.
     /// @param graceNoteIndex The Finale grace note index to match, counting from 1 starting from the leftmost grace note.
     /// @param findExact If true, only find an entry that matches to within 1 evpu. Otherwise find the closest entry in the measure.
     /// @param matchLayer If specified, only find entries in this 0-based layer index. (Values 0..3)
-    /// @param matchVoice Determines which voice(s) are candidates. Use #MatchVoice::Any (the default) to accept either voice,
-    /// #MatchVoice::Voice1 for voice 1 only, or #MatchVoice::Voice2 for voice 2 only.
+    /// @param matchVoice Determines which voice(s) are candidates. Use #MatchVoice::Default (the default) to accept either voice
+    /// while preferring voice 1 when both voices coincide, or #MatchVoice::Voice2 to require voice 2.
     /// @return The entry if found, otherwise `nullptr`.
     [[nodiscard]]
     EntryInfoPtr calcNearestEntryAtGraceIndex(util::Fraction position, unsigned graceNoteIndex, bool findExact = true,
-        std::optional<LayerIndex> matchLayer = std::nullopt, MatchVoice matchVoice = MatchVoice::Any) const;
+        std::optional<LayerIndex> matchLayer = std::nullopt, MatchVoice matchVoice = MatchVoice::Default) const;
 
     /// @brief Snaps a measure position to the nearest entry if possible.
     /// @param location The measure location to snap.
@@ -1508,12 +1508,12 @@ public:
     /// @brief Calculates the nearest non-grace-note entry at the given @p position.
     /// @param position The measure position to find.
     /// @param findExact If true, only find an entry that matches to within 1 evpu. Otherwise find the closest entry in the measure.
-    /// @param matchVoice Determines which voice(s) are candidates. Use #MatchVoice::Any (the default) to accept either voice,
-    /// #MatchVoice::Voice1 for voice 1 only, or #MatchVoice::Voice2 for voice 2 only.
+    /// @param matchVoice Determines which voice(s) are candidates. Use #MatchVoice::Default (the default) to accept either voice
+    /// while preferring voice 1 when both voices coincide, or #MatchVoice::Voice2 to require voice 2.
     /// @param atGraceNoteDuration Match on this grace note duration. When it is zero, grace notes are skipped.
     /// @return The entry if found, otherwise `nullptr`.
     [[nodiscard]]
-    EntryInfoPtr calcNearestEntry(util::Fraction position, bool findExact = true, MatchVoice matchVoice = MatchVoice::Any,
+    EntryInfoPtr calcNearestEntry(util::Fraction position, bool findExact = true, MatchVoice matchVoice = MatchVoice::Default,
         util::Fraction atGraceNoteDuration = 0) const;
 
     /// @brief Iterates the entries for the specified layer in this EntryFrame from left to right.

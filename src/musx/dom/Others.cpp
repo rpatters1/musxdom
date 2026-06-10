@@ -396,7 +396,7 @@ EntryInfoPtr MeasureExprAssign::calcAssociatedEntry() const
         }
         if (auto gfHold = details::GFrameHoldContext(getDocument(), getRequestedPartId(), staffAssign, getCmper())) {
             const auto matchLayer = layer ? std::make_optional(LayerIndex(layer - 1)) : std::nullopt;
-            const auto matchVoice = voice2 ? MatchVoice::Voice2 : MatchVoice::Voice1;
+            const auto matchVoice = voice2 ? MatchVoice::Voice2 : MatchVoice::Default;
             const auto position = util::Fraction::fromEdu(eduPosition);
             const auto graceIndex = this->graceNoteIndex <= kMaxExpectedGraceNoteIndex ? this->graceNoteIndex : 0u;
             if (const auto result = gfHold.calcNearestEntryAtGraceIndex(position, graceIndex, findExact, matchLayer, matchVoice)) {

@@ -34,40 +34,45 @@ namespace dom {
 
 namespace {
 
+int calcVoiceRank(MatchVoice matchVoice, bool voice2)
+{
+    switch (matchVoice) {
+        case MatchVoice::Voice2:
+            return voice2 ? 0 : 1;
+        case MatchVoice::Default:
+            return voice2 ? 1 : 0;
+    }
+    return 0;
+}
+
 EntryInfoPtr calcNearestEntryInFrame(const EntryFrame& frame, util::Fraction position, bool findExact, MatchVoice matchVoice,
     const std::function<bool(const EntryInfoPtr&)>& matchesEntry)
 {
     EntryInfoPtr result;
     util::Fraction bestDiff = (std::numeric_limits<util::Fraction>::max)();
+    int bestVoiceRank = (std::numeric_limits<int>::max)();
+    const auto exactTolerance = util::Fraction::fromEdu(1);
 
     auto iterator = [&](const EntryInfoPtr& entryInfo) {
         if (!matchesEntry(entryInfo)) {
             return true; // iterate past non-matching entries
         }
         const bool entryVoice2 = entryInfo->getEntry()->voice2;
-        bool matchesVoice = true;
-        switch (matchVoice) {
-            case MatchVoice::Any:
-                matchesVoice = true;
-                break;
-            case MatchVoice::Voice1:
-                matchesVoice = !entryVoice2;
-                break;
-            case MatchVoice::Voice2:
-                matchesVoice = entryVoice2;
-                break;
-        }
-        if (!matchesVoice) {
+        const int voiceRank = calcVoiceRank(matchVoice, entryVoice2);
+        if (matchVoice == MatchVoice::Voice2 && voiceRank != 0) {
             return true; // iterate past non-matching v1/v2 values
         }
         using std::abs;
         auto posDiff = abs(position - entryInfo->elapsedDuration);
-        if (posDiff <= util::Fraction::fromEdu(1)) {
-            result = entryInfo;
-            return false; // stop iterating
+        if (findExact && posDiff > exactTolerance) {
+            return true;
         }
-        if (!findExact && posDiff < bestDiff) {
+        if (posDiff > bestDiff) {
+            return true;
+        }
+        if (posDiff < bestDiff || voiceRank < bestVoiceRank) {
             bestDiff = posDiff;
+            bestVoiceRank = voiceRank;
             result = entryInfo;
         }
         return true;
@@ -2646,22 +2651,19 @@ EntryInfoPtr details::GFrameHoldContext::calcNearestEntryMatching(util::Fraction
 {
     EntryInfoPtr bestResult;
     util::Fraction bestDiff = (std::numeric_limits<util::Fraction>::max)();
+    int bestVoiceRank = (std::numeric_limits<int>::max)();
 
     LayerIndex startLayer = matchLayer.value_or(0);
     for (LayerIndex layerIndex = startLayer; layerIndex < m_hold->frames.size(); layerIndex++) {
         if (auto entryFrame = createEntryFrame(layerIndex)) {
             if (auto result = calcNearestEntryInFrame(*entryFrame, position, findExact, matchVoice, matchesEntry)) {
-                if (findExact) {
-                    return result;
-                }
                 using std::abs;
                 auto posDiff = abs(position - result->elapsedDuration);
-                if (!bestResult || posDiff < bestDiff) {
+                const int voiceRank = calcVoiceRank(matchVoice, result->getEntry()->voice2);
+                if (!bestResult || posDiff < bestDiff || (posDiff == bestDiff && voiceRank < bestVoiceRank)) {
                     bestDiff = posDiff;
+                    bestVoiceRank = voiceRank;
                     bestResult = result;
-                    if (posDiff == 0) {
-                        return bestResult; // can't get any closer than exact position match
-                    }
                 }
             }
         }
