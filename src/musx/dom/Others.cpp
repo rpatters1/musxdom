@@ -383,6 +383,12 @@ std::optional<HorizontalMeasExprAlign> MeasureExprAssign::calcEntryAlignmentType
 
 EntryInfoPtr MeasureExprAssign::calcAssociatedEntry() const
 {
+    // Finale at least sometimes uses large sentinel-like values for graceNoteIndex
+    // at the end of measures that end with grace notes. kMaxExpectedGraceNoteIndex
+    // allows us to treat such values as a main note (by converting them to 0) and
+    // not find any trailing grace note as an associated entry.
+    constexpr unsigned kMaxExpectedGraceNoteIndex = 0x3fff;
+
     constexpr bool findExact = true;
     if (staffAssign > 0) {
         if (!calcEntryAlignmentType()) {
@@ -391,7 +397,20 @@ EntryInfoPtr MeasureExprAssign::calcAssociatedEntry() const
         if (auto gfHold = details::GFrameHoldContext(getDocument(), getRequestedPartId(), staffAssign, getCmper())) {
             const auto matchLayer = layer ? std::make_optional(LayerIndex(layer - 1)) : std::nullopt;
             const auto matchVoice = voice2 ? MatchVoice::Voice2 : MatchVoice::Voice1;
-            return gfHold.calcNearestEntry(util::Fraction::fromEdu(eduPosition), findExact, matchLayer, matchVoice);
+            const auto position = util::Fraction::fromEdu(eduPosition);
+            const auto graceIndex = this->graceNoteIndex <= kMaxExpectedGraceNoteIndex ? this->graceNoteIndex : 0u;
+            if (const auto result = gfHold.calcNearestEntryAtGraceIndex(position, graceIndex, findExact, matchLayer, matchVoice)) {
+                return result;
+            }
+            if (graceIndex > 0) {
+                if (const auto mainEntry = gfHold.calcNearestEntry(position, findExact, matchLayer, matchVoice)) {
+                    util::Logger::log(util::Logger::LogLevel::Info,
+                        "Dangling graceNoteIndex " + std::to_string(this->graceNoteIndex) +
+                        " on expression assignment in measure " + std::to_string(getCmper()) +
+                        ". Falling back to the main entry.");
+                    return mainEntry;
+                }
+            }
         }
     }
     return {};

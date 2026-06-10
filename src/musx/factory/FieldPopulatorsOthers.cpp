@@ -815,7 +815,7 @@ MUSX_XML_ELEMENT_ARRAY(MeasureExprAssign, {
     {"hidden", [](const XmlElementPtr& e, const std::shared_ptr<MeasureExprAssign>& i) { i->hidden = populateBoolean(e, i); }},
     {"staffGroup", [](const XmlElementPtr& e, const std::shared_ptr<MeasureExprAssign>& i) { i->staffGroup = e->getTextAs<int>(); }},
     {"staffList", [](const XmlElementPtr& e, const std::shared_ptr<MeasureExprAssign>& i) { i->staffList = e->getTextAs<Cmper>(); }},
-    {"graceNoteIndex", [](const XmlElementPtr& e, const std::shared_ptr<MeasureExprAssign>& i) { i->graceNoteIndex = e->getTextAs<int>(); }},
+    {"graceNoteIndex", [](const XmlElementPtr& e, const std::shared_ptr<MeasureExprAssign>& i) { i->graceNoteIndex = e->getTextAs<unsigned>(); }},
     {"rehearsalMarkOffset", [](const XmlElementPtr& e, const std::shared_ptr<MeasureExprAssign>& i) { i->rehearsalMarkOffset = e->getTextAs<int>(); }},
 });
 

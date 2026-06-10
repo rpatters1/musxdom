@@ -1371,7 +1371,7 @@ public:
     Cmper textExprId{};                     ///< The @ref Cmper of a text expression (xml node is `<textExprID>`)
     Cmper shapeExprId{};                    ///< The @ref Cmper of a shape expression (xml node is `<shapeExprID>`)
     Evpu horzEvpuOff{};                     ///< Horizontal Evpu offset from the default position.
-    Edu eduPosition{};                      ///< Horizontal Edu position (xml node is `<horzEduOff>`)
+    Edu eduPosition{};                      ///< Horizontal Edu position in staff edu (xml node is `<horzEduOff>`)
     Evpu vertEvpuOff{};                     ///< Vertical Evpu offset from the default position (xml node is `<vertOff>`)
     StaffCmper staffAssign{};               ///< The staff to which this expression is assigned, or -1 if it is assigned to top staff and -2 if assigned to bottom staff.
     int layer{};                            ///< The 1-based layer number (1..4) to which this expression is assigned. (0 = all layers.)
@@ -1387,7 +1387,7 @@ public:
     int staffGroup{};                       ///< Assignment is part of a group of assignments associated with a staff list and should be modified as a group.
     Cmper staffList{};                      ///< The cmper of the marking category staff list that is controlling this assignment (if any).
                                             ///< There will be a separate #MeasureExprAssign instance for every staff in the staff list.
-    int graceNoteIndex{};                   ///< 1-based index from leftmost grace note. 0 = main note.
+    unsigned graceNoteIndex{};              ///< 1-based index from leftmost grace note. 0 = main note.
     int rehearsalMarkOffset{};              ///< Restarts the rehearsal mark sequence at this 1-based sequence value. If this is zero, the sequence continues normally.
 
     /// @brief Returns true if this shape expression is likely acting as a pseudo tie for the specified mode.
