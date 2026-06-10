@@ -87,10 +87,10 @@ var NAVTREEINDEX =
 "classmusx_1_1dom_1_1others_1_1TimeCompositeUpper_1_1CompositeItem.html#a07269c830b58b748b808fabe7a5738e2",
 "classmusx_1_1xml_1_1IXmlElement.html#ae6afaf06b540902e9467cf2e9c47b8f0",
 "namespacemembers_vars_n.html",
-"namespacemusx_1_1dom.html#af72aa98bddad049ec18ef7858aea2168",
-"namespacemusx_1_1dom_1_1uuid.html#a3534411e01e6b1d8fe53a08db5ed80f5",
-"namespacemusx_1_1dom_1_1uuid.html#a8597fc24cab0bd51175e9aa50abd00c4",
-"namespacemusx_1_1dom_1_1uuid.html#ad451e23fec759422e244e8272ed65d5b",
+"namespacemusx_1_1dom_1_1details.html",
+"namespacemusx_1_1dom_1_1uuid.html#a356fdd6d0b4e12969b4db7547e1e1f8d",
+"namespacemusx_1_1dom_1_1uuid.html#a85ba54b8ce5d2cbee4aa04e8e5502ae2",
+"namespacemusx_1_1dom_1_1uuid.html#ad47db390de8e044a871745221d8ebce4",
 "structmusx_1_1dom_1_1ObjectPool_1_1ObjectKey.html#a48e28f7a3d2b82d9cb0d25a7a1560b58",
 "structmusx_1_1dom_1_1header_1_1FileInfo.html#abfc997ed8b29c7ca551f957a99efd71f"
 ];

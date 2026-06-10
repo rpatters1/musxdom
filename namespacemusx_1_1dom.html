@@ -475,8 +475,7 @@ Enumerations</h2></td></tr>
  }</td></tr>
 <tr class="memdesc:a15ce5f78a9bdae32abc605711086c991"><td class="mdescLeft">&#160;</td><td class="mdescRight">The lyric text type if this is a lyrics smart shape.  <a href="namespacemusx_1_1dom.html#a15ce5f78a9bdae32abc605711086c991">More...</a><br /></td></tr>
 <tr class="separator:a15ce5f78a9bdae32abc605711086c991"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2ce10a96e600e1368dd4b8cefdf12d5b" id="r_a2ce10a96e600e1368dd4b8cefdf12d5b"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemusx_1_1dom.html#a2ce10a96e600e1368dd4b8cefdf12d5b">MatchVoice</a> { <a class="el" href="namespacemusx_1_1dom.html#a2ce10a96e600e1368dd4b8cefdf12d5baed36a1ef76a59ee3f15180e0441188ad">Any</a>
-, <a class="el" href="namespacemusx_1_1dom.html#a2ce10a96e600e1368dd4b8cefdf12d5baf5616200d2e5faff161ac8f5e1637559">Voice1</a>
+<tr class="memitem:a2ce10a96e600e1368dd4b8cefdf12d5b" id="r_a2ce10a96e600e1368dd4b8cefdf12d5b"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemusx_1_1dom.html#a2ce10a96e600e1368dd4b8cefdf12d5b">MatchVoice</a> { <a class="el" href="namespacemusx_1_1dom.html#a2ce10a96e600e1368dd4b8cefdf12d5ba7a1920d61156abc05a60135aefe8bc67">Default</a>
 , <a class="el" href="namespacemusx_1_1dom.html#a2ce10a96e600e1368dd4b8cefdf12d5ba5fbff2c65b52ee38781d1d81ff11ecb5">Voice2</a>
  }</td></tr>
 <tr class="memdesc:a2ce10a96e600e1368dd4b8cefdf12d5b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Specifies which voice(s) are considered when matching entries.  <a href="namespacemusx_1_1dom.html#a2ce10a96e600e1368dd4b8cefdf12d5b">More...</a><br /></td></tr>
@@ -1109,11 +1108,9 @@ template&lt;typename T &gt; </div>
 
 <p>Specifies which voice(s) are considered when matching entries. </p>
 <table class="fieldtable">
-<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a2ce10a96e600e1368dd4b8cefdf12d5baed36a1ef76a59ee3f15180e0441188ad" name="a2ce10a96e600e1368dd4b8cefdf12d5baed36a1ef76a59ee3f15180e0441188ad"></a>Any&#160;</td><td class="fielddoc"><p>Consider entries from either voice. (Default) </p>
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a2ce10a96e600e1368dd4b8cefdf12d5ba7a1920d61156abc05a60135aefe8bc67" name="a2ce10a96e600e1368dd4b8cefdf12d5ba7a1920d61156abc05a60135aefe8bc67"></a>Default&#160;</td><td class="fielddoc"><p>Default matching behavior: accept either voice, but prefer voice 1 when both voices coincide. </p>
 </td></tr>
-<tr><td class="fieldname"><a id="a2ce10a96e600e1368dd4b8cefdf12d5baf5616200d2e5faff161ac8f5e1637559" name="a2ce10a96e600e1368dd4b8cefdf12d5baf5616200d2e5faff161ac8f5e1637559"></a>Voice1&#160;</td><td class="fielddoc"><p>Consider only entries where <a class="el" href="classmusx_1_1dom_1_1Entry.html#a26a88d263d2fd4f4ee89ce7ec1aade41" title="This is a V2 note. (xml node &lt;v2&gt;)">Entry::voice2</a> is false. </p>
-</td></tr>
-<tr><td class="fieldname"><a id="a2ce10a96e600e1368dd4b8cefdf12d5ba5fbff2c65b52ee38781d1d81ff11ecb5" name="a2ce10a96e600e1368dd4b8cefdf12d5ba5fbff2c65b52ee38781d1d81ff11ecb5"></a>Voice2&#160;</td><td class="fielddoc"><p>Consider only entries where <a class="el" href="classmusx_1_1dom_1_1Entry.html#a26a88d263d2fd4f4ee89ce7ec1aade41" title="This is a V2 note. (xml node &lt;v2&gt;)">Entry::voice2</a> is true. </p>
+<tr><td class="fieldname"><a id="a2ce10a96e600e1368dd4b8cefdf12d5ba5fbff2c65b52ee38781d1d81ff11ecb5" name="a2ce10a96e600e1368dd4b8cefdf12d5ba5fbff2c65b52ee38781d1d81ff11ecb5"></a>Voice2&#160;</td><td class="fielddoc"><p>Require <a class="el" href="classmusx_1_1dom_1_1Entry.html#a26a88d263d2fd4f4ee89ce7ec1aade41" title="This is a V2 note. (xml node &lt;v2&gt;)">Entry::voice2</a> to be true. </p>
 </td></tr>
 </table>
 

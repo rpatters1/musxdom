@@ -58,14 +58,13 @@ var searchData=
   ['virginal_55',['Virginal',['../namespacemusx_1_1dom_1_1uuid.html#a13ee3e8e8f2ed1d735b4c477e00dd809',1,'musx::dom::uuid']]],
   ['vocalpercussion_56',['VocalPercussion',['../namespacemusx_1_1dom_1_1uuid.html#aa958bb20ec50ffd5d0e44fa54c5465f4',1,'musx::dom::uuid']]],
   ['vocals_57',['Vocals',['../namespacemusx_1_1dom_1_1uuid.html#a9e6597d9676d6b917fd1da0b542b51ee',1,'musx::dom::uuid']]],
-  ['voffset_58',['voffset',['../classmusx_1_1dom_1_1details_1_1DotAlterations.html#a45482d82d14cb4de5de29692cd55cad0',1,'musx::dom::details::DotAlterations::vOffset'],['../classmusx_1_1dom_1_1details_1_1AccidentalAlterations.html#ae57fab895f67ab47c6f441454efcdaa9',1,'musx::dom::details::AccidentalAlterations::vOffset']]],
+  ['voffset_58',['voffset',['../classmusx_1_1dom_1_1details_1_1AccidentalAlterations.html#ae57fab895f67ab47c6f441454efcdaa9',1,'musx::dom::details::AccidentalAlterations::vOffset'],['../classmusx_1_1dom_1_1details_1_1DotAlterations.html#a45482d82d14cb4de5de29692cd55cad0',1,'musx::dom::details::DotAlterations::vOffset']]],
   ['voice_59',['Voice',['../namespacemusx_1_1dom_1_1uuid.html#a2b51aedd740ce1295ae61f90d9a5ae80',1,'musx::dom::uuid']]],
-  ['voice1_60',['Voice1',['../namespacemusx_1_1dom.html#a2ce10a96e600e1368dd4b8cefdf12d5baf5616200d2e5faff161ac8f5e1637559',1,'musx::dom']]],
-  ['voice2_61',['voice2',['../classmusx_1_1dom_1_1others_1_1MeasureExprAssign.html#aeac79b2ed22028a68b2c3add6081c3e4',1,'musx::dom::others::MeasureExprAssign::voice2'],['../structmusx_1_1dom_1_1EntryFrame_1_1TupletInfo.html#ad296b9cbfc35e51318fd4fb9a22831c8',1,'musx::dom::EntryFrame::TupletInfo::voice2'],['../classmusx_1_1dom_1_1Entry.html#a26a88d263d2fd4f4ee89ce7ec1aade41',1,'musx::dom::Entry::voice2'],['../namespacemusx_1_1dom.html#a2ce10a96e600e1368dd4b8cefdf12d5ba5fbff2c65b52ee38781d1d81ff11ecb5',1,'musx::dom::Voice2']]],
-  ['voicenoname_62',['VoiceNoName',['../namespacemusx_1_1dom_1_1uuid.html#a5f83c84f8de38b13a93aa16c9cb52d49',1,'musx::dom::uuid']]],
-  ['voicingtype_63',['voicingtype',['../classmusx_1_1dom_1_1others_1_1PartVoicing.html#a17cf8f7bc74489355af9fd10c1988e2a',1,'musx::dom::others::PartVoicing::voicingType'],['../classmusx_1_1dom_1_1others_1_1PartVoicing.html#a648ab1f3aab46486b429653ec46cb996',1,'musx::dom::others::PartVoicing::VoicingType']]],
-  ['volrefnum_64',['volRefNum',['../classmusx_1_1dom_1_1others_1_1FileDescription.html#a8fc46e6515c7f7299a0e548ffc9b0840',1,'musx::dom::others::FileDescription']]],
-  ['vpos_65',['vPos',['../classmusx_1_1dom_1_1others_1_1PageTextAssign.html#ad413f9c23f03c1443ecb3d0853b4c448',1,'musx::dom::others::PageTextAssign']]],
-  ['vpospageedge_66',['vPosPageEdge',['../classmusx_1_1dom_1_1others_1_1PageTextAssign.html#af8af2a15c3f67b46deb39466e2afd552',1,'musx::dom::others::PageTextAssign']]],
-  ['vuvuzela_67',['Vuvuzela',['../namespacemusx_1_1dom_1_1uuid.html#aa8f257f4ea45636839176b8b10804804',1,'musx::dom::uuid']]]
+  ['voice2_60',['voice2',['../classmusx_1_1dom_1_1others_1_1MeasureExprAssign.html#aeac79b2ed22028a68b2c3add6081c3e4',1,'musx::dom::others::MeasureExprAssign::voice2'],['../structmusx_1_1dom_1_1EntryFrame_1_1TupletInfo.html#ad296b9cbfc35e51318fd4fb9a22831c8',1,'musx::dom::EntryFrame::TupletInfo::voice2'],['../classmusx_1_1dom_1_1Entry.html#a26a88d263d2fd4f4ee89ce7ec1aade41',1,'musx::dom::Entry::voice2'],['../namespacemusx_1_1dom.html#a2ce10a96e600e1368dd4b8cefdf12d5ba5fbff2c65b52ee38781d1d81ff11ecb5',1,'musx::dom::Voice2']]],
+  ['voicenoname_61',['VoiceNoName',['../namespacemusx_1_1dom_1_1uuid.html#a5f83c84f8de38b13a93aa16c9cb52d49',1,'musx::dom::uuid']]],
+  ['voicingtype_62',['voicingtype',['../classmusx_1_1dom_1_1others_1_1PartVoicing.html#a17cf8f7bc74489355af9fd10c1988e2a',1,'musx::dom::others::PartVoicing::voicingType'],['../classmusx_1_1dom_1_1others_1_1PartVoicing.html#a648ab1f3aab46486b429653ec46cb996',1,'musx::dom::others::PartVoicing::VoicingType']]],
+  ['volrefnum_63',['volRefNum',['../classmusx_1_1dom_1_1others_1_1FileDescription.html#a8fc46e6515c7f7299a0e548ffc9b0840',1,'musx::dom::others::FileDescription']]],
+  ['vpos_64',['vPos',['../classmusx_1_1dom_1_1others_1_1PageTextAssign.html#ad413f9c23f03c1443ecb3d0853b4c448',1,'musx::dom::others::PageTextAssign']]],
+  ['vpospageedge_65',['vPosPageEdge',['../classmusx_1_1dom_1_1others_1_1PageTextAssign.html#af8af2a15c3f67b46deb39466e2afd552',1,'musx::dom::others::PageTextAssign']]],
+  ['vuvuzela_66',['Vuvuzela',['../namespacemusx_1_1dom_1_1uuid.html#aa8f257f4ea45636839176b8b10804804',1,'musx::dom::uuid']]]
 ];

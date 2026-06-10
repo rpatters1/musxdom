@@ -1,6 +1,5 @@
 var NAVTREEINDEX33 =
 {
-"namespacemusx_1_1dom_1_1uuid.html#ad451e23fec759422e244e8272ed65d5b":[1,0,1,0,5,693],
 "namespacemusx_1_1dom_1_1uuid.html#ad47db390de8e044a871745221d8ebce4":[1,0,1,0,5,88],
 "namespacemusx_1_1dom_1_1uuid.html#ad4bb0a2e2967f45b0b0e9519f6306eeb":[1,0,1,0,5,417],
 "namespacemusx_1_1dom_1_1uuid.html#ad4eb7e5cc48cf8685533d148840b02bb":[1,0,1,0,5,239],
@@ -249,5 +248,6 @@ var NAVTREEINDEX33 =
 "structmusx_1_1dom_1_1ObjectPool_1_1ObjectKey.html#a1ac1f0bf9e5f8306ff660c4acfce45c3":[2,0,1,0,45,0,4],
 "structmusx_1_1dom_1_1ObjectPool_1_1ObjectKey.html#a1ac1f0bf9e5f8306ff660c4acfce45c3":[1,0,1,0,44,0,4],
 "structmusx_1_1dom_1_1ObjectPool_1_1ObjectKey.html#a37842776e0b73ab5df710876c093f5b9":[1,0,1,0,44,0,0],
-"structmusx_1_1dom_1_1ObjectPool_1_1ObjectKey.html#a37842776e0b73ab5df710876c093f5b9":[2,0,1,0,45,0,0]
+"structmusx_1_1dom_1_1ObjectPool_1_1ObjectKey.html#a37842776e0b73ab5df710876c093f5b9":[2,0,1,0,45,0,0],
+"structmusx_1_1dom_1_1ObjectPool_1_1ObjectKey.html#a48e28f7a3d2b82d9cb0d25a7a1560b58":[2,0,1,0,45,0,3]
 };

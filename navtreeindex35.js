@@ -1,6 +1,5 @@
 var NAVTREEINDEX35 =
 {
-"structmusx_1_1dom_1_1header_1_1FileInfo.html#abfc997ed8b29c7ca551f957a99efd71f":[1,0,1,0,1,0,5],
 "structmusx_1_1dom_1_1header_1_1FileInfo.html#abfc997ed8b29c7ca551f957a99efd71f":[2,0,1,0,1,0,5],
 "structmusx_1_1dom_1_1header_1_1FileInfo.html#acb2be370b3d92ad46fcf4ea1edd55df4":[1,0,1,0,1,0,0],
 "structmusx_1_1dom_1_1header_1_1FileInfo.html#acb2be370b3d92ad46fcf4ea1edd55df4":[2,0,1,0,1,0,0],

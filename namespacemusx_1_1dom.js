@@ -941,8 +941,7 @@ var namespacemusx_1_1dom =
       [ "Section", "namespacemusx_1_1dom.html#a15ce5f78a9bdae32abc605711086c991ad2c24d59e0baff4d0155fbdf62590867", null ]
     ] ],
     [ "MatchVoice", "namespacemusx_1_1dom.html#a2ce10a96e600e1368dd4b8cefdf12d5b", [
-      [ "Any", "namespacemusx_1_1dom.html#a2ce10a96e600e1368dd4b8cefdf12d5baed36a1ef76a59ee3f15180e0441188ad", null ],
-      [ "Voice1", "namespacemusx_1_1dom.html#a2ce10a96e600e1368dd4b8cefdf12d5baf5616200d2e5faff161ac8f5e1637559", null ],
+      [ "Default", "namespacemusx_1_1dom.html#a2ce10a96e600e1368dd4b8cefdf12d5ba7a1920d61156abc05a60135aefe8bc67", null ],
       [ "Voice2", "namespacemusx_1_1dom.html#a2ce10a96e600e1368dd4b8cefdf12d5ba5fbff2c65b52ee38781d1d81ff11ecb5", null ]
     ] ],
     [ "NoteType", "namespacemusx_1_1dom.html#a3c91ee84b72cc27a2899191d6baee312", [
