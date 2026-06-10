@@ -573,6 +573,28 @@ TEST(ExpressionAssignments, CalcAssociatedEntry)
     }
 }
 
+TEST(ExpressionAssignments, CalcAssociatedGraceEntry)
+{
+    std::vector<char> xml;
+    musxtest::readFile(musxtest::getInputPath() / "grace_notes.enigmaxml", xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(xml);
+    ASSERT_TRUE(doc);
+
+    auto others = doc->getOthers();
+    ASSERT_TRUE(others);
+
+    auto expr = others->get<others::MeasureExprAssign>(SCORE_PARTID, 1, 0);
+    ASSERT_TRUE(expr);
+    ASSERT_EQ(expr->graceNoteIndex, 3u);
+
+    auto entryInfo = expr->calcAssociatedEntry();
+    ASSERT_TRUE(entryInfo);
+    EXPECT_TRUE(entryInfo->getEntry()->graceNote);
+    EXPECT_EQ(entryInfo->graceIndex, 3);
+    EXPECT_EQ(entryInfo->elapsedDuration, musx::util::Fraction::fromEdu(2048));
+    EXPECT_EQ(entryInfo->getEntry()->getEntryNumber(), 7);
+}
+
 TEST(ExpressionAssignments, Voice2Entries)
 {
     std::vector<char> xml;

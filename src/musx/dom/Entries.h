@@ -204,6 +204,18 @@ public:
     EntryInfoPtr calcNearestEntry(util::Fraction position, bool findExact = true, std::optional<LayerIndex> matchLayer = std::nullopt,
         MatchVoice matchVoice = MatchVoice::Any, util::Fraction atGraceNoteDuration = 0) const;
 
+    /// @brief Calculates the nearest entry at the given @p position and @p graceNoteIndex.
+    /// @param position The measure position to find.
+    /// @param graceNoteIndex The Finale grace note index to match, counting from 1 starting from the leftmost grace note.
+    /// @param findExact If true, only find an entry that matches to within 1 evpu. Otherwise find the closest entry in the measure.
+    /// @param matchLayer If specified, only find entries in this 0-based layer index. (Values 0..3)
+    /// @param matchVoice Determines which voice(s) are candidates. Use #MatchVoice::Any (the default) to accept either voice,
+    /// #MatchVoice::Voice1 for voice 1 only, or #MatchVoice::Voice2 for voice 2 only.
+    /// @return The entry if found, otherwise `nullptr`.
+    [[nodiscard]]
+    EntryInfoPtr calcNearestEntryAtGraceIndex(util::Fraction position, unsigned graceNoteIndex, bool findExact = true,
+        std::optional<LayerIndex> matchLayer = std::nullopt, MatchVoice matchVoice = MatchVoice::Any) const;
+
     /// @brief Snaps a measure position to the nearest entry if possible.
     /// @param location The measure location to snap.
     /// @param findExact If true, only snap to an entry that matches to within 1 evpu.
@@ -241,6 +253,9 @@ private:
     /// @brief Scans non-rest content layers and calls @p visitor with whether each layer is a cue layer.
     /// @return true if all content layers were scanned, false if @p visitor stopped the scan.
     bool scanCueLayers(bool includeVisibleInScore, std::function<bool(LayerIndex, bool)> visitor) const;
+
+    EntryInfoPtr calcNearestEntryMatching(util::Fraction position, bool findExact, std::optional<LayerIndex> matchLayer,
+        MatchVoice matchVoice, const std::function<bool(const EntryInfoPtr&)>& matchesEntry) const;
 
     MusxInstance<GFrameHold> m_hold;                    ///< The resolved GFrameHold object, or null if not found.
     Cmper m_requestedPartId{};                          ///< The requested part context.
@@ -943,6 +958,9 @@ public:
 
     /// @brief Return true if this entry is a grace note and the only grace in the sequence at this location.
     [[nodiscard]] bool calcIsSingletonGrace() const;
+
+    /// @brief Return true if this entry is a main note with one or more grace notes.
+    [[nodiscard]] bool calcHasGraceNote() const;
 
     /// @brief Return true if this entry is an auxiliary pitch marker (specifically, a trill-to or gliss-to pitch marker.)
     ///
