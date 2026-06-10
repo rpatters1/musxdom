@@ -126,9 +126,8 @@ enum class LyricTextType
 /// @brief Specifies which voice(s) are considered when matching entries.
 enum class MatchVoice
 {
-    Any,        ///< Consider entries from either voice. (Default)
-    Voice1,     ///< Consider only entries where #Entry::voice2 is false.
-    Voice2      ///< Consider only entries where #Entry::voice2 is true.
+    Default,    ///< Default matching behavior: accept either voice, but prefer voice 1 when both voices coincide.
+    Voice2      ///< Require #Entry::voice2 to be true.
 };
 
 /**
