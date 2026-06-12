@@ -1,5 +1,9 @@
 name: Build and Test
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 on:
   push:
     branches:
@@ -21,11 +25,15 @@ jobs:
           - os: macos-latest
             generator: Ninja
           - os: windows-latest
-            generator: "Visual Studio 17 2022"
+            generator: Ninja
     steps:
       # Step 1: Check out the repository
       - name: Checkout code
         uses: actions/checkout@v4
+
+      - name: Set up MSVC
+        if: matrix.os == 'windows-latest'
+        uses: ilammy/msvc-dev-cmd@v1
 
       # Step 2: Display Preinstalled Tools
       - name: Display preinstalled tools
@@ -39,10 +47,14 @@ jobs:
 
       - name: Install Ninja on macOS
         if: matrix.os == 'macos-latest'
-        run: brew install ninja
+        run: brew install ninja || echo "Ninja already installed"
+
+      - name: Install Ninja on Windows
+        if: matrix.os == 'windows-latest'
+        run: |
+          ninja --version && echo "Ninja already installed" || choco install ninja -y
 
       - name: Verify Ninja Installation
-        if: matrix.os != 'windows-latest'
         run: ninja --version || echo "Ninja is not available on this platform"
 
       # Step 4: Configure CMake
