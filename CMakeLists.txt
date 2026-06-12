@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.16)
 
 project(musx)
 
@@ -112,6 +112,10 @@ target_compile_definitions(musx INTERFACE
 
 # Ensure the library uses the correct include paths
 target_include_directories(musx PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
+
+target_precompile_headers(musx PRIVATE
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/musx/musx.h"
+)
 
 if(APPLE)
     target_link_libraries(musx PRIVATE "-framework CoreFoundation")
