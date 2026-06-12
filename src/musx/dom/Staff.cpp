@@ -180,6 +180,9 @@ void Staff::calcAllRuntimeValues(const DocumentPtr& document)
     }
 }
 
+template void Staff::calcAllRuntimeValues<Staff>(const DocumentPtr&);
+template void Staff::calcAllRuntimeValues<StaffStyle>(const DocumentPtr&);
+
 #ifndef DOXYGEN_SHOULD_IGNORE_THIS
 static std::string intToRoman(int num)
 {
