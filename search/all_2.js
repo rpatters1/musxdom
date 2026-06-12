@@ -11,7 +11,7 @@ var searchData=
   ['calcallactiveflags_8',['calcAllActiveFlags',['../classmusx_1_1dom_1_1details_1_1BeamAlterations.html#ac42d1f3fc2fedfa78dee04c3b9808b59',1,'musx::dom::details::BeamAlterations']]],
   ['calcallautonumbervalues_9',['calcAllAutoNumberValues',['../classmusx_1_1dom_1_1others_1_1Staff.html#a2af29870dae3b8de0e2d99b8a8cbd6d1',1,'musx::dom::others::Staff']]],
   ['calcallmultistaffgroupids_10',['calcAllMultiStaffGroupIds',['../classmusx_1_1dom_1_1others_1_1MultiStaffInstrumentGroup.html#ae68c139bbdeedfcdfda39fd18a351374',1,'musx::dom::others::MultiStaffInstrumentGroup']]],
-  ['calcallruntimevalues_11',['calcAllRuntimeValues',['../classmusx_1_1dom_1_1others_1_1Staff.html#a23c5b0befb63ed9e169eb58b86f78f9b',1,'musx::dom::others::Staff']]],
+  ['calcallruntimevalues_11',['calcAllRuntimeValues',['../classmusx_1_1dom_1_1others_1_1Staff.html#a018ed06a8880a9aedaa3f56939eb4405',1,'musx::dom::others::Staff']]],
   ['calcalterationfrom12edohalfsteps_12',['calcAlterationFrom12EdoHalfsteps',['../namespacemusic__theory.html#a5d580efb2fd53b410d55ecd25b268376',1,'music_theory']]],
   ['calcalterationfromkeysigchange_13',['calcAlterationFromKeySigChange',['../namespacemusic__theory.html#aa8135fae68fcafc7da27d3540d2a04b3',1,'music_theory']]],
   ['calcalterationonnote_14',['calcAlterationOnNote',['../classmusx_1_1dom_1_1KeySignature.html#a899161f19ddb7bae6eed764691959e8a',1,'musx::dom::KeySignature']]],
