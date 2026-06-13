@@ -591,11 +591,13 @@ MusxInstance<Staff> MultiStaffInstrumentGroup::getStaffInstanceAtIndex(size_t x)
 
 MusxInstance<Staff> MultiStaffInstrumentGroup::getFirstStaffInstance() const
 {
+    MusxInstance<Staff> result;
     if (staffNums.empty()) {
         MUSX_INTEGRITY_ERROR("MultiStaffInstrumentGroup " + std::to_string(getCmper()) + " contains no staves.");
-        return nullptr;
+    } else {
+        result = getStaffInstanceAtIndex(0);
     }
-    return getStaffInstanceAtIndex(0);
+    return result;
 }
 
 MusxInstance<details::StaffGroup> MultiStaffInstrumentGroup::getStaffGroup(Cmper forPartId) const
@@ -685,8 +687,8 @@ void Page::calcSystemInfo(const DocumentPtr& document)
                             MUSX_INTEGRITY_ERROR("Page " + std::to_string(page->getCmper()) + " of part " + part->getName()
                                 + " has a no system instance for its last system.");
                         }
-                        for (size_t x = size_t(page->firstSystemId - 1); x < size_t(page->lastSystemId.value()); x++) {
-                            StaffSystem* mutableSystem = const_cast<StaffSystem*>(systems[x].get());
+                        for (size_t y = size_t(page->firstSystemId - 1); y < size_t(page->lastSystemId.value()); y++) {
+                            StaffSystem* mutableSystem = const_cast<StaffSystem*>(systems[y].get());
                             mutableSystem->pageId = PageCmper(page->getCmper());
                         }
                     } else {
@@ -750,7 +752,7 @@ std::optional<PageCmper> PageTextAssign::calcStartPageNumber(Cmper forPartId) co
         } else if (isMultiPage()) {
             if (auto endPageNum = calcEndPageNumber(forPartId)) {
                 if (part->numberOfLeadingBlankPages < endPageNum.value()) {
-                    return PageCmper(part->numberOfLeadingBlankPages) + 1;
+                    return PageCmper(part->numberOfLeadingBlankPages + 1);
                 }
             }
         }
@@ -815,11 +817,13 @@ std::string PartDefinition::getName(util::EnigmaString::AccidentalStyle accident
 
 MusxInstance<PartDefinition> PartDefinition::getScore(const DocumentPtr& document)
 {
+    MusxInstance<PartDefinition> result{};
     if (auto score = document->getOthers()->get<PartDefinition>(SCORE_PARTID, SCORE_PARTID)) {
-        return score;
+        result = score;
+    } else {
+        MUSX_INTEGRITY_ERROR("The document contains no instance of PartDefinition for the score.");
     }
-    MUSX_INTEGRITY_ERROR("The document contains no instance of PartDefinition for the score.");
-    return nullptr;
+    return result;
 }
 
 MusxInstanceList<PartDefinition> PartDefinition::getInUserOrder(const DocumentPtr& document)
@@ -989,10 +993,10 @@ std::optional<MeasCmper> RepeatBack::calcTargetMeasure() const
 {
     switch (jumpAction) {
     case RepeatActionType::JumpAbsolute:
-        return (targetValue > 0) ? std::optional<MeasCmper>(targetValue) : std::nullopt;
+        return (targetValue > 0) ? std::optional<MeasCmper>(MeasCmper(targetValue)) : std::nullopt;
 
     case RepeatActionType::JumpRelative: {
-        const int target = static_cast<int>(getCmper()) + targetValue;
+        const auto target = static_cast<MeasCmper>(getCmper() + targetValue);
         return (target > 0) ? std::optional<MeasCmper>(target) : std::nullopt;
     }
 
@@ -1000,7 +1004,7 @@ std::optional<MeasCmper> RepeatBack::calcTargetMeasure() const
         for (MeasCmper meas = getCmper(); meas > 1; --meas) {
             if (auto measure = getDocument()->getOthers()->get<Measure>(getRequestedPartId(), meas - 1)) {
                 if (measure->forwardRepeatBar) {
-                    return meas - 1;
+                    return MeasCmper(meas - 1);
                 }
             } else {
                 break;
@@ -1058,15 +1062,15 @@ std::optional<MeasCmper> RepeatEndingStart::calcTargetMeasure() const
 {
     switch (jumpAction) {
     case RepeatActionType::JumpAbsolute:
-        return (targetValue > 0) ? std::optional<MeasCmper>(targetValue) : std::nullopt;
+        return (targetValue > 0) ? std::optional<MeasCmper>(MeasCmper(targetValue)) : std::nullopt;
 
     case RepeatActionType::JumpRelative: {
-        const int target = static_cast<int>(getCmper()) + targetValue;
+        const auto target = static_cast<MeasCmper>(getCmper() + targetValue);
         return (target > 0) ? std::optional<MeasCmper>(target) : std::nullopt;
     }
 
     case RepeatActionType::JumpAuto: {
-        const auto target = getCmper() + calcEndingLength();
+        const auto target = static_cast<MeasCmper>(getCmper() + calcEndingLength());
         return (target > 0) ? std::optional<MeasCmper>(target) : std::nullopt;
     }
 
@@ -1383,10 +1387,10 @@ std::optional<MeasCmper> TextRepeatAssign::calcTargetMeasure() const
 {
     switch (jumpAction) {
     case RepeatActionType::JumpAbsolute:
-        return (targetValue > 0) ? std::optional<MeasCmper>(targetValue) : std::nullopt;
+        return (targetValue > 0) ? std::optional<MeasCmper>(MeasCmper(targetValue)) : std::nullopt;
 
     case RepeatActionType::JumpRelative: {
-        const int target = static_cast<int>(getCmper()) + targetValue;
+        const auto target = static_cast<MeasCmper>(getCmper() + targetValue);
         return (target > 0) ? std::optional<MeasCmper>(target) : std::nullopt;
     }
 

@@ -323,17 +323,17 @@ void benchmarkOthers(const DocumentPtr& doc)
 
     const std::vector<TestCase> cases = {
         {"staffSpec", score, staff2, std::nullopt},
-        {"staffStyle", score, 2, std::nullopt},
-        {"smartShape", score, 337, std::nullopt},
-        {"instUsed", score, 17, 3},
+        {"staffStyle", score, Cmper{2}, std::nullopt},
+        {"smartShape", score, Cmper{337}, std::nullopt},
+        {"instUsed", score, Cmper{17}, Inci{3}},
         {"partGlobals", part1, MUSX_GLOBALS_CMPER, std::nullopt},
-        {"textBlock", score, 345, std::nullopt},
+        {"textBlock", score, Cmper{345}, std::nullopt},
         {"measSpec", part2, meas5, std::nullopt},
         {"repeatEndingStart", score, meas5, std::nullopt},
-        {"layerAtts", score, 1, std::nullopt},
-        {"pageSpec", part2, 4, std::nullopt},
-        {"frameSpec", score, 678, 0},
-        {"nonExistent", part2, 12345, 0}
+        {"layerAtts", score, Cmper{1}, std::nullopt},
+        {"pageSpec", part2, Cmper{4}, std::nullopt},
+        {"frameSpec", score, Cmper{678}, Inci{0}},
+        {"nonExistent", part2, Cmper{12345}, Inci{0}}
     };
 
     int foundCount = 0;

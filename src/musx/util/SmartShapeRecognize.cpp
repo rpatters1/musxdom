@@ -34,7 +34,7 @@ using dom::NoteInfoPtr;
 using dom::others::SmartShape;
 using CL = dom::others::SmartShapeCustomLine;
 
-constexpr dom::Efix RIGHT_HOOK_MAX_LENGTH_EVPU = 48 * dom::EFIX_PER_EVPU;
+constexpr dom::Efix RIGHT_HOOK_MAX_LENGTH_EVPU = 48 * dom::Efix(dom::EFIX_PER_EVPU);
 
 static bool isRightHookLine(const dom::Evpu hookLength)
 {

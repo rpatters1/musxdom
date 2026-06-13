@@ -239,12 +239,14 @@ struct FieldPopulator<TieAlterStart> : private FieldPopulator<TieAlterBase>
 template <>
 inline Bracket::BracketStyle toEnum<Bracket::BracketStyle>(const int& value)
 {
+    Bracket::BracketStyle result{};
     if (value >= static_cast<int>(Bracket::BracketStyle::None) &&
         value <= static_cast<int>(Bracket::BracketStyle::DeskBracket)) {
-        return static_cast<Bracket::BracketStyle>(value);
+        result = static_cast<Bracket::BracketStyle>(value);
+    } else {
+        MUSX_UNKNOWN_XML("Invalid <bracket><id> value in XML for Bracket: " + std::to_string(value));
     }
-    MUSX_UNKNOWN_XML("Invalid <bracket><id> value in XML for Bracket: " + std::to_string(value));
-    return {};
+    return result;
 }
 
 MUSX_RESOLVER_ENTRY(BeamAlterationsDownStem, BeamAlterations::calcAllActiveFlags<BeamAlterationsDownStem>);

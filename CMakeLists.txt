@@ -19,6 +19,9 @@ message(STATUS "Musx C++ standard: ${CMAKE_CXX_STANDARD}")
 
 if (MSVC)
     add_compile_options(/bigobj)
+    add_compile_options(/W4 /WX)
+elseif(CMAKE_CXX_COMPILER_ID MATCHES "AppleClang|Clang|GNU")
+    add_compile_options(-Wall -Wextra -Wpedantic -Werror)
 endif()
 
 set(MUSX_ROOT_DIR ${CMAKE_CURRENT_SOURCE_DIR} CACHE INTERNAL "Root directory of musx")

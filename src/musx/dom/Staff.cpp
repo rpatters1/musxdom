@@ -570,11 +570,11 @@ Evpu Staff::calcBaselinePositionImpl(SystemCmper systemId, std::optional<Cmper> 
 
     Evpu result = calcBaselineZeroPosition();
 
-    auto globalArray = getDocument()->getDetails()->getArray<BaselineType>(getRequestedPartId(), 0, 0);
+    auto globalArray = getDocument()->getDetails()->getArray<BaselineType>(getRequestedPartId(), Cmper{0}, Cmper{0});
     if (auto globalBaseline = findBaseline(globalArray)) {
         result += globalBaseline->baselineDisplacement;
     }
-    auto staffArray = getDocument()->getDetails()->getArray<BaselineType>(getRequestedPartId(), 0, getCmper());
+    auto staffArray = getDocument()->getDetails()->getArray<BaselineType>(getRequestedPartId(), Cmper{0}, getCmper());
     if (auto staffBaseline = findBaseline(staffArray)) {
         result += staffBaseline->baselineDisplacement;
     }

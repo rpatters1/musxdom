@@ -41,12 +41,14 @@ using namespace ::musx::dom::others;
 template <>
 inline Enclosure::Shape toEnum<Enclosure::Shape>(const uint8_t& value)
 {
+    Enclosure::Shape result{};
     if (value >= static_cast<uint8_t>(Enclosure::Shape::NoEnclosure) &&
         value <= static_cast<uint8_t>(Enclosure::Shape::Octogon)) {
-        return static_cast<Enclosure::Shape>(value);
+        result = static_cast<Enclosure::Shape>(value);
+    } else {
+        MUSX_UNKNOWN_XML("Invalid <sides> value in XML for enclosure: " + std::to_string(value));
     }
-    MUSX_UNKNOWN_XML("Invalid <sides> value in XML for enclosure: " + std::to_string(value));
-    return {};
+    return result;
 }
 
 template <>
