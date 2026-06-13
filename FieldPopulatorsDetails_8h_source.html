@@ -341,48 +341,50 @@ $(document).ready(function(){initNavTree('FieldPopulatorsDetails_8h_source.html'
 <div class="line"><a id="l00239" name="l00239"></a><span class="lineno">  239</span><span class="keyword">template</span> &lt;&gt;</div>
 <div class="line"><a id="l00240" name="l00240"></a><span class="lineno">  240</span><span class="keyword">inline</span> Bracket::BracketStyle toEnum&lt;Bracket::BracketStyle&gt;(<span class="keyword">const</span> <span class="keywordtype">int</span>&amp; value)</div>
 <div class="line"><a id="l00241" name="l00241"></a><span class="lineno">  241</span>{</div>
-<div class="line"><a id="l00242" name="l00242"></a><span class="lineno">  242</span>    <span class="keywordflow">if</span> (value &gt;= <span class="keyword">static_cast&lt;</span><span class="keywordtype">int</span><span class="keyword">&gt;</span>(Bracket::BracketStyle::None) &amp;&amp;</div>
-<div class="line"><a id="l00243" name="l00243"></a><span class="lineno">  243</span>        value &lt;= <span class="keyword">static_cast&lt;</span><span class="keywordtype">int</span><span class="keyword">&gt;</span>(Bracket::BracketStyle::DeskBracket)) {</div>
-<div class="line"><a id="l00244" name="l00244"></a><span class="lineno">  244</span>        <span class="keywordflow">return</span> <span class="keyword">static_cast&lt;</span>Bracket::BracketStyle<span class="keyword">&gt;</span>(value);</div>
-<div class="line"><a id="l00245" name="l00245"></a><span class="lineno">  245</span>    }</div>
-<div class="line"><a id="l00246" name="l00246"></a><span class="lineno">  246</span>    MUSX_UNKNOWN_XML(<span class="stringliteral">&quot;Invalid &lt;bracket&gt;&lt;id&gt; value in XML for Bracket: &quot;</span> + std::to_string(value));</div>
-<div class="line"><a id="l00247" name="l00247"></a><span class="lineno">  247</span>    <span class="keywordflow">return</span> {};</div>
-<div class="line"><a id="l00248" name="l00248"></a><span class="lineno">  248</span>}</div>
-<div class="line"><a id="l00249" name="l00249"></a><span class="lineno">  249</span> </div>
-<div class="line"><a id="l00250" name="l00250"></a><span class="lineno">  250</span>MUSX_RESOLVER_ENTRY(BeamAlterationsDownStem, BeamAlterations::calcAllActiveFlags&lt;BeamAlterationsDownStem&gt;);</div>
-<div class="line"><a id="l00251" name="l00251"></a><span class="lineno">  251</span>MUSX_RESOLVER_ENTRY(BeamAlterationsUpStem, BeamAlterations::calcAllActiveFlags&lt;BeamAlterationsUpStem&gt;);</div>
-<div class="line"><a id="l00252" name="l00252"></a><span class="lineno">  252</span>MUSX_RESOLVER_ENTRY(SecondaryBeamAlterationsDownStem, BeamAlterations::calcAllActiveFlags&lt;SecondaryBeamAlterationsDownStem&gt;);</div>
-<div class="line"><a id="l00253" name="l00253"></a><span class="lineno">  253</span>MUSX_RESOLVER_ENTRY(SecondaryBeamAlterationsUpStem, BeamAlterations::calcAllActiveFlags&lt;SecondaryBeamAlterationsUpStem&gt;);</div>
-<div class="line"><a id="l00254" name="l00254"></a><span class="lineno">  254</span> </div>
-<div class="line"><a id="l00255" name="l00255"></a><span class="lineno">  255</span>MUSX_RESOLVER_ENTRY(StaffGroup, {</div>
-<div class="line"><a id="l00256" name="l00256"></a><span class="lineno">  256</span>    [](<span class="keyword">const</span> <a class="code hl_typedef" href="namespacemusx_1_1dom.html#ac52edbaa60f81ba3df76ee77b37e95fd">dom::DocumentPtr</a>&amp; document) {</div>
-<div class="line"><a id="l00257" name="l00257"></a><span class="lineno">  257</span>        <span class="keyword">auto</span> parts = document-&gt;getOthers()-&gt;getArray&lt;others::PartDefinition&gt;(<a class="code hl_variable" href="namespacemusx_1_1dom.html#a5dd453394b3375a5be17055a82ddd9f0">SCORE_PARTID</a>);</div>
-<div class="line"><a id="l00258" name="l00258"></a><span class="lineno">  258</span>        <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; part : parts) {</div>
-<div class="line"><a id="l00259" name="l00259"></a><span class="lineno">  259</span>            <span class="keyword">auto</span> groups = document-&gt;getDetails()-&gt;getArray&lt;StaffGroup&gt;(part-&gt;getCmper(), document-&gt;calcScrollViewCmper(part-&gt;getCmper()));</div>
-<div class="line"><a id="l00260" name="l00260"></a><span class="lineno">  260</span>            <span class="keyword">const</span> <span class="keyword">auto</span> baseList = document-&gt;getScrollViewStaves(part-&gt;getCmper());</div>
-<div class="line"><a id="l00261" name="l00261"></a><span class="lineno">  261</span>            <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; instance : groups) {</div>
-<div class="line"><a id="l00262" name="l00262"></a><span class="lineno">  262</span>                <span class="keyword">auto</span> startIndex = baseList.getIndexForStaff(instance-&gt;startInst);</div>
-<div class="line"><a id="l00263" name="l00263"></a><span class="lineno">  263</span>                <span class="keyword">auto</span> endIndex = baseList.getIndexForStaff(instance-&gt;endInst);</div>
-<div class="line"><a id="l00264" name="l00264"></a><span class="lineno">  264</span>                <span class="keywordflow">if</span> (!startIndex || !endIndex) {</div>
-<div class="line"><a id="l00265" name="l00265"></a><span class="lineno">  265</span>                    <span class="comment">// this situation arises fairly commonly in Finale files, so the message is demoted to a verbose logging message</span></div>
-<div class="line"><a id="l00266" name="l00266"></a><span class="lineno">  266</span>                    <span class="comment">// from an integrity error.</span></div>
-<div class="line"><a id="l00267" name="l00267"></a><span class="lineno">  267</span>                    <a class="code hl_function" href="classmusx_1_1util_1_1Logger.html#a039905239762ae96745483d24588a68e">util::Logger::log</a>(<a class="code hl_enumvalue" href="classmusx_1_1util_1_1Logger.html#a022f4477cac1558e8687be693d111cabad4a9fa383ab700c5bdd6f31cf7df0faf">util::Logger::LogLevel::Verbose</a>, <span class="stringliteral">&quot;Group &quot;</span> + std::to_string(instance-&gt;getCmper2()) + <span class="stringliteral">&quot; in part &quot;</span> + part-&gt;getName()</div>
-<div class="line"><a id="l00268" name="l00268"></a><span class="lineno">  268</span>                        + <span class="stringliteral">&quot; [&quot;</span> + std::to_string(part-&gt;getCmper()) + <span class="stringliteral">&quot;] has non-existent start or end staff cmpers&quot;</span>);</div>
-<div class="line"><a id="l00269" name="l00269"></a><span class="lineno">  269</span>                    <span class="keywordflow">continue</span>;</div>
-<div class="line"><a id="l00270" name="l00270"></a><span class="lineno">  270</span>                }</div>
-<div class="line"><a id="l00271" name="l00271"></a><span class="lineno">  271</span>                <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> x = *startIndex; x &lt;= *endIndex &amp;&amp; x &lt; baseList.size(); x++) {</div>
-<div class="line"><a id="l00272" name="l00272"></a><span class="lineno">  272</span>                    <span class="keyword">auto</span> mutableInstance = <span class="keyword">const_cast&lt;</span>StaffGroup*<span class="keyword">&gt;</span>(instance.get());</div>
-<div class="line"><a id="l00273" name="l00273"></a><span class="lineno">  273</span>                    mutableInstance-&gt;staves.insert(baseList[x]-&gt;staffId);</div>
-<div class="line"><a id="l00274" name="l00274"></a><span class="lineno">  274</span>                }</div>
-<div class="line"><a id="l00275" name="l00275"></a><span class="lineno">  275</span>            }</div>
-<div class="line"><a id="l00276" name="l00276"></a><span class="lineno">  276</span>        }</div>
-<div class="line"><a id="l00277" name="l00277"></a><span class="lineno">  277</span>    }</div>
-<div class="line"><a id="l00278" name="l00278"></a><span class="lineno">  278</span>});</div>
-<div class="line"><a id="l00279" name="l00279"></a><span class="lineno">  279</span> </div>
-<div class="line"><a id="l00280" name="l00280"></a><span class="lineno">  280</span>} <span class="comment">// namespace factory</span></div>
-<div class="line"><a id="l00281" name="l00281"></a><span class="lineno">  281</span>} <span class="comment">// namespace musx</span></div>
-<div class="line"><a id="l00282" name="l00282"></a><span class="lineno">  282</span> </div>
-<div class="line"><a id="l00283" name="l00283"></a><span class="lineno">  283</span><span class="preprocessor">#endif </span><span class="comment">// DOXYGEN_SHOULD_IGNORE THIS</span></div>
+<div class="line"><a id="l00242" name="l00242"></a><span class="lineno">  242</span>    Bracket::BracketStyle result{};</div>
+<div class="line"><a id="l00243" name="l00243"></a><span class="lineno">  243</span>    <span class="keywordflow">if</span> (value &gt;= <span class="keyword">static_cast&lt;</span><span class="keywordtype">int</span><span class="keyword">&gt;</span>(Bracket::BracketStyle::None) &amp;&amp;</div>
+<div class="line"><a id="l00244" name="l00244"></a><span class="lineno">  244</span>        value &lt;= <span class="keyword">static_cast&lt;</span><span class="keywordtype">int</span><span class="keyword">&gt;</span>(Bracket::BracketStyle::DeskBracket)) {</div>
+<div class="line"><a id="l00245" name="l00245"></a><span class="lineno">  245</span>        result = <span class="keyword">static_cast&lt;</span>Bracket::BracketStyle<span class="keyword">&gt;</span>(value);</div>
+<div class="line"><a id="l00246" name="l00246"></a><span class="lineno">  246</span>    } <span class="keywordflow">else</span> {</div>
+<div class="line"><a id="l00247" name="l00247"></a><span class="lineno">  247</span>        MUSX_UNKNOWN_XML(<span class="stringliteral">&quot;Invalid &lt;bracket&gt;&lt;id&gt; value in XML for Bracket: &quot;</span> + std::to_string(value));</div>
+<div class="line"><a id="l00248" name="l00248"></a><span class="lineno">  248</span>    }</div>
+<div class="line"><a id="l00249" name="l00249"></a><span class="lineno">  249</span>    <span class="keywordflow">return</span> result;</div>
+<div class="line"><a id="l00250" name="l00250"></a><span class="lineno">  250</span>}</div>
+<div class="line"><a id="l00251" name="l00251"></a><span class="lineno">  251</span> </div>
+<div class="line"><a id="l00252" name="l00252"></a><span class="lineno">  252</span>MUSX_RESOLVER_ENTRY(BeamAlterationsDownStem, BeamAlterations::calcAllActiveFlags&lt;BeamAlterationsDownStem&gt;);</div>
+<div class="line"><a id="l00253" name="l00253"></a><span class="lineno">  253</span>MUSX_RESOLVER_ENTRY(BeamAlterationsUpStem, BeamAlterations::calcAllActiveFlags&lt;BeamAlterationsUpStem&gt;);</div>
+<div class="line"><a id="l00254" name="l00254"></a><span class="lineno">  254</span>MUSX_RESOLVER_ENTRY(SecondaryBeamAlterationsDownStem, BeamAlterations::calcAllActiveFlags&lt;SecondaryBeamAlterationsDownStem&gt;);</div>
+<div class="line"><a id="l00255" name="l00255"></a><span class="lineno">  255</span>MUSX_RESOLVER_ENTRY(SecondaryBeamAlterationsUpStem, BeamAlterations::calcAllActiveFlags&lt;SecondaryBeamAlterationsUpStem&gt;);</div>
+<div class="line"><a id="l00256" name="l00256"></a><span class="lineno">  256</span> </div>
+<div class="line"><a id="l00257" name="l00257"></a><span class="lineno">  257</span>MUSX_RESOLVER_ENTRY(StaffGroup, {</div>
+<div class="line"><a id="l00258" name="l00258"></a><span class="lineno">  258</span>    [](<span class="keyword">const</span> <a class="code hl_typedef" href="namespacemusx_1_1dom.html#ac52edbaa60f81ba3df76ee77b37e95fd">dom::DocumentPtr</a>&amp; document) {</div>
+<div class="line"><a id="l00259" name="l00259"></a><span class="lineno">  259</span>        <span class="keyword">auto</span> parts = document-&gt;getOthers()-&gt;getArray&lt;others::PartDefinition&gt;(<a class="code hl_variable" href="namespacemusx_1_1dom.html#a5dd453394b3375a5be17055a82ddd9f0">SCORE_PARTID</a>);</div>
+<div class="line"><a id="l00260" name="l00260"></a><span class="lineno">  260</span>        <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; part : parts) {</div>
+<div class="line"><a id="l00261" name="l00261"></a><span class="lineno">  261</span>            <span class="keyword">auto</span> groups = document-&gt;getDetails()-&gt;getArray&lt;StaffGroup&gt;(part-&gt;getCmper(), document-&gt;calcScrollViewCmper(part-&gt;getCmper()));</div>
+<div class="line"><a id="l00262" name="l00262"></a><span class="lineno">  262</span>            <span class="keyword">const</span> <span class="keyword">auto</span> baseList = document-&gt;getScrollViewStaves(part-&gt;getCmper());</div>
+<div class="line"><a id="l00263" name="l00263"></a><span class="lineno">  263</span>            <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; instance : groups) {</div>
+<div class="line"><a id="l00264" name="l00264"></a><span class="lineno">  264</span>                <span class="keyword">auto</span> startIndex = baseList.getIndexForStaff(instance-&gt;startInst);</div>
+<div class="line"><a id="l00265" name="l00265"></a><span class="lineno">  265</span>                <span class="keyword">auto</span> endIndex = baseList.getIndexForStaff(instance-&gt;endInst);</div>
+<div class="line"><a id="l00266" name="l00266"></a><span class="lineno">  266</span>                <span class="keywordflow">if</span> (!startIndex || !endIndex) {</div>
+<div class="line"><a id="l00267" name="l00267"></a><span class="lineno">  267</span>                    <span class="comment">// this situation arises fairly commonly in Finale files, so the message is demoted to a verbose logging message</span></div>
+<div class="line"><a id="l00268" name="l00268"></a><span class="lineno">  268</span>                    <span class="comment">// from an integrity error.</span></div>
+<div class="line"><a id="l00269" name="l00269"></a><span class="lineno">  269</span>                    <a class="code hl_function" href="classmusx_1_1util_1_1Logger.html#a039905239762ae96745483d24588a68e">util::Logger::log</a>(<a class="code hl_enumvalue" href="classmusx_1_1util_1_1Logger.html#a022f4477cac1558e8687be693d111cabad4a9fa383ab700c5bdd6f31cf7df0faf">util::Logger::LogLevel::Verbose</a>, <span class="stringliteral">&quot;Group &quot;</span> + std::to_string(instance-&gt;getCmper2()) + <span class="stringliteral">&quot; in part &quot;</span> + part-&gt;getName()</div>
+<div class="line"><a id="l00270" name="l00270"></a><span class="lineno">  270</span>                        + <span class="stringliteral">&quot; [&quot;</span> + std::to_string(part-&gt;getCmper()) + <span class="stringliteral">&quot;] has non-existent start or end staff cmpers&quot;</span>);</div>
+<div class="line"><a id="l00271" name="l00271"></a><span class="lineno">  271</span>                    <span class="keywordflow">continue</span>;</div>
+<div class="line"><a id="l00272" name="l00272"></a><span class="lineno">  272</span>                }</div>
+<div class="line"><a id="l00273" name="l00273"></a><span class="lineno">  273</span>                <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> x = *startIndex; x &lt;= *endIndex &amp;&amp; x &lt; baseList.size(); x++) {</div>
+<div class="line"><a id="l00274" name="l00274"></a><span class="lineno">  274</span>                    <span class="keyword">auto</span> mutableInstance = <span class="keyword">const_cast&lt;</span>StaffGroup*<span class="keyword">&gt;</span>(instance.get());</div>
+<div class="line"><a id="l00275" name="l00275"></a><span class="lineno">  275</span>                    mutableInstance-&gt;staves.insert(baseList[x]-&gt;staffId);</div>
+<div class="line"><a id="l00276" name="l00276"></a><span class="lineno">  276</span>                }</div>
+<div class="line"><a id="l00277" name="l00277"></a><span class="lineno">  277</span>            }</div>
+<div class="line"><a id="l00278" name="l00278"></a><span class="lineno">  278</span>        }</div>
+<div class="line"><a id="l00279" name="l00279"></a><span class="lineno">  279</span>    }</div>
+<div class="line"><a id="l00280" name="l00280"></a><span class="lineno">  280</span>});</div>
+<div class="line"><a id="l00281" name="l00281"></a><span class="lineno">  281</span> </div>
+<div class="line"><a id="l00282" name="l00282"></a><span class="lineno">  282</span>} <span class="comment">// namespace factory</span></div>
+<div class="line"><a id="l00283" name="l00283"></a><span class="lineno">  283</span>} <span class="comment">// namespace musx</span></div>
+<div class="line"><a id="l00284" name="l00284"></a><span class="lineno">  284</span> </div>
+<div class="line"><a id="l00285" name="l00285"></a><span class="lineno">  285</span><span class="preprocessor">#endif </span><span class="comment">// DOXYGEN_SHOULD_IGNORE THIS</span></div>
 <div class="ttc" id="aclassmusx_1_1util_1_1Logger_html_a022f4477cac1558e8687be693d111cabad4a9fa383ab700c5bdd6f31cf7df0faf"><div class="ttname"><a href="classmusx_1_1util_1_1Logger.html#a022f4477cac1558e8687be693d111cabad4a9fa383ab700c5bdd6f31cf7df0faf">musx::util::Logger::LogLevel::Verbose</a></div><div class="ttdeci">@ Verbose</div><div class="ttdoc">Informational messages that should only displayed when verbose logging is requested.</div></div>
 <div class="ttc" id="aclassmusx_1_1util_1_1Logger_html_a039905239762ae96745483d24588a68e"><div class="ttname"><a href="classmusx_1_1util_1_1Logger.html#a039905239762ae96745483d24588a68e">musx::util::Logger::log</a></div><div class="ttdeci">static void log(LogLevel level, const std::string &amp;message)</div><div class="ttdoc">Logs a message with a specific severity level.</div><div class="ttdef"><b>Definition</b> Logger.h:87</div></div>
 <div class="ttc" id="anamespacemusx_1_1dom_1_1details_html"><div class="ttname"><a href="namespacemusx_1_1dom_1_1details.html">musx::dom::details</a></div><div class="ttdoc">Classes in the DetailsPool.</div><div class="ttdef"><b>Definition</b> CommonClasses.h:42</div></div>
