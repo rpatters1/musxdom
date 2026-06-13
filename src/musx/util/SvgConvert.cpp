@@ -2390,11 +2390,11 @@ std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape,
             if (!payload) {
                 if (auto doc = shape.getDocument()) {
                     if (assignment) {
-                        if (auto path = doc->resolveExternalGraphicPath(assignment->fDescId)) {
+                        if (auto graphicPath = doc->resolveExternalGraphicPath(assignment->fDescId)) {
                             ExternalGraphicPayload filePayload;
-                            filePayload.bytes = readFileBytes(*path);
+                            filePayload.bytes = readFileBytes(*graphicPath);
                             if (!filePayload.bytes.empty()) {
-                                filePayload.mimeType = mimeTypeFromExtension(path->extension());
+                                filePayload.mimeType = mimeTypeFromExtension(graphicPath->extension());
                                 if (!filePayload.mimeType.empty()) {
                                     payload = std::move(filePayload);
                                 }
