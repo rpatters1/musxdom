@@ -50,7 +50,7 @@ MusxInstanceList<details::Bracket> OssiaHeader::getBrackets() const
     // from some legacy plan to use top-level brackets with staff groups rather than embedding the brackets
     // in the staff groups. Or maybe there was an ancient design where brackets were entirely independent
     // of staff groups and instead attached to system or staves. We may never know the reason.
-    return getDocument()->getDetails()->getArray<details::Bracket>(getRequestedPartId(), bracketGroup, 0);
+    return getDocument()->getDetails()->getArray<details::Bracket>(getRequestedPartId(), bracketGroup, Cmper{ 0 });
 }
 
 } // namespace others

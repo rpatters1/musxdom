@@ -186,7 +186,7 @@ MeasCmper EntryFrame::getMeasure() const { return m_context->getMeasure(); }
 MusxInstance<others::LayerAttributes> EntryFrame::getLayerAttributes() const
 {
     if (!m_cachedLayerAttributes) {
-        m_cachedLayerAttributes = getDocument()->getOthers()->get<others::LayerAttributes>(getRequestedPartId(), getLayerIndex());
+        m_cachedLayerAttributes = getDocument()->getOthers()->get<others::LayerAttributes>(getRequestedPartId(), Cmper(getLayerIndex()));
     }
     return m_cachedLayerAttributes;
 }

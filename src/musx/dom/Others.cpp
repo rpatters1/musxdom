@@ -685,8 +685,8 @@ void Page::calcSystemInfo(const DocumentPtr& document)
                             MUSX_INTEGRITY_ERROR("Page " + std::to_string(page->getCmper()) + " of part " + part->getName()
                                 + " has a no system instance for its last system.");
                         }
-                        for (size_t x = size_t(page->firstSystemId - 1); x < size_t(page->lastSystemId.value()); x++) {
-                            StaffSystem* mutableSystem = const_cast<StaffSystem*>(systems[x].get());
+                        for (size_t y = size_t(page->firstSystemId - 1); y < size_t(page->lastSystemId.value()); y++) {
+                            StaffSystem* mutableSystem = const_cast<StaffSystem*>(systems[y].get());
                             mutableSystem->pageId = PageCmper(page->getCmper());
                         }
                     } else {
@@ -750,7 +750,7 @@ std::optional<PageCmper> PageTextAssign::calcStartPageNumber(Cmper forPartId) co
         } else if (isMultiPage()) {
             if (auto endPageNum = calcEndPageNumber(forPartId)) {
                 if (part->numberOfLeadingBlankPages < endPageNum.value()) {
-                    return PageCmper(part->numberOfLeadingBlankPages) + 1;
+                    return PageCmper(part->numberOfLeadingBlankPages + 1);
                 }
             }
         }

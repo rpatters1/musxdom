@@ -62,7 +62,7 @@ std::optional<PageCmper> PageGraphicAssign::calcStartPageNumber(Cmper forPartId)
         } else if (isMultiPage()) {
             if (auto endPageNum = calcEndPageNumber(forPartId)) {
                 if (part->numberOfLeadingBlankPages < endPageNum.value()) {
-                    return PageCmper(part->numberOfLeadingBlankPages) + 1;
+                    return PageCmper(part->numberOfLeadingBlankPages + 1);
                 }
             }
         }
