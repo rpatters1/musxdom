@@ -378,7 +378,7 @@ VerticalPlacement others::SmartShape::calcVerticalPlacementForBeatAttached() con
     /// @note Beat-attached smart shapes are positioned relative to the top staff line,
     /// not the reference line. That means no staff is necessary for the Above calculation.
 
-    if (startTermSeg->endPointAdj->calcVertOffset() <= 0 && endTermSeg->endPointAdj->calcVertOffset() <= 0) {
+    if (startTermSeg->endPointAdj->calcVertOffset() >= 0 && endTermSeg->endPointAdj->calcVertOffset() >= 0) {
         return VerticalPlacement::Above;
     }
 
@@ -386,7 +386,7 @@ VerticalPlacement others::SmartShape::calcVerticalPlacementForBeatAttached() con
         bool result = false;
         if (const auto staff = termSeg.endPoint->createCurrentStaff()) {
             const Evpu bottomOffset = staff->calcTopLineEvpu() - staff->calcBottomLineEvpu();
-            result = (termSeg.endPointAdj->calcVertOffset() > bottomOffset);
+            result = (termSeg.endPointAdj->calcVertOffset() < bottomOffset);
         } else {
             /// @todo force top-level function to return NotApplicable from here.
             MUSX_INTEGRITY_ERROR("SmartShape with cmper " + std::to_string(getCmper())
