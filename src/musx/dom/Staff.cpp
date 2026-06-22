@@ -508,6 +508,23 @@ int Staff::calcMiddleStaffPosition() const
     return 0;
 }
 
+Evpu Staff::calcRestOffset(Edu edu) const
+{
+    switch (std::get<0>(calcDurationInfoFromEdu(edu))) {
+        case NoteType::Longa:
+        case NoteType::Maxima:
+            return otherRestOffset;
+        case NoteType::Breve:
+            return dwRestOffset;
+        case NoteType::Whole:
+            return wRestOffset;
+        case NoteType::Half:
+            return hRestOffset;
+        default:
+            return otherRestOffset;
+    }
+}
+
 int Staff::calcTopLinePosition() const
 {
     if (staffLines.has_value()) {

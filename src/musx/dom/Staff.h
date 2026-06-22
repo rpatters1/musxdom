@@ -395,6 +395,9 @@ public:
     /// @brief Calculates the middle staff position. For staves with even numbers of lines, it is the middle space.
     int calcMiddleStaffPosition() const;
 
+    /// @brief Returns the configured rest staff-step offset for an Edu value.
+    [[nodiscard]] Evpu calcRestOffset(Edu edu) const;
+
     /// @brief Calculates the baseline zero position for this staff, relative to the reference line, before any displacements are applied.
     ///
     /// This function reproduces Finale’s observed behavior but may yield inaccurate results in unusual configurations of custom staff lines.

@@ -199,6 +199,41 @@ TEST(StaffTest, PopulateFields)
     EXPECT_EQ(staff3->stemDirection, StemDirection::Default);
 }
 
+TEST(StaffTest, RestOffsets)
+{
+    constexpr static musxtest::string_view restOffsetXml = R"xml(
+<?xml version="1.0" encoding="UTF-8"?>
+<finale>
+  <others>
+    <staffSpec cmper="1">
+      <staffLines>5</staffLines>
+      <lineSpace>24</lineSpace>
+      <instUuid>54422b22-4627-4100-abbf-064eedc15fe3</instUuid>
+      <dwRestOffset>-5</dwRestOffset>
+      <wRestOffset>-6</wRestOffset>
+      <hRestOffset>-7</hRestOffset>
+      <otherRestOffset>-8</otherRestOffset>
+    </staffSpec>
+  </others>
+</finale>
+    )xml";
+
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(restOffsetXml);
+    auto others = doc->getOthers();
+    ASSERT_TRUE(others);
+
+    auto staff = others->get<others::Staff>(SCORE_PARTID, 1);
+    ASSERT_TRUE(staff);
+
+    EXPECT_EQ(staff->calcRestOffset(Edu(NoteType::Breve)), -5);
+    EXPECT_EQ(staff->calcRestOffset(Edu(NoteType::Longa)), -8);
+    EXPECT_EQ(staff->calcRestOffset(Edu(NoteType::Maxima)), -8);
+    EXPECT_EQ(staff->calcRestOffset(Edu(NoteType::Whole)), -6);
+    EXPECT_EQ(staff->calcRestOffset(Edu(NoteType::Whole) + Edu(NoteType::Half)), -6);
+    EXPECT_EQ(staff->calcRestOffset(Edu(NoteType::Half)), -7);
+    EXPECT_EQ(staff->calcRestOffset(Edu(NoteType::Quarter)), -8);
+}
+
 TEST(StaffTest, AutoNumbering)
 {
     auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(staffXml);
