@@ -1331,13 +1331,6 @@ private:
     [[nodiscard]] std::optional<utils::PseudoTieShapeInfo> calcPseudoTieShape() const;
 
 public:
-    /// @brief Coarse vertical placement information for a measure expression assignment.
-    struct VerticalPlacementContext
-    {
-        VerticalPlacement placement = VerticalPlacement::NotApplicable; ///< Coarse placement classification.
-        Evpu effectiveY{};                                               ///< Effective Y offset used for the classification.
-    };
-
     /** @brief Constructor function */
     explicit MeasureExprAssign(const DocumentWeakPtr& document, Cmper ID, ShareMode shareMode, Cmper cmper, Inci inci)
         : OthersBase(document, ID, shareMode, cmper, inci) {}
@@ -1446,10 +1439,10 @@ public:
     /// @brief Calculates if this assignment is hidden by alternate notation.
     bool calcIsHiddenByAlternateNotation() const;
 
-    /// @brief Calculates a coarse vertical placement classification and effective Y offset for this assignment.
+    /// @brief Calculates a vertical placement classification and effective Y offset for this assignment.
     /// @details This is intentionally rough: it uses the assigned expression definition's vertical alignment and the
     /// assignment's own vertical offset, and collapses the result into a coarse placement category.
-    [[nodiscard]] VerticalPlacementContext calcVerticalPlacementContext() const;
+    [[nodiscard]] VerticalPlacement calcVerticalPlacementContext() const;
 
     void integrityCheck(const std::shared_ptr<EnigmaBase>& ptrToThis) override
     {

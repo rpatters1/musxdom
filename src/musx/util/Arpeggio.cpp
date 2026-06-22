@@ -48,7 +48,6 @@ std::string ArpeggioSpanCandidate::key() const
 
 namespace {
 
-constexpr double EVPU_PER_STAFF_POSITION = EVPU_PER_SPACE / 2.0;
 constexpr double ARPEGGIO_VERTICAL_SEGMENT_ASCENT = 2.0 * EVPU_PER_SPACE;
 constexpr double NON_ARPEGGIO_INSTRUMENT_BOUND_SLOP = 1.5 * EVPU_PER_SPACE;
 

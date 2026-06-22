@@ -471,47 +471,45 @@ bool MeasureExprAssign::calcIsHiddenByAlternateNotation() const
     }
 }
 
-MeasureExprAssign::VerticalPlacementContext MeasureExprAssign::calcVerticalPlacementContext() const
+VerticalPlacement MeasureExprAssign::calcVerticalPlacementContext() const
 {
-    VerticalPlacementContext result;
+    VerticalPlacement result;
 
     const auto classify = [&](VerticalMeasExprAlign align, Evpu effectiveY) {
-        result.effectiveY = effectiveY;
         constexpr Evpu AboveFloatThreshold = 72;
         constexpr Evpu BelowFloatThreshold = -144;
         switch (align) {
         case VerticalMeasExprAlign::AboveStaff:
         case VerticalMeasExprAlign::AboveStaffOrEntry:
-            result.placement = (effectiveY > AboveFloatThreshold) ? VerticalPlacement::Float : VerticalPlacement::Above;
+            result = (effectiveY > AboveFloatThreshold) ? VerticalPlacement::Float : VerticalPlacement::Above;
             return;
         case VerticalMeasExprAlign::BelowStaff:
         case VerticalMeasExprAlign::BelowStaffOrEntry:
-            result.placement = (effectiveY < BelowFloatThreshold) ? VerticalPlacement::Float : VerticalPlacement::Below;
+            result = (effectiveY < BelowFloatThreshold) ? VerticalPlacement::Float : VerticalPlacement::Below;
             return;
         case VerticalMeasExprAlign::Manual:
         case VerticalMeasExprAlign::RefLine:
             if (auto staff = createCurrentStaff()) {
-                constexpr int EVPU_PER_STAFF_POSITION = static_cast<int>(EVPU_PER_SPACE) / 2;
-                const Evpu topLineEvpu = static_cast<Evpu>((staff->calcTopLinePosition() * EVPU_PER_STAFF_POSITION) / 2);
-                const Evpu bottomLineEvpu = static_cast<Evpu>((staff->calcBottomLinePosition() * EVPU_PER_STAFF_POSITION) / 2);
-                if (effectiveY <= topLineEvpu) {
-                    result.placement = VerticalPlacement::Above;
-                } else if (effectiveY > bottomLineEvpu) {
-                    result.placement = VerticalPlacement::Below;
+                const Evpu topLineEvpu = staff->calcTopLineEvpu();
+                const Evpu bottomLineEvpu = staff->calcBottomLineEvpu();
+                if (effectiveY >= topLineEvpu) {
+                    result = VerticalPlacement::Above;
+                } else if (effectiveY < bottomLineEvpu) {
+                    result = VerticalPlacement::Below;
                 } else {
-                    result.placement = VerticalPlacement::Float;
+                    result = VerticalPlacement::Float;
                 }
                 return;
             }
-            result.placement = VerticalPlacement::NotApplicable;
+            result = VerticalPlacement::NotApplicable;
             return;
         default:
-            result.placement = VerticalPlacement::Float;
+            result = VerticalPlacement::Float;
             return;
         }
     };
 
-    auto calcEffectiveY = [&](const auto& def) -> std::optional<VerticalPlacementContext> {
+    auto calcEffectiveY = [&](const auto& def) -> std::optional<VerticalPlacement> {
         using InstanceType = std::remove_cv_t<std::remove_reference_t<decltype(def)>>;
         using ElementType = typename InstanceType::element_type;
         using Def = std::remove_const_t<ElementType>;

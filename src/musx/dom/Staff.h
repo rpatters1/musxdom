@@ -434,8 +434,16 @@ public:
     /// @brief Calculates the position of the top staff line, relative to the reference line.
     int calcTopLinePosition() const;
 
+    /// @brief Calculates the Evpu position of the top staff line, relative to the reference line.
+    Evpu calcTopLineEvpu() const
+    { return static_cast<Evpu>(calcTopLinePosition() * static_cast<int>(EVPU_PER_STAFF_POSITION)); }
+
     /// @brief Calculates the position of the top staff line, relative to the reference line.
     int calcBottomLinePosition() const;
+
+    /// @brief Calculates the Evpu position of the bottom staff line, relative to the reference line.
+    Evpu calcBottomLineEvpu() const
+    { return static_cast<Evpu>(calcBottomLinePosition() * static_cast<int>(EVPU_PER_STAFF_POSITION)); }
 
     /// @brief Return true if this staff has an instrument assigned.
     bool hasInstrumentAssigned() const;

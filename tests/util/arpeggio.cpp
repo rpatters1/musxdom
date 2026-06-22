@@ -84,8 +84,8 @@ MusxInstance<others::SmartShape> createVerticalHookSmartShape(
 
     const auto [topStaffTop, topStaffBottom] = topEntry.calcTopBottomStaffPositions();
     const auto [bottomStaffTop, bottomStaffBottom] = bottomEntry.calcTopBottomStaffPositions();
-    const Evpu startY = static_cast<Evpu>((std::min)(topStaffTop, topStaffBottom) * (EVPU_PER_SPACE / 2));
-    Evpu endY = static_cast<Evpu>((std::max)(bottomStaffTop, bottomStaffBottom) * (EVPU_PER_SPACE / 2));
+    const Evpu startY = static_cast<Evpu>((std::min)(topStaffTop, topStaffBottom) * EVPU_PER_STAFF_POSITION);
+    Evpu endY = static_cast<Evpu>((std::max)(bottomStaffTop, bottomStaffBottom) * EVPU_PER_STAFF_POSITION);
     if (startY == endY) {
         endY += 1;
     }

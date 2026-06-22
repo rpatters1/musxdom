@@ -36,7 +36,7 @@ EntryInfoPtr smartshape::EndPoint::calcAssociatedEntry(bool findExact) const
 {
     const auto doc = getDocument();
     auto shapeParent = getParent<others::SmartShape>();
-    MUSX_ASSERT_IF (!shapeParent) {
+    MUSX_ASSERT_IF(!shapeParent) {
         throw std::logic_error("Unknown parent type for SmartShape::EndPoint.");
     }
     const Cmper forPartId = shapeParent->getRequestedPartId();
@@ -82,7 +82,7 @@ EntryInfoPtr smartshape::EndPoint::calcAssociatedEntry(bool findExact) const
 MusxInstance<others::SmartShapeMeasureAssign> smartshape::EndPoint::getMeasureAssignment() const
 {
     auto shapeParent = getParent<others::SmartShape>();
-    MUSX_ASSERT_IF (!shapeParent) {
+    MUSX_ASSERT_IF(!shapeParent) {
         throw std::logic_error("Unknown parent type for SmartShape::EndPoint.");
     }
     if (auto measure = getDocument()->getOthers()->get<others::Measure>(shapeParent->getRequestedPartId(), measId)) {
@@ -101,7 +101,7 @@ MusxInstance<others::SmartShapeMeasureAssign> smartshape::EndPoint::getMeasureAs
 MusxInstance<details::SmartShapeEntryAssign> smartshape::EndPoint::getEntryAssignment() const
 {
     auto shapeParent = getParent<others::SmartShape>();
-    MUSX_ASSERT_IF (!shapeParent) {
+    MUSX_ASSERT_IF(!shapeParent) {
         throw std::logic_error("Unknown parent type for SmartShape::EndPoint.");
     }
     if (entryNumber != 0) {
@@ -131,6 +131,16 @@ bool smartshape::EndPoint::calcIsAssigned() const
     return true;
 }
 
+MusxInstance<others::StaffComposite> smartshape::EndPoint::createCurrentStaff() const
+{
+    auto shapeParent = getParent<others::SmartShape>();
+    MUSX_ASSERT_IF(!shapeParent) {
+        throw std::logic_error("Unknown parent type for SmartShape::EndPoint.");
+    }
+    return others::StaffComposite::createCurrent(getDocument(), shapeParent->getRequestedPartId(),
+        staffId, measId, calcPosition().calcEduDuration());
+}
+
 util::Fraction smartshape::EndPoint::calcPosition() const
 {
     if (!entryNumber) {
@@ -145,7 +155,7 @@ util::Fraction smartshape::EndPoint::calcPosition() const
 util::Fraction smartshape::EndPoint::calcGlobalPosition() const
 {
     auto shapeParent = getParent<others::SmartShape>();
-    MUSX_ASSERT_IF (!shapeParent) {
+    MUSX_ASSERT_IF(!shapeParent) {
         throw std::logic_error("Unknown parent type for SmartShape::EndPoint.");
     }
     if (!entryNumber) {
@@ -357,6 +367,39 @@ CurveContourDirection others::SmartShape::calcContourDirection() const
     default:
         return CurveContourDirection::Unspecified;
     }
+}
+
+VerticalPlacement others::SmartShape::calcVerticalPlacementForBeatAttached() const
+{
+    if (entryBased) {
+        return VerticalPlacement::NotApplicable;
+    }
+
+    /// @note Beat-attached smart shapes are positioned relative to the top staff line,
+    /// not the reference line. That means no staff is necessary for the Above calculation.
+
+    if (startTermSeg->endPointAdj->calcVertOffset() <= 0 && endTermSeg->endPointAdj->calcVertOffset() <= 0) {
+        return VerticalPlacement::Above;
+    }
+
+    auto isBelow = [&](const TerminationSeg& termSeg) -> bool {
+        bool result = false;
+        if (const auto staff = termSeg.endPoint->createCurrentStaff()) {
+            const Evpu bottomOffset = staff->calcTopLineEvpu() - staff->calcBottomLineEvpu();
+            result = (termSeg.endPointAdj->calcVertOffset() > bottomOffset);
+        } else {
+            /// @todo force top-level function to return NotApplicable from here.
+            MUSX_INTEGRITY_ERROR("SmartShape with cmper " + std::to_string(getCmper())
+                + " is missing staff cmper " + std::to_string(termSeg.endPoint->staffId) + " at endpoint.");
+        }
+        return result;
+    };
+
+    if (isBelow(*startTermSeg) && isBelow(*endTermSeg)) {
+        return VerticalPlacement::Below;
+    }
+
+    return VerticalPlacement::Float;
 }
 
 bool others::SmartShape::calcIsDashed() const
