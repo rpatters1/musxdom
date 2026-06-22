@@ -959,8 +959,9 @@ bool EntryInfoPtr::calcDisplaysAsRest() const
 std::pair<int, int> EntryInfoPtr::calcTopBottomStaffPositions() const
 {
     const auto& entry = (*this)->getEntry();
-    MUSX_ASSERT_IF(entry->notes.empty() || entry->floatRest) {
-        throw std::logic_error("calcTopBottomStaffPositions cannot be called for a floating rest.");
+    if (entry->notes.empty() || entry->floatRest) {
+        /// @todo calculate floating rest values from staff. For now, just return hard-coded value of -4.
+        return std::make_pair(-4, -4);
     }
     int topLine = (std::numeric_limits<int>::min)();
     int botLine = (std::numeric_limits<int>::max)();
