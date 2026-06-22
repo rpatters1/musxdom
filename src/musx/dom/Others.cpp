@@ -471,6 +471,85 @@ bool MeasureExprAssign::calcIsHiddenByAlternateNotation() const
     }
 }
 
+MeasureExprAssign::VerticalPlacementContext MeasureExprAssign::calcVerticalPlacementContext() const
+{
+    VerticalPlacementContext result;
+
+    const auto classify = [&](VerticalMeasExprAlign align, Evpu effectiveY) {
+        result.effectiveY = effectiveY;
+        constexpr Evpu AboveFloatThreshold = 72;
+        constexpr Evpu BelowFloatThreshold = -144;
+        switch (align) {
+        case VerticalMeasExprAlign::AboveStaff:
+        case VerticalMeasExprAlign::AboveStaffOrEntry:
+            result.placement = (effectiveY > AboveFloatThreshold) ? VerticalPlacement::Float : VerticalPlacement::Above;
+            return;
+        case VerticalMeasExprAlign::BelowStaff:
+        case VerticalMeasExprAlign::BelowStaffOrEntry:
+            result.placement = (effectiveY < BelowFloatThreshold) ? VerticalPlacement::Float : VerticalPlacement::Below;
+            return;
+        case VerticalMeasExprAlign::Manual:
+        case VerticalMeasExprAlign::RefLine:
+            if (auto staff = createCurrentStaff()) {
+                constexpr int EVPU_PER_STAFF_POSITION = static_cast<int>(EVPU_PER_SPACE) / 2;
+                const Evpu topLineEvpu = static_cast<Evpu>((staff->calcTopLinePosition() * EVPU_PER_STAFF_POSITION) / 2);
+                const Evpu bottomLineEvpu = static_cast<Evpu>((staff->calcBottomLinePosition() * EVPU_PER_STAFF_POSITION) / 2);
+                if (effectiveY <= topLineEvpu) {
+                    result.placement = VerticalPlacement::Above;
+                } else if (effectiveY > bottomLineEvpu) {
+                    result.placement = VerticalPlacement::Below;
+                } else {
+                    result.placement = VerticalPlacement::Float;
+                }
+                return;
+            }
+            result.placement = VerticalPlacement::NotApplicable;
+            return;
+        default:
+            result.placement = VerticalPlacement::Float;
+            return;
+        }
+    };
+
+    auto calcEffectiveY = [&](const auto& def) -> std::optional<VerticalPlacementContext> {
+        using InstanceType = std::remove_cv_t<std::remove_reference_t<decltype(def)>>;
+        using ElementType = typename InstanceType::element_type;
+        using Def = std::remove_const_t<ElementType>;
+        static_assert(std::is_same_v<Def, TextExpressionDef> || std::is_same_v<Def, ShapeExpressionDef>,
+            "Def must be an expression definition.");
+        if (!def) {
+            return std::nullopt;
+        }
+
+        const auto align = def->vertMeasExprAlign;
+        Evpu effectiveY{};
+        switch (align) {
+        case VerticalMeasExprAlign::AboveStaff:
+        case VerticalMeasExprAlign::BelowStaff:
+            effectiveY = def->yAdjustBaseline + vertEvpuOff;
+            break;
+        default:
+            effectiveY = def->yAdjustEntry + vertEvpuOff;
+            break;
+        }
+
+        classify(align, effectiveY);
+        return result;
+    };
+
+    if (textExprId) {
+        if (auto resolved = calcEffectiveY(getTextExpression())) {
+            return *resolved;
+        }
+    } else if (shapeExprId) {
+        if (auto resolved = calcEffectiveY(getShapeExpression())) {
+            return *resolved;
+        }
+    }
+
+    return result;
+}
+
 std::optional<utils::PseudoTieShapeInfo> MeasureExprAssign::calcPseudoTieShape() const
 {
     const auto shapeExp = getShapeExpression();
