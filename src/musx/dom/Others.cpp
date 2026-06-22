@@ -471,45 +471,28 @@ bool MeasureExprAssign::calcIsHiddenByAlternateNotation() const
     }
 }
 
-VerticalPlacement MeasureExprAssign::calcVerticalPlacementContext() const
+std::optional<Evpu> MeasureExprAssign::calcBaselinePosition(bool forAbove) const
 {
-    VerticalPlacement result;
-
-    const auto classify = [&](VerticalMeasExprAlign align, Evpu effectiveY) {
-        constexpr Evpu AboveFloatThreshold = 72;
-        constexpr Evpu BelowFloatThreshold = -144;
-        switch (align) {
-        case VerticalMeasExprAlign::AboveStaff:
-        case VerticalMeasExprAlign::AboveStaffOrEntry:
-            result = (effectiveY > AboveFloatThreshold) ? VerticalPlacement::Float : VerticalPlacement::Above;
-            return;
-        case VerticalMeasExprAlign::BelowStaff:
-        case VerticalMeasExprAlign::BelowStaffOrEntry:
-            result = (effectiveY < BelowFloatThreshold) ? VerticalPlacement::Float : VerticalPlacement::Below;
-            return;
-        case VerticalMeasExprAlign::Manual:
-        case VerticalMeasExprAlign::RefLine:
-            if (auto staff = createCurrentStaff()) {
-                const Evpu topLineEvpu = staff->calcTopLineEvpu();
-                const Evpu bottomLineEvpu = staff->calcBottomLineEvpu();
-                if (effectiveY >= topLineEvpu) {
-                    result = VerticalPlacement::Above;
-                } else if (effectiveY < bottomLineEvpu) {
-                    result = VerticalPlacement::Below;
-                } else {
-                    result = VerticalPlacement::Float;
-                }
-                return;
-            }
-            result = VerticalPlacement::NotApplicable;
-            return;
-        default:
-            result = VerticalPlacement::Float;
-            return;
+    std::optional<Evpu> result = std::nullopt;
+    constexpr bool forPageView = true;
+    if (const auto sys = getDocument()->calcSystemFromMeasure(getRequestedPartId(), getCmper())) {
+        const StaffCmper assignedStaffId = calcAssignedStaffId(forPageView);
+        if (const auto systemStaff = StaffComposite::createCurrent(getDocument(), getRequestedPartId(), assignedStaffId, sys->startMeas, 0)) {
+            result = forAbove
+                   ? systemStaff->calcBaselinePosition<details::BaselineExpressionsAbove>(sys->getCmper())
+                   : systemStaff->calcBaselinePosition<details::BaselineExpressionsBelow>(sys->getCmper());
+        } else {
+            MUSX_INTEGRITY_ERROR("staff " + std::to_string(assignedStaffId) + " not found for system " + std::to_string(sys->getCmper()));
         }
-    };
+    } else {
+        MUSX_INTEGRITY_ERROR("system not found for measure " + std::to_string(getCmper()));
+    }
+    return result;
+}
 
-    auto calcEffectiveY = [&](const auto& def) -> std::optional<VerticalPlacement> {
+std::optional<Evpu> MeasureExprAssign::calcDefaultVerticalPosition() const
+{
+    const auto calcDefaultVerticalPositionForDef = [&](const auto& def) -> std::optional<Evpu> {
         using InstanceType = std::remove_cv_t<std::remove_reference_t<decltype(def)>>;
         using ElementType = typename InstanceType::element_type;
         using Def = std::remove_const_t<ElementType>;
@@ -520,32 +503,102 @@ VerticalPlacement MeasureExprAssign::calcVerticalPlacementContext() const
         }
 
         const auto align = def->vertMeasExprAlign;
-        Evpu effectiveY{};
+        const Evpu entryYOffset = def->yAdjustEntry;
+        const Evpu baselineYOffset = def->yAdjustBaseline;
         switch (align) {
-        case VerticalMeasExprAlign::AboveStaff:
-        case VerticalMeasExprAlign::BelowStaff:
-            effectiveY = def->yAdjustBaseline + vertEvpuOff;
-            break;
-        default:
-            effectiveY = def->yAdjustEntry + vertEvpuOff;
-            break;
+            case VerticalMeasExprAlign::Manual:
+            case VerticalMeasExprAlign::RefLine:
+                return baselineYOffset;
+            case VerticalMeasExprAlign::AboveStaff:
+                if (const auto pos = calcBaselinePosition(/*forAbove*/ true)) {
+                    return pos.value() + baselineYOffset;
+                }
+                return std::nullopt;
+            case VerticalMeasExprAlign::BelowStaff:
+                if (const auto pos = calcBaselinePosition(/*forAbove*/ false)) {
+                    return pos.value() + baselineYOffset;
+                }
+                return std::nullopt;
+            case VerticalMeasExprAlign::AboveEntry:
+                if (const auto entryInfo = calcAssociatedEntry()) {
+                    const auto [top, bot] = entryInfo.calcTopBottomExtent();
+                    return top + entryYOffset;
+                }
+                return baselineYOffset; // if there is no entry, Finale treats these like RefLine
+            case VerticalMeasExprAlign::BelowEntry:
+                if (const auto entryInfo = calcAssociatedEntry()) {
+                    const auto [top, bot] = entryInfo.calcTopBottomExtent();
+                    return bot + entryYOffset;
+                }
+                return baselineYOffset; // if there is no entry, Finale treats these like RefLine
+            case VerticalMeasExprAlign::AboveStaffOrEntry: {
+                auto result = calcBaselinePosition(/*forAbove*/ true);
+                if (!result) return std::nullopt;
+                if (const auto entryInfo = calcAssociatedEntry()) {
+                    const auto [top, bot] = entryInfo.calcTopBottomExtent();
+                    if (top > result) {
+                        return top + entryYOffset;
+                    }
+                }
+                return result.value() + baselineYOffset;
+            }
+            case VerticalMeasExprAlign::BelowStaffOrEntry: {
+                auto result = calcBaselinePosition(/*forAbove*/ false);
+                if (!result) return std::nullopt;
+                if (const auto entryInfo = calcAssociatedEntry()) {
+                    const auto [top, bot] = entryInfo.calcTopBottomExtent();
+                    if (bot < result) {
+                        return bot + entryYOffset;
+                    }
+                }
+                return result.value() + baselineYOffset;
+            }
+            case VerticalMeasExprAlign::TopNote:
+                if (const auto entryInfo = calcAssociatedEntry()) {
+                    const auto [top, bot] = entryInfo.calcTopBottomStaffPositions();
+                    return static_cast<Evpu>(top * EVPU_PER_STAFF_POSITION) + entryYOffset;
+                }
+                return baselineYOffset; // if there is no entry, Finale treats these like RefLine
+            case VerticalMeasExprAlign::BottomNote:
+                if (const auto entryInfo = calcAssociatedEntry()) {
+                    const auto [top, bot] = entryInfo.calcTopBottomStaffPositions();
+                    return static_cast<Evpu>(bot * EVPU_PER_STAFF_POSITION) + entryYOffset;
+                }
+                return baselineYOffset; // if there is no entry, Finale treats these like RefLine
         }
-
-        classify(align, effectiveY);
-        return result;
+        return std::nullopt;
     };
 
-    if (textExprId) {
-        if (auto resolved = calcEffectiveY(getTextExpression())) {
-            return *resolved;
-        }
-    } else if (shapeExprId) {
-        if (auto resolved = calcEffectiveY(getShapeExpression())) {
-            return *resolved;
-        }
+    if (const auto textExp = getTextExpression()) {
+        return calcDefaultVerticalPositionForDef(textExp);
+    }
+    if (const auto shapeExp = getShapeExpression()) {
+        return calcDefaultVerticalPositionForDef(shapeExp);
+    }
+    return std::nullopt;
+}
+
+VerticalPlacement MeasureExprAssign::calcVerticalPlacement() const
+{
+    const auto defaultY = calcDefaultVerticalPosition();
+    if (!defaultY) {
+        return VerticalPlacement::NotApplicable;
     }
 
-    return result;
+    const auto staff = createCurrentStaff();
+    if (!staff) {
+        return VerticalPlacement::NotApplicable;
+    }
+
+    const Evpu y = *defaultY + vertEvpuOff;
+
+    if (y >= staff->calcTopLineEvpu()) {
+        return VerticalPlacement::Above;
+    } else if (y < staff->calcBottomLineEvpu()) {
+        return VerticalPlacement::Below;
+    }
+
+    return VerticalPlacement::Float;
 }
 
 std::optional<utils::PseudoTieShapeInfo> MeasureExprAssign::calcPseudoTieShape() const
@@ -1488,6 +1541,5 @@ std::optional<MeasCmper> TextRepeatAssign::calcTargetMeasure() const
 }
 
 } // namespace others
-
 } // namespace dom
 } // namespace musx

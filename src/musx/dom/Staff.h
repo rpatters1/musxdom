@@ -408,7 +408,7 @@ public:
     /// @return The accumulated position of the baseline, relative to the staff's reference line.
     template<typename BaselineType,
              std::enable_if_t<std::is_base_of<details::BaselineNoInci, BaselineType>::value, int> = 0>
-     Evpu calcBaselinePosition(SystemCmper systemId) const
+    Evpu calcBaselinePosition(SystemCmper systemId) const
     {
         return calcBaselinePositionImpl<BaselineType>(systemId, std::nullopt);
     }

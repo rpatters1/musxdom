@@ -768,6 +768,13 @@ public:
     /// @return A std::pair<int, int> with the first being the top staff position and the second being the bottom staff position.
     [[nodiscard]] std::pair<int, int> calcTopBottomStaffPositions() const;
 
+    /// @brief Calculates the top and bottom EVPU extent of the entry's approximate visual footprint.
+    /// @details This is a layout-free approximation intended for expression placement. The returned values are not note positions;
+    /// they are an envelope in EVPU space derived from the note extrema, one half-space of note-side padding, and the document's
+    /// stemLength setting on the stem side.
+    /// @return A std::pair<Evpu, Evpu> with the first being the top EVPU extent and the second being the bottom EVPU extent.
+    [[nodiscard]] std::pair<Evpu, Evpu> calcTopBottomExtent() const;
+
     /// @brief Returns the Entry stem settings for the current requested part. This function encapsulates handling of the case when the
     /// two booleans are unlinked and different in score and part(s).
     /// @note This function is only for getting the entry's two boolean stem settings. Use #calcUpStem to get the entry's effective stem direction,

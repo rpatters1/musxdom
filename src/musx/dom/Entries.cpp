@@ -981,6 +981,33 @@ std::pair<int, int> EntryInfoPtr::calcTopBottomStaffPositions() const
     return std::make_pair(topLine, botLine);
 }
 
+std::pair<Evpu, Evpu> EntryInfoPtr::calcTopBottomExtent() const
+{
+    const auto [topLine, botLine] = calcTopBottomStaffPositions();
+
+    const auto stemOptions = getFrame()->getDocument()->getOptions()->get<options::StemOptions>();
+    MUSX_ASSERT_IF(!stemOptions) {
+        throw std::logic_error("Unable to retrieve stem options for calculating entry extent.");
+    }
+
+    constexpr Evpu noteSidePadding = static_cast<Evpu>(EVPU_PER_STAFF_POSITION);
+    const Evpu topEvpu = static_cast<Evpu>(topLine * EVPU_PER_STAFF_POSITION);
+    const Evpu bottomEvpu = static_cast<Evpu>(botLine * EVPU_PER_STAFF_POSITION);
+    const Evpu stemLength = stemOptions->stemLength;
+
+    if (calcUpStem()) {
+        return {
+            topEvpu + stemLength,
+            bottomEvpu - noteSidePadding
+        };
+    }
+
+    return {
+        topEvpu + noteSidePadding,
+        bottomEvpu - stemLength
+    };
+}
+
 bool EntryInfoPtr::calcUpStemDefault() const
 {
     //stem direction is determined by the beam a note or rest is part of, if any, so
