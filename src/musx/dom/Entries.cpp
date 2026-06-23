@@ -956,12 +956,46 @@ bool EntryInfoPtr::calcDisplaysAsRest() const
     return false;
 }
 
+int EntryInfoPtr::calcFloatingRestStaffPosition() const
+{
+    const auto entry = (*this)->getEntry();    
+    MUSX_ASSERT_IF(!entry->notes.empty() && !entry->floatRest) {
+        throw std::logic_error("calcFloatingRestStaffPosition() called on a non-floating rest.");
+    }
+    const auto staff = createCurrentStaff();
+    MUSX_ASSERT_IF(!staff) {
+        throw std::logic_error("calcFloatingRestStaffPosition() could not find the staff for entry " + std::to_string(entry->getEntryNumber()));
+    }
+    const auto layerAttr = getFrame()->getLayerAttributes();
+    MUSX_ASSERT_IF(!layerAttr) {
+        throw std::logic_error("calcFloatingRestStaffPosition() could not find the layer attributes for entry " + std::to_string(entry->getEntryNumber()));
+    }
+
+    auto result = staff->calcRestOffset(entry->duration);
+    if (!layerAttr->useRestOffset) {
+        return result;
+    }
+
+    if (calcIfLayerSettingsApply()) {
+        const auto miscOptions = entry->getDocument()->getOptions()->get<options::MiscOptions>();
+        MUSX_ASSERT_IF(!miscOptions) {
+            throw std::logic_error("calcFloatingRestStaffPosition() could not find the miscellaneous options");
+        }
+        if (miscOptions->consolidateRestsAcrossLayers && !entry->splitRest) {
+            return result;
+        }
+        result += layerAttr->restOffset;
+    }
+
+    return result;
+}
+
 std::pair<int, int> EntryInfoPtr::calcTopBottomStaffPositions() const
 {
     const auto& entry = (*this)->getEntry();
     if (entry->notes.empty() || entry->floatRest) {
-        /// @todo calculate floating rest values from staff. For now, just return hard-coded value of -4.
-        return std::make_pair(-4, -4);
+        const auto floatingRestPos = calcFloatingRestStaffPosition();
+        return std::make_pair(floatingRestPos, floatingRestPos);
     }
     int topLine = (std::numeric_limits<int>::min)();
     int botLine = (std::numeric_limits<int>::max)();
