@@ -73,6 +73,31 @@ enum class NoteName : int
     B = 6
 };
 
+/**
+ * @brief A spelled pitch, expressed relative to C4.
+ *
+ * The alteration is relative to the natural note name, in EDO divisions.
+ * This type does not encode a key signature or scale degree.
+ */
+struct Pitch
+{
+    /// @brief Creates an unspecified pitch.
+    constexpr Pitch() = default;
+
+    /// @brief Creates a spelled pitch.
+    /// @param pitchName The diatonic note name.
+    /// @param pitchOctave The octave number, where C4 is middle C.
+    /// @param pitchAlteration The alteration relative to the natural note name, in EDO divisions.
+    constexpr Pitch(NoteName pitchName, int pitchOctave, int pitchAlteration = 0)
+        : noteName(pitchName), octave(pitchOctave), alteration(pitchAlteration)
+    {
+    }
+
+    NoteName noteName{}; ///< The diatonic note name.
+    int octave{};        ///< The octave number, where C4 is middle C.
+    int alteration{};    ///< The alteration relative to the natural note name, in EDO divisions.
+};
+
 static constexpr std::array<music_theory::NoteName, music_theory::STANDARD_DIATONIC_STEPS> noteNames = {
     NoteName::C, NoteName::D, NoteName::E, NoteName::F, NoteName::G, NoteName::A, NoteName::B
 };
@@ -106,16 +131,15 @@ enum class ClefType
     TabSerif            ///< Tablature clef (TAB) with serif font
 };
 
-/// @brief Calculates the displacement value for a given absolute pitch class and octave
-/// @param pitchClass 0..6 corresponding to C..B
-/// @param octave Octave 4 is the middle-C octave
+/// @brief Calculates the displacement value for a spelled pitch.
+/// @param pitch The pitch to convert.
 /// @return A displacement value that can be used to create a @ref Transposer instance.
-constexpr int calcDisplacement(int pitchClass, int octave)
+constexpr int calcDisplacement(const Pitch& pitch)
 {
-    pitchClass %= STANDARD_DIATONIC_STEPS;
-    const int relativeOctave = octave - 4;
+    int pitchClassVal = int(pitch.noteName) % STANDARD_DIATONIC_STEPS;
+    const int relativeOctave = pitch.octave - 4;
 
-    return pitchClass + (STANDARD_DIATONIC_STEPS * relativeOctave);
+    return pitchClassVal + (STANDARD_DIATONIC_STEPS * relativeOctave);
 }
 
 /// @brief Calculates the sign of an integer.
@@ -241,6 +265,13 @@ private:
     std::vector<int> m_keyMap;      // step map for the EDO
 
 public:
+    /// @brief Constructs a 12-EDO major-scale transposer for a spelled pitch.
+    /// @param pitch The pitch to transpose. Its alteration is relative to the natural note name.
+    explicit Transposer(const Pitch& pitch)
+        : Transposer(calcDisplacement(pitch), pitch.alteration)
+    {
+    }
+
     /// @brief Constructor function
     /// @param displacement     the scale step displacement value. 0 signifies the tonic in the C4 (middle-C) octave.
     /// With the default values @p isMinor = `false` and @p keyMap = `std::nullopt`, 0 is C4.
@@ -279,13 +310,16 @@ public:
         m_displacement += interval;
     }
 
-    /// @brief Transposes enharmonically relative to the current values
-    /// @param direction negative or non-negative (usually -1 or 1)
-    void enharmonicTranspose(int direction)
+    /// @brief Transposes enharmonically relative to the current values.
+    /// @param diatonicSteps number of diatonic steps to move; may be positive or negative.
+    void enharmonicTranspose(int diatonicSteps)
     {
-        const int keyStepEnharmonic = calcStepsBetweenScaleDegrees(m_displacement, m_displacement + sign(direction));
-        diatonicTranspose(sign(direction));
-        m_alteration -= sign(direction) * keyStepEnharmonic;
+        const int stepSign = sign(diatonicSteps);
+        for (int i = 0; i < std::abs(diatonicSteps); ++i) {
+            const int keyStepEnharmonic = calcStepsBetweenScaleDegrees(m_displacement, m_displacement + stepSign);
+            diatonicTranspose(stepSign);
+            m_alteration -= stepSign * keyStepEnharmonic;
+        }
     }
 
     /**

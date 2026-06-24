@@ -2782,37 +2782,30 @@ bool details::GFrameHoldContext::calcVoicingIncludesLayer(LayerIndex layerIndex)
 
 std::pair<int, int> Note::calcDefaultEnharmonic(const MusxInstance<KeySignature>& key) const
 {
-    auto transposer = key->createTransposer(harmLev, harmAlt);
-    if (harmAlt) {
-        transposer->enharmonicTranspose(music_theory::sign(harmAlt));
-        if (std::abs(transposer->alteration()) > MAX_ALTERATIONS)
-            return {harmLev, harmAlt};
-        return {transposer->displacement(), transposer->alteration()};
+    auto createReturnVal = [&](int steps) -> std::pair<int, int> {
+        auto noteTransposer = key->createTransposer(harmLev, harmAlt);
+        noteTransposer->enharmonicTranspose(steps);
+        if (std::abs(noteTransposer->alteration()) > MAX_ALTERATIONS) {
+            return { harmLev, harmAlt };
+        }
+        return { noteTransposer->displacement(), noteTransposer->alteration() };
+    };
+
+    if (harmAlt != 0) {
+        return createReturnVal(music_theory::sign(harmAlt));
     }
 
-    transposer->enharmonicTranspose(1);
-    int upDisp = transposer->displacement();
-    int upAlt = transposer->alteration();
+    const auto pitch = key->calcPitch(harmLev, harmAlt, KeySignature::KeyContext::Concert);
+    auto up = music_theory::Transposer(pitch);
+    up.enharmonicTranspose(1);
+    auto down = music_theory::Transposer(pitch);
+    down.enharmonicTranspose(-1);
 
-    // This is observed Finale behavior, relevant in the context of microtone custom key signatures.
-    // A possibly more correct version would omit this hard-coded comparison to the number 2, but it
-    // seems to be what Finale does.
-    if (std::abs(upAlt) != 2) {
-        if (std::abs(upAlt) > MAX_ALTERATIONS)
-            return {harmLev, harmAlt};
-        return {upDisp, upAlt};
+    if (std::abs(down.alteration()) < std::abs(up.alteration())) {
+        return createReturnVal(-1);
     }
 
-    auto down = key->createTransposer(harmLev, harmAlt);
-    down->enharmonicTranspose(-1);
-    int downAlt = down->alteration();
-
-    if (std::abs(downAlt) > MAX_ALTERATIONS)
-        return {harmLev, harmAlt};
-
-    if (std::abs(downAlt) < std::abs(upAlt))
-        return {down->displacement(), downAlt};
-    return {upDisp, upAlt};
+    return createReturnVal(1);
 }
 
 Note::NoteProperties Note::calcNoteProperties(const MusxInstance<KeySignature>& key, KeySignature::KeyContext ctx, ClefIndex clefIndex,
@@ -2829,17 +2822,8 @@ Note::NoteProperties Note::calcNoteProperties(const MusxInstance<KeySignature>& 
         transposedAlt = transposer->alteration();
     }
 
-    // Determine the base note and octave
+    const auto pitch = key->calcPitch(transposedLev, transposedAlt, ctx);
     int keyAdjustedLev = key->calcTonalCenterIndex(ctx) + transposedLev + (key->getOctaveDisplacement(ctx) * music_theory::STANDARD_DIATONIC_STEPS);
-    int octave = (keyAdjustedLev / music_theory::STANDARD_DIATONIC_STEPS) + 4; // Middle C (C4) is the reference
-    int step = keyAdjustedLev % music_theory::STANDARD_DIATONIC_STEPS;
-    if (step < 0) {
-        step += music_theory::STANDARD_DIATONIC_STEPS;
-        octave -= 1;
-    }
-
-    // Calculate the actual alteration
-    const int actualAlteration = transposedAlt + key->calcAlterationOnNote(step, ctx);
 
     // Calculate the staff line
     const int staffLine = [&]() {
@@ -2854,7 +2838,7 @@ Note::NoteProperties Note::calcNoteProperties(const MusxInstance<KeySignature>& 
         return keyAdjustedLev + middleCLine;
     }();
 
-    return { music_theory::noteNames[step], octave, actualAlteration, staffLine };
+    return { pitch.noteName, pitch.octave, pitch.alteration, staffLine };
 }
 
 // ***********************

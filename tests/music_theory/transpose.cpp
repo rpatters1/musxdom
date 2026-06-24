@@ -43,6 +43,19 @@
      EXPECT_FALSE(t.isEnharmonicEquivalent(0, 1));
  }
 
+TEST(TransposerTest, ConstructFromPitch)
+{
+    const Pitch naturalPitch { NoteName::C, 4 };
+    EXPECT_EQ(naturalPitch.alteration, 0);
+
+    const Pitch pitch { NoteName::B, 3, 1 };
+    Transposer transposer(pitch);
+
+    EXPECT_EQ(calcDisplacement(pitch), -1);
+     EXPECT_EQ(transposer.displacement(), -1);
+     EXPECT_EQ(transposer.alteration(), 1);
+ }
+
  TEST(TransposerTest, StepwiseTranspose12EDO) {
      Transposer t(0, 0); // C natural
      t.stepwiseTranspose(1); // Up one chromatic step (C#)

@@ -24,6 +24,8 @@
 #include "musx/musx.h"
 #include "test_utils.h"
 
+#include <array>
+
 using namespace musx::dom;
 
 TEST(EntryTest, PopulateFields)
@@ -300,6 +302,66 @@ TEST(EntryTest, UnlinkedEnharmonicSpelling)
         EXPECT_TRUE(noteAlts->enharmonic) << "Part is enharmonically respelled";
         checkEntry(true, firstNote.getEntryInfo(), music_theory::NoteName::F, 4, 2, EnharmonicOverride::NoRespell);
         checkEntry(true, firstNote.getEntryInfo(), music_theory::NoteName::G, 4, 0, EnharmonicOverride::Respell);
+    }
+}
+
+TEST(EntryTest, EnharmonicSpellingDefault)
+{
+    std::vector<char> xml;
+    musxtest::readFile(musxtest::getInputPath() / "enharmonics_test.enigmaxml", xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(xml);
+    ASSERT_TRUE(doc);
+
+    struct PitchExpectation
+    {
+        Cmper measure{};
+        size_t noteIndex{};
+        music_theory::NoteName noteName{};
+        int octave{};
+        int alteration{};
+    };
+
+    // Fill in the expected pitch values once they are provided.
+    constexpr std::array<PitchExpectation, 16> expectedPitches = {{
+        { 1, 0, music_theory::NoteName::B, 4, -2 },
+        { 1, 1, music_theory::NoteName::C, 5, -1 },
+        { 1, 2, music_theory::NoteName::D, 5, -1 },
+        { 1, 3, music_theory::NoteName::E, 5, -2 },
+        { 2, 0, music_theory::NoteName::F, 5, -1 },
+        { 2, 1, music_theory::NoteName::G, 5, -1 },
+        { 2, 2, music_theory::NoteName::A, 5, -1 },
+        { 2, 3, music_theory::NoteName::B, 5, -2 },
+        { 3, 0, music_theory::NoteName::D, 4, +1 },
+        { 3, 1, music_theory::NoteName::E, 4, +1 },
+        { 3, 2, music_theory::NoteName::A, 4, -2 },
+        { 3, 3, music_theory::NoteName::G, 4, +1 },
+        { 4, 0, music_theory::NoteName::A, 4, +1 },
+        { 4, 1, music_theory::NoteName::B, 4, +1 },
+        { 4, 2, music_theory::NoteName::E, 5, -2 },
+        { 4, 3, music_theory::NoteName::D, 5, +1 },
+    }};
+
+    for (const auto& testCase : expectedPitches) {
+        SCOPED_TRACE(testing::Message() << "measure " << testCase.measure << ", note " << testCase.noteIndex);
+
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, testCase.measure);
+        ASSERT_TRUE(gfhold);
+
+        auto entryFrame = gfhold.createEntryFrame(0);
+        ASSERT_TRUE(entryFrame);
+        ASSERT_GE(entryFrame->getEntries().size(), testCase.noteIndex + 1);
+
+        auto noteInfo = NoteInfoPtr(EntryInfoPtr(entryFrame, testCase.noteIndex), 0);
+        ASSERT_TRUE(noteInfo);
+
+        const auto [disp, alt] = noteInfo.calcDefaultEnharmonic();
+        const auto key = noteInfo.getEntryInfo().getFrame()->keySignature;
+        ASSERT_TRUE(key);
+
+        const auto pitch = key->calcPitch(disp, alt, KeySignature::KeyContext::Concert);
+        EXPECT_EQ(pitch.noteName, testCase.noteName);
+        EXPECT_EQ(pitch.octave, testCase.octave);
+        EXPECT_EQ(pitch.alteration, testCase.alteration);
     }
 }
 
