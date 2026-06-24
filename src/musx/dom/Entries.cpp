@@ -1028,18 +1028,21 @@ std::pair<Evpu, Evpu> EntryInfoPtr::calcTopBottomExtent() const
     constexpr Evpu noteSidePadding = static_cast<Evpu>(EVPU_PER_STAFF_POSITION);
     const Evpu topEvpu = static_cast<Evpu>(topLine * EVPU_PER_STAFF_POSITION);
     const Evpu bottomEvpu = static_cast<Evpu>(botLine * EVPU_PER_STAFF_POSITION);
-    const Evpu stemLength = stemOptions->stemLength;
+
+    /// @todo develop proper stem length calc
+    const Evpu stemSidePadding = (*this)->getEntry()->duration < EDU_PER_WHOLE_NOTE
+        ? stemOptions->stemLength : noteSidePadding;
 
     if (calcUpStem()) {
         return {
-            topEvpu + stemLength,
+            topEvpu + stemSidePadding,
             bottomEvpu - noteSidePadding
         };
     }
 
     return {
         topEvpu + noteSidePadding,
-        bottomEvpu - stemLength
+        bottomEvpu - stemSidePadding
     };
 }
 
