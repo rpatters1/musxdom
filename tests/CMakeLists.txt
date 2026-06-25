@@ -144,7 +144,7 @@ if (CMAKE_CXX_COMPILER_ID MATCHES "AppleClang|Clang|GNU")
     target_compile_options(musxdomtests PRIVATE -Wall -Wextra -Werror -Wpedantic)
 elseif (CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
     # Extra warnings for MSVC
-    target_compile_options(musxdomtests PRIVATE /Zc:__cplusplus /W4 /WX)
+    target_compile_options(musxdomtests PRIVATE /bigobj /Zc:__cplusplus /W4 /WX)
 endif()
 
 add_dependencies(musxdomtests musx)
