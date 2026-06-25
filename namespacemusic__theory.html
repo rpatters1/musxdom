@@ -106,6 +106,9 @@ $(document).ready(function(){initNavTree('namespacemusic__theory.html',''); init
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmusic__theory_1_1Pitch.html">Pitch</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A spelled pitch, expressed relative to C4.  <a href="structmusic__theory_1_1Pitch.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusic__theory_1_1Transposer.html">Transposer</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Provides dependency-free transposition utilities that work with any scale that has 7 diatonic steps and an equal number of divisions of the octave (EDO). The most common Western scales use 12 divisions of the octave, .i.e., 12-EDO.  <a href="classmusic__theory_1_1Transposer.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -155,9 +158,9 @@ Enumerations</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a9c6451da69ad76a5cab37f007209c014" id="r_a9c6451da69ad76a5cab37f007209c014"><td class="memItemLeft" align="right" valign="top">constexpr int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemusic__theory.html#a9c6451da69ad76a5cab37f007209c014">calcDisplacement</a> (int pitchClass, int octave)</td></tr>
-<tr class="memdesc:a9c6451da69ad76a5cab37f007209c014"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the displacement value for a given absolute pitch class and octave.  <br /></td></tr>
-<tr class="separator:a9c6451da69ad76a5cab37f007209c014"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a25d2e2ec4727f853dc7cd1448e713a7e" id="r_a25d2e2ec4727f853dc7cd1448e713a7e"><td class="memItemLeft" align="right" valign="top">constexpr int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemusic__theory.html#a25d2e2ec4727f853dc7cd1448e713a7e">calcDisplacement</a> (const <a class="el" href="structmusic__theory_1_1Pitch.html">Pitch</a> &amp;pitch)</td></tr>
+<tr class="memdesc:a25d2e2ec4727f853dc7cd1448e713a7e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the displacement value for a spelled pitch.  <br /></td></tr>
+<tr class="separator:a25d2e2ec4727f853dc7cd1448e713a7e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6cb3b3e4883819fd7f9acbca09b7cebe" id="r_a6cb3b3e4883819fd7f9acbca09b7cebe"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:a6cb3b3e4883819fd7f9acbca09b7cebe"><td class="memTemplItemLeft" align="right" valign="top">constexpr T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacemusic__theory.html#a6cb3b3e4883819fd7f9acbca09b7cebe">sign</a> (T n)</td></tr>
 <tr class="memdesc:a6cb3b3e4883819fd7f9acbca09b7cebe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the sign of an integer.  <br /></td></tr>
@@ -437,8 +440,8 @@ constexpr std::array&lt; int, <a class="el" href="namespacemusic__theory.html#ab
 
 </div>
 </div>
-<a id="a9c6451da69ad76a5cab37f007209c014" name="a9c6451da69ad76a5cab37f007209c014"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9c6451da69ad76a5cab37f007209c014">&#9670;&#160;</a></span>calcDisplacement()</h2>
+<a id="a25d2e2ec4727f853dc7cd1448e713a7e" name="a25d2e2ec4727f853dc7cd1448e713a7e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a25d2e2ec4727f853dc7cd1448e713a7e">&#9670;&#160;</a></span>calcDisplacement()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -449,19 +452,9 @@ constexpr std::array&lt; int, <a class="el" href="namespacemusic__theory.html#ab
         <tr>
           <td class="memname">constexpr int music_theory::calcDisplacement </td>
           <td>(</td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>pitchClass</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
+          <td class="paramtype">const <a class="el" href="structmusic__theory_1_1Pitch.html">Pitch</a> &amp;&#160;</td>
+          <td class="paramname"><em>pitch</em></td><td>)</td>
           <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>octave</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
         </tr>
       </table>
   </td>
@@ -471,11 +464,10 @@ constexpr std::array&lt; int, <a class="el" href="namespacemusic__theory.html#ab
 </table>
 </div><div class="memdoc">
 
-<p>Calculates the displacement value for a given absolute pitch class and octave. </p>
+<p>Calculates the displacement value for a spelled pitch. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">pitchClass</td><td>0..6 corresponding to C..B </td></tr>
-    <tr><td class="paramname">octave</td><td>Octave 4 is the middle-C octave </td></tr>
+    <tr><td class="paramname">pitch</td><td>The pitch to convert. </td></tr>
   </table>
   </dd>
 </dl>

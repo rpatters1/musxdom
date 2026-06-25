@@ -6,6 +6,7 @@ var classmusx_1_1dom_1_1smartshape_1_1EndPoint =
     [ "calcPosition", "classmusx_1_1dom_1_1smartshape_1_1EndPoint.html#a323e31a14fcd66725881171714e04cf4", null ],
     [ "compareMetricPosition", "classmusx_1_1dom_1_1smartshape_1_1EndPoint.html#a347640f292abaa7ead07973429b082eb", null ],
     [ "ContainedClassBase", "classmusx_1_1dom_1_1smartshape_1_1EndPoint.html#a3e1b557e7c6827ba497c48cad3022f95", null ],
+    [ "createCurrentStaff", "classmusx_1_1dom_1_1smartshape_1_1EndPoint.html#a1587832f11c140febb19477175de724f", null ],
     [ "getEntryAssignment", "classmusx_1_1dom_1_1smartshape_1_1EndPoint.html#a5f694a701652dfd17256512b02e6c77f", null ],
     [ "getMeasureAssignment", "classmusx_1_1dom_1_1smartshape_1_1EndPoint.html#a6348bd306404e772e995dc0ef1820cd4", null ],
     [ "eduPosition", "classmusx_1_1dom_1_1smartshape_1_1EndPoint.html#a25b9e4b63a8d7615b864ba39fae28025", null ],

@@ -99,17 +99,21 @@ $(document).ready(function(){initNavTree('todo.html',''); initResizable(); });
 <dt>Member <a class="el" href="classmusx_1_1dom_1_1EntryFrame.html#a2cbd52ed27bd8b65673d4440e2cb2c4c">musx::dom::EntryFrame::calcAreAllEntriesHiddenInFrame</a>  () const</dt>
 <dd><a class="anchor" id="_todo000001"></a>check if the entry is hidden by voiced parts.  </dd>
 <dt>Member <a class="el" href="classmusx_1_1dom_1_1EntryFrame.html#af934596122cb5cd63787c096466d7b0e">musx::dom::EntryFrame::calcIsCueFrame</a>  (bool includeVisibleInScore=false) const</dt>
-<dd><a class="anchor" id="_todo000003"></a>Revisit this algorithm if needed. The current algorithm is chosen to be mostly accurate while being fast to compute when there is no cue.  </dd>
+<dd><a class="anchor" id="_todo000004"></a>Revisit this algorithm if needed. The current algorithm is chosen to be mostly accurate while being fast to compute when there is no cue.  </dd>
+<dt>Member <a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#aee5a24c2959499b513c8bee591ecd5f0">musx::dom::EntryInfoPtr::calcTopBottomExtent</a>  () const</dt>
+<dd><a class="anchor" id="_todo000002"></a>develop proper stem length calc  </dd>
 <dt>Member <a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr_1_1InterpretedIterator.html#a7695a9be72a0454184fd406a0f86d7af">musx::dom::EntryInfoPtr::InterpretedIterator::getPrevious</a>  () const</dt>
-<dd><a class="anchor" id="_todo000002"></a>Currently m_iteratedEntry is the forward launcher only. However, when we incorporate mid-system beams it will become a backwards launcher as well, and then we will need to differentiate.  </dd>
+<dd><a class="anchor" id="_todo000003"></a>Currently m_iteratedEntry is the forward launcher only. However, when we incorporate mid-system beams it will become a backwards launcher as well, and then we will need to differentiate.  </dd>
 <dt>Member <a class="el" href="classmusx_1_1dom_1_1others_1_1PartDefinition.html#ad766742621a9d1e43a68c2779d30d7c8">musx::dom::others::PartDefinition::getNameRawTextCtx</a>  () const</dt>
-<dd><a class="anchor" id="_todo000004"></a>perhaps additional logic as in getName, but not until something is broken.  </dd>
+<dd><a class="anchor" id="_todo000005"></a>perhaps additional logic as in getName, but not until something is broken.  </dd>
+<dt>Member <a class="el" href="classmusx_1_1dom_1_1others_1_1SmartShape.html#a5fe1a12dabd649547c603ba62bd8a585">musx::dom::others::SmartShape::calcVerticalPlacementForBeatAttached</a>  () const</dt>
+<dd><a class="anchor" id="_todo000007"></a>force top-level function to return NotApplicable from here.  </dd>
 <dt>Member <a class="el" href="classmusx_1_1dom_1_1others_1_1StaffListSet.html#a881c319547c5309dda20863a1846a1b3">musx::dom::others::StaffListSet&lt; ScoreList, PartsList, ScoreForcedList, PartsForcedList &gt;::contains</a>  (StaffCmper staffId, const MusxInstanceList&lt; StaffUsed &gt; &amp;systemStaves, bool isHidden=false) const noexcept</dt>
-<dd><a class="anchor" id="_todo000005"></a>It may be necessary to add some fuzzy logic around StaffGroup here, at least for category staff lists. Finale includes a staff if it is the top staff in a group, when the top staff of a group is included. We defer this to another day.  </dd>
+<dd><a class="anchor" id="_todo000006"></a>It may be necessary to add some fuzzy logic around StaffGroup here, at least for category staff lists. Finale includes a staff if it is the top staff in a group, when the top staff of a group is included. We defer this to another day.  </dd>
 <dt>Member <a class="el" href="classmusx_1_1util_1_1SvgConvert.html#ad400b0d1954a54c7f6e45fa756614c12">musx::util::SvgConvert::toSvg</a>  (const dom::others::ShapeDef &amp;shape, double scaling, SvgUnit unit, GlyphMetricsFn glyphMetrics)</dt>
-<dd><a class="anchor" id="_todo000007"></a>Render start/end arrowhead caps for line/path instructions.  </dd>
+<dd><a class="anchor" id="_todo000009"></a>Render start/end arrowhead caps for line/path instructions.  </dd>
 <dt>Member <a class="el" href="classmusx_1_1util_1_1SvgConvert.html#ab661dfea2a0c82f4b2240e9db5b50b78">musx::util::SvgConvert::toSvg</a>  (const dom::others::ShapeDef &amp;shape)</dt>
-<dd><a class="anchor" id="_todo000008"></a>ShapeDef SetArrowhead instructions are decoded but not yet rendered in SVG output. </dd>
+<dd><a class="anchor" id="_todo000010"></a>ShapeDef SetArrowhead instructions are decoded but not yet rendered in SVG output. </dd>
 </dl>
 </div></div><!-- contents -->
 </div><!-- PageDoc -->

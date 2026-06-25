@@ -243,6 +243,9 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>calcIsSlur</b> () con
 <tr class="memitem:a8e4270d6ae14b235f9df565782ee1e28" id="r_a8e4270d6ae14b235f9df565782ee1e28"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemusx_1_1dom.html#a0dc36a86e1ae0cadd7b7e4c624b07b55">CurveContourDirection</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1SmartShape.html#a8e4270d6ae14b235f9df565782ee1e28">calcContourDirection</a> () const</td></tr>
 <tr class="memdesc:a8e4270d6ae14b235f9df565782ee1e28"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines if a smart shape slur or curve has a fixed direction (up or down) or floats automatically.  <br /></td></tr>
 <tr class="separator:a8e4270d6ae14b235f9df565782ee1e28"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5fe1a12dabd649547c603ba62bd8a585" id="r_a5fe1a12dabd649547c603ba62bd8a585"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemusx_1_1dom.html#a5f47ab5a8dd3f3cab33730ac7e178ad3">VerticalPlacement</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1SmartShape.html#a5fe1a12dabd649547c603ba62bd8a585">calcVerticalPlacementForBeatAttached</a> () const</td></tr>
+<tr class="memdesc:a5fe1a12dabd649547c603ba62bd8a585"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates a vertical placement classification for beat-attached smart shapes.  <br /></td></tr>
+<tr class="separator:a5fe1a12dabd649547c603ba62bd8a585"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a27ec6e0d4e4d57258c9fe40aabd67870" id="r_a27ec6e0d4e4d57258c9fe40aabd67870"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1SmartShape.html#a27ec6e0d4e4d57258c9fe40aabd67870">calcIsDashed</a> () const</td></tr>
 <tr class="memdesc:a27ec6e0d4e4d57258c9fe40aabd67870"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if the smart shape's <a class="el" href="classmusx_1_1dom_1_1others_1_1SmartShape.html#a7b869b52ed9d931b235b79d2c4ed1e6f" title="All the smart shape types supported by Finale.">ShapeType</a> uses a dashed line style.  <br /></td></tr>
 <tr class="separator:a27ec6e0d4e4d57258c9fe40aabd67870"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -805,6 +808,28 @@ Over System Break" in the Finale U.I. </p>
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a id="a5fe1a12dabd649547c603ba62bd8a585" name="a5fe1a12dabd649547c603ba62bd8a585"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5fe1a12dabd649547c603ba62bd8a585">&#9670;&#160;</a></span>calcVerticalPlacementForBeatAttached()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacemusx_1_1dom.html#a5f47ab5a8dd3f3cab33730ac7e178ad3">VerticalPlacement</a> musx::dom::others::SmartShape::calcVerticalPlacementForBeatAttached </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Calculates a vertical placement classification for beat-attached smart shapes. </p>
+<dl class="section return"><dt>Returns</dt><dd>Above if both endpoints are above the staff, Below if both endpoints are below the staff. Otherwise it returns Float. If the smart shape is not beat-attached, it returns NotApplicable. </dd></dl>
+<dl class="section note"><dt>Note</dt><dd>Beat-attached smart shapes are positioned relative to the top staff line, not the reference line. That means no staff is necessary for the Above calculation.</dd></dl>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000007">Todo:</a></b></dt><dd>force top-level function to return NotApplicable from here. </dd></dl>
 
 </div>
 </div>

@@ -406,6 +406,7 @@ var hierarchy =
     [ "musx::dom::OthersPool", "classmusx_1_1dom_1_1OthersPool.html", null ],
     [ "musx::dom::options::PageFormatOptions::PageFormat", "classmusx_1_1dom_1_1options_1_1PageFormatOptions_1_1PageFormat.html", null ],
     [ "musx::dom::percussion::PercussionNoteType", "structmusx_1_1dom_1_1percussion_1_1PercussionNoteType.html", null ],
+    [ "music_theory::Pitch", "structmusic__theory_1_1Pitch.html", null ],
     [ "musx::dom::NoteInfoPtr::PseudoTieInfo", "structmusx_1_1dom_1_1NoteInfoPtr_1_1PseudoTieInfo.html", null ],
     [ "musx::utils::PseudoTieShapeInfo", "structmusx_1_1utils_1_1PseudoTieShapeInfo.html", null ],
     [ "musx::dom::ShapeDefInstruction::Rectangle", "structmusx_1_1dom_1_1ShapeDefInstruction_1_1Rectangle.html", null ],

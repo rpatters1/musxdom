@@ -13,12 +13,13 @@ var searchData=
   ['percussionnoteinfo_10',['PercussionNoteInfo',['../classmusx_1_1dom_1_1others_1_1PercussionNoteInfo.html',1,'musx::dom::others']]],
   ['percussionnotetype_11',['PercussionNoteType',['../structmusx_1_1dom_1_1percussion_1_1PercussionNoteType.html',1,'musx::dom::percussion']]],
   ['pianobracebracketoptions_12',['PianoBraceBracketOptions',['../classmusx_1_1dom_1_1options_1_1PianoBraceBracketOptions.html',1,'musx::dom::options']]],
-  ['poolfactory_13',['PoolFactory',['../classmusx_1_1factory_1_1PoolFactory.html',1,'musx::factory']]],
-  ['poolfactory_3c_20detailsfactory_2c_20dom_3a_3adetailsbase_2c_20dom_3a_3adetailspool_20_3e_14',['PoolFactory&lt; DetailsFactory, dom::DetailsBase, dom::DetailsPool &gt;',['../classmusx_1_1factory_1_1PoolFactory.html',1,'musx::factory']]],
-  ['poolfactory_3c_20entryfactory_2c_20dom_3a_3aentry_2c_20dom_3a_3aentrypool_20_3e_15',['PoolFactory&lt; EntryFactory, dom::Entry, dom::EntryPool &gt;',['../classmusx_1_1factory_1_1PoolFactory.html',1,'musx::factory']]],
-  ['poolfactory_3c_20optionsfactory_2c_20dom_3a_3aoptionsbase_2c_20dom_3a_3aoptionspool_20_3e_16',['PoolFactory&lt; OptionsFactory, dom::OptionsBase, dom::OptionsPool &gt;',['../classmusx_1_1factory_1_1PoolFactory.html',1,'musx::factory']]],
-  ['poolfactory_3c_20othersfactory_2c_20dom_3a_3aothersbase_2c_20dom_3a_3aotherspool_20_3e_17',['PoolFactory&lt; OthersFactory, dom::OthersBase, dom::OthersPool &gt;',['../classmusx_1_1factory_1_1PoolFactory.html',1,'musx::factory']]],
-  ['poolfactory_3c_20textsfactory_2c_20dom_3a_3atextsbase_2c_20dom_3a_3atextspool_20_3e_18',['PoolFactory&lt; TextsFactory, dom::TextsBase, dom::TextsPool &gt;',['../classmusx_1_1factory_1_1PoolFactory.html',1,'musx::factory']]],
-  ['pseudotieinfo_19',['PseudoTieInfo',['../structmusx_1_1dom_1_1NoteInfoPtr_1_1PseudoTieInfo.html',1,'musx::dom::NoteInfoPtr']]],
-  ['pseudotieshapeinfo_20',['PseudoTieShapeInfo',['../structmusx_1_1utils_1_1PseudoTieShapeInfo.html',1,'musx::utils']]]
+  ['pitch_13',['Pitch',['../structmusic__theory_1_1Pitch.html',1,'music_theory']]],
+  ['poolfactory_14',['PoolFactory',['../classmusx_1_1factory_1_1PoolFactory.html',1,'musx::factory']]],
+  ['poolfactory_3c_20detailsfactory_2c_20dom_3a_3adetailsbase_2c_20dom_3a_3adetailspool_20_3e_15',['PoolFactory&lt; DetailsFactory, dom::DetailsBase, dom::DetailsPool &gt;',['../classmusx_1_1factory_1_1PoolFactory.html',1,'musx::factory']]],
+  ['poolfactory_3c_20entryfactory_2c_20dom_3a_3aentry_2c_20dom_3a_3aentrypool_20_3e_16',['PoolFactory&lt; EntryFactory, dom::Entry, dom::EntryPool &gt;',['../classmusx_1_1factory_1_1PoolFactory.html',1,'musx::factory']]],
+  ['poolfactory_3c_20optionsfactory_2c_20dom_3a_3aoptionsbase_2c_20dom_3a_3aoptionspool_20_3e_17',['PoolFactory&lt; OptionsFactory, dom::OptionsBase, dom::OptionsPool &gt;',['../classmusx_1_1factory_1_1PoolFactory.html',1,'musx::factory']]],
+  ['poolfactory_3c_20othersfactory_2c_20dom_3a_3aothersbase_2c_20dom_3a_3aotherspool_20_3e_18',['PoolFactory&lt; OthersFactory, dom::OthersBase, dom::OthersPool &gt;',['../classmusx_1_1factory_1_1PoolFactory.html',1,'musx::factory']]],
+  ['poolfactory_3c_20textsfactory_2c_20dom_3a_3atextsbase_2c_20dom_3a_3atextspool_20_3e_19',['PoolFactory&lt; TextsFactory, dom::TextsBase, dom::TextsPool &gt;',['../classmusx_1_1factory_1_1PoolFactory.html',1,'musx::factory']]],
+  ['pseudotieinfo_20',['PseudoTieInfo',['../structmusx_1_1dom_1_1NoteInfoPtr_1_1PseudoTieInfo.html',1,'musx::dom::NoteInfoPtr']]],
+  ['pseudotieshapeinfo_21',['PseudoTieShapeInfo',['../structmusx_1_1utils_1_1PseudoTieShapeInfo.html',1,'musx::utils']]]
 ];

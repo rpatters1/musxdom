@@ -205,6 +205,15 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>calcIsAssignedInReque
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>calcIsHiddenByAlternateNotation</b> () const</td></tr>
 <tr class="memdesc:a29eb375fb486646c106264a2fc98fda1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates if this assignment is hidden by alternate notation. <br /></td></tr>
 <tr class="separator:a29eb375fb486646c106264a2fc98fda1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1cc2e6df7c4380fc2c63a27e8039eca4" id="r_a1cc2e6df7c4380fc2c63a27e8039eca4"><td class="memItemLeft" align="right" valign="top">std::optional&lt; <a class="el" href="namespacemusx_1_1dom.html#a7f27f66bcae06e7ccf1173bfca211da2">Evpu</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1MeasureExprAssign.html#a1cc2e6df7c4380fc2c63a27e8039eca4">calcBaselinePosition</a> (bool forAbove) const</td></tr>
+<tr class="memdesc:a1cc2e6df7c4380fc2c63a27e8039eca4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the baseline position for this expression assignment in EVPU.  <br /></td></tr>
+<tr class="separator:a1cc2e6df7c4380fc2c63a27e8039eca4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6572eea3547f479322608d18fdf0c871" id="r_a6572eea3547f479322608d18fdf0c871"><td class="memItemLeft" align="right" valign="top">std::optional&lt; <a class="el" href="namespacemusx_1_1dom.html#a7f27f66bcae06e7ccf1173bfca211da2">Evpu</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1MeasureExprAssign.html#a6572eea3547f479322608d18fdf0c871">calcDefaultVerticalPosition</a> () const</td></tr>
+<tr class="memdesc:a6572eea3547f479322608d18fdf0c871"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the default vertical position for the assigned expression, relative to the staff reference line, before any additional vertical offset from either assignment or expression definition. This includes the expression definition's vertical offsets.  <br /></td></tr>
+<tr class="separator:a6572eea3547f479322608d18fdf0c871"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abfa2d4dee0923162af8d2a49716ab26b" id="r_abfa2d4dee0923162af8d2a49716ab26b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemusx_1_1dom.html#a5f47ab5a8dd3f3cab33730ac7e178ad3">VerticalPlacement</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1MeasureExprAssign.html#abfa2d4dee0923162af8d2a49716ab26b">calcVerticalPlacement</a> () const</td></tr>
+<tr class="memdesc:abfa2d4dee0923162af8d2a49716ab26b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates a vertical placement classification for this assignment.  <br /></td></tr>
+<tr class="separator:abfa2d4dee0923162af8d2a49716ab26b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af84d077db446c43ffd153f7ea05786e8" id="r_af84d077db446c43ffd153f7ea05786e8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1MeasureExprAssign.html#af84d077db446c43ffd153f7ea05786e8">integrityCheck</a> (const std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1EnigmaBase.html">EnigmaBase</a> &gt; &amp;ptrToThis) override</td></tr>
 <tr class="memdesc:af84d077db446c43ffd153f7ea05786e8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Performs a final consistency check after population.  <br /></td></tr>
 <tr class="separator:af84d077db446c43ffd153f7ea05786e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -583,6 +592,53 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
+<a id="a1cc2e6df7c4380fc2c63a27e8039eca4" name="a1cc2e6df7c4380fc2c63a27e8039eca4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1cc2e6df7c4380fc2c63a27e8039eca4">&#9670;&#160;</a></span>calcBaselinePosition()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::optional&lt; <a class="el" href="namespacemusx_1_1dom.html#a7f27f66bcae06e7ccf1173bfca211da2">Evpu</a> &gt; musx::dom::others::MeasureExprAssign::calcBaselinePosition </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>forAbove</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Calculates the baseline position for this expression assignment in EVPU. </p>
+<p>The staff used for the baseline lookup should be the staff at the beginning of the system. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">forAbove</td><td>If true, returns the "above staff" baseline; otherwise returns the "below staff" baseline. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The baseline EVPU position, or std::nullopt if the system or staff cannot be resolved. </dd></dl>
+
+</div>
+</div>
+<a id="a6572eea3547f479322608d18fdf0c871" name="a6572eea3547f479322608d18fdf0c871"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6572eea3547f479322608d18fdf0c871">&#9670;&#160;</a></span>calcDefaultVerticalPosition()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::optional&lt; <a class="el" href="namespacemusx_1_1dom.html#a7f27f66bcae06e7ccf1173bfca211da2">Evpu</a> &gt; musx::dom::others::MeasureExprAssign::calcDefaultVerticalPosition </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Calculates the default vertical position for the assigned expression, relative to the staff reference line, before any additional vertical offset from either assignment or expression definition. This includes the expression definition's vertical offsets. </p>
+<dl class="section return"><dt>Returns</dt><dd>The default EVPU position, or std::nullopt if the required staff/entry context cannot be resolved. </dd></dl>
+
+</div>
+</div>
 <a id="a552cef74b8f77a1f8e056d459d1355e5" name="a552cef74b8f77a1f8e056d459d1355e5"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a552cef74b8f77a1f8e056d459d1355e5">&#9670;&#160;</a></span>calcIsPartOfStaffListAssignment()</h2>
 
@@ -600,6 +656,26 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Calculates if this assignment participates in a staff-list-based assignment group. </p>
 <p>This checks the assignment-level grouping fields first, then falls back to the assigned expression category when the category uses staff lists. This works for both text and shape expressions. </p>
+
+</div>
+</div>
+<a id="abfa2d4dee0923162af8d2a49716ab26b" name="abfa2d4dee0923162af8d2a49716ab26b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abfa2d4dee0923162af8d2a49716ab26b">&#9670;&#160;</a></span>calcVerticalPlacement()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacemusx_1_1dom.html#a5f47ab5a8dd3f3cab33730ac7e178ad3">VerticalPlacement</a> musx::dom::others::MeasureExprAssign::calcVerticalPlacement </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Calculates a vertical placement classification for this assignment. </p>
+<p>Uses the assigned expression definition's vertical alignment and collapses the result into a placement category. </p>
 
 </div>
 </div>

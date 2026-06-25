@@ -106,6 +106,9 @@ $(document).ready(function(){initNavTree('classmusic__theory_1_1Transposer.html'
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
+<tr class="memitem:a60afeabd008e8c9d8423b83fdd072405" id="r_a60afeabd008e8c9d8423b83fdd072405"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusic__theory_1_1Transposer.html#a60afeabd008e8c9d8423b83fdd072405">Transposer</a> (const <a class="el" href="structmusic__theory_1_1Pitch.html">Pitch</a> &amp;pitch)</td></tr>
+<tr class="memdesc:a60afeabd008e8c9d8423b83fdd072405"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a 12-EDO major-scale transposer for a spelled pitch.  <br /></td></tr>
+<tr class="separator:a60afeabd008e8c9d8423b83fdd072405"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a77f3b85e9a4d9cfc42678c236fbd9ef6" id="r_a77f3b85e9a4d9cfc42678c236fbd9ef6"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusic__theory_1_1Transposer.html#a77f3b85e9a4d9cfc42678c236fbd9ef6">Transposer</a> (int <a class="el" href="classmusic__theory_1_1Transposer.html#a0514e0c7d959d81e6c118e58acf7ed08">displacement</a>, int <a class="el" href="classmusic__theory_1_1Transposer.html#a550fc30dbc918d850cd12599248b001c">alteration</a>, bool isMinor=false, int numberOfEdoDivisions=<a class="el" href="namespacemusic__theory.html#a9c6d3371d0dbd13ad22c18e667a6d384">STANDARD_12EDO_STEPS</a>, const std::optional&lt; std::vector&lt; int &gt; &gt; &amp;keyMap=std::nullopt)</td></tr>
 <tr class="memdesc:a77f3b85e9a4d9cfc42678c236fbd9ef6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor function.  <br /></td></tr>
 <tr class="separator:a77f3b85e9a4d9cfc42678c236fbd9ef6"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -120,9 +123,9 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>alteration</b> () cons
 <tr class="memitem:a8fc8178c83f5655e24b13165a968777a" id="r_a8fc8178c83f5655e24b13165a968777a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusic__theory_1_1Transposer.html#a8fc8178c83f5655e24b13165a968777a">diatonicTranspose</a> (int interval)</td></tr>
 <tr class="memdesc:a8fc8178c83f5655e24b13165a968777a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Transposes the displacement by the specified interval.  <br /></td></tr>
 <tr class="separator:a8fc8178c83f5655e24b13165a968777a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aad74d8df8af43667448383acf0652c05" id="r_aad74d8df8af43667448383acf0652c05"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusic__theory_1_1Transposer.html#aad74d8df8af43667448383acf0652c05">enharmonicTranspose</a> (int direction)</td></tr>
-<tr class="memdesc:aad74d8df8af43667448383acf0652c05"><td class="mdescLeft">&#160;</td><td class="mdescRight">Transposes enharmonically relative to the current values.  <br /></td></tr>
-<tr class="separator:aad74d8df8af43667448383acf0652c05"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afcea52c4d2d8f21fcc3bd20b48096bf2" id="r_afcea52c4d2d8f21fcc3bd20b48096bf2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusic__theory_1_1Transposer.html#afcea52c4d2d8f21fcc3bd20b48096bf2">enharmonicTranspose</a> (int diatonicSteps)</td></tr>
+<tr class="memdesc:afcea52c4d2d8f21fcc3bd20b48096bf2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Transposes enharmonically relative to the current values.  <br /></td></tr>
+<tr class="separator:afcea52c4d2d8f21fcc3bd20b48096bf2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a316564e5ceb34e7aaa072df6677b1ef3" id="r_a316564e5ceb34e7aaa072df6677b1ef3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusic__theory_1_1Transposer.html#a316564e5ceb34e7aaa072df6677b1ef3">chromaticTranspose</a> (int interval, int chromaticAlteration)</td></tr>
 <tr class="memdesc:a316564e5ceb34e7aaa072df6677b1ef3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Chromatically transposes by a specified chromatic interval.  <br /></td></tr>
 <tr class="separator:a316564e5ceb34e7aaa072df6677b1ef3"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -140,8 +143,42 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>alteration</b> () cons
 <div class="textblock"><p>Provides dependency-free transposition utilities that work with any scale that has 7 diatonic steps and an equal number of divisions of the octave (EDO). The most common Western scales use 12 divisions of the octave, .i.e., 12-EDO. </p>
 <p>The way to use this class is to intialize it in the constructor, run one or more transposition functions, then extract the modified displacement and alteration values. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a60afeabd008e8c9d8423b83fdd072405" name="a60afeabd008e8c9d8423b83fdd072405"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a60afeabd008e8c9d8423b83fdd072405">&#9670;&#160;</a></span>Transposer() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">music_theory::Transposer::Transposer </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structmusic__theory_1_1Pitch.html">Pitch</a> &amp;&#160;</td>
+          <td class="paramname"><em>pitch</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">explicit</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Constructs a 12-EDO major-scale transposer for a spelled pitch. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pitch</td><td>The pitch to transpose. Its alteration is relative to the natural note name. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a id="a77f3b85e9a4d9cfc42678c236fbd9ef6" name="a77f3b85e9a4d9cfc42678c236fbd9ef6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a77f3b85e9a4d9cfc42678c236fbd9ef6">&#9670;&#160;</a></span>Transposer()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a77f3b85e9a4d9cfc42678c236fbd9ef6">&#9670;&#160;</a></span>Transposer() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -295,8 +332,8 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>alteration</b> () cons
 
 </div>
 </div>
-<a id="aad74d8df8af43667448383acf0652c05" name="aad74d8df8af43667448383acf0652c05"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aad74d8df8af43667448383acf0652c05">&#9670;&#160;</a></span>enharmonicTranspose()</h2>
+<a id="afcea52c4d2d8f21fcc3bd20b48096bf2" name="afcea52c4d2d8f21fcc3bd20b48096bf2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afcea52c4d2d8f21fcc3bd20b48096bf2">&#9670;&#160;</a></span>enharmonicTranspose()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -308,7 +345,7 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>alteration</b> () cons
           <td class="memname">void music_theory::Transposer::enharmonicTranspose </td>
           <td>(</td>
           <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>direction</em></td><td>)</td>
+          <td class="paramname"><em>diatonicSteps</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -322,7 +359,7 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>alteration</b> () cons
 <p>Transposes enharmonically relative to the current values. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">direction</td><td>negative or non-negative (usually -1 or 1) </td></tr>
+    <tr><td class="paramname">diatonicSteps</td><td>number of diatonic steps to move; may be positive or negative. </td></tr>
   </table>
   </dd>
 </dl>

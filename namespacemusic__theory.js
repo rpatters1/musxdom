@@ -1,5 +1,6 @@
 var namespacemusic__theory =
 [
+    [ "Pitch", "structmusic__theory_1_1Pitch.html", "structmusic__theory_1_1Pitch" ],
     [ "Transposer", "classmusic__theory_1_1Transposer.html", "classmusic__theory_1_1Transposer" ],
     [ "ClefType", "namespacemusic__theory.html#a815d2a1e748a138127d59c252e4fa946", [
       [ "Unknown", "namespacemusic__theory.html#a815d2a1e748a138127d59c252e4fa946a88183b946cc5f0e8c96b2e66e1c74a7e", null ],
@@ -32,7 +33,7 @@ var namespacemusic__theory =
     [ "calc12EdoHalfstepsInInterval", "namespacemusic__theory.html#acf8c49a568a6a6043714a796c4de89e4", null ],
     [ "calcAlterationFrom12EdoHalfsteps", "namespacemusic__theory.html#a5d580efb2fd53b410d55ecd25b268376", null ],
     [ "calcAlterationFromKeySigChange", "namespacemusic__theory.html#aa8135fae68fcafc7da27d3540d2a04b3", null ],
-    [ "calcDisplacement", "namespacemusic__theory.html#a9c6451da69ad76a5cab37f007209c014", null ],
+    [ "calcDisplacement", "namespacemusic__theory.html#a25d2e2ec4727f853dc7cd1448e713a7e", null ],
     [ "calcKeySigChangeFromInterval", "namespacemusic__theory.html#aa537406e4ca826927f9dfe4f3c238d52", null ],
     [ "calcTranspositionIsOctave", "namespacemusic__theory.html#aaf657cfd2d18ef5386cc35a5d1283ea4", null ],
     [ "positiveModulus", "namespacemusic__theory.html#ad044685489c9b3d008be12762a490463", null ],

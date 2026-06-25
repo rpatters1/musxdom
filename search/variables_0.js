@@ -69,7 +69,7 @@ var searchData=
   ['alphorn_66',['Alphorn',['../namespacemusx_1_1dom_1_1uuid.html#aa3e1647689ca33775cb23e19f5536922',1,'musx::dom::uuid']]],
   ['altchar_67',['altChar',['../classmusx_1_1dom_1_1details_1_1AccidentalAlterations.html#ae965de8e3c0557140664c59cd78d6e30',1,'musx::dom::details::AccidentalAlterations']]],
   ['altdentsig_68',['altDenTsig',['../classmusx_1_1dom_1_1details_1_1IndependentStaffDetails.html#a9094cbd50203570c534cc252000b4522',1,'musx::dom::details::IndependentStaffDetails']]],
-  ['alteration_69',['alteration',['../classmusx_1_1dom_1_1others_1_1Staff_1_1ChromaticTransposition.html#ae79db5af3e3bd4fb99c09d4867661d94',1,'musx::dom::others::Staff::ChromaticTransposition']]],
+  ['alteration_69',['alteration',['../classmusx_1_1dom_1_1others_1_1Staff_1_1ChromaticTransposition.html#ae79db5af3e3bd4fb99c09d4867661d94',1,'musx::dom::others::Staff::ChromaticTransposition::alteration'],['../structmusic__theory_1_1Pitch.html#aee7354814c377218f9a53a17b594e1a6',1,'music_theory::Pitch::alteration']]],
   ['althideartics_70',['altHideArtics',['../classmusx_1_1dom_1_1others_1_1Staff.html#a3d71d17f073f49cad55029429f43dd8e',1,'musx::dom::others::Staff']]],
   ['althideexpressions_71',['altHideExpressions',['../classmusx_1_1dom_1_1others_1_1Staff.html#ab793f4f7d3c9ca183084ba3cb8d7e1db',1,'musx::dom::others::Staff']]],
   ['althidelyrics_72',['altHideLyrics',['../classmusx_1_1dom_1_1others_1_1Staff.html#af611ff907ca13c1a60c47e2ade60b39c',1,'musx::dom::others::Staff']]],
