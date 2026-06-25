@@ -365,6 +365,69 @@ TEST(EntryTest, EnharmonicSpellingDefault)
     }
 }
 
+TEST(EntryTest, EnharmonicSpellingDefault31Edo)
+{
+    std::vector<char> xml;
+    musxtest::readFile(musxtest::getInputPath() / "enharmonics_test_31edo.enigmaxml", xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(xml);
+    ASSERT_TRUE(doc);
+
+    struct PitchExpectation
+    {
+        Cmper measure{};
+        size_t noteIndex{};
+        music_theory::NoteName noteName{};
+        int octave{};
+        int alteration{};
+    };
+
+    /// @note Some of Finale's behavior enharmonically respelling notes in microtonal
+    /// scales is inconsistent or plain wrong. These values guarantee consistency with their
+    /// equivalent values in 12edo. We can add special-casing for microtonal scales to
+    /// calcDefaultEnharmonic if and when we ever have to reproduce Finale's erratic behavior.
+    constexpr std::array<PitchExpectation, 16> expectedPitches = { {
+        { 1, 0, music_theory::NoteName::B, 4, -5 },
+        { 1, 1, music_theory::NoteName::C, 5, -3 },
+        { 1, 2, music_theory::NoteName::D, 5, -3 },
+        { 1, 3, music_theory::NoteName::E, 5, -5 },
+        { 2, 0, music_theory::NoteName::F, 5, -3 },
+        { 2, 1, music_theory::NoteName::G, 5, -3 },
+        { 2, 2, music_theory::NoteName::A, 5, -3 },
+        { 2, 3, music_theory::NoteName::B, 5, -5 },
+        { 3, 0, music_theory::NoteName::D, 4, +3 },
+        { 3, 1, music_theory::NoteName::E, 4, +3 },
+        { 3, 2, music_theory::NoteName::A, 4, -5 },
+        { 3, 3, music_theory::NoteName::G, 4, +3 },
+        { 4, 0, music_theory::NoteName::A, 4, +3 },
+        { 4, 1, music_theory::NoteName::B, 4, +3 },
+        { 4, 2, music_theory::NoteName::E, 5, -5 },
+        { 4, 3, music_theory::NoteName::D, 5, +3 },
+    }};
+
+    for (const auto& testCase : expectedPitches) {
+        SCOPED_TRACE(testing::Message() << "measure " << testCase.measure << ", note " << testCase.noteIndex);
+
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, testCase.measure);
+        ASSERT_TRUE(gfhold);
+
+        auto entryFrame = gfhold.createEntryFrame(0);
+        ASSERT_TRUE(entryFrame);
+        ASSERT_GE(entryFrame->getEntries().size(), testCase.noteIndex + 1);
+
+        auto noteInfo = NoteInfoPtr(EntryInfoPtr(entryFrame, testCase.noteIndex), 0);
+        ASSERT_TRUE(noteInfo);
+
+        const auto [disp, alt] = noteInfo.calcDefaultEnharmonic();
+        const auto key = noteInfo.getEntryInfo().getFrame()->keySignature;
+        ASSERT_TRUE(key);
+
+        const auto pitch = key->calcPitch(disp, alt, KeySignature::KeyContext::Concert);
+        EXPECT_EQ(pitch.noteName, testCase.noteName);
+        EXPECT_EQ(pitch.octave, testCase.octave);
+        EXPECT_EQ(pitch.alteration, testCase.alteration);
+    }
+}
+
 TEST(EntryTest, TransposedConcert)
 {
     std::vector<char> xml;
