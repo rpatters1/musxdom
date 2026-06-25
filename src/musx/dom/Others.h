@@ -1439,6 +1439,24 @@ public:
     /// @brief Calculates if this assignment is hidden by alternate notation.
     bool calcIsHiddenByAlternateNotation() const;
 
+    /// @brief Calculates the baseline position for this expression assignment in EVPU.
+    /// @details The staff used for the baseline lookup should be the staff at the beginning of the system.
+    /// @param forAbove If true, returns the "above staff" baseline; otherwise returns the "below staff" baseline.
+    /// @return The baseline EVPU position, or std::nullopt if the system or staff cannot be resolved.
+    [[nodiscard]] std::optional<Evpu> calcBaselinePosition(bool forAbove) const;
+
+    /// @brief Calculates the default vertical position for the assigned expression,
+    /// relative to the staff reference line, before any additional vertical offset from either assignment
+    /// or expression definition. This includes the expression definition's vertical offsets.
+    /// @return The default EVPU position, or std::nullopt if the required staff/entry
+    /// context cannot be resolved.
+    [[nodiscard]] std::optional<Evpu> calcDefaultVerticalPosition() const;
+
+    /// @brief Calculates a vertical placement classification for this assignment.
+    /// @details Uses the assigned expression definition's vertical alignment and collapses the result into a placement
+    /// category.
+    [[nodiscard]] VerticalPlacement calcVerticalPlacement() const;
+
     void integrityCheck(const std::shared_ptr<EnigmaBase>& ptrToThis) override
     {
         this->OthersBase::integrityCheck(ptrToThis);

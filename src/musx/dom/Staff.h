@@ -395,6 +395,9 @@ public:
     /// @brief Calculates the middle staff position. For staves with even numbers of lines, it is the middle space.
     int calcMiddleStaffPosition() const;
 
+    /// @brief Returns the configured rest staff-step offset for an Edu value.
+    [[nodiscard]] Evpu calcRestOffset(Edu edu) const;
+
     /// @brief Calculates the baseline zero position for this staff, relative to the reference line, before any displacements are applied.
     ///
     /// This function reproduces Finale’s observed behavior but may yield inaccurate results in unusual configurations of custom staff lines.
@@ -408,7 +411,7 @@ public:
     /// @return The accumulated position of the baseline, relative to the staff's reference line.
     template<typename BaselineType,
              std::enable_if_t<std::is_base_of<details::BaselineNoInci, BaselineType>::value, int> = 0>
-     Evpu calcBaselinePosition(SystemCmper systemId) const
+    Evpu calcBaselinePosition(SystemCmper systemId) const
     {
         return calcBaselinePositionImpl<BaselineType>(systemId, std::nullopt);
     }
@@ -434,8 +437,16 @@ public:
     /// @brief Calculates the position of the top staff line, relative to the reference line.
     int calcTopLinePosition() const;
 
+    /// @brief Calculates the Evpu position of the top staff line, relative to the reference line.
+    Evpu calcTopLineEvpu() const
+    { return static_cast<Evpu>(calcTopLinePosition() * static_cast<int>(EVPU_PER_STAFF_POSITION)); }
+
     /// @brief Calculates the position of the top staff line, relative to the reference line.
     int calcBottomLinePosition() const;
+
+    /// @brief Calculates the Evpu position of the bottom staff line, relative to the reference line.
+    Evpu calcBottomLineEvpu() const
+    { return static_cast<Evpu>(calcBottomLinePosition() * static_cast<int>(EVPU_PER_STAFF_POSITION)); }
 
     /// @brief Return true if this staff has an instrument assigned.
     bool hasInstrumentAssigned() const;

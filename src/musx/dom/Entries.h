@@ -523,6 +523,10 @@ public:
         if (size_t(numNotes) != notes.size()) {
             MUSX_INTEGRITY_ERROR("Entry " + std::to_string(m_entnum) + " has an incorrect number of notes.");
         }
+        if (notes.empty() && !floatRest) {
+            MUSX_INTEGRITY_ERROR("Entry " + std::to_string(m_entnum)
+                + " has an invalid rest representation: the entry has no notes but is not floatRest.");
+        }
     }
 
     /// @brief Calculates the locations for all entries in the document. This function is normally only called by the document factory.
@@ -767,6 +771,19 @@ public:
     /// be called on a floating rest. It asserts and throws if so.
     /// @return A std::pair<int, int> with the first being the top staff position and the second being the bottom staff position.
     [[nodiscard]] std::pair<int, int> calcTopBottomStaffPositions() const;
+
+    /// @brief Calculates the staff position of a floating rest.
+    /// @note This helper is only valid when the entry is a floating rest.
+    /// @return The staff position used to place the floating rest.
+    /// @throw std::logic_error if the entry is not a floating rest.
+    [[nodiscard]] int calcFloatingRestStaffPosition() const;
+
+    /// @brief Calculates the top and bottom EVPU extent of the entry's approximate visual footprint.
+    /// @details This is a layout-free approximation intended for expression placement. The returned values are not note positions;
+    /// they are an envelope in EVPU space derived from the note extrema, one half-space of note-side padding, and the document's
+    /// stemLength setting on the stem side.
+    /// @return A std::pair<Evpu, Evpu> with the first being the top EVPU extent and the second being the bottom EVPU extent.
+    [[nodiscard]] std::pair<Evpu, Evpu> calcTopBottomExtent() const;
 
     /// @brief Returns the Entry stem settings for the current requested part. This function encapsulates handling of the case when the
     /// two booleans are unlinked and different in score and part(s).

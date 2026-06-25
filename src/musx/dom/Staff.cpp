@@ -508,6 +508,23 @@ int Staff::calcMiddleStaffPosition() const
     return 0;
 }
 
+Evpu Staff::calcRestOffset(Edu edu) const
+{
+    switch (std::get<0>(calcDurationInfoFromEdu(edu))) {
+        case NoteType::Longa:
+        case NoteType::Maxima:
+            return otherRestOffset;
+        case NoteType::Breve:
+            return dwRestOffset;
+        case NoteType::Whole:
+            return wRestOffset;
+        case NoteType::Half:
+            return hRestOffset;
+        default:
+            return otherRestOffset;
+    }
+}
+
 int Staff::calcTopLinePosition() const
 {
     if (staffLines.has_value()) {
@@ -539,13 +556,13 @@ int Staff::calcBottomLinePosition() const
 Evpu Staff::calcBaselineZeroPosition() const
 {
     // Weird cases involving custom lines above the reference line may require additional logic, but
-    // this gets us going for the vast majority of staves in Finale.
-    int bottomLinePosition = calcBottomLinePosition();
+    // this gets us going for the vast majority of staves in Finale. The baseline zero position here
+    // is calculated as halfway between the reference line and the bottom staff lines.
     if (calcNumberOfStafflines() == 0) {
-        bottomLinePosition = -8; // Finale treats a blank staff like a standard staff for baselines
+        static constexpr Evpu kNumberOfSpaces = (music_theory::STANDARD_NUMBER_OF_STAFFLINES - 1) / 2;
+        return -kNumberOfSpaces * static_cast<Evpu>(EVPU_PER_SPACE); // Finale treats a blank staff like a standard staff for baselines
     }
-    constexpr int EVPU_PER_STAFF_POSITION = static_cast<int>(EVPU_PER_SPACE) / 2;
-    return static_cast<Evpu>((bottomLinePosition * EVPU_PER_STAFF_POSITION) / 2); // halfway between reference (0) and bottom line
+    return calcBottomLineEvpu() / 2;
 }
 
 template<typename BaselineType>

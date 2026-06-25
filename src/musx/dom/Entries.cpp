@@ -956,11 +956,46 @@ bool EntryInfoPtr::calcDisplaysAsRest() const
     return false;
 }
 
+int EntryInfoPtr::calcFloatingRestStaffPosition() const
+{
+    const auto entry = (*this)->getEntry();    
+    MUSX_ASSERT_IF(!entry->notes.empty() && !entry->floatRest) {
+        throw std::logic_error("calcFloatingRestStaffPosition() called on a non-floating rest.");
+    }
+    const auto staff = createCurrentStaff();
+    MUSX_ASSERT_IF(!staff) {
+        throw std::logic_error("calcFloatingRestStaffPosition() could not find the staff for entry " + std::to_string(entry->getEntryNumber()));
+    }
+    const auto layerAttr = getFrame()->getLayerAttributes();
+    MUSX_ASSERT_IF(!layerAttr) {
+        throw std::logic_error("calcFloatingRestStaffPosition() could not find the layer attributes for entry " + std::to_string(entry->getEntryNumber()));
+    }
+
+    auto result = staff->calcRestOffset(entry->duration);
+    if (!layerAttr->useRestOffset) {
+        return result;
+    }
+
+    if (calcIfLayerSettingsApply()) {
+        const auto miscOptions = entry->getDocument()->getOptions()->get<options::MiscOptions>();
+        MUSX_ASSERT_IF(!miscOptions) {
+            throw std::logic_error("calcFloatingRestStaffPosition() could not find the miscellaneous options");
+        }
+        if (miscOptions->consolidateRestsAcrossLayers && !entry->splitRest) {
+            return result;
+        }
+        result += layerAttr->restOffset;
+    }
+
+    return result;
+}
+
 std::pair<int, int> EntryInfoPtr::calcTopBottomStaffPositions() const
 {
     const auto& entry = (*this)->getEntry();
-    MUSX_ASSERT_IF(entry->notes.empty() || entry->floatRest) {
-        throw std::logic_error("calcTopBottomStaffPositions cannot be called for a floating rest.");
+    if (entry->notes.empty() || entry->floatRest) {
+        const auto floatingRestPos = calcFloatingRestStaffPosition();
+        return std::make_pair(floatingRestPos, floatingRestPos);
     }
     int topLine = (std::numeric_limits<int>::min)();
     int botLine = (std::numeric_limits<int>::max)();
@@ -979,6 +1014,36 @@ std::pair<int, int> EntryInfoPtr::calcTopBottomStaffPositions() const
     updateLines(NoteInfoPtr(*this, entry->notes.size() - 1));
 
     return std::make_pair(topLine, botLine);
+}
+
+std::pair<Evpu, Evpu> EntryInfoPtr::calcTopBottomExtent() const
+{
+    const auto [topLine, botLine] = calcTopBottomStaffPositions();
+
+    const auto stemOptions = getFrame()->getDocument()->getOptions()->get<options::StemOptions>();
+    MUSX_ASSERT_IF(!stemOptions) {
+        throw std::logic_error("Unable to retrieve stem options for calculating entry extent.");
+    }
+
+    constexpr Evpu noteSidePadding = static_cast<Evpu>(EVPU_PER_STAFF_POSITION);
+    const Evpu topEvpu = static_cast<Evpu>(topLine * EVPU_PER_STAFF_POSITION);
+    const Evpu bottomEvpu = static_cast<Evpu>(botLine * EVPU_PER_STAFF_POSITION);
+
+    /// @todo develop proper stem length calc
+    const Evpu stemSidePadding = (*this)->getEntry()->duration < EDU_PER_WHOLE_NOTE
+        ? stemOptions->stemLength : noteSidePadding;
+
+    if (calcUpStem()) {
+        return {
+            topEvpu + stemSidePadding,
+            bottomEvpu - noteSidePadding
+        };
+    }
+
+    return {
+        topEvpu + noteSidePadding,
+        bottomEvpu - stemSidePadding
+    };
 }
 
 bool EntryInfoPtr::calcUpStemDefault() const
@@ -2717,37 +2782,30 @@ bool details::GFrameHoldContext::calcVoicingIncludesLayer(LayerIndex layerIndex)
 
 std::pair<int, int> Note::calcDefaultEnharmonic(const MusxInstance<KeySignature>& key) const
 {
-    auto transposer = key->createTransposer(harmLev, harmAlt);
-    if (harmAlt) {
-        transposer->enharmonicTranspose(music_theory::sign(harmAlt));
-        if (std::abs(transposer->alteration()) > MAX_ALTERATIONS)
-            return {harmLev, harmAlt};
-        return {transposer->displacement(), transposer->alteration()};
+    auto createReturnVal = [&](int steps) -> std::pair<int, int> {
+        auto noteTransposer = key->createTransposer(harmLev, harmAlt);
+        noteTransposer->enharmonicTranspose(steps);
+        if (std::abs(noteTransposer->alteration()) > MAX_ALTERATIONS) {
+            return { harmLev, harmAlt };
+        }
+        return { noteTransposer->displacement(), noteTransposer->alteration() };
+    };
+
+    if (harmAlt != 0) {
+        return createReturnVal(music_theory::sign(harmAlt));
     }
 
-    transposer->enharmonicTranspose(1);
-    int upDisp = transposer->displacement();
-    int upAlt = transposer->alteration();
+    const auto pitch = key->calcPitch(harmLev, harmAlt, KeySignature::KeyContext::Concert);
+    auto up = music_theory::Transposer(pitch);
+    up.enharmonicTranspose(1);
+    auto down = music_theory::Transposer(pitch);
+    down.enharmonicTranspose(-1);
 
-    // This is observed Finale behavior, relevant in the context of microtone custom key signatures.
-    // A possibly more correct version would omit this hard-coded comparison to the number 2, but it
-    // seems to be what Finale does.
-    if (std::abs(upAlt) != 2) {
-        if (std::abs(upAlt) > MAX_ALTERATIONS)
-            return {harmLev, harmAlt};
-        return {upDisp, upAlt};
+    if (std::abs(down.alteration()) < std::abs(up.alteration())) {
+        return createReturnVal(-1);
     }
 
-    auto down = key->createTransposer(harmLev, harmAlt);
-    down->enharmonicTranspose(-1);
-    int downAlt = down->alteration();
-
-    if (std::abs(downAlt) > MAX_ALTERATIONS)
-        return {harmLev, harmAlt};
-
-    if (std::abs(downAlt) < std::abs(upAlt))
-        return {down->displacement(), downAlt};
-    return {upDisp, upAlt};
+    return createReturnVal(1);
 }
 
 Note::NoteProperties Note::calcNoteProperties(const MusxInstance<KeySignature>& key, KeySignature::KeyContext ctx, ClefIndex clefIndex,
@@ -2764,17 +2822,8 @@ Note::NoteProperties Note::calcNoteProperties(const MusxInstance<KeySignature>& 
         transposedAlt = transposer->alteration();
     }
 
-    // Determine the base note and octave
+    const auto pitch = key->calcPitch(transposedLev, transposedAlt, ctx);
     int keyAdjustedLev = key->calcTonalCenterIndex(ctx) + transposedLev + (key->getOctaveDisplacement(ctx) * music_theory::STANDARD_DIATONIC_STEPS);
-    int octave = (keyAdjustedLev / music_theory::STANDARD_DIATONIC_STEPS) + 4; // Middle C (C4) is the reference
-    int step = keyAdjustedLev % music_theory::STANDARD_DIATONIC_STEPS;
-    if (step < 0) {
-        step += music_theory::STANDARD_DIATONIC_STEPS;
-        octave -= 1;
-    }
-
-    // Calculate the actual alteration
-    const int actualAlteration = transposedAlt + key->calcAlterationOnNote(step, ctx);
 
     // Calculate the staff line
     const int staffLine = [&]() {
@@ -2789,7 +2838,7 @@ Note::NoteProperties Note::calcNoteProperties(const MusxInstance<KeySignature>& 
         return keyAdjustedLev + middleCLine;
     }();
 
-    return { music_theory::noteNames[step], octave, actualAlteration, staffLine };
+    return { pitch.noteName, pitch.octave, pitch.alteration, staffLine };
 }
 
 // ***********************

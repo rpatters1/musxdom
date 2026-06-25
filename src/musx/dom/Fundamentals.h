@@ -85,8 +85,10 @@ constexpr double EVPU_PER_CM = EVPU_PER_MM * 10.0;   ///< Number of Evpu units p
 constexpr double EVPU_PER_PX = EVPU_PER_INCH / 96.0; ///< Number of Evpu units per CSS pixel
 constexpr double EVPU_PER_PICA = EVPU_PER_POINT * 12.0; ///< Number of Evpu units per pica
 constexpr double EVPU_PER_SPACE = 24.0;         ///< Number of Evpu units per space (spatium)
+constexpr double EVPU_PER_STAFF_POSITION = EVPU_PER_SPACE / 2.0; ///< Number of Evpu units per half space.
 constexpr double EFIX_PER_EVPU = 64.0;          ///< Number of Efix units per Evpu
 constexpr double EFIX_PER_SPACE = EVPU_PER_SPACE * EFIX_PER_EVPU; ///< Number of Efix units per space (spatium)
+
 constexpr Edu EDU_PER_WHOLE_NOTE = 0x1000;    ///< Number of Edu units per whole note
 
 constexpr Cmper BASE_SYSTEM_ID = 0; ///< The base system cmper that gives a list of all available staves and their score order (@ref others::StaffUsed cmper)

@@ -471,6 +471,136 @@ bool MeasureExprAssign::calcIsHiddenByAlternateNotation() const
     }
 }
 
+std::optional<Evpu> MeasureExprAssign::calcBaselinePosition(bool forAbove) const
+{
+    std::optional<Evpu> result = std::nullopt;
+    constexpr bool forPageView = true;
+    if (const auto sys = getDocument()->calcSystemFromMeasure(getRequestedPartId(), getCmper())) {
+        const StaffCmper assignedStaffId = calcAssignedStaffId(forPageView);
+        if (const auto systemStaff = StaffComposite::createCurrent(getDocument(), getRequestedPartId(), assignedStaffId, sys->startMeas, 0)) {
+            result = forAbove
+                   ? systemStaff->calcBaselinePosition<details::BaselineExpressionsAbove>(sys->getCmper())
+                   : systemStaff->calcBaselinePosition<details::BaselineExpressionsBelow>(sys->getCmper());
+        } else {
+            MUSX_INTEGRITY_ERROR("staff " + std::to_string(assignedStaffId) + " not found for system " + std::to_string(sys->getCmper()));
+        }
+    } else {
+        MUSX_INTEGRITY_ERROR("system not found for measure " + std::to_string(getCmper()));
+    }
+    return result;
+}
+
+std::optional<Evpu> MeasureExprAssign::calcDefaultVerticalPosition() const
+{
+    const auto calcDefaultVerticalPositionForDef = [&](const auto& def) -> std::optional<Evpu> {
+        using InstanceType = std::remove_cv_t<std::remove_reference_t<decltype(def)>>;
+        using ElementType = typename InstanceType::element_type;
+        using Def = std::remove_const_t<ElementType>;
+        static_assert(std::is_same_v<Def, TextExpressionDef> || std::is_same_v<Def, ShapeExpressionDef>,
+            "Def must be an expression definition.");
+        if (!def) {
+            return std::nullopt;
+        }
+
+        const auto align = def->vertMeasExprAlign;
+        const Evpu entryYOffset = def->yAdjustEntry;
+        const Evpu baselineYOffset = def->yAdjustBaseline;
+        switch (align) {
+            case VerticalMeasExprAlign::Manual:
+            case VerticalMeasExprAlign::RefLine:
+                return baselineYOffset;
+            case VerticalMeasExprAlign::AboveStaff:
+                if (const auto pos = calcBaselinePosition(/*forAbove*/ true)) {
+                    return pos.value() + baselineYOffset;
+                }
+                return std::nullopt;
+            case VerticalMeasExprAlign::BelowStaff:
+                if (const auto pos = calcBaselinePosition(/*forAbove*/ false)) {
+                    return pos.value() + baselineYOffset;
+                }
+                return std::nullopt;
+            case VerticalMeasExprAlign::AboveEntry:
+                if (const auto entryInfo = calcAssociatedEntry()) {
+                    const auto [top, bot] = entryInfo.calcTopBottomExtent();
+                    return top + entryYOffset;
+                }
+                return baselineYOffset; // if there is no entry, Finale treats these like RefLine
+            case VerticalMeasExprAlign::BelowEntry:
+                if (const auto entryInfo = calcAssociatedEntry()) {
+                    const auto [top, bot] = entryInfo.calcTopBottomExtent();
+                    return bot + entryYOffset;
+                }
+                return baselineYOffset; // if there is no entry, Finale treats these like RefLine
+            case VerticalMeasExprAlign::AboveStaffOrEntry: {
+                auto result = calcBaselinePosition(/*forAbove*/ true);
+                if (!result) return std::nullopt;
+                if (const auto entryInfo = calcAssociatedEntry()) {
+                    const auto [top, bot] = entryInfo.calcTopBottomExtent();
+                    if (top > result) {
+                        return top + entryYOffset;
+                    }
+                }
+                return result.value() + baselineYOffset;
+            }
+            case VerticalMeasExprAlign::BelowStaffOrEntry: {
+                auto result = calcBaselinePosition(/*forAbove*/ false);
+                if (!result) return std::nullopt;
+                if (const auto entryInfo = calcAssociatedEntry()) {
+                    const auto [top, bot] = entryInfo.calcTopBottomExtent();
+                    if (bot < result) {
+                        return bot + entryYOffset;
+                    }
+                }
+                return result.value() + baselineYOffset;
+            }
+            case VerticalMeasExprAlign::TopNote:
+                if (const auto entryInfo = calcAssociatedEntry()) {
+                    const auto [top, bot] = entryInfo.calcTopBottomStaffPositions();
+                    return static_cast<Evpu>(top * EVPU_PER_STAFF_POSITION) + entryYOffset;
+                }
+                return baselineYOffset; // if there is no entry, Finale treats these like RefLine
+            case VerticalMeasExprAlign::BottomNote:
+                if (const auto entryInfo = calcAssociatedEntry()) {
+                    const auto [top, bot] = entryInfo.calcTopBottomStaffPositions();
+                    return static_cast<Evpu>(bot * EVPU_PER_STAFF_POSITION) + entryYOffset;
+                }
+                return baselineYOffset; // if there is no entry, Finale treats these like RefLine
+        }
+        return std::nullopt;
+    };
+
+    if (const auto textExp = getTextExpression()) {
+        return calcDefaultVerticalPositionForDef(textExp);
+    }
+    if (const auto shapeExp = getShapeExpression()) {
+        return calcDefaultVerticalPositionForDef(shapeExp);
+    }
+    return std::nullopt;
+}
+
+VerticalPlacement MeasureExprAssign::calcVerticalPlacement() const
+{
+    const auto defaultY = calcDefaultVerticalPosition();
+    if (!defaultY) {
+        return VerticalPlacement::NotApplicable;
+    }
+
+    const auto staff = createCurrentStaff();
+    if (!staff) {
+        return VerticalPlacement::NotApplicable;
+    }
+
+    const Evpu y = *defaultY + vertEvpuOff;
+
+    if (y >= staff->calcTopLineEvpu()) {
+        return VerticalPlacement::Above;
+    } else if (y < staff->calcBottomLineEvpu()) {
+        return VerticalPlacement::Below;
+    }
+
+    return VerticalPlacement::Float;
+}
+
 std::optional<utils::PseudoTieShapeInfo> MeasureExprAssign::calcPseudoTieShape() const
 {
     const auto shapeExp = getShapeExpression();
@@ -1411,6 +1541,5 @@ std::optional<MeasCmper> TextRepeatAssign::calcTargetMeasure() const
 }
 
 } // namespace others
-
 } // namespace dom
 } // namespace musx

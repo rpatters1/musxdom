@@ -343,6 +343,20 @@ int KeySignature::calcAlterationOnNote(unsigned noteIndex, KeyContext ctx) const
     return keySigAlteration;
 }
 
+music_theory::Pitch KeySignature::calcPitch(int displacement, int alteration, KeyContext ctx) const
+{
+    const int keyAdjustedLev = calcTonalCenterIndex(ctx) + displacement
+                             + (getOctaveDisplacement(ctx) * music_theory::STANDARD_DIATONIC_STEPS);
+    int octave = (keyAdjustedLev / music_theory::STANDARD_DIATONIC_STEPS) + 4;
+    int step = keyAdjustedLev % music_theory::STANDARD_DIATONIC_STEPS;
+    if (step < 0) {
+        step += music_theory::STANDARD_DIATONIC_STEPS;
+        --octave;
+    }
+
+    return { music_theory::noteNames[step], octave, alteration + calcAlterationOnNote(step, ctx) };
+}
+
 int KeySignature::calcScaleDegree(int displacement) const
 {
     const int diatonicSteps = [&]() {

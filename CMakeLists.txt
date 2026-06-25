@@ -17,13 +17,6 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 message(STATUS "Musx C++ standard: ${CMAKE_CXX_STANDARD}")
 
-if (MSVC)
-    add_compile_options(/bigobj)
-    add_compile_options(/W4 /WX)
-elseif(CMAKE_CXX_COMPILER_ID MATCHES "AppleClang|Clang|GNU")
-    add_compile_options(-Wall -Wextra -Wpedantic -Werror)
-endif()
-
 set(MUSX_ROOT_DIR ${CMAKE_CURRENT_SOURCE_DIR} CACHE INTERNAL "Root directory of musx")
 
 # Allow users to disable building tests
@@ -73,6 +66,12 @@ set(MUSX_SRC_FILES
 
 # Create a static library for the project
 add_library(musx STATIC ${MUSX_SRC_FILES})
+
+if (MSVC)
+    target_compile_options(musx PRIVATE /bigobj /W4 /WX)
+elseif(CMAKE_CXX_COMPILER_ID MATCHES "AppleClang|Clang|GNU")
+    target_compile_options(musx PRIVATE -Wall -Wextra -Wpedantic -Werror)
+endif()
 
 # Detect if we are building standalone or as part of a consuming project
 if(CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR)

@@ -139,10 +139,10 @@ public:
     EntryNumber entryNumber{};      ///< Entry number. Zero if the endpoint is not entry-attached. (xml node is `<entryNum>`)
 
     /// @brief Calculates the staff-level position of the endpoint within its measure, based on whether it is measure- or entry-attached
-    util::Fraction calcPosition() const;
+    [[nodiscard]] util::Fraction calcPosition() const;
 
     /// @brief Calculates the global position of the endpoint within its measure, based on whether it is measure- or entry-attached
-    util::Fraction calcGlobalPosition() const;
+    [[nodiscard]] util::Fraction calcGlobalPosition() const;
 
     /// @brief Compares the metric position of two endpoints.
     /// @param other The endpoint to compare.
@@ -150,7 +150,7 @@ public:
     ///         - negative (-1) means this is before @p other.
     ///         - 0 means the endpoints have the same metric position.
     ///         - positive (+1) means this is after @p other.
-    int compareMetricPosition(const EndPoint& other) const;
+    [[nodiscard]] int compareMetricPosition(const EndPoint& other) const;
 
     /// @brief Calculates the entry associated with the endpoint.
     /// @note This function does not check for an actual assignment. It simply returns an entry the endpoint would be associated
@@ -159,16 +159,19 @@ public:
     /// within 1 EVPU. No fallback search is performed. If false, return the closest entry in the measure,
     /// provided it lies within a quarter-beat of the endpoint.
     /// @return The entry if the endpoint is entry-attached or measure-attached within 1 Edu of an entry. Null if not.
-    EntryInfoPtr calcAssociatedEntry(bool findExact = false) const;
+    [[nodiscard]] EntryInfoPtr calcAssociatedEntry(bool findExact = false) const;
 
     /// @brief Gets the measure assignment for this endpoint or null if none.
-    MusxInstance<others::SmartShapeMeasureAssign> getMeasureAssignment() const;
+    [[nodiscard]] MusxInstance<others::SmartShapeMeasureAssign> getMeasureAssignment() const;
 
     /// @brief Gets the entry assignment for this endpoint or null if none. Always null for measure-assigned endpoints.
-    MusxInstance<details::SmartShapeEntryAssign> getEntryAssignment() const;
+    [[nodiscard]] MusxInstance<details::SmartShapeEntryAssign> getEntryAssignment() const;
 
     /// @brief Return true if this endpoint is properly assigned to its measure and to its entry (for entry-attached endpoints).
-    bool calcIsAssigned() const;
+    [[nodiscard]] bool calcIsAssigned() const;
+
+    /// @brief Return true if this endpoint is properly assigned to its measure and to its entry (for entry-attached endpoints).
+    [[nodiscard]] MusxInstance<others::StaffComposite> createCurrentStaff() const;
 
     static const xml::XmlElementArray<EndPoint>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
@@ -188,17 +191,17 @@ public:
     EntryConnectionType contextEntCnct{};   ///< The entry conntection type for this adjustment.
 
     /// @brief Returns the effective horizontal offset, taking into account whether the endpoint is active.
-    Evpu calcHorzOffset() const
+    [[nodiscard]] Evpu calcHorzOffset() const
     { return active ? horzOffset : 0; }
 
     /// @brief Returns the effective vertical offset, taking into account whether the endpoint is active.
-    Evpu calcVertOffset() const
+    [[nodiscard]] Evpu calcVertOffset() const
     { return active ? vertOffset : 0; }
 
     /// @brief Returns true if the two intances of @ref EndPointAdjustment have connection types that allow
     /// their vertical offsets to be compared.
     /// @param other The @ref EndPointAdjustment to compare.
-    bool calcHasVerticalEquivalentConnection(const EndPointAdjustment& other) const;
+    [[nodiscard]] bool calcHasVerticalEquivalentConnection(const EndPointAdjustment& other) const;
 
     static const xml::XmlElementArray<EndPointAdjustment>& xmlMappingArray();    ///< Required for musx::factory::FieldPopulator.
 };
@@ -378,6 +381,7 @@ public:
                                                     ///< This value has never been seen to be different than #startLyricNum unless endLyricNum is zero. (xml node is `<endLyricTag>`)
 
     /// @brief Returns true if this smart shape is a type of slur.
+    [[nodiscard]]
     bool calcIsSlur() const;
 
     /// @brief Calculates if the smart shape applies to the specified entry.
@@ -385,15 +389,18 @@ public:
     /// This function is most useful for shape types like ottavas and hairpins. It does
     /// not check layers or staves in between start and end staves, so it may be less useful for slurs.
     /// @param entryInfo The entry to check
+    [[nodiscard]]
     bool calcAppliesTo(const EntryInfoPtr& entryInfo) const;
 
     /// @brief Creates a music range for the SmartShape in staff EDUs. If the SmartShape spans staves with different
     /// EDUs, the start endpoint uses the start staff's EDUs and the endpoint uses the end staff's EDUs.
     /// @return The created music range.
+    [[nodiscard]]
     MusicRange createMusicRange() const;
 
     /// @brief Creates a music range for the SmartShape in global EDUs.
     /// @return The created music range.
+    [[nodiscard]]
     MusicRange createGlobalMusicRange() const;
 
     /// @brief Returns the tied-to note if this slur is being used as an arpeggiated tie on the specified entry.
@@ -402,13 +409,18 @@ public:
     /// - There must be no note that the start entry's note could be tied to.
     /// @param forStartEntry The entry to check.
     /// @return The NoteInfoPtr that is the tied-to note for this note, or null if none.
-    NoteInfoPtr calcArpeggiatedTieToNote(const EntryInfoPtr& forStartEntry) const;
+    [[nodiscard]] NoteInfoPtr calcArpeggiatedTieToNote(const EntryInfoPtr& forStartEntry) const;
 
     /// @brief Determines if a smart shape slur or curve has a fixed direction (up or down) or floats automatically.
     /// @note If the smart shape is not a slur or curve, the return value is `CurveContourDirection::Unspecified`.
     /// @return The curve contour direction for fixed-direction shapes; `CurveContourDirection::Unspecified` if floating/automatic.
     [[nodiscard]]
     CurveContourDirection calcContourDirection() const;
+
+    /// @brief Calculates a vertical placement classification for beat-attached smart shapes.
+    /// @returns Above if both endpoints are above the staff, Below if both endpoints are below the staff. Otherwise
+    /// it returns Float. If the smart shape is not beat-attached, it returns NotApplicable.
+    [[nodiscard]] VerticalPlacement calcVerticalPlacementForBeatAttached() const;
     
     /// @brief Returns true if the smart shape's #ShapeType uses a dashed line style.
     /// @return True when the shape type is dashed; false otherwise.
@@ -419,6 +431,7 @@ public:
     /// It is used by #NoteInfoPtr::calcPseudoTieInfoInternal, which imposes additional rules and checks.
     /// @param mode The pseudo tie mode to evaluate.
     /// @param forStartEntry The entry to check.
+    [[nodiscard]]
     bool calcIsPseudoTie(utils::PseudoTieMode mode, const EntryInfoPtr& forStartEntry) const;
 
     /// @brief Iterates all the entries that start within the staves and music range defined by the SmartShape. It iterates by staff and then measure.
@@ -556,6 +569,7 @@ public:
      * @brief Gets the raw text context for parsing the left-start, or nullptr if none.
      * @param forPartId The linked part to use for ^partname and ^totpages inserts.
     */
+    [[nodiscard]] 
     util::EnigmaParsingContext getLeftStartRawTextCtx(Cmper forPartId) const
     { return getRawTextCtx(forPartId, leftStartRawTextId); }
 
@@ -563,6 +577,7 @@ public:
      * @brief Gets the raw text context for parsing the left-continuation text, or nullptr if none.
      * @param forPartId The linked part to use for ^partname and ^totpages inserts.
     */
+    [[nodiscard]] 
     util::EnigmaParsingContext getLeftContRawTextCtx(Cmper forPartId) const
     { return getRawTextCtx(forPartId, leftContRawTextId); }
 
@@ -570,6 +585,7 @@ public:
      * @brief Gets the raw text context for parsing the right-end text, or nullptr if none.
      * @param forPartId The linked part to use for ^partname and ^totpages inserts.
     */
+    [[nodiscard]] 
     util::EnigmaParsingContext getRightEndRawTextCtx(Cmper forPartId) const
     { return getRawTextCtx(forPartId, rightEndRawTextId); }
 
@@ -577,6 +593,7 @@ public:
      * @brief Gets the raw text context for parsing the center-full text, or nullptr if none.
      * @param forPartId The linked part to use for ^partname and ^totpages inserts.
     */
+    [[nodiscard]] 
     util::EnigmaParsingContext getCenterFullRawTextCtx(Cmper forPartId) const
     { return getRawTextCtx(forPartId, centerFullRawTextId); }
 
@@ -584,6 +601,7 @@ public:
      * @brief Gets the raw text context for parsing the center-abbreviated text, or nullptr if none.
      * @param forPartId The linked part to use for ^partname and ^totpages inserts.
     */
+    [[nodiscard]] 
     util::EnigmaParsingContext getCenterAbbrRawTextCtx(Cmper forPartId) const
     { return getRawTextCtx(forPartId, centerAbbrRawTextId); }
 

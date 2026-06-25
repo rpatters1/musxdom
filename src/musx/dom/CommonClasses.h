@@ -32,6 +32,7 @@
 namespace music_theory {
 class Transposer;
 enum class DiatonicMode : int;
+struct Pitch;
 } // namespace music_theory
 
 namespace musx {
@@ -295,6 +296,17 @@ public:
     /// @param noteIndex note index, where C=0, D=1, E=3, F=3, G=4, A=5, B=6
     /// @param ctx Whether to calculate the alteration for concert or written pitch.
     int calcAlterationOnNote(unsigned noteIndex, KeyContext ctx ) const;
+
+    /**
+     * @brief Converts a key-relative pitch representation into a spelled pitch.
+     *
+     * @param displacement Diatonic displacement relative to the key tonic in the C4 octave.
+     * @param alteration Alteration relative to the key signature, in EDO divisions.
+     * @param ctx Whether to use concert or written key-signature values.
+     * @return The resulting note name, octave, and alteration relative to the natural note name.
+     */
+    [[nodiscard]]
+    music_theory::Pitch calcPitch(int displacement, int alteration, KeyContext ctx) const;
 
     /// @brief The octave displacement if this key is a transposed key.
     /// @return 0 for non-transposing keys or the octave displacement for transposed keys.
