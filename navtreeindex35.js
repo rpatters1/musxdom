@@ -1,5 +1,6 @@
 var NAVTREEINDEX35 =
 {
+"structmusx_1_1dom_1_1TimeSignature_1_1TimeSigComponent.html#af1f390f711bf9fd8c715655bb2cb9b31":[1,0,1,0,54,0,0],
 "structmusx_1_1dom_1_1TimeSignature_1_1TimeSigComponent.html#af1f390f711bf9fd8c715655bb2cb9b31":[2,0,1,0,55,0,0],
 "structmusx_1_1dom_1_1details_1_1ArticulationAssign_1_1SelectedSymbolContext.html":[1,0,1,0,0,1,0],
 "structmusx_1_1dom_1_1details_1_1ArticulationAssign_1_1SelectedSymbolContext.html":[2,0,1,0,0,1,0],
@@ -248,6 +249,5 @@ var NAVTREEINDEX35 =
 "structmusx_1_1util_1_1EnigmaStyles.html#a92285674ae24bafdeba952d44f95d20c":[2,0,1,2,6,4],
 "structmusx_1_1util_1_1StaffOriginOffsetRequest.html":[2,0,1,2,9],
 "structmusx_1_1util_1_1StaffOriginOffsetRequest.html#a3ccb1cdee21ea8ff15fcee311a521dd4":[2,0,1,2,9,3],
-"structmusx_1_1util_1_1StaffOriginOffsetRequest.html#a7da174e0f146b90771778e78bcd09277":[2,0,1,2,9,2],
-"structmusx_1_1util_1_1StaffOriginOffsetRequest.html#a970abbaef386e8255133abf2a89780b6":[2,0,1,2,9,1]
+"structmusx_1_1util_1_1StaffOriginOffsetRequest.html#a7da174e0f146b90771778e78bcd09277":[2,0,1,2,9,2]
 };

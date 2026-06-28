@@ -1,5 +1,6 @@
 var NAVTREEINDEX34 =
 {
+"structmusx_1_1dom_1_1NoteInfoPtr_1_1ArpeggiatedTieInfo.html#a9222dd9b342cd5b9b703bbb3055e3faa":[2,0,1,0,44,0,2],
 "structmusx_1_1dom_1_1NoteInfoPtr_1_1ArpeggiatedTieInfo.html#a9222dd9b342cd5b9b703bbb3055e3faa":[1,0,1,0,43,0,2],
 "structmusx_1_1dom_1_1NoteInfoPtr_1_1PseudoTieInfo.html":[1,0,1,0,43,1],
 "structmusx_1_1dom_1_1NoteInfoPtr_1_1PseudoTieInfo.html":[2,0,1,0,44,1],
@@ -248,6 +249,5 @@ var NAVTREEINDEX34 =
 "structmusx_1_1dom_1_1TimeSignature_1_1TimeSigComponent.html#a7f520211e7fe24c719f3d682ee248f0e":[2,0,1,0,55,0,1],
 "structmusx_1_1dom_1_1TimeSignature_1_1TimeSigComponent.html#a7f520211e7fe24c719f3d682ee248f0e":[1,0,1,0,54,0,1],
 "structmusx_1_1dom_1_1TimeSignature_1_1TimeSigComponent.html#ad6741949876b88d061a2fc0656eca76c":[1,0,1,0,54,0,2],
-"structmusx_1_1dom_1_1TimeSignature_1_1TimeSigComponent.html#ad6741949876b88d061a2fc0656eca76c":[2,0,1,0,55,0,2],
-"structmusx_1_1dom_1_1TimeSignature_1_1TimeSigComponent.html#af1f390f711bf9fd8c715655bb2cb9b31":[1,0,1,0,54,0,0]
+"structmusx_1_1dom_1_1TimeSignature_1_1TimeSigComponent.html#ad6741949876b88d061a2fc0656eca76c":[2,0,1,0,55,0,2]
 };

@@ -1040,6 +1040,7 @@ var namespacemusx_1_1dom =
     [ "EVPU_PER_PX", "namespacemusx_1_1dom.html#a29f7b9d057bc451a1135e77f8e621d5c", null ],
     [ "EVPU_PER_SPACE", "namespacemusx_1_1dom.html#a0fbe9bcf04cd6e9acfcb562fac1f6f25", null ],
     [ "EVPU_PER_STAFF_POSITION", "namespacemusx_1_1dom.html#a9dbed26c6a7eff6ed16daf6cebf1bde1", null ],
+    [ "EVPU_PER_STANDARD_STAFF", "namespacemusx_1_1dom.html#ab066e37fae4eb475a63a377b0fb7b6a5", null ],
     [ "is_pool_type_v", "namespacemusx_1_1dom.html#a6636eac92fb7f81ee37826d6de646e68", null ],
     [ "MAX_ALTERATIONS", "namespacemusx_1_1dom.html#a077fc40e1a52fb0aa59a78a138133ae5", null ],
     [ "MAX_CUE_PERCENTAGE", "namespacemusx_1_1dom.html#a31c92a4751443e096b5a99100828f6e0", null ],

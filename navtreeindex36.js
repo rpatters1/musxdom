@@ -1,5 +1,6 @@
 var NAVTREEINDEX36 =
 {
+"structmusx_1_1util_1_1StaffOriginOffsetRequest.html#a970abbaef386e8255133abf2a89780b6":[2,0,1,2,9,1],
 "structmusx_1_1util_1_1StaffOriginOffsetRequest.html#ad85edf71b97e8aee7e6987d620235a02":[2,0,1,2,9,0],
 "structmusx_1_1util_1_1StaffOriginOffsetResolverResult.html":[2,0,1,2,10],
 "structmusx_1_1util_1_1StaffOriginOffsetResolverResult.html#a356e80eda2c6b660551b1ca4d9ca3357":[2,0,1,2,10,0],

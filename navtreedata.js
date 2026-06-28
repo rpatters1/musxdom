@@ -88,12 +88,12 @@ var NAVTREEINDEX =
 "classmusx_1_1xml_1_1IXmlDocument.html#a9f8306733e03b3be63d1de4f98500b8d",
 "namespacemembers_o.html",
 "namespacemusx_1_1dom.html#aa75d341865ea5c3e1a8fcb735ea5e51b",
-"namespacemusx_1_1dom_1_1uuid.html#a2d63975c0052f4e53d0958bbeb5eddbb",
-"namespacemusx_1_1dom_1_1uuid.html#a7e215bed4fff8532b87e6f5b51629e1a",
-"namespacemusx_1_1dom_1_1uuid.html#accf33a57b9d2a31f03684cf4661cabb7",
+"namespacemusx_1_1dom_1_1uuid.html#a2d4d9bae092c4df1c44ebeae5ba0cd21",
+"namespacemusx_1_1dom_1_1uuid.html#a7dca38ed269b8402e4fb08fd8ca0a23b",
+"namespacemusx_1_1dom_1_1uuid.html#acc3fc780cc2d3e43626627dada9ec482",
 "structmusx_1_1dom_1_1NoteInfoPtr_1_1ArpeggiatedTieInfo.html#a9222dd9b342cd5b9b703bbb3055e3faa",
 "structmusx_1_1dom_1_1TimeSignature_1_1TimeSigComponent.html#af1f390f711bf9fd8c715655bb2cb9b31",
-"structmusx_1_1util_1_1StaffOriginOffsetRequest.html#ad85edf71b97e8aee7e6987d620235a02"
+"structmusx_1_1util_1_1StaffOriginOffsetRequest.html#a970abbaef386e8255133abf2a89780b6"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

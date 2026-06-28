@@ -1,5 +1,6 @@
 var NAVTREEINDEX33 =
 {
+"namespacemusx_1_1dom_1_1uuid.html#acc3fc780cc2d3e43626627dada9ec482":[1,0,1,0,5,48],
 "namespacemusx_1_1dom_1_1uuid.html#accf33a57b9d2a31f03684cf4661cabb7":[1,0,1,0,5,216],
 "namespacemusx_1_1dom_1_1uuid.html#accf7e1a89303e48658fd4e4ac382fd28":[1,0,1,0,5,60],
 "namespacemusx_1_1dom_1_1uuid.html#acdb4a22bab1a962e88c16dc891e0e14b":[1,0,1,0,5,491],
@@ -248,6 +249,5 @@ var NAVTREEINDEX33 =
 "structmusx_1_1dom_1_1NoteInfoPtr_1_1ArpeggiatedTieInfo.html#a12654c6494a3f08116515d3a61db44cd":[1,0,1,0,43,0,3],
 "structmusx_1_1dom_1_1NoteInfoPtr_1_1ArpeggiatedTieInfo.html#a12654c6494a3f08116515d3a61db44cd":[2,0,1,0,44,0,3],
 "structmusx_1_1dom_1_1NoteInfoPtr_1_1ArpeggiatedTieInfo.html#a68f383ffc9cebd912e4a6b8fa4ec7fe8":[1,0,1,0,43,0,1],
-"structmusx_1_1dom_1_1NoteInfoPtr_1_1ArpeggiatedTieInfo.html#a68f383ffc9cebd912e4a6b8fa4ec7fe8":[2,0,1,0,44,0,1],
-"structmusx_1_1dom_1_1NoteInfoPtr_1_1ArpeggiatedTieInfo.html#a9222dd9b342cd5b9b703bbb3055e3faa":[2,0,1,0,44,0,2]
+"structmusx_1_1dom_1_1NoteInfoPtr_1_1ArpeggiatedTieInfo.html#a68f383ffc9cebd912e4a6b8fa4ec7fe8":[2,0,1,0,44,0,1]
 };
