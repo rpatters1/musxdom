@@ -19,7 +19,7 @@ var searchData=
   ['dashoff_16',['dashOff',['../classmusx_1_1dom_1_1others_1_1SmartShapeCustomLine_1_1DashedParams.html#a0277e498a585d68f8fcaaa2f57379d82',1,'musx::dom::others::SmartShapeCustomLine::DashedParams']]],
   ['dashon_17',['dashOn',['../classmusx_1_1dom_1_1others_1_1SmartShapeCustomLine_1_1DashedParams.html#a4e7a3a706cfe2b5c694f1e63fa37cc51',1,'musx::dom::others::SmartShapeCustomLine::DashedParams']]],
   ['data_18',['data',['../structmusx_1_1dom_1_1ShapeDefInstruction_1_1Undocumented.html#a91275c8060f02b2004977d74387b8480',1,'musx::dom::ShapeDefInstruction::Undocumented::data'],['../structmusx_1_1dom_1_1ShapeDefInstruction_1_1Decoded.html#ae041ab69c922d8e201204087caa8f965',1,'musx::dom::ShapeDefInstruction::Decoded::data']]],
-  ['datanguliondrum_19',['DatangulionDrum',['../namespacemusx_1_1dom_1_1uuid.html#a5ada51019388a4e23fa85ac09ecb68ae',1,'musx::dom::uuid']]],
+  ['datanguliondrum_19',['DatanguLionDrum',['../namespacemusx_1_1dom_1_1uuid.html#adafccf152247f93c52eb546bc0dfe837',1,'musx::dom::uuid']]],
   ['dateformat_20',['dateFormat',['../classmusx_1_1dom_1_1options_1_1TextOptions.html#adeb68132c83937c4952fd6afaee5f34b',1,'musx::dom::options::TextOptions']]],
   ['dawuro_21',['Dawuro',['../namespacemusx_1_1dom_1_1uuid.html#aea8acc70313d55c98867289d25cf7223',1,'musx::dom::uuid']]],
   ['day_22',['day',['../structmusx_1_1dom_1_1header_1_1FileInfo.html#a9d00dfc66a829f980bbd8645f438582d',1,'musx::dom::header::FileInfo']]],
