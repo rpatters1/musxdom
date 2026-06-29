@@ -234,6 +234,66 @@ TEST(StaffTest, RestOffsets)
     EXPECT_EQ(staff->calcRestOffset(Edu(NoteType::Quarter)), -8);
 }
 
+TEST(StaffTest, BarlineOffsetsFromCenter)
+{
+    constexpr static musxtest::string_view barlineOffsetXml = R"xml(
+<?xml version="1.0" encoding="UTF-8"?>
+<finale>
+  <others>
+    <staffSpec cmper="1">
+      <staffLines>5</staffLines>
+      <lineSpace>24</lineSpace>
+      <instUuid>54422b22-4627-4100-abbf-064eedc15fe3</instUuid>
+    </staffSpec>
+    <staffSpec cmper="2">
+      <staffLines>5</staffLines>
+      <lineSpace>24</lineSpace>
+      <instUuid>54422b22-4627-4100-abbf-064eedc15fe3</instUuid>
+      <topBarlineOffset>-36</topBarlineOffset>
+      <botBarlineOffset>36</botBarlineOffset>
+    </staffSpec>
+    <staffSpec cmper="3">
+      <staffLines>1</staffLines>
+      <lineSpace>24</lineSpace>
+      <instUuid>54422b22-4627-4100-abbf-064eedc15fe3</instUuid>
+    </staffSpec>
+    <staffSpec cmper="4">
+      <staffLines>1</staffLines>
+      <lineSpace>24</lineSpace>
+      <instUuid>54422b22-4627-4100-abbf-064eedc15fe3</instUuid>
+      <topBarlineOffset>36</topBarlineOffset>
+      <botBarlineOffset>-36</botBarlineOffset>
+    </staffSpec>
+  </others>
+</finale>
+    )xml";
+
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(barlineOffsetXml);
+    auto others = doc->getOthers();
+    ASSERT_TRUE(others);
+
+    {
+        auto staff = others->get<others::Staff>(SCORE_PARTID, 1);
+        ASSERT_TRUE(staff);
+        EXPECT_EQ(staff->calcBarlineOffsetsFromCenter(), std::make_pair(Evpu(48), Evpu(-48)));
+    }
+    {
+        auto staff = others->get<others::Staff>(SCORE_PARTID, 2);
+        ASSERT_TRUE(staff);
+        EXPECT_EQ(staff->calcBarlineOffsetsFromCenter(), std::make_pair(Evpu(12), Evpu(-12)));
+    }
+    {
+        auto staff = others->get<others::Staff>(SCORE_PARTID, 3);
+        ASSERT_TRUE(staff);
+        EXPECT_EQ(staff->calcBarlineOffsetsFromCenter(), std::make_pair(Evpu(0), Evpu(0)));
+    }
+    {
+        auto staff = others->get<others::Staff>(SCORE_PARTID, 4);
+        ASSERT_TRUE(staff);
+        EXPECT_EQ(staff->calcBarlineOffsetsFromCenter(), std::make_pair(Evpu(36), Evpu(-36)));
+    }
+}
+
 TEST(StaffTest, AutoNumbering)
 {
     auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(staffXml);

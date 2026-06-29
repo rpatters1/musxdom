@@ -525,6 +525,17 @@ Evpu Staff::calcRestOffset(Edu edu) const
     }
 }
 
+std::pair<Evpu, Evpu> Staff::calcBarlineOffsetsFromCenter() const
+{
+    const Evpu topLine = calcTopLineEvpu();
+    const Evpu bottomLine = calcBottomLineEvpu();
+    const Evpu center = (topLine + bottomLine) / 2;
+    const Evpu topEndpoint = topLine + topBarlineOffset;
+    const Evpu bottomEndpoint = bottomLine + botBarlineOffset;
+
+    return {topEndpoint - center, bottomEndpoint - center};
+}
+
 int Staff::calcTopLinePosition() const
 {
     if (staffLines.has_value()) {

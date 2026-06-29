@@ -22,6 +22,7 @@
 #pragma once
 
 #include <type_traits>
+#include <utility>
 
 #include "musx/util/Logger.h"
 #include "musx/util/Fraction.h"
@@ -397,6 +398,13 @@ public:
 
     /// @brief Returns the configured rest staff-step offset for an Edu value.
     [[nodiscard]] Evpu calcRestOffset(Edu edu) const;
+
+    /// @brief Calculates barline endpoint offsets relative to the staff center.
+    /// @return A std::pair containing
+    ///     - the top barline endpoint relative to staff center, in EVPU
+    ///     - the bottom barline endpoint relative to staff center, in EVPU
+    /// @note This uses the staff-position sign convention: positive is above/up and negative is below/down.
+    [[nodiscard]] std::pair<Evpu, Evpu> calcBarlineOffsetsFromCenter() const;
 
     /// @brief Calculates the baseline zero position for this staff, relative to the reference line, before any displacements are applied.
     ///
