@@ -483,6 +483,71 @@ ClefIndex Staff::calcFirstClefIndex(const DocumentPtr& document, Cmper partId, S
     }
 }
 
+bool Staff::iterateClefChangesAtMeasure(
+    MeasCmper measureId,
+    bool forWrittenPitch,
+    std::function<bool(const ClefChange&)> iterator) const
+{
+    const auto document = getDocument();
+    const auto partId = getRequestedPartId();
+    const auto staffId = getCmper();
+
+    if (forWrittenPitch) {
+        const auto currentStaff = StaffComposite::createCurrent(document, partId, staffId, measureId, 0);
+        if (currentStaff && currentStaff->transposition && currentStaff->transposition->setToClef) {
+            return iterator(ClefChange{
+                currentStaff->transposedClef,
+                {},
+                ShowClefMode::WhenNeeded,
+                false,
+                0,
+                100,
+                0
+            });
+        }
+    }
+
+    const auto gfhold = document->getDetails()->get<details::GFrameHold>(partId, staffId, measureId);
+    if (!gfhold) {
+        return true;
+    }
+
+    if (gfhold->clefId.has_value()) {
+        return iterator(ClefChange{
+            gfhold->clefId.value(),
+            {},
+            gfhold->showClefMode,
+            gfhold->clefAfterBarline,
+            0,
+            gfhold->clefPercent,
+            0
+        });
+    }
+
+    const auto clefList = document->getOthers()->getArray<others::ClefList>(partId, gfhold->clefListId);
+    if (clefList.empty()) {
+        MUSX_INTEGRITY_ERROR("GFrameHold for staff " + std::to_string(gfhold->getStaff()) + " and measure "
+            + std::to_string(gfhold->getMeasure()) + " has non-existent clef list [" + std::to_string(gfhold->clefListId) + "]");
+    }
+    const auto gfholdContext = details::GFrameHoldContext(gfhold);
+    for (const auto& clefItem : clefList) {
+        const auto position = util::Fraction::fromEdu(clefItem->xEduPos);
+        const auto snappedPosition = gfholdContext.snapLocationToEntryOrKeep(position, /*findExact*/ true);
+        if (!iterator(ClefChange{
+                clefItem->clefIndex,
+                snappedPosition,
+                clefItem->clefMode,
+                clefItem->xEduPos == 0 && clefItem->afterBarline,
+                clefItem->yEvpuPos,
+                clefItem->percent,
+                clefItem->xEvpuOffset
+            })) {
+            return false;
+        }
+    }
+    return true;
+}
+
 int Staff::calcNumberOfStafflines() const
 {
     if (staffLines.has_value()) {

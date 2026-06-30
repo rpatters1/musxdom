@@ -21,6 +21,7 @@
  */
 #pragma once
 
+#include <functional>
 #include <type_traits>
 #include <utility>
 
@@ -389,6 +390,33 @@ public:
     /// @param partId the linked part to search
     /// @param staffCmper the staff cmper to search
     static ClefIndex calcFirstClefIndex(const DocumentPtr& document, Cmper partId, StaffCmper staffCmper);
+
+    /**
+     * @brief A clef change attached to a staff at a measure location.
+     *
+     * The position is expressed as a staff-level fraction of a whole note, matching Finale's clef-list
+     * positioning convention. Callers that need global score time should apply the staff's time stretch.
+     */
+    struct ClefChange
+    {
+        ClefIndex clefIndex{};                  ///< The Finale clef index.
+        util::Fraction position{};              ///< The staff-level position in the measure.
+        ShowClefMode showClefMode{};            ///< The Finale clef display mode.
+        bool afterBarline{};                    ///< True if a measure-start clef is placed after the barline.
+        Evpu yEvpuPos{};                        ///< Vertical EVPU adjustment for mid-measure clefs.
+        int percent{};                          ///< Clef scaling percent, where 100 is unscaled.
+        int xEvpuOffset{};                      ///< Horizontal EVPU adjustment for mid-measure clefs.
+    };
+
+    /// @brief Iterate clef changes in this staff at the given measure.
+    /// @param measureId The measure to inspect.
+    /// @param forWrittenPitch If true, use an active transposed clef as Finale's written clef.
+    /// @param iterator The callback function. Return false to stop iteration.
+    /// @return True if iteration completed. False if @p iterator returned false and exited early.
+    bool iterateClefChangesAtMeasure(
+        MeasCmper measureId,
+        bool forWrittenPitch,
+        std::function<bool(const ClefChange&)> iterator) const;
 
     /// @brief Calculates the number of staff lines on this staff.
     int calcNumberOfStafflines() const;

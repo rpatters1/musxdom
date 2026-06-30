@@ -24,6 +24,8 @@
 #include "musx/musx.h"
 #include "test_utils.h"
 
+#include <vector>
+
 using namespace musx::dom;
 
 constexpr static musxtest::string_view staffXml = R"xml(
@@ -232,6 +234,245 @@ TEST(StaffTest, RestOffsets)
     EXPECT_EQ(staff->calcRestOffset(Edu(NoteType::Whole) + Edu(NoteType::Half)), -6);
     EXPECT_EQ(staff->calcRestOffset(Edu(NoteType::Half)), -7);
     EXPECT_EQ(staff->calcRestOffset(Edu(NoteType::Quarter)), -8);
+}
+
+TEST(StaffTest, IterateClefChangesAtMeasureSingleClef)
+{
+    constexpr static musxtest::string_view xml = R"xml(
+<?xml version="1.0" encoding="UTF-8"?>
+<finale>
+  <others>
+    <measSpec cmper="1">
+      <width>600</width>
+    </measSpec>
+    <staffSpec cmper="1">
+      <staffLines>5</staffLines>
+      <lineSpace>24</lineSpace>
+      <instUuid>54422b22-4627-4100-abbf-064eedc15fe3</instUuid>
+      <defaultClef>0</defaultClef>
+    </staffSpec>
+  </others>
+  <details>
+    <gfhold cmper1="1" cmper2="1">
+      <clefID>3</clefID>
+      <clefMode>forced</clefMode>
+      <clefAfterBarline/>
+      <clefPercent>75</clefPercent>
+    </gfhold>
+  </details>
+</finale>
+)xml";
+
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(xml);
+    auto staff = doc->getOthers()->get<others::Staff>(SCORE_PARTID, 1);
+    ASSERT_TRUE(staff);
+
+    std::vector<others::Staff::ClefChange> changes;
+    EXPECT_TRUE(staff->iterateClefChangesAtMeasure(1, false, [&](const others::Staff::ClefChange& change) {
+        changes.push_back(change);
+        return true;
+    }));
+
+    ASSERT_EQ(changes.size(), 1);
+    EXPECT_EQ(changes[0].clefIndex, 3);
+    EXPECT_EQ(changes[0].position, musx::util::Fraction());
+    EXPECT_EQ(changes[0].showClefMode, ShowClefMode::Always);
+    EXPECT_TRUE(changes[0].afterBarline);
+    EXPECT_EQ(changes[0].yEvpuPos, 0);
+    EXPECT_EQ(changes[0].percent, 75);
+    EXPECT_EQ(changes[0].xEvpuOffset, 0);
+}
+
+TEST(StaffTest, IterateClefChangesAtMeasureClefList)
+{
+    constexpr static musxtest::string_view xml = R"xml(
+<?xml version="1.0" encoding="UTF-8"?>
+<finale>
+  <others>
+    <measSpec cmper="1">
+      <width>600</width>
+      <beats>4</beats>
+      <divbeat>1024</divbeat>
+    </measSpec>
+    <staffSpec cmper="1">
+      <staffLines>5</staffLines>
+      <lineSpace>24</lineSpace>
+      <instUuid>54422b22-4627-4100-abbf-064eedc15fe3</instUuid>
+      <defaultClef>0</defaultClef>
+    </staffSpec>
+    <frameSpec cmper="10" inci="0">
+      <startEntry>1001</startEntry>
+      <endEntry>1002</endEntry>
+    </frameSpec>
+    <clefEnum cmper="25" inci="0">
+      <clef>2</clef>
+      <xEduPos>0</xEduPos>
+      <yEvpuPos>0</yEvpuPos>
+      <percent>100</percent>
+      <xEvpuOffset>0</xEvpuOffset>
+      <clefMode>hidden</clefMode>
+      <afterBarline/>
+    </clefEnum>
+    <clefEnum cmper="25" inci="1">
+      <clef>4</clef>
+      <xEduPos>1025</xEduPos>
+      <yEvpuPos>-12</yEvpuPos>
+      <percent>80</percent>
+      <xEvpuOffset>7</xEvpuOffset>
+      <clefMode>forced</clefMode>
+      <afterBarline/>
+    </clefEnum>
+  </others>
+  <details>
+    <gfhold cmper1="1" cmper2="1">
+      <clefListID>25</clefListID>
+      <frame1>10</frame1>
+    </gfhold>
+  </details>
+  <entries>
+    <entry entnum="1001" prev="0" next="1002">
+      <dura>1024</dura>
+      <numNotes>0</numNotes>
+      <isValid/>
+      <floatRest/>
+    </entry>
+    <entry entnum="1002" prev="1001" next="0">
+      <dura>1024</dura>
+      <numNotes>0</numNotes>
+      <isValid/>
+      <floatRest/>
+    </entry>
+  </entries>
+</finale>
+)xml";
+
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
+    auto staff = doc->getOthers()->get<others::Staff>(SCORE_PARTID, 1);
+    ASSERT_TRUE(staff);
+
+    std::vector<others::Staff::ClefChange> changes;
+    EXPECT_TRUE(staff->iterateClefChangesAtMeasure(1, false, [&](const others::Staff::ClefChange& change) {
+        changes.push_back(change);
+        return true;
+    }));
+
+    ASSERT_EQ(changes.size(), 2);
+    EXPECT_EQ(changes[0].clefIndex, 2);
+    EXPECT_EQ(changes[0].position, musx::util::Fraction());
+    EXPECT_EQ(changes[0].showClefMode, ShowClefMode::Never);
+    EXPECT_TRUE(changes[0].afterBarline);
+    EXPECT_EQ(changes[0].percent, 100);
+
+    EXPECT_EQ(changes[1].clefIndex, 4);
+    EXPECT_EQ(changes[1].position, musx::util::Fraction::fromEdu(1024));
+    EXPECT_EQ(changes[1].showClefMode, ShowClefMode::Always);
+    EXPECT_FALSE(changes[1].afterBarline);
+    EXPECT_EQ(changes[1].yEvpuPos, -12);
+    EXPECT_EQ(changes[1].percent, 80);
+    EXPECT_EQ(changes[1].xEvpuOffset, 7);
+}
+
+TEST(StaffTest, IterateClefChangesAtMeasureStopsWhenCallbackReturnsFalse)
+{
+    constexpr static musxtest::string_view xml = R"xml(
+<?xml version="1.0" encoding="UTF-8"?>
+<finale>
+  <others>
+    <measSpec cmper="1">
+      <width>600</width>
+    </measSpec>
+    <staffSpec cmper="1">
+      <staffLines>5</staffLines>
+      <lineSpace>24</lineSpace>
+      <instUuid>54422b22-4627-4100-abbf-064eedc15fe3</instUuid>
+    </staffSpec>
+    <clefEnum cmper="25" inci="0">
+      <clef>2</clef>
+      <xEduPos>0</xEduPos>
+    </clefEnum>
+    <clefEnum cmper="25" inci="1">
+      <clef>4</clef>
+      <xEduPos>1024</xEduPos>
+    </clefEnum>
+  </others>
+  <details>
+    <gfhold cmper1="1" cmper2="1">
+      <clefListID>25</clefListID>
+    </gfhold>
+  </details>
+</finale>
+)xml";
+
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml);
+    auto staff = doc->getOthers()->get<others::Staff>(SCORE_PARTID, 1);
+    ASSERT_TRUE(staff);
+
+    int calls = 0;
+    EXPECT_FALSE(staff->iterateClefChangesAtMeasure(1, false, [&](const others::Staff::ClefChange&) {
+        calls++;
+        return false;
+    }));
+    EXPECT_EQ(calls, 1);
+}
+
+TEST(StaffTest, IterateClefChangesAtMeasureUsesWrittenPitchTransposedClef)
+{
+    constexpr static musxtest::string_view xml = R"xml(
+<?xml version="1.0" encoding="UTF-8"?>
+<finale>
+  <others>
+    <instUsed cmper="0" inci="0">
+      <inst>1</inst>
+      <trackType>staff</trackType>
+      <range>
+        <startMeas>1</startMeas>
+        <startEdu>0</startEdu>
+        <endMeas>32767</endMeas>
+        <endEdu>2147483647</endEdu>
+      </range>
+    </instUsed>
+    <measSpec cmper="1">
+      <width>600</width>
+    </measSpec>
+    <staffSpec cmper="1">
+      <staffLines>5</staffLines>
+      <lineSpace>24</lineSpace>
+      <instUuid>54422b22-4627-4100-abbf-064eedc15fe3</instUuid>
+      <defaultClef>0</defaultClef>
+      <transposedClef>5</transposedClef>
+      <transposition>
+        <setToClef/>
+        <keysig>
+          <interval>1</interval>
+          <adjust>0</adjust>
+        </keysig>
+      </transposition>
+    </staffSpec>
+  </others>
+  <details>
+    <gfhold cmper1="1" cmper2="1">
+      <clefID>3</clefID>
+    </gfhold>
+  </details>
+</finale>
+)xml";
+
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(xml);
+    auto staff = doc->getOthers()->get<others::Staff>(SCORE_PARTID, 1);
+    ASSERT_TRUE(staff);
+
+    std::vector<others::Staff::ClefChange> changes;
+    EXPECT_TRUE(staff->iterateClefChangesAtMeasure(1, true, [&](const others::Staff::ClefChange& change) {
+        changes.push_back(change);
+        return true;
+    }));
+
+    ASSERT_EQ(changes.size(), 1);
+    EXPECT_EQ(changes[0].clefIndex, 5);
+    EXPECT_EQ(changes[0].position, musx::util::Fraction());
+    EXPECT_EQ(changes[0].showClefMode, ShowClefMode::WhenNeeded);
+    EXPECT_FALSE(changes[0].afterBarline);
+    EXPECT_EQ(changes[0].percent, 100);
 }
 
 TEST(StaffTest, BarlineOffsetsFromCenter)
