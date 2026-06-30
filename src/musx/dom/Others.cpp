@@ -137,6 +137,18 @@ CategoryStaffListSet MarkingCategory::createStaffListSet() const
 // ***** Measure *****
 // *******************
 
+void Measure::checkMeasureCmperSequence(const DocumentPtr& document)
+{
+    const auto measures = document->getOthers()->getArray<Measure>(SCORE_PARTID);
+    for (size_t i = 0; i < measures.size(); i++) {
+        const auto expected = Cmper(i + 1);
+        if (measures[i]->getCmper() != expected) {
+            MUSX_INTEGRITY_ERROR("Expected <measSpec> elements to have cmper values sequentially starting with 1. Expected "
+                + std::to_string(expected) + " but found " + std::to_string(measures[i]->getCmper()) + ".");
+        }
+    }
+}
+
 MusxInstance<MeasureNumberRegion> Measure::findMeasureNumberRegion() const
 {
     auto regions = getDocument()->getOthers()->getArray<MeasureNumberRegion>(getRequestedPartId());

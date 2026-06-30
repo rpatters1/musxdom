@@ -225,6 +225,8 @@ MUSX_RESOLVER_ENTRY(MarkingCategory, {
     }
 });
 
+MUSX_RESOLVER_ENTRY(Measure, Measure::checkMeasureCmperSequence);
+
 MUSX_RESOLVER_ENTRY(MultiStaffGroupId, {
     [](const dom::DocumentPtr& document) {
         auto parts = document->getOthers()->getArray<PartDefinition>(SCORE_PARTID);

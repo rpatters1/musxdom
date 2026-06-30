@@ -107,6 +107,31 @@ constexpr static musxtest::string_view measureXml = R"xml(
 </finale>
 )xml";
 
+TEST(MeasureTest, IntegrityCheckRequiresSequentialScoreCmpers)
+{
+  constexpr static musxtest::string_view testXml = R"xml(
+<?xml version="1.0" encoding="UTF-8"?>
+<finale>
+  <others>
+    <measSpec cmper="1">
+      <width>600</width>
+    </measSpec>
+    <measSpec cmper="3">
+      <width>600</width>
+    </measSpec>
+    <measSpec cmper="3" part="1" shared="true">
+      <width>420</width>
+    </measSpec>
+  </others>
+</finale>
+)xml";
+
+    EXPECT_THROW(
+        auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(testXml),
+        musx::dom::integrity_error
+    );
+}
+
 TEST(MeasureTest, PopulateScore)
 {
     auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(measureXml);

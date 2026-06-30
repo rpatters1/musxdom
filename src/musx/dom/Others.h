@@ -1301,6 +1301,9 @@ public:
         return calcDuration() / calcDuration(forStaff);
     }
 
+    /// @brief Checks that score measure cmpers are sequential, starting with 1.
+    static void checkMeasureCmperSequence(const DocumentPtr& document);
+
     void integrityCheck(const std::shared_ptr<EnigmaBase>& ptrToThis) override
     {
         this->OthersBase::integrityCheck(ptrToThis);
