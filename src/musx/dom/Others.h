@@ -2801,6 +2801,11 @@ public:
     util::Fraction calcSystemScaling() const
     { return util::Fraction::fromPercent(ssysPercent) * util::Fraction(staffHeight, 4 * int(EFIX_PER_SPACE)); }
 
+    /// @brief Calculate individual staff scaling for a given staff.
+    /// @param staffId The staff to get the scaling for.
+    /// @return The staff scaling or 1/1 if the staff is not in the system.
+    util::Fraction calcStaffScaling(StaffCmper staffId) const;
+
     /// @brief Calculates the effective scaling on this system, taking into account page scaling.
     util::Fraction calcEffectiveScaling() const;
 

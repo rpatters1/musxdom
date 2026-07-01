@@ -1372,6 +1372,16 @@ util::Fraction StaffSystem::calcEffectiveScaling() const
     return result;
 }
 
+util::Fraction StaffSystem::calcStaffScaling(StaffCmper staffId) const
+{
+    if (hasStaffScaling) {
+        if (const auto staffSize = getDocument()->getDetails()->get<details::StaffSize>(getRequestedPartId(), getCmper(), staffId)) {
+            return util::Fraction::fromPercent(staffSize->staffPercent);
+        }
+    }
+    return 1;
+}
+
 std::pair<util::Fraction, util::Fraction> StaffSystem::calcMinMaxStaffSizes() const
 {
     if (hasStaffScaling) {
@@ -1379,8 +1389,7 @@ std::pair<util::Fraction, util::Fraction> StaffSystem::calcMinMaxStaffSizes() co
         if (!systemStaves.empty()) {
             std::pair<util::Fraction, util::Fraction> result = std::make_pair((std::numeric_limits<util::Fraction>::max)(), (std::numeric_limits<util::Fraction>::min)());
             for (const auto& systemStaff : systemStaves) {
-                auto staffSize = getDocument()->getDetails()->get<details::StaffSize>(getRequestedPartId(), getCmper(), systemStaff->getCmper());
-                const util::Fraction val = staffSize ? util::Fraction(staffSize->staffPercent / 100) : 1;
+                const auto val = calcStaffScaling(systemStaff->getCmper());
                 if (val < result.first) result.first = val;
                 if (val > result.second) result.second = val;
             }
@@ -1480,12 +1489,7 @@ util::Fraction StaffUsed::calcEffectiveScaling() const
     util::Fraction result(1);
     if (SystemCmper(getCmper()) > 0) { // if this is a page-view system
         if (auto system = getDocument()->getOthers()->get<StaffSystem>(getRequestedPartId(), getCmper())) {
-            result = system->calcEffectiveScaling();
-            if (system->hasStaffScaling) {
-                if (auto staffSize = getDocument()->getDetails()->get<details::StaffSize>(getRequestedPartId(), getCmper(), staffId)) {
-                    result *= staffSize->calcStaffScaling();
-                }
-            }
+            result = system->calcEffectiveScaling() * system->calcStaffScaling(staffId);
         }
     }
     return result;

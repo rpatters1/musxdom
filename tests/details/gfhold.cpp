@@ -159,7 +159,7 @@ constexpr static musxtest::string_view xmlNoClefs = R"xml(
       <startEntry>1</startEntry>
       <endEntry>2</endEntry>
     </frameSpec>
-    <measSpec cmper="915">
+    <measSpec cmper="1">
       <width>600</width>
       <keySig>
         <keyless/>
@@ -197,7 +197,7 @@ constexpr static musxtest::string_view xmlNoClefs = R"xml(
     </staffSpec>
   </others>
   <details>
-    <gfhold cmper1="3" cmper2="915">
+    <gfhold cmper1="3" cmper2="1">
       <clefID>0</clefID>
       <clefMode>forced</clefMode>
       <clefPercent>75</clefPercent>
@@ -213,7 +213,7 @@ constexpr static musxtest::string_view xmlNoClefs = R"xml(
     auto details = doc->getDetails();
     ASSERT_TRUE(details);
 
-    auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 3, 915);
+    auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 3, 1);
     ASSERT_TRUE(gfhold);
 
     EXPECT_THROW(
