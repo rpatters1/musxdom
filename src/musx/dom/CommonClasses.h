@@ -585,6 +585,15 @@ public:
         /// @brief Compute the sum of all units.
         Edu sumUnits() const
         { return std::accumulate(units.begin(), units.end(), Edu{}); }
+
+        /// @brief Normalizes a single time signature count and unit to a power-of-two unit.
+        /// @return The adjusted count and unit.
+        static std::pair<util::Fraction, Edu> normalizeCompoundUnit(util::Fraction count, Edu unit);
+
+        /// @brief Returns a copy of this component normalized for compound meter. For example, 2 dotted quarters becomes 6/8.
+        /// @return If this component is unambiguously compound meter, returns a normalized version. Otherwise, returns an exact copy
+        /// of this component.
+        TimeSigComponent normalizeCompound() const;
     };
 
     std::vector<TimeSigComponent> components;     ///< the components in the time signature

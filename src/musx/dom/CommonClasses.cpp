@@ -609,6 +609,37 @@ bool TimeSignature::isCutTime() const
     return components[0].counts[0] == 2 && components[0].units[0] == Edu(NoteType::Half);
 }
 
+std::pair<util::Fraction, Edu> TimeSignature::TimeSigComponent::normalizeCompoundUnit(util::Fraction count, Edu unit)
+{
+    if (!unit) {
+        throw std::logic_error("The beat size is zero.");
+    }
+
+    int power2 = 0;
+    Edu otherPrimes = unit;
+    while ((otherPrimes & 0x01) == 0) {
+        otherPrimes >>= 1;
+        power2++;
+    }
+
+    return { count * otherPrimes, Edu(1 << power2) };
+}
+
+TimeSignature::TimeSigComponent TimeSignature::TimeSigComponent::normalizeCompound() const
+{
+    if (units.size() != 1) {
+        return *this;
+    }
+
+    TimeSigComponent result = *this;
+    for (auto& count : result.counts) {
+        auto [normalizedCount, normalizedUnit] = normalizeCompoundUnit(count, units[0]);
+        count = normalizedCount;
+        result.units[0] = normalizedUnit;
+    }
+    return result;
+}
+
 std::pair<util::Fraction, NoteType> TimeSignature::calcSimplified() const
 {
     // Lambda to compute GCD of a vector
@@ -635,14 +666,8 @@ std::pair<util::Fraction, NoteType> TimeSignature::calcSimplified() const
         return acc + p.first * (p.second / finalUnit);
     });
 
-    int power2 = 0;
-    int otherPrimes = finalUnit;
-    while ((otherPrimes & 0x01) == 0) {
-        otherPrimes >>= 1;
-        power2++;
-    }
-
-    return { totalBeats * otherPrimes, NoteType(1 << power2) };
+    auto [count, unit] = TimeSigComponent::normalizeCompoundUnit(totalBeats, finalUnit);
+    return { count, NoteType(unit) };
 }
 
 util::Fraction TimeSignature::calcBeatValueAt(Edu eduPosition) const

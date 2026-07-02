@@ -538,6 +538,31 @@ TEST(MeasureTest, CompositeTimeSig2)
     }
 }
 
+TEST(MeasureTest, CompoundTimeSigFocused)
+{
+    {
+        auto [count, unit] = TimeSignature::TimeSigComponent::normalizeCompoundUnit(2, 1536);
+        EXPECT_EQ(count, 6);
+        EXPECT_EQ(unit, 512);
+    }
+    {
+        auto [count, unit] = TimeSignature::TimeSigComponent::normalizeCompoundUnit(2, 4608);
+        EXPECT_EQ(count, 18);
+        EXPECT_EQ(unit, 512);
+    }
+
+    TimeSignature::TimeSigComponent test;
+    test.counts.push_back(2);
+    test.counts.push_back(3);
+    test.units.push_back(1536);
+    auto normal = test.normalizeCompound();
+    ASSERT_EQ(normal.counts.size(), 2U);
+    ASSERT_EQ(normal.units.size(), 1U);
+    EXPECT_EQ(normal.counts[0], 6);
+    EXPECT_EQ(normal.counts[1], 9);
+    EXPECT_EQ(normal.units[0], 512);
+}
+
 TEST(MeasureTest, LegacyPickupSpacers)
 {
     std::vector<char> enigmaXml;
