@@ -29,6 +29,9 @@ namespace dom {
 /**
  * @namespace musx::dom::uuid
  * @brief Constants for all supported instruments (identified by UUID) in Finale.
+ *
+ * Any additions, removals, or renames in this namespace must be synchronized with
+ * the instrument family lookup table in Instrument.cpp.
  */
 namespace uuid {
 

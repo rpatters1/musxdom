@@ -1393,6 +1393,9 @@ public:
     unsigned graceNoteIndex{};              ///< 1-based index from leftmost grace note. 0 = main note.
     int rehearsalMarkOffset{};              ///< Restarts the rehearsal mark sequence at this 1-based sequence value. If this is zero, the sequence continues normally.
 
+    /// @brief Calculate if this expression and the source expression point to the same definition
+    [[nodiscard]] bool calcIsSameDefinition(const MeasureExprAssign& src) const;
+
     /// @brief Returns true if this shape expression is likely acting as a pseudo tie for the specified mode.
     [[nodiscard]] bool calcIsPseudoTie(utils::PseudoTieMode mode, const EntryInfoPtr& forStartEntry) const;
 

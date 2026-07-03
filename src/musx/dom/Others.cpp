@@ -310,6 +310,18 @@ util::Fraction Measure::calcDuration(const std::optional<StaffCmper>& forStaff) 
 // ***** MeasureExprAssign *****
 // *****************************
 
+bool MeasureExprAssign::calcIsSameDefinition(const MeasureExprAssign& src) const
+{
+    if (textExprId || src.textExprId) {
+        return textExprId && src.textExprId && textExprId == src.textExprId;
+    }
+    if (shapeExprId || src.shapeExprId) {
+        return shapeExprId && src.shapeExprId && shapeExprId == src.shapeExprId;
+    }
+
+    return false;
+}
+
 MusxInstance<TextExpressionDef> MeasureExprAssign::getTextExpression() const
 {
     if (!textExprId) {

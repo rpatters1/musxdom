@@ -23,6 +23,7 @@
 
 #include <cstddef>
 #include <map>
+#include <string_view>
 #include <unordered_map>
 #include <vector>
 
@@ -34,6 +35,29 @@ namespace dom {
 namespace others {
 class StaffComposite;
 }
+
+/// @brief Lightweight view of a Finale instrument UUID value.
+using InstrumentUuid = std::string_view;
+
+/// @brief Broad source-domain family for a Finale instrument UUID.
+enum class InstrumentFamily
+{
+    Unspecified,
+    Brass,
+    Keyboard,
+    Organ,
+    Percussion,
+    PitchedPercussion,
+    PluckedStrings,
+    Strings,
+    Voice,
+    Woodwinds,
+    Synth,
+    Other
+};
+
+/// @brief Returns the broad source-domain family for a Finale instrument UUID.
+InstrumentFamily instrumentFamilyFromUuid(InstrumentUuid uuid);
 
 /**
  * @class InstrumentInfo
