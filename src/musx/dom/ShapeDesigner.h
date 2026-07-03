@@ -50,6 +50,8 @@ enum class KnownShapeDefType
     SnapPizzicatoAbove,         ///< Snap pizzicato mark with vertical stem above the circle.
     SnapPizzicatoBelow,         ///< Snap pizzicato mark with vertical stem below the circle.
     BuzzPizzicato,              ///< Buzz pizzicato mark with horizontal stem.
+    FingernailPizzCurveUp,      ///< Fingernail pizzicato double curve arching upward.
+    FingernailPizzCurveDown,    ///< Fingernail pizzicato double curve arching downward.
 
     // Add more known types here
 };

@@ -79,12 +79,23 @@ constexpr dom::Evpu PIZZICATO_CIRCLE_SIZE_EVPU = 18;
 constexpr dom::Evpu PIZZICATO_CIRCLE_SIZE_TOLERANCE_EVPU = 3;
 constexpr dom::Evpu PIZZICATO_LINE_WIDTH_MIN_EFIX = dom::EFIX_PER_EVPU;
 constexpr dom::Evpu PIZZICATO_LINE_WIDTH_MAX_EFIX = 3 * dom::EFIX_PER_EVPU;
+constexpr dom::Evpu FINGERNAIL_PIZZ_MIN_WIDTH_EVPU = 240;
+constexpr dom::Evpu FINGERNAIL_PIZZ_MAX_WIDTH_EVPU = 330;
+constexpr dom::Evpu FINGERNAIL_PIZZ_MIN_BULGE_EVPU = 55;
+constexpr dom::Evpu FINGERNAIL_PIZZ_MAX_BULGE_EVPU = 150;
+constexpr dom::Evpu FINGERNAIL_PIZZ_ENDPOINT_TOLERANCE_EVPU = 2;
 
 enum class PizzicatoStemOrientation
 {
     Above,
     Below,
     Horizontal
+};
+
+enum class FingernailPizzDirection
+{
+    CurveUp,
+    CurveDown
 };
 
 static dom::Evpu16ths evpuTo16ths(dom::Evpu value)
@@ -648,6 +659,143 @@ static ShapeRecognitionCandidate makeCircleStemPizzicatoRecognizer(KnownShapeDef
     return candidate;
 }
 
+struct FingernailPizzContour
+{
+    dom::Evpu startX{};
+    dom::Evpu startY{};
+    dom::Evpu endX{};
+    dom::Evpu endY{};
+    dom::Evpu c1dy{};
+    dom::Evpu c2dy{};
+    dom::Evpu edy{};
+};
+
+struct FingernailPizzState
+{
+    std::optional<ShapeDefInstruction::StartObject> currentStart;
+    std::optional<ShapeDefInstruction::RMoveTo> currentMove;
+    bool sawValidLineWidth = false;
+    std::vector<FingernailPizzContour> contours;
+};
+
+static bool isFingernailPizzLineWidth(const ShapeDefInstruction::Decoded& inst)
+{
+    const auto* data = std::get_if<ShapeDefInstruction::LineWidth>(&inst.data);
+    return data && data->efix >= PIZZICATO_LINE_WIDTH_MIN_EFIX && data->efix <= PIZZICATO_LINE_WIDTH_MAX_EFIX;
+}
+
+static std::optional<FingernailPizzDirection> calcFingernailPizzDirection(const std::vector<FingernailPizzContour>& contours)
+{
+    if (contours.size() != 2) {
+        return std::nullopt;
+    }
+
+    std::optional<FingernailPizzDirection> direction;
+    for (const auto& contour : contours) {
+        const auto width = std::abs(contour.endX - contour.startX);
+        const auto endpointDeltaY = std::abs(contour.endY - contour.startY);
+        const auto bulge1 = contour.c1dy;
+        if (width < FINGERNAIL_PIZZ_MIN_WIDTH_EVPU || width > FINGERNAIL_PIZZ_MAX_WIDTH_EVPU ||
+            endpointDeltaY > FINGERNAIL_PIZZ_ENDPOINT_TOLERANCE_EVPU ||
+            std::abs(bulge1) < FINGERNAIL_PIZZ_MIN_BULGE_EVPU || std::abs(bulge1) > FINGERNAIL_PIZZ_MAX_BULGE_EVPU ||
+            std::abs(contour.c2dy) > FINGERNAIL_PIZZ_ENDPOINT_TOLERANCE_EVPU ||
+            std::abs(contour.edy + bulge1) > FINGERNAIL_PIZZ_ENDPOINT_TOLERANCE_EVPU) {
+            return std::nullopt;
+        }
+
+        const auto contourDirection = (bulge1 > 0) ? FingernailPizzDirection::CurveUp : FingernailPizzDirection::CurveDown;
+        if (!direction) {
+            direction = contourDirection;
+        } else if (*direction != contourDirection) {
+            return std::nullopt;
+        }
+    }
+
+    return direction;
+}
+
+static ShapeRecognitionCandidate makeFingernailPizzRecognizer(KnownShapeDefType type, FingernailPizzDirection expectedDirection)
+{
+    auto state = std::make_shared<FingernailPizzState>();
+
+    ShapeRecognitionCandidate candidate;
+    candidate.type = type;
+    candidate.consume = [state](const ShapeDefInstruction::Decoded& inst) -> ShapeRecognitionStepResult {
+        if (!inst.valid()) {
+            return ShapeRecognitionStepResult::Reject;
+        }
+
+        switch (inst.type) {
+        case ShapeDefInstructionType::StartObject: {
+            const auto* data = std::get_if<ShapeDefInstruction::StartObject>(&inst.data);
+            if (!data || state->currentStart) {
+                return ShapeRecognitionStepResult::Reject;
+            }
+            state->currentStart = *data;
+            state->currentMove.reset();
+            state->sawValidLineWidth = false;
+            return ShapeRecognitionStepResult::Continue;
+        }
+
+        case ShapeDefInstructionType::LineWidth:
+            if (!state->currentStart || !isFingernailPizzLineWidth(inst)) {
+                return ShapeRecognitionStepResult::Reject;
+            }
+            state->sawValidLineWidth = true;
+            return ShapeRecognitionStepResult::Continue;
+
+        case ShapeDefInstructionType::RMoveTo: {
+            const auto* data = std::get_if<ShapeDefInstruction::RMoveTo>(&inst.data);
+            if (!state->currentStart || state->currentMove || !data) {
+                return ShapeRecognitionStepResult::Reject;
+            }
+            state->currentMove = *data;
+            return ShapeRecognitionStepResult::Continue;
+        }
+
+        case ShapeDefInstructionType::SetDash:
+            return state->currentStart && isZeroSpaceDash(inst) ? ShapeRecognitionStepResult::Continue : ShapeRecognitionStepResult::Reject;
+
+        case ShapeDefInstructionType::CurveTo: {
+            const auto* data = std::get_if<ShapeDefInstruction::CurveTo>(&inst.data);
+            if (!state->currentStart || !state->currentMove || !state->sawValidLineWidth || !data) {
+                return ShapeRecognitionStepResult::Reject;
+            }
+            FingernailPizzContour contour;
+            contour.startX = state->currentStart->originX + state->currentMove->dx;
+            contour.startY = state->currentStart->originY + state->currentMove->dy;
+            contour.endX = contour.startX + data->c1dx + data->c2dx + data->edx;
+            contour.endY = contour.startY + data->c1dy + data->c2dy + data->edy;
+            contour.c1dy = data->c1dy;
+            contour.c2dy = data->c2dy;
+            contour.edy = data->edy;
+            state->contours.push_back(contour);
+            return ShapeRecognitionStepResult::Continue;
+        }
+
+        case ShapeDefInstructionType::Stroke:
+            if (!state->currentStart || !state->currentMove) {
+                return ShapeRecognitionStepResult::Reject;
+            }
+            state->currentStart.reset();
+            state->currentMove.reset();
+            state->sawValidLineWidth = false;
+            return ShapeRecognitionStepResult::Continue;
+
+        default:
+            return ShapeRecognitionStepResult::Reject;
+        }
+    };
+
+    candidate.finalize = [state, expectedDirection]() -> bool {
+        return !state->currentStart
+            && !state->currentMove
+            && calcFingernailPizzDirection(state->contours) == expectedDirection;
+    };
+
+    return candidate;
+}
+
 struct SlurTieContour
 {
     dom::Evpu16ths startX = 0;
@@ -847,6 +995,8 @@ static ShapeRecognitionCandidates createShapeRecognizers(const ShapeDef& shape)
     candidates.push_back(makeCircleStemPizzicatoRecognizer(KnownShapeDefType::SnapPizzicatoAbove, PizzicatoStemOrientation::Above));
     candidates.push_back(makeCircleStemPizzicatoRecognizer(KnownShapeDefType::SnapPizzicatoBelow, PizzicatoStemOrientation::Below));
     candidates.push_back(makeCircleStemPizzicatoRecognizer(KnownShapeDefType::BuzzPizzicato, PizzicatoStemOrientation::Horizontal));
+    candidates.push_back(makeFingernailPizzRecognizer(KnownShapeDefType::FingernailPizzCurveUp, FingernailPizzDirection::CurveUp));
+    candidates.push_back(makeFingernailPizzRecognizer(KnownShapeDefType::FingernailPizzCurveDown, FingernailPizzDirection::CurveDown));
     if (allowsShapeType({ShapeDef::ShapeType::Articulation, ShapeDef::ShapeType::Expression})) {
         candidates.push_back(makeSlurTieRecognizer(SlurTieDirection::CurveRight));
         candidates.push_back(makeSlurTieRecognizer(SlurTieDirection::CurveLeft));
