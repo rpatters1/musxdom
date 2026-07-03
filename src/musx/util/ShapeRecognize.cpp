@@ -71,6 +71,19 @@ constexpr int SLUR_TIE_BOUND_SAMPLE_COUNT = 32;
 constexpr double SLUR_TIE_VERTICAL_SCALE_THRESHOLD = 4.0;
 constexpr dom::Evpu RIGHT_HOOK_MAX_LENGTH_EVPU = 48;
 constexpr dom::Evpu RIGHT_HOOK_VERTICAL_TOLERANCE_EVPU = 1;
+constexpr dom::Evpu PIZZICATO_STEM_MIN_LENGTH_EVPU = 18;
+constexpr dom::Evpu PIZZICATO_STEM_AXIS_TOLERANCE_EVPU = 1;
+constexpr dom::Evpu PIZZICATO_CIRCLE_SIZE_EVPU = 18;
+constexpr dom::Evpu PIZZICATO_CIRCLE_SIZE_TOLERANCE_EVPU = 3;
+constexpr dom::Evpu PIZZICATO_LINE_WIDTH_MIN_EFIX = dom::EFIX_PER_EVPU;
+constexpr dom::Evpu PIZZICATO_LINE_WIDTH_MAX_EFIX = 3 * dom::EFIX_PER_EVPU;
+
+enum class PizzicatoStemOrientation
+{
+    Above,
+    Below,
+    Horizontal
+};
 
 static dom::Evpu16ths evpuTo16ths(dom::Evpu value)
 {
@@ -424,6 +437,157 @@ static ShapeRecognitionCandidate makeVerticalLineRightHooksRecognizer()
     return candidate;
 }
 
+struct CircleStemState
+{
+    std::vector<std::pair<dom::Evpu, dom::Evpu>> groupOrigins;
+    std::optional<ShapeDefInstruction::StartObject> currentStart;
+    ShapeDefInstruction::RMoveTo currentMove;
+    bool hasCurrentMove = false;
+    bool sawValidLineWidth = false;
+    std::optional<double> circleCenterY;
+    std::optional<std::pair<dom::Evpu, dom::Evpu>> stemDelta;
+    std::optional<double> stemMidY;
+};
+
+static bool isPizzicatoLineWidth(const ShapeDefInstruction::Decoded& inst)
+{
+    const auto* data = std::get_if<ShapeDefInstruction::LineWidth>(&inst.data);
+    return data && data->efix >= PIZZICATO_LINE_WIDTH_MIN_EFIX && data->efix <= PIZZICATO_LINE_WIDTH_MAX_EFIX;
+}
+
+static bool isPizzicatoCircleBounds(const ShapeDefInstruction::StartObject& startObject)
+{
+    const auto width = std::abs(startObject.right - startObject.left);
+    const auto height = std::abs(startObject.top - startObject.bottom);
+    return std::abs(width - PIZZICATO_CIRCLE_SIZE_EVPU) <= PIZZICATO_CIRCLE_SIZE_TOLERANCE_EVPU
+        && std::abs(height - PIZZICATO_CIRCLE_SIZE_EVPU) <= PIZZICATO_CIRCLE_SIZE_TOLERANCE_EVPU;
+}
+
+static std::optional<PizzicatoStemOrientation> calcCircleStemOrientation(const CircleStemState& state)
+{
+    if (!state.circleCenterY || !state.stemDelta || !state.stemMidY) {
+        return std::nullopt;
+    }
+
+    const auto [dx, dy] = *state.stemDelta;
+    if (std::abs(dx) >= PIZZICATO_STEM_MIN_LENGTH_EVPU && std::abs(dy) <= PIZZICATO_STEM_AXIS_TOLERANCE_EVPU) {
+        return PizzicatoStemOrientation::Horizontal;
+    }
+    if (std::abs(dy) >= PIZZICATO_STEM_MIN_LENGTH_EVPU && std::abs(dx) <= PIZZICATO_STEM_AXIS_TOLERANCE_EVPU) {
+        if (*state.stemMidY > *state.circleCenterY + PIZZICATO_STEM_AXIS_TOLERANCE_EVPU) {
+            return PizzicatoStemOrientation::Above;
+        }
+        if (*state.stemMidY < *state.circleCenterY - PIZZICATO_STEM_AXIS_TOLERANCE_EVPU) {
+            return PizzicatoStemOrientation::Below;
+        }
+    }
+    return std::nullopt;
+}
+
+static ShapeRecognitionCandidate makeCircleStemPizzicatoRecognizer(KnownShapeDefType type, PizzicatoStemOrientation expectedOrientation)
+{
+    auto state = std::make_shared<CircleStemState>();
+
+    ShapeRecognitionCandidate candidate;
+    candidate.type = type;
+    candidate.consume = [state](const ShapeDefInstruction::Decoded& inst) -> ShapeRecognitionStepResult {
+        if (!inst.valid()) {
+            return ShapeRecognitionStepResult::Reject;
+        }
+
+        switch (inst.type) {
+        case ShapeDefInstructionType::StartGroup: {
+            const auto* data = std::get_if<ShapeDefInstruction::StartGroup>(&inst.data);
+            if (!data) {
+                return ShapeRecognitionStepResult::Reject;
+            }
+            state->groupOrigins.emplace_back(data->originX, data->originY);
+            return ShapeRecognitionStepResult::Continue;
+        }
+
+        case ShapeDefInstructionType::EndGroup:
+            if (state->groupOrigins.empty() || state->currentStart) {
+                return ShapeRecognitionStepResult::Reject;
+            }
+            state->groupOrigins.pop_back();
+            return ShapeRecognitionStepResult::Continue;
+
+        case ShapeDefInstructionType::StartObject: {
+            const auto* data = std::get_if<ShapeDefInstruction::StartObject>(&inst.data);
+            if (!data || state->currentStart) {
+                return ShapeRecognitionStepResult::Reject;
+            }
+            state->currentStart = *data;
+            state->currentMove = {};
+            state->hasCurrentMove = false;
+            state->sawValidLineWidth = false;
+            return ShapeRecognitionStepResult::Continue;
+        }
+
+        case ShapeDefInstructionType::LineWidth:
+            if (!state->currentStart || !isPizzicatoLineWidth(inst)) {
+                return ShapeRecognitionStepResult::Reject;
+            }
+            state->sawValidLineWidth = true;
+            return ShapeRecognitionStepResult::Continue;
+
+        case ShapeDefInstructionType::SetDash:
+            return state->currentStart && isZeroSpaceDash(inst) ? ShapeRecognitionStepResult::Continue : ShapeRecognitionStepResult::Reject;
+
+        case ShapeDefInstructionType::RMoveTo: {
+            const auto* data = std::get_if<ShapeDefInstruction::RMoveTo>(&inst.data);
+            if (!state->currentStart || !data || state->hasCurrentMove) {
+                return ShapeRecognitionStepResult::Reject;
+            }
+            state->currentMove = *data;
+            state->hasCurrentMove = true;
+            return ShapeRecognitionStepResult::Continue;
+        }
+
+        case ShapeDefInstructionType::Ellipse: {
+            const auto* data = std::get_if<ShapeDefInstruction::Ellipse>(&inst.data);
+            if (!state->currentStart || !state->sawValidLineWidth || !data || state->circleCenterY ||
+                !isPizzicatoCircleBounds(*state->currentStart)) {
+                return ShapeRecognitionStepResult::Reject;
+            }
+            state->circleCenterY = (static_cast<double>(state->currentStart->top) + static_cast<double>(state->currentStart->bottom)) / 2.0;
+            return ShapeRecognitionStepResult::Continue;
+        }
+
+        case ShapeDefInstructionType::RLineTo: {
+            const auto* data = std::get_if<ShapeDefInstruction::RLineTo>(&inst.data);
+            if (!state->currentStart || !state->sawValidLineWidth || !data || state->stemDelta) {
+                return ShapeRecognitionStepResult::Reject;
+            }
+            state->stemDelta = {data->dx, data->dy};
+            state->stemMidY = (static_cast<double>(state->currentStart->top) + static_cast<double>(state->currentStart->bottom)) / 2.0;
+            return ShapeRecognitionStepResult::Continue;
+        }
+
+        case ShapeDefInstructionType::Stroke:
+            if (!state->currentStart) {
+                return ShapeRecognitionStepResult::Reject;
+            }
+            state->currentStart.reset();
+            state->currentMove = {};
+            state->hasCurrentMove = false;
+            state->sawValidLineWidth = false;
+            return ShapeRecognitionStepResult::Continue;
+
+        default:
+            return ShapeRecognitionStepResult::Reject;
+        }
+    };
+
+    candidate.finalize = [state, expectedOrientation]() -> bool {
+        return state->groupOrigins.empty()
+            && !state->currentStart
+            && calcCircleStemOrientation(*state) == expectedOrientation;
+    };
+
+    return candidate;
+}
+
 struct SlurTieContour
 {
     dom::Evpu16ths startX = 0;
@@ -620,6 +784,9 @@ static ShapeRecognitionCandidates createShapeRecognizers(const ShapeDef& shape)
     if (allowsShapeType({ShapeDef::ShapeType::Articulation})) {
         candidates.push_back(makeTenutoRecognizer());
     }
+    candidates.push_back(makeCircleStemPizzicatoRecognizer(KnownShapeDefType::SnapPizzicatoAbove, PizzicatoStemOrientation::Above));
+    candidates.push_back(makeCircleStemPizzicatoRecognizer(KnownShapeDefType::SnapPizzicatoBelow, PizzicatoStemOrientation::Below));
+    candidates.push_back(makeCircleStemPizzicatoRecognizer(KnownShapeDefType::BuzzPizzicato, PizzicatoStemOrientation::Horizontal));
     if (allowsShapeType({ShapeDef::ShapeType::Articulation, ShapeDef::ShapeType::Expression})) {
         candidates.push_back(makeSlurTieRecognizer(SlurTieDirection::CurveRight));
         candidates.push_back(makeSlurTieRecognizer(SlurTieDirection::CurveLeft));

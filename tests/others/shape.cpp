@@ -333,11 +333,18 @@ TEST(ShapeDefTest, RecognizeOnlyExpectedShapesInPattersonDefault)
     ASSERT_TRUE(doc);
 
     const std::vector<std::pair<Cmper, KnownShapeDefType>> expectedRecognized = {
+        {10, KnownShapeDefType::SnapPizzicatoAbove},
+        {11, KnownShapeDefType::SnapPizzicatoBelow},
+        {12, KnownShapeDefType::BuzzPizzicato},
         {91, KnownShapeDefType::PedalArrowheadDown},
         {92, KnownShapeDefType::PedalArrowheadUp},
         {93, KnownShapeDefType::PedalArrowheadShortUpDownLongUp},
         {94, KnownShapeDefType::PedalArrowheadLongUpDownShortUp},
         {95, KnownShapeDefType::Blank},
+        {96, KnownShapeDefType::SnapPizzicatoAbove},
+        {110, KnownShapeDefType::BuzzPizzicato},
+        {111, KnownShapeDefType::SnapPizzicatoBelow},
+        {112, KnownShapeDefType::SnapPizzicatoAbove},
         {120, KnownShapeDefType::PedalArrowheadDown},
         {121, KnownShapeDefType::PedalArrowheadUp},
         {122, KnownShapeDefType::PedalArrowheadLongUpDownShortUp},
@@ -358,6 +365,27 @@ TEST(ShapeDefTest, RecognizeOnlyExpectedShapesInPattersonDefault)
             : KnownShapeDefType::Unrecognized;
         EXPECT_EQ(shape->recognize(), expectedType)
             << "unexpected recognition result for PattersonDefault shapeDef " << shape->getCmper();
+    }
+}
+
+TEST(ShapeDefTest, RecognizePattersonDefaultPizzicatoShapes)
+{
+    std::vector<char> enigmaXml;
+    musxtest::readFile(musxtest::getInputPath() / "reference" / "PattersonDefault.enigmaxml", enigmaXml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(enigmaXml);
+    ASSERT_TRUE(doc);
+
+    const std::vector<std::pair<Cmper, KnownShapeDefType>> expectedRecognized = {
+        {10, KnownShapeDefType::SnapPizzicatoAbove},
+        {11, KnownShapeDefType::SnapPizzicatoBelow},
+        {12, KnownShapeDefType::BuzzPizzicato},
+    };
+
+    for (const auto& [cmper, expectedType] : expectedRecognized) {
+        const auto shape = doc->getOthers()->get<others::ShapeDef>(SCORE_PARTID, cmper);
+        ASSERT_TRUE(shape) << "missing PattersonDefault shapeDef " << cmper;
+        EXPECT_EQ(shape->recognize(), expectedType)
+            << "recognized shape type is not the expected value for PattersonDefault shapeDef " << cmper;
     }
 }
 
