@@ -71,8 +71,10 @@ constexpr int SLUR_TIE_BOUND_SAMPLE_COUNT = 32;
 constexpr double SLUR_TIE_VERTICAL_SCALE_THRESHOLD = 4.0;
 constexpr dom::Evpu RIGHT_HOOK_MAX_LENGTH_EVPU = 48;
 constexpr dom::Evpu RIGHT_HOOK_VERTICAL_TOLERANCE_EVPU = 1;
-constexpr dom::Evpu PIZZICATO_STEM_MIN_LENGTH_EVPU = 18;
+constexpr dom::Evpu PIZZICATO_STEM_MIN_LENGTH_EVPU = 15;
+constexpr dom::Evpu PIZZICATO_STEM_MAX_LENGTH_EVPU = 48;
 constexpr dom::Evpu PIZZICATO_STEM_AXIS_TOLERANCE_EVPU = 1;
+constexpr dom::Evpu PIZZICATO_STEM_CENTER_TOLERANCE_EVPU = 2;
 constexpr dom::Evpu PIZZICATO_CIRCLE_SIZE_EVPU = 18;
 constexpr dom::Evpu PIZZICATO_CIRCLE_SIZE_TOLERANCE_EVPU = 3;
 constexpr dom::Evpu PIZZICATO_LINE_WIDTH_MIN_EFIX = dom::EFIX_PER_EVPU;
@@ -439,12 +441,23 @@ static ShapeRecognitionCandidate makeVerticalLineRightHooksRecognizer()
 
 struct CircleStemState
 {
+    struct CircleBounds {
+        double left{};
+        double right{};
+        double bottom{};
+        double top{};
+        double centerX{};
+        double centerY{};
+    };
+
     std::vector<std::pair<dom::Evpu, dom::Evpu>> groupOrigins;
     std::optional<ShapeDefInstruction::StartObject> currentStart;
     ShapeDefInstruction::RMoveTo currentMove;
     bool hasCurrentMove = false;
     bool sawValidLineWidth = false;
-    std::optional<double> circleCenterY;
+    std::optional<CircleBounds> circleBounds;
+    std::optional<std::pair<double, double>> stemStart;
+    std::optional<std::pair<double, double>> stemEnd;
     std::optional<std::pair<dom::Evpu, dom::Evpu>> stemDelta;
     std::optional<double> stemMidY;
 };
@@ -463,21 +476,57 @@ static bool isPizzicatoCircleBounds(const ShapeDefInstruction::StartObject& star
         && std::abs(height - PIZZICATO_CIRCLE_SIZE_EVPU) <= PIZZICATO_CIRCLE_SIZE_TOLERANCE_EVPU;
 }
 
+static CircleStemState::CircleBounds calcPizzicatoCircleBounds(const ShapeDefInstruction::StartObject& startObject)
+{
+    CircleStemState::CircleBounds result;
+    result.left = (std::min)(static_cast<double>(startObject.left), static_cast<double>(startObject.right));
+    result.right = (std::max)(static_cast<double>(startObject.left), static_cast<double>(startObject.right));
+    result.bottom = (std::min)(static_cast<double>(startObject.bottom), static_cast<double>(startObject.top));
+    result.top = (std::max)(static_cast<double>(startObject.bottom), static_cast<double>(startObject.top));
+    result.centerX = (result.left + result.right) / 2.0;
+    result.centerY = (result.bottom + result.top) / 2.0;
+    return result;
+}
+
+static bool isPointInPizzicatoCircleBounds(const CircleStemState::CircleBounds& bounds, double x, double y)
+{
+    return x >= bounds.left - PIZZICATO_STEM_AXIS_TOLERANCE_EVPU
+        && x <= bounds.right + PIZZICATO_STEM_AXIS_TOLERANCE_EVPU
+        && y >= bounds.bottom - PIZZICATO_STEM_AXIS_TOLERANCE_EVPU
+        && y <= bounds.top + PIZZICATO_STEM_AXIS_TOLERANCE_EVPU;
+}
+
 static std::optional<PizzicatoStemOrientation> calcCircleStemOrientation(const CircleStemState& state)
 {
-    if (!state.circleCenterY || !state.stemDelta || !state.stemMidY) {
+    if (!state.circleBounds || !state.stemStart || !state.stemEnd || !state.stemDelta || !state.stemMidY) {
         return std::nullopt;
     }
 
+    const auto& bounds = *state.circleBounds;
+    const auto [startX, startY] = *state.stemStart;
+    const auto [endX, endY] = *state.stemEnd;
+    const bool startInside = isPointInPizzicatoCircleBounds(bounds, startX, startY);
+    const bool endInside = isPointInPizzicatoCircleBounds(bounds, endX, endY);
+    if (startInside == endInside) {
+        return std::nullopt;
+    }
+
+    const double insideX = startInside ? startX : endX;
+    const double insideY = startInside ? startY : endY;
+
     const auto [dx, dy] = *state.stemDelta;
-    if (std::abs(dx) >= PIZZICATO_STEM_MIN_LENGTH_EVPU && std::abs(dy) <= PIZZICATO_STEM_AXIS_TOLERANCE_EVPU) {
+    if (std::abs(dx) >= PIZZICATO_STEM_MIN_LENGTH_EVPU && std::abs(dx) <= PIZZICATO_STEM_MAX_LENGTH_EVPU
+        && std::abs(dy) <= PIZZICATO_STEM_AXIS_TOLERANCE_EVPU
+        && std::abs(insideY - bounds.centerY) <= PIZZICATO_STEM_CENTER_TOLERANCE_EVPU) {
         return PizzicatoStemOrientation::Horizontal;
     }
-    if (std::abs(dy) >= PIZZICATO_STEM_MIN_LENGTH_EVPU && std::abs(dx) <= PIZZICATO_STEM_AXIS_TOLERANCE_EVPU) {
-        if (*state.stemMidY > *state.circleCenterY + PIZZICATO_STEM_AXIS_TOLERANCE_EVPU) {
+    if (std::abs(dy) >= PIZZICATO_STEM_MIN_LENGTH_EVPU && std::abs(dy) <= PIZZICATO_STEM_MAX_LENGTH_EVPU
+        && std::abs(dx) <= PIZZICATO_STEM_AXIS_TOLERANCE_EVPU
+        && std::abs(insideX - bounds.centerX) <= PIZZICATO_STEM_CENTER_TOLERANCE_EVPU) {
+        if (*state.stemMidY > bounds.centerY + PIZZICATO_STEM_AXIS_TOLERANCE_EVPU) {
             return PizzicatoStemOrientation::Above;
         }
-        if (*state.stemMidY < *state.circleCenterY - PIZZICATO_STEM_AXIS_TOLERANCE_EVPU) {
+        if (*state.stemMidY < bounds.centerY - PIZZICATO_STEM_AXIS_TOLERANCE_EVPU) {
             return PizzicatoStemOrientation::Below;
         }
     }
@@ -546,17 +595,28 @@ static ShapeRecognitionCandidate makeCircleStemPizzicatoRecognizer(KnownShapeDef
 
         case ShapeDefInstructionType::Ellipse: {
             const auto* data = std::get_if<ShapeDefInstruction::Ellipse>(&inst.data);
-            if (!state->currentStart || !state->sawValidLineWidth || !data || state->circleCenterY ||
+            if (!state->currentStart || !state->sawValidLineWidth || !data || state->circleBounds ||
                 !isPizzicatoCircleBounds(*state->currentStart)) {
                 return ShapeRecognitionStepResult::Reject;
             }
-            state->circleCenterY = (static_cast<double>(state->currentStart->top) + static_cast<double>(state->currentStart->bottom)) / 2.0;
+            state->circleBounds = calcPizzicatoCircleBounds(*state->currentStart);
             return ShapeRecognitionStepResult::Continue;
         }
 
         case ShapeDefInstructionType::RLineTo: {
             const auto* data = std::get_if<ShapeDefInstruction::RLineTo>(&inst.data);
             if (!state->currentStart || !state->sawValidLineWidth || !data || state->stemDelta) {
+                return ShapeRecognitionStepResult::Reject;
+            }
+            if (std::abs(data->dx) <= PIZZICATO_STEM_AXIS_TOLERANCE_EVPU) {
+                const double lineX = (static_cast<double>(state->currentStart->left) + static_cast<double>(state->currentStart->right)) / 2.0;
+                state->stemStart = {lineX, static_cast<double>(state->currentStart->bottom)};
+                state->stemEnd = {lineX, static_cast<double>(state->currentStart->top)};
+            } else if (std::abs(data->dy) <= PIZZICATO_STEM_AXIS_TOLERANCE_EVPU) {
+                const double lineY = (static_cast<double>(state->currentStart->bottom) + static_cast<double>(state->currentStart->top)) / 2.0;
+                state->stemStart = {static_cast<double>(state->currentStart->left), lineY};
+                state->stemEnd = {static_cast<double>(state->currentStart->right), lineY};
+            } else {
                 return ShapeRecognitionStepResult::Reject;
             }
             state->stemDelta = {data->dx, data->dy};
