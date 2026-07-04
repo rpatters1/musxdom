@@ -78,6 +78,13 @@ struct EnigmaStyles
     int tracking{};                         ///< inter-character tracking in EMs (1/1000 font size)
 };
 
+/// @brief A text chunk with the Enigma styles active for that chunk.
+struct EnigmaTextChunk
+{
+    std::string text;       ///< the chunk of text
+    EnigmaStyles styles;    ///< the styles active for the chunk
+};
+
 class EnigmaParsingContext;
 
 /**
@@ -399,6 +406,9 @@ public:
     /** @brief Trims all enigma tags from an enigma string, leaving just the plain text. */
     static std::string trimTags(const std::string& input);
 
+    /// @brief Concatenate the plain text from collected Enigma text chunks.
+    static std::string plainTextFromChunks(const std::vector<EnigmaTextChunk>& chunks);
+
 private:
     static bool parseEnigmaTextImpl(const std::shared_ptr<dom::Document>& document, dom::Cmper forPartId, const std::string& rawText,
         const TextChunkCallback& onText, const TextInsertCallback& onInsert,
@@ -472,6 +482,20 @@ public:
     {
         return parseEnigmaText(onText, EnigmaString::defaultInsertsCallback, options);
     }
+
+    /// @brief Collect the Enigma text into styled chunks with insert handling.
+    /// @param onInsert The handler for insert conversions.
+    /// @param options The options for the parsing session.
+    /// @return The collected chunks emitted by #parseEnigmaText.
+    std::vector<EnigmaTextChunk> collectEnigmaTextChunks(
+        const EnigmaString::TextInsertCallback& onInsert,
+        const EnigmaString::EnigmaParsingOptions& options = {}) const;
+
+    /// @brief Collect the Enigma text into styled chunks with default insert handling.
+    /// @param options The options for the parsing session.
+    /// @return The collected chunks emitted by #parseEnigmaText.
+    std::vector<EnigmaTextChunk> collectEnigmaTextChunks(
+        const EnigmaString::EnigmaParsingOptions& options = {}) const;
 
     /**
      * @brief Returns a shared pointer to a FontInfo instance that reflects

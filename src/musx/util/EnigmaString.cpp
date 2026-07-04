@@ -591,6 +591,15 @@ std::string EnigmaString::trimTags(const std::string& input)
     return output;
 }
 
+std::string EnigmaString::plainTextFromChunks(const std::vector<EnigmaTextChunk>& chunks)
+{
+    std::string result;
+    for (const auto& chunk : chunks) {
+        result += chunk.text;
+    }
+    return result;
+}
+
 bool EnigmaParsingContext::parseEnigmaText(const util::EnigmaString::TextChunkCallback& onText, const util::EnigmaString::TextInsertCallback& onInsert,
     const util::EnigmaString::EnigmaParsingOptions& options) const
 {
@@ -612,6 +621,24 @@ bool EnigmaParsingContext::parseEnigmaText(const util::EnigmaString::TextChunkCa
         }
         return std::nullopt;
     }, options, this);
+}
+
+std::vector<EnigmaTextChunk> EnigmaParsingContext::collectEnigmaTextChunks(
+    const util::EnigmaString::TextInsertCallback& onInsert,
+    const util::EnigmaString::EnigmaParsingOptions& options) const
+{
+    std::vector<EnigmaTextChunk> result;
+    parseEnigmaText([&](const std::string& text, const musx::util::EnigmaStyles& styles) -> bool {
+        result.push_back({ text, styles.createDeepCopy() });
+        return true;
+    }, onInsert, options);
+    return result;
+}
+
+std::vector<EnigmaTextChunk> EnigmaParsingContext::collectEnigmaTextChunks(
+    const util::EnigmaString::EnigmaParsingOptions& options) const
+{
+    return collectEnigmaTextChunks(util::EnigmaString::defaultInsertsCallback, options);
 }
 
 std::string EnigmaParsingContext::getText(bool trimTags, util::EnigmaString::AccidentalStyle accidentalStyle,
