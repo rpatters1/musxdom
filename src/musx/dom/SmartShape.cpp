@@ -141,12 +141,24 @@ MusxInstance<others::StaffComposite> smartshape::EndPoint::createCurrentStaff() 
         staffId, measId, calcPosition().calcEduDuration());
 }
 
+bool smartshape::EndPoint::calcIsValid() const
+{
+    if (entryNumber) {
+        const auto entryInfo = calcAssociatedEntry();
+        if (!entryInfo) return false;
+        if (entryInfo.getMeasure() != measId || entryInfo.getStaff() != staffId) {
+            return false;
+        }
+    }
+    return getDocument()->getOthers()->get<others::Measure>(SCORE_PARTID, measId) != nullptr;
+}
+
 util::Fraction smartshape::EndPoint::calcPosition() const
 {
     if (!entryNumber) {
         return util::Fraction::fromEdu(eduPosition);
     }
-    if (auto entryInfo = calcAssociatedEntry()) {
+    if (const auto entryInfo = calcAssociatedEntry()) {
         return entryInfo->elapsedDuration;
     }
     return 0;
@@ -314,6 +326,11 @@ bool others::SmartShape::iterateEntries(std::function<bool(const EntryInfoPtr&)>
 NoteInfoPtr others::SmartShape::calcArpeggiatedTieToNote(const EntryInfoPtr& forStartEntry) const
 {
     return musx::util::calcSmartShapeArpeggiatedTieToNote(*this, forStartEntry);
+}
+
+bool others::SmartShape::calcIsValid() const
+{
+    return startTermSeg->endPoint->calcIsValid() && endTermSeg->endPoint->calcIsValid();
 }
 
 bool others::SmartShape::calcIsSlur() const
