@@ -509,6 +509,18 @@ bool Staff::iterateClefChangesAtMeasure(
 
     const auto gfhold = document->getDetails()->get<details::GFrameHold>(partId, staffId, measureId);
     if (!gfhold) {
+        if (measureId == 1) {
+            const auto currentStaff = StaffComposite::createCurrent(document, partId, staffId, measureId, 0);
+            return iterator(ClefChange{
+                currentStaff->defaultClef,
+                {},
+                ShowClefMode::WhenNeeded,
+                false,
+                0,
+                100,
+                0
+            });
+        }
         return true;
     }
 
