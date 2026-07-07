@@ -1181,6 +1181,28 @@ StemDirection EntryInfoPtr::calcStemDirectionForced() const
     return StemDirection::Default;
 }
 
+bool EntryInfoPtr::calcGraceNoteSlash(const MusxInstance<options::GraceNoteOptions> graceOptions) const
+{
+    const auto entry = (*this)->getEntry();
+    if (!entry->graceNote) {
+        return false;
+    }
+
+    const auto options = [&]() {
+        if (graceOptions) {
+            return graceOptions;
+            }
+        return getFrame()->getDocument()->getOptions()->get<options::GraceNoteOptions>();
+    }();
+    MUSX_ASSERT_IF(!options) {
+        util::Logger::log(util::Logger::LogLevel::Warning, "calcGraceNoteSlash: unable to get grace note options.");
+        return false;
+    }
+
+    return (entry->slashGrace || options->slashFlaggedGraceNotes)
+        && calcCanBeBeamed() && calcUnbeamed();    
+}
+
 bool EntryInfoPtr::calcUnbeamed() const
 {
     if (!calcCanBeBeamed()) return true;

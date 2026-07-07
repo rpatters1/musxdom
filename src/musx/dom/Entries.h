@@ -448,7 +448,7 @@ public:
     bool noLeger{};          ///< Hide ledger lines.
     bool sorted{};           ///< Sorted flag.
     bool slashGrace{};       ///< Indicates that a non-beamed grace note with flags (8th note or smaller) should have a slash on the stem.
-                             ///< If #options::GraceNoteOptions::slashFlaggedGraceNotes is true, this options has no effect. The stem
+                             ///< If #options::GraceNoteOptions::slashFlaggedGraceNotes is true, this option has no effect. The stem
                              ///< always has a slash in that case.
     bool flatBeam{};         ///< Forces any beam that starts on this entry to be flat by default.
     bool noPlayback{};       ///< Indicates that the entry should not be played back.
@@ -825,6 +825,11 @@ public:
         m_upStem = calcUpStemImpl();
         return m_upStem.value();
     }
+
+    /// @brief Calculates if the current entry is a grace note with a slash
+    /// @param graceOptions Allows caller to supply the grace note options if caller already has them. Otherwise, the
+    /// function gets the grace note options internally.
+    [[nodiscard]] bool calcGraceNoteSlash(const MusxInstance<options::GraceNoteOptions> graceOptions = nullptr) const;
 
     /// @brief Returns whether this is an unbeamed entry
     /// @return
