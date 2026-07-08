@@ -234,10 +234,9 @@ public:
     std::optional<InstrumentInfo> getInstrumentForStaff(Cmper partId, StaffCmper staffId) const;
 
     /// @brief Returns the rehearsal mark info for a rehearsal mark text expression assignment.
-    /// @param assign The assignment for which to find the rehearsal mark info.
     /// @return The rehearsal mark info or std::nullopt if none.
     [[nodiscard]]
-    std::optional<RehearsalMarkInfo> getRehearsalMarkInfo(const others::MeasureExprAssign& assign) const;
+    std::optional<RehearsalMarkInfo> getRehearsalMarkInfo(MeasCmper measureId, Cmper textExpressionId) const;
 
     /**
      * @brief Builds an instrument map for the specified linked part ID.

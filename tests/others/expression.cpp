@@ -705,7 +705,7 @@ TEST(ExpressionAssignments, RehearsalSequences)
         ASSERT_TRUE(assign);
         const auto expectedIt = expectedResult.find(RehearsalMarkKey{ MeasCmper(assign->getCmper()), assign->textExprId });
         const bool validIt = expectedIt != expectedResult.end();
-        if (const auto tryInfo = doc->getRehearsalMarkInfo(assign)) {
+        if (const auto tryInfo = doc->getRehearsalMarkInfo(assign->getCmper(), assign->textExprId)) {
             EXPECT_TRUE(validIt) << "assign for meas " << assign->getCmper() << " expr " << assign->textExprId
                                  << " not found in expected results";
             if (validIt) {
@@ -716,4 +716,87 @@ TEST(ExpressionAssignments, RehearsalSequences)
                                   << " was not found in document but is in expected results";
         }
     }
+}
+
+TEST(ExpressionAssignments, RehearsalValues)
+{
+    std::vector<char> xml;
+    musxtest::readFile(musxtest::getInputPath() / "rehearsalMarks.enigmaxml", xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(xml);
+    ASSERT_TRUE(doc);
+
+    {
+        const auto assign = doc->getOthers()->get<others::MeasureExprAssign>(SCORE_PARTID, 10, 0);
+        EXPECT_EQ(assign->getRawTextCtx(SCORE_PARTID).getText(), "E");
+    }
+    {
+        const auto assign = doc->getOthers()->get<others::MeasureExprAssign>(SCORE_PARTID, 11, 0);
+        EXPECT_EQ(assign->getRawTextCtx(SCORE_PARTID).getText(), "3");
+    }
+    {
+        const auto assign = doc->getOthers()->get<others::MeasureExprAssign>(SCORE_PARTID, 15, 0);
+        EXPECT_EQ(assign->getRawTextCtx(SCORE_PARTID).getText(), "137");
+    }
+    {
+        const auto assign = doc->getOthers()->get<others::MeasureExprAssign>(SCORE_PARTID, 26, 0);
+        EXPECT_EQ(assign->getRawTextCtx(SCORE_PARTID).getText(), "26");
+    }
+}
+
+TEST(MeasureExprAssign, RawTextCtxResolvesMeasureNumberRehearsalAndExpressionDefaults)
+{
+    constexpr static musxtest::string_view xml = R"xml(
+<?xml version="1.0" encoding="UTF-8"?>
+<finale>
+  <others>
+    <measNumbRegion cmper="1">
+      <scoreData>
+        <startFont/>
+        <multipleFont/>
+        <mmRestFont/>
+      </scoreData>
+      <partData>
+        <startFont/>
+        <multipleFont/>
+        <mmRestFont/>
+      </partData>
+      <startMeas>1</startMeas>
+      <endMeas>10</endMeas>
+      <startChar>48</startChar>
+      <base>10</base>
+      <offset>0</offset>
+      <countFromOne/>
+      <region>1</region>
+    </measNumbRegion>
+    <measSpec cmper="1">
+      <width>600</width>
+    </measSpec>
+    <textBlock cmper="1">
+      <textID>1</textID>
+      <textTag>expression</textTag>
+    </textBlock>
+    <textExprDef cmper="1">
+      <textIDKey>1</textIDKey>
+      <rehearsalMarkStyle>measNum</rehearsalMarkStyle>
+      <value>112</value>
+      <auxdata1>64</auxdata1>
+      <playPass>3</playPass>
+    </textExprDef>
+    <measExprAssign cmper="1" inci="0">
+      <textExprID>1</textExprID>
+    </measExprAssign>
+  </others>
+  <texts>
+    <expression number="1">^rehearsal() value:^value() control:^control() pass:^pass()</expression>
+  </texts>
+</finale>
+)xml";
+
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
+    ASSERT_TRUE(doc);
+
+    auto assign = doc->getOthers()->get<others::MeasureExprAssign>(SCORE_PARTID, 1, 0);
+    ASSERT_TRUE(assign);
+
+    EXPECT_EQ(assign->getRawTextCtx(SCORE_PARTID).getText(), "1 value:112 control:64 pass:3");
 }

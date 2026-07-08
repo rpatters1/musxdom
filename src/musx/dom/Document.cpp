@@ -362,9 +362,9 @@ void Document::createRehearsalMarkMap()
     }
 }
 
-std::optional<RehearsalMarkInfo> Document::getRehearsalMarkInfo(const others::MeasureExprAssign& assign) const
+std::optional<RehearsalMarkInfo> Document::getRehearsalMarkInfo(MeasCmper measureId, Cmper textExpressionId) const
 {
-    const auto it = m_rehearsalMarks.find(RehearsalMarkKey{ MeasCmper(assign.getCmper()), assign.textExprId });
+    const auto it = m_rehearsalMarks.find(RehearsalMarkKey{ measureId, textExpressionId });
     if (it == m_rehearsalMarks.end()) {
         return std::nullopt;
     }

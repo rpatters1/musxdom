@@ -1253,6 +1253,11 @@ public:
     /// covered by a measure number region.
     std::optional<int> calcDisplayNumber() const;
 
+    /// @brief Calculates the visible measure number text, based on the first MeasureNumberRegion that contains it.
+    /// @return The display text or std::nullopt if the measure is not included in measure numbering or if it is not
+    /// covered by a measure number region.
+    std::optional<std::string> calcDisplayNumberText() const;
+
     /// @brief Creates and returns a shared pointer to an instance of the @ref KeySignature for this measure and staff.
     /// @param forStaff If present, specifies the specific staff for which to create the key signature.
     /// @return A shared pointer to a new instance of KeySignature. The caller may modify it (*e.g.*, for transposition) without affecting the values in the document.
@@ -1609,6 +1614,11 @@ public:
     /// @return The display number or std::nullopt if the measure is not included in measure numbering
     /// @throw std::logic_error if measureId is not contained in the region
     std::optional<int> calcDisplayNumberFor(MeasCmper measureId) const;
+
+    /// @brief Returns the visible text for a measure id with respect to the region.
+    /// @return The display text or std::nullopt if the measure is not included in measure numbering
+    /// @throw std::logic_error if measureId is not contained in the region
+    std::optional<std::string> calcDisplayNumberTextFor(MeasCmper measureId) const;
 
     /// @brief Returns the last visible number in the region. This function takes into account if the last measure
     /// is not included and falls back to the previous measure if so. (And repeats if necessary.)
@@ -3051,8 +3061,11 @@ public:
     /**
      * @brief Gets the raw text context for parsing this expression, or nullptr if none.
      * @param forPartId The linked part to use for ^partname and ^totpages inserts.
+     * @param defaultInsertFunc An optional outer handler layer. If it returns `std::nullopt`, the
+     * expression-definition defaults for `^value`, `^control`, and `^pass` are tried next.
     */
-    util::EnigmaParsingContext getRawTextCtx(Cmper forPartId) const;
+    util::EnigmaParsingContext getRawTextCtx(Cmper forPartId,
+        util::EnigmaString::TextInsertCallback defaultInsertFunc = util::EnigmaString::defaultInsertsCallback) const;
 
     /** @brief Gets the enclosure for this expression, or nullptr if none. */
     MusxInstance<Enclosure> getEnclosure() const;

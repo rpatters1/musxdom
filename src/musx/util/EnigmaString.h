@@ -165,8 +165,11 @@ public:
         return std::string(reinterpret_cast<const char*>(s));
     }
 
-    /// @brief Concerts a 32-bit codepoint to a utf8-encoded std::string.
+    /// @brief Converts a 32-bit codepoint to a utf8-encoded std::string.
     static std::string toU8(char32_t cp);
+
+    /// @brief Converts a 32-bit codepoint string to a utf8-encoded std::string.
+    static std::string toU8(const std::u32string& value);
 
     /**
      * @brief Enumeration to specify the default handling for accidental insert commands. Like all Enigma commands,

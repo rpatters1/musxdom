@@ -128,6 +128,15 @@ std::string EnigmaString::toU8(char32_t cp)
     return result;
 }
 
+std::string EnigmaString::toU8(const std::u32string& value)
+{
+    std::string result;
+    for (char32_t codePoint : value) {
+        result += EnigmaString::toU8(codePoint);
+    }
+    return result;
+}
+
 bool EnigmaString::startsWithFontCommand(const std::string& text)
 {
     static const std::vector<std::string> kEnigmaFontCommands = { "^font", "^fontid", "^Font", "^fontMus", "^fontTxt", "^fontNum", "^size", "^nfx" };

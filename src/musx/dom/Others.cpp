@@ -26,10 +26,69 @@
 #include <type_traits>
 
 #include "musx/musx.h"
+#include "musx/util/EnigmaString.h"
 
 namespace musx {
 namespace dom {
 namespace others {
+
+static std::string formatMeasureNumberText(const MeasureNumberRegion& region, int displayNumber)
+{
+    std::string result = region.prefix;
+    if (region.base <= 1) {
+        result += util::EnigmaString::toU8(region.startChar);
+        result += region.suffix;
+        return result;
+    }
+
+    const bool numericStyle = region.countFromOne;
+    const bool negative = displayNumber < 0;
+    auto absDisplayNumber = static_cast<long long>(std::llabs(static_cast<long long>(displayNumber)));
+    std::size_t digitCount = 1;
+    auto widthProbe = absDisplayNumber;
+    while (true) {
+        if (!numericStyle && widthProbe > 0 && (widthProbe % region.base) == 0) {
+            widthProbe--;
+        }
+        widthProbe /= region.base;
+        if (widthProbe == 0) {
+            break;
+        }
+        if (region.doubleUp) {
+            digitCount += static_cast<std::size_t>(widthProbe);
+            break;
+        }
+        digitCount++;
+    }
+
+    if (negative) {
+        result += '-';
+    }
+
+    std::u32string digits(digitCount, U'\0');
+    for (std::size_t index = digitCount; index-- > 0;) {
+        auto numericValue = absDisplayNumber;
+        if (!numericStyle) {
+            numericValue -= 1;
+        }
+        const auto digit = region.startChar + static_cast<char32_t>(numericValue % region.base);
+        digits[index] = digit;
+        if (region.doubleUp) {
+            for (std::size_t repeatedIndex = index; repeatedIndex-- > 0;) {
+                digits[repeatedIndex] = digit;
+            }
+            break;
+        }
+        if (!numericStyle && (absDisplayNumber % region.base) == 0) {
+            absDisplayNumber--;
+        }
+        absDisplayNumber /= region.base;
+    }
+
+    result += util::EnigmaString::toU8(digits);
+    result += region.suffix;
+    return result;
+}
 
 // ***************************
 // ***** ArticulationDef *****
@@ -179,6 +238,17 @@ std::optional<int> Measure::calcDisplayNumber() const
     }
     if (const auto region = findMeasureNumberRegion()) {
         return region->calcDisplayNumberFor(getCmper());
+    }
+    return std::nullopt;
+}
+
+std::optional<std::string> Measure::calcDisplayNumberText() const
+{
+    if (noMeasNum) {
+        return std::nullopt;
+    }
+    if (const auto region = findMeasureNumberRegion()) {
+        return region->calcDisplayNumberTextFor(getCmper());
     }
     return std::nullopt;
 }
@@ -744,15 +814,44 @@ static std::string rehearsalMarkText(RehearsalMarkStyle style, int sequence)
 util::EnigmaParsingContext MeasureExprAssign::getRawTextCtx(Cmper forPartId) const
 {
     if (const auto def = getTextExpression()) {
-        return def->getRawTextCtx(forPartId, [&](const std::vector<std::string>& components) -> std::optional<std::string> {
+        const auto document = getDocument();
+        const auto measureId = getCmper();
+        return def->getRawTextCtx(forPartId, [document, measureId, def, forPartId](const std::vector<std::string>& components) -> std::optional<std::string> {
             if (components[0] == "rehearsal") {
                 if (def->rehearsalMarkStyle == others::RehearsalMarkStyle::MeasureNumber) {
-                    
+                    if (const auto measure = document->getOthers()->get<Measure>(forPartId, measureId)) {
+                        return measure->calcDisplayNumberText().value_or(std::to_string(measure->getCmper()));
+                    }
+                    return std::to_string(measureId);
                 }
-                if (const auto markInfo = getDocument()->getRehearsalMarkInfo(*this)) {
+                if (const auto markInfo = document->getRehearsalMarkInfo(measureId, def->getCmper())) {
                     return rehearsalMarkText(def->rehearsalMarkStyle, markInfo->rehearsalSequence);
                 }
                 return std::string{};
+            }
+            return std::nullopt;
+        });
+    }
+    return {};
+}
+
+util::EnigmaParsingContext TextExpressionDef::getRawTextCtx(Cmper forPartId,
+    util::EnigmaString::TextInsertCallback defaultInsertFunc) const
+{
+    if (auto textBlock = getTextBlock()) {
+        const auto exprValue = value;
+        const auto exprAuxData1 = auxData1;
+        const auto exprPlayPass = playPass;
+        return textBlock->getRawTextCtx(forPartId, std::nullopt, [defaultInsertFunc, exprValue, exprAuxData1, exprPlayPass](const std::vector<std::string>& components) -> std::optional<std::string> {
+            if (auto result = defaultInsertFunc(components)) {
+                return result;
+            }
+            if (components[0] == "value") {
+                return std::to_string(exprValue);
+            } else if (components[0] == "control") {
+                return std::to_string(exprAuxData1);
+            } else if (components[0] == "pass") {
+                return std::to_string(exprPlayPass);
             }
             return std::nullopt;
         });
@@ -781,6 +880,15 @@ std::optional<int> MeasureNumberRegion::calcDisplayNumberFor(MeasCmper measureId
         }
     }
     return result;
+}
+
+std::optional<std::string> MeasureNumberRegion::calcDisplayNumberTextFor(MeasCmper measureId) const
+{
+    const auto displayNumber = calcDisplayNumberFor(measureId);
+    if (!displayNumber) {
+        return std::nullopt;
+    }
+    return formatMeasureNumberText(*this, *displayNumber);
 }
 
 std::optional<int> MeasureNumberRegion::calcLastDisplayNumber() const
@@ -1538,22 +1646,6 @@ MusxInstance<TextBlock> TextExpressionDef::getTextBlock() const
     return getDocument()->getOthers()->get<TextBlock>(getRequestedPartId(), textIdKey);
 }
 
-util::EnigmaParsingContext TextExpressionDef::getRawTextCtx(Cmper forPartId) const
-{
-    if (auto textBlock = getTextBlock()) {
-        return textBlock->getRawTextCtx(forPartId, std::nullopt, [&](const std::vector<std::string>& components) -> std::optional<std::string> {
-            if (components[0] == "value") {
-                return std::to_string(value);
-            } else if (components[0] == "control") {
-                return std::to_string(auxData1);
-            } else if (components[0] == "pass") {
-                return std::to_string(playPass);
-            }
-            return std::nullopt;
-        });
-    }
-    return {};
-}
 
 MusxInstance<Enclosure> TextExpressionDef::getEnclosure() const
 {

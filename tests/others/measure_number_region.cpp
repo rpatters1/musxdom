@@ -273,3 +273,111 @@ TEST(MeasureNumberIndividualPositioningTest, PopulateFields)
     EXPECT_TRUE(pos2->useEnclosure); // not present -> shared from score.
     EXPECT_TRUE(bool(pos2->enclosure)); // not present -> shared from score.
 }
+
+TEST(MeasureNumberRegionTest, CalcDisplayNumberText)
+{
+    constexpr static musxtest::string_view xml = R"xml(
+<?xml version="1.0" encoding="UTF-8"?>
+<finale>
+  <others>
+    <measNumbRegion cmper="1">
+      <scoreData>
+        <startFont/>
+        <multipleFont/>
+        <mmRestFont/>
+      </scoreData>
+      <partData>
+        <startFont/>
+        <multipleFont/>
+        <mmRestFont/>
+      </partData>
+      <startMeas>1</startMeas>
+      <endMeas>100</endMeas>
+      <startChar>48</startChar>
+      <base>10</base>
+      <offset>0</offset>
+      <prefix>M-</prefix>
+      <suffix>-X</suffix>
+      <countFromOne/>
+      <region>1</region>
+    </measNumbRegion>
+    <measNumbRegion cmper="2">
+      <scoreData>
+        <startFont/>
+        <multipleFont/>
+        <mmRestFont/>
+      </scoreData>
+      <partData>
+        <startFont/>
+        <multipleFont/>
+        <mmRestFont/>
+      </partData>
+      <startMeas>100</startMeas>
+      <endMeas>200</endMeas>
+      <startChar>97</startChar>
+      <base>26</base>
+      <offset>0</offset>
+      <noZero/>
+      <region>2</region>
+    </measNumbRegion>
+    <measNumbRegion cmper="3">
+      <scoreData>
+        <startFont/>
+        <multipleFont/>
+        <mmRestFont/>
+      </scoreData>
+      <partData>
+        <startFont/>
+        <multipleFont/>
+        <mmRestFont/>
+      </partData>
+      <startMeas>200</startMeas>
+      <endMeas>400</endMeas>
+      <startChar>65</startChar>
+      <base>26</base>
+      <offset>0</offset>
+      <doubleUp/>
+      <region>3</region>
+    </measNumbRegion>
+    <measSpec cmper="1">
+      <width>600</width>
+    </measSpec>
+    <measSpec cmper="2">
+      <width>600</width>
+      <noMeasNum/>
+    </measSpec>
+  </others>
+</finale>
+)xml";
+
+    using Measure = musx::dom::others::Measure;
+    using MeasureNumberRegion = musx::dom::others::MeasureNumberRegion;
+
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
+    auto others = doc->getOthers();
+    ASSERT_TRUE(others);
+
+    auto numericRegion = others->get<MeasureNumberRegion>(SCORE_PARTID, 1);
+    ASSERT_TRUE(numericRegion);
+    EXPECT_EQ(numericRegion->calcDisplayNumberTextFor(1), std::optional<std::string>("M-1-X"));
+
+    auto alphaRegion = others->get<MeasureNumberRegion>(SCORE_PARTID, 2);
+    ASSERT_TRUE(alphaRegion);
+    EXPECT_EQ(alphaRegion->calcDisplayNumberTextFor(100), std::optional<std::string>("a"));
+    EXPECT_EQ(alphaRegion->calcDisplayNumberTextFor(126), std::optional<std::string>("aa"));
+
+    auto doubleUpRegion = others->get<MeasureNumberRegion>(SCORE_PARTID, 3);
+    ASSERT_TRUE(doubleUpRegion);
+    EXPECT_EQ(doubleUpRegion->calcDisplayNumberTextFor(200), std::optional<std::string>("A"));
+    EXPECT_EQ(doubleUpRegion->calcDisplayNumberTextFor(226), std::optional<std::string>("AA"));
+
+    auto measure1 = others->get<Measure>(SCORE_PARTID, 1);
+    ASSERT_TRUE(measure1);
+    EXPECT_EQ(measure1->calcDisplayNumber(), std::optional<int>(1));
+    EXPECT_EQ(measure1->calcDisplayNumberText(), std::optional<std::string>("M-1-X"));
+
+    auto measure2 = others->get<Measure>(SCORE_PARTID, 2);
+    ASSERT_TRUE(measure2);
+    EXPECT_EQ(measure2->calcDisplayNumber(), std::nullopt);
+    EXPECT_EQ(measure2->calcDisplayNumberText(), std::nullopt);
+}
