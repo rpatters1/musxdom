@@ -677,3 +677,43 @@ TEST(ExpressionDefinitions, ExpressionsWithNoCategory)
         static_cast<void>(musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(xml));
     ) << "this document contains expressions with no catagory id and should load without errors.";
 }
+
+TEST(ExpressionAssignments, RehearsalSequences)
+{
+    std::vector<char> xml;
+    musxtest::readFile(musxtest::getInputPath() / "rehearsalMarks.enigmaxml", xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(xml);
+    ASSERT_TRUE(doc);
+
+    RehearsalMarkMap expectedResult = {
+        { RehearsalMarkKey{ 2, 25}, RehearsalMarkInfo{1} },
+        { RehearsalMarkKey{ 2, 54}, RehearsalMarkInfo{1} },
+        { RehearsalMarkKey{ 3, 25}, RehearsalMarkInfo{1} },
+        { RehearsalMarkKey{ 4, 25}, RehearsalMarkInfo{2} },
+        { RehearsalMarkKey{ 5, 25}, RehearsalMarkInfo{3} },
+        { RehearsalMarkKey{ 6, 54}, RehearsalMarkInfo{2} },
+        { RehearsalMarkKey{ 7, 25}, RehearsalMarkInfo{4} },
+        { RehearsalMarkKey{10, 25}, RehearsalMarkInfo{5} },
+        { RehearsalMarkKey{11, 54}, RehearsalMarkInfo{3} },
+        { RehearsalMarkKey{19, 54}, RehearsalMarkInfo{4} },
+        { RehearsalMarkKey{22, 25}, RehearsalMarkInfo{6} },
+        { RehearsalMarkKey{31, 54}, RehearsalMarkInfo{3} },
+    };
+
+    const auto assigns = doc->getOthers()->getArray<others::MeasureExprAssign>(SCORE_PARTID);
+    for (const auto& assign : assigns) {
+        ASSERT_TRUE(assign);
+        const auto expectedIt = expectedResult.find(RehearsalMarkKey{ MeasCmper(assign->getCmper()), assign->textExprId });
+        const bool validIt = expectedIt != expectedResult.end();
+        if (const auto tryInfo = doc->getRehearsalMarkInfo(assign)) {
+            EXPECT_TRUE(validIt) << "assign for meas " << assign->getCmper() << " expr " << assign->textExprId
+                                 << " not found in expected results";
+            if (validIt) {
+                EXPECT_EQ(expectedIt->second.rehearsalSequence, tryInfo.value().rehearsalSequence) << "assign for meas " << assign->getCmper() << " expr " << assign->textExprId;
+            }
+        } else {
+            EXPECT_FALSE(validIt) << "assign for meas " << assign->getCmper() << " expr " << assign->textExprId
+                                  << " was not found in document but is in expected results";
+        }
+    }
+}

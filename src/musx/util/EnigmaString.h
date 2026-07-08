@@ -147,8 +147,9 @@ class EnigmaParsingContext;
  * - `^filename()`: inserts the file name (no path).
  * - `^lyricist()`: inserts the lyricist name from File Info (ScoreManager window).
  * - `^page(offset)`: inserts the current page number, offsetting from the offset parameter. (The Finale UI prevents more than one `^page` insert per Enigma string.)
- * - `^subtitle()`: inserts the subtitle from File Info (ScoreManager window).
  * - `^partname()`: score or part name. (Score uses the score text from File Info.)
+ * - `^rehearsal()`: inserts the text for a rehearsal sequence into a text expression.
+ * - `^subtitle()`: inserts the subtitle from File Info (ScoreManager window).
  * - `^title()`: inserts the title from File Info (ScoreManager window).
  * - `^totpages()`: inserts the total number of pages in the document.
 */

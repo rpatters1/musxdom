@@ -24,6 +24,7 @@
 #include <memory>
 #include <cstdint>
 #include <filesystem>
+#include <map>
 #include <optional>
 #include <string>
 #include <unordered_map>
@@ -51,6 +52,10 @@ class DocumentFactory;
 namespace dom {
 
 using namespace header;
+
+namespace others {
+class MeasureExprAssign;
+}
 
 enum class KnownShapeDefType;
 using EmbeddedGraphicBlob = std::vector<uint8_t>; ///< Raw bytes for one embedded graphic payload from a musx archive.
@@ -80,6 +85,18 @@ enum class PartVoicingPolicy
                 ///< If all notes in an entry are excluded by voicing, then
                 ///< #EntryInfoPtr::calcDisplaysAsRest returns true for that entry.
 };
+
+/// @brief Key identifying a rehearsal mark by measure number and @ref others::TextExpressionDef @ref Cmper.
+using RehearsalMarkKey = std::pair<MeasCmper, Cmper>;
+
+/// @brief Information associated with a rehearsal mark.
+struct RehearsalMarkInfo
+{
+    int rehearsalSequence;  ///< 1-based rehearsal mark sequence number for this measure.
+};
+
+/// @brief Maps each occurrence of a rehearsal mark to its sequence number for that measure.
+using RehearsalMarkMap = std::map<RehearsalMarkKey, RehearsalMarkInfo>;
 
 /**
  * @brief Represents a document object that encapsulates the entire EnigmaXML structure.
@@ -216,6 +233,12 @@ public:
     [[nodiscard]]
     std::optional<InstrumentInfo> getInstrumentForStaff(Cmper partId, StaffCmper staffId) const;
 
+    /// @brief Returns the rehearsal mark info for a rehearsal mark text expression assignment.
+    /// @param assign The assignment for which to find the rehearsal mark info.
+    /// @return The rehearsal mark info or std::nullopt if none.
+    [[nodiscard]]
+    std::optional<RehearsalMarkInfo> getRehearsalMarkInfo(const others::MeasureExprAssign& assign) const;
+
     /**
      * @brief Builds an instrument map for the specified linked part ID.
      *
@@ -276,6 +299,9 @@ private:
     std::optional<InstrumentMap> m_instruments = std::nullopt; ///< List of instruments in the document,
                                 ///< indexed by the top staff in each instrument in Scroll View of the score.
                                 ///< This computed by the factory.
+
+    RehearsalMarkMap m_rehearsalMarks; ///< Map of rehearsal marks in the document.
+    void createRehearsalMarkMap();
 
     PartVoicingPolicy m_partVoicingPolicy{};    ///< The part voicing policy in effect for this document.
     std::optional<double> m_scoreDurationSeconds; ///< Optional score duration in seconds from NotationMetadata.xml.

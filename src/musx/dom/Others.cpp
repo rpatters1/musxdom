@@ -691,6 +691,75 @@ bool MeasureExprAssign::calcIsPseudoTie(utils::PseudoTieMode mode, const EntryIn
     return false;
 }
 
+static std::string rehearsalMarkText(RehearsalMarkStyle style, int sequence)
+{
+    if (sequence <= 0) {
+        return {};
+    }
+
+    auto repeatedLetter = [sequence](char base) -> std::string {
+        const int index = sequence - 1;
+        const char letter = static_cast<char>(base + (index % 26));
+        const int repeat = index / 26 + 1;
+        return std::string(repeat, letter);
+    };
+
+    auto letterNumber = [sequence](char base) -> std::string {
+            if (sequence <= 26) {
+            return std::string(1, static_cast<char>(base + sequence - 1));
+        }
+
+        const int index = sequence - 27;
+        return std::string(1, static_cast<char>(base + (index % 26)))
+            + std::to_string(index / 26 + 1);
+    };
+
+    switch (style) {
+    case RehearsalMarkStyle::None:
+        return {};
+
+    case RehearsalMarkStyle::Letters:
+        return repeatedLetter('A');
+
+    case RehearsalMarkStyle::LetterNumbers:
+        return letterNumber('A');
+
+    case RehearsalMarkStyle::LettersLowerCase:
+        return repeatedLetter('a');
+
+    case RehearsalMarkStyle::LettersNumbersLowerCase:
+        return letterNumber('a');
+
+    case RehearsalMarkStyle::Numbers:
+        return std::to_string(sequence);
+
+    case RehearsalMarkStyle::MeasureNumber:
+        assert(false && "rehearsalMarkText called for a measure number rehearsal mark");
+        break;
+    }
+
+    return {};
+}
+
+util::EnigmaParsingContext MeasureExprAssign::getRawTextCtx(Cmper forPartId) const
+{
+    if (const auto def = getTextExpression()) {
+        return def->getRawTextCtx(forPartId, [&](const std::vector<std::string>& components) -> std::optional<std::string> {
+            if (components[0] == "rehearsal") {
+                if (def->rehearsalMarkStyle == others::RehearsalMarkStyle::MeasureNumber) {
+                    
+                }
+                if (const auto markInfo = getDocument()->getRehearsalMarkInfo(*this)) {
+                    return rehearsalMarkText(def->rehearsalMarkStyle, markInfo->rehearsalSequence);
+                }
+                return std::string{};
+            }
+            return std::nullopt;
+        });
+    }
+    return {};
+}
+
 // *******************************
 // ***** MeasureNumberRegion *****
 // *******************************

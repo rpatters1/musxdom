@@ -239,7 +239,8 @@ public:
 #endif
         elementLinker.resolveAll(document);
         document->m_instruments = document->createInstrumentMap(SCORE_PARTID);
-
+        document->createRehearsalMarkMap();
+        
         document->m_maxBlankPages = 0;
         auto linkedParts = document->getOthers()->getArray<PartDefinition>(SCORE_PARTID);
         for (const auto& part : linkedParts) {

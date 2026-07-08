@@ -1463,6 +1463,14 @@ public:
     /// category.
     [[nodiscard]] VerticalPlacement calcVerticalPlacement() const;
 
+    /**
+     * @brief Gets the raw text context for parsing this expression assignment, or nullptr if none.
+     * @note The main difference between the assignment and the underlying text definition context
+     * is that the assignment can resolve rehearsal number text.
+     * @param forPartId The linked part to use for ^partname and ^totpages inserts.
+    */
+    util::EnigmaParsingContext getRawTextCtx(Cmper forPartId) const;
+
     void integrityCheck(const std::shared_ptr<EnigmaBase>& ptrToThis) override
     {
         this->OthersBase::integrityCheck(ptrToThis);
