@@ -1600,7 +1600,7 @@ public:
 
     /// @brief Calculates whether the input measure is covered by this measure number region
     /// @param measureId The measure id to check.
-    bool calcIncludesMeasure(MeasCmper measureId) const
+    [[nodiscard]] bool calcIncludesMeasure(MeasCmper measureId) const
     {
         return measureId >= startMeas && measureId < endMeas; // endMeas is non-inclusive!
     }
@@ -1608,23 +1608,38 @@ public:
     /// @brief Returns the starting display measure number for this region. The value is irrespective
     /// of whether the number actually displays on the first measure of the region. (This depends on #Measure::noMeasNum.)
     /// The starting number appears on the first measure in the region that is included in measure numbering.
-    int getStartNumber() const { return int(numberOffset + 1); }
+    [[nodiscard]] int getStartNumber() const { return int(numberOffset + 1); }
 
     /// @brief Returns the visible number for a measure id with respect to the region.
     /// @return The display number or std::nullopt if the measure is not included in measure numbering
     /// @throw std::logic_error if measureId is not contained in the region
-    std::optional<int> calcDisplayNumberFor(MeasCmper measureId) const;
+    [[nodiscard]] std::optional<int> calcDisplayNumberFor(MeasCmper measureId) const;
 
     /// @brief Returns the visible text for a measure id with respect to the region.
     /// @return The display text or std::nullopt if the measure is not included in measure numbering
     /// @throw std::logic_error if measureId is not contained in the region
-    std::optional<std::string> calcDisplayNumberTextFor(MeasCmper measureId) const;
+    [[nodiscard]] std::optional<std::string> calcDisplayNumberTextFor(MeasCmper measureId) const;
+
+    /// @brief Returns the @ref MeasCmper of the first displayed measure number in this region.
+    /// @returns The first displayed measure id. Measures with "skip measure numbering" are skipped.
+    /// Returns std::nullopt if every measure in the region is set to skip measure numbering. (See #Measure::noMeasNum.)
+    [[nodiscard]] std::optional<MeasCmper> calcFirstDisplayedMeasureId() const;
+
+    /// @brief Returns the @ref MeasCmper of the last displayed measure number in this region.
+    /// @returns The last displayed measure id. Measures with "skip measure numbering" are skipped.
+    /// Returns std::nullopt if every measure in the region is set to skip measure numbering. (See #Measure::noMeasNum.)
+    [[nodiscard]] std::optional<MeasCmper> calcLastDisplayedMeasureId() const;
+
+    /// @brief Returns the first visible number in the region. This function takes into account if the first measure
+    /// is not included and falls back to the next measure if so. (And repeats if necessary.)
+    /// @return The first visible number or std::nullopt if no measure in the region is included in numbering. (See #Measure::noMeasNum.)
+    [[nodiscard]] std::optional<int> calcFirstDisplayNumber() const;
 
     /// @brief Returns the last visible number in the region. This function takes into account if the last measure
     /// is not included and falls back to the previous measure if so. (And repeats if necessary.)
     /// @return The last visible number or std::nullopt if no measure in the region is included in numbering. (See #Measure::noMeasNum.)
-    std::optional<int> calcLastDisplayNumber() const;
-
+    [[nodiscard]] std::optional<int> calcLastDisplayNumber() const;
+    
     void integrityCheck(const std::shared_ptr<EnigmaBase>& ptrToThis) override
     {
         this->OthersBase::integrityCheck(ptrToThis);

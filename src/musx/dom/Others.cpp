@@ -891,16 +891,46 @@ std::optional<std::string> MeasureNumberRegion::calcDisplayNumberTextFor(MeasCmp
     return formatMeasureNumberText(*this, *displayNumber);
 }
 
-std::optional<int> MeasureNumberRegion::calcLastDisplayNumber() const
+std::optional<MeasCmper> MeasureNumberRegion::calcFirstDisplayedMeasureId() const
 {
-    for (MeasCmper endMeasId = endMeas - 1; endMeasId >= startMeas; endMeasId--) {
-        if (auto measure = getDocument()->getOthers()->get<Measure>(getRequestedPartId(), endMeasId)) {
+    for (MeasCmper startMeasId = startMeas; startMeasId < endMeas; startMeasId++) {
+        if (auto measure = getDocument()->getOthers()->get<Measure>(getRequestedPartId(), startMeasId)) {
             if (!measure->noMeasNum) {
-                return calcDisplayNumberFor(endMeasId);
+                return startMeasId;
             }
         } else {
             break;
         }
+    }
+    return std::nullopt;
+}
+
+std::optional<MeasCmper> MeasureNumberRegion::calcLastDisplayedMeasureId() const
+{
+    for (MeasCmper endMeasId = endMeas - 1; endMeasId >= startMeas; endMeasId--) {
+        if (auto measure = getDocument()->getOthers()->get<Measure>(getRequestedPartId(), endMeasId)) {
+            if (!measure->noMeasNum) {
+                return endMeasId;
+            }
+        } else {
+            break;
+        }
+    }
+    return std::nullopt;
+}
+
+std::optional<int> MeasureNumberRegion::calcFirstDisplayNumber() const
+{
+    if (const auto startMeasId = calcFirstDisplayedMeasureId()) {
+        return calcDisplayNumberFor(startMeasId.value());
+    }
+    return std::nullopt;
+}
+
+std::optional<int> MeasureNumberRegion::calcLastDisplayNumber() const
+{
+    if (const auto endMeasId = calcLastDisplayedMeasureId()) {
+        return calcDisplayNumberFor(endMeasId.value());
     }
     return std::nullopt;
 }
