@@ -1667,9 +1667,8 @@ public:
     { return m_noteIndex; }
 
     /**
-     * @brief Calculates the note name, octave number, actual alteration, and staff position. This function does
-     * not take into account percussion notes and their staff position override. To get the staff position taking
-     * into account percussion notes, use #calcStaffPosition.
+     * @brief Calculates the note name, octave number, actual alteration, and staff position. The staff position
+     * takes into account percussion notes and their staff position override.
      * @note In Finale, the default whole rest staff position is the middle staff line. Other music notation systems
      * frequently expect the standard whole rest staff position to be the second line from the top. You may need to interpolate
      * the staff position returned by #calcNoteProperties for whole rests.
@@ -1683,9 +1682,8 @@ public:
     Note::NoteProperties calcNoteProperties(EnharmonicOverride enharmonicOverride = EnharmonicOverride::None, bool alwaysUseEntryStaff = false) const;
 
     /**
-     * @brief Calculates the note name, octave number, actual alteration, and staff position for the concert pitch of the note. This function does
-     * not take into account percussion notes and their staff position override. To discover if a note is a percussion
-     * note, call #calcPercussionNoteInfo. If it returns non-null, use that for staff position instead of this function.
+     * @brief Calculates the note name, octave number, actual alteration, and staff position for the concert pitch of the note. The staff position
+     * takes into account percussion notes and their staff position override.
      * @param alwaysUseEntryStaff If true, the entry is not checked for cross-staff staffing. Normally you omit this.
      * @return #Note::NoteProperties
      */
@@ -1695,8 +1693,8 @@ public:
     /**
      * @brief Calculates the note name, octave number, actual alteration, and staff position for the pitch of the note in the currently
      * selected "Display In Concert Pitch" view for the current part. This may be
-     * particularly useful with non-floating rests, but it can be used with any note. As with other versions of the function, it does not
-     * handle the staff position override of percussion notes.
+     * particularly useful with non-floating rests, but it can be used with any note. As with other versions of the function, the staff
+     * position takes into account the staff position override of percussion notes.
      * @param alwaysUseEntryStaff If true, the entry is not checked for cross-staff staffing. Normally you omit this.
      * @return #Note::NoteProperties
      */
@@ -1707,11 +1705,6 @@ public:
     /// @return If the note is on a percussion staff and has percussion note info assigned, returns it. Otherwise `nullptr`.
     [[nodiscard]]
     MusxInstance<others::PercussionNoteInfo> calcPercussionNoteInfo() const;
-
-    /// @brief Calculates the staff position for this note, taking into account percussion notes.
-    /// @return
-    [[nodiscard]]
-    int calcStaffPosition() const;
 
     /// @brief Calculates the note that this note could tie to. Check the return value's #Note::tieEnd
     /// to see if there is actually a tie end. (Note that Finale shows a tie whether there #Note::tieEnd is true or not.)

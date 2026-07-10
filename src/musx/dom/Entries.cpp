@@ -2850,7 +2850,7 @@ Note::NoteProperties Note::calcNoteProperties(const MusxInstance<KeySignature>& 
     // Calculate the staff line
     const int staffLine = [&]() {
         if (percNoteInfo) {
-            return percNoteInfo->staffPosition;
+            return percNoteInfo->calcStaffReferencePosition();
         }
         const auto& clefOptions = getDocument()->getOptions()->get<options::ClefOptions>();
         if (!clefOptions) {

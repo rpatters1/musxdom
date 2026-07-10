@@ -162,6 +162,43 @@ details::ArticulationAssign::calcSelectedSymbolContext(const EntryInfoPtr& entry
     return result;
 }
 
+NoteInfoPtr details::ArticulationAssign::calcAssociatedNote(const EntryInfoPtr& entryInfo) const
+{
+    if (!entryInfo) {
+        return NoteInfoPtr();
+    }
+    const auto entry = entryInfo->getEntry();
+    MUSX_ASSERT_IF(entry->getEntryNumber() != getEntryNumber()) {
+        throw std::logic_error("ArticulationAssign::calcAssociatedNote called with entry number "
+            + std::to_string(entry->getEntryNumber()) + " that does not match the assignment's entry number "
+            + std::to_string(getEntryNumber()) + ".");
+    }
+    if (!entry->isNote || entry->notes.empty()) {
+        return NoteInfoPtr();
+    }
+    const auto definition = getDocument()->getOthers()->get<others::ArticulationDef>(getRequestedPartId(), articDef);
+    if (!definition || definition->autoVert) {
+        return NoteInfoPtr();
+    }
+
+    const auto staffPositionOf = [](const NoteInfoPtr& note) {
+        return std::get<3>(note.calcNotePropertiesInView(/*alwaysUseEntryStaff*/ true));
+    };
+
+    // A zero offset places the symbol at the staff position of the note furthest from the stem.
+    const NoteInfoPtr furthestFromStem(entryInfo, entryInfo.calcUpStem() ? 0 : entry->notes.size() - 1);
+    const int targetPosition = staffPositionOf(furthestFromStem)
+        + static_cast<int>(std::lround(static_cast<double>(vertOffset) / EVPU_PER_STAFF_POSITION));
+
+    for (size_t noteIndex = 0; noteIndex < entry->notes.size(); ++noteIndex) {
+        const NoteInfoPtr note(entryInfo, noteIndex);
+        if (staffPositionOf(note) == targetPosition) {
+            return note;
+        }
+    }
+    return NoteInfoPtr();
+}
+
 std::optional<details::ArticulationAssign::PseudoTieShapeContext>
 details::ArticulationAssign::calcPseudoTieShapeContext(const EntryInfoPtr& forStartEntry) const
 {
