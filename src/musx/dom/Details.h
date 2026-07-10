@@ -1547,7 +1547,7 @@ public:
     NoteNumber noteId{};                    ///< The ID of the note being altered. (xml node is `<noteID>`)
     int percent{};                          ///< Size percentage for the notehead. (A value of 100 means 100%.)
     Evpu nxdisp{};                          ///< Horizontal notehead offset.
-    char32_t altNhead{};                    ///< Alternate notehead character.
+    char32_t altNhead{};                    ///< Alternate notehead character. Zero (the default) means no override is specified.
     bool useOwnFont{};                      ///< Whether to use the custom font.
     std::shared_ptr<FontInfo> customFont{}; ///< Custom font info (consolidates: `<fontID>`, `<fontSize>`, `<efx>`)
     bool allowVertPos{};                    ///< Whether vertical positioning is allowed .

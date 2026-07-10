@@ -638,3 +638,99 @@ TEST(EntryTest, FullMeasureRestV1V2)
         EXPECT_TRUE(entryInfoPtr.calcIsFullMeasureRest());
     }
 }
+
+TEST(NoteheadInfoTest, DefaultByDuration)
+{
+    std::vector<char> xml;
+    musxtest::readFile(musxtest::getInputPath() / "enharmonic_unlinked.enigmaxml", xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(xml);
+    ASSERT_TRUE(doc);
+
+    auto symbolOptions = doc->getOptions()->get<options::MusicSymbolOptions>();
+    ASSERT_TRUE(symbolOptions);
+    auto fontOptions = doc->getOptions()->get<options::FontOptions>();
+    ASSERT_TRUE(fontOptions);
+    auto noteheadFont = fontOptions->getFontInfo(options::FontOptions::FontType::Noteheads);
+    ASSERT_TRUE(noteheadFont);
+
+    auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 1);
+    ASSERT_TRUE(gfhold);
+    auto entryFrame = gfhold.createEntryFrame(0);
+    ASSERT_TRUE(entryFrame);
+
+    NoteInfoPtr noteInfo(EntryInfoPtr(entryFrame, 0), 0);
+    ASSERT_TRUE(noteInfo);
+    ASSERT_EQ(noteInfo.getEntryInfo()->getEntry()->duration, 1024); // quarter note: below the "half" threshold
+
+    auto noteheadInfo = noteInfo.calcNoteheadInfo();
+    EXPECT_EQ(noteheadInfo.character, symbolOptions->noteheadQuarter);
+    ASSERT_TRUE(noteheadInfo.font);
+    EXPECT_EQ(noteheadInfo.font->fontId, noteheadFont->fontId);
+    EXPECT_EQ(noteheadInfo.percent, 100);
+    EXPECT_EQ(noteheadInfo.horzOffset, 0);
+    EXPECT_EQ(noteheadInfo.vertOffset, 0);
+}
+
+TEST(NoteheadInfoTest, NoteAlterationsOverrideTakesPrecedence)
+{
+    std::vector<char> xml;
+    musxtest::readFile(musxtest::getInputPath() / "tremolos.enigmaxml", xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(xml);
+    ASSERT_TRUE(doc);
+
+    auto fontOptions = doc->getOptions()->get<options::FontOptions>();
+    ASSERT_TRUE(fontOptions);
+    auto noteheadFont = fontOptions->getFontInfo(options::FontOptions::FontType::Noteheads);
+    ASSERT_TRUE(noteheadFont);
+
+    // Staff 1, measure 2, voice 1: entry 14 has a noteAlter with altNhead=250 but no useOwnFont,
+    // so the font should still resolve to the document's default Noteheads font, not fontID 17.
+    auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 2);
+    ASSERT_TRUE(gfhold);
+    auto entryFrame = gfhold.createEntryFrame(0);
+    ASSERT_TRUE(entryFrame);
+
+    NoteInfoPtr noteInfo(EntryInfoPtr(entryFrame, 0), 0);
+    ASSERT_TRUE(noteInfo);
+    ASSERT_EQ(noteInfo.getEntryInfo()->getEntry()->getEntryNumber(), 14);
+
+    auto noteheadInfo = noteInfo.calcNoteheadInfo();
+    EXPECT_EQ(noteheadInfo.character, char32_t(250));
+    ASSERT_TRUE(noteheadInfo.font);
+    EXPECT_EQ(noteheadInfo.font->fontId, noteheadFont->fontId);
+    EXPECT_NE(noteheadInfo.font->fontId, 17);
+}
+
+TEST(NoteheadInfoTest, PercussionNoteOverride)
+{
+    std::vector<char> xml;
+    musxtest::readFile(musxtest::getInputPath() / "drumset.enigmaxml", xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(xml);
+    ASSERT_TRUE(doc);
+
+    auto fontOptions = doc->getOptions()->get<options::FontOptions>();
+    ASSERT_TRUE(fontOptions);
+    auto percussionFont = fontOptions->getFontInfo(options::FontOptions::FontType::Percussion);
+    ASSERT_TRUE(percussionFont);
+
+    // Staff 1 (percussion), measure 1, voice 1: entries 125/126 are mapped percussion notes
+    // (noteCode 2 and 11 respectively, in drum library 8), each shorter than a half note.
+    auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 1);
+    ASSERT_TRUE(gfhold);
+    auto entryFrame = gfhold.createEntryFrame(0);
+    ASSERT_TRUE(entryFrame);
+
+    NoteInfoPtr firstNote(EntryInfoPtr(entryFrame, 0), 0);
+    ASSERT_TRUE(firstNote);
+    ASSERT_EQ(firstNote.getEntryInfo()->getEntry()->getEntryNumber(), 125);
+    auto firstNoteheadInfo = firstNote.calcNoteheadInfo();
+    EXPECT_EQ(firstNoteheadInfo.character, char32_t(57508));
+    ASSERT_TRUE(firstNoteheadInfo.font);
+    EXPECT_EQ(firstNoteheadInfo.font->fontId, percussionFont->fontId);
+
+    NoteInfoPtr secondNote(EntryInfoPtr(entryFrame, 1), 0);
+    ASSERT_TRUE(secondNote);
+    ASSERT_EQ(secondNote.getEntryInfo()->getEntry()->getEntryNumber(), 126);
+    auto secondNoteheadInfo = secondNote.calcNoteheadInfo();
+    EXPECT_EQ(secondNoteheadInfo.character, char32_t(57534));
+}

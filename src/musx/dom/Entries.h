@@ -1706,6 +1706,36 @@ public:
     [[nodiscard]]
     MusxInstance<others::PercussionNoteInfo> calcPercussionNoteInfo() const;
 
+    /// @struct NoteheadInfo
+    /// @brief The resolved font, character, size, and offset for a note's notehead.
+    struct NoteheadInfo
+    {
+        MusxInstance<FontInfo> font;   ///< The font that #character is drawn from.
+        char32_t character{};          ///< The notehead character, interpreted in #font.
+        int percent{100};              ///< Size percentage for the notehead. (100 means 100%.)
+        Evpu horzOffset{};              ///< Horizontal notehead offset from the default position.
+        Evpu vertOffset{};              ///< Vertical notehead offset from the default position. Zero unless the source of
+                                        ///< the notehead specifically allows vertical positioning.
+    };
+
+    /// @brief Resolves the effective font and character used to render this note's notehead, along with any
+    /// size or position adjustments.
+    /// @details Resolution is in order of precedence:
+    ///          - A per-note #details::NoteAlterations::altNhead override, if one is set for this note (with its own
+    ///            font override, if #details::NoteAlterations::useOwnFont is set).
+    ///          - The percussion note's shape, if this note is on a percussion staff with a mapped percussion note.
+    ///            (See #calcPercussionNoteInfo.)
+    ///          - The staff's shape-note convention, if shape notes are in effect for the staff. (See #others::Staff::getNoteShapes.)
+    ///          - Otherwise, the document's default notehead codepoints for the note's duration category.
+    ///            (See #options::MusicSymbolOptions.)
+    ///
+    ///          In every case except a custom-font #details::NoteAlterations override, the font is #others::Staff::noteFont
+    ///          if the staff specifies a custom notehead font, or the document's default #options::FontOptions::FontType::Noteheads
+    ///          font otherwise.
+    /// @return The resolved notehead info. This function always returns a usable result.
+    [[nodiscard]]
+    NoteheadInfo calcNoteheadInfo() const;
+
     /// @brief Calculates the note that this note could tie to. Check the return value's #Note::tieEnd
     /// to see if there is actually a tie end. (Note that Finale shows a tie whether there #Note::tieEnd is true or not.)
     /// @return The candidate note or an empty NoteInfoPtr if no candidate was found.
