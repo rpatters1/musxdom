@@ -36,7 +36,7 @@
 
 #include "musx/musx.h"
 
-#if ! defined(MUSX_RUNNING_ON_WINDOWS)
+#if ! defined(MUSX_RUNNING_ON_WINDOWS) && ! defined(MUSX_RUNNING_ON_WASM)
 #include <pwd.h>
 #include <sys/types.h>
 #include <unistd.h>
@@ -123,6 +123,11 @@ std::vector<std::filesystem::path> FontInfo::calcSMuFLPaths()
     if (const auto& testPath = util::TestConfiguration::getTestDataPath()) {
         return { std::filesystem::path(testPath.value()) / "font_metadata" };
     }
+#if defined(MUSX_RUNNING_ON_WASM)
+    // No filesystem or user-profile access in a wasm sandbox: skip probing entirely and
+    // rely on FontInfo::calcIsSMuFL()'s hardcoded knownSmuflFontNames fallback.
+    return {};
+#else
 #if defined(MUSX_RUNNING_ON_WINDOWS)
     auto systemEnv = "COMMONPROGRAMFILES";
     auto userEnv = "LOCALAPPDATA";
@@ -208,6 +213,7 @@ std::vector<std::filesystem::path> FontInfo::calcSMuFLPaths()
         retval.emplace_back(std::move(path));
     }
     return retval;
+#endif // MUSX_RUNNING_ON_WASM
 }
 
 // ************************
