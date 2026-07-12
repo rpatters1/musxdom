@@ -489,3 +489,94 @@ TEST(SmartShapes, EntriesInShapeTest)
         });
     }
 }
+
+TEST(SmartShapes, VerticalPlacementForBeatAttached)
+{
+    constexpr static musxtest::string_view xml = R"xml(
+    <?xml version="1.0" encoding="UTF-8"?>
+    <finale>
+        <others>
+            <measSpec cmper="1">
+                <beats>4</beats>
+                <divbeat>1024</divbeat>
+            </measSpec>
+            <staffSpec cmper="1">
+                <staffLines>5</staffLines>
+                <lineSpace>24</lineSpace>
+            </staffSpec>
+            <smartShape cmper="1">
+                <shapeType>solidLine</shapeType>
+                <startTermSeg>
+                    <endPt><inst>1</inst><meas>1</meas></endPt>
+                    <endPtAdj><y>24</y><on/></endPtAdj>
+                </startTermSeg>
+                <endTermSeg>
+                    <endPt><inst>1</inst><meas>1</meas><edu>1024</edu></endPt>
+                </endTermSeg>
+            </smartShape>
+            <smartShape cmper="2">
+                <shapeType>solidLine</shapeType>
+                <startTermSeg>
+                    <endPt><inst>1</inst><meas>1</meas></endPt>
+                    <endPtAdj><y>-120</y><on/></endPtAdj>
+                </startTermSeg>
+                <endTermSeg>
+                    <endPt><inst>1</inst><meas>1</meas><edu>1024</edu></endPt>
+                    <endPtAdj><y>-200</y><on/></endPtAdj>
+                </endTermSeg>
+            </smartShape>
+            <smartShape cmper="3">
+                <shapeType>solidLine</shapeType>
+                <startTermSeg>
+                    <endPt><inst>1</inst><meas>1</meas></endPt>
+                    <endPtAdj><y>-48</y><on/></endPtAdj>
+                </startTermSeg>
+                <endTermSeg>
+                    <endPt><inst>1</inst><meas>1</meas><edu>1024</edu></endPt>
+                    <endPtAdj><y>-48</y><on/></endPtAdj>
+                </endTermSeg>
+            </smartShape>
+            <smartShape cmper="4">
+                <shapeType>solidLine</shapeType>
+                <startTermSeg>
+                    <endPt><inst>1</inst><meas>1</meas></endPt>
+                    <endPtAdj><y>-200</y><on/></endPtAdj>
+                </startTermSeg>
+                <endTermSeg>
+                    <endPt><inst>1</inst><meas>1</meas><edu>1024</edu></endPt>
+                </endTermSeg>
+            </smartShape>
+            <smartShape cmper="5">
+                <shapeType>slurAuto</shapeType>
+                <entryBased/>
+                <startTermSeg>
+                    <endPt><inst>1</inst><meas>1</meas><entryNum>5</entryNum></endPt>
+                </startTermSeg>
+                <endTermSeg>
+                    <endPt><inst>1</inst><meas>1</meas><entryNum>6</entryNum></endPt>
+                </endTermSeg>
+            </smartShape>
+        </others>
+    </finale>
+    )xml";
+
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
+    ASSERT_TRUE(doc);
+
+    auto placementFor = [&](Cmper shapeCmper) {
+        auto shape = doc->getOthers()->get<others::SmartShape>(SCORE_PARTID, shapeCmper);
+        EXPECT_TRUE(shape) << "smart shape " << shapeCmper;
+        return shape->calcVerticalPlacementForBeatAttached();
+    };
+
+    // Both endpoints at or above the top staff line.
+    EXPECT_EQ(placementFor(1), VerticalPlacement::Above);
+    // Both endpoints below the bottom staff line (bottom line is at -96 for a 5-line staff).
+    EXPECT_EQ(placementFor(2), VerticalPlacement::Below);
+    // Both endpoints in the middle of the staff: neither above nor below.
+    EXPECT_EQ(placementFor(3), VerticalPlacement::Float);
+    // One endpoint below the bottom line, the other at the top line.
+    EXPECT_EQ(placementFor(4), VerticalPlacement::Float);
+    // Entry-based shapes have no beat-attached placement.
+    EXPECT_EQ(placementFor(5), VerticalPlacement::NotApplicable);
+}

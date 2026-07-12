@@ -402,7 +402,9 @@ VerticalPlacement others::SmartShape::calcVerticalPlacementForBeatAttached() con
     auto isBelow = [&](const TerminationSeg& termSeg) -> bool {
         bool result = false;
         if (const auto staff = termSeg.endPoint->createCurrentStaff()) {
-            const Evpu bottomOffset = staff->calcTopLineEvpu() - staff->calcBottomLineEvpu();
+            // Offsets are relative to the top staff line, so the bottom staff line
+            // is at a negative offset from it.
+            const Evpu bottomOffset = staff->calcBottomLineEvpu() - staff->calcTopLineEvpu();
             result = (termSeg.endPointAdj->calcVertOffset() < bottomOffset);
         } else {
             /// @todo force top-level function to return NotApplicable from here.
