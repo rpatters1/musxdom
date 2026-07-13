@@ -129,6 +129,9 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1Staff_1_1ChromaticTransposition.html">ChromaticTransposition</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Represents chromatic transposition details.  <a href="classmusx_1_1dom_1_1others_1_1Staff_1_1ChromaticTransposition.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmusx_1_1dom_1_1others_1_1Staff_1_1ClefChange.html">ClefChange</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A clef change attached to a staff at a measure location.  <a href="structmusx_1_1dom_1_1others_1_1Staff_1_1ClefChange.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1Staff_1_1KeySigTransposition.html">KeySigTransposition</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Represents key signature transposition details.  <a href="classmusx_1_1dom_1_1others_1_1Staff_1_1KeySigTransposition.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -255,6 +258,9 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>showNamesForPart</b> 
 <a class="el" href="namespacemusx_1_1dom.html#a894a6de7cd017628a3b75a07ed40952c">ClefIndex</a>&#160;</td><td class="memItemRight" valign="bottom"><b>calcFirstClefIndex</b> (bool forWrittenPitch=false) const</td></tr>
 <tr class="memdesc:ae105cbae363560acab42afbc47941b89"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the first clef in this staff. <br /></td></tr>
 <tr class="separator:ae105cbae363560acab42afbc47941b89"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2287feb684527946505a21535094557b" id="r_a2287feb684527946505a21535094557b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html#a2287feb684527946505a21535094557b">iterateClefChangesAtMeasure</a> (<a class="el" href="namespacemusx_1_1dom.html#a3d5af8a8174c235d3292c076def44817">MeasCmper</a> measureId, bool forWrittenPitch, std::function&lt; bool(const <a class="el" href="structmusx_1_1dom_1_1others_1_1Staff_1_1ClefChange.html">ClefChange</a> &amp;)&gt; iterator) const</td></tr>
+<tr class="memdesc:a2287feb684527946505a21535094557b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Iterate clef changes in this staff at the given measure.  <br /></td></tr>
+<tr class="separator:a2287feb684527946505a21535094557b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2358db6269aa8601b023e5b1b93e4748" id="r_a2358db6269aa8601b023e5b1b93e4748"><td class="memItemLeft" align="right" valign="top"><a id="a2358db6269aa8601b023e5b1b93e4748" name="a2358db6269aa8601b023e5b1b93e4748"></a>
 int&#160;</td><td class="memItemRight" valign="bottom"><b>calcNumberOfStafflines</b> () const</td></tr>
 <tr class="memdesc:a2358db6269aa8601b023e5b1b93e4748"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the number of staff lines on this staff. <br /></td></tr>
@@ -267,6 +273,9 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>calcMiddleStaffPositio
 <a class="el" href="namespacemusx_1_1dom.html#a7f27f66bcae06e7ccf1173bfca211da2">Evpu</a>&#160;</td><td class="memItemRight" valign="bottom"><b>calcRestOffset</b> (<a class="el" href="namespacemusx_1_1dom.html#a907ef641c247f1a5dbe75bbc972661f5">Edu</a> edu) const</td></tr>
 <tr class="memdesc:a762f7f1eddd06acb4399dc032e601d67"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the configured rest staff-step offset for an Edu value. <br /></td></tr>
 <tr class="separator:a762f7f1eddd06acb4399dc032e601d67"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aea617ae9c848fed7f9a844cbcdff9092" id="r_aea617ae9c848fed7f9a844cbcdff9092"><td class="memItemLeft" align="right" valign="top">std::pair&lt; <a class="el" href="namespacemusx_1_1dom.html#a7f27f66bcae06e7ccf1173bfca211da2">Evpu</a>, <a class="el" href="namespacemusx_1_1dom.html#a7f27f66bcae06e7ccf1173bfca211da2">Evpu</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html#aea617ae9c848fed7f9a844cbcdff9092">calcBarlineOffsetsFromCenter</a> () const</td></tr>
+<tr class="memdesc:aea617ae9c848fed7f9a844cbcdff9092"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates barline endpoint offsets relative to the staff center.  <br /></td></tr>
+<tr class="separator:aea617ae9c848fed7f9a844cbcdff9092"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af722a8287d3d1cfc0c27232aab4133de" id="r_af722a8287d3d1cfc0c27232aab4133de"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemusx_1_1dom.html#a7f27f66bcae06e7ccf1173bfca211da2">Evpu</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html#af722a8287d3d1cfc0c27232aab4133de">calcBaselineZeroPosition</a> () const</td></tr>
 <tr class="memdesc:af722a8287d3d1cfc0c27232aab4133de"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the baseline zero position for this staff, relative to the reference line, before any displacements are applied.  <br /></td></tr>
 <tr class="separator:af722a8287d3d1cfc0c27232aab4133de"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1088,6 +1097,31 @@ template&lt;typename SubType &gt; </div>
 
 </div>
 </div>
+<a id="aea617ae9c848fed7f9a844cbcdff9092" name="aea617ae9c848fed7f9a844cbcdff9092"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aea617ae9c848fed7f9a844cbcdff9092">&#9670;&#160;</a></span>calcBarlineOffsetsFromCenter()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::pair&lt; <a class="el" href="namespacemusx_1_1dom.html#a7f27f66bcae06e7ccf1173bfca211da2">Evpu</a>, <a class="el" href="namespacemusx_1_1dom.html#a7f27f66bcae06e7ccf1173bfca211da2">Evpu</a> &gt; musx::dom::others::Staff::calcBarlineOffsetsFromCenter </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Calculates barline endpoint offsets relative to the staff center. </p>
+<dl class="section return"><dt>Returns</dt><dd>A std::pair containing<ul>
+<li>the top barline endpoint relative to staff center, in EVPU</li>
+<li>the bottom barline endpoint relative to staff center, in EVPU </li>
+</ul>
+</dd></dl>
+<dl class="section note"><dt>Note</dt><dd>This uses the staff-position sign convention: positive is above/up and negative is below/down. </dd></dl>
+
+</div>
+</div>
 <a id="a9a7297ea42e76c5b5836160412e72fc8" name="a9a7297ea42e76c5b5836160412e72fc8"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a9a7297ea42e76c5b5836160412e72fc8">&#9670;&#160;</a></span>calcBaselinePosition() <span class="overload">[1/2]</span></h2>
 
@@ -1655,6 +1689,51 @@ template&lt;typename BaselineType , std::enable_if_t&lt; std::is_base_of&lt; <a 
 <p>Reimplemented from <a class="el" href="classmusx_1_1dom_1_1EnigmaBase.html#afe002b3162a9e31032d84196c80f6f74">musx::dom::EnigmaBase</a>.</p>
 
 <p>Reimplemented in <a class="el" href="classmusx_1_1dom_1_1others_1_1StaffStyle.html#a550396933a06fee05fa379be419fedb8">musx::dom::others::StaffStyle</a>.</p>
+
+</div>
+</div>
+<a id="a2287feb684527946505a21535094557b" name="a2287feb684527946505a21535094557b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2287feb684527946505a21535094557b">&#9670;&#160;</a></span>iterateClefChangesAtMeasure()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool musx::dom::others::Staff::iterateClefChangesAtMeasure </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespacemusx_1_1dom.html#a3d5af8a8174c235d3292c076def44817">MeasCmper</a>&#160;</td>
+          <td class="paramname"><em>measureId</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>forWrittenPitch</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::function&lt; bool(const <a class="el" href="structmusx_1_1dom_1_1others_1_1Staff_1_1ClefChange.html">ClefChange</a> &amp;)&gt;&#160;</td>
+          <td class="paramname"><em>iterator</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Iterate clef changes in this staff at the given measure. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">measureId</td><td>The measure to inspect. </td></tr>
+    <tr><td class="paramname">forWrittenPitch</td><td>If true, use an active transposed clef as Finale's written clef. </td></tr>
+    <tr><td class="paramname">iterator</td><td>The callback function. Return false to stop iteration. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True if iteration completed. False if <code>iterator</code> returned false and exited early. </dd></dl>
 
 </div>
 </div>

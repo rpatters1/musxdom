@@ -31,6 +31,7 @@ var classmusx_1_1dom_1_1others_1_1Measure =
     [ "Measure", "classmusx_1_1dom_1_1others_1_1Measure.html#ad05b328fcda211b8f40931f69bcf4b08", null ],
     [ "calcDefaultPickupRestValue", "classmusx_1_1dom_1_1others_1_1Measure.html#a1e35c6ec5cc9a58e0111f54456ded628", null ],
     [ "calcDisplayNumber", "classmusx_1_1dom_1_1others_1_1Measure.html#a3a0f5d6105af79216d3eb85fb4eabf89", null ],
+    [ "calcDisplayNumberText", "classmusx_1_1dom_1_1others_1_1Measure.html#a02b718c5a179e31ace1a8122066bfc94", null ],
     [ "calcDuration", "classmusx_1_1dom_1_1others_1_1Measure.html#acae376781db54c20039e5a6c6626f17b", null ],
     [ "calcMinLegacyPickupSpacer", "classmusx_1_1dom_1_1others_1_1Measure.html#a53580a7769b31e9aa51fee60790865c4", null ],
     [ "calcMinLegacyPickupSpacer", "classmusx_1_1dom_1_1others_1_1Measure.html#a7292509dd15a52901b8b7e27b1c0fa1e", null ],

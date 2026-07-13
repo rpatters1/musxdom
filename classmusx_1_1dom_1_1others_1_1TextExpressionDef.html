@@ -129,9 +129,9 @@ Public Member Functions</h2></td></tr>
 <a class="el" href="namespacemusx_1_1dom.html#a4223cd531120dbef7acd854c3d2631b8">MusxInstance</a>&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1TextBlock.html">TextBlock</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getTextBlock</b> () const</td></tr>
 <tr class="memdesc:a760183a3d6e13d8fa84d7e4da65e7415"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the <a class="el" href="classmusx_1_1dom_1_1others_1_1TextBlock.html" title="Represents the attributes of a Finale &quot;textBlock&quot;.">TextBlock</a> for this expression, or nullptr if none. <br /></td></tr>
 <tr class="separator:a760183a3d6e13d8fa84d7e4da65e7415"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a210437df7dac644e92b3a49a5088df4c" id="r_a210437df7dac644e92b3a49a5088df4c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1util_1_1EnigmaParsingContext.html">util::EnigmaParsingContext</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1TextExpressionDef.html#a210437df7dac644e92b3a49a5088df4c">getRawTextCtx</a> (<a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> forPartId) const</td></tr>
-<tr class="memdesc:a210437df7dac644e92b3a49a5088df4c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the raw text context for parsing this expression, or nullptr if none.  <br /></td></tr>
-<tr class="separator:a210437df7dac644e92b3a49a5088df4c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab3615a1d1bcd0d66d8db85636ea61683" id="r_ab3615a1d1bcd0d66d8db85636ea61683"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1util_1_1EnigmaParsingContext.html">util::EnigmaParsingContext</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1TextExpressionDef.html#ab3615a1d1bcd0d66d8db85636ea61683">getRawTextCtx</a> (<a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> forPartId, <a class="el" href="classmusx_1_1util_1_1EnigmaString.html#ad0503e291556abece57b9c47b16bbf1e">util::EnigmaString::TextInsertCallback</a> defaultInsertFunc=<a class="el" href="classmusx_1_1util_1_1EnigmaString.html#a78c97ffac1f57121cedf8d72ce879c11">util::EnigmaString::defaultInsertsCallback</a>) const</td></tr>
+<tr class="memdesc:ab3615a1d1bcd0d66d8db85636ea61683"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the raw text context for parsing this expression, or nullptr if none.  <br /></td></tr>
+<tr class="separator:ab3615a1d1bcd0d66d8db85636ea61683"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a239e82274fbcd62be18029f9935ce29d" id="r_a239e82274fbcd62be18029f9935ce29d"><td class="memItemLeft" align="right" valign="top"><a id="a239e82274fbcd62be18029f9935ce29d" name="a239e82274fbcd62be18029f9935ce29d"></a>
 <a class="el" href="namespacemusx_1_1dom.html#a4223cd531120dbef7acd854c3d2631b8">MusxInstance</a>&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1Enclosure.html">Enclosure</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getEnclosure</b> () const</td></tr>
 <tr class="memdesc:a239e82274fbcd62be18029f9935ce29d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the enclosure for this expression, or nullptr if none. <br /></td></tr>
@@ -422,8 +422,8 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>SharedNodes</b> = st
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a210437df7dac644e92b3a49a5088df4c" name="a210437df7dac644e92b3a49a5088df4c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a210437df7dac644e92b3a49a5088df4c">&#9670;&#160;</a></span>getRawTextCtx()</h2>
+<a id="ab3615a1d1bcd0d66d8db85636ea61683" name="ab3615a1d1bcd0d66d8db85636ea61683"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab3615a1d1bcd0d66d8db85636ea61683">&#9670;&#160;</a></span>getRawTextCtx()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -432,8 +432,18 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>SharedNodes</b> = st
           <td class="memname"><a class="el" href="classmusx_1_1util_1_1EnigmaParsingContext.html">util::EnigmaParsingContext</a> musx::dom::others::TextExpressionDef::getRawTextCtx </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a>&#160;</td>
-          <td class="paramname"><em>forPartId</em></td><td>)</td>
-          <td> const</td>
+          <td class="paramname"><em>forPartId</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classmusx_1_1util_1_1EnigmaString.html#ad0503e291556abece57b9c47b16bbf1e">util::EnigmaString::TextInsertCallback</a>&#160;</td>
+          <td class="paramname"><em>defaultInsertFunc</em> = <code><a class="el" href="classmusx_1_1util_1_1EnigmaString.html#a78c97ffac1f57121cedf8d72ce879c11">util::EnigmaString::defaultInsertsCallback</a></code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -442,6 +452,7 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>SharedNodes</b> = st
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">forPartId</td><td>The linked part to use for ^partname and ^totpages inserts. </td></tr>
+    <tr><td class="paramname">defaultInsertFunc</td><td>An optional outer handler layer. If it returns <code>std::nullopt</code>, the expression-definition defaults for <code>^value</code>, <code>^control</code>, and <code>^pass</code> are tried next. </td></tr>
   </table>
   </dd>
 </dl>

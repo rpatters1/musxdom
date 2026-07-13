@@ -26,6 +26,7 @@ var classmusx_1_1dom_1_1EntryInfoPtr =
     [ "calcGlobalActualDuration", "classmusx_1_1dom_1_1EntryInfoPtr.html#aefab62e48990cb691af5a4975e102989", null ],
     [ "calcGlobalElapsedDuration", "classmusx_1_1dom_1_1EntryInfoPtr.html#a1445f0a573b9b1751c2c8dd5d3092dee", null ],
     [ "calcGraceElapsedDuration", "classmusx_1_1dom_1_1EntryInfoPtr.html#a6a66035c5eb6d31759de5e72e9152831", null ],
+    [ "calcGraceNoteSlash", "classmusx_1_1dom_1_1EntryInfoPtr.html#a64caa4b9d816b0e87a72ef3ad4658c14", null ],
     [ "calcHasGraceNote", "classmusx_1_1dom_1_1EntryInfoPtr.html#a035280357058182f2a7193272b7dad6e", null ],
     [ "calcIfLayerSettingsApply", "classmusx_1_1dom_1_1EntryInfoPtr.html#a1b2399f12b3954defd1403ab7acc7b0b", null ],
     [ "calcIsAuxiliaryPitchMarker", "classmusx_1_1dom_1_1EntryInfoPtr.html#abbfa1f3bf8950151977f8ede1c74150b", null ],

@@ -190,6 +190,9 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>calcShouldShowFullNam
 <tr class="memitem:a3a0f5d6105af79216d3eb85fb4eabf89" id="r_a3a0f5d6105af79216d3eb85fb4eabf89"><td class="memItemLeft" align="right" valign="top">std::optional&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1Measure.html#a3a0f5d6105af79216d3eb85fb4eabf89">calcDisplayNumber</a> () const</td></tr>
 <tr class="memdesc:a3a0f5d6105af79216d3eb85fb4eabf89"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the visible number of the measure, based on the first <a class="el" href="classmusx_1_1dom_1_1others_1_1MeasureNumberRegion.html" title="Represents the Measure Number Region with detailed font and enclosure settings for score and part dat...">MeasureNumberRegion</a> that contains it.  <br /></td></tr>
 <tr class="separator:a3a0f5d6105af79216d3eb85fb4eabf89"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a02b718c5a179e31ace1a8122066bfc94" id="r_a02b718c5a179e31ace1a8122066bfc94"><td class="memItemLeft" align="right" valign="top">std::optional&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1Measure.html#a02b718c5a179e31ace1a8122066bfc94">calcDisplayNumberText</a> () const</td></tr>
+<tr class="memdesc:a02b718c5a179e31ace1a8122066bfc94"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the visible measure number text, based on the first <a class="el" href="classmusx_1_1dom_1_1others_1_1MeasureNumberRegion.html" title="Represents the Measure Number Region with detailed font and enclosure settings for score and part dat...">MeasureNumberRegion</a> that contains it.  <br /></td></tr>
+<tr class="separator:a02b718c5a179e31ace1a8122066bfc94"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a03099d87e8e56693e6451f03c7b717cc" id="r_a03099d87e8e56693e6451f03c7b717cc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemusx_1_1dom.html#a4223cd531120dbef7acd854c3d2631b8">MusxInstance</a>&lt; <a class="el" href="classmusx_1_1dom_1_1KeySignature.html">KeySignature</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1Measure.html#a03099d87e8e56693e6451f03c7b717cc">createKeySignature</a> (const std::optional&lt; <a class="el" href="namespacemusx_1_1dom.html#ada2c0787f5b7cb764d2a344d491ab99c">StaffCmper</a> &gt; &amp;forStaff=std::nullopt) const</td></tr>
 <tr class="memdesc:a03099d87e8e56693e6451f03c7b717cc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates and returns a shared pointer to an instance of the <a class="el" href="classmusx_1_1dom_1_1KeySignature.html">KeySignature</a> for this measure and staff.  <br /></td></tr>
 <tr class="separator:a03099d87e8e56693e6451f03c7b717cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -271,6 +274,10 @@ virtual&#160;</td><td class="memItemRight" valign="bottom"><b>~DocumentElement</
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
+<tr class="memitem:aaab6ef680a33e94553a1e7d7c3725adf" id="r_aaab6ef680a33e94553a1e7d7c3725adf"><td class="memItemLeft" align="right" valign="top"><a id="aaab6ef680a33e94553a1e7d7c3725adf" name="aaab6ef680a33e94553a1e7d7c3725adf"></a>
+static void&#160;</td><td class="memItemRight" valign="bottom"><b>checkMeasureCmperSequence</b> (const <a class="el" href="namespacemusx_1_1dom.html#ac52edbaa60f81ba3df76ee77b37e95fd">DocumentPtr</a> &amp;document)</td></tr>
+<tr class="memdesc:aaab6ef680a33e94553a1e7d7c3725adf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks that score measure cmpers are sequential, starting with 1. <br /></td></tr>
+<tr class="separator:aaab6ef680a33e94553a1e7d7c3725adf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac582ef13d3e8e32836116b698a42fbea" id="r_ac582ef13d3e8e32836116b698a42fbea"><td class="memItemLeft" align="right" valign="top"><a id="ac582ef13d3e8e32836116b698a42fbea" name="ac582ef13d3e8e32836116b698a42fbea"></a>
 static const <a class="el" href="namespacemusx_1_1xml.html#a39bb6e9f7fd9e4cdc090566309a8dfe8">xml::XmlElementArray</a>&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1Measure.html">Measure</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>xmlMappingArray</b> ()</td></tr>
 <tr class="memdesc:ac582ef13d3e8e32836116b698a42fbea"><td class="mdescLeft">&#160;</td><td class="mdescRight">Required for musx::factory::FieldPopulator. <br /></td></tr>
@@ -690,6 +697,26 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Calculates the visible number of the measure, based on the first <a class="el" href="classmusx_1_1dom_1_1others_1_1MeasureNumberRegion.html" title="Represents the Measure Number Region with detailed font and enclosure settings for score and part dat...">MeasureNumberRegion</a> that contains it. </p>
 <p>Depending on the display options of the found <a class="el" href="classmusx_1_1dom_1_1others_1_1MeasureNumberRegion.html" title="Represents the Measure Number Region with detailed font and enclosure settings for score and part dat...">MeasureNumberRegion</a>, the number may or may not appear in the score. And if it does, it may not appear as a number. </p><dl class="section return"><dt>Returns</dt><dd>The display number or std::nullopt if the measure is not included in measure numbering or if it is not covered by a measure number region. </dd></dl>
+
+</div>
+</div>
+<a id="a02b718c5a179e31ace1a8122066bfc94" name="a02b718c5a179e31ace1a8122066bfc94"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a02b718c5a179e31ace1a8122066bfc94">&#9670;&#160;</a></span>calcDisplayNumberText()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::optional&lt; std::string &gt; musx::dom::others::Measure::calcDisplayNumberText </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Calculates the visible measure number text, based on the first <a class="el" href="classmusx_1_1dom_1_1others_1_1MeasureNumberRegion.html" title="Represents the Measure Number Region with detailed font and enclosure settings for score and part dat...">MeasureNumberRegion</a> that contains it. </p>
+<dl class="section return"><dt>Returns</dt><dd>The display text or std::nullopt if the measure is not included in measure numbering or if it is not covered by a measure number region. </dd></dl>
 
 </div>
 </div>

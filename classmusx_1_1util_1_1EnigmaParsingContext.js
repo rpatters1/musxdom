@@ -2,6 +2,8 @@ var classmusx_1_1util_1_1EnigmaParsingContext =
 [
     [ "EnigmaParsingContext", "classmusx_1_1util_1_1EnigmaParsingContext.html#ac18d6d3149004f84cf0d407aee01b6fd", null ],
     [ "EnigmaParsingContext", "classmusx_1_1util_1_1EnigmaParsingContext.html#a9ee07388f1f1af0d6629e2331df92106", null ],
+    [ "collectEnigmaTextChunks", "classmusx_1_1util_1_1EnigmaParsingContext.html#a396a76b54fc1bf00d4730c3713d56ac8", null ],
+    [ "collectEnigmaTextChunks", "classmusx_1_1util_1_1EnigmaParsingContext.html#a714f40ce6ef7ed0961e4817e370f5812", null ],
     [ "getPageNumber", "classmusx_1_1util_1_1EnigmaParsingContext.html#a6605682c140bd8df27052e0429f9d90f", null ],
     [ "getRawText", "classmusx_1_1util_1_1EnigmaParsingContext.html#a69efcf3a810d02d0046eeeb62cedd73b", null ],
     [ "getRequestedPartId", "classmusx_1_1util_1_1EnigmaParsingContext.html#a2c083ad522a42b106e5f5e7497ab1774", null ],

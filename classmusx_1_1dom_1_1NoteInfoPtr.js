@@ -1,6 +1,7 @@
 var classmusx_1_1dom_1_1NoteInfoPtr =
 [
     [ "ArpeggiatedTieInfo", "structmusx_1_1dom_1_1NoteInfoPtr_1_1ArpeggiatedTieInfo.html", "structmusx_1_1dom_1_1NoteInfoPtr_1_1ArpeggiatedTieInfo" ],
+    [ "NoteheadInfo", "structmusx_1_1dom_1_1NoteInfoPtr_1_1NoteheadInfo.html", "structmusx_1_1dom_1_1NoteInfoPtr_1_1NoteheadInfo" ],
     [ "PseudoTieInfo", "structmusx_1_1dom_1_1NoteInfoPtr_1_1PseudoTieInfo.html", "structmusx_1_1dom_1_1NoteInfoPtr_1_1PseudoTieInfo" ],
     [ "TieStandInSource", "structmusx_1_1dom_1_1NoteInfoPtr_1_1TieStandInSource.html", "structmusx_1_1dom_1_1NoteInfoPtr_1_1TieStandInSource" ],
     [ "NoteInfoPtr", "classmusx_1_1dom_1_1NoteInfoPtr.html#af96307ed369138a67d004695055e894d", null ],
@@ -18,6 +19,7 @@ var classmusx_1_1dom_1_1NoteInfoPtr =
     [ "calcIsIncludedInVoicing", "classmusx_1_1dom_1_1NoteInfoPtr.html#aa078714d4ad095bd9be5da204e9bc438", null ],
     [ "calcIsTop", "classmusx_1_1dom_1_1NoteInfoPtr.html#ae5c74d24751ea19781ea5c0b812b5b08", null ],
     [ "calcJumpTieContinuationsFrom", "classmusx_1_1dom_1_1NoteInfoPtr.html#a351043be4712ae30b3b2371ac0f05ce2", null ],
+    [ "calcNoteheadInfo", "classmusx_1_1dom_1_1NoteInfoPtr.html#a16f03e5030d5d4995c87d9899341ce48", null ],
     [ "calcNoteProperties", "classmusx_1_1dom_1_1NoteInfoPtr.html#aff1513549d85b77ca2bd2013287e3ef1", null ],
     [ "calcNotePropertiesConcert", "classmusx_1_1dom_1_1NoteInfoPtr.html#a7ae784a48f045641dac1434223fd593f", null ],
     [ "calcNotePropertiesInView", "classmusx_1_1dom_1_1NoteInfoPtr.html#aacb76820577ceef2195da88bfbe37435", null ],
@@ -25,7 +27,6 @@ var classmusx_1_1dom_1_1NoteInfoPtr =
     [ "calcPseudoLvTieInfo", "classmusx_1_1dom_1_1NoteInfoPtr.html#ab6c73b9fc08738bb70bf615a29d0ae3f", null ],
     [ "calcPseudoTieEndInfo", "classmusx_1_1dom_1_1NoteInfoPtr.html#a8d7ea5877dcf0a6c3f69a5bd1fb75b86", null ],
     [ "calcStaff", "classmusx_1_1dom_1_1NoteInfoPtr.html#a47410cd12a40e392c789ffc3c265b264", null ],
-    [ "calcStaffPosition", "classmusx_1_1dom_1_1NoteInfoPtr.html#a1bd7cd06f7ed01f976e9e35de673d486", null ],
     [ "calcTieFrom", "classmusx_1_1dom_1_1NoteInfoPtr.html#a8d4472ff1bfd27358ea69f33a3e82d18", null ],
     [ "calcTieTo", "classmusx_1_1dom_1_1NoteInfoPtr.html#ac535914f03c0ac61fe184134c1584d9b", null ],
     [ "createTransposer", "classmusx_1_1dom_1_1NoteInfoPtr.html#afc49802bc77032c3e6990acb8c3a9f9d", null ],

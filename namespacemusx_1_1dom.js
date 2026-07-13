@@ -840,6 +840,7 @@ var namespacemusx_1_1dom =
     [ "OthersBase", "classmusx_1_1dom_1_1OthersBase.html", "classmusx_1_1dom_1_1OthersBase" ],
     [ "OthersName", "classmusx_1_1dom_1_1OthersName.html", "classmusx_1_1dom_1_1OthersName" ],
     [ "OthersPool", "classmusx_1_1dom_1_1OthersPool.html", "classmusx_1_1dom_1_1OthersPool" ],
+    [ "RehearsalMarkInfo", "structmusx_1_1dom_1_1RehearsalMarkInfo.html", "structmusx_1_1dom_1_1RehearsalMarkInfo" ],
     [ "ShapeDefInstruction", "structmusx_1_1dom_1_1ShapeDefInstruction.html", "structmusx_1_1dom_1_1ShapeDefInstruction" ],
     [ "TextsBase", "classmusx_1_1dom_1_1TextsBase.html", "classmusx_1_1dom_1_1TextsBase" ],
     [ "TextsPool", "classmusx_1_1dom_1_1TextsPool.html", "classmusx_1_1dom_1_1TextsPool" ],
@@ -862,6 +863,7 @@ var namespacemusx_1_1dom =
     [ "Evpu16ths", "namespacemusx_1_1dom.html#a724894a371aee2f8438f1dec8109e451", null ],
     [ "EvpuFloat", "namespacemusx_1_1dom.html#a901fc57f5455ae033180b2401434b6a9", null ],
     [ "Inci", "namespacemusx_1_1dom.html#a7e1523afa8705d91b1d694405c2feefb", null ],
+    [ "InstrumentUuid", "namespacemusx_1_1dom.html#a83d1be84fd914d0b9046fbbdec2cd97d", null ],
     [ "LayerIndex", "namespacemusx_1_1dom.html#a58ecc2c31e1c1ff88267f87f028b5981", null ],
     [ "MeasCmper", "namespacemusx_1_1dom.html#a3d5af8a8174c235d3292c076def44817", null ],
     [ "MusxInstance", "namespacemusx_1_1dom.html#a4223cd531120dbef7acd854c3d2631b8", null ],
@@ -871,6 +873,8 @@ var namespacemusx_1_1dom =
     [ "OthersPoolPtr", "namespacemusx_1_1dom.html#a18750060f2b1c2d29282ecea4adbe04e", null ],
     [ "PageCmper", "namespacemusx_1_1dom.html#af3051df2564d9f3cae82e214142eebb2", null ],
     [ "PercussionNoteTypeId", "namespacemusx_1_1dom.html#a2158a5e042da1a8511f2e3b604afaa7b", null ],
+    [ "RehearsalMarkKey", "namespacemusx_1_1dom.html#a9b8cbc5a46e43a1278d774ba0eeed764", null ],
+    [ "RehearsalMarkMap", "namespacemusx_1_1dom.html#a154b657c8dfadc9cae18f7c91e49e692", null ],
     [ "StaffCmper", "namespacemusx_1_1dom.html#ada2c0787f5b7cb764d2a344d491ab99c", null ],
     [ "SystemCmper", "namespacemusx_1_1dom.html#ada9565e4288b6e80b32971960acb0237", null ],
     [ "TextsPoolPtr", "namespacemusx_1_1dom.html#a8da452175665b93e3cf051de6c5a08b4", null ],
@@ -921,6 +925,20 @@ var namespacemusx_1_1dom =
       [ "Respell", "namespacemusx_1_1dom.html#a58a07f9a8e6c45605a8dab47d3b70d7faaadf30377ea3d55f6efd59235c959e76", null ],
       [ "NoRespell", "namespacemusx_1_1dom.html#a58a07f9a8e6c45605a8dab47d3b70d7fa0074882deee30ffbff3641c589b6a089", null ]
     ] ],
+    [ "InstrumentFamily", "namespacemusx_1_1dom.html#a7d5001a69f7120037cc0d75a4abcd99a", [
+      [ "Unspecified", "namespacemusx_1_1dom.html#a7d5001a69f7120037cc0d75a4abcd99aa6fcdc090caeade09d0efd6253932b6f5", null ],
+      [ "Brass", "namespacemusx_1_1dom.html#a7d5001a69f7120037cc0d75a4abcd99aaff60395b07a0d85c9ccdd153dfe4ec0e", null ],
+      [ "Keyboard", "namespacemusx_1_1dom.html#a7d5001a69f7120037cc0d75a4abcd99aa6ce4d85a628a88bbdb3ac24a8e5a9c2e", null ],
+      [ "Organ", "namespacemusx_1_1dom.html#a7d5001a69f7120037cc0d75a4abcd99aa0891cabee54d9799e07da860195f67b8", null ],
+      [ "Percussion", "namespacemusx_1_1dom.html#a7d5001a69f7120037cc0d75a4abcd99aacb5c10c0b488ed4f3826ba628d18ca6a", null ],
+      [ "PitchedPercussion", "namespacemusx_1_1dom.html#a7d5001a69f7120037cc0d75a4abcd99aac7b71f9f6b107c6617e4a70647e6a9a7", null ],
+      [ "PluckedStrings", "namespacemusx_1_1dom.html#a7d5001a69f7120037cc0d75a4abcd99aafc5926c76c85889d86a8e6b6515467ec", null ],
+      [ "Strings", "namespacemusx_1_1dom.html#a7d5001a69f7120037cc0d75a4abcd99aa89be9433646f5939040a78971a5d103a", null ],
+      [ "Voice", "namespacemusx_1_1dom.html#a7d5001a69f7120037cc0d75a4abcd99aad7a3fdf1351b72249a47454751549deb", null ],
+      [ "Woodwinds", "namespacemusx_1_1dom.html#a7d5001a69f7120037cc0d75a4abcd99aa3f72f3573d59aee3be659ca53efec76e", null ],
+      [ "Synth", "namespacemusx_1_1dom.html#a7d5001a69f7120037cc0d75a4abcd99aa09c86ba7bce1c4d7e7cb68994db099c9", null ],
+      [ "Other", "namespacemusx_1_1dom.html#a7d5001a69f7120037cc0d75a4abcd99aa6311ae17c1ee52b36e68aaf4ad066387", null ]
+    ] ],
     [ "KnownShapeDefType", "namespacemusx_1_1dom.html#a16d85e8ed9439b9a2ef071d38ffa0fd7", [
       [ "Unrecognized", "namespacemusx_1_1dom.html#a16d85e8ed9439b9a2ef071d38ffa0fd7a7f5f743ac34344aeb26849015b4b3dae", null ],
       [ "Blank", "namespacemusx_1_1dom.html#a16d85e8ed9439b9a2ef071d38ffa0fd7ae4ef81cce7e4e10033ebb10962dfdd5e", null ],
@@ -931,7 +949,12 @@ var namespacemusx_1_1dom =
       [ "PedalArrowheadUp", "namespacemusx_1_1dom.html#a16d85e8ed9439b9a2ef071d38ffa0fd7a59735bf84a9f0da1b032ed34bc0d6161", null ],
       [ "PedalArrowheadShortUpDownLongUp", "namespacemusx_1_1dom.html#a16d85e8ed9439b9a2ef071d38ffa0fd7a088e918e332375bfeb20c4168e0196a5", null ],
       [ "PedalArrowheadLongUpDownShortUp", "namespacemusx_1_1dom.html#a16d85e8ed9439b9a2ef071d38ffa0fd7a9bf7fd8cfe4d0efe1365f0666ef286b7", null ],
-      [ "VerticalLineRightHooks", "namespacemusx_1_1dom.html#a16d85e8ed9439b9a2ef071d38ffa0fd7acc794282ee76f747268ab52530f95768", null ]
+      [ "VerticalLineRightHooks", "namespacemusx_1_1dom.html#a16d85e8ed9439b9a2ef071d38ffa0fd7acc794282ee76f747268ab52530f95768", null ],
+      [ "SnapPizzicatoAbove", "namespacemusx_1_1dom.html#a16d85e8ed9439b9a2ef071d38ffa0fd7a3adea1c2001f8e6eac1e9a7cbeda4887", null ],
+      [ "SnapPizzicatoBelow", "namespacemusx_1_1dom.html#a16d85e8ed9439b9a2ef071d38ffa0fd7a79bfcfe1cfabb876ac778994bf85f200", null ],
+      [ "BuzzPizzicato", "namespacemusx_1_1dom.html#a16d85e8ed9439b9a2ef071d38ffa0fd7a56db6f7486895e1126594dbcd5b88f93", null ],
+      [ "FingernailPizzCurveUp", "namespacemusx_1_1dom.html#a16d85e8ed9439b9a2ef071d38ffa0fd7a1e29ecb3dd56cc4ebfded77a472c1eae", null ],
+      [ "FingernailPizzCurveDown", "namespacemusx_1_1dom.html#a16d85e8ed9439b9a2ef071d38ffa0fd7a596d7d825313087211cafb7ab90a132b", null ]
     ] ],
     [ "KnownSmartShapeType", "namespacemusx_1_1dom.html#a1a00dcadafbe5dfc91e5d1cde4f5ff5e", [
       [ "Unrecognized", "namespacemusx_1_1dom.html#a1a00dcadafbe5dfc91e5d1cde4f5ff5ea7f5f743ac34344aeb26849015b4b3dae", null ],
@@ -1030,6 +1053,7 @@ var namespacemusx_1_1dom =
     ] ],
     [ "calcDurationInfoFromEdu", "namespacemusx_1_1dom.html#ad70355206e90c7b79b7860fc5d75bff0", null ],
     [ "calcNumberOfBeamsInEdu", "namespacemusx_1_1dom.html#aa75d341865ea5c3e1a8fcb735ea5e51b", null ],
+    [ "instrumentFamilyFromUuid", "namespacemusx_1_1dom.html#aca8bd8022b86b8fc68930283cb07d674", null ],
     [ "BASE_SYSTEM_ID", "namespacemusx_1_1dom.html#ac87f0744ae26e5eb9f08d9615fc15bc5", null ],
     [ "EDU_PER_WHOLE_NOTE", "namespacemusx_1_1dom.html#ace087082aba8a546ecd9abe14e0b2fc2", null ],
     [ "EFIX_PER_EVPU", "namespacemusx_1_1dom.html#a6e7e94e8e870c83e2fb15709b0c87fa3", null ],

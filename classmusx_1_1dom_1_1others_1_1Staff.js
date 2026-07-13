@@ -1,6 +1,7 @@
 var classmusx_1_1dom_1_1others_1_1Staff =
 [
     [ "ChromaticTransposition", "classmusx_1_1dom_1_1others_1_1Staff_1_1ChromaticTransposition.html", "classmusx_1_1dom_1_1others_1_1Staff_1_1ChromaticTransposition" ],
+    [ "ClefChange", "structmusx_1_1dom_1_1others_1_1Staff_1_1ClefChange.html", "structmusx_1_1dom_1_1others_1_1Staff_1_1ClefChange" ],
     [ "KeySigTransposition", "classmusx_1_1dom_1_1others_1_1Staff_1_1KeySigTransposition.html", "classmusx_1_1dom_1_1others_1_1Staff_1_1KeySigTransposition" ],
     [ "Transposition", "classmusx_1_1dom_1_1others_1_1Staff_1_1Transposition.html", "classmusx_1_1dom_1_1others_1_1Staff_1_1Transposition" ],
     [ "AlternateNotation", "classmusx_1_1dom_1_1others_1_1Staff.html#a0a3bc01d0f78962930fc34ea6fb31bb9", [
@@ -34,6 +35,7 @@ var classmusx_1_1dom_1_1others_1_1Staff =
     [ "addAutoNumbering", "classmusx_1_1dom_1_1others_1_1Staff.html#a428918fb57d8ff9b01b34f953b080904", null ],
     [ "calcAlternateNotationHidesEntries", "classmusx_1_1dom_1_1others_1_1Staff.html#a9d7c3b2be150114583a4bc3f1cfee5c6", null ],
     [ "calcAutoNumberingAffix", "classmusx_1_1dom_1_1others_1_1Staff.html#a1429901c5fe356fd8f4ce7d63b680c04", null ],
+    [ "calcBarlineOffsetsFromCenter", "classmusx_1_1dom_1_1others_1_1Staff.html#aea617ae9c848fed7f9a844cbcdff9092", null ],
     [ "calcBaselinePosition", "classmusx_1_1dom_1_1others_1_1Staff.html#a9a7297ea42e76c5b5836160412e72fc8", null ],
     [ "calcBaselinePosition", "classmusx_1_1dom_1_1others_1_1Staff.html#a3b3b84f9e7315d29b794311f290d4d08", null ],
     [ "calcBaselineZeroPosition", "classmusx_1_1dom_1_1others_1_1Staff.html#af722a8287d3d1cfc0c27232aab4133de", null ],
@@ -66,6 +68,7 @@ var classmusx_1_1dom_1_1others_1_1Staff =
     [ "getNoteShapes", "classmusx_1_1dom_1_1others_1_1Staff.html#a65dddeed8b69726453a77e4d378f39b8", null ],
     [ "hasInstrumentAssigned", "classmusx_1_1dom_1_1others_1_1Staff.html#a76f425b19ecab6f653dedb641f226748", null ],
     [ "integrityCheck", "classmusx_1_1dom_1_1others_1_1Staff.html#a307f203b57bd0e60a5255f8758fb44a8", null ],
+    [ "iterateClefChangesAtMeasure", "classmusx_1_1dom_1_1others_1_1Staff.html#a2287feb684527946505a21535094557b", null ],
     [ "iterateEntries", "classmusx_1_1dom_1_1others_1_1Staff.html#a527875ed46af13e7e93d5469e064996a", null ],
     [ "showNamesForPart", "classmusx_1_1dom_1_1others_1_1Staff.html#ac9c53dc5f21562bebfaf99be4d6d4cd5", null ],
     [ "abbrvNameTextId", "classmusx_1_1dom_1_1others_1_1Staff.html#aa33a3c157327823a02f0f3a5e69fd76d", null ],

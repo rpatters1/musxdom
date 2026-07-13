@@ -264,6 +264,9 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1OthersPool.html">OthersPool</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A pool that manages collections of <code><a class="el" href="classmusx_1_1dom_1_1OthersBase.html" title="EnigmaBase class for all &quot;others&quot; types.">OthersBase</a></code> objects.  <a href="classmusx_1_1dom_1_1OthersPool.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmusx_1_1dom_1_1RehearsalMarkInfo.html">RehearsalMarkInfo</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Information associated with a rehearsal mark.  <a href="structmusx_1_1dom_1_1RehearsalMarkInfo.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmusx_1_1dom_1_1ShapeDefInstruction.html">ShapeDefInstruction</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper functions and structs for decoding instruction data vectors in others::ShapeDef.  <a href="structmusx_1_1dom_1_1ShapeDefInstruction.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -291,6 +294,14 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>EmbeddedGraphicBlob<
 using&#160;</td><td class="memItemRight" valign="bottom"><b>EmbeddedGraphicsMap</b> = std::unordered_map&lt; <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a>, <a class="el" href="structmusx_1_1dom_1_1EmbeddedGraphicData.html">EmbeddedGraphicData</a> &gt;</td></tr>
 <tr class="memdesc:ab6c9d6e38f68c0631771adfe88470077"><td class="mdescLeft">&#160;</td><td class="mdescRight">Embedded graphics keyed by cmper (filename stem in musx archive). <br /></td></tr>
 <tr class="separator:ab6c9d6e38f68c0631771adfe88470077"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9b8cbc5a46e43a1278d774ba0eeed764" id="r_a9b8cbc5a46e43a1278d774ba0eeed764"><td class="memItemLeft" align="right" valign="top"><a id="a9b8cbc5a46e43a1278d774ba0eeed764" name="a9b8cbc5a46e43a1278d774ba0eeed764"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>RehearsalMarkKey</b> = std::pair&lt; <a class="el" href="namespacemusx_1_1dom.html#a3d5af8a8174c235d3292c076def44817">MeasCmper</a>, <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> &gt;</td></tr>
+<tr class="memdesc:a9b8cbc5a46e43a1278d774ba0eeed764"><td class="mdescLeft">&#160;</td><td class="mdescRight">Key identifying a rehearsal mark by measure number and <a class="el" href="classmusx_1_1dom_1_1others_1_1TextExpressionDef.html">others::TextExpressionDef</a> <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a>. <br /></td></tr>
+<tr class="separator:a9b8cbc5a46e43a1278d774ba0eeed764"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a154b657c8dfadc9cae18f7c91e49e692" id="r_a154b657c8dfadc9cae18f7c91e49e692"><td class="memItemLeft" align="right" valign="top"><a id="a154b657c8dfadc9cae18f7c91e49e692" name="a154b657c8dfadc9cae18f7c91e49e692"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>RehearsalMarkMap</b> = std::map&lt; <a class="el" href="namespacemusx_1_1dom.html#a9b8cbc5a46e43a1278d774ba0eeed764">RehearsalMarkKey</a>, <a class="el" href="structmusx_1_1dom_1_1RehearsalMarkInfo.html">RehearsalMarkInfo</a> &gt;</td></tr>
+<tr class="memdesc:a154b657c8dfadc9cae18f7c91e49e692"><td class="mdescLeft">&#160;</td><td class="mdescRight">Maps each occurrence of a rehearsal mark to its sequence number for that measure. <br /></td></tr>
+<tr class="separator:a154b657c8dfadc9cae18f7c91e49e692"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac52edbaa60f81ba3df76ee77b37e95fd" id="r_ac52edbaa60f81ba3df76ee77b37e95fd"><td class="memItemLeft" align="right" valign="top"><a id="ac52edbaa60f81ba3df76ee77b37e95fd" name="ac52edbaa60f81ba3df76ee77b37e95fd"></a>
 using&#160;</td><td class="memItemRight" valign="bottom"><b>DocumentPtr</b> = std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1Document.html">Document</a> &gt;</td></tr>
 <tr class="memdesc:ac52edbaa60f81ba3df76ee77b37e95fd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Shared <code><a class="el" href="classmusx_1_1dom_1_1Document.html" title="Represents a document object that encapsulates the entire EnigmaXML structure.">Document</a></code> pointer. <br /></td></tr>
@@ -371,6 +382,10 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>BeamNumber</b> = uns
 using&#160;</td><td class="memItemRight" valign="bottom"><b>PercussionNoteTypeId</b> = uint16_t</td></tr>
 <tr class="memdesc:a2158a5e042da1a8511f2e3b604afaa7b"><td class="mdescLeft">&#160;</td><td class="mdescRight">multiple times in one layout. The rest are the "pure" note type. See <a class="el" href="structmusx_1_1dom_1_1percussion_1_1PercussionNoteType.html">percussion::PercussionNoteType</a>. <br /></td></tr>
 <tr class="separator:a2158a5e042da1a8511f2e3b604afaa7b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a83d1be84fd914d0b9046fbbdec2cd97d" id="r_a83d1be84fd914d0b9046fbbdec2cd97d"><td class="memItemLeft" align="right" valign="top"><a id="a83d1be84fd914d0b9046fbbdec2cd97d" name="a83d1be84fd914d0b9046fbbdec2cd97d"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>InstrumentUuid</b> = std::string_view</td></tr>
+<tr class="memdesc:a83d1be84fd914d0b9046fbbdec2cd97d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Lightweight view of a Finale instrument UUID value. <br /></td></tr>
+<tr class="separator:a83d1be84fd914d0b9046fbbdec2cd97d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4223cd531120dbef7acd854c3d2631b8" id="r_a4223cd531120dbef7acd854c3d2631b8"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:a4223cd531120dbef7acd854c3d2631b8"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacemusx_1_1dom.html#a4223cd531120dbef7acd854c3d2631b8">MusxInstance</a> = std::shared_ptr&lt; const T &gt;</td></tr>
 <tr class="memdesc:a4223cd531120dbef7acd854c3d2631b8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines the type of a musx instance stored in a pool.  <br /></td></tr>
@@ -542,6 +557,25 @@ Enumerations</h2></td></tr>
  }</td></tr>
 <tr class="memdesc:a5f47ab5a8dd3f3cab33730ac7e178ad3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Specifies a vertical placement relationship for notation objects.  <a href="namespacemusx_1_1dom.html#a5f47ab5a8dd3f3cab33730ac7e178ad3">More...</a><br /></td></tr>
 <tr class="separator:a5f47ab5a8dd3f3cab33730ac7e178ad3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7d5001a69f7120037cc0d75a4abcd99a" id="r_a7d5001a69f7120037cc0d75a4abcd99a"><td class="memItemLeft" align="right" valign="top"><a id="a7d5001a69f7120037cc0d75a4abcd99a" name="a7d5001a69f7120037cc0d75a4abcd99a"></a>enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemusx_1_1dom.html#a7d5001a69f7120037cc0d75a4abcd99a">InstrumentFamily</a> { <br />
+&#160;&#160;<b>Unspecified</b>
+, <b>Brass</b>
+, <b>Keyboard</b>
+, <b>Organ</b>
+, <br />
+&#160;&#160;<b>Percussion</b>
+, <b>PitchedPercussion</b>
+, <b>PluckedStrings</b>
+, <b>Strings</b>
+, <br />
+&#160;&#160;<b>Voice</b>
+, <b>Woodwinds</b>
+, <b>Synth</b>
+, <b>Other</b>
+<br />
+ }</td></tr>
+<tr class="memdesc:a7d5001a69f7120037cc0d75a4abcd99a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Broad source-domain family for a Finale instrument UUID. <br /></td></tr>
+<tr class="separator:a7d5001a69f7120037cc0d75a4abcd99a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a16d85e8ed9439b9a2ef071d38ffa0fd7" id="r_a16d85e8ed9439b9a2ef071d38ffa0fd7"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemusx_1_1dom.html#a16d85e8ed9439b9a2ef071d38ffa0fd7">KnownShapeDefType</a> { <br />
 &#160;&#160;<a class="el" href="namespacemusx_1_1dom.html#a16d85e8ed9439b9a2ef071d38ffa0fd7a7f5f743ac34344aeb26849015b4b3dae">Unrecognized</a>
 , <a class="el" href="namespacemusx_1_1dom.html#a16d85e8ed9439b9a2ef071d38ffa0fd7ae4ef81cce7e4e10033ebb10962dfdd5e">Blank</a>
@@ -555,6 +589,12 @@ Enumerations</h2></td></tr>
 , <br />
 &#160;&#160;<a class="el" href="namespacemusx_1_1dom.html#a16d85e8ed9439b9a2ef071d38ffa0fd7a9bf7fd8cfe4d0efe1365f0666ef286b7">PedalArrowheadLongUpDownShortUp</a>
 , <a class="el" href="namespacemusx_1_1dom.html#a16d85e8ed9439b9a2ef071d38ffa0fd7acc794282ee76f747268ab52530f95768">VerticalLineRightHooks</a>
+, <a class="el" href="namespacemusx_1_1dom.html#a16d85e8ed9439b9a2ef071d38ffa0fd7a3adea1c2001f8e6eac1e9a7cbeda4887">SnapPizzicatoAbove</a>
+, <a class="el" href="namespacemusx_1_1dom.html#a16d85e8ed9439b9a2ef071d38ffa0fd7a79bfcfe1cfabb876ac778994bf85f200">SnapPizzicatoBelow</a>
+, <br />
+&#160;&#160;<a class="el" href="namespacemusx_1_1dom.html#a16d85e8ed9439b9a2ef071d38ffa0fd7a56db6f7486895e1126594dbcd5b88f93">BuzzPizzicato</a>
+, <a class="el" href="namespacemusx_1_1dom.html#a16d85e8ed9439b9a2ef071d38ffa0fd7a1e29ecb3dd56cc4ebfded77a472c1eae">FingernailPizzCurveUp</a>
+, <a class="el" href="namespacemusx_1_1dom.html#a16d85e8ed9439b9a2ef071d38ffa0fd7a596d7d825313087211cafb7ab90a132b">FingernailPizzCurveDown</a>
 <br />
  }</td></tr>
 <tr class="memdesc:a16d85e8ed9439b9a2ef071d38ffa0fd7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enumerates the shape types we can recognize semantically.  <a href="namespacemusx_1_1dom.html#a16d85e8ed9439b9a2ef071d38ffa0fd7">More...</a><br /></td></tr>
@@ -612,6 +652,10 @@ Functions</h2></td></tr>
 <tr class="memitem:aa75d341865ea5c3e1a8fcb735ea5e51b" id="r_aa75d341865ea5c3e1a8fcb735ea5e51b"><td class="memItemLeft" align="right" valign="top">unsigned&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemusx_1_1dom.html#aa75d341865ea5c3e1a8fcb735ea5e51b">calcNumberOfBeamsInEdu</a> (<a class="el" href="namespacemusx_1_1dom.html#a907ef641c247f1a5dbe75bbc972661f5">Edu</a> duration)</td></tr>
 <tr class="memdesc:aa75d341865ea5c3e1a8fcb735ea5e51b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the number of beams implied by an EDU duration.  <br /></td></tr>
 <tr class="separator:aa75d341865ea5c3e1a8fcb735ea5e51b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aca8bd8022b86b8fc68930283cb07d674" id="r_aca8bd8022b86b8fc68930283cb07d674"><td class="memItemLeft" align="right" valign="top"><a id="aca8bd8022b86b8fc68930283cb07d674" name="aca8bd8022b86b8fc68930283cb07d674"></a>
+<a class="el" href="namespacemusx_1_1dom.html#a7d5001a69f7120037cc0d75a4abcd99a">InstrumentFamily</a>&#160;</td><td class="memItemRight" valign="bottom"><b>instrumentFamilyFromUuid</b> (<a class="el" href="namespacemusx_1_1dom.html#a83d1be84fd914d0b9046fbbdec2cd97d">InstrumentUuid</a> uuid)</td></tr>
+<tr class="memdesc:aca8bd8022b86b8fc68930283cb07d674"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the broad source-domain family for a Finale instrument UUID. <br /></td></tr>
+<tr class="separator:aca8bd8022b86b8fc68930283cb07d674"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="var-members" name="var-members"></a>
 Variables</h2></td></tr>
@@ -1027,6 +1071,16 @@ template&lt;typename T &gt; </div>
 <tr><td class="fieldname"><a id="a16d85e8ed9439b9a2ef071d38ffa0fd7a9bf7fd8cfe4d0efe1365f0666ef286b7" name="a16d85e8ed9439b9a2ef071d38ffa0fd7a9bf7fd8cfe4d0efe1365f0666ef286b7"></a>PedalArrowheadLongUpDownShortUp&#160;</td><td class="fielddoc"><p>Pedal arrowhead: long up, down, short up. </p>
 </td></tr>
 <tr><td class="fieldname"><a id="a16d85e8ed9439b9a2ef071d38ffa0fd7acc794282ee76f747268ab52530f95768" name="a16d85e8ed9439b9a2ef071d38ffa0fd7acc794282ee76f747268ab52530f95768"></a>VerticalLineRightHooks&#160;</td><td class="fielddoc"><p>Vertical line with short horizontal hooks extending to the right at both ends. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a16d85e8ed9439b9a2ef071d38ffa0fd7a3adea1c2001f8e6eac1e9a7cbeda4887" name="a16d85e8ed9439b9a2ef071d38ffa0fd7a3adea1c2001f8e6eac1e9a7cbeda4887"></a>SnapPizzicatoAbove&#160;</td><td class="fielddoc"><p>Snap pizzicato mark with vertical stem above the circle. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a16d85e8ed9439b9a2ef071d38ffa0fd7a79bfcfe1cfabb876ac778994bf85f200" name="a16d85e8ed9439b9a2ef071d38ffa0fd7a79bfcfe1cfabb876ac778994bf85f200"></a>SnapPizzicatoBelow&#160;</td><td class="fielddoc"><p>Snap pizzicato mark with vertical stem below the circle. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a16d85e8ed9439b9a2ef071d38ffa0fd7a56db6f7486895e1126594dbcd5b88f93" name="a16d85e8ed9439b9a2ef071d38ffa0fd7a56db6f7486895e1126594dbcd5b88f93"></a>BuzzPizzicato&#160;</td><td class="fielddoc"><p>Buzz pizzicato mark with horizontal stem. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a16d85e8ed9439b9a2ef071d38ffa0fd7a1e29ecb3dd56cc4ebfded77a472c1eae" name="a16d85e8ed9439b9a2ef071d38ffa0fd7a1e29ecb3dd56cc4ebfded77a472c1eae"></a>FingernailPizzCurveUp&#160;</td><td class="fielddoc"><p>Fingernail pizzicato double curve arching upward. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a16d85e8ed9439b9a2ef071d38ffa0fd7a596d7d825313087211cafb7ab90a132b" name="a16d85e8ed9439b9a2ef071d38ffa0fd7a596d7d825313087211cafb7ab90a132b"></a>FingernailPizzCurveDown&#160;</td><td class="fielddoc"><p>Fingernail pizzicato double curve arching downward. </p>
 </td></tr>
 </table>
 

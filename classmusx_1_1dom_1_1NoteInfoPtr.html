@@ -110,6 +110,9 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmusx_1_1dom_1_1NoteInfoPtr_1_1ArpeggiatedTieInfo.html">ArpeggiatedTieInfo</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Metadata for a smart-shape arpeggiated tie match.  <a href="structmusx_1_1dom_1_1NoteInfoPtr_1_1ArpeggiatedTieInfo.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmusx_1_1dom_1_1NoteInfoPtr_1_1NoteheadInfo.html">NoteheadInfo</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">The resolved font, character, size, and offset for a note's notehead.  <a href="structmusx_1_1dom_1_1NoteInfoPtr_1_1NoteheadInfo.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmusx_1_1dom_1_1NoteInfoPtr_1_1PseudoTieInfo.html">PseudoTieInfo</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Metadata for pseudo tie and pseudo tie-end detection.  <a href="structmusx_1_1dom_1_1NoteInfoPtr_1_1PseudoTieInfo.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -149,20 +152,20 @@ size_t&#160;</td><td class="memItemRight" valign="bottom"><b>getNoteIndex</b> ()
 <tr class="memdesc:a160ca8678250695a224f1665b9c7a1c0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the note index for this note. <br /></td></tr>
 <tr class="separator:a160ca8678250695a224f1665b9c7a1c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aff1513549d85b77ca2bd2013287e3ef1" id="r_aff1513549d85b77ca2bd2013287e3ef1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1dom_1_1Note.html#abbde1ac182d8dc432c6aab9a8c08cf68">Note::NoteProperties</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html#aff1513549d85b77ca2bd2013287e3ef1">calcNoteProperties</a> (<a class="el" href="namespacemusx_1_1dom.html#a58a07f9a8e6c45605a8dab47d3b70d7f">EnharmonicOverride</a> enharmonicOverride=<a class="el" href="namespacemusx_1_1dom.html#a58a07f9a8e6c45605a8dab47d3b70d7fa6adf97f83acf6453d4a6a4b1070f3754">EnharmonicOverride::None</a>, bool alwaysUseEntryStaff=false) const</td></tr>
-<tr class="memdesc:aff1513549d85b77ca2bd2013287e3ef1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the note name, octave number, actual alteration, and staff position. This function does not take into account percussion notes and their staff position override. To get the staff position taking into account percussion notes, use <a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html#a1bd7cd06f7ed01f976e9e35de673d486" title="Calculates the staff position for this note, taking into account percussion notes.">calcStaffPosition</a>.  <br /></td></tr>
+<tr class="memdesc:aff1513549d85b77ca2bd2013287e3ef1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the note name, octave number, actual alteration, and staff position. The staff position takes into account percussion notes and their staff position override.  <br /></td></tr>
 <tr class="separator:aff1513549d85b77ca2bd2013287e3ef1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7ae784a48f045641dac1434223fd593f" id="r_a7ae784a48f045641dac1434223fd593f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1dom_1_1Note.html#abbde1ac182d8dc432c6aab9a8c08cf68">Note::NoteProperties</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html#a7ae784a48f045641dac1434223fd593f">calcNotePropertiesConcert</a> (bool alwaysUseEntryStaff=false) const</td></tr>
-<tr class="memdesc:a7ae784a48f045641dac1434223fd593f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the note name, octave number, actual alteration, and staff position for the concert pitch of the note. This function does not take into account percussion notes and their staff position override. To discover if a note is a percussion note, call <a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html#a2c725e14e257f68e2c7600a8540b7457" title="Calculates the percussion note info for this note, if any.">calcPercussionNoteInfo</a>. If it returns non-null, use that for staff position instead of this function.  <br /></td></tr>
+<tr class="memdesc:a7ae784a48f045641dac1434223fd593f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the note name, octave number, actual alteration, and staff position for the concert pitch of the note. The staff position takes into account percussion notes and their staff position override.  <br /></td></tr>
 <tr class="separator:a7ae784a48f045641dac1434223fd593f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aacb76820577ceef2195da88bfbe37435" id="r_aacb76820577ceef2195da88bfbe37435"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1dom_1_1Note.html#abbde1ac182d8dc432c6aab9a8c08cf68">Note::NoteProperties</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html#aacb76820577ceef2195da88bfbe37435">calcNotePropertiesInView</a> (bool alwaysUseEntryStaff=false) const</td></tr>
-<tr class="memdesc:aacb76820577ceef2195da88bfbe37435"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the note name, octave number, actual alteration, and staff position for the pitch of the note in the currently selected "Display In Concert Pitch" view for the current part. This may be particularly useful with non-floating rests, but it can be used with any note. As with other versions of the function, it does not handle the staff position override of percussion notes.  <br /></td></tr>
+<tr class="memdesc:aacb76820577ceef2195da88bfbe37435"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the note name, octave number, actual alteration, and staff position for the pitch of the note in the currently selected "Display In Concert Pitch" view for the current part. This may be particularly useful with non-floating rests, but it can be used with any note. As with other versions of the function, the staff position takes into account the staff position override of percussion notes.  <br /></td></tr>
 <tr class="separator:aacb76820577ceef2195da88bfbe37435"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2c725e14e257f68e2c7600a8540b7457" id="r_a2c725e14e257f68e2c7600a8540b7457"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemusx_1_1dom.html#a4223cd531120dbef7acd854c3d2631b8">MusxInstance</a>&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1PercussionNoteInfo.html">others::PercussionNoteInfo</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html#a2c725e14e257f68e2c7600a8540b7457">calcPercussionNoteInfo</a> () const</td></tr>
 <tr class="memdesc:a2c725e14e257f68e2c7600a8540b7457"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the percussion note info for this note, if any.  <br /></td></tr>
 <tr class="separator:a2c725e14e257f68e2c7600a8540b7457"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1bd7cd06f7ed01f976e9e35de673d486" id="r_a1bd7cd06f7ed01f976e9e35de673d486"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html#a1bd7cd06f7ed01f976e9e35de673d486">calcStaffPosition</a> () const</td></tr>
-<tr class="memdesc:a1bd7cd06f7ed01f976e9e35de673d486"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the staff position for this note, taking into account percussion notes.  <br /></td></tr>
-<tr class="separator:a1bd7cd06f7ed01f976e9e35de673d486"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a16f03e5030d5d4995c87d9899341ce48" id="r_a16f03e5030d5d4995c87d9899341ce48"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structmusx_1_1dom_1_1NoteInfoPtr_1_1NoteheadInfo.html">NoteheadInfo</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html#a16f03e5030d5d4995c87d9899341ce48">calcNoteheadInfo</a> () const</td></tr>
+<tr class="memdesc:a16f03e5030d5d4995c87d9899341ce48"><td class="mdescLeft">&#160;</td><td class="mdescRight">Resolves the effective font and character used to render this note's notehead, along with any size or position adjustments.  <br /></td></tr>
+<tr class="separator:a16f03e5030d5d4995c87d9899341ce48"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac535914f03c0ac61fe184134c1584d9b" id="r_ac535914f03c0ac61fe184134c1584d9b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html">NoteInfoPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html#ac535914f03c0ac61fe184134c1584d9b">calcTieTo</a> () const</td></tr>
 <tr class="memdesc:ac535914f03c0ac61fe184134c1584d9b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the note that this note could tie to. Check the return value's <a class="el" href="classmusx_1_1dom_1_1Note.html#a6f312eed82f216e8b14500319fa36549" title="Indicates a tie ends on this note.">Note::tieEnd</a> to see if there is actually a tie end. (<a class="el" href="classmusx_1_1dom_1_1Note.html" title="Represents a single note element in an entry.">Note</a> that Finale shows a tie whether there <a class="el" href="classmusx_1_1dom_1_1Note.html#a6f312eed82f216e8b14500319fa36549" title="Indicates a tie ends on this note.">Note::tieEnd</a> is true or not.)  <br /></td></tr>
 <tr class="separator:ac535914f03c0ac61fe184134c1584d9b"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -357,7 +360,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>calcIsIncludedInVoici
 </div><div class="memdoc">
 
 <p>Calculates the default enharmonic equivalent of this note. This is the value that Finale uses when <a class="el" href="classmusx_1_1dom_1_1details_1_1NoteAlterations.html#ada5b4983856d57d4e17d8806368778be">details::NoteAlterations::enharmonic</a> is true. </p>
-<p>Normally you do not have to call this function directly. It is called inside <a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html#aff1513549d85b77ca2bd2013287e3ef1" title="Calculates the note name, octave number, actual alteration, and staff position. This function does no...">calcNoteProperties</a>. But the function is available if you need it.</p>
+<p>Normally you do not have to call this function directly. It is called inside <a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html#aff1513549d85b77ca2bd2013287e3ef1" title="Calculates the note name, octave number, actual alteration, and staff position. The staff position ta...">calcNoteProperties</a>. But the function is available if you need it.</p>
 <dl class="section return"><dt>Returns</dt><dd>A std::pair containing<ul>
 <li>int: the enharmonic equivalent's displacement value relative to the tonic.</li>
 <li>int: the enharmonic equivalent's alteration value relative to the key signature. </li>
@@ -556,6 +559,32 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>calcIsIncludedInVoici
 
 </div>
 </div>
+<a id="a16f03e5030d5d4995c87d9899341ce48" name="a16f03e5030d5d4995c87d9899341ce48"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a16f03e5030d5d4995c87d9899341ce48">&#9670;&#160;</a></span>calcNoteheadInfo()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structmusx_1_1dom_1_1NoteInfoPtr_1_1NoteheadInfo.html">NoteInfoPtr::NoteheadInfo</a> musx::dom::NoteInfoPtr::calcNoteheadInfo </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Resolves the effective font and character used to render this note's notehead, along with any size or position adjustments. </p>
+<p>Resolution is in order of precedence:</p><ul>
+<li>A per-note <a class="el" href="classmusx_1_1dom_1_1details_1_1NoteAlterations.html#a5c62d56a41a9d7ba35bab536bd9b4b58" title="Alternate notehead character. Zero (the default) means no override is specified.">details::NoteAlterations::altNhead</a> override, if one is set for this note (with its own font override, if <a class="el" href="classmusx_1_1dom_1_1details_1_1NoteAlterations.html#ab6109adfe840115cd1ba92ed2e32f25b" title="Whether to use the custom font.">details::NoteAlterations::useOwnFont</a> is set).</li>
+<li>The percussion note's shape, if this note is on a percussion staff with a mapped percussion note. (See <a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html#a2c725e14e257f68e2c7600a8540b7457" title="Calculates the percussion note info for this note, if any.">calcPercussionNoteInfo</a>.)</li>
+<li>The staff's shape-note convention, if shape notes are in effect for the staff. (See <a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html#a65dddeed8b69726453a77e4d378f39b8" title="Returns the note shape record in effect for this staff instance.">others::Staff::getNoteShapes</a>.)</li>
+<li>Otherwise, the document's default notehead codepoints for the note's duration category. (See #options::MusicSymbolOptions.)</li>
+</ul>
+<p>In every case except a custom-font #details::NoteAlterations override, the font is <a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html#a25be62ce2014b907540d00c78d0d961c" title="The custom font to use for noteheads. Guaranteed non-null by integrityCheck if useNoteFont is true.">others::Staff::noteFont</a> if the staff specifies a custom notehead font, or the document's default <a class="el" href="classmusx_1_1dom_1_1options_1_1FontOptions.html#a794a0a1c04e4b92a27daee007bd5694aaacc48be35ed99a8ddcf5adc73ae950cd" title="Notehead symbols font.">options::FontOptions::FontType::Noteheads</a> font otherwise. </p><dl class="section return"><dt>Returns</dt><dd>The resolved notehead info. This function always returns a usable result. </dd></dl>
+
+</div>
+</div>
 <a id="aff1513549d85b77ca2bd2013287e3ef1" name="aff1513549d85b77ca2bd2013287e3ef1"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aff1513549d85b77ca2bd2013287e3ef1">&#9670;&#160;</a></span>calcNoteProperties()</h2>
 
@@ -582,8 +611,8 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>calcIsIncludedInVoici
       </table>
 </div><div class="memdoc">
 
-<p>Calculates the note name, octave number, actual alteration, and staff position. This function does not take into account percussion notes and their staff position override. To get the staff position taking into account percussion notes, use <a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html#a1bd7cd06f7ed01f976e9e35de673d486" title="Calculates the staff position for this note, taking into account percussion notes.">calcStaffPosition</a>. </p>
-<dl class="section note"><dt>Note</dt><dd>In Finale, the default whole rest staff position is the middle staff line. Other music notation systems frequently expect the standard whole rest staff position to be the second line from the top. You may need to interpolate the staff position returned by <a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html#aff1513549d85b77ca2bd2013287e3ef1" title="Calculates the note name, octave number, actual alteration, and staff position. This function does no...">calcNoteProperties</a> for whole rests. </dd></dl>
+<p>Calculates the note name, octave number, actual alteration, and staff position. The staff position takes into account percussion notes and their staff position override. </p>
+<dl class="section note"><dt>Note</dt><dd>In Finale, the default whole rest staff position is the middle staff line. Other music notation systems frequently expect the standard whole rest staff position to be the second line from the top. You may need to interpolate the staff position returned by <a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html#aff1513549d85b77ca2bd2013287e3ef1" title="Calculates the note name, octave number, actual alteration, and staff position. The staff position ta...">calcNoteProperties</a> for whole rests. </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">enharmonicOverride</td><td>Overrides the enharmonic respelling behavior. Use <a class="el" href="namespacemusx_1_1dom.html#a58a07f9a8e6c45605a8dab47d3b70d7fa6adf97f83acf6453d4a6a4b1070f3754" title="Do not override the existing enharmonic state. (Default)">EnharmonicOverride::None</a> to defer to the score/part data (default), <a class="el" href="namespacemusx_1_1dom.html#a58a07f9a8e6c45605a8dab47d3b70d7faaadf30377ea3d55f6efd59235c959e76" title="Apply enharmonic respelling.">EnharmonicOverride::Respell</a> to force respelling, or <a class="el" href="namespacemusx_1_1dom.html#a58a07f9a8e6c45605a8dab47d3b70d7fa0074882deee30ffbff3641c589b6a089" title="Do not apply enharmonic respelling, even if already respelled.">EnharmonicOverride::NoRespell</a> to prevent respelling even if the part would otherwise respell. </td></tr>
@@ -611,7 +640,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>calcIsIncludedInVoici
       </table>
 </div><div class="memdoc">
 
-<p>Calculates the note name, octave number, actual alteration, and staff position for the concert pitch of the note. This function does not take into account percussion notes and their staff position override. To discover if a note is a percussion note, call <a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html#a2c725e14e257f68e2c7600a8540b7457" title="Calculates the percussion note info for this note, if any.">calcPercussionNoteInfo</a>. If it returns non-null, use that for staff position instead of this function. </p>
+<p>Calculates the note name, octave number, actual alteration, and staff position for the concert pitch of the note. The staff position takes into account percussion notes and their staff position override. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">alwaysUseEntryStaff</td><td>If true, the entry is not checked for cross-staff staffing. Normally you omit this. </td></tr>
@@ -638,7 +667,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>calcIsIncludedInVoici
       </table>
 </div><div class="memdoc">
 
-<p>Calculates the note name, octave number, actual alteration, and staff position for the pitch of the note in the currently selected "Display In Concert Pitch" view for the current part. This may be particularly useful with non-floating rests, but it can be used with any note. As with other versions of the function, it does not handle the staff position override of percussion notes. </p>
+<p>Calculates the note name, octave number, actual alteration, and staff position for the pitch of the note in the currently selected "Display In Concert Pitch" view for the current part. This may be particularly useful with non-floating rests, but it can be used with any note. As with other versions of the function, the staff position takes into account the staff position override of percussion notes. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">alwaysUseEntryStaff</td><td>If true, the entry is not checked for cross-staff staffing. Normally you omit this. </td></tr>
@@ -666,26 +695,6 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>calcIsIncludedInVoici
 
 <p>Calculates the percussion note info for this note, if any. </p>
 <dl class="section return"><dt>Returns</dt><dd>If the note is on a percussion staff and has percussion note info assigned, returns it. Otherwise <code>nullptr</code>. </dd></dl>
-
-</div>
-</div>
-<a id="a1bd7cd06f7ed01f976e9e35de673d486" name="a1bd7cd06f7ed01f976e9e35de673d486"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1bd7cd06f7ed01f976e9e35de673d486">&#9670;&#160;</a></span>calcStaffPosition()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">int musx::dom::NoteInfoPtr::calcStaffPosition </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Calculates the staff position for this note, taking into account percussion notes. </p>
-<dl class="section return"><dt>Returns</dt><dd></dd></dl>
 
 </div>
 </div>

@@ -94,6 +94,7 @@ $(document).ready(function(){initNavTree('structmusx_1_1dom_1_1TimeSignature_1_1
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="structmusx_1_1dom_1_1TimeSignature_1_1TimeSigComponent-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">musx::dom::TimeSignature::TimeSigComponent Struct Reference</div></div>
@@ -119,6 +120,15 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator==</b> (const
 <a class="el" href="namespacemusx_1_1dom.html#a907ef641c247f1a5dbe75bbc972661f5">Edu</a>&#160;</td><td class="memItemRight" valign="bottom"><b>sumUnits</b> () const</td></tr>
 <tr class="memdesc:ad6741949876b88d061a2fc0656eca76c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the sum of all units. <br /></td></tr>
 <tr class="separator:ad6741949876b88d061a2fc0656eca76c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac3c0ab58151df70b863a92c97bd69c78" id="r_ac3c0ab58151df70b863a92c97bd69c78"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structmusx_1_1dom_1_1TimeSignature_1_1TimeSigComponent.html">TimeSigComponent</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmusx_1_1dom_1_1TimeSignature_1_1TimeSigComponent.html#ac3c0ab58151df70b863a92c97bd69c78">normalizeCompound</a> () const</td></tr>
+<tr class="memdesc:ac3c0ab58151df70b863a92c97bd69c78"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a copy of this component normalized for compound meter. For example, 2 dotted quarters becomes 6/8.  <br /></td></tr>
+<tr class="separator:ac3c0ab58151df70b863a92c97bd69c78"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:acff20d50c963c656bcb359a16943de05" id="r_acff20d50c963c656bcb359a16943de05"><td class="memItemLeft" align="right" valign="top">static std::pair&lt; <a class="el" href="classmusx_1_1util_1_1Fraction.html">util::Fraction</a>, <a class="el" href="namespacemusx_1_1dom.html#a907ef641c247f1a5dbe75bbc972661f5">Edu</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmusx_1_1dom_1_1TimeSignature_1_1TimeSigComponent.html#acff20d50c963c656bcb359a16943de05">normalizeCompoundUnit</a> (<a class="el" href="classmusx_1_1util_1_1Fraction.html">util::Fraction</a> count, <a class="el" href="namespacemusx_1_1dom.html#a907ef641c247f1a5dbe75bbc972661f5">Edu</a> unit)</td></tr>
+<tr class="memdesc:acff20d50c963c656bcb359a16943de05"><td class="mdescLeft">&#160;</td><td class="mdescRight">Normalizes a single time signature count and unit to a power-of-two unit.  <br /></td></tr>
+<tr class="separator:acff20d50c963c656bcb359a16943de05"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -129,7 +139,67 @@ Public Attributes</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>A single time signature component. </p>
-</div><h2 class="groupheader">Member Data Documentation</h2>
+</div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="ac3c0ab58151df70b863a92c97bd69c78" name="ac3c0ab58151df70b863a92c97bd69c78"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac3c0ab58151df70b863a92c97bd69c78">&#9670;&#160;</a></span>normalizeCompound()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structmusx_1_1dom_1_1TimeSignature_1_1TimeSigComponent.html">TimeSignature::TimeSigComponent</a> musx::dom::TimeSignature::TimeSigComponent::normalizeCompound </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns a copy of this component normalized for compound meter. For example, 2 dotted quarters becomes 6/8. </p>
+<dl class="section return"><dt>Returns</dt><dd>If this component is unambiguously compound meter, returns a normalized version. Otherwise, returns an exact copy of this component. </dd></dl>
+
+</div>
+</div>
+<a id="acff20d50c963c656bcb359a16943de05" name="acff20d50c963c656bcb359a16943de05"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acff20d50c963c656bcb359a16943de05">&#9670;&#160;</a></span>normalizeCompoundUnit()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::pair&lt; <a class="el" href="classmusx_1_1util_1_1Fraction.html">util::Fraction</a>, <a class="el" href="namespacemusx_1_1dom.html#a907ef641c247f1a5dbe75bbc972661f5">Edu</a> &gt; musx::dom::TimeSignature::TimeSigComponent::normalizeCompoundUnit </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classmusx_1_1util_1_1Fraction.html">util::Fraction</a>&#160;</td>
+          <td class="paramname"><em>count</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacemusx_1_1dom.html#a907ef641c247f1a5dbe75bbc972661f5">Edu</a>&#160;</td>
+          <td class="paramname"><em>unit</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Normalizes a single time signature count and unit to a power-of-two unit. </p>
+<dl class="section return"><dt>Returns</dt><dd>The adjusted count and unit. </dd></dl>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
 <a id="a2245dbc0d76b1ac3eb2c7fafc09fa341" name="a2245dbc0d76b1ac3eb2c7fafc09fa341"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a2245dbc0d76b1ac3eb2c7fafc09fa341">&#9670;&#160;</a></span>counts</h2>
 

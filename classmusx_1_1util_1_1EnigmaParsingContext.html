@@ -127,6 +127,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a23f780f83313f40a9ca0a1f192584078" id="r_a23f780f83313f40a9ca0a1f192584078"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1util_1_1EnigmaParsingContext.html#a23f780f83313f40a9ca0a1f192584078">parseEnigmaText</a> (const <a class="el" href="classmusx_1_1util_1_1EnigmaString.html#ab7774814f864c7fc4e840f73af322936">EnigmaString::TextChunkCallback</a> &amp;onText, const <a class="el" href="structmusx_1_1util_1_1EnigmaString_1_1EnigmaParsingOptions.html">EnigmaString::EnigmaParsingOptions</a> &amp;options={}) const</td></tr>
 <tr class="memdesc:a23f780f83313f40a9ca0a1f192584078"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parse the Enigma text into structured chunks with insert handling.  <br /></td></tr>
 <tr class="separator:a23f780f83313f40a9ca0a1f192584078"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a714f40ce6ef7ed0961e4817e370f5812" id="r_a714f40ce6ef7ed0961e4817e370f5812"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="structmusx_1_1util_1_1EnigmaTextChunk.html">EnigmaTextChunk</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1util_1_1EnigmaParsingContext.html#a714f40ce6ef7ed0961e4817e370f5812">collectEnigmaTextChunks</a> (const <a class="el" href="classmusx_1_1util_1_1EnigmaString.html#ad0503e291556abece57b9c47b16bbf1e">EnigmaString::TextInsertCallback</a> &amp;onInsert, const <a class="el" href="structmusx_1_1util_1_1EnigmaString_1_1EnigmaParsingOptions.html">EnigmaString::EnigmaParsingOptions</a> &amp;options={}) const</td></tr>
+<tr class="memdesc:a714f40ce6ef7ed0961e4817e370f5812"><td class="mdescLeft">&#160;</td><td class="mdescRight">Collect the Enigma text into styled chunks with insert handling.  <br /></td></tr>
+<tr class="separator:a714f40ce6ef7ed0961e4817e370f5812"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a396a76b54fc1bf00d4730c3713d56ac8" id="r_a396a76b54fc1bf00d4730c3713d56ac8"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="structmusx_1_1util_1_1EnigmaTextChunk.html">EnigmaTextChunk</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1util_1_1EnigmaParsingContext.html#a396a76b54fc1bf00d4730c3713d56ac8">collectEnigmaTextChunks</a> (const <a class="el" href="structmusx_1_1util_1_1EnigmaString_1_1EnigmaParsingOptions.html">EnigmaString::EnigmaParsingOptions</a> &amp;options={}) const</td></tr>
+<tr class="memdesc:a396a76b54fc1bf00d4730c3713d56ac8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Collect the Enigma text into styled chunks with default insert handling.  <br /></td></tr>
+<tr class="separator:a396a76b54fc1bf00d4730c3713d56ac8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1e7ed77d559996441a91a8d058a2c67a" id="r_a1e7ed77d559996441a91a8d058a2c67a"><td class="memItemLeft" align="right" valign="top"><a id="a1e7ed77d559996441a91a8d058a2c67a" name="a1e7ed77d559996441a91a8d058a2c67a"></a>
 <a class="el" href="namespacemusx_1_1dom.html#a4223cd531120dbef7acd854c3d2631b8">dom::MusxInstance</a>&lt; <a class="el" href="classmusx_1_1dom_1_1FontInfo.html">dom::FontInfo</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>parseFirstFontInfo</b> () const</td></tr>
 <tr class="memdesc:a1e7ed77d559996441a91a8d058a2c67a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a shared pointer to a FontInfo instance that reflects the first font information in the text. <br /></td></tr>
@@ -219,6 +225,71 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>affixIsPrefix</b> {}<
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="a396a76b54fc1bf00d4730c3713d56ac8" name="a396a76b54fc1bf00d4730c3713d56ac8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a396a76b54fc1bf00d4730c3713d56ac8">&#9670;&#160;</a></span>collectEnigmaTextChunks() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; <a class="el" href="structmusx_1_1util_1_1EnigmaTextChunk.html">EnigmaTextChunk</a> &gt; musx::util::EnigmaParsingContext::collectEnigmaTextChunks </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structmusx_1_1util_1_1EnigmaString_1_1EnigmaParsingOptions.html">EnigmaString::EnigmaParsingOptions</a> &amp;&#160;</td>
+          <td class="paramname"><em>options</em> = <code>{}</code></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Collect the Enigma text into styled chunks with default insert handling. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">options</td><td>The options for the parsing session. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The collected chunks emitted by <a class="el" href="classmusx_1_1util_1_1EnigmaParsingContext.html#abcd0e1d0d91de8906a647a39d4faf394" title="Parse the Enigma text into structured chunks with insert handling.">parseEnigmaText</a>. </dd></dl>
+
+</div>
+</div>
+<a id="a714f40ce6ef7ed0961e4817e370f5812" name="a714f40ce6ef7ed0961e4817e370f5812"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a714f40ce6ef7ed0961e4817e370f5812">&#9670;&#160;</a></span>collectEnigmaTextChunks() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; <a class="el" href="structmusx_1_1util_1_1EnigmaTextChunk.html">EnigmaTextChunk</a> &gt; musx::util::EnigmaParsingContext::collectEnigmaTextChunks </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classmusx_1_1util_1_1EnigmaString.html#ad0503e291556abece57b9c47b16bbf1e">EnigmaString::TextInsertCallback</a> &amp;&#160;</td>
+          <td class="paramname"><em>onInsert</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structmusx_1_1util_1_1EnigmaString_1_1EnigmaParsingOptions.html">EnigmaString::EnigmaParsingOptions</a> &amp;&#160;</td>
+          <td class="paramname"><em>options</em> = <code>{}</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Collect the Enigma text into styled chunks with insert handling. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">onInsert</td><td>The handler for insert conversions. </td></tr>
+    <tr><td class="paramname">options</td><td>The options for the parsing session. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The collected chunks emitted by <a class="el" href="classmusx_1_1util_1_1EnigmaParsingContext.html#abcd0e1d0d91de8906a647a39d4faf394" title="Parse the Enigma text into structured chunks with insert handling.">parseEnigmaText</a>. </dd></dl>
+
+</div>
+</div>
 <a id="a1d1178005a52284ba506019c5b94cbbb" name="a1d1178005a52284ba506019c5b94cbbb"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a1d1178005a52284ba506019c5b94cbbb">&#9670;&#160;</a></span>getText()</h2>
 

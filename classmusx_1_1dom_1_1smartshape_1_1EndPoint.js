@@ -3,6 +3,7 @@ var classmusx_1_1dom_1_1smartshape_1_1EndPoint =
     [ "calcAssociatedEntry", "classmusx_1_1dom_1_1smartshape_1_1EndPoint.html#a51adf348efb78ee6dca1f3137a4fe6aa", null ],
     [ "calcGlobalPosition", "classmusx_1_1dom_1_1smartshape_1_1EndPoint.html#a00d74b5dfaf87ddf5cd91b0d34922332", null ],
     [ "calcIsAssigned", "classmusx_1_1dom_1_1smartshape_1_1EndPoint.html#a2c28929d9431c956a87929a94b0f6e2c", null ],
+    [ "calcIsValid", "classmusx_1_1dom_1_1smartshape_1_1EndPoint.html#ab5e145bf9b29cd720f41f226326b071f", null ],
     [ "calcPosition", "classmusx_1_1dom_1_1smartshape_1_1EndPoint.html#a323e31a14fcd66725881171714e04cf4", null ],
     [ "compareMetricPosition", "classmusx_1_1dom_1_1smartshape_1_1EndPoint.html#a347640f292abaa7ead07973429b082eb", null ],
     [ "ContainedClassBase", "classmusx_1_1dom_1_1smartshape_1_1EndPoint.html#a3e1b557e7c6827ba497c48cad3022f95", null ],

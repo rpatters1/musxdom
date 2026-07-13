@@ -1,0 +1,5 @@
+var structmusx_1_1util_1_1EnigmaTextChunk =
+[
+    [ "styles", "structmusx_1_1util_1_1EnigmaTextChunk.html#af28ec879801edd98e36aa51695055787", null ],
+    [ "text", "structmusx_1_1util_1_1EnigmaTextChunk.html#a10b6b922df3a05a7c934a849127430b8", null ]
+];

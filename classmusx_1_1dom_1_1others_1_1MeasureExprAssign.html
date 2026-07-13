@@ -166,6 +166,10 @@ Public Member Functions</h2></td></tr>
 &#160;</td><td class="memItemRight" valign="bottom"><b>MeasureExprAssign</b> (const <a class="el" href="namespacemusx_1_1dom.html#aa76356b1ad3580081294898c79615c4d">DocumentWeakPtr</a> &amp;document, <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> ID, <a class="el" href="classmusx_1_1dom_1_1EnigmaBase.html#ac655bdce0724d5e32cfcd6203c9a5d1f">ShareMode</a> shareMode, <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> cmper, <a class="el" href="namespacemusx_1_1dom.html#a7e1523afa8705d91b1d694405c2feefb">Inci</a> inci)</td></tr>
 <tr class="memdesc:a84b2bc300f4329b27bfd7b9a9900c294"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor function. <br /></td></tr>
 <tr class="separator:a84b2bc300f4329b27bfd7b9a9900c294"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a42d76ca9acc74b7584e71d8b4d4eb408" id="r_a42d76ca9acc74b7584e71d8b4d4eb408"><td class="memItemLeft" align="right" valign="top"><a id="a42d76ca9acc74b7584e71d8b4d4eb408" name="a42d76ca9acc74b7584e71d8b4d4eb408"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>calcIsSameDefinition</b> (const <a class="el" href="classmusx_1_1dom_1_1others_1_1MeasureExprAssign.html">MeasureExprAssign</a> &amp;src) const</td></tr>
+<tr class="memdesc:a42d76ca9acc74b7584e71d8b4d4eb408"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate if this expression and the source expression point to the same definition. <br /></td></tr>
+<tr class="separator:a42d76ca9acc74b7584e71d8b4d4eb408"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af399d92f1596822162c33d28ad1fdad1" id="r_af399d92f1596822162c33d28ad1fdad1"><td class="memItemLeft" align="right" valign="top"><a id="af399d92f1596822162c33d28ad1fdad1" name="af399d92f1596822162c33d28ad1fdad1"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>calcIsPseudoTie</b> (utils::PseudoTieMode mode, const <a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a> &amp;forStartEntry) const</td></tr>
 <tr class="memdesc:af399d92f1596822162c33d28ad1fdad1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if this shape expression is likely acting as a pseudo tie for the specified mode. <br /></td></tr>
@@ -214,6 +218,9 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>calcIsHiddenByAlterna
 <tr class="memitem:abfa2d4dee0923162af8d2a49716ab26b" id="r_abfa2d4dee0923162af8d2a49716ab26b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemusx_1_1dom.html#a5f47ab5a8dd3f3cab33730ac7e178ad3">VerticalPlacement</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1MeasureExprAssign.html#abfa2d4dee0923162af8d2a49716ab26b">calcVerticalPlacement</a> () const</td></tr>
 <tr class="memdesc:abfa2d4dee0923162af8d2a49716ab26b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates a vertical placement classification for this assignment.  <br /></td></tr>
 <tr class="separator:abfa2d4dee0923162af8d2a49716ab26b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2a7aae0e2b051a0a0975035e41939f4d" id="r_a2a7aae0e2b051a0a0975035e41939f4d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1util_1_1EnigmaParsingContext.html">util::EnigmaParsingContext</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1MeasureExprAssign.html#a2a7aae0e2b051a0a0975035e41939f4d">getRawTextCtx</a> (<a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> forPartId) const</td></tr>
+<tr class="memdesc:a2a7aae0e2b051a0a0975035e41939f4d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the raw text context for parsing this expression assignment, or nullptr if none.  <br /></td></tr>
+<tr class="separator:a2a7aae0e2b051a0a0975035e41939f4d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af84d077db446c43ffd153f7ea05786e8" id="r_af84d077db446c43ffd153f7ea05786e8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1MeasureExprAssign.html#af84d077db446c43ffd153f7ea05786e8">integrityCheck</a> (const std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1EnigmaBase.html">EnigmaBase</a> &gt; &amp;ptrToThis) override</td></tr>
 <tr class="memdesc:af84d077db446c43ffd153f7ea05786e8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Performs a final consistency check after population.  <br /></td></tr>
 <tr class="separator:af84d077db446c43ffd153f7ea05786e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -742,6 +749,33 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Gets the marking category for the assigned text or shape expression. </p>
 <dl class="section return"><dt>Returns</dt><dd>The marking category or nullptr if the definition or its category cannot be resolved. </dd></dl>
+
+</div>
+</div>
+<a id="a2a7aae0e2b051a0a0975035e41939f4d" name="a2a7aae0e2b051a0a0975035e41939f4d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2a7aae0e2b051a0a0975035e41939f4d">&#9670;&#160;</a></span>getRawTextCtx()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classmusx_1_1util_1_1EnigmaParsingContext.html">util::EnigmaParsingContext</a> musx::dom::others::MeasureExprAssign::getRawTextCtx </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a>&#160;</td>
+          <td class="paramname"><em>forPartId</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Gets the raw text context for parsing this expression assignment, or nullptr if none. </p>
+<dl class="section note"><dt>Note</dt><dd>The main difference between the assignment and the underlying text definition context is that the assignment can resolve rehearsal number text. </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">forPartId</td><td>The linked part to use for ^partname and ^totpages inserts. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

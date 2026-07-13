@@ -279,6 +279,9 @@ std::optional&lt; size_t &gt;&#160;</td><td class="memItemRight" valign="bottom"
 <tr class="memitem:a87a183870482e7322a06c94d953a31aa" id="r_a87a183870482e7322a06c94d953a31aa"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#a87a183870482e7322a06c94d953a31aa">calcUpStem</a> () const</td></tr>
 <tr class="memdesc:a87a183870482e7322a06c94d953a31aa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines the effective stem direction of the entry, taking into account voices, layers, staff options, manual overrides, and cross-staff notation.  <br /></td></tr>
 <tr class="separator:a87a183870482e7322a06c94d953a31aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a64caa4b9d816b0e87a72ef3ad4658c14" id="r_a64caa4b9d816b0e87a72ef3ad4658c14"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#a64caa4b9d816b0e87a72ef3ad4658c14">calcGraceNoteSlash</a> (const <a class="el" href="namespacemusx_1_1dom.html#a4223cd531120dbef7acd854c3d2631b8">MusxInstance</a>&lt; <a class="el" href="classmusx_1_1dom_1_1options_1_1GraceNoteOptions.html">options::GraceNoteOptions</a> &gt; graceOptions=nullptr) const</td></tr>
+<tr class="memdesc:a64caa4b9d816b0e87a72ef3ad4658c14"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates if the current entry is a grace note with a slash.  <br /></td></tr>
+<tr class="separator:a64caa4b9d816b0e87a72ef3ad4658c14"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:accb023218f8bfd19cd3b3c4b82de530c" id="r_accb023218f8bfd19cd3b3c4b82de530c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#accb023218f8bfd19cd3b3c4b82de530c">calcUnbeamed</a> () const</td></tr>
 <tr class="memdesc:accb023218f8bfd19cd3b3c4b82de530c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns whether this is an unbeamed entry.  <br /></td></tr>
 <tr class="separator:accb023218f8bfd19cd3b3c4b82de530c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -782,6 +785,32 @@ Static Public Member Functions</h2></td></tr>
 
 <p>Calculates a grace note's symbolic starting duration as a negative offset from the main note. This is useful for comparing grace note sequences. </p>
 <dl class="section return"><dt>Returns</dt><dd>Negative symbolic offset from the main note, or zero if not a grace note. </dd></dl>
+
+</div>
+</div>
+<a id="a64caa4b9d816b0e87a72ef3ad4658c14" name="a64caa4b9d816b0e87a72ef3ad4658c14"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a64caa4b9d816b0e87a72ef3ad4658c14">&#9670;&#160;</a></span>calcGraceNoteSlash()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool musx::dom::EntryInfoPtr::calcGraceNoteSlash </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="namespacemusx_1_1dom.html#a4223cd531120dbef7acd854c3d2631b8">MusxInstance</a>&lt; <a class="el" href="classmusx_1_1dom_1_1options_1_1GraceNoteOptions.html">options::GraceNoteOptions</a> &gt;&#160;</td>
+          <td class="paramname"><em>graceOptions</em> = <code>nullptr</code></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Calculates if the current entry is a grace note with a slash. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">graceOptions</td><td>Allows caller to supply the grace note options if caller already has them. Otherwise, the function gets the grace note options internally. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
