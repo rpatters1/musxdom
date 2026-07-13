@@ -496,8 +496,12 @@ std::optional<MusicPoint> MusicRange::nextLocation(const std::optional<StaffCmpe
         }
         result = MusicPoint(nextMeas, util::Fraction::fromEdu(nextEdu));
     } else {
-        // music ranges are explicitly allowed to be beyond the end of a document, so treat this as a verbose message.
-        util::Logger::log(util::Logger::LogLevel::Verbose, "MusicRange has invalid end measure " + std::to_string(end.measureId));
+        auto measures = getDocument()->getOthers()->getArray<others::Measure>(SCORE_PARTID);
+        // don't even report a range whose end measure is 1 past the end. This is common non-inclusive range logic.
+        if (end.measureId > MeasCmper(measures.size() + 1)) {
+            // music ranges are explicitly allowed to be beyond the end of a document, so treat this as a verbose message.
+            util::Logger::log(util::Logger::LogLevel::Verbose, "MusicRange has invalid end measure " + std::to_string(end.measureId));
+        }
     }
     return result;
 }
