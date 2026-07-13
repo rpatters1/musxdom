@@ -44,6 +44,7 @@ add_executable(musxdomtests
     dom/document.cpp
     dom/document_graphics.cpp
     dom/header.cpp
+    dom/instrument.cpp
     dom/pool.cpp
     # entries
     entries/beam_detection.cpp

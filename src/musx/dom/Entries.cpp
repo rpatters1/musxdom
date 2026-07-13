@@ -34,6 +34,23 @@ namespace dom {
 
 namespace {
 
+/// @brief Selects one of four duration-bucketed values (quarter-and-shorter, half, whole, breve-and-longer),
+/// matching the four notehead codepoints Finale stores per duration category.
+template <typename T>
+T selectByDuration(Edu duration, T quarterAndShorter, T half, T whole, T breveAndLonger)
+{
+    if (duration >= Edu(NoteType::Breve)) {
+        return breveAndLonger;
+    }
+    if (duration >= Edu(NoteType::Whole)) {
+        return whole;
+    }
+    if (duration >= Edu(NoteType::Half)) {
+        return half;
+    }
+    return quarterAndShorter;
+}
+
 int calcVoiceRank(MatchVoice matchVoice, bool voice2)
 {
     switch (matchVoice) {
@@ -1179,6 +1196,28 @@ StemDirection EntryInfoPtr::calcStemDirectionForced() const
     }
 
     return StemDirection::Default;
+}
+
+bool EntryInfoPtr::calcGraceNoteSlash(const MusxInstance<options::GraceNoteOptions> graceOptions) const
+{
+    const auto entry = (*this)->getEntry();
+    if (!entry->graceNote) {
+        return false;
+    }
+
+    const auto options = [&]() {
+        if (graceOptions) {
+            return graceOptions;
+            }
+        return getFrame()->getDocument()->getOptions()->get<options::GraceNoteOptions>();
+    }();
+    MUSX_ASSERT_IF(!options) {
+        util::Logger::log(util::Logger::LogLevel::Warning, "calcGraceNoteSlash: unable to get grace note options.");
+        return false;
+    }
+
+    return (entry->slashGrace || options->slashFlaggedGraceNotes)
+        && calcCanBeBeamed() && calcUnbeamed();    
 }
 
 bool EntryInfoPtr::calcUnbeamed() const
@@ -2828,7 +2867,7 @@ Note::NoteProperties Note::calcNoteProperties(const MusxInstance<KeySignature>& 
     // Calculate the staff line
     const int staffLine = [&]() {
         if (percNoteInfo) {
-            return percNoteInfo->staffPosition;
+            return percNoteInfo->calcStaffReferencePosition();
         }
         const auto& clefOptions = getDocument()->getOptions()->get<options::ClefOptions>();
         if (!clefOptions) {
@@ -3121,6 +3160,75 @@ MusxInstance<others::PercussionNoteInfo> NoteInfoPtr::calcPercussionNoteInfo() c
         }
     }
     return nullptr;
+}
+
+NoteInfoPtr::NoteheadInfo NoteInfoPtr::calcNoteheadInfo() const
+{
+    const auto entryInfo = getEntryInfo();
+    const auto entry = entryInfo->getEntry();
+    const auto document = entry->getDocument();
+    const auto currStaff = entryInfo.createCurrentStaff();
+
+    const auto defaultFont = [&]() -> MusxInstance<FontInfo> {
+        if (currStaff && currStaff->useNoteFont && currStaff->noteFont) {
+            return currStaff->noteFont;
+        }
+        if (auto fontOptions = document->getOptions()->get<options::FontOptions>()) {
+            return fontOptions->getFontInfo(options::FontOptions::FontType::Noteheads);
+        }
+        return nullptr;
+    }();
+
+    // Highest precedence: an explicit per-note override.
+    if (entry->noteDetail) {
+        if (auto noteAlts = document->getDetails()->getForNote<details::NoteAlterations>(*this)) {
+            if (noteAlts->altNhead != char32_t{}) {
+                NoteheadInfo result;
+                result.font = (noteAlts->useOwnFont && noteAlts->customFont) ? noteAlts->customFont : defaultFont;
+                result.character = noteAlts->altNhead;
+                result.percent = noteAlts->percent ? noteAlts->percent : 100;
+                result.horzOffset = noteAlts->nxdisp;
+                result.vertOffset = noteAlts->allowVertPos ? noteAlts->nydisp : 0;
+                return result;
+            }
+        }
+    }
+
+    // Next: the note's percussion shape, if it is a mapped percussion note.
+    if (auto percNoteInfo = calcPercussionNoteInfo()) {
+        NoteheadInfo result;
+        if (auto fontOptions = document->getOptions()->get<options::FontOptions>()) {
+            result.font = fontOptions->getFontInfo(options::FontOptions::FontType::Percussion);
+        }
+        result.character = selectByDuration(entry->duration,
+            percNoteInfo->closedNotehead, percNoteInfo->halfNotehead, percNoteInfo->wholeNotehead, percNoteInfo->dwholeNotehead);
+        return result;
+    }
+
+    // Next: the staff's shape-note convention, if any is in effect.
+    if (currStaff) {
+        if (auto noteShapes = currStaff->getNoteShapes()) {
+            const size_t index = noteShapes->arrangedByPitch
+                ? size_t(std::get<0>(calcNoteProperties()))
+                : size_t(music_theory::positiveModulus(int((*this)->harmLev), music_theory::STANDARD_DIATONIC_STEPS));
+            if (index < noteShapes->noteShapes.size() && noteShapes->noteShapes[index]) {
+                const auto& shape = noteShapes->noteShapes[index];
+                NoteheadInfo result;
+                result.font = defaultFont;
+                result.character = selectByDuration(entry->duration, shape->quarter, shape->half, shape->whole, shape->doubleWhole);
+                return result;
+            }
+        }
+    }
+
+    // Otherwise: the document's default notehead codepoints for the note's duration category.
+    NoteheadInfo result;
+    result.font = defaultFont;
+    if (auto symbolOptions = document->getOptions()->get<options::MusicSymbolOptions>()) {
+        result.character = selectByDuration(entry->duration,
+            symbolOptions->noteheadQuarter, symbolOptions->noteheadHalf, symbolOptions->noteheadWhole, symbolOptions->noteheadDblWhole);
+    }
+    return result;
 }
 
 std::unique_ptr<music_theory::Transposer> NoteInfoPtr::createTransposer() const

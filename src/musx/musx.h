@@ -83,6 +83,7 @@
 #include "xml/XmlInterface.h"
 #include "dom/Document.h"
 #include "factory/DocumentFactory.h"
+#include "dom/Instrument.h"
 #include "dom/InstrumentUuids.h"
 #include "dom/PercussionNoteType.h"
 

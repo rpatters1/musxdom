@@ -332,6 +332,45 @@ std::optional<InstrumentInfo> Document::getInstrumentForStaff(Cmper partId, Staf
     return std::nullopt;
 }
 
+void Document::createRehearsalMarkMap()
+{
+    m_rehearsalMarks.clear();
+    const auto assignments = getOthers()->getArray<others::MeasureExprAssign>(SCORE_PARTID);
+    const auto defs = getOthers()->getArray<others::TextExpressionDef>(SCORE_PARTID);
+    for (const auto& def : defs) {
+        using RMS = others::RehearsalMarkStyle;
+        if (def->rehearsalMarkStyle == RMS::None || def->rehearsalMarkStyle == RMS::MeasureNumber) {
+            continue;
+        }
+        // This code depends on the assignments being in measure number order, but that is
+        // a built-in guarantee from how the pools are structured. If it changed, the pain
+        // would extend far beyond this little corner of the library.
+        int currentSequence = 1;
+        for (const auto& assign : assignments) {
+            if (assign->textExprId != def->getCmper()) {
+                continue;
+            }
+            auto newSequencenNum = currentSequence;
+            if (assign->rehearsalMarkOffset > 0) {
+                newSequencenNum = assign->rehearsalMarkOffset;
+            }
+            const auto key = RehearsalMarkKey{ MeasCmper(assign->getCmper()), assign->textExprId };
+            if (m_rehearsalMarks.emplace(key, RehearsalMarkInfo{ newSequencenNum }).second) {
+                currentSequence = newSequencenNum + 1;
+            }
+        }
+    }
+}
+
+std::optional<RehearsalMarkInfo> Document::getRehearsalMarkInfo(MeasCmper measureId, Cmper textExpressionId) const
+{
+    const auto it = m_rehearsalMarks.find(RehearsalMarkKey{ measureId, textExpressionId });
+    if (it == m_rehearsalMarks.end()) {
+        return std::nullopt;
+    }
+    return it->second;
+}
+
 MusicRange Document::calcEntireDocument() const
 {
     auto measures = getOthers()->getArray<others::Measure>(SCORE_PARTID);

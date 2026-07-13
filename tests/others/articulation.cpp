@@ -333,3 +333,126 @@ TEST(ArticulationAssignTest, CalcSelectedSymbolContextKeepsBelowEntryFixedInMult
     EXPECT_FALSE(lowerContext->symbol.usesAlternate);
     EXPECT_EQ(lowerContext->symbol.character, lowerContext->definition->charMain);
 }
+
+TEST(ArticulationAssignTest, CalcAssociatedNote)
+{
+    // articDef 1 uses manual vertical positioning (no autoVert); articDef 2 uses automatic positioning.
+    constexpr static musxtest::string_view defXml = R"xml(
+<?xml version="1.0" encoding="UTF-8"?>
+<finale>
+  <others>
+    <articDef cmper="1">
+      <charMain>63</charMain>
+      <sizeMain>24</sizeMain>
+      <autoHorz/>
+      <charAlt>63</charAlt>
+      <sizeAlt>24</sizeAlt>
+    </articDef>
+    <articDef cmper="2">
+      <charMain>63</charMain>
+      <sizeMain>24</sizeMain>
+      <autoHorz/>
+      <autoVert/>
+      <autoVertMode>autoNoteStem</autoVertMode>
+      <charAlt>63</charAlt>
+      <sizeAlt>24</sizeAlt>
+    </articDef>
+  </others>
+</finale>
+    )xml";
+
+    auto defDoc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(defXml);
+    ASSERT_TRUE(defDoc);
+
+    std::vector<char> entryXml;
+    musxtest::readFile(musxtest::getInputPath() / "lvshapes.enigmaxml", entryXml);
+    auto entryDoc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(entryXml);
+    ASSERT_TRUE(entryDoc);
+
+    auto staffPositionOf = [](const NoteInfoPtr& note) {
+        return std::get<3>(note.calcNotePropertiesInView(/*alwaysUseEntryStaff*/ true));
+    };
+
+    { // up-stem chord E4/G4/B4 (staff positions -8/-6/-4): zero offset selects the bottom note
+        auto gfhold = details::GFrameHoldContext(entryDoc, SCORE_PARTID, 1, 1);
+        ASSERT_TRUE(gfhold);
+        auto entryFrame = gfhold.createEntryFrame(0);
+        ASSERT_TRUE(entryFrame);
+        auto entryInfo = EntryInfoPtr(entryFrame, 1);
+        ASSERT_TRUE(entryInfo);
+        ASSERT_EQ(entryInfo->getEntry()->notes.size(), 3);
+
+        details::ArticulationAssign assign(defDoc, SCORE_PARTID, EnigmaBase::ShareMode::All, entryInfo->getEntry()->getEntryNumber(), 0);
+        assign.articDef = 1;
+        ASSERT_TRUE(entryInfo.calcUpStem());
+        ASSERT_EQ(staffPositionOf(NoteInfoPtr(entryInfo, 0)), -8);
+        ASSERT_EQ(staffPositionOf(NoteInfoPtr(entryInfo, 2)), -4);
+
+        assign.vertOffset = 0;
+        auto note = assign.calcAssociatedNote(entryInfo);
+        ASSERT_TRUE(note);
+        EXPECT_EQ(note.getNoteIndex(), 0u);
+
+        assign.vertOffset = 24; // one staff space up
+        note = assign.calcAssociatedNote(entryInfo);
+        ASSERT_TRUE(note);
+        EXPECT_EQ(note.getNoteIndex(), 1u);
+
+        assign.vertOffset = 48;
+        note = assign.calcAssociatedNote(entryInfo);
+        ASSERT_TRUE(note);
+        EXPECT_EQ(note.getNoteIndex(), 2u);
+
+        assign.vertOffset = 29; // dragged slightly: rounds to the nearest staff position
+        note = assign.calcAssociatedNote(entryInfo);
+        ASSERT_TRUE(note);
+        EXPECT_EQ(note.getNoteIndex(), 1u);
+
+        assign.vertOffset = 12; // lands between chord notes: no association
+        EXPECT_FALSE(assign.calcAssociatedNote(entryInfo));
+
+        assign.vertOffset = -24; // lands below the chord: no association
+        EXPECT_FALSE(assign.calcAssociatedNote(entryInfo));
+
+        assign.vertOffset = 0;
+        assign.articDef = 2; // automatic vertical positioning: heuristic does not apply
+        EXPECT_FALSE(assign.calcAssociatedNote(entryInfo));
+
+        assign.articDef = 999; // unresolvable definition
+        EXPECT_FALSE(assign.calcAssociatedNote(entryInfo));
+    }
+
+    { // down-stem chord C5/E5/G5 (staff positions -4/-2/0): zero offset selects the top note
+        auto gfhold = details::GFrameHoldContext(entryDoc, SCORE_PARTID, 1, 3);
+        ASSERT_TRUE(gfhold);
+        auto entryFrame = gfhold.createEntryFrame(0);
+        ASSERT_TRUE(entryFrame);
+        auto entryInfo = EntryInfoPtr(entryFrame, 0);
+        ASSERT_TRUE(entryInfo);
+        ASSERT_EQ(entryInfo->getEntry()->notes.size(), 3);
+        ASSERT_FALSE(entryInfo.calcUpStem());
+
+        details::ArticulationAssign assign(defDoc, SCORE_PARTID, EnigmaBase::ShareMode::All, entryInfo->getEntry()->getEntryNumber(), 0);
+        assign.articDef = 1;
+        ASSERT_EQ(staffPositionOf(NoteInfoPtr(entryInfo, 0)), -4);
+        ASSERT_EQ(staffPositionOf(NoteInfoPtr(entryInfo, 2)), 0);
+
+        assign.vertOffset = 0;
+        auto note = assign.calcAssociatedNote(entryInfo);
+        ASSERT_TRUE(note);
+        EXPECT_EQ(note.getNoteIndex(), 2u);
+
+        assign.vertOffset = -24; // one staff space down
+        note = assign.calcAssociatedNote(entryInfo);
+        ASSERT_TRUE(note);
+        EXPECT_EQ(note.getNoteIndex(), 1u);
+
+        assign.vertOffset = -48;
+        note = assign.calcAssociatedNote(entryInfo);
+        ASSERT_TRUE(note);
+        EXPECT_EQ(note.getNoteIndex(), 0u);
+
+        assign.vertOffset = 24; // lands above the chord: no association
+        EXPECT_FALSE(assign.calcAssociatedNote(entryInfo));
+    }
+}

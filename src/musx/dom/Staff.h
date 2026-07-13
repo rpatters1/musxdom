@@ -21,7 +21,9 @@
  */
 #pragma once
 
+#include <functional>
 #include <type_traits>
+#include <utility>
 
 #include "musx/util/Logger.h"
 #include "musx/util/Fraction.h"
@@ -389,6 +391,33 @@ public:
     /// @param staffCmper the staff cmper to search
     static ClefIndex calcFirstClefIndex(const DocumentPtr& document, Cmper partId, StaffCmper staffCmper);
 
+    /**
+     * @brief A clef change attached to a staff at a measure location.
+     *
+     * The position is expressed as a staff-level fraction of a whole note, matching Finale's clef-list
+     * positioning convention. Callers that need global score time should apply the staff's time stretch.
+     */
+    struct ClefChange
+    {
+        ClefIndex clefIndex{};                  ///< The Finale clef index.
+        util::Fraction position{};              ///< The staff-level position in the measure.
+        ShowClefMode showClefMode{};            ///< The Finale clef display mode.
+        bool afterBarline{};                    ///< True if a measure-start clef is placed after the barline.
+        Evpu yEvpuPos{};                        ///< Vertical EVPU adjustment for mid-measure clefs.
+        int percent{};                          ///< Clef scaling percent, where 100 is unscaled.
+        int xEvpuOffset{};                      ///< Horizontal EVPU adjustment for mid-measure clefs.
+    };
+
+    /// @brief Iterate clef changes in this staff at the given measure.
+    /// @param measureId The measure to inspect.
+    /// @param forWrittenPitch If true, use an active transposed clef as Finale's written clef.
+    /// @param iterator The callback function. Return false to stop iteration.
+    /// @return True if iteration completed. False if @p iterator returned false and exited early.
+    bool iterateClefChangesAtMeasure(
+        MeasCmper measureId,
+        bool forWrittenPitch,
+        std::function<bool(const ClefChange&)> iterator) const;
+
     /// @brief Calculates the number of staff lines on this staff.
     int calcNumberOfStafflines() const;
 
@@ -397,6 +426,13 @@ public:
 
     /// @brief Returns the configured rest staff-step offset for an Edu value.
     [[nodiscard]] Evpu calcRestOffset(Edu edu) const;
+
+    /// @brief Calculates barline endpoint offsets relative to the staff center.
+    /// @return A std::pair containing
+    ///     - the top barline endpoint relative to staff center, in EVPU
+    ///     - the bottom barline endpoint relative to staff center, in EVPU
+    /// @note This uses the staff-position sign convention: positive is above/up and negative is below/down.
+    [[nodiscard]] std::pair<Evpu, Evpu> calcBarlineOffsetsFromCenter() const;
 
     /// @brief Calculates the baseline zero position for this staff, relative to the reference line, before any displacements are applied.
     ///
@@ -654,7 +690,7 @@ public:
  * @class StaffStyleAssign
  * @brief Represents an assignment
  *
- * @note Staff style assignments use staff EDU ranges. They end measure can be greater than
+ * @note Staff style assignments use staff EDU ranges. The end measure can be greater than
  * the number of measures in the document.
  *
  * The cmper is the staff ID. This class is identified by the XML node name "staffStyleAssign".

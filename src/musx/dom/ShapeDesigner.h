@@ -47,6 +47,11 @@ enum class KnownShapeDefType
     PedalArrowheadShortUpDownLongUp, ///< Pedal arrowhead: short up, down, long up.
     PedalArrowheadLongUpDownShortUp, ///< Pedal arrowhead: long up, down, short up.
     VerticalLineRightHooks,     ///< Vertical line with short horizontal hooks extending to the right at both ends.
+    SnapPizzicatoAbove,         ///< Snap pizzicato mark with vertical stem above the circle.
+    SnapPizzicatoBelow,         ///< Snap pizzicato mark with vertical stem below the circle.
+    BuzzPizzicato,              ///< Buzz pizzicato mark with horizontal stem.
+    FingernailPizzCurveUp,      ///< Fingernail pizzicato double curve arching upward.
+    FingernailPizzCurveDown,    ///< Fingernail pizzicato double curve arching downward.
 
     // Add more known types here
 };

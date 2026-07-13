@@ -327,17 +327,22 @@ TEST(ShapeDefTest, RecognizeVerticalLineRightHooks)
 
 TEST(ShapeDefTest, RecognizeOnlyExpectedShapesInPattersonDefault)
 {
-    std::vector<char> enigmaXml;
-    musxtest::readFile(musxtest::getInputPath() / "reference" / "PattersonDefault.enigmaxml", enigmaXml);
-    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(enigmaXml);
-    ASSERT_TRUE(doc);
-
     const std::vector<std::pair<Cmper, KnownShapeDefType>> expectedRecognized = {
+        {10, KnownShapeDefType::SnapPizzicatoAbove},
+        {11, KnownShapeDefType::SnapPizzicatoBelow},
+        {12, KnownShapeDefType::BuzzPizzicato},
+        {29, KnownShapeDefType::FingernailPizzCurveUp},
+        {30, KnownShapeDefType::FingernailPizzCurveDown},
         {91, KnownShapeDefType::PedalArrowheadDown},
         {92, KnownShapeDefType::PedalArrowheadUp},
         {93, KnownShapeDefType::PedalArrowheadShortUpDownLongUp},
         {94, KnownShapeDefType::PedalArrowheadLongUpDownShortUp},
         {95, KnownShapeDefType::Blank},
+        {96, KnownShapeDefType::SnapPizzicatoAbove},
+        {101, KnownShapeDefType::FingernailPizzCurveDown},
+        {110, KnownShapeDefType::BuzzPizzicato},
+        {111, KnownShapeDefType::SnapPizzicatoBelow},
+        {112, KnownShapeDefType::SnapPizzicatoAbove},
         {120, KnownShapeDefType::PedalArrowheadDown},
         {121, KnownShapeDefType::PedalArrowheadUp},
         {122, KnownShapeDefType::PedalArrowheadLongUpDownShortUp},
@@ -346,6 +351,11 @@ TEST(ShapeDefTest, RecognizeOnlyExpectedShapesInPattersonDefault)
         {125, KnownShapeDefType::SlurTieCurveRight},
         {126, KnownShapeDefType::SlurTieCurveRight},
     };
+
+    std::vector<char> enigmaXml;
+    musxtest::readFile(musxtest::getInputPath() / "reference" / "PattersonDefault.enigmaxml", enigmaXml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(enigmaXml);
+    ASSERT_TRUE(doc);
 
     auto shapes = doc->getOthers()->getArray<others::ShapeDef>(SCORE_PARTID);
     ASSERT_EQ(shapes.size(), 143);
@@ -411,6 +421,27 @@ void verifyPedalArrowheads(
             << "expected no recognized shape type for cmper " << cmper << " in " << path.string();
     }
 }
+
+void verifyOnlyExpectedRecognizedShapes(
+    const std::filesystem::path& path,
+    const std::vector<std::pair<Cmper, KnownShapeDefType>>& expectedRecognized)
+{
+    std::vector<char> enigmaXml;
+    musxtest::readFile(path, enigmaXml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(enigmaXml);
+    ASSERT_TRUE(doc) << "unable to parse " << path.string();
+
+    for (const auto& shape : doc->getOthers()->getArray<others::ShapeDef>(SCORE_PARTID)) {
+        const auto expected = std::find_if(expectedRecognized.begin(), expectedRecognized.end(),
+            [&](const auto& entry) { return entry.first == shape->getCmper(); });
+        const auto expectedType = expected != expectedRecognized.end()
+            ? expected->second
+            : KnownShapeDefType::Unrecognized;
+        EXPECT_EQ(shape->recognize(), expectedType)
+            << "unexpected recognition result for shapeDef " << shape->getCmper() << " in " << path.string();
+    }
+}
+
 } // namespace
 
 TEST(ShapeDefTest, RecognizePedalArrowheads)
@@ -428,6 +459,75 @@ TEST(ShapeDefTest, RecognizePedalArrowheads)
     for (const auto& entry : cases) {
         verifyPedalArrowheads(entry.path, entry.arrowCmpers, entry.cmpers);
     }
+}
+
+TEST(ShapeDefTest, RecognizeBroadwayFontDefaultShapes)
+{
+    const auto path = musxtest::getInputPath() / "reference" / "Finale Broadway Font Default.enigmaxml";
+    verifyOnlyExpectedRecognizedShapes(path, {
+        {20, KnownShapeDefType::SnapPizzicatoAbove},
+        {21, KnownShapeDefType::SnapPizzicatoAbove},
+        {22, KnownShapeDefType::SnapPizzicatoBelow},
+        {23, KnownShapeDefType::SnapPizzicatoBelow},
+        {24, KnownShapeDefType::BuzzPizzicato},
+        {25, KnownShapeDefType::BuzzPizzicato},
+        {42, KnownShapeDefType::FingernailPizzCurveUp},
+        {43, KnownShapeDefType::FingernailPizzCurveDown},
+        {97, KnownShapeDefType::PedalArrowheadDown},
+        {98, KnownShapeDefType::PedalArrowheadUp},
+        {99, KnownShapeDefType::PedalArrowheadShortUpDownLongUp},
+        {100, KnownShapeDefType::PedalArrowheadLongUpDownShortUp},
+        {101, KnownShapeDefType::Blank},
+        {121, KnownShapeDefType::Blank},
+        {122, KnownShapeDefType::Blank},
+        {123, KnownShapeDefType::Blank},
+    });
+}
+
+TEST(ShapeDefTest, RecognizeMaestroFontDefaultWinShapes)
+{
+    const auto path = musxtest::getInputPath() / "reference" / "MaestroFontDefaultWin.enigmaxml";
+    verifyOnlyExpectedRecognizedShapes(path, {
+        {10, KnownShapeDefType::SnapPizzicatoAbove},
+        {11, KnownShapeDefType::SnapPizzicatoBelow},
+        {12, KnownShapeDefType::BuzzPizzicato},
+        {29, KnownShapeDefType::FingernailPizzCurveUp},
+        {30, KnownShapeDefType::FingernailPizzCurveDown},
+        {91, KnownShapeDefType::PedalArrowheadDown},
+        {92, KnownShapeDefType::PedalArrowheadUp},
+        {93, KnownShapeDefType::PedalArrowheadShortUpDownLongUp},
+        {94, KnownShapeDefType::PedalArrowheadLongUpDownShortUp},
+        {95, KnownShapeDefType::Blank},
+        {96, KnownShapeDefType::SnapPizzicatoAbove},
+        {101, KnownShapeDefType::FingernailPizzCurveDown},
+        {110, KnownShapeDefType::BuzzPizzicato},
+        {111, KnownShapeDefType::SnapPizzicatoBelow},
+        {112, KnownShapeDefType::SnapPizzicatoAbove},
+    });
+}
+
+TEST(ShapeDefTest, RecognizeJazzFontDefaultShapes)
+{
+    const auto inputRoot = musxtest::getInputPath() / "reference";
+    const std::vector<std::pair<Cmper, KnownShapeDefType>> finaleJazzExpected = {
+        {39, KnownShapeDefType::Blank},
+        {44, KnownShapeDefType::PedalArrowheadDown},
+        {45, KnownShapeDefType::PedalArrowheadUp},
+        {46, KnownShapeDefType::PedalArrowheadLongUpDownShortUp},
+        {47, KnownShapeDefType::PedalArrowheadShortUpDownLongUp},
+        {49, KnownShapeDefType::Blank},
+    };
+    const std::vector<std::pair<Cmper, KnownShapeDefType>> jazzExpected = {
+        {38, KnownShapeDefType::Blank},
+        {43, KnownShapeDefType::PedalArrowheadDown},
+        {44, KnownShapeDefType::PedalArrowheadUp},
+        {45, KnownShapeDefType::PedalArrowheadLongUpDownShortUp},
+        {46, KnownShapeDefType::PedalArrowheadShortUpDownLongUp},
+        {48, KnownShapeDefType::Blank},
+    };
+
+    verifyOnlyExpectedRecognizedShapes(inputRoot / "Finale Jazz Font Default.enigmaxml", finaleJazzExpected);
+    verifyOnlyExpectedRecognizedShapes(inputRoot / "Jazz Font Default.enigmaxml", jazzExpected);
 }
 
 TEST(ShapeDefTest, CalculateWidths)

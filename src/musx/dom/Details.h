@@ -154,6 +154,21 @@ public:
     bool avoidSlur{};               ///< Whether the articulation should avoid slurs.
     int numSlursAvoided{};          ///< Number of slurs avoided. Used internally by Finale's stacking algorithm.
 
+    /// @brief Heuristically finds the note in the entry that this articulation assignment appears to be associated with.
+    /// @details Finale cannot model an articulation attached to a specific note of a chord, but users approximate it by
+    /// giving the articulation definition manual vertical positioning and setting #vertOffset so that the symbol aligns
+    /// with the staff position of the target note, where zero is the staff position of the note furthest from the stem.
+    /// This function reverses that convention: it rounds #vertOffset to the nearest staff position and returns the note
+    /// (if any) at exactly that position. Definition-level offsets are ignored, since they orient the symbol relative
+    /// to the selected note rather than select it.
+    /// @note This is a heuristic classification aid. Combine it with other signals (such as the glyph) before concluding
+    /// that an articulation is note-associated.
+    /// @param entryInfo The entry to which this articulation is assigned. Its entry number must match this
+    /// assignment's entry number.
+    /// @return The associated note, or an empty NoteInfoPtr if the heuristic does not identify one.
+    /// @throws std::logic_error if @p entryInfo does not match this assignment's entry number.
+    [[nodiscard]] NoteInfoPtr calcAssociatedNote(const EntryInfoPtr& entryInfo) const;
+
     /// @brief Calculates the pseudo-tie shape info if this articulation is acting as a pseudo tie for the specified mode.
     /// @return The pseudo-tie shape info when a qualifying shape exists; otherwise std::nullopt.
     [[nodiscard]] std::optional<utils::PseudoTieShapeInfo> calcIsPseudoTie(utils::PseudoTieMode mode,
@@ -1532,7 +1547,7 @@ public:
     NoteNumber noteId{};                    ///< The ID of the note being altered. (xml node is `<noteID>`)
     int percent{};                          ///< Size percentage for the notehead. (A value of 100 means 100%.)
     Evpu nxdisp{};                          ///< Horizontal notehead offset.
-    char32_t altNhead{};                    ///< Alternate notehead character.
+    char32_t altNhead{};                    ///< Alternate notehead character. Zero (the default) means no override is specified.
     bool useOwnFont{};                      ///< Whether to use the custom font.
     std::shared_ptr<FontInfo> customFont{}; ///< Custom font info (consolidates: `<fontID>`, `<fontSize>`, `<efx>`)
     bool allowVertPos{};                    ///< Whether vertical positioning is allowed .

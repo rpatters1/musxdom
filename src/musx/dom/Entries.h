@@ -448,7 +448,7 @@ public:
     bool noLeger{};          ///< Hide ledger lines.
     bool sorted{};           ///< Sorted flag.
     bool slashGrace{};       ///< Indicates that a non-beamed grace note with flags (8th note or smaller) should have a slash on the stem.
-                             ///< If #options::GraceNoteOptions::slashFlaggedGraceNotes is true, this options has no effect. The stem
+                             ///< If #options::GraceNoteOptions::slashFlaggedGraceNotes is true, this option has no effect. The stem
                              ///< always has a slash in that case.
     bool flatBeam{};         ///< Forces any beam that starts on this entry to be flat by default.
     bool noPlayback{};       ///< Indicates that the entry should not be played back.
@@ -825,6 +825,11 @@ public:
         m_upStem = calcUpStemImpl();
         return m_upStem.value();
     }
+
+    /// @brief Calculates if the current entry is a grace note with a slash
+    /// @param graceOptions Allows caller to supply the grace note options if caller already has them. Otherwise, the
+    /// function gets the grace note options internally.
+    [[nodiscard]] bool calcGraceNoteSlash(const MusxInstance<options::GraceNoteOptions> graceOptions = nullptr) const;
 
     /// @brief Returns whether this is an unbeamed entry
     /// @return
@@ -1662,9 +1667,8 @@ public:
     { return m_noteIndex; }
 
     /**
-     * @brief Calculates the note name, octave number, actual alteration, and staff position. This function does
-     * not take into account percussion notes and their staff position override. To get the staff position taking
-     * into account percussion notes, use #calcStaffPosition.
+     * @brief Calculates the note name, octave number, actual alteration, and staff position. The staff position
+     * takes into account percussion notes and their staff position override.
      * @note In Finale, the default whole rest staff position is the middle staff line. Other music notation systems
      * frequently expect the standard whole rest staff position to be the second line from the top. You may need to interpolate
      * the staff position returned by #calcNoteProperties for whole rests.
@@ -1678,9 +1682,8 @@ public:
     Note::NoteProperties calcNoteProperties(EnharmonicOverride enharmonicOverride = EnharmonicOverride::None, bool alwaysUseEntryStaff = false) const;
 
     /**
-     * @brief Calculates the note name, octave number, actual alteration, and staff position for the concert pitch of the note. This function does
-     * not take into account percussion notes and their staff position override. To discover if a note is a percussion
-     * note, call #calcPercussionNoteInfo. If it returns non-null, use that for staff position instead of this function.
+     * @brief Calculates the note name, octave number, actual alteration, and staff position for the concert pitch of the note. The staff position
+     * takes into account percussion notes and their staff position override.
      * @param alwaysUseEntryStaff If true, the entry is not checked for cross-staff staffing. Normally you omit this.
      * @return #Note::NoteProperties
      */
@@ -1690,8 +1693,8 @@ public:
     /**
      * @brief Calculates the note name, octave number, actual alteration, and staff position for the pitch of the note in the currently
      * selected "Display In Concert Pitch" view for the current part. This may be
-     * particularly useful with non-floating rests, but it can be used with any note. As with other versions of the function, it does not
-     * handle the staff position override of percussion notes.
+     * particularly useful with non-floating rests, but it can be used with any note. As with other versions of the function, the staff
+     * position takes into account the staff position override of percussion notes.
      * @param alwaysUseEntryStaff If true, the entry is not checked for cross-staff staffing. Normally you omit this.
      * @return #Note::NoteProperties
      */
@@ -1703,10 +1706,35 @@ public:
     [[nodiscard]]
     MusxInstance<others::PercussionNoteInfo> calcPercussionNoteInfo() const;
 
-    /// @brief Calculates the staff position for this note, taking into account percussion notes.
-    /// @return
+    /// @struct NoteheadInfo
+    /// @brief The resolved font, character, size, and offset for a note's notehead.
+    struct NoteheadInfo
+    {
+        MusxInstance<FontInfo> font;   ///< The font that #character is drawn from.
+        char32_t character{};          ///< The notehead character, interpreted in #font.
+        int percent{100};              ///< Size percentage for the notehead. (100 means 100%.)
+        Evpu horzOffset{};              ///< Horizontal notehead offset from the default position.
+        Evpu vertOffset{};              ///< Vertical notehead offset from the default position. Zero unless the source of
+                                        ///< the notehead specifically allows vertical positioning.
+    };
+
+    /// @brief Resolves the effective font and character used to render this note's notehead, along with any
+    /// size or position adjustments.
+    /// @details Resolution is in order of precedence:
+    ///          - A per-note #details::NoteAlterations::altNhead override, if one is set for this note (with its own
+    ///            font override, if #details::NoteAlterations::useOwnFont is set).
+    ///          - The percussion note's shape, if this note is on a percussion staff with a mapped percussion note.
+    ///            (See #calcPercussionNoteInfo.)
+    ///          - The staff's shape-note convention, if shape notes are in effect for the staff. (See #others::Staff::getNoteShapes.)
+    ///          - Otherwise, the document's default notehead codepoints for the note's duration category.
+    ///            (See #options::MusicSymbolOptions.)
+    ///
+    ///          In every case except a custom-font #details::NoteAlterations override, the font is #others::Staff::noteFont
+    ///          if the staff specifies a custom notehead font, or the document's default #options::FontOptions::FontType::Noteheads
+    ///          font otherwise.
+    /// @return The resolved notehead info. This function always returns a usable result.
     [[nodiscard]]
-    int calcStaffPosition() const;
+    NoteheadInfo calcNoteheadInfo() const;
 
     /// @brief Calculates the note that this note could tie to. Check the return value's #Note::tieEnd
     /// to see if there is actually a tie end. (Note that Finale shows a tie whether there #Note::tieEnd is true or not.)

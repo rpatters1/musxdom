@@ -78,6 +78,13 @@ struct EnigmaStyles
     int tracking{};                         ///< inter-character tracking in EMs (1/1000 font size)
 };
 
+/// @brief A text chunk with the Enigma styles active for that chunk.
+struct EnigmaTextChunk
+{
+    std::string text;       ///< the chunk of text
+    EnigmaStyles styles;    ///< the styles active for the chunk
+};
+
 class EnigmaParsingContext;
 
 /**
@@ -140,8 +147,9 @@ class EnigmaParsingContext;
  * - `^filename()`: inserts the file name (no path).
  * - `^lyricist()`: inserts the lyricist name from File Info (ScoreManager window).
  * - `^page(offset)`: inserts the current page number, offsetting from the offset parameter. (The Finale UI prevents more than one `^page` insert per Enigma string.)
- * - `^subtitle()`: inserts the subtitle from File Info (ScoreManager window).
  * - `^partname()`: score or part name. (Score uses the score text from File Info.)
+ * - `^rehearsal()`: inserts the text for a rehearsal sequence into a text expression.
+ * - `^subtitle()`: inserts the subtitle from File Info (ScoreManager window).
  * - `^title()`: inserts the title from File Info (ScoreManager window).
  * - `^totpages()`: inserts the total number of pages in the document.
 */
@@ -157,8 +165,11 @@ public:
         return std::string(reinterpret_cast<const char*>(s));
     }
 
-    /// @brief Concerts a 32-bit codepoint to a utf8-encoded std::string.
+    /// @brief Converts a 32-bit codepoint to a utf8-encoded std::string.
     static std::string toU8(char32_t cp);
+
+    /// @brief Converts a 32-bit codepoint string to a utf8-encoded std::string.
+    static std::string toU8(const std::u32string& value);
 
     /**
      * @brief Enumeration to specify the default handling for accidental insert commands. Like all Enigma commands,
@@ -399,6 +410,9 @@ public:
     /** @brief Trims all enigma tags from an enigma string, leaving just the plain text. */
     static std::string trimTags(const std::string& input);
 
+    /// @brief Concatenate the plain text from collected Enigma text chunks.
+    static std::string plainTextFromChunks(const std::vector<EnigmaTextChunk>& chunks);
+
 private:
     static bool parseEnigmaTextImpl(const std::shared_ptr<dom::Document>& document, dom::Cmper forPartId, const std::string& rawText,
         const TextChunkCallback& onText, const TextInsertCallback& onInsert,
@@ -472,6 +486,20 @@ public:
     {
         return parseEnigmaText(onText, EnigmaString::defaultInsertsCallback, options);
     }
+
+    /// @brief Collect the Enigma text into styled chunks with insert handling.
+    /// @param onInsert The handler for insert conversions.
+    /// @param options The options for the parsing session.
+    /// @return The collected chunks emitted by #parseEnigmaText.
+    std::vector<EnigmaTextChunk> collectEnigmaTextChunks(
+        const EnigmaString::TextInsertCallback& onInsert,
+        const EnigmaString::EnigmaParsingOptions& options = {}) const;
+
+    /// @brief Collect the Enigma text into styled chunks with default insert handling.
+    /// @param options The options for the parsing session.
+    /// @return The collected chunks emitted by #parseEnigmaText.
+    std::vector<EnigmaTextChunk> collectEnigmaTextChunks(
+        const EnigmaString::EnigmaParsingOptions& options = {}) const;
 
     /**
      * @brief Returns a shared pointer to a FontInfo instance that reflects

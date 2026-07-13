@@ -168,6 +168,7 @@ TEST(StaffTest, CalcPercussionNoteInfo)
         }
         EXPECT_EQ(percNoteInfo->calcStaffReferencePosition(), expectedStaffRefPos);
         EXPECT_EQ(percNoteInfo->closedNotehead, expectedClosed);
+        EXPECT_EQ(std::get<3>(noteInfo.calcNotePropertiesInView()), expectedStaffRefPos);
     };
 
     {

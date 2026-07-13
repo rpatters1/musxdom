@@ -26,10 +26,69 @@
 #include <type_traits>
 
 #include "musx/musx.h"
+#include "musx/util/EnigmaString.h"
 
 namespace musx {
 namespace dom {
 namespace others {
+
+static std::string formatMeasureNumberText(const MeasureNumberRegion& region, int displayNumber)
+{
+    std::string result = region.prefix;
+    if (region.base <= 1) {
+        result += util::EnigmaString::toU8(region.startChar);
+        result += region.suffix;
+        return result;
+    }
+
+    const bool numericStyle = region.countFromOne;
+    const bool negative = displayNumber < 0;
+    auto absDisplayNumber = static_cast<long long>(std::llabs(static_cast<long long>(displayNumber)));
+    std::size_t digitCount = 1;
+    auto widthProbe = absDisplayNumber;
+    while (true) {
+        if (!numericStyle && widthProbe > 0 && (widthProbe % region.base) == 0) {
+            widthProbe--;
+        }
+        widthProbe /= region.base;
+        if (widthProbe == 0) {
+            break;
+        }
+        if (region.doubleUp) {
+            digitCount += static_cast<std::size_t>(widthProbe);
+            break;
+        }
+        digitCount++;
+    }
+
+    if (negative) {
+        result += '-';
+    }
+
+    std::u32string digits(digitCount, U'\0');
+    for (std::size_t index = digitCount; index-- > 0;) {
+        auto numericValue = absDisplayNumber;
+        if (!numericStyle) {
+            numericValue -= 1;
+        }
+        const auto digit = region.startChar + static_cast<char32_t>(numericValue % region.base);
+        digits[index] = digit;
+        if (region.doubleUp) {
+            for (std::size_t repeatedIndex = index; repeatedIndex-- > 0;) {
+                digits[repeatedIndex] = digit;
+            }
+            break;
+        }
+        if (!numericStyle && (absDisplayNumber % region.base) == 0) {
+            absDisplayNumber--;
+        }
+        absDisplayNumber /= region.base;
+    }
+
+    result += util::EnigmaString::toU8(digits);
+    result += region.suffix;
+    return result;
+}
 
 // ***************************
 // ***** ArticulationDef *****
@@ -137,6 +196,18 @@ CategoryStaffListSet MarkingCategory::createStaffListSet() const
 // ***** Measure *****
 // *******************
 
+void Measure::checkMeasureCmperSequence(const DocumentPtr& document)
+{
+    const auto measures = document->getOthers()->getArray<Measure>(SCORE_PARTID);
+    for (size_t i = 0; i < measures.size(); i++) {
+        const auto expected = Cmper(i + 1);
+        if (measures[i]->getCmper() != expected) {
+            MUSX_INTEGRITY_ERROR("Expected <measSpec> elements to have cmper values sequentially starting with 1. Expected "
+                + std::to_string(expected) + " but found " + std::to_string(measures[i]->getCmper()) + ".");
+        }
+    }
+}
+
 MusxInstance<MeasureNumberRegion> Measure::findMeasureNumberRegion() const
 {
     auto regions = getDocument()->getOthers()->getArray<MeasureNumberRegion>(getRequestedPartId());
@@ -167,6 +238,17 @@ std::optional<int> Measure::calcDisplayNumber() const
     }
     if (const auto region = findMeasureNumberRegion()) {
         return region->calcDisplayNumberFor(getCmper());
+    }
+    return std::nullopt;
+}
+
+std::optional<std::string> Measure::calcDisplayNumberText() const
+{
+    if (noMeasNum) {
+        return std::nullopt;
+    }
+    if (const auto region = findMeasureNumberRegion()) {
+        return region->calcDisplayNumberTextFor(getCmper());
     }
     return std::nullopt;
 }
@@ -297,6 +379,18 @@ util::Fraction Measure::calcDuration(const std::optional<StaffCmper>& forStaff) 
 // *****************************
 // ***** MeasureExprAssign *****
 // *****************************
+
+bool MeasureExprAssign::calcIsSameDefinition(const MeasureExprAssign& src) const
+{
+    if (textExprId || src.textExprId) {
+        return textExprId && src.textExprId && textExprId == src.textExprId;
+    }
+    if (shapeExprId || src.shapeExprId) {
+        return shapeExprId && src.shapeExprId && shapeExprId == src.shapeExprId;
+    }
+
+    return false;
+}
 
 MusxInstance<TextExpressionDef> MeasureExprAssign::getTextExpression() const
 {
@@ -667,6 +761,104 @@ bool MeasureExprAssign::calcIsPseudoTie(utils::PseudoTieMode mode, const EntryIn
     return false;
 }
 
+static std::string rehearsalMarkText(RehearsalMarkStyle style, int sequence)
+{
+    if (sequence <= 0) {
+        return {};
+    }
+
+    auto repeatedLetter = [sequence](char base) -> std::string {
+        const int index = sequence - 1;
+        const char letter = static_cast<char>(base + (index % 26));
+        const int repeat = index / 26 + 1;
+        return std::string(repeat, letter);
+    };
+
+    auto letterNumber = [sequence](char base) -> std::string {
+            if (sequence <= 26) {
+            return std::string(1, static_cast<char>(base + sequence - 1));
+        }
+
+        const int index = sequence - 27;
+        return std::string(1, static_cast<char>(base + (index % 26)))
+            + std::to_string(index / 26 + 1);
+    };
+
+    switch (style) {
+    case RehearsalMarkStyle::None:
+        return {};
+
+    case RehearsalMarkStyle::Letters:
+        return repeatedLetter('A');
+
+    case RehearsalMarkStyle::LetterNumbers:
+        return letterNumber('A');
+
+    case RehearsalMarkStyle::LettersLowerCase:
+        return repeatedLetter('a');
+
+    case RehearsalMarkStyle::LettersNumbersLowerCase:
+        return letterNumber('a');
+
+    case RehearsalMarkStyle::Numbers:
+        return std::to_string(sequence);
+
+    case RehearsalMarkStyle::MeasureNumber:
+        assert(false && "rehearsalMarkText called for a measure number rehearsal mark");
+        break;
+    }
+
+    return {};
+}
+
+util::EnigmaParsingContext MeasureExprAssign::getRawTextCtx(Cmper forPartId) const
+{
+    if (const auto def = getTextExpression()) {
+        const auto document = getDocument();
+        const auto measureId = getCmper();
+        return def->getRawTextCtx(forPartId, [document, measureId, def, forPartId](const std::vector<std::string>& components) -> std::optional<std::string> {
+            if (components[0] == "rehearsal") {
+                if (def->rehearsalMarkStyle == others::RehearsalMarkStyle::MeasureNumber) {
+                    if (const auto measure = document->getOthers()->get<Measure>(forPartId, measureId)) {
+                        return measure->calcDisplayNumberText().value_or(std::to_string(measure->getCmper()));
+                    }
+                    return std::to_string(measureId);
+                }
+                if (const auto markInfo = document->getRehearsalMarkInfo(measureId, def->getCmper())) {
+                    return rehearsalMarkText(def->rehearsalMarkStyle, markInfo->rehearsalSequence);
+                }
+                return std::string{};
+            }
+            return std::nullopt;
+        });
+    }
+    return {};
+}
+
+util::EnigmaParsingContext TextExpressionDef::getRawTextCtx(Cmper forPartId,
+    util::EnigmaString::TextInsertCallback defaultInsertFunc) const
+{
+    if (auto textBlock = getTextBlock()) {
+        const auto exprValue = value;
+        const auto exprAuxData1 = auxData1;
+        const auto exprPlayPass = playPass;
+        return textBlock->getRawTextCtx(forPartId, std::nullopt, [defaultInsertFunc, exprValue, exprAuxData1, exprPlayPass](const std::vector<std::string>& components) -> std::optional<std::string> {
+            if (auto result = defaultInsertFunc(components)) {
+                return result;
+            }
+            if (components[0] == "value") {
+                return std::to_string(exprValue);
+            } else if (components[0] == "control") {
+                return std::to_string(exprAuxData1);
+            } else if (components[0] == "pass") {
+                return std::to_string(exprPlayPass);
+            }
+            return std::nullopt;
+        });
+    }
+    return {};
+}
+
 // *******************************
 // ***** MeasureNumberRegion *****
 // *******************************
@@ -690,16 +882,55 @@ std::optional<int> MeasureNumberRegion::calcDisplayNumberFor(MeasCmper measureId
     return result;
 }
 
-std::optional<int> MeasureNumberRegion::calcLastDisplayNumber() const
+std::optional<std::string> MeasureNumberRegion::calcDisplayNumberTextFor(MeasCmper measureId) const
 {
-    for (MeasCmper endMeasId = endMeas - 1; endMeasId >= startMeas; endMeasId--) {
-        if (auto measure = getDocument()->getOthers()->get<Measure>(getRequestedPartId(), endMeasId)) {
+    const auto displayNumber = calcDisplayNumberFor(measureId);
+    if (!displayNumber) {
+        return std::nullopt;
+    }
+    return formatMeasureNumberText(*this, *displayNumber);
+}
+
+std::optional<MeasCmper> MeasureNumberRegion::calcFirstDisplayedMeasureId() const
+{
+    for (MeasCmper startMeasId = startMeas; startMeasId < endMeas; startMeasId++) {
+        if (auto measure = getDocument()->getOthers()->get<Measure>(getRequestedPartId(), startMeasId)) {
             if (!measure->noMeasNum) {
-                return calcDisplayNumberFor(endMeasId);
+                return startMeasId;
             }
         } else {
             break;
         }
+    }
+    return std::nullopt;
+}
+
+std::optional<MeasCmper> MeasureNumberRegion::calcLastDisplayedMeasureId() const
+{
+    for (MeasCmper endMeasId = endMeas - 1; endMeasId >= startMeas; endMeasId--) {
+        if (auto measure = getDocument()->getOthers()->get<Measure>(getRequestedPartId(), endMeasId)) {
+            if (!measure->noMeasNum) {
+                return endMeasId;
+            }
+        } else {
+            break;
+        }
+    }
+    return std::nullopt;
+}
+
+std::optional<int> MeasureNumberRegion::calcFirstDisplayNumber() const
+{
+    if (const auto startMeasId = calcFirstDisplayedMeasureId()) {
+        return calcDisplayNumberFor(startMeasId.value());
+    }
+    return std::nullopt;
+}
+
+std::optional<int> MeasureNumberRegion::calcLastDisplayNumber() const
+{
+    if (const auto endMeasId = calcLastDisplayedMeasureId()) {
+        return calcDisplayNumberFor(endMeasId.value());
     }
     return std::nullopt;
 }
@@ -1360,6 +1591,16 @@ util::Fraction StaffSystem::calcEffectiveScaling() const
     return result;
 }
 
+util::Fraction StaffSystem::calcStaffScaling(StaffCmper staffId) const
+{
+    if (hasStaffScaling) {
+        if (const auto staffSize = getDocument()->getDetails()->get<details::StaffSize>(getRequestedPartId(), getCmper(), staffId)) {
+            return util::Fraction::fromPercent(staffSize->staffPercent);
+        }
+    }
+    return 1;
+}
+
 std::pair<util::Fraction, util::Fraction> StaffSystem::calcMinMaxStaffSizes() const
 {
     if (hasStaffScaling) {
@@ -1367,8 +1608,7 @@ std::pair<util::Fraction, util::Fraction> StaffSystem::calcMinMaxStaffSizes() co
         if (!systemStaves.empty()) {
             std::pair<util::Fraction, util::Fraction> result = std::make_pair((std::numeric_limits<util::Fraction>::max)(), (std::numeric_limits<util::Fraction>::min)());
             for (const auto& systemStaff : systemStaves) {
-                auto staffSize = getDocument()->getDetails()->get<details::StaffSize>(getRequestedPartId(), getCmper(), systemStaff->getCmper());
-                const util::Fraction val = staffSize ? util::Fraction(staffSize->staffPercent / 100) : 1;
+                const auto val = calcStaffScaling(systemStaff->getCmper());
                 if (val < result.first) result.first = val;
                 if (val > result.second) result.second = val;
             }
@@ -1436,22 +1676,6 @@ MusxInstance<TextBlock> TextExpressionDef::getTextBlock() const
     return getDocument()->getOthers()->get<TextBlock>(getRequestedPartId(), textIdKey);
 }
 
-util::EnigmaParsingContext TextExpressionDef::getRawTextCtx(Cmper forPartId) const
-{
-    if (auto textBlock = getTextBlock()) {
-        return textBlock->getRawTextCtx(forPartId, std::nullopt, [&](const std::vector<std::string>& components) -> std::optional<std::string> {
-            if (components[0] == "value") {
-                return std::to_string(value);
-            } else if (components[0] == "control") {
-                return std::to_string(auxData1);
-            } else if (components[0] == "pass") {
-                return std::to_string(playPass);
-            }
-            return std::nullopt;
-        });
-    }
-    return {};
-}
 
 MusxInstance<Enclosure> TextExpressionDef::getEnclosure() const
 {
@@ -1468,12 +1692,7 @@ util::Fraction StaffUsed::calcEffectiveScaling() const
     util::Fraction result(1);
     if (SystemCmper(getCmper()) > 0) { // if this is a page-view system
         if (auto system = getDocument()->getOthers()->get<StaffSystem>(getRequestedPartId(), getCmper())) {
-            result = system->calcEffectiveScaling();
-            if (system->hasStaffScaling) {
-                if (auto staffSize = getDocument()->getDetails()->get<details::StaffSize>(getRequestedPartId(), getCmper(), staffId)) {
-                    result *= staffSize->calcStaffScaling();
-                }
-            }
+            result = system->calcEffectiveScaling() * system->calcStaffScaling(staffId);
         }
     }
     return result;

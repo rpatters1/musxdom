@@ -36,7 +36,7 @@
 
 #include "musx/musx.h"
 
-#if ! defined(MUSX_RUNNING_ON_WINDOWS)
+#if ! defined(MUSX_RUNNING_ON_WINDOWS) && ! defined(MUSX_RUNNING_ON_WASM)
 #include <pwd.h>
 #include <sys/types.h>
 #include <unistd.h>
@@ -123,6 +123,11 @@ std::vector<std::filesystem::path> FontInfo::calcSMuFLPaths()
     if (const auto& testPath = util::TestConfiguration::getTestDataPath()) {
         return { std::filesystem::path(testPath.value()) / "font_metadata" };
     }
+#if defined(MUSX_RUNNING_ON_WASM)
+    // No filesystem or user-profile access in a wasm sandbox: skip probing entirely and
+    // rely on FontInfo::calcIsSMuFL()'s hardcoded knownSmuflFontNames fallback.
+    return {};
+#else
 #if defined(MUSX_RUNNING_ON_WINDOWS)
     auto systemEnv = "COMMONPROGRAMFILES";
     auto userEnv = "LOCALAPPDATA";
@@ -208,6 +213,7 @@ std::vector<std::filesystem::path> FontInfo::calcSMuFLPaths()
         retval.emplace_back(std::move(path));
     }
     return retval;
+#endif // MUSX_RUNNING_ON_WASM
 }
 
 // ************************
@@ -490,8 +496,12 @@ std::optional<MusicPoint> MusicRange::nextLocation(const std::optional<StaffCmpe
         }
         result = MusicPoint(nextMeas, util::Fraction::fromEdu(nextEdu));
     } else {
-        // music ranges are explicitly allowed to be beyond the end of a document, so treat this as a verbose message.
-        util::Logger::log(util::Logger::LogLevel::Verbose, "MusicRange has invalid end measure " + std::to_string(end.measureId));
+        auto measures = getDocument()->getOthers()->getArray<others::Measure>(SCORE_PARTID);
+        // don't even report a range whose end measure is 1 past the end. This is common non-inclusive range logic.
+        if (end.measureId > MeasCmper(measures.size() + 1)) {
+            // music ranges are explicitly allowed to be beyond the end of a document, so treat this as a verbose message.
+            util::Logger::log(util::Logger::LogLevel::Verbose, "MusicRange has invalid end measure " + std::to_string(end.measureId));
+        }
     }
     return result;
 }
@@ -609,6 +619,37 @@ bool TimeSignature::isCutTime() const
     return components[0].counts[0] == 2 && components[0].units[0] == Edu(NoteType::Half);
 }
 
+std::pair<util::Fraction, Edu> TimeSignature::TimeSigComponent::normalizeCompoundUnit(util::Fraction count, Edu unit)
+{
+    if (!unit) {
+        throw std::logic_error("The beat size is zero.");
+    }
+
+    int power2 = 0;
+    Edu otherPrimes = unit;
+    while ((otherPrimes & 0x01) == 0) {
+        otherPrimes >>= 1;
+        power2++;
+    }
+
+    return { count * otherPrimes, Edu(1 << power2) };
+}
+
+TimeSignature::TimeSigComponent TimeSignature::TimeSigComponent::normalizeCompound() const
+{
+    if (units.size() != 1) {
+        return *this;
+    }
+
+    TimeSigComponent result = *this;
+    for (auto& count : result.counts) {
+        auto [normalizedCount, normalizedUnit] = normalizeCompoundUnit(count, units[0]);
+        count = normalizedCount;
+        result.units[0] = normalizedUnit;
+    }
+    return result;
+}
+
 std::pair<util::Fraction, NoteType> TimeSignature::calcSimplified() const
 {
     // Lambda to compute GCD of a vector
@@ -635,14 +676,8 @@ std::pair<util::Fraction, NoteType> TimeSignature::calcSimplified() const
         return acc + p.first * (p.second / finalUnit);
     });
 
-    int power2 = 0;
-    int otherPrimes = finalUnit;
-    while ((otherPrimes & 0x01) == 0) {
-        otherPrimes >>= 1;
-        power2++;
-    }
-
-    return { totalBeats * otherPrimes, NoteType(1 << power2) };
+    auto [count, unit] = TimeSigComponent::normalizeCompoundUnit(totalBeats, finalUnit);
+    return { count, NoteType(unit) };
 }
 
 util::Fraction TimeSignature::calcBeatValueAt(Edu eduPosition) const

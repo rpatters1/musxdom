@@ -759,6 +759,61 @@ TEST(TextsTest, ParseEnigmaTextLowLevel)
     EXPECT_EQ(output, expected6);
 }
 
+TEST(TextsTest, CollectEnigmaTextChunks)
+{
+    using namespace musx::util;
+
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(textXml);
+    auto texts = doc->getTexts();
+    ASSERT_TRUE(texts);
+
+    auto styledText = texts->get<texts::BlockText>(32);
+    ASSERT_TRUE(styledText);
+    auto chunks = styledText->getRawTextCtx(styledText, SCORE_PARTID).collectEnigmaTextChunks();
+    ASSERT_EQ(chunks.size(), 1);
+    EXPECT_EQ(chunks[0].text, "Text block");
+    EXPECT_EQ(EnigmaString::plainTextFromChunks(chunks), "Text block");
+    ASSERT_TRUE(chunks[0].styles.font);
+    EXPECT_EQ(chunks[0].styles.font->fontId, 1);
+    EXPECT_EQ(chunks[0].styles.font->fontSize, 14);
+    EXPECT_EQ(chunks[0].styles.font->getEnigmaStyles(), 2);
+
+    auto styleChangeText = texts->get<texts::BlockText>(27);
+    ASSERT_TRUE(styleChangeText);
+    chunks = styleChangeText->getRawTextCtx(styleChangeText, SCORE_PARTID).collectEnigmaTextChunks();
+    ASSERT_EQ(chunks.size(), 2);
+    EXPECT_EQ(chunks[0].text, "My Piece\n");
+    EXPECT_EQ(chunks[1].text, "for");
+    EXPECT_EQ(EnigmaString::plainTextFromChunks(chunks), "My Piece\nfor");
+    ASSERT_TRUE(chunks[0].styles.font);
+    ASSERT_TRUE(chunks[1].styles.font);
+    EXPECT_NE(chunks[0].styles.font, chunks[1].styles.font);
+    EXPECT_EQ(chunks[0].styles.font->fontSize, 24);
+    EXPECT_EQ(chunks[0].styles.font->getEnigmaStyles(), 65);
+    EXPECT_EQ(chunks[1].styles.font->fontSize, 10);
+    EXPECT_EQ(chunks[1].styles.font->getEnigmaStyles(), 66);
+    chunks[1].styles.font->setEnigmaStyles(0);
+    EXPECT_EQ(chunks[0].styles.font->getEnigmaStyles(), 65);
+
+    auto pageText = texts->get<texts::BlockText>(17);
+    ASSERT_TRUE(pageText);
+    chunks = pageText->getRawTextCtx(pageText, SCORE_PARTID).collectEnigmaTextChunks(
+        [](const std::vector<std::string>& parsed) -> std::optional<std::string> {
+            if (parsed[0] == "page") {
+                return "custom page";
+            }
+            return std::nullopt;
+        });
+    ASSERT_EQ(chunks.size(), 1);
+    EXPECT_EQ(chunks[0].text, "custom page");
+
+    auto titleText = texts->get<texts::BlockText>(18);
+    ASSERT_TRUE(titleText);
+    chunks = titleText->getRawTextCtx(titleText, SCORE_PARTID).collectEnigmaTextChunks();
+    ASSERT_EQ(chunks.size(), 1);
+    EXPECT_EQ(chunks[0].text, "My Piece");
+}
+
 TEST(TextsTest, EnigmaAccidentalSubstitution)
 {
     using EnigmaString = musx::util::EnigmaString;

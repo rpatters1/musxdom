@@ -138,6 +138,10 @@ public:
     Edu eduPosition{};              ///< Edu position of endpoint (xml node is `<edu>`)
     EntryNumber entryNumber{};      ///< Entry number. Zero if the endpoint is not entry-attached. (xml node is `<entryNum>`)
 
+    /// @brief Finale can leave dead smart shapes around. This function calculates if the endpoint's staff and measure match its
+    /// endpoint, if any. It also verifies that the endpoint measure exists in the document.
+    [[nodiscard]] bool calcIsValid() const;
+
     /// @brief Calculates the staff-level position of the endpoint within its measure, based on whether it is measure- or entry-attached
     [[nodiscard]] util::Fraction calcPosition() const;
 
@@ -379,6 +383,11 @@ public:
     std::optional<LyricTextType> startLyricType;    ///< The type of lyrics block for #startLyricNum. (xml node is `<startLyricTag>`)
     std::optional<LyricTextType> endLyricType;      ///< The type of lyrics block for #endLyricNum. The speculative comments at #endLyricNum also apply here.
                                                     ///< This value has never been seen to be different than #startLyricNum unless endLyricNum is zero. (xml node is `<endLyricTag>`)
+
+    /// @brief Finale sometimes leaves dead smart shapes hanging around that it does not display. This
+    /// function tells you if you should process the smart shape.
+    [[nodiscard]]
+    bool calcIsValid() const;
 
     /// @brief Returns true if this smart shape is a type of slur.
     [[nodiscard]]

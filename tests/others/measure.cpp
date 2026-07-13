@@ -107,6 +107,31 @@ constexpr static musxtest::string_view measureXml = R"xml(
 </finale>
 )xml";
 
+TEST(MeasureTest, IntegrityCheckRequiresSequentialScoreCmpers)
+{
+  constexpr static musxtest::string_view testXml = R"xml(
+<?xml version="1.0" encoding="UTF-8"?>
+<finale>
+  <others>
+    <measSpec cmper="1">
+      <width>600</width>
+    </measSpec>
+    <measSpec cmper="3">
+      <width>600</width>
+    </measSpec>
+    <measSpec cmper="3" part="1" shared="true">
+      <width>420</width>
+    </measSpec>
+  </others>
+</finale>
+)xml";
+
+    EXPECT_THROW(
+        auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(testXml),
+        musx::dom::integrity_error
+    );
+}
+
 TEST(MeasureTest, PopulateScore)
 {
     auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(measureXml);
@@ -511,6 +536,31 @@ TEST(MeasureTest, CompositeTimeSig2)
         EXPECT_EQ(count, musx::util::Fraction(7, 3));
         EXPECT_EQ(unit, NoteType::Quarter);
     }
+}
+
+TEST(MeasureTest, CompoundTimeSigFocused)
+{
+    {
+        auto [count, unit] = TimeSignature::TimeSigComponent::normalizeCompoundUnit(2, 1536);
+        EXPECT_EQ(count, 6);
+        EXPECT_EQ(unit, 512);
+    }
+    {
+        auto [count, unit] = TimeSignature::TimeSigComponent::normalizeCompoundUnit(2, 4608);
+        EXPECT_EQ(count, 18);
+        EXPECT_EQ(unit, 512);
+    }
+
+    TimeSignature::TimeSigComponent test;
+    test.counts.push_back(2);
+    test.counts.push_back(3);
+    test.units.push_back(1536);
+    auto normal = test.normalizeCompound();
+    ASSERT_EQ(normal.counts.size(), 2U);
+    ASSERT_EQ(normal.units.size(), 1U);
+    EXPECT_EQ(normal.counts[0], 6);
+    EXPECT_EQ(normal.counts[1], 9);
+    EXPECT_EQ(normal.units[0], 512);
 }
 
 TEST(MeasureTest, LegacyPickupSpacers)

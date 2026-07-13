@@ -27,6 +27,8 @@
 #define MUSX_RUNNING_ON_WINDOWS
 #elif defined(__APPLE__) && defined(__MACH__)
 #define MUSX_RUNNING_ON_MACOS
+#elif defined(__EMSCRIPTEN__)
+#define MUSX_RUNNING_ON_WASM
 #elif defined(__unix__) || defined(__linux__)
 #define MUSX_RUNNING_ON_LINUX_UNIX
 #else

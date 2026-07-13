@@ -141,12 +141,24 @@ MusxInstance<others::StaffComposite> smartshape::EndPoint::createCurrentStaff() 
         staffId, measId, calcPosition().calcEduDuration());
 }
 
+bool smartshape::EndPoint::calcIsValid() const
+{
+    if (entryNumber) {
+        const auto entryInfo = calcAssociatedEntry();
+        if (!entryInfo) return false;
+        if (entryInfo.getMeasure() != measId || entryInfo.getStaff() != staffId) {
+            return false;
+        }
+    }
+    return getDocument()->getOthers()->get<others::Measure>(SCORE_PARTID, measId) != nullptr;
+}
+
 util::Fraction smartshape::EndPoint::calcPosition() const
 {
     if (!entryNumber) {
         return util::Fraction::fromEdu(eduPosition);
     }
-    if (auto entryInfo = calcAssociatedEntry()) {
+    if (const auto entryInfo = calcAssociatedEntry()) {
         return entryInfo->elapsedDuration;
     }
     return 0;
@@ -316,6 +328,11 @@ NoteInfoPtr others::SmartShape::calcArpeggiatedTieToNote(const EntryInfoPtr& for
     return musx::util::calcSmartShapeArpeggiatedTieToNote(*this, forStartEntry);
 }
 
+bool others::SmartShape::calcIsValid() const
+{
+    return startTermSeg->endPoint->calcIsValid() && endTermSeg->endPoint->calcIsValid();
+}
+
 bool others::SmartShape::calcIsSlur() const
 {
     using ST = ShapeType;
@@ -385,7 +402,9 @@ VerticalPlacement others::SmartShape::calcVerticalPlacementForBeatAttached() con
     auto isBelow = [&](const TerminationSeg& termSeg) -> bool {
         bool result = false;
         if (const auto staff = termSeg.endPoint->createCurrentStaff()) {
-            const Evpu bottomOffset = staff->calcTopLineEvpu() - staff->calcBottomLineEvpu();
+            // Offsets are relative to the top staff line, so the bottom staff line
+            // is at a negative offset from it.
+            const Evpu bottomOffset = staff->calcBottomLineEvpu() - staff->calcTopLineEvpu();
             result = (termSeg.endPointAdj->calcVertOffset() < bottomOffset);
         } else {
             /// @todo force top-level function to return NotApplicable from here.

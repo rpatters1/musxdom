@@ -1253,6 +1253,11 @@ public:
     /// covered by a measure number region.
     std::optional<int> calcDisplayNumber() const;
 
+    /// @brief Calculates the visible measure number text, based on the first MeasureNumberRegion that contains it.
+    /// @return The display text or std::nullopt if the measure is not included in measure numbering or if it is not
+    /// covered by a measure number region.
+    std::optional<std::string> calcDisplayNumberText() const;
+
     /// @brief Creates and returns a shared pointer to an instance of the @ref KeySignature for this measure and staff.
     /// @param forStaff If present, specifies the specific staff for which to create the key signature.
     /// @return A shared pointer to a new instance of KeySignature. The caller may modify it (*e.g.*, for transposition) without affecting the values in the document.
@@ -1300,6 +1305,9 @@ public:
     {
         return calcDuration() / calcDuration(forStaff);
     }
+
+    /// @brief Checks that score measure cmpers are sequential, starting with 1.
+    static void checkMeasureCmperSequence(const DocumentPtr& document);
 
     void integrityCheck(const std::shared_ptr<EnigmaBase>& ptrToThis) override
     {
@@ -1390,6 +1398,9 @@ public:
     unsigned graceNoteIndex{};              ///< 1-based index from leftmost grace note. 0 = main note.
     int rehearsalMarkOffset{};              ///< Restarts the rehearsal mark sequence at this 1-based sequence value. If this is zero, the sequence continues normally.
 
+    /// @brief Calculate if this expression and the source expression point to the same definition
+    [[nodiscard]] bool calcIsSameDefinition(const MeasureExprAssign& src) const;
+
     /// @brief Returns true if this shape expression is likely acting as a pseudo tie for the specified mode.
     [[nodiscard]] bool calcIsPseudoTie(utils::PseudoTieMode mode, const EntryInfoPtr& forStartEntry) const;
 
@@ -1456,6 +1467,14 @@ public:
     /// @details Uses the assigned expression definition's vertical alignment and collapses the result into a placement
     /// category.
     [[nodiscard]] VerticalPlacement calcVerticalPlacement() const;
+
+    /**
+     * @brief Gets the raw text context for parsing this expression assignment, or nullptr if none.
+     * @note The main difference between the assignment and the underlying text definition context
+     * is that the assignment can resolve rehearsal number text.
+     * @param forPartId The linked part to use for ^partname and ^totpages inserts.
+    */
+    util::EnigmaParsingContext getRawTextCtx(Cmper forPartId) const;
 
     void integrityCheck(const std::shared_ptr<EnigmaBase>& ptrToThis) override
     {
@@ -1581,7 +1600,7 @@ public:
 
     /// @brief Calculates whether the input measure is covered by this measure number region
     /// @param measureId The measure id to check.
-    bool calcIncludesMeasure(MeasCmper measureId) const
+    [[nodiscard]] bool calcIncludesMeasure(MeasCmper measureId) const
     {
         return measureId >= startMeas && measureId < endMeas; // endMeas is non-inclusive!
     }
@@ -1589,18 +1608,38 @@ public:
     /// @brief Returns the starting display measure number for this region. The value is irrespective
     /// of whether the number actually displays on the first measure of the region. (This depends on #Measure::noMeasNum.)
     /// The starting number appears on the first measure in the region that is included in measure numbering.
-    int getStartNumber() const { return int(numberOffset + 1); }
+    [[nodiscard]] int getStartNumber() const { return int(numberOffset + 1); }
 
     /// @brief Returns the visible number for a measure id with respect to the region.
     /// @return The display number or std::nullopt if the measure is not included in measure numbering
     /// @throw std::logic_error if measureId is not contained in the region
-    std::optional<int> calcDisplayNumberFor(MeasCmper measureId) const;
+    [[nodiscard]] std::optional<int> calcDisplayNumberFor(MeasCmper measureId) const;
+
+    /// @brief Returns the visible text for a measure id with respect to the region.
+    /// @return The display text or std::nullopt if the measure is not included in measure numbering
+    /// @throw std::logic_error if measureId is not contained in the region
+    [[nodiscard]] std::optional<std::string> calcDisplayNumberTextFor(MeasCmper measureId) const;
+
+    /// @brief Returns the @ref MeasCmper of the first displayed measure number in this region.
+    /// @returns The first displayed measure id. Measures with "skip measure numbering" are skipped.
+    /// Returns std::nullopt if every measure in the region is set to skip measure numbering. (See #Measure::noMeasNum.)
+    [[nodiscard]] std::optional<MeasCmper> calcFirstDisplayedMeasureId() const;
+
+    /// @brief Returns the @ref MeasCmper of the last displayed measure number in this region.
+    /// @returns The last displayed measure id. Measures with "skip measure numbering" are skipped.
+    /// Returns std::nullopt if every measure in the region is set to skip measure numbering. (See #Measure::noMeasNum.)
+    [[nodiscard]] std::optional<MeasCmper> calcLastDisplayedMeasureId() const;
+
+    /// @brief Returns the first visible number in the region. This function takes into account if the first measure
+    /// is not included and falls back to the next measure if so. (And repeats if necessary.)
+    /// @return The first visible number or std::nullopt if no measure in the region is included in numbering. (See #Measure::noMeasNum.)
+    [[nodiscard]] std::optional<int> calcFirstDisplayNumber() const;
 
     /// @brief Returns the last visible number in the region. This function takes into account if the last measure
     /// is not included and falls back to the previous measure if so. (And repeats if necessary.)
     /// @return The last visible number or std::nullopt if no measure in the region is included in numbering. (See #Measure::noMeasNum.)
-    std::optional<int> calcLastDisplayNumber() const;
-
+    [[nodiscard]] std::optional<int> calcLastDisplayNumber() const;
+    
     void integrityCheck(const std::shared_ptr<EnigmaBase>& ptrToThis) override
     {
         this->OthersBase::integrityCheck(ptrToThis);
@@ -2798,6 +2837,11 @@ public:
     util::Fraction calcSystemScaling() const
     { return util::Fraction::fromPercent(ssysPercent) * util::Fraction(staffHeight, 4 * int(EFIX_PER_SPACE)); }
 
+    /// @brief Calculate individual staff scaling for a given staff.
+    /// @param staffId The staff to get the scaling for.
+    /// @return The staff scaling or 1/1 if the staff is not in the system.
+    util::Fraction calcStaffScaling(StaffCmper staffId) const;
+
     /// @brief Calculates the effective scaling on this system, taking into account page scaling.
     util::Fraction calcEffectiveScaling() const;
 
@@ -3032,8 +3076,11 @@ public:
     /**
      * @brief Gets the raw text context for parsing this expression, or nullptr if none.
      * @param forPartId The linked part to use for ^partname and ^totpages inserts.
+     * @param defaultInsertFunc An optional outer handler layer. If it returns `std::nullopt`, the
+     * expression-definition defaults for `^value`, `^control`, and `^pass` are tried next.
     */
-    util::EnigmaParsingContext getRawTextCtx(Cmper forPartId) const;
+    util::EnigmaParsingContext getRawTextCtx(Cmper forPartId,
+        util::EnigmaString::TextInsertCallback defaultInsertFunc = util::EnigmaString::defaultInsertsCallback) const;
 
     /** @brief Gets the enclosure for this expression, or nullptr if none. */
     MusxInstance<Enclosure> getEnclosure() const;
