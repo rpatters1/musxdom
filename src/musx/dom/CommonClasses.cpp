@@ -30,6 +30,7 @@
 #include <cmath>
 #include <cwctype>
 #include <string_view>
+#include <unordered_map>
 #include <unordered_set>
 
  // This header includes method implementations that need to see all the classes in the dom
@@ -44,6 +45,16 @@
 
 namespace musx {
 namespace dom {
+
+namespace {
+
+struct SmuflMetadataPathCacheEntry
+{
+    bool found{};
+    std::filesystem::path path;
+};
+
+} // namespace
 
 // ********************
 // ***** FontInfo *****
@@ -71,16 +82,23 @@ void FontInfo::setFontIdByName(const std::string& name)
 
 std::optional<std::filesystem::path> FontInfo::calcSMuFLMetaDataPath(const std::string& fontName)
 {
+    static std::unordered_map<std::string, SmuflMetadataPathCacheEntry> cache;
+    if (const auto it = cache.find(fontName); it != cache.end()) {
+        return it->second.found ? std::make_optional(it->second.path) : std::nullopt;
+    }
+
     auto standardFontPaths = calcSMuFLPaths();
     for (const auto& path : standardFontPaths) {
         if (!path.empty()) {
             std::filesystem::path metaFilePath(path / fontName / fontName);
             metaFilePath.replace_extension(".json");
             if (std::filesystem::is_regular_file(metaFilePath)) {
+                cache.emplace(fontName, SmuflMetadataPathCacheEntry{ true, metaFilePath });
                 return metaFilePath;
             }
         }
     }
+    cache.emplace(fontName, SmuflMetadataPathCacheEntry{});
     return std::nullopt;
 }
 
