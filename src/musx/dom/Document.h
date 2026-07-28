@@ -185,6 +185,13 @@ public:
     /// @brief Stores a shape recognition result in the cache.
     void setCachedShapeRecognition(Cmper shapeCmper, KnownShapeDefType type) const;
 
+    /// @brief Retrieves a cached SMuFL font recognition result, if available.
+    [[nodiscard]]
+    std::optional<bool> getCachedFontIsSMuFL(Cmper fontId) const;
+
+    /// @brief Stores a SMuFL font recognition result in the cache.
+    void setCachedFontIsSMuFL(Cmper fontId, bool isSmufl) const;
+
     /// @brief Searches pages to find the page that contains the measure.
     /// @param partId the linked part to search
     /// @param measureId the measure to find
@@ -308,6 +315,7 @@ private:
     std::optional<std::filesystem::path> m_sourcePath; ///< Path to the musx (or EnigmaXML) file used to create this document.
 
     mutable std::unordered_map<Cmper, KnownShapeDefType> m_shapeRecognitionCache; ///< Cache of ShapeDef recognitions.
+    mutable std::unordered_map<Cmper, bool> m_isSmuflFontCache; ///< Cache of SMuFL font recognitions.
 
     // Grant the factory class access to the private constructor
     friend class musx::factory::DocumentFactory;

@@ -160,6 +160,20 @@ void Document::setCachedShapeRecognition(Cmper shapeCmper, KnownShapeDefType typ
     m_shapeRecognitionCache[shapeCmper] = type;
 }
 
+std::optional<bool> Document::getCachedFontIsSMuFL(Cmper fontId) const
+{
+    auto it = m_isSmuflFontCache.find(fontId);
+    if (it != m_isSmuflFontCache.end()) {
+        return it->second;
+    }
+    return std::nullopt;
+}
+
+void Document::setCachedFontIsSMuFL(Cmper fontId, bool isSmufl) const
+{
+    m_isSmuflFontCache[fontId] = isSmufl;
+}
+
 MusxInstance<others::Page> Document::calcPageFromMeasure(Cmper partId, MeasCmper measureId) const
 {
     MusxInstance<others::Page> result;

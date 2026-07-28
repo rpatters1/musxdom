@@ -54,6 +54,46 @@ struct SmuflMetadataPathCacheEntry
     std::filesystem::path path;
 };
 
+static bool looksLikeSmuflDefaultMusicFont(const FontInfo& fontInfo)
+{
+    const auto document = fontInfo.getDocument();
+    const auto fontOptions = document->getOptions()->get<options::FontOptions>();
+    const auto musicSymbols = document->getOptions()->get<options::MusicSymbolOptions>();
+    if (!fontOptions || !musicSymbols) {
+        return false;
+    }
+
+    const auto sameFontFace = [](const FontInfo& lhs, const FontInfo& rhs) {
+        return lhs.fontId == rhs.fontId || lhs.getName() == rhs.getName();
+    };
+
+    const auto defaultMusicFontIt = fontOptions->fontOptions.find(options::FontOptions::FontType::Music);
+    if (defaultMusicFontIt == fontOptions->fontOptions.end() || !defaultMusicFontIt->second
+        || !sameFontFace(fontInfo, *defaultMusicFontIt->second)) {
+        return false;
+    }
+
+    const auto categoryUsesCandidateFont = [&](options::FontOptions::FontType type) {
+        const auto it = fontOptions->fontOptions.find(type);
+        return it != fontOptions->fontOptions.end() && it->second && sameFontFace(fontInfo, *it->second);
+    };
+
+    size_t matches{};
+    if (categoryUsesCandidateFont(options::FontOptions::FontType::Noteheads)
+        && musicSymbols->noteheadQuarter == smufl_glyph::noteheadBlack) {
+        ++matches;
+    }
+    if (categoryUsesCandidateFont(options::FontOptions::FontType::Accis)
+        && musicSymbols->natural == smufl_glyph::accidentalNatural) {
+        ++matches;
+    }
+    if (categoryUsesCandidateFont(options::FontOptions::FontType::Rests)
+        && musicSymbols->restQuarter == smufl_glyph::restQuarter) {
+        ++matches;
+    }
+    return matches >= 2;
+}
+
 } // namespace
 
 // ********************
@@ -104,6 +144,12 @@ std::optional<std::filesystem::path> FontInfo::calcSMuFLMetaDataPath(const std::
 
 bool FontInfo::calcIsSMuFL() const
 {
+    const auto document = getDocument();
+    const auto cached = document->getCachedFontIsSMuFL(fontId);
+    if (cached.has_value()) {
+        return cached.value();
+    }
+
    static const std::set<std::string_view> knownSmuflFontNames =
     {
         "Bravura",
@@ -120,12 +166,17 @@ bool FontInfo::calcIsSMuFL() const
         "Petaluma",
     };
 
+    bool result;
     if (calcSMuFLMetaDataPath().has_value()) {
-        return true;
+        result = true;
+    } else if (auto it = knownSmuflFontNames.find(getName()); it != knownSmuflFontNames.end()) {
+        result = true;
+    } else {
+        result = looksLikeSmuflDefaultMusicFont(*this);
     }
 
-    auto it = knownSmuflFontNames.find(getName());
-    return it != knownSmuflFontNames.end();
+    document->setCachedFontIsSMuFL(fontId, result);
+    return result;
 }
 
 bool FontInfo::calcIsSymbolFont() const

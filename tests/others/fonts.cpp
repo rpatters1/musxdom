@@ -61,6 +61,48 @@ constexpr static musxtest::string_view fontProperties = R"xml(
 </finale>
     )xml";
 
+constexpr static musxtest::string_view unknownSmuflFontProperties = R"xml(
+<?xml version="1.0" encoding="UTF-8"?>
+<finale>
+  <options>
+    <fontOptions>
+      <font type="music"/>
+      <font type="noteheads"/>
+      <font type="accis"/>
+      <font type="rests"/>
+    </fontOptions>
+    <musicSymbolOptions>
+      <noteheadQuarter>57508</noteheadQuarter>
+      <natural>57953</natural>
+      <restQuarter>58597</restQuarter>
+    </musicSymbolOptions>
+  </options>
+  <others>
+    <fontName cmper="0">
+      <charsetBank>Mac</charsetBank>
+      <charsetVal>4095</charsetVal>
+      <pitch>0</pitch>
+      <family>0</family>
+      <name>Unknown SMuFL Font</name>
+    </fontName>
+    <fontName cmper="1">
+      <charsetBank>Mac</charsetBank>
+      <charsetVal>4095</charsetVal>
+      <pitch>0</pitch>
+      <family>0</family>
+      <name>Unknown Nondefault Font</name>
+    </fontName>
+    <fontName cmper="2">
+      <charsetBank>Mac</charsetBank>
+      <charsetVal>4095</charsetVal>
+      <pitch>0</pitch>
+      <family>0</family>
+      <name>Unknown SMuFL Font</name>
+    </fontName>
+  </others>
+</finale>
+    )xml";
+
 TEST(FontTest, FontInfoPropertiesTest)
 {
     auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(fontProperties);
@@ -117,4 +159,45 @@ TEST(FontTest, FontInfoNoName)
         ASSERT_EQ(fontInfo->getName(), "Finale Maestro"),
         std::invalid_argument
     );
+}
+
+TEST(FontTest, DetectsUnknownDefaultSmuflFontFromMusicSymbols)
+{
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(unknownSmuflFontProperties);
+    auto fontOptions = doc->getOptions()->get<options::FontOptions>();
+    ASSERT_TRUE(fontOptions);
+    auto fontInfo = fontOptions->getFontInfo(options::FontOptions::FontType::Music);
+    ASSERT_TRUE(fontInfo);
+
+    EXPECT_TRUE(fontInfo->calcIsSMuFL());
+}
+
+TEST(FontTest, DoesNotInferUnknownNondefaultFontFromMusicSymbols)
+{
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(unknownSmuflFontProperties);
+    auto fontInfo = std::make_shared<FontInfo>(doc);
+    fontInfo->fontId = 1;
+
+    EXPECT_FALSE(fontInfo->calcIsSMuFL());
+}
+
+TEST(FontTest, DetectsExplicitFontWithDefaultMusicFontName)
+{
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(unknownSmuflFontProperties);
+    auto fontInfo = std::make_shared<FontInfo>(doc);
+    fontInfo->fontId = 2;
+
+    EXPECT_TRUE(fontInfo->calcIsSMuFL());
+}
+
+TEST(FontTest, ChangingFontIdUsesSeparateSmuflCacheEntry)
+{
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(unknownSmuflFontProperties);
+    auto fontInfo = std::make_shared<FontInfo>(doc);
+    fontInfo->fontId = 1;
+    ASSERT_FALSE(fontInfo->calcIsSMuFL());
+
+    fontInfo->setFontIdByName("Unknown SMuFL Font");
+
+    EXPECT_TRUE(fontInfo->calcIsSMuFL());
 }
