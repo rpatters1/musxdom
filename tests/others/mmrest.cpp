@@ -69,6 +69,25 @@ TEST(MultimeasureRestTest, PopulateFields)
     EXPECT_TRUE(mmRest->useSymbols);
 }
 
+TEST(MultimeasureRestTest, CalculatesUseSymbols)
+{
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(mmRestXml);
+    auto mmRest = std::make_shared<others::MultimeasureRest>(
+        doc, 1, EnigmaBase::ShareMode::None, 27);
+    mmRest->nextMeas = 32;
+    mmRest->symbolThreshold = 2;
+    mmRest->useSymbols = true;
+
+    EXPECT_FALSE(mmRest->calcUsesSymbols());
+    mmRest->symbolThreshold = 6;
+    EXPECT_TRUE(mmRest->calcUsesSymbols());
+    mmRest->symbolThreshold = mmRest->calcNumberOfMeasures();
+    EXPECT_FALSE(mmRest->calcUsesSymbols());
+    mmRest->useSymbols = false;
+    mmRest->symbolThreshold = 6;
+    EXPECT_FALSE(mmRest->calcUsesSymbols());
+}
+
 
 TEST(MultimeasureRestTest, IntegrityCheckFailure)
 {

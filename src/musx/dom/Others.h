@@ -1690,6 +1690,9 @@ public:
     /// @brief Calculates the number of measures spanned by this multimeasure rest
     int calcNumberOfMeasures() const { return (std::max)(nextMeas - getStartMeasure(), 0); }
 
+    /// @brief Calculates whether rest symbols are used instead of the multimeasure rest shape.
+    bool calcUsesSymbols() const;
+
     /// @brief Calculates if the number on this multimeasure rest is visible.
     bool calcIsNumberVisible() const { return calcNumberOfMeasures() >= numStart; }
 
