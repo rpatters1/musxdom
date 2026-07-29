@@ -201,3 +201,101 @@ TEST(FontTest, ChangingFontIdUsesSeparateSmuflCacheEntry)
 
     EXPECT_TRUE(fontInfo->calcIsSMuFL());
 }
+
+constexpr static musxtest::string_view defaultMusicFontProperties = R"xml(
+<?xml version="1.0" encoding="UTF-8"?>
+<finale>
+  <others>
+    <fontName cmper="0">
+      <charsetBank>Mac</charsetBank>
+      <charsetVal>4095</charsetVal>
+      <pitch>0</pitch>
+      <family>0</family>
+      <name>Finale Maestro</name>
+    </fontName>
+    <fontName cmper="12">
+      <charsetBank>Mac</charsetBank>
+      <charsetVal>4095</charsetVal>
+      <pitch>0</pitch>
+      <family>0</family>
+      <name>Maestro</name>
+    </fontName>
+    <fontName cmper="13">
+      <charsetBank>Mac</charsetBank>
+      <charsetVal>4095</charsetVal>
+      <pitch>0</pitch>
+      <family>0</family>
+      <name>Finale Maestro</name>
+    </fontName>
+  </others>
+</finale>
+    )xml";
+
+TEST(FontTest, SameTypefaceMatchesDefaultMusicFontIdWithConcreteId)
+{
+    // Font id 0 is the default music font. The same typeface also exists under a concrete id, which
+    // is how Finale records a font option that was set explicitly rather than left on the default.
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(defaultMusicFontProperties);
+
+    auto defaultMusic = std::make_shared<FontInfo>(doc);
+    defaultMusic->fontId = 0;
+    auto concrete = std::make_shared<FontInfo>(doc);
+    concrete->fontId = 13;
+
+    EXPECT_TRUE(defaultMusic->calcIsSameTypeface(*concrete));
+    EXPECT_TRUE(concrete->calcIsSameTypeface(*defaultMusic));
+}
+
+TEST(FontTest, SameTypefaceRejectsFontPinnedToADifferentTypeface)
+{
+    // A font option pinned to legacy Maestro keeps that typeface after the document default music
+    // font is changed to Finale Maestro.
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(defaultMusicFontProperties);
+
+    auto defaultMusic = std::make_shared<FontInfo>(doc);
+    defaultMusic->fontId = 0;
+    auto pinned = std::make_shared<FontInfo>(doc);
+    pinned->fontId = 12;
+
+    EXPECT_FALSE(defaultMusic->calcIsSameTypeface(*pinned));
+}
+
+TEST(FontTest, IsSameComparesTypefaceSizeAndEffects)
+{
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(defaultMusicFontProperties);
+
+    auto defaultMusic = std::make_shared<FontInfo>(doc);
+    defaultMusic->fontId = 0;
+    defaultMusic->fontSize = 24;
+
+    auto concrete = std::make_shared<FontInfo>(doc);
+    concrete->fontId = 13;
+    concrete->fontSize = 24;
+
+    EXPECT_TRUE(defaultMusic->isSame(*concrete));
+
+    concrete->fontSize = 18;
+    EXPECT_FALSE(defaultMusic->isSame(*concrete));
+
+    concrete->fontSize = 24;
+    concrete->bold = true;
+    EXPECT_FALSE(defaultMusic->isSame(*concrete));
+}
+
+TEST(FontTest, SameTypefaceDoesNotCompareNamesOfTwoConcreteIds)
+{
+    // Only the default music font is duplicated by design. Two distinct non-zero ids that happen to
+    // share a name indicate a malformed document and are not treated as the same typeface.
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(unknownSmuflFontProperties);
+
+    // Ids 0 and 2 both name "Unknown SMuFL Font"; id 1 names a different font.
+    auto sentinel = std::make_shared<FontInfo>(doc);
+    sentinel->fontId = 0;
+    auto duplicate = std::make_shared<FontInfo>(doc);
+    duplicate->fontId = 2;
+    auto other = std::make_shared<FontInfo>(doc);
+    other->fontId = 1;
+
+    EXPECT_TRUE(sentinel->calcIsSameTypeface(*duplicate));
+    EXPECT_FALSE(other->calcIsSameTypeface(*duplicate));
+}

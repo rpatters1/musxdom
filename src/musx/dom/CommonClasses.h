@@ -85,13 +85,31 @@ public:
     bool absolute{};    ///< Fixed size effect.
     bool hidden{};      ///< Hidden effect.
 
-    /// @brief Return true if the two fonts represent the same font.
+    /// @brief Return true if the two fonts specify the same typeface, ignoring size and effects.
+    ///
+    /// A #fontId of 0 is the document's default music font. Finale rewrites that
+    /// @ref others::FontDefinition's name whenever the default music font changes, so anything
+    /// storing id 0 follows the change while a concrete id keeps whatever typeface it was set to.
+    /// The same typeface therefore routinely appears under both id 0 and a concrete id, and those
+    /// compare equal here by name.
+    ///
+    /// Two distinct non-zero ids are never compared by name. The default music font is the only
+    /// font duplicated by design, so duplicate names elsewhere indicate a malformed document.
+    ///
     /// @param src The input font to compare with.
-    bool isSame(const FontInfo& src) const
-    {
-        return fontId == src.fontId && fontSize == src.fontSize && m_sizeIsPercent == src.m_sizeIsPercent
-            && getEnigmaStyles() == src.getEnigmaStyles();
-    }
+    /// @throws std::invalid_argument if either font id has no @ref others::FontDefinition.
+    bool calcIsSameTypeface(const FontInfo& src) const;
+
+    /// @brief Return true if the two fonts represent the same font.
+    ///
+    /// Compares typeface (see #calcIsSameTypeface), size, and style effects. To distinguish a
+    /// #fontId of 0 from the concrete id naming the same typeface - which matters only when the
+    /// source encoding itself is the subject, such as round-tripping, or reporting that a font
+    /// option pins a concrete font instead of following the document default - compare #fontId
+    /// directly.
+    ///
+    /// @param src The input font to compare with.
+    bool isSame(const FontInfo& src) const;
 
     /// @brief If true, the size of this font is calculated as a percent of the preceding font size (in an Enigma string)
     bool getSizeIsPercent() const { return m_sizeIsPercent; }
