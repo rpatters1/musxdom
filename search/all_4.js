@@ -63,7 +63,7 @@ var searchData=
   ['endstring_60',['endString',['../classmusx_1_1dom_1_1details_1_1FretboardDiagram_1_1Barre.html#a5c06fb37bfc0541f3cb6cdcaf7ff6976',1,'musx::dom::details::FretboardDiagram::Barre']]],
   ['endtermseg_61',['endTermSeg',['../classmusx_1_1dom_1_1others_1_1SmartShape.html#a4e56b4c73aef844dcbdb8753768824a5',1,'musx::dom::others::SmartShape']]],
   ['englishhorn_62',['EnglishHorn',['../namespacemusx_1_1dom_1_1uuid.html#aba90da05f0a5f611a0202753567578e9',1,'musx::dom::uuid']]],
-  ['engraverslurstate_63',['engraverslurstate',['../classmusx_1_1dom_1_1others_1_1SmartShape.html#a76f47c85e23c3feeb7c33030cd3d0e02',1,'musx::dom::others::SmartShape::engraverSlurState'],['../classmusx_1_1dom_1_1others_1_1SmartShape.html#a401ee7c12c872ce9f039ab9994a6708b',1,'musx::dom::others::SmartShape::EngraverSlurState']]],
+  ['engraverslurstate_63',['engraverslurstate',['../classmusx_1_1dom_1_1others_1_1SmartShape.html#a401ee7c12c872ce9f039ab9994a6708b',1,'musx::dom::others::SmartShape::EngraverSlurState'],['../classmusx_1_1dom_1_1others_1_1SmartShape.html#a76f47c85e23c3feeb7c33030cd3d0e02',1,'musx::dom::others::SmartShape::engraverSlurState']]],
   ['enharmonic_64',['enharmonic',['../classmusx_1_1dom_1_1details_1_1NoteAlterations.html#ada5b4983856d57d4e17d8806368778be',1,'musx::dom::details::NoteAlterations']]],
   ['enharmonicoverride_65',['EnharmonicOverride',['../namespacemusx_1_1dom.html#a58a07f9a8e6c45605a8dab47d3b70d7f',1,'musx::dom']]],
   ['enharmonictranspose_66',['enharmonicTranspose',['../classmusic__theory_1_1Transposer.html#afcea52c4d2d8f21fcc3bd20b48096bf2',1,'music_theory::Transposer']]],

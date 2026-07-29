@@ -124,6 +124,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a0b5a0f5843f363230f090f76325495ae" id="r_a0b5a0f5843f363230f090f76325495ae"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1FontInfo.html#a0b5a0f5843f363230f090f76325495ae">FontInfo</a> (const <a class="el" href="namespacemusx_1_1dom.html#aa76356b1ad3580081294898c79615c4d">DocumentWeakPtr</a> &amp;document, bool sizeIsPercent=false)</td></tr>
 <tr class="memdesc:a0b5a0f5843f363230f090f76325495ae"><td class="mdescLeft">&#160;</td><td class="mdescRight">constructor  <br /></td></tr>
 <tr class="separator:a0b5a0f5843f363230f090f76325495ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aae2a2b12926209beedbc813f7cec7fb0" id="r_aae2a2b12926209beedbc813f7cec7fb0"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1FontInfo.html#aae2a2b12926209beedbc813f7cec7fb0">calcIsSameTypeface</a> (const <a class="el" href="classmusx_1_1dom_1_1FontInfo.html">FontInfo</a> &amp;src) const</td></tr>
+<tr class="memdesc:aae2a2b12926209beedbc813f7cec7fb0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return true if the two fonts specify the same typeface, ignoring size and effects.  <br /></td></tr>
+<tr class="separator:aae2a2b12926209beedbc813f7cec7fb0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab16918facac73b28273576d8df541eab" id="r_ab16918facac73b28273576d8df541eab"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1FontInfo.html#ab16918facac73b28273576d8df541eab">isSame</a> (const <a class="el" href="classmusx_1_1dom_1_1FontInfo.html">FontInfo</a> &amp;src) const</td></tr>
 <tr class="memdesc:ab16918facac73b28273576d8df541eab"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return true if the two fonts represent the same font.  <br /></td></tr>
 <tr class="separator:ab16918facac73b28273576d8df541eab"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -391,6 +394,40 @@ const <a class="el" href="classmusx_1_1dom_1_1EnigmaBase.html#a1e53d536ab5b5c2c0
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="aae2a2b12926209beedbc813f7cec7fb0" name="aae2a2b12926209beedbc813f7cec7fb0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aae2a2b12926209beedbc813f7cec7fb0">&#9670;&#160;</a></span>calcIsSameTypeface()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool musx::dom::FontInfo::calcIsSameTypeface </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classmusx_1_1dom_1_1FontInfo.html">FontInfo</a> &amp;&#160;</td>
+          <td class="paramname"><em>src</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Return true if the two fonts specify the same typeface, ignoring size and effects. </p>
+<p>A <a class="el" href="classmusx_1_1dom_1_1FontInfo.html#a7b5eba0c729498d941368d97ee6fe51b" title="Font identifier. This is a Cmper for others::FontDefinition.">fontId</a> of 0 is the document's default music font. Finale rewrites that <a class="el" href="classmusx_1_1dom_1_1others_1_1FontDefinition.html">others::FontDefinition</a>'s name whenever the default music font changes, so anything storing id 0 follows the change while a concrete id keeps whatever typeface it was set to. The same typeface therefore routinely appears under both id 0 and a concrete id, and those compare equal here by name.</p>
+<p>Two distinct non-zero ids are never compared by name. The default music font is the only font duplicated by design, so duplicate names elsewhere indicate a malformed document.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">src</td><td>The input font to compare with. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::invalid_argument</td><td>if either font id has no <a class="el" href="classmusx_1_1dom_1_1others_1_1FontDefinition.html">others::FontDefinition</a>. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a id="ae8690da604f94c3b282ec12c6f48e4e1" name="ae8690da604f94c3b282ec12c6f48e4e1"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ae8690da604f94c3b282ec12c6f48e4e1">&#9670;&#160;</a></span>calcSMuFLMetaDataPath()</h2>
 
@@ -478,9 +515,6 @@ const <a class="el" href="classmusx_1_1dom_1_1EnigmaBase.html#a1e53d536ab5b5c2c0
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">bool musx::dom::FontInfo::isSame </td>
@@ -490,14 +524,10 @@ const <a class="el" href="classmusx_1_1dom_1_1EnigmaBase.html#a1e53d536ab5b5c2c0
           <td> const</td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
 <p>Return true if the two fonts represent the same font. </p>
+<p>Compares typeface (see <a class="el" href="classmusx_1_1dom_1_1FontInfo.html#aae2a2b12926209beedbc813f7cec7fb0" title="Return true if the two fonts specify the same typeface, ignoring size and effects.">calcIsSameTypeface</a>), size, and style effects. To distinguish a <a class="el" href="classmusx_1_1dom_1_1FontInfo.html#a7b5eba0c729498d941368d97ee6fe51b" title="Font identifier. This is a Cmper for others::FontDefinition.">fontId</a> of 0 from the concrete id naming the same typeface - which matters only when the source encoding itself is the subject, such as round-tripping, or reporting that a font option pins a concrete font instead of following the document default - compare <a class="el" href="classmusx_1_1dom_1_1FontInfo.html#a7b5eba0c729498d941368d97ee6fe51b" title="Font identifier. This is a Cmper for others::FontDefinition.">fontId</a> directly.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">src</td><td>The input font to compare with. </td></tr>

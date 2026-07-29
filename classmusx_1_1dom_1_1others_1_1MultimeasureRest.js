@@ -3,6 +3,7 @@ var classmusx_1_1dom_1_1others_1_1MultimeasureRest =
     [ "MultimeasureRest", "classmusx_1_1dom_1_1others_1_1MultimeasureRest.html#a8945eb94b708a316f176f970b0c3ec06", null ],
     [ "calcIsNumberVisible", "classmusx_1_1dom_1_1others_1_1MultimeasureRest.html#ad3a74f444ae9e2a8595e0b4d2cb02a18", null ],
     [ "calcNumberOfMeasures", "classmusx_1_1dom_1_1others_1_1MultimeasureRest.html#a64755deadd3656f403667263bf73f3e7", null ],
+    [ "calcUsesSymbols", "classmusx_1_1dom_1_1others_1_1MultimeasureRest.html#a921bcc87a8008a8cf5136ea8e0522e49", null ],
     [ "getStartMeasure", "classmusx_1_1dom_1_1others_1_1MultimeasureRest.html#a8c726066a31ae5389a7e5ec7f563d2b7", null ],
     [ "integrityCheck", "classmusx_1_1dom_1_1others_1_1MultimeasureRest.html#a6a5536fefa5bb7942e69882c8928d2ba", null ],
     [ "measWidth", "classmusx_1_1dom_1_1others_1_1MultimeasureRest.html#a9ac347a53b4b2e7acb97df93bfc35f13", null ],
