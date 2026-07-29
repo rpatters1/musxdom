@@ -282,22 +282,6 @@ MusxInstance<others::Measure> EntryFrame::getMeasureInstance() const
     return getDocument()->getOthers()->get<others::Measure>(getRequestedPartId(), getMeasure());
 }
 
-bool EntryFrame::calcIsCueFrame(bool includeVisibleInScore) const
-{
-    bool foundCueEntry = false;
-    for (size_t x = 0; x < m_entries.size(); x++) {
-        if (!m_entries[x]->getEntry()->isHidden) {
-            EntryInfoPtr entryInfo(shared_from_this(), x);
-            if (entryInfo.calcIsCue(includeVisibleInScore)) {
-                foundCueEntry = true;
-            } else {
-                return false; // return false on the first non-cue visible entry found
-            }
-        }
-    }
-    return foundCueEntry;
-}
-
 bool EntryFrame::calcAreAllEntriesHiddenInFrame() const
 {
     for (const auto& entry : m_entries) {
@@ -2021,32 +2005,6 @@ int EntryInfoPtr::calcEntrySize() const
     return result;
 }
 
-bool EntryInfoPtr::calcIsCue(bool includeVisibleInScore) const
-{
-    if (calcEntrySize() <= MAX_CUE_PERCENTAGE) {
-        if (includeVisibleInScore) {
-            return true;
-        }
-        auto doc = m_entryFrame->getDocument();
-        if (auto scoreStaff = others::StaffComposite::createCurrent(doc, SCORE_PARTID, getStaff(), getMeasure(), (*this)->elapsedDuration.calcEduDuration())) {
-            const bool hidden = scoreStaff->calcAlternateNotationHidesEntries(getLayerIndex()) || scoreStaff->hideMode != others::Staff::HideMode::None;
-            if (hidden) {
-                auto parts = scoreStaff->getContainingParts(/*includeScore*/false);
-                for (const auto& part : parts) {
-                    if (auto partStaff = others::StaffComposite::createCurrent(doc, part->getCmper(), getStaff(), getMeasure(), (*this)->elapsedDuration.calcEduDuration())) {
-                        if (partStaff->altNotation != others::Staff::AlternateNotation::BlankWithRests && partStaff->altNotation != others::Staff::AlternateNotation::Blank) {
-                            return true;
-                        }
-                    }
-                }
-            }
-        } else {
-            MUSX_INTEGRITY_ERROR("Staff " + std::to_string(getStaff()) + " not found for measure " + std::to_string(getMeasure()));
-        }
-    }
-    return false;
-}
-
 bool EntryInfoPtr::calcIsFullMeasureRest() const
 {
     const auto entry = (*this)->getEntry();
@@ -2681,57 +2639,6 @@ ClefIndex details::GFrameHoldContext::calcClefIndexAt(Edu position) const
         result = lastClef->clefIndex;
     }
     return result;
-}
-
-bool details::GFrameHoldContext::calcIsCuesOnly(bool includeVisibleInScore) const
-{
-    bool foundCue = false;
-    const bool completed = scanCueLayers(includeVisibleInScore, [&](LayerIndex, bool isCueLayer) {
-        if (!isCueLayer) {
-            return false;
-        }
-        foundCue = true;
-        return true;
-    });
-    return completed && foundCue;
-}
-
-details::GFrameHoldContext::CueSummary details::GFrameHoldContext::calcCueSummary(bool includeVisibleInScore) const
-{
-    bool foundNonCue = false;
-    CueSummary result;
-    scanCueLayers(includeVisibleInScore, [&](LayerIndex layerIndex, bool isCueLayer) {
-        if (isCueLayer) {
-            result.cueLayers.push_back(layerIndex);
-        } else {
-            foundNonCue = true;
-        }
-        return true;
-    });
-    result.isCueHold = !foundNonCue && !result.cueLayers.empty();
-    return result;
-}
-
-bool details::GFrameHoldContext::scanCueLayers(bool includeVisibleInScore, std::function<bool(LayerIndex, bool)> visitor) const
-{
-    for (LayerIndex layerIndex = 0; layerIndex < m_hold->frames.size(); layerIndex++) {
-        if (!calcPolicyVoicingIncludesLayer(layerIndex)) {
-            continue;
-        }
-        auto [frame, startEdu] = m_hold->findLayerFrame(layerIndex);
-        if (frame) {
-            auto entries = frame->getEntries();
-            if (startEdu == 0 && entries.size() == 1 && entries[0]->isPossibleFullMeasureRest()) {
-                continue;
-            }
-            if (auto entryFrame = createEntryFrame(layerIndex)) {
-                if (!visitor(layerIndex, entryFrame->calcIsCueFrame(includeVisibleInScore))) {
-                    return false;
-                }
-            }
-        }
-    }
-    return true;
 }
 
 EntryInfoPtr details::GFrameHoldContext::calcNearestEntry(util::Fraction position, bool findExact, std::optional<LayerIndex> matchLayer,

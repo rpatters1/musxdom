@@ -68,17 +68,6 @@ class GFrameHold;
 class GFrameHoldContext
 {
 public:
-    /// @brief Summary of cue information for a @ref GFrameHold in this context.
-    struct CueSummary
-    {
-        std::vector<LayerIndex> cueLayers; ///< 0-based layer indices whose frames are cue frames.
-        bool isCueHold{};                  ///< True if the hold contains only cue frames and full-measure rests.
-
-        /// @brief Allows clean bool comparisons in `if` statements
-        explicit operator bool() const
-        { return isCueHold; }
-    };
-
     /**
      * @brief Constructs a context-aware @ref GFrameHold wrapper.
      *
@@ -182,16 +171,6 @@ public:
     [[nodiscard]]
     std::map<LayerIndex, int> calcVoices(bool excludeHidden = false) const;
 
-    /// @brief Calculates if this staff in this measure contains only a cue layer and full-measure rest layers.
-    /// @param includeVisibleInScore If true, include cues that are visible in the score.
-    [[nodiscard]]
-    bool calcIsCuesOnly(bool includeVisibleInScore = false) const;
-
-    /// @brief Calculates cue layers and whether this hold is comprised only of cue frames and full-measure rests.
-    /// @param includeVisibleInScore If true, include cues that are visible in the score.
-    [[nodiscard]]
-    CueSummary calcCueSummary(bool includeVisibleInScore = false) const;
-
     /// @brief Calculates the nearest non-grace-note entry at the given @p position.
     /// @param position The measure position to find.
     /// @param findExact If true, only find an entry that matches to within 1 evpu. Otherwise find the closest entry in the measure.
@@ -250,10 +229,6 @@ public:
     util::Fraction getTimeOffset() const { return m_timeOffset; }
 
 private:
-    /// @brief Scans non-rest content layers and calls @p visitor with whether each layer is a cue layer.
-    /// @return true if all content layers were scanned, false if @p visitor stopped the scan.
-    bool scanCueLayers(bool includeVisibleInScore, std::function<bool(LayerIndex, bool)> visitor) const;
-
     EntryInfoPtr calcNearestEntryMatching(util::Fraction position, bool findExact, std::optional<LayerIndex> matchLayer,
         MatchVoice matchVoice, const std::function<bool(const EntryInfoPtr&)>& matchesEntry) const;
 
@@ -932,13 +907,6 @@ public:
     /// @return Integer percentage where 100 means 100%.
     [[nodiscard]] int calcEntrySize() const;
 
-    /// @brief Calculates if this entry is part of a cue.
-    /// @param includeVisibleInScore If true, include cues that are visible in the score.
-    /// @return true if
-    ///         - the entry is reduced in size
-    ///         - the entry is hidden by "Blank Notation" or "Blank Notation with Rests" alternate notation in the score but not in a part.
-    [[nodiscard]] bool calcIsCue(bool includeVisibleInScore = false) const;
-
     /// @brief Returns whether this is a full measure rest.
     /// @note Note that in Finale, only whole rests are used as full measure rests.
     [[nodiscard]] bool calcIsFullMeasureRest() const;
@@ -1510,14 +1478,6 @@ public:
     /// @brief Get the measure instance
     [[nodiscard]]
     MusxInstance<others::Measure> getMeasureInstance() const;
-
-    /// @brief Calculates if this entry frame is part of a cue.
-    /// @todo Revisit this algorithm if needed. The current algorithm is chosen to be mostly accurate while being
-    /// fast to compute when there is no cue.
-    /// @param includeVisibleInScore If true, include cues that are visible in the score.
-    /// @return true if all entries in the frame are either cue entries or hidden.
-    [[nodiscard]]
-    bool calcIsCueFrame(bool includeVisibleInScore = false) const;
 
     /// @brief Calculates if this all notes in the frame are hidden.
     /// This routine only checks that entries are individually hidden. The caller must separately check #others::Staff::calcAlternateNotationHidesEntries
