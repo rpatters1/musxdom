@@ -935,6 +935,15 @@ std::optional<int> MeasureNumberRegion::calcLastDisplayNumber() const
     return std::nullopt;
 }
 
+// ****************************
+// ***** MultimeasureRest *****
+// ****************************
+
+bool MultimeasureRest::calcUsesSymbols() const
+{
+    return useSymbols && calcNumberOfMeasures() < symbolThreshold;
+}
+
 // *************************************
 // ***** MultiStaffInstrumentGroup *****
 // *************************************

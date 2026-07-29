@@ -63,19 +63,15 @@ static bool looksLikeSmuflDefaultMusicFont(const FontInfo& fontInfo)
         return false;
     }
 
-    const auto sameFontFace = [](const FontInfo& lhs, const FontInfo& rhs) {
-        return lhs.fontId == rhs.fontId || lhs.getName() == rhs.getName();
-    };
-
     const auto defaultMusicFontIt = fontOptions->fontOptions.find(options::FontOptions::FontType::Music);
     if (defaultMusicFontIt == fontOptions->fontOptions.end() || !defaultMusicFontIt->second
-        || !sameFontFace(fontInfo, *defaultMusicFontIt->second)) {
+        || !fontInfo.calcIsSameTypeface(*defaultMusicFontIt->second)) {
         return false;
     }
 
     const auto categoryUsesCandidateFont = [&](options::FontOptions::FontType type) {
         const auto it = fontOptions->fontOptions.find(type);
-        return it != fontOptions->fontOptions.end() && it->second && sameFontFace(fontInfo, *it->second);
+        return it != fontOptions->fontOptions.end() && it->second && fontInfo.calcIsSameTypeface(*it->second);
     };
 
     size_t matches{};
@@ -118,6 +114,25 @@ void FontInfo::setFontIdByName(const std::string& name)
         }
     }
     throw std::invalid_argument("font definition not found for font \"" + name + "\"");
+}
+
+bool FontInfo::calcIsSameTypeface(const FontInfo& src) const
+{
+    if (fontId == src.fontId) {
+        return true;
+    }
+    // The default music font is the only font duplicated by design, so it is the only case where
+    // differing ids can still name the same typeface.
+    if (!calcIsDefaultMusic() && !src.calcIsDefaultMusic()) {
+        return false;
+    }
+    return getName() == src.getName();
+}
+
+bool FontInfo::isSame(const FontInfo& src) const
+{
+    return calcIsSameTypeface(src) && fontSize == src.fontSize && m_sizeIsPercent == src.m_sizeIsPercent
+        && getEnigmaStyles() == src.getEnigmaStyles();
 }
 
 std::optional<std::filesystem::path> FontInfo::calcSMuFLMetaDataPath(const std::string& fontName)
