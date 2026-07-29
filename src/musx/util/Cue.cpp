@@ -31,14 +31,14 @@ namespace musx::util {
 
 namespace {
 
-bool calcPolicyVoicingIncludesLayer(const dom::EntryInfoPtr& entry, dom::Cmper partId)
+bool calcTargetPartVoicingShowsEntryLayer(const dom::EntryInfoPtr& entry, dom::Cmper targetPartId)
 {
     const auto frame = entry.getFrame();
     const auto document = frame->getDocument();
     if (document->getPartVoicingPolicy() != dom::PartVoicingPolicy::Apply) {
         return true;
     }
-    if (const auto partVoicing = document->getOthers()->get<dom::others::PartVoicing>(partId, frame->getStaff())) {
+    if (const auto partVoicing = document->getOthers()->get<dom::others::PartVoicing>(targetPartId, frame->getStaff())) {
         return partVoicing->calcShowsLayer(frame->getLayerIndex(), frame->getContext()->calcIsMultiLayer());
     }
     return true;
@@ -73,7 +73,7 @@ Cue::EntryVisibility Cue::calcVisibility(const dom::EntryInfoPtr& entry, dom::Cm
     if (staff->calcAlternateNotationHidesEntries(entry.getLayerIndex())) {
         return EntryVisibility::HiddenByAlternateNotation;
     }
-    if (!calcPolicyVoicingIncludesLayer(entry, targetPartId)) {
+    if (!calcTargetPartVoicingShowsEntryLayer(entry, targetPartId)) {
         return EntryVisibility::ExcludedByVoicing;
     }
     return EntryVisibility::Visible;
