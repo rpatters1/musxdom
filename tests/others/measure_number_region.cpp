@@ -238,6 +238,9 @@ TEST(MeasureNumberIndividualPositioningTest, PopulateFields)
       <x1add>131</x1add>
       <y1add>-44</y1add>
       <x2add>201</x2add>
+      <encl>
+        <xAdd>13</xAdd>
+      </encl>
     </measNumbIndivPos>
   </details>
 </finale>
@@ -271,7 +274,24 @@ TEST(MeasureNumberIndividualPositioningTest, PopulateFields)
     EXPECT_EQ(pos2->xOffset2, Evpu{201});
     EXPECT_EQ(pos2->forceVisibility, details::MeasureNumberIndividualPositioning::ForceVisibility::Show);
     EXPECT_TRUE(pos2->useEnclosure); // not present -> shared from score.
-    EXPECT_TRUE(bool(pos2->enclosure)); // not present -> shared from score.
+    ASSERT_TRUE(pos2->enclosure);
+    EXPECT_EQ(pos2->enclosure->getRequestedPartId(), 1);
+    EXPECT_EQ(pos2->enclosure->xAdd, 13);
+    EXPECT_EQ(pos2->enclosure->yAdd, 5);
+    EXPECT_EQ(pos2->enclosure->xMargin, 21);
+    EXPECT_EQ(pos2->enclosure->cornerRadius, 768);
+    EXPECT_TRUE(pos2->enclosure->fixedSize);
+    EXPECT_NE(pos2->enclosure.get(), pos1->enclosure.get());
+
+    EXPECT_EQ(pos1->enclosure->xAdd, 3);
+
+    auto pos3 = details->get<details::MeasureNumberIndividualPositioning>(2, 1, 8, 0);
+    ASSERT_TRUE(pos3);
+    ASSERT_TRUE(pos3->enclosure);
+    EXPECT_EQ(pos3->getRequestedPartId(), 2);
+    EXPECT_EQ(pos3->enclosure->getRequestedPartId(), 2);
+    EXPECT_EQ(pos3->enclosure->xAdd, 3);
+    EXPECT_NE(pos3->enclosure.get(), pos1->enclosure.get());
 }
 
 TEST(MeasureNumberRegionTest, CalcDisplayNumberText)

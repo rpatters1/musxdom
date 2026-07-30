@@ -321,6 +321,18 @@ struct FieldPopulator : public FactoryBase
        return FieldPopulator<T>::createAndPopulateImpl(element, std::forward<Args>(args)...);
     }
 
+    /// @brief Populates an existing contained instance, or creates it first if it does not exist.
+    template <typename... Args>
+    static std::shared_ptr<T> populateExistingOrCreate(
+        const XmlElementPtr& element, std::shared_ptr<T> instance, Args&&... args)
+    {
+        if (!instance) {
+            instance = std::make_shared<T>(std::forward<Args>(args)...);
+        }
+        FieldPopulator<T>::populate(instance, element);
+        return instance;
+    }
+
 private:
     static const std::unordered_map<std::string_view, XmlElementPopulator<T>>& elementXref()
     {

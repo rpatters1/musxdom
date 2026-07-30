@@ -1176,13 +1176,13 @@ MUSX_XML_ELEMENT_ARRAY(ShapeInstructionList, {
 
 MUSX_XML_ELEMENT_ARRAY(SmartShape::TerminationSeg, {
     {"endPt", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape::TerminationSeg>& i)
-        { i->endPoint = FieldPopulator<smartshape::EndPoint>::createAndPopulate(e, i->getParent()); }},
+        { i->endPoint = FieldPopulator<smartshape::EndPoint>::populateExistingOrCreate(e, i->endPoint, i->getParent()); }},
     {"endPtAdj", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape::TerminationSeg>& i)
-        { i->endPointAdj = FieldPopulator<smartshape::EndPointAdjustment>::createAndPopulate(e, i->getParent()); }},
+        { i->endPointAdj = FieldPopulator<smartshape::EndPointAdjustment>::populateExistingOrCreate(e, i->endPointAdj, i->getParent()); }},
     {"ctlPtAdj", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape::TerminationSeg>& i)
-        { i->ctlPtAdj = FieldPopulator<smartshape::ControlPointAdjustment>::createAndPopulate(e, i->getParent()); }},
+        { i->ctlPtAdj = FieldPopulator<smartshape::ControlPointAdjustment>::populateExistingOrCreate(e, i->ctlPtAdj, i->getParent()); }},
     {"breakAdj", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape::TerminationSeg>& i)
-        { i->breakAdj = FieldPopulator<smartshape::EndPointAdjustment>::createAndPopulate(e, i->getParent()); }},
+        { i->breakAdj = FieldPopulator<smartshape::EndPointAdjustment>::populateExistingOrCreate(e, i->breakAdj, i->getParent()); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(SmartShape, {
@@ -1197,11 +1197,11 @@ MUSX_XML_ELEMENT_ARRAY(SmartShape, {
     {"slurAvoidAcciState", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape>& i) { i->slurAvoidAcciState = toEnum<SmartShape::SlurAvoidAccidentalsState>(e); }},
     {"yBreakType", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape>& i) { i->yBreakType = toEnum<SmartShape::SystemBreakType>(e); }},
     {"startTermSeg", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape>& i)
-        { i->startTermSeg = FieldPopulator<SmartShape::TerminationSeg>::createAndPopulate(e, i); }},
+        { i->startTermSeg = FieldPopulator<SmartShape::TerminationSeg>::populateExistingOrCreate(e, i->startTermSeg, i); }},
     {"endTermSeg", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape>& i)
-        { i->endTermSeg = FieldPopulator<SmartShape::TerminationSeg>::createAndPopulate(e, i); }},
+        { i->endTermSeg = FieldPopulator<SmartShape::TerminationSeg>::populateExistingOrCreate(e, i->endTermSeg, i); }},
     {"fullCtlPtAdj", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape>& i)
-        { i->fullCtlPtAdj = FieldPopulator<smartshape::ControlPointAdjustment>::createAndPopulate(e, i); }},
+        { i->fullCtlPtAdj = FieldPopulator<smartshape::ControlPointAdjustment>::populateExistingOrCreate(e, i->fullCtlPtAdj, i); }},
     {"hidden", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape>& i) { i->hidden = populateBoolean(e, i); }},
     {"startNoteID", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape>& i) { i->startNoteId= e->getTextAs<NoteNumber>(); }},
     {"endNoteID", [](const XmlElementPtr& e, const std::shared_ptr<SmartShape>& i) { i->endNoteId = e->getTextAs<NoteNumber>(); }},

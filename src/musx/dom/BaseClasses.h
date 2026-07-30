@@ -53,6 +53,12 @@ public:
 };
 
 #ifndef DOXYGEN_SHOULD_IGNORE_THIS
+template <typename T>
+struct PartContextRebinder
+{
+    static void rebind(const std::shared_ptr<T>&) {}
+};
+
 class PartContextCloner {
 public:
     template <typename T>
@@ -66,6 +72,7 @@ public:
     {
         auto result = std::make_shared<T>(*obj);
         setRequestedPartId(result, partId);
+        PartContextRebinder<T>::rebind(result);
         return result;
     }
 };
@@ -184,6 +191,29 @@ protected:
 class ContainedClassBase : public EnigmaBase
 {
     Cmper getSourcePartId() const = delete; ///< meaningless for this base class (always SCORE_PARTID)
+
+protected:
+    // A shallow copy of an owning OthersBase or DetailsBase leaves contained objects parented to
+    // the source instance. If that distinction matters, the owner must use PartContextRebinder.
+    // PartContextRebinder<details::CenterShape> is a simple example.
+
+    /// @brief Assignment preserves the destination's parent while allowing subclasses to copy their values.
+    ContainedClassBase& operator=(const ContainedClassBase& other)
+    {
+        if (this != &other) {
+            this->EnigmaBase::operator=(other);
+        }
+        return *this;
+    }
+
+    /// @brief Move assignment preserves the destination's parent while allowing subclasses to move their values.
+    ContainedClassBase& operator=(ContainedClassBase&& other) noexcept
+    {
+        if (this != &other) {
+            this->EnigmaBase::operator=(std::move(other));
+        }
+        return *this;
+    }
 
 public:
     /**

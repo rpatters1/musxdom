@@ -1574,6 +1574,10 @@ public:
         static const xml::XmlElementArray<ScorePartData>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
     };
 
+    // No fixture has a part-specific MeasureNumberRegion. If partial sharing is observed,
+    // scoreData and partData must be copied and rebound before their nested fields are overlaid.
+    // See PartContextRebinder<details::CenterShape> and the CenterShape field mappings for the pattern.
+
     // Public properties
     std::shared_ptr<ScorePartData> scoreData; ///< Score-wide measure number data.
     std::shared_ptr<ScorePartData> partData;  ///< Part-specific measure number data.
