@@ -171,6 +171,12 @@ public:
     [[nodiscard]]
     std::map<LayerIndex, int> calcVoices(bool excludeHidden = false) const;
 
+    /// @brief Returns whether every significant layer is classified as a cue layer.
+    /// @details This compatibility convenience delegates cue interpretation to #util::Cue.
+    /// @todo Remove this function once MuseScore's Finale importer uses #util::Cue directly.
+    [[nodiscard]]
+    bool calcIsCuesOnly() const;
+
     /// @brief Calculates the nearest non-grace-note entry at the given @p position.
     /// @param position The measure position to find.
     /// @param findExact If true, only find an entry that matches to within 1 evpu. Otherwise find the closest entry in the measure.

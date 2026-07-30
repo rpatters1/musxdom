@@ -168,3 +168,8 @@ Cue::StaffMeasureAnalysis Cue::calcStaffMeasureAnalysis(const dom::details::GFra
 }
 
 } // namespace musx::util
+
+bool musx::dom::details::GFrameHoldContext::calcIsCuesOnly() const
+{
+    return musx::util::Cue::calcStaffMeasureAnalysis(*this).isCueOnly;
+}
