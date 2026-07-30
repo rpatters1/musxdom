@@ -71,6 +71,7 @@
 #include "util/Layout.h"
 #include "util/Arpeggio.h"
 #include "util/ArrowheadPresets.h"
+#include "util/Cue.h"
 #include "util/DateTimeFormat.h"
 #include "util/EnigmaString.h"
 #include "util/PseudoTieUtils.h"

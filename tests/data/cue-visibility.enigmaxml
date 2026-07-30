@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<finale>
+  <others>
+    <measSpec cmper="1"><beats>4</beats><divbeat>1024</divbeat></measSpec>
+    <measSpec cmper="2"><beats>4</beats><divbeat>1024</divbeat></measSpec>
+    <measSpec cmper="3"><beats>4</beats><divbeat>1024</divbeat></measSpec>
+    <measSpec cmper="4"><beats>4</beats><divbeat>1024</divbeat></measSpec>
+    <measSpec cmper="5"><beats>4</beats><divbeat>1024</divbeat></measSpec>
+    <measSpec cmper="6"><beats>4</beats><divbeat>1024</divbeat></measSpec>
+    <measSpec cmper="7"><beats>4</beats><divbeat>1024</divbeat></measSpec>
+
+    <frameSpec cmper="10"><startEntry>101</startEntry><endEntry>101</endEntry></frameSpec>
+    <frameSpec cmper="11"><startEntry>102</startEntry><endEntry>102</endEntry></frameSpec>
+    <frameSpec cmper="12"><startEntry>103</startEntry><endEntry>103</endEntry></frameSpec>
+    <frameSpec cmper="20"><startEntry>201</startEntry><endEntry>201</endEntry></frameSpec>
+    <frameSpec cmper="30"><startEntry>301</startEntry><endEntry>301</endEntry></frameSpec>
+    <frameSpec cmper="40"><startEntry>401</startEntry><endEntry>402</endEntry></frameSpec>
+    <frameSpec cmper="50"><startEntry>501</startEntry><endEntry>502</endEntry></frameSpec>
+    <frameSpec cmper="60"><startEntry>601</startEntry><endEntry>601</endEntry></frameSpec>
+    <frameSpec cmper="70"><startEntry>701</startEntry><endEntry>701</endEntry></frameSpec>
+
+    <instUsed cmper="0" inci="0"><inst>1</inst><trackType>staff</trackType></instUsed>
+    <instUsed cmper="0" inci="1"><inst>2</inst><trackType>staff</trackType></instUsed>
+    <instUsed cmper="0" inci="2"><inst>3</inst><trackType>staff</trackType></instUsed>
+    <instUsed cmper="0" inci="3"><inst>4</inst><trackType>staff</trackType></instUsed>
+    <instUsed cmper="0" inci="0" part="1" shared="false"><inst>1</inst><trackType>staff</trackType></instUsed>
+    <instUsed cmper="0" inci="1" part="1" shared="false"><inst>3</inst><trackType>staff</trackType></instUsed>
+    <instUsed cmper="0" inci="2" part="1" shared="false"><inst>4</inst><trackType>staff</trackType></instUsed>
+    <instUsed cmper="0" inci="0" part="2" shared="false"><inst>1</inst><trackType>staff</trackType></instUsed>
+    <instUsed cmper="0" inci="1" part="2" shared="false"><inst>3</inst><trackType>staff</trackType></instUsed>
+    <instUsed cmper="0" inci="0" part="3" shared="false"><inst>1</inst><trackType>staff</trackType></instUsed>
+
+    <staffSpec cmper="1">
+      <staffLines>5</staffLines><lineSpace>24</lineSpace>
+      <altNotation>blankWithRests</altNotation><altLayer>0</altLayer>
+    </staffSpec>
+    <staffSpec cmper="1" part="1" shared="false">
+      <staffLines>5</staffLines><lineSpace>24</lineSpace><blankMeasure/>
+    </staffSpec>
+    <staffSpec cmper="1" part="2" shared="false">
+      <staffLines>5</staffLines><lineSpace>24</lineSpace>
+      <altNotation>blank</altNotation><altLayer>0</altLayer>
+    </staffSpec>
+    <staffSpec cmper="1" part="3" shared="false">
+      <staffLines>5</staffLines><lineSpace>24</lineSpace>
+    </staffSpec>
+
+    <staffSpec cmper="2">
+      <staffLines>5</staffLines><lineSpace>24</lineSpace>
+      <altNotation>blank</altNotation><altLayer>0</altLayer>
+    </staffSpec>
+
+    <staffSpec cmper="3">
+      <staffLines>5</staffLines><lineSpace>24</lineSpace><hideMode>score</hideMode>
+    </staffSpec>
+    <staffSpec cmper="3" part="1" shared="false">
+      <staffLines>5</staffLines><lineSpace>24</lineSpace>
+    </staffSpec>
+    <staffSpec cmper="3" part="2" shared="false">
+      <staffLines>5</staffLines><lineSpace>24</lineSpace><hideMode>scoreParts</hideMode>
+    </staffSpec>
+
+    <staffSpec cmper="4">
+      <staffLines>5</staffLines><lineSpace>24</lineSpace>
+      <altNotation>blank</altNotation><altLayer>0</altLayer><altHideOtherNotes/>
+    </staffSpec>
+    <staffSpec cmper="4" part="1" shared="false">
+      <staffLines>5</staffLines><lineSpace>24</lineSpace>
+    </staffSpec>
+    <staffSpec cmper="4" part="2" shared="false">
+      <staffLines>5</staffLines><lineSpace>24</lineSpace>
+    </staffSpec>
+
+    <voicingDef cmper="1" part="3" shared="false">
+      <enabled/><singleLayer>1</singleLayer>
+    </voicingDef>
+
+    <partDef cmper="0"><partOrder>0</partOrder></partDef>
+    <partDef cmper="1"><partOrder>1</partOrder><extractPart/></partDef>
+    <partDef cmper="2"><partOrder>2</partOrder><extractPart/></partDef>
+    <partDef cmper="3"><partOrder>3</partOrder><extractPart/></partDef>
+    <partGlobals cmper="65534"/>
+    <partGlobals cmper="65534" part="1" shared="false"/>
+    <partGlobals cmper="65534" part="2" shared="false"/>
+    <partGlobals cmper="65534" part="3" shared="false"/>
+  </others>
+
+  <details>
+    <entrySize entnum="101"><percent>75</percent></entrySize>
+    <entrySize entnum="102"><percent>80</percent></entrySize>
+    <entrySize entnum="201"><percent>70</percent></entrySize>
+    <entrySize entnum="301"><percent>95</percent></entrySize>
+    <entrySize entnum="401"><percent>75</percent></entrySize>
+    <entrySize entnum="501"><percent>75</percent></entrySize>
+    <entrySize entnum="502"><percent>75</percent></entrySize>
+    <entrySize entnum="601"><percent>75</percent></entrySize>
+    <entrySize entnum="701"><percent>75</percent></entrySize>
+
+    <gfhold cmper1="1" cmper2="1"><clefID>0</clefID><frame1>10</frame1><frame2>11</frame2><frame3>12</frame3></gfhold>
+    <gfhold cmper1="2" cmper2="2"><clefID>0</clefID><frame1>20</frame1></gfhold>
+    <gfhold cmper1="1" cmper2="3"><clefID>0</clefID><frame1>30</frame1></gfhold>
+    <gfhold cmper1="1" cmper2="4"><clefID>0</clefID><frame1>40</frame1></gfhold>
+    <gfhold cmper1="1" cmper2="5"><clefID>0</clefID><frame1>50</frame1></gfhold>
+    <gfhold cmper1="3" cmper2="6"><clefID>0</clefID><frame1>60</frame1></gfhold>
+    <gfhold cmper1="4" cmper2="7"><clefID>0</clefID><frame2>70</frame2></gfhold>
+  </details>
+
+  <entries>
+    <entry entnum="101" prev="0" next="0"><dura>1024</dura><numNotes>1</numNotes><isValid/><isNote/><noteDetail/><note id="1"><harmLev>0</harmLev><isValid/></note></entry>
+    <entry entnum="102" prev="0" next="0"><dura>1024</dura><numNotes>1</numNotes><isValid/><isNote/><noteDetail/><note id="1"><harmLev>1</harmLev><isValid/></note></entry>
+    <entry entnum="103" prev="0" next="0"><dura>4096</dura><numNotes>0</numNotes><isValid/><floatRest/></entry>
+    <entry entnum="201" prev="0" next="0"><dura>1024</dura><numNotes>1</numNotes><isValid/><isNote/><noteDetail/><note id="1"><harmLev>2</harmLev><isValid/></note></entry>
+    <entry entnum="301" prev="0" next="0"><dura>1024</dura><numNotes>1</numNotes><isValid/><isNote/><noteDetail/><note id="1"><harmLev>3</harmLev><isValid/></note></entry>
+    <entry entnum="401" prev="0" next="402"><dura>1024</dura><numNotes>1</numNotes><isValid/><isNote/><noteDetail/><note id="1"><harmLev>4</harmLev><isValid/></note></entry>
+    <entry entnum="402" prev="401" next="0"><dura>1024</dura><numNotes>1</numNotes><isValid/><isNote/><note id="1"><harmLev>5</harmLev><isValid/></note></entry>
+    <entry entnum="501" prev="0" next="502"><dura>1024</dura><numNotes>1</numNotes><isValid/><isNote/><noteDetail/><ignore/><note id="1"><harmLev>6</harmLev><isValid/></note></entry>
+    <entry entnum="502" prev="501" next="0"><dura>1024</dura><numNotes>1</numNotes><isValid/><isNote/><noteDetail/><note id="1"><harmLev>7</harmLev><isValid/></note></entry>
+    <entry entnum="601" prev="0" next="0"><dura>1024</dura><numNotes>1</numNotes><isValid/><isNote/><noteDetail/><note id="1"><harmLev>8</harmLev><isValid/></note></entry>
+    <entry entnum="701" prev="0" next="0"><dura>1024</dura><numNotes>1</numNotes><isValid/><isNote/><noteDetail/><note id="1"><harmLev>9</harmLev><isValid/></note></entry>
+  </entries>
+</finale>

@@ -49,7 +49,6 @@ add_executable(musxdomtests
     # entries
     entries/beam_detection.cpp
     entries/cross_staffs.cpp
-    entries/cues.cpp
     entries/entries.cpp
     entries/keysigs.cpp
     entries/ties.cpp
@@ -130,6 +129,7 @@ add_executable(musxdomtests
     music_theory/transpose.cpp
     # util
     util/arpeggio.cpp
+    util/cue.cpp
     util/fraction.cpp
     util/svg_arrowheads.cpp
     util/svg_convert.cpp
