@@ -186,11 +186,11 @@ MUSX_XML_ELEMENT_ARRAY(Bracket, {
 
 MUSX_XML_ELEMENT_ARRAY(CenterShape, {
     {"startBreakAdj", [](const XmlElementPtr& e, const std::shared_ptr<CenterShape>& i)
-        { i->startBreakAdj = FieldPopulator<smartshape::EndPointAdjustment>::createAndPopulate(e, i); }},
+        { i->startBreakAdj = FieldPopulator<smartshape::EndPointAdjustment>::populateExistingOrCreate(e, i->startBreakAdj, i); }},
     {"endBreakAdj", [](const XmlElementPtr& e, const std::shared_ptr<CenterShape>& i)
-        { i->endBreakAdj = FieldPopulator<smartshape::EndPointAdjustment>::createAndPopulate(e, i); }},
+        { i->endBreakAdj = FieldPopulator<smartshape::EndPointAdjustment>::populateExistingOrCreate(e, i->endBreakAdj, i); }},
     {"ctlPtAdj", [](const XmlElementPtr& e, const std::shared_ptr<CenterShape>& i)
-        { i->ctlPtAdj = FieldPopulator<smartshape::ControlPointAdjustment>::createAndPopulate(e, i); }},
+        { i->ctlPtAdj = FieldPopulator<smartshape::ControlPointAdjustment>::populateExistingOrCreate(e, i->ctlPtAdj, i); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(ChordAssign, {
@@ -365,7 +365,7 @@ MUSX_XML_ELEMENT_ARRAY(MeasureNumberIndividualPositioning, {
         { i->forceVisibility = toEnum<MeasureNumberIndividualPositioning::ForceVisibility>(e); }},
     {"useEncl", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberIndividualPositioning>& i) { i->useEnclosure = populateBoolean(e, i); }},
     {"encl", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberIndividualPositioning>& i)
-        { i->enclosure = FieldPopulator<others::Enclosure>::createAndPopulate(e, i->getDocument()); }}
+        { i->enclosure = FieldPopulator<others::Enclosure>::populateExistingOrCreate(e, i->enclosure, i->getDocument()); }}
 });
 
 MUSX_XML_ELEMENT_ARRAY(MeasureOssiaAssign, {

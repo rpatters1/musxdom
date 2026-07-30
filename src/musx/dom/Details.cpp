@@ -31,6 +31,15 @@
 namespace musx {
 namespace dom {
 
+void PartContextRebinder<details::MeasureNumberIndividualPositioning>::rebind(
+    const std::shared_ptr<details::MeasureNumberIndividualPositioning>& positioning)
+{
+    if (positioning->enclosure) {
+        positioning->enclosure = PartContextCloner::copyWithPartId<others::Enclosure>(
+            positioning->enclosure, positioning->getRequestedPartId());
+    }
+}
+
 // ****************************
 // ***** EntryDetailsBase *****
 // ****************************

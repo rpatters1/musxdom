@@ -225,6 +225,151 @@ TEST(SmartShape, Populate)
     }
 }
 
+TEST(SmartShape, PartiallySharedTerminationSegments)
+{
+    constexpr static musxtest::string_view xml = R"xml(
+<?xml version="1.0" encoding="UTF-8"?>
+<finale>
+  <others>
+    <frameSpec cmper="1" inci="0">
+      <startEntry>1</startEntry>
+      <endEntry>1</endEntry>
+    </frameSpec>
+    <measSpec cmper="1">
+      <beats>4</beats>
+      <divbeat>1024</divbeat>
+      <hasSmartShape/>
+    </measSpec>
+    <smartShape cmper="3034">
+      <shapeType>octaveUp</shapeType>
+      <startTermSeg>
+        <endPt>
+          <inst>1</inst>
+          <meas>1</meas>
+        </endPt>
+        <endPtAdj>
+          <x>12</x>
+          <on/>
+        </endPtAdj>
+      </startTermSeg>
+      <endTermSeg>
+        <endPt>
+          <inst>1</inst>
+          <meas>1</meas>
+          <edu>2048</edu>
+        </endPt>
+      </endTermSeg>
+      <hidden/>
+    </smartShape>
+    <smartShape cmper="3034" part="1" shared="true">
+      <startTermSeg>
+        <endPt>
+          <edu>0</edu>
+        </endPt>
+      </startTermSeg>
+      <endTermSeg>
+        <endPt>
+          <edu>2048</edu>
+        </endPt>
+      </endTermSeg>
+      <hidden>
+        <offInPart/>
+      </hidden>
+    </smartShape>
+    <smartShapeMeasMark cmper="1" inci="0">
+      <shapeNum>3034</shapeNum>
+    </smartShapeMeasMark>
+    <staffSpec cmper="1">
+      <staffLines>5</staffLines>
+      <lineSpace>24</lineSpace>
+    </staffSpec>
+  </others>
+  <details>
+    <gfhold cmper1="1" cmper2="1">
+      <clefID>0</clefID>
+      <frame1>1</frame1>
+    </gfhold>
+  </details>
+  <entries>
+    <entry entnum="1" prev="0" next="0">
+      <dura>1024</dura>
+      <numNotes>0</numNotes>
+      <isValid/>
+      <floatRest/>
+      <sorted/>
+    </entry>
+  </entries>
+</finale>
+)xml";
+
+    auto document = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
+    ASSERT_TRUE(document);
+
+    const auto scoreShape = document->getOthers()->get<others::SmartShape>(SCORE_PARTID, 3034);
+    const auto partShape = document->getOthers()->get<others::SmartShape>(1, 3034);
+    ASSERT_TRUE(scoreShape);
+    ASSERT_TRUE(partShape);
+
+    EXPECT_EQ(partShape->getRequestedPartId(), 1);
+    EXPECT_FALSE(partShape->hidden);
+
+    ASSERT_TRUE(partShape->startTermSeg);
+    ASSERT_TRUE(partShape->startTermSeg->endPoint);
+    EXPECT_EQ(partShape->startTermSeg->endPoint->staffId, 1);
+    EXPECT_EQ(partShape->startTermSeg->endPoint->measId, 1);
+    EXPECT_EQ(partShape->startTermSeg->endPoint->eduPosition, 0);
+
+    ASSERT_TRUE(partShape->endTermSeg);
+    ASSERT_TRUE(partShape->endTermSeg->endPoint);
+    EXPECT_EQ(partShape->endTermSeg->endPoint->staffId, 1);
+    EXPECT_EQ(partShape->endTermSeg->endPoint->measId, 1);
+    EXPECT_EQ(partShape->endTermSeg->endPoint->eduPosition, 2048);
+
+    ASSERT_TRUE(partShape->startTermSeg->endPointAdj);
+    EXPECT_EQ(partShape->startTermSeg->endPointAdj->horzOffset, 12);
+    EXPECT_TRUE(partShape->startTermSeg->endPointAdj->active);
+
+    EXPECT_NE(partShape->startTermSeg.get(), scoreShape->startTermSeg.get());
+    EXPECT_NE(partShape->startTermSeg->endPoint.get(), scoreShape->startTermSeg->endPoint.get());
+    EXPECT_NE(partShape->startTermSeg->endPointAdj.get(), scoreShape->startTermSeg->endPointAdj.get());
+    EXPECT_EQ(partShape->startTermSeg->endPoint->getParent<others::SmartShape>()->getRequestedPartId(), 1);
+    EXPECT_EQ(partShape->endTermSeg->endPoint->getParent<others::SmartShape>()->getRequestedPartId(), 1);
+
+    EXPECT_TRUE(scoreShape->hidden);
+    EXPECT_EQ(scoreShape->startTermSeg->endPoint->staffId, 1);
+    EXPECT_EQ(scoreShape->startTermSeg->endPoint->measId, 1);
+    EXPECT_EQ(scoreShape->endTermSeg->endPoint->staffId, 1);
+    EXPECT_EQ(scoreShape->endTermSeg->endPoint->measId, 1);
+
+    const auto sharedPartShape = document->getOthers()->get<others::SmartShape>(2, 3034);
+    ASSERT_TRUE(sharedPartShape);
+    EXPECT_EQ(sharedPartShape->getRequestedPartId(), 2);
+    EXPECT_TRUE(sharedPartShape->hidden);
+    EXPECT_NE(sharedPartShape->startTermSeg.get(), scoreShape->startTermSeg.get());
+    EXPECT_NE(sharedPartShape->startTermSeg->endPoint.get(), scoreShape->startTermSeg->endPoint.get());
+    EXPECT_NE(sharedPartShape->endTermSeg.get(), scoreShape->endTermSeg.get());
+    EXPECT_NE(sharedPartShape->endTermSeg->endPoint.get(), scoreShape->endTermSeg->endPoint.get());
+    EXPECT_EQ(sharedPartShape->startTermSeg->endPoint->getParent<others::SmartShape>()->getRequestedPartId(), 2);
+    EXPECT_EQ(sharedPartShape->endTermSeg->endPoint->getParent<others::SmartShape>()->getRequestedPartId(), 2);
+
+    const details::GFrameHoldContext partContext(document, 1, 1, 1);
+    ASSERT_TRUE(partContext);
+    const auto entryFrame = partContext.createEntryFrame(0);
+    ASSERT_TRUE(entryFrame);
+    ASSERT_EQ(entryFrame->getEntries().size(), 1);
+    const EntryInfoPtr entryInfo(entryFrame, 0);
+    EXPECT_TRUE(partShape->startTermSeg->endPoint->calcAssociatedEntry(true));
+    EXPECT_TRUE(partShape->calcAppliesTo(entryInfo));
+
+    const details::GFrameHoldContext sharedPartContext(document, 2, 1, 1);
+    ASSERT_TRUE(sharedPartContext);
+    const auto sharedPartEntryFrame = sharedPartContext.createEntryFrame(0);
+    ASSERT_TRUE(sharedPartEntryFrame);
+    const EntryInfoPtr sharedPartEntryInfo(sharedPartEntryFrame, 0);
+    EXPECT_TRUE(sharedPartShape->startTermSeg->endPoint->calcAssociatedEntry(true));
+    EXPECT_TRUE(sharedPartShape->calcAppliesTo(sharedPartEntryInfo));
+}
+
 TEST(SmartShapeCustomLine, Populate)
 {
     constexpr static musxtest::string_view xml = R"xml(
@@ -401,6 +546,91 @@ TEST(CenterShape, Populate)
     EXPECT_EQ(centerShape->endBreakAdj->horzOffset, -68);
     EXPECT_EQ(centerShape->endBreakAdj->vertOffset, -199);
     EXPECT_TRUE(centerShape->endBreakAdj->active);
+}
+
+TEST(CenterShape, PartiallySharedAdjustments)
+{
+    constexpr static musxtest::string_view xml = R"xml(
+<?xml version="1.0" encoding="UTF-8"?>
+<finale>
+  <details>
+    <centerShape cmper1="1" cmper2="7">
+      <startBreakAdj>
+        <x>37</x>
+        <y>-199</y>
+        <on/>
+      </startBreakAdj>
+      <endBreakAdj>
+        <x>-68</x>
+        <y>-201</y>
+        <on/>
+      </endBreakAdj>
+      <ctlPtAdj>
+        <startCtlPtX>11</startCtlPtX>
+        <startCtlPtY>136</startCtlPtY>
+        <endCtlPtX>22</endCtlPtX>
+        <endCtlPtY>44</endCtlPtY>
+        <on/>
+      </ctlPtAdj>
+    </centerShape>
+    <centerShape cmper1="1" cmper2="7" part="1" shared="true">
+      <startBreakAdj>
+        <x>50</x>
+      </startBreakAdj>
+      <ctlPtAdj>
+        <startCtlPtY>200</startCtlPtY>
+      </ctlPtAdj>
+    </centerShape>
+  </details>
+</finale>
+)xml";
+
+    const auto document = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml);
+    ASSERT_TRUE(document);
+
+    const auto scoreShape = document->getDetails()->get<details::CenterShape>(SCORE_PARTID, 1, 7);
+    const auto partShape = document->getDetails()->get<details::CenterShape>(1, 1, 7);
+    ASSERT_TRUE(scoreShape);
+    ASSERT_TRUE(partShape);
+
+    EXPECT_EQ(partShape->getRequestedPartId(), 1);
+
+    ASSERT_TRUE(partShape->startBreakAdj);
+    EXPECT_EQ(partShape->startBreakAdj->horzOffset, 50);
+    EXPECT_EQ(partShape->startBreakAdj->vertOffset, -199);
+    EXPECT_TRUE(partShape->startBreakAdj->active);
+
+    ASSERT_TRUE(partShape->endBreakAdj);
+    EXPECT_EQ(partShape->endBreakAdj->horzOffset, -68);
+    EXPECT_EQ(partShape->endBreakAdj->vertOffset, -201);
+    EXPECT_TRUE(partShape->endBreakAdj->active);
+
+    ASSERT_TRUE(partShape->ctlPtAdj);
+    EXPECT_EQ(partShape->ctlPtAdj->startCtlPtX, 11);
+    EXPECT_EQ(partShape->ctlPtAdj->startCtlPtY, 200);
+    EXPECT_EQ(partShape->ctlPtAdj->endCtlPtX, 22);
+    EXPECT_EQ(partShape->ctlPtAdj->endCtlPtY, 44);
+    EXPECT_TRUE(partShape->ctlPtAdj->active);
+
+    EXPECT_NE(partShape->startBreakAdj.get(), scoreShape->startBreakAdj.get());
+    EXPECT_NE(partShape->endBreakAdj.get(), scoreShape->endBreakAdj.get());
+    EXPECT_NE(partShape->ctlPtAdj.get(), scoreShape->ctlPtAdj.get());
+    EXPECT_EQ(partShape->startBreakAdj->getParent<details::CenterShape>()->getRequestedPartId(), 1);
+    EXPECT_EQ(partShape->endBreakAdj->getParent<details::CenterShape>()->getRequestedPartId(), 1);
+    EXPECT_EQ(partShape->ctlPtAdj->getParent<details::CenterShape>()->getRequestedPartId(), 1);
+
+    EXPECT_EQ(scoreShape->startBreakAdj->horzOffset, 37);
+    EXPECT_EQ(scoreShape->ctlPtAdj->startCtlPtY, 136);
+
+    const auto sharedPartShape = document->getDetails()->get<details::CenterShape>(2, 1, 7);
+    ASSERT_TRUE(sharedPartShape);
+    EXPECT_EQ(sharedPartShape->getRequestedPartId(), 2);
+    EXPECT_NE(sharedPartShape->startBreakAdj.get(), scoreShape->startBreakAdj.get());
+    EXPECT_NE(sharedPartShape->endBreakAdj.get(), scoreShape->endBreakAdj.get());
+    EXPECT_NE(sharedPartShape->ctlPtAdj.get(), scoreShape->ctlPtAdj.get());
+    EXPECT_EQ(sharedPartShape->startBreakAdj->getParent<details::CenterShape>()->getRequestedPartId(), 2);
+    EXPECT_EQ(sharedPartShape->endBreakAdj->getParent<details::CenterShape>()->getRequestedPartId(), 2);
+    EXPECT_EQ(sharedPartShape->ctlPtAdj->getParent<details::CenterShape>()->getRequestedPartId(), 2);
 }
 
 TEST(SmartShapes, IndependentTimeSigs)

@@ -198,6 +198,9 @@ public:
     bool hasStyles{};               ///< Indicates that this staff has staff style assignments
     bool showNameInParts{};         ///< "Display Staff Name in Parts" (xml node is `<showNameParts>`)
     bool showNoteColors{};          ///< "Color Noteheads" (Score Manager)
+    // No fixture has a partially shared Staff (part-specific staffSpec records are fully unshared).
+    // If one is found, Transposition must be copied and rebound before overlaying its nested fields.
+    // See PartContextRebinder<details::CenterShape> and the CenterShape field mappings for the pattern.
     std::shared_ptr<Transposition> transposition; ///< Transposition details, if non-null.
     bool hideNameInScore{};         ///< Inverse of "Display Staff Name in Score" (xml node is `<hideStfNameInScore>`)
     Evpu botBarlineOffset{};        ///< Offset for the bottom barline.
@@ -631,6 +634,9 @@ public:
     std::string styleName;              ///< name of staff style
     bool copyable{};                    ///< whether the staff style assignments for this style should be copied when copy/pasting music
     bool addToMenu{};                   ///< add this staff style to the context menu for staff styles
+    // No fixture has a part-specific StaffStyle. If partial sharing is observed, both Masks and the
+    // inherited Transposition will need part-context rebinding and copy-overlay population.
+    // See PartContextRebinder<details::CenterShape> and the CenterShape field mappings for the pattern.
     std::shared_ptr<Masks> masks;       ///< override masks: guaranteed to exist by #integrityCheck, which is called by the factory
                                         ///< (xml node is `<mask>`)
 

@@ -1444,8 +1444,8 @@ public:
     /**
      * @brief Constructor
      * @param document A weak pointer to the associated document.
-     * @param partId The part that this is for (probably always 0).
-     * @param shareMode The sharing mode for this #MeasureNumberIndividualPositioning (probably always #ShareMode::All).
+     * @param partId The source part for this instance.
+     * @param shareMode The sharing mode for this #MeasureNumberIndividualPositioning.
      * @param staffId The staff ID for this instance.
      * @param meas The measure ID for this instance.
      * @param inci The 0-based incident.
@@ -2278,5 +2278,14 @@ public:
 };
 
 } // namespace details
+
+#ifndef DOXYGEN_SHOULD_IGNORE_THIS
+template <>
+struct PartContextRebinder<details::MeasureNumberIndividualPositioning>
+{
+    static void rebind(const std::shared_ptr<details::MeasureNumberIndividualPositioning>& positioning);
+};
+#endif
+
 } // namespace dom
 } // namespace entries

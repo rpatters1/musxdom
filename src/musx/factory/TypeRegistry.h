@@ -174,6 +174,7 @@ public:
                             auto scoreValue = getScoreValue<T>(pool, std::forward<Args>(args)...);
                             if (scoreValue) {
                                 *instance = *scoreValue;
+                                PartContextRebinder<T>::rebind(instance);
                             } else {
                                 throw std::invalid_argument("Score instance not found for partially linked part instance");
                             }

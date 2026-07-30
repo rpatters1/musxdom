@@ -28,6 +28,51 @@
 namespace musx {
 namespace dom {
 
+namespace {
+
+template <typename T, typename Parent>
+std::shared_ptr<T> copyContained(
+    const std::shared_ptr<T>& source, const std::shared_ptr<Parent>& parent)
+{
+    if (!source) {
+        return nullptr;
+    }
+    auto result = std::make_shared<T>(parent);
+    *result = *source;
+    return result;
+}
+
+} // namespace
+
+std::shared_ptr<others::SmartShape::TerminationSeg> PartContextRebinder<others::SmartShape>::copyTerminationSeg(
+    const std::shared_ptr<others::SmartShape::TerminationSeg>& source,
+    const std::shared_ptr<others::SmartShape>& parent)
+{
+    auto result = std::make_shared<others::SmartShape::TerminationSeg>(parent);
+    if (source) {
+        *result = *source;
+        result->endPoint = copyContained(source->endPoint, parent);
+        result->endPointAdj = copyContained(source->endPointAdj, parent);
+        result->ctlPtAdj = copyContained(source->ctlPtAdj, parent);
+        result->breakAdj = copyContained(source->breakAdj, parent);
+    }
+    return result;
+}
+
+void PartContextRebinder<others::SmartShape>::rebind(const std::shared_ptr<others::SmartShape>& shape)
+{
+    shape->startTermSeg = copyTerminationSeg(shape->startTermSeg, shape);
+    shape->endTermSeg = copyTerminationSeg(shape->endTermSeg, shape);
+    shape->fullCtlPtAdj = copyContained(shape->fullCtlPtAdj, shape);
+}
+
+void PartContextRebinder<details::CenterShape>::rebind(const std::shared_ptr<details::CenterShape>& shape)
+{
+    shape->startBreakAdj = copyContained(shape->startBreakAdj, shape);
+    shape->endBreakAdj = copyContained(shape->endBreakAdj, shape);
+    shape->ctlPtAdj = copyContained(shape->ctlPtAdj, shape);
+}
+
 // ********************
 // ***** EndPoint *****
 // ********************

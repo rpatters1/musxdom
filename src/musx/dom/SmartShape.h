@@ -534,6 +534,9 @@ public:
     };
 
     LineStyle lineStyle{};                                ///< Line style
+    // No fixture has a part-specific SmartShapeCustomLine. If partial sharing is observed, its
+    // applicable parameter object must be copied and rebound before nested fields are overlaid.
+    // See PartContextRebinder<details::CenterShape> and the CenterShape field mappings for the pattern.
     std::shared_ptr<CharParams> charParams;               ///< Parameters for char line style. Only allocated if lineStyle is LineStyle::Char.
     std::shared_ptr<SolidParams> solidParams;             ///< Parameters for solid line style. Only allocated if lineStyle is LineStyle::Solid.
     std::shared_ptr<DashedParams> dashedParams;           ///< Parameters for dashed line style. Only allocated if lineStyle is LineStyle::Dashed.
@@ -662,6 +665,17 @@ public:
 
 } // namespace others
 
+#ifndef DOXYGEN_SHOULD_IGNORE_THIS
+template <>
+struct PartContextRebinder<others::SmartShape>
+{
+    static std::shared_ptr<others::SmartShape::TerminationSeg> copyTerminationSeg(
+        const std::shared_ptr<others::SmartShape::TerminationSeg>& source,
+        const std::shared_ptr<others::SmartShape>& parent);
+    static void rebind(const std::shared_ptr<others::SmartShape>& shape);
+};
+#endif
+
 namespace details {
 
 /**
@@ -738,6 +752,14 @@ public:
 };
 
 } // namespace details
+
+#ifndef DOXYGEN_SHOULD_IGNORE_THIS
+template <>
+struct PartContextRebinder<details::CenterShape>
+{
+    static void rebind(const std::shared_ptr<details::CenterShape>& shape);
+};
+#endif
 
 } // namespace dom
 } // namespace musx

@@ -513,7 +513,6 @@ class DetailsPool
 public:
     /// @brief Constructor
     DetailsPool(const DocumentWeakPtr& document) : m_pool(document, {
-        { details::CenterShape::XmlNodeName, EnigmaBase::ShareMode::None },
         { details::StaffGroup::XmlNodeName, EnigmaBase::ShareMode::None },
         { details::StaffSize::XmlNodeName, EnigmaBase::ShareMode::None },
         // add other known sharemode none items as they are identified.
