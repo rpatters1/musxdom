@@ -32,7 +32,7 @@ var searchData=
   ['createdinstanceinfo_29',['CreatedInstanceInfo',['../structmusx_1_1factory_1_1TypeRegistry_1_1CreatedInstanceInfo.html',1,'musx::factory::TypeRegistry']]],
   ['createoptions_30',['CreateOptions',['../structmusx_1_1factory_1_1DocumentFactory_1_1CreateOptions.html',1,'musx::factory::DocumentFactory']]],
   ['crossstaff_31',['CrossStaff',['../classmusx_1_1dom_1_1details_1_1CrossStaff.html',1,'musx::dom::details']]],
-  ['cuesummary_32',['CueSummary',['../structmusx_1_1dom_1_1details_1_1GFrameHoldContext_1_1CueSummary.html',1,'musx::dom::details::GFrameHoldContext']]],
+  ['cue_32',['Cue',['../classmusx_1_1util_1_1Cue.html',1,'musx::util']]],
   ['curveto_33',['CurveTo',['../structmusx_1_1dom_1_1ShapeDefInstruction_1_1CurveTo.html',1,'musx::dom::ShapeDefInstruction']]],
   ['customdownstem_34',['CustomDownStem',['../classmusx_1_1dom_1_1details_1_1CustomDownStem.html',1,'musx::dom::details']]],
   ['customstem_35',['CustomStem',['../classmusx_1_1dom_1_1details_1_1CustomStem.html',1,'musx::dom::details']]],

@@ -14,8 +14,9 @@ var searchData=
   ['fontoptions_11',['FontOptions',['../classmusx_1_1dom_1_1options_1_1FontOptions.html',1,'musx::dom::options']]],
   ['fraction_12',['Fraction',['../classmusx_1_1util_1_1Fraction.html',1,'musx::util']]],
   ['frame_13',['Frame',['../classmusx_1_1dom_1_1others_1_1Frame.html',1,'musx::dom::others']]],
-  ['fretboarddiagram_14',['FretboardDiagram',['../classmusx_1_1dom_1_1details_1_1FretboardDiagram.html',1,'musx::dom::details']]],
-  ['fretboardgroup_15',['FretboardGroup',['../classmusx_1_1dom_1_1others_1_1FretboardGroup.html',1,'musx::dom::others']]],
-  ['fretboardstyle_16',['FretboardStyle',['../classmusx_1_1dom_1_1others_1_1FretboardStyle.html',1,'musx::dom::others']]],
-  ['fretinstrument_17',['FretInstrument',['../classmusx_1_1dom_1_1others_1_1FretInstrument.html',1,'musx::dom::others']]]
+  ['frameanalysis_14',['FrameAnalysis',['../structmusx_1_1util_1_1Cue_1_1FrameAnalysis.html',1,'musx::util::Cue']]],
+  ['fretboarddiagram_15',['FretboardDiagram',['../classmusx_1_1dom_1_1details_1_1FretboardDiagram.html',1,'musx::dom::details']]],
+  ['fretboardgroup_16',['FretboardGroup',['../classmusx_1_1dom_1_1others_1_1FretboardGroup.html',1,'musx::dom::others']]],
+  ['fretboardstyle_17',['FretboardStyle',['../classmusx_1_1dom_1_1others_1_1FretboardStyle.html',1,'musx::dom::others']]],
+  ['fretinstrument_18',['FretInstrument',['../classmusx_1_1dom_1_1others_1_1FretInstrument.html',1,'musx::dom::others']]]
 ];

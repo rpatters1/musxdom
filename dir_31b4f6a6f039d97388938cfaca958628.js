@@ -2,6 +2,7 @@ var dir_31b4f6a6f039d97388938cfaca958628 =
 [
     [ "Arpeggio.h", "Arpeggio_8h_source.html", null ],
     [ "ArrowheadPresets.h", "ArrowheadPresets_8h_source.html", null ],
+    [ "Cue.h", "Cue_8h_source.html", null ],
     [ "DateTimeFormat.h", "DateTimeFormat_8h_source.html", null ],
     [ "EnigmaString.h", "EnigmaString_8h_source.html", null ],
     [ "Fraction.h", "Fraction_8h_source.html", null ],

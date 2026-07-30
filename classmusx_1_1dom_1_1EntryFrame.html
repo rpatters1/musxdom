@@ -191,9 +191,6 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>addEntry</b> (const s
 <a class="el" href="namespacemusx_1_1dom.html#a4223cd531120dbef7acd854c3d2631b8">MusxInstance</a>&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1Measure.html">others::Measure</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getMeasureInstance</b> () const</td></tr>
 <tr class="memdesc:a50382422cbad358619a691c58ca503f4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the measure instance. <br /></td></tr>
 <tr class="separator:a50382422cbad358619a691c58ca503f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af934596122cb5cd63787c096466d7b0e" id="r_af934596122cb5cd63787c096466d7b0e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryFrame.html#af934596122cb5cd63787c096466d7b0e">calcIsCueFrame</a> (bool includeVisibleInScore=false) const</td></tr>
-<tr class="memdesc:af934596122cb5cd63787c096466d7b0e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates if this entry frame is part of a cue.  <br /></td></tr>
-<tr class="separator:af934596122cb5cd63787c096466d7b0e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2cbd52ed27bd8b65673d4440e2cb2c4c" id="r_a2cbd52ed27bd8b65673d4440e2cb2c4c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryFrame.html#a2cbd52ed27bd8b65673d4440e2cb2c4c">calcAreAllEntriesHiddenInFrame</a> () const</td></tr>
 <tr class="memdesc:a2cbd52ed27bd8b65673d4440e2cb2c4c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates if this all notes in the frame are hidden. This routine only checks that entries are individually hidden. The caller must separately check <a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html#a9d7c3b2be150114583a4bc3f1cfee5c6" title="Returns true if the given layer is hidden by alternate notation.">others::Staff::calcAlternateNotationHidesEntries</a> according to its specific needs. For example, to determine if a layer is hidden for the purposes of checking validity of layer attributes, only the staff at edu position 0 should be checked.  <br /></td></tr>
 <tr class="separator:a2cbd52ed27bd8b65673d4440e2cb2c4c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -302,34 +299,6 @@ Public Attributes</h2></td></tr>
 <p>Calculates if this all notes in the frame are hidden. This routine only checks that entries are individually hidden. The caller must separately check <a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html#a9d7c3b2be150114583a4bc3f1cfee5c6" title="Returns true if the given layer is hidden by alternate notation.">others::Staff::calcAlternateNotationHidesEntries</a> according to its specific needs. For example, to determine if a layer is hidden for the purposes of checking validity of layer attributes, only the staff at edu position 0 should be checked. </p>
 <dl class="section return"><dt>Returns</dt><dd>true if all entries in the frame are hidden. </dd></dl>
 <dl class="todo"><dt><b><a class="el" href="todo.html#_todo000001">Todo:</a></b></dt><dd>check if the entry is hidden by voiced parts. </dd></dl>
-
-</div>
-</div>
-<a id="af934596122cb5cd63787c096466d7b0e" name="af934596122cb5cd63787c096466d7b0e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af934596122cb5cd63787c096466d7b0e">&#9670;&#160;</a></span>calcIsCueFrame()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool musx::dom::EntryFrame::calcIsCueFrame </td>
-          <td>(</td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>includeVisibleInScore</em> = <code>false</code></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Calculates if this entry frame is part of a cue. </p>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000004">Todo:</a></b></dt><dd>Revisit this algorithm if needed. The current algorithm is chosen to be mostly accurate while being fast to compute when there is no cue. </dd></dl>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">includeVisibleInScore</td><td>If true, include cues that are visible in the score. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>true if all entries in the frame are either cue entries or hidden. </dd></dl>
 
 </div>
 </div>

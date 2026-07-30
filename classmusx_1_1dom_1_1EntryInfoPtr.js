@@ -33,7 +33,6 @@ var classmusx_1_1dom_1_1EntryInfoPtr =
     [ "calcIsBeamedRestWorkaroundHiddenRest", "classmusx_1_1dom_1_1EntryInfoPtr.html#a889bd2a2d34c6e10b0d3e3ef9f5d1caf", null ],
     [ "calcIsBeamedRestWorkaroundVisibleRest", "classmusx_1_1dom_1_1EntryInfoPtr.html#a5e5709e78e5ae67b5300453290222f65", null ],
     [ "calcIsBeamStart", "classmusx_1_1dom_1_1EntryInfoPtr.html#a0944be727f65a75c300e77877bd362e4", null ],
-    [ "calcIsCue", "classmusx_1_1dom_1_1EntryInfoPtr.html#a933091a4840ecd2596b70069a11201ef", null ],
     [ "calcIsFeatheredBeamStart", "classmusx_1_1dom_1_1EntryInfoPtr.html#afe092ac6f686263ca7b26d6ca0d4b6ee", null ],
     [ "calcIsFullMeasureRest", "classmusx_1_1dom_1_1EntryInfoPtr.html#aee6b5524df00cd1f2bbb41ebf760b58d", null ],
     [ "calcIsGlissToGraceEntry", "classmusx_1_1dom_1_1EntryInfoPtr.html#ae8a320e15a3426a63b142b35003a922e", null ],

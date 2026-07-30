@@ -1,12 +1,10 @@
 var classmusx_1_1dom_1_1details_1_1GFrameHoldContext =
 [
-    [ "CueSummary", "structmusx_1_1dom_1_1details_1_1GFrameHoldContext_1_1CueSummary.html", "structmusx_1_1dom_1_1details_1_1GFrameHoldContext_1_1CueSummary" ],
     [ "GFrameHoldContext", "classmusx_1_1dom_1_1details_1_1GFrameHoldContext.html#a981066205691c56fd4b0963c0ac243dd", null ],
     [ "GFrameHoldContext", "classmusx_1_1dom_1_1details_1_1GFrameHoldContext.html#a16afc3c00643ca4cc37d3c8e5b2816dd", null ],
     [ "calcClefIndexAt", "classmusx_1_1dom_1_1details_1_1GFrameHoldContext.html#af7dfee19597fcc58f5a0e518a9cb58d1", null ],
     [ "calcClefIndexAt", "classmusx_1_1dom_1_1details_1_1GFrameHoldContext.html#a8fff05d40b94995cc544370b58f59af3", null ],
-    [ "calcCueSummary", "classmusx_1_1dom_1_1details_1_1GFrameHoldContext.html#a3fd58336a1c22207218c7c0556e8a779", null ],
-    [ "calcIsCuesOnly", "classmusx_1_1dom_1_1details_1_1GFrameHoldContext.html#aa0e3d30b4a276c376b3e4b3a18d5d25d", null ],
+    [ "calcIsCuesOnly", "classmusx_1_1dom_1_1details_1_1GFrameHoldContext.html#a9bd6e36a5e4e34486fb3d75c4d031de1", null ],
     [ "calcMinLegacyPickupSpacer", "classmusx_1_1dom_1_1details_1_1GFrameHoldContext.html#a904e4afe0ed1e60e508d488f00b2fff4", null ],
     [ "calcNearestEntry", "classmusx_1_1dom_1_1details_1_1GFrameHoldContext.html#af473e66f4ab01194143db805fba5f191", null ],
     [ "calcNearestEntryAtGraceIndex", "classmusx_1_1dom_1_1details_1_1GFrameHoldContext.html#a052a7d8b3d921ad5e099d69fe13a2b04", null ],

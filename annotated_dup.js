@@ -297,6 +297,7 @@ var annotated_dup =
         [ "ArpeggioSpanCandidate", "structmusx_1_1util_1_1ArpeggioSpanCandidate.html", "structmusx_1_1util_1_1ArpeggioSpanCandidate" ],
         [ "ArpeggioSpanOptions", "structmusx_1_1util_1_1ArpeggioSpanOptions.html", "structmusx_1_1util_1_1ArpeggioSpanOptions" ],
         [ "ArrowheadPresetSpec", "structmusx_1_1util_1_1ArrowheadPresetSpec.html", "structmusx_1_1util_1_1ArrowheadPresetSpec" ],
+        [ "Cue", "classmusx_1_1util_1_1Cue.html", "classmusx_1_1util_1_1Cue" ],
         [ "DateTime", "structmusx_1_1util_1_1DateTime.html", "structmusx_1_1util_1_1DateTime" ],
         [ "EnigmaParsingContext", "classmusx_1_1util_1_1EnigmaParsingContext.html", "classmusx_1_1util_1_1EnigmaParsingContext" ],
         [ "EnigmaString", "classmusx_1_1util_1_1EnigmaString.html", "classmusx_1_1util_1_1EnigmaString" ],
