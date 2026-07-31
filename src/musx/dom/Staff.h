@@ -506,6 +506,12 @@ public:
     MusxInstance<PartDefinition> firstContainingPart() const;
 
     /// @brief Returns true if the given layer is hidden by alternate notation.
+    ///
+    /// Blank, blank-with-rests, one-bar repeat, two-bar repeat, and slash notation all replace the
+    /// layer's entries, and Finale counts the layer as having no notes. Rhythmic notation does not:
+    /// it restyles the entries rather than replacing them, and the layer still counts as having
+    /// notes. (Observed behavior.)
+    ///
     /// @param forLayerIndex 0-based layer index (0..3)
     bool calcAlternateNotationHidesEntries(LayerIndex forLayerIndex) const;
 

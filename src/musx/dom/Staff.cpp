@@ -827,8 +827,23 @@ MusxInstance<PartDefinition> Staff::firstContainingPart() const
 
 bool Staff::calcAlternateNotationHidesEntries(LayerIndex forLayerIndex) const
 {
-    return (altNotation == others::Staff::AlternateNotation::BlankWithRests || altNotation == others::Staff::AlternateNotation::Blank)
-        && (altLayer == forLayerIndex || altHideOtherNotes);
+    const bool replacesEntries = [this]() {
+        switch (altNotation) {
+            case others::Staff::AlternateNotation::Blank:
+            case others::Staff::AlternateNotation::BlankWithRests:
+            case others::Staff::AlternateNotation::OneBarRepeat:
+            case others::Staff::AlternateNotation::TwoBarRepeat:
+            case others::Staff::AlternateNotation::SlashBeats:
+                return true;
+            // Rhythmic notation restyles the entries rather than replacing them, so the layer still
+            // counts as having notes.
+            case others::Staff::AlternateNotation::Rhythmic:
+            case others::Staff::AlternateNotation::Normal:
+                return false;
+        }
+        return false;
+    }();
+    return replacesEntries && (altLayer == forLayerIndex || altHideOtherNotes);
 }
 
 bool Staff::iterateEntries(std::function<bool(const EntryInfoPtr&)> iterator) const

@@ -667,7 +667,7 @@ std::optional<char32_t> TimeSignature::getAbbreviatedSymbol() const
             break;
     }
     if (auto options = getDocument()->getOptions()->get<options::TimeSignatureOptions>()) {
-        if (options->timeSigDoAbrvCut && isCutTime  ()) {
+        if (options->timeSigDoAbrvCut && isCutTime()) {
             return cutTimeSymbol;
         } else if (options->timeSigDoAbrvCommon && isCommonTime()) {
             return commonTimeSymbol;
