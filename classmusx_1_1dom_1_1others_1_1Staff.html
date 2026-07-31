@@ -1064,6 +1064,7 @@ template&lt;typename SubType &gt; </div>
 </div><div class="memdoc">
 
 <p>Returns true if the given layer is hidden by alternate notation. </p>
+<p>Blank, blank-with-rests, one-bar repeat, two-bar repeat, and slash notation all replace the layer's entries, and Finale counts the layer as having no notes. Rhythmic notation does not: it restyles the entries rather than replacing them, and the layer still counts as having notes. (Observed behavior.)</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">forLayerIndex</td><td>0-based layer index (0..3) </td></tr>
