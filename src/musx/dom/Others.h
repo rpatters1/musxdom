@@ -1865,7 +1865,15 @@ public:
     std::optional<MeasCmper> lastMeasureId;     ///< Computed by the Resolver function #calcSystemInfo. This value is not in the xml.
 
     /** @brief is this a blank page */
-    bool isBlank() const { return firstSystemId < 0; }
+    bool isBlank() const { return firstSystemId == -1; }
+
+    /// @brief Returns whether this page has a calculated layout.
+    /// @details Blank pages are valid calculated pages. A nonblank page is calculated when its
+    /// system range and corresponding measure range were resolved by #calcSystemInfo.
+    bool isLayoutCalculated() const
+    {
+        return isBlank() || (firstSystemId > 0 && lastSystemId && firstMeasureId && lastMeasureId);
+    }
 
     /// @brief Calculate the page scaling.
     util::Fraction calcPageScaling() const
@@ -2041,6 +2049,10 @@ public:
 
     /** @brief Get the part name if any */
     std::string getName(util::EnigmaString::AccidentalStyle accidentalStyle = util::EnigmaString::AccidentalStyle::Ascii) const;
+
+    /// @brief Returns whether this part has a calculated page layout.
+    /// @details Returns false if the part has no pages or any page has unresolved layout information.
+    bool isLayoutCalculated() const;
 
     /** @brief Return true if this part corresponds to the score */
     bool isScore() const { return getCmper() == SCORE_PARTID; }
@@ -2837,7 +2849,7 @@ public:
     /// @return The number of measures on the system.
     int calcNumMeasures() const { return endMeas - startMeas; }
 
-    /// @brief Gets the page this system is on.
+    /// @brief Gets the page this system is on, or nullptr if the page layout is unavailable.
     MusxInstance<others::Page> getPage() const;
 
     /// @brief Calculate the system scaling.
@@ -2863,8 +2875,14 @@ public:
     {
         this->OthersBase::integrityCheck(ptrToThis);
         if (startMeas == 0 || endMeas == 0) {
-            MUSX_INTEGRITY_ERROR("Layout for system " + std::to_string(getCmper())
-                + " of part " + std::to_string(getSourcePartId()) + " is in an unknown state.");
+            if (getSourcePartId() == SCORE_PARTID) {
+                util::Logger::log(util::Logger::LogLevel::Info, "Layout for system " + std::to_string(getCmper())
+                    + " of part " + std::to_string(getSourcePartId()) + " has not been calculated.");
+            } else {
+                // Finale can retain zero-valued system placeholders until a linked-part layout is updated.
+                util::Logger::log(util::Logger::LogLevel::Verbose, "Layout for system " + std::to_string(getCmper())
+                    + " of part " + std::to_string(getSourcePartId()) + " has not been calculated.");
+            }
         }
     }
 

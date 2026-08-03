@@ -205,20 +205,6 @@ bool calcUseOuterPlacement(const NoteInfoPtr& noteInfo, bool forTieEnd, const No
     return true;
 }
 
-std::optional<MeasCmper> calcLastMeasureId(const DocumentPtr& document, Cmper partId)
-{
-    std::optional<MeasCmper> lastMeasure;
-    const auto pages = document->getOthers()->getArray<others::Page>(partId);
-    for (const auto& page : pages) {
-        if (page->lastMeasureId) {
-            if (!lastMeasure || page->lastMeasureId.value() > *lastMeasure) {
-                lastMeasure = page->lastMeasureId.value();
-            }
-        }
-    }
-    return lastMeasure;
-}
-
 bool calcIsEndOfSystem(const NoteInfoPtr& noteInfo, bool forPageView)
 {
     const auto entryInfo = noteInfo.getEntryInfo();
@@ -226,10 +212,8 @@ bool calcIsEndOfSystem(const NoteInfoPtr& noteInfo, bool forPageView)
     const auto document = entryFrame->getDocument();
 
     if (!entryInfo.getNextInLayer()) {
-        if (const auto lastMeasure = calcLastMeasureId(document, entryFrame->getRequestedPartId())) {
-            if (entryInfo.getMeasure() == *lastMeasure) {
-                return true;
-            }
+        if (entryInfo.getMeasure() == document->calcEntireDocument().end.measureId) {
+            return true;
         }
     }
 

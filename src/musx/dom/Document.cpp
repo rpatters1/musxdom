@@ -176,14 +176,19 @@ void Document::setCachedFontIsSMuFL(Cmper fontId, bool isSmufl) const
 
 MusxInstance<others::Page> Document::calcPageFromMeasure(Cmper partId, MeasCmper measureId) const
 {
+    const auto part = getOthers()->get<others::PartDefinition>(SCORE_PARTID, partId);
+    if (!part || !part->isLayoutCalculated()) {
+        return nullptr;
+    }
     MusxInstance<others::Page> result;
     auto pages = getOthers()->getArray<others::Page>(partId);
     for (const auto& page : pages) {
-        if (page->firstMeasureId && page->lastMeasureId) {
-            if (measureId >= page->firstMeasureId.value() && measureId <= page->lastMeasureId.value()) {
-                result = page;
-                break;
-            }
+        if (page->isBlank() || !page->isLayoutCalculated()) {
+            continue;
+        }
+        if (measureId >= page->firstMeasureId.value() && measureId <= page->lastMeasureId.value()) {
+            result = page;
+            break;
         }
     }
     if (!result) {
@@ -194,6 +199,10 @@ MusxInstance<others::Page> Document::calcPageFromMeasure(Cmper partId, MeasCmper
 
 MusxInstance<others::StaffSystem> Document::calcSystemFromMeasure(Cmper partId, MeasCmper measureId) const
 {
+    const auto part = getOthers()->get<others::PartDefinition>(SCORE_PARTID, partId);
+    if (!part || !part->isLayoutCalculated()) {
+        return nullptr;
+    }
     MusxInstance<others::StaffSystem> result;
     auto systems = getOthers()->getArray<others::StaffSystem>(partId);
     for (const auto& system : systems) {

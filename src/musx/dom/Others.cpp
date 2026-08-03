@@ -530,8 +530,11 @@ StaffCmper MeasureExprAssign::calcAssignedStaffId(bool forPageView) const
     }
     const auto systemStaves = [&]() -> std::optional<MusxInstanceList<StaffUsed>> {
         if (forPageView) {
-            if (auto system = getDocument()->calcSystemFromMeasure(getRequestedPartId(), getCmper())) {
-                return getDocument()->getOthers()->getArray<StaffUsed>(getRequestedPartId(), system->getCmper());
+            const auto part = getDocument()->getOthers()->get<PartDefinition>(SCORE_PARTID, getRequestedPartId());
+            if (part && part->isLayoutCalculated()) {
+                if (auto system = getDocument()->calcSystemFromMeasure(getRequestedPartId(), getCmper())) {
+                    return getDocument()->getOthers()->getArray<StaffUsed>(getRequestedPartId(), system->getCmper());
+                }
             }
         }
         return getDocument()->getScrollViewStaves(getRequestedPartId());
@@ -569,6 +572,10 @@ std::optional<Evpu> MeasureExprAssign::calcBaselinePosition(bool forAbove) const
 {
     std::optional<Evpu> result = std::nullopt;
     constexpr bool forPageView = true;
+    const auto part = getDocument()->getOthers()->get<PartDefinition>(SCORE_PARTID, getRequestedPartId());
+    if (!part || !part->isLayoutCalculated()) {
+        return result;
+    }
     if (const auto sys = getDocument()->calcSystemFromMeasure(getRequestedPartId(), getCmper())) {
         const StaffCmper assignedStaffId = calcAssignedStaffId(forPageView);
         if (const auto systemStaff = StaffComposite::createCurrent(getDocument(), getRequestedPartId(), assignedStaffId, sys->startMeas, 0)) {
@@ -1020,6 +1027,18 @@ void Page::calcSystemInfo(const DocumentPtr& document)
     for (const auto& part : linkedParts) {
         auto pages = document->getOthers()->getArray<Page>(part->getCmper());
         auto systems = document->getOthers()->getArray<StaffSystem>(part->getCmper());
+        const auto reportStructuralLayoutProblem = [&](const std::string& message) {
+            if (part->isScore()) {
+                MUSX_INTEGRITY_ERROR(message);
+            } else {
+                util::Logger::log(util::Logger::LogLevel::Verbose, message);
+            }
+        };
+        const auto reportUncalculatedLayout = [&](const std::string& message) {
+            // Finale can save an uncalculated layout for any part, though it is much more common
+            // for linked parts. This state is informational for the score and verbose for parts.
+            util::Logger::log(part->isScore() ? util::Logger::LogLevel::Info : util::Logger::LogLevel::Verbose, message);
+        };
         for (const auto& system : systems) {
             StaffSystem* mutableSystem = const_cast<StaffSystem*>(system.get());
             mutableSystem->pageId = 0; // initialize
@@ -1028,47 +1047,85 @@ void Page::calcSystemInfo(const DocumentPtr& document)
             auto page = pages[x];
             Page* mutablePage = const_cast<Page*>(page.get());
             mutablePage->lastSystemId = std::nullopt;
-            if (!page->isBlank()) {
-                if (page->firstSystemId > 0) {
-                    mutablePage->lastSystemId = [&]() -> SystemCmper {
-                        size_t nextIndex = x + 1;
-                        while (nextIndex < pages.size()) {
-                            auto nextPage = pages[nextIndex++];
-                            if (!nextPage->isBlank()) {
-                                if (nextPage->firstSystemId > 0) {
-                                    return nextPage->firstSystemId - 1;
-                                } else {
-                                    return 0;
-                                }
-                            }
-                        }
-                        return SystemCmper(systems.size());
-                    }();
-                    if (page->lastSystemId.value() >= page->firstSystemId) {
-                        if (auto sys = document->getOthers()->get<StaffSystem>(part->getCmper(), page->firstSystemId)) {
-                            mutablePage->firstMeasureId = sys->startMeas;
-                        } else {
-                            MUSX_INTEGRITY_ERROR("Page " + std::to_string(page->getCmper()) + " of part " + part->getName()
-                                + " has a no system instance for its first system.");
-                        }
-                        if (auto sys = document->getOthers()->get<StaffSystem>(part->getCmper(), page->lastSystemId.value())) {
-                            mutablePage->lastMeasureId = sys->getLastMeasure();
-                        } else {
-                            MUSX_INTEGRITY_ERROR("Page " + std::to_string(page->getCmper()) + " of part " + part->getName()
-                                + " has a no system instance for its last system.");
-                        }
-                        for (size_t y = size_t(page->firstSystemId - 1); y < size_t(page->lastSystemId.value()); y++) {
-                            StaffSystem* mutableSystem = const_cast<StaffSystem*>(systems[y].get());
-                            mutableSystem->pageId = PageCmper(page->getCmper());
-                        }
-                    } else {
-                        MUSX_INTEGRITY_ERROR("The systems on page " + std::to_string(page->getCmper()) + " of part " + part->getName()
-                            + " cannot be determined.");
+            mutablePage->firstMeasureId = std::nullopt;
+            mutablePage->lastMeasureId = std::nullopt;
+            if (page->isBlank()) {
+                continue;
+            }
+            if (page->firstSystemId <= 0) {
+                reportUncalculatedLayout("Layout for page " + std::to_string(page->getCmper())
+                    + " of part " + std::to_string(part->getCmper()) + " has not been calculated.");
+                continue;
+            }
+
+            std::optional<SystemCmper> lastSystemId;
+            bool foundFollowingNonBlankPage = false;
+            size_t nextIndex = x + 1;
+            while (nextIndex < pages.size()) {
+                const auto& nextPage = pages[nextIndex++];
+                if (!nextPage->isBlank()) {
+                    foundFollowingNonBlankPage = true;
+                    if (nextPage->firstSystemId > 0) {
+                        lastSystemId = nextPage->firstSystemId - 1;
                     }
-                } else {
-                    MUSX_INTEGRITY_ERROR("Layout for page " + std::to_string(page->getCmper())
-                        + " of part " + std::to_string(part->getCmper()) + " is in an unknown state.");
+                    break;
                 }
+            }
+            if (!lastSystemId && !foundFollowingNonBlankPage) {
+                if (!systems.empty()) {
+                    lastSystemId = systems.back()->getCmper();
+                }
+            }
+            if (!lastSystemId) {
+                const auto message = "The systems on page " + std::to_string(page->getCmper()) + " of part " + part->getName()
+                    + " cannot be determined.";
+                if (foundFollowingNonBlankPage) {
+                    reportUncalculatedLayout(message);
+                } else {
+                    reportStructuralLayoutProblem(message);
+                }
+                continue;
+            }
+            if (lastSystemId.value() < page->firstSystemId) {
+                reportStructuralLayoutProblem("The systems on page " + std::to_string(page->getCmper()) + " of part " + part->getName()
+                    + " cannot be determined.");
+                continue;
+            }
+
+            std::vector<MusxInstance<StaffSystem>> pageSystems;
+            bool hasInvalidSystem = false;
+            for (SystemCmper systemId = page->firstSystemId; systemId <= lastSystemId.value(); ++systemId) {
+                auto system = document->getOthers()->get<StaffSystem>(part->getCmper(), systemId);
+                if (!system) {
+                    reportStructuralLayoutProblem("Page " + std::to_string(page->getCmper()) + " of part " + part->getName()
+                        + " has no system instance for system " + std::to_string(systemId) + ".");
+                    hasInvalidSystem = true;
+                    break;
+                }
+                if (system->startMeas == 0 || system->endMeas == 0) {
+                    reportUncalculatedLayout("Layout for system " + std::to_string(systemId) + " of part "
+                        + std::to_string(part->getCmper()) + " has not been calculated.");
+                    hasInvalidSystem = true;
+                    break;
+                }
+                if (system->endMeas <= system->startMeas) {
+                    reportStructuralLayoutProblem("Page " + std::to_string(page->getCmper()) + " of part " + part->getName()
+                        + " has an invalid measure range for system " + std::to_string(systemId) + ".");
+                    hasInvalidSystem = true;
+                    break;
+                }
+                pageSystems.emplace_back(std::move(system));
+            }
+            if (hasInvalidSystem) {
+                continue;
+            }
+
+            mutablePage->lastSystemId = lastSystemId;
+            mutablePage->firstMeasureId = pageSystems.front()->startMeas;
+            mutablePage->lastMeasureId = pageSystems.back()->getLastMeasure();
+            for (const auto& system : pageSystems) {
+                StaffSystem* mutableSystem = const_cast<StaffSystem*>(system.get());
+                mutableSystem->pageId = PageCmper(page->getCmper());
             }
         }
     }
@@ -1183,6 +1240,14 @@ std::string PartDefinition::getName(util::EnigmaString::AccidentalStyle accident
         }
     }
     return {};
+}
+
+bool PartDefinition::isLayoutCalculated() const
+{
+    const auto pages = getDocument()->getOthers()->getArray<Page>(getCmper());
+    return !pages.empty() && std::all_of(pages.begin(), pages.end(), [](const auto& page) {
+        return page->isLayoutCalculated();
+    });
 }
 
 MusxInstance<PartDefinition> PartDefinition::getScore(const DocumentPtr& document)
@@ -1588,7 +1653,12 @@ template class StaffListSet<StaffListRepeatScore, StaffListRepeatParts, StaffLis
 
 MusxInstance<Page> StaffSystem::getPage() const
 {
-    return getDocument()->getOthers()->get<Page>(getRequestedPartId(), pageId);
+    const auto part = getDocument()->getOthers()->get<PartDefinition>(SCORE_PARTID, getRequestedPartId());
+    if (!part || !part->isLayoutCalculated()) {
+        return nullptr;
+    }
+    const auto page = getDocument()->getOthers()->get<Page>(getRequestedPartId(), pageId);
+    return page && page->isLayoutCalculated() ? page : nullptr;
 }
 
 util::Fraction StaffSystem::calcEffectiveScaling() const

@@ -310,7 +310,15 @@ MusxInstance<details::StaffGroup> Staff::getMultiStaffInstVisualGroup(Cmper forP
 {
     const auto groupId = [&]() -> std::optional<Cmper> {
         if (forPartId == SCORE_PARTID) {
-            return getDocument()->getInstrumentForStaff(getCmper()).staffGroupId;
+            // This helper can be reached while factory resolvers are formatting diagnostics, before
+            // the score instrument map is constructed. In that case, allow the caller to fall back
+            // to the staff's own name rather than making name lookup depend on factory ordering.
+            if (const auto& instruments = getDocument()->getInstrumentsIfAvailable()) {
+                if (const auto result = instruments->getInstrumentForStaff(getCmper())) {
+                    return result->staffGroupId;
+                }
+            }
+            return std::nullopt;
         }
         const auto map = getDocument()->createInstrumentMap(forPartId);
         auto result = map.getInstrumentForStaff(getCmper());
