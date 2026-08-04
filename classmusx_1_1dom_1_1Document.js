@@ -19,6 +19,7 @@ var classmusx_1_1dom_1_1Document =
     [ "getInstrumentForStaff", "classmusx_1_1dom_1_1Document.html#a5019553e0d13e9718e6b380b3f1b83d0", null ],
     [ "getInstrumentForStaff", "classmusx_1_1dom_1_1Document.html#a58f73fe5524281814278b6dbcd3fe871", null ],
     [ "getInstruments", "classmusx_1_1dom_1_1Document.html#a5f737b924b967fc0cfe22d79c763c164", null ],
+    [ "getInstrumentsIfAvailable", "classmusx_1_1dom_1_1Document.html#a99dcfb31dd346a7172abd23bf36d9b53", null ],
     [ "getMaxBlankPages", "classmusx_1_1dom_1_1Document.html#a5a4d0b7008895e9e59d721475331f6be", null ],
     [ "getOptions", "classmusx_1_1dom_1_1Document.html#aeeb6649b58a69c1d8d81afd9624d72e5", null ],
     [ "getOptions", "classmusx_1_1dom_1_1Document.html#ac1157cd13a429ed6c2e27a0ca008551d", null ],

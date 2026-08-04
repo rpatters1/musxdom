@@ -130,6 +130,9 @@ Public Member Functions</h2></td></tr>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>isBlank</b> () const</td></tr>
 <tr class="memdesc:a2394f352b3461ee765fe821c8d1432bd"><td class="mdescLeft">&#160;</td><td class="mdescRight">is this a blank page <br /></td></tr>
 <tr class="separator:a2394f352b3461ee765fe821c8d1432bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a64cb90adf9e323b6458baa3cdc821e96" id="r_a64cb90adf9e323b6458baa3cdc821e96"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1Page.html#a64cb90adf9e323b6458baa3cdc821e96">isLayoutCalculated</a> () const</td></tr>
+<tr class="memdesc:a64cb90adf9e323b6458baa3cdc821e96"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns whether this page has a calculated layout.  <br /></td></tr>
+<tr class="separator:a64cb90adf9e323b6458baa3cdc821e96"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a18a1c2569960221a82797e695bd4a45c" id="r_a18a1c2569960221a82797e695bd4a45c"><td class="memItemLeft" align="right" valign="top"><a id="a18a1c2569960221a82797e695bd4a45c" name="a18a1c2569960221a82797e695bd4a45c"></a>
 <a class="el" href="classmusx_1_1util_1_1Fraction.html">util::Fraction</a>&#160;</td><td class="memItemRight" valign="bottom"><b>calcPageScaling</b> () const</td></tr>
 <tr class="memdesc:a18a1c2569960221a82797e695bd4a45c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate the page scaling. <br /></td></tr>
@@ -327,7 +330,36 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>SharedNodes</b> = st
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Represents the attributes of a page in the page layout. </p>
 <p>This class is identified by the XML node name "pageSpec". </p>
-</div></div><!-- contents -->
+</div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="a64cb90adf9e323b6458baa3cdc821e96" name="a64cb90adf9e323b6458baa3cdc821e96"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a64cb90adf9e323b6458baa3cdc821e96">&#9670;&#160;</a></span>isLayoutCalculated()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool musx::dom::others::Page::isLayoutCalculated </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns whether this page has a calculated layout. </p>
+<p>Blank pages are valid calculated pages. A nonblank page is calculated when its system range and corresponding measure range were resolved by <a class="el" href="classmusx_1_1dom_1_1others_1_1Page.html#a7bfc65ee853c40b9cf43bf4f737d1608" title="Resolver function used by factory to compute system and measure information for all pages.">calcSystemInfo</a>. </p>
+
+</div>
+</div>
+</div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->

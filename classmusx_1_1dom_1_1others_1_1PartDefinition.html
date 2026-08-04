@@ -133,6 +133,9 @@ Public Member Functions</h2></td></tr>
 std::string&#160;</td><td class="memItemRight" valign="bottom"><b>getName</b> (<a class="el" href="classmusx_1_1util_1_1EnigmaString.html#a4692b7b51e78c89ee59a2871fee34455">util::EnigmaString::AccidentalStyle</a> accidentalStyle=<a class="el" href="classmusx_1_1util_1_1EnigmaString.html#a4692b7b51e78c89ee59a2871fee34455a76b8d0dcd02ccaf203c167ced6d7ef31">util::EnigmaString::AccidentalStyle::Ascii</a>) const</td></tr>
 <tr class="memdesc:adc5b21e3ca829c176bf419756232f65b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the part name if any. <br /></td></tr>
 <tr class="separator:adc5b21e3ca829c176bf419756232f65b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae13967b639b0da58a9e9825a3afb6755" id="r_ae13967b639b0da58a9e9825a3afb6755"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1PartDefinition.html#ae13967b639b0da58a9e9825a3afb6755">isLayoutCalculated</a> () const</td></tr>
+<tr class="memdesc:ae13967b639b0da58a9e9825a3afb6755"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns whether this part has a calculated page layout.  <br /></td></tr>
+<tr class="separator:ae13967b639b0da58a9e9825a3afb6755"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aef38a46b8dbac91906cd353ea2ef2830" id="r_aef38a46b8dbac91906cd353ea2ef2830"><td class="memItemLeft" align="right" valign="top"><a id="aef38a46b8dbac91906cd353ea2ef2830" name="aef38a46b8dbac91906cd353ea2ef2830"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>isScore</b> () const</td></tr>
 <tr class="memdesc:aef38a46b8dbac91906cd353ea2ef2830"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return true if this part corresponds to the score. <br /></td></tr>
@@ -420,6 +423,26 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>SharedNodes</b> = st
 
 <p>Get the raw text context for the part name if any. </p>
 <dl class="todo"><dt><b><a class="el" href="todo.html#_todo000005">Todo:</a></b></dt><dd>perhaps additional logic as in getName, but not until something is broken. </dd></dl>
+
+</div>
+</div>
+<a id="ae13967b639b0da58a9e9825a3afb6755" name="ae13967b639b0da58a9e9825a3afb6755"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae13967b639b0da58a9e9825a3afb6755">&#9670;&#160;</a></span>isLayoutCalculated()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool musx::dom::others::PartDefinition::isLayoutCalculated </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns whether this part has a calculated page layout. </p>
+<p>Returns false if the part has no pages or any page has unresolved layout information. </p>
 
 </div>
 </div>

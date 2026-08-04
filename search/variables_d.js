@@ -28,7 +28,7 @@ var searchData=
   ['nodeid_25',['nodeId',['../structmusx_1_1dom_1_1ObjectPool_1_1ObjectKey.html#acf2e6818f0cea369ce48784084d0c86b',1,'musx::dom::ObjectPool::ObjectKey']]],
   ['noexpandsingleword_26',['noExpandSingleWord',['../classmusx_1_1dom_1_1others_1_1TextBlock.html#a34633d8ec36d5f5e8457c6fe7fd18ec4',1,'musx::dom::others::TextBlock']]],
   ['nohkan_27',['Nohkan',['../namespacemusx_1_1dom_1_1uuid.html#a57c70f801882af3c0df68afbedf091fb',1,'musx::dom::uuid']]],
-  ['nohorizontalstretch_28',['noHorizontalStretch',['../classmusx_1_1dom_1_1options_1_1MultimeasureRestOptions.html#a7e639bf925772e9aaeab9c21b2a09a72',1,'musx::dom::options::MultimeasureRestOptions']]],
+  ['nohorizontalstretch_28',['nohorizontalstretch',['../classmusx_1_1dom_1_1others_1_1MultimeasureRest.html#a91b0e41822d137d64b0c1427c0dc67c1',1,'musx::dom::others::MultimeasureRest::noHorizontalStretch'],['../classmusx_1_1dom_1_1options_1_1MultimeasureRestOptions.html#a7e639bf925772e9aaeab9c21b2a09a72',1,'musx::dom::options::MultimeasureRestOptions::noHorizontalStretch']]],
   ['nohorzstretch_29',['noHorzStretch',['../classmusx_1_1dom_1_1others_1_1ShapeExpressionDef.html#af1b75802c3545136cec63b8751c96226',1,'musx::dom::others::ShapeExpressionDef']]],
   ['nokey_30',['nokey',['../classmusx_1_1dom_1_1others_1_1StaffStyle_1_1Masks.html#af105b3c6a92233c80c6fde8198d1c638',1,'musx::dom::others::StaffStyle::Masks::noKey'],['../classmusx_1_1dom_1_1others_1_1Staff.html#a2392e4a4e58206156e19355ade47a860',1,'musx::dom::others::Staff::noKey']]],
   ['noleger_31',['noLeger',['../classmusx_1_1dom_1_1Entry.html#a1e97e6ca23c02f4f2b98a875ad863459',1,'musx::dom::Entry']]],

@@ -6,6 +6,7 @@ var classmusx_1_1dom_1_1others_1_1PartDefinition =
     [ "calcScrollViewCmper", "classmusx_1_1dom_1_1others_1_1PartDefinition.html#a6f5e40b30a761d258d53abe10a93b9fc", null ],
     [ "getName", "classmusx_1_1dom_1_1others_1_1PartDefinition.html#adc5b21e3ca829c176bf419756232f65b", null ],
     [ "getNameRawTextCtx", "classmusx_1_1dom_1_1others_1_1PartDefinition.html#ad766742621a9d1e43a68c2779d30d7c8", null ],
+    [ "isLayoutCalculated", "classmusx_1_1dom_1_1others_1_1PartDefinition.html#ae13967b639b0da58a9e9825a3afb6755", null ],
     [ "isScore", "classmusx_1_1dom_1_1others_1_1PartDefinition.html#aef38a46b8dbac91906cd353ea2ef2830", null ],
     [ "applyFormat", "classmusx_1_1dom_1_1others_1_1PartDefinition.html#a891133bc80b60ee8957a0ada85b4b2c9", null ],
     [ "copies", "classmusx_1_1dom_1_1others_1_1PartDefinition.html#a5d5cc2ba146e55da4974cabba2037dfc", null ],

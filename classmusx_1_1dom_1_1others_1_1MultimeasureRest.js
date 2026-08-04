@@ -8,6 +8,7 @@ var classmusx_1_1dom_1_1others_1_1MultimeasureRest =
     [ "integrityCheck", "classmusx_1_1dom_1_1others_1_1MultimeasureRest.html#a6a5536fefa5bb7942e69882c8928d2ba", null ],
     [ "measWidth", "classmusx_1_1dom_1_1others_1_1MultimeasureRest.html#a9ac347a53b4b2e7acb97df93bfc35f13", null ],
     [ "nextMeas", "classmusx_1_1dom_1_1others_1_1MultimeasureRest.html#a80225f5b443e59dea06a441b7f22f0c5", null ],
+    [ "noHorizontalStretch", "classmusx_1_1dom_1_1others_1_1MultimeasureRest.html#a91b0e41822d137d64b0c1427c0dc67c1", null ],
     [ "numHorzAdj", "classmusx_1_1dom_1_1others_1_1MultimeasureRest.html#ac080cafa4b4def09dd7706edee66958f", null ],
     [ "numStart", "classmusx_1_1dom_1_1others_1_1MultimeasureRest.html#abe0f41da26dd222cd3a1f7a769fd379d", null ],
     [ "numVertAdj", "classmusx_1_1dom_1_1others_1_1MultimeasureRest.html#a07dd0c2f2322504b174e54becaf40237", null ],

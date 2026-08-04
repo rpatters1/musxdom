@@ -1,5 +1,13 @@
 var NAVTREEINDEX29 =
 {
+"functions_u.html":[2,3,0,20],
+"functions_v.html":[2,3,0,21],
+"functions_vars.html":[2,3,2],
+"functions_vars.html":[2,3,2,0],
+"functions_vars_b.html":[2,3,2,1],
+"functions_vars_c.html":[2,3,2,2],
+"functions_vars_d.html":[2,3,2,3],
+"functions_vars_e.html":[2,3,2,4],
 "functions_vars_f.html":[2,3,2,5],
 "functions_vars_g.html":[2,3,2,6],
 "functions_vars_h.html":[2,3,2,7],
@@ -28,8 +36,8 @@ var NAVTREEINDEX29 =
 "index.html":[],
 "music__theory_8hpp_source.html":[3,0,0,0,0],
 "musx_8h_source.html":[3,0,0,1,4],
-"namespacemembers.html":[1,1,0],
 "namespacemembers.html":[1,1,0,0],
+"namespacemembers.html":[1,1,0],
 "namespacemembers_b.html":[1,1,0,1],
 "namespacemembers_c.html":[1,1,0,2],
 "namespacemembers_d.html":[1,1,0,3],
@@ -241,13 +249,5 @@ var NAVTREEINDEX29 =
 "namespacemusx_1_1dom.html#a7d5001a69f7120037cc0d75a4abcd99aad7a3fdf1351b72249a47454751549deb":[1,0,1,0,95,8],
 "namespacemusx_1_1dom.html#a7d5001a69f7120037cc0d75a4abcd99aafc5926c76c85889d86a8e6b6515467ec":[1,0,1,0,95,6],
 "namespacemusx_1_1dom.html#a7d5001a69f7120037cc0d75a4abcd99aaff60395b07a0d85c9ccdd153dfe4ec0e":[1,0,1,0,95,1],
-"namespacemusx_1_1dom.html#a7e1523afa8705d91b1d694405c2feefb":[1,0,1,0,73],
-"namespacemusx_1_1dom.html#a7f27f66bcae06e7ccf1173bfca211da2":[1,0,1,0,70],
-"namespacemusx_1_1dom.html#a83d1be84fd914d0b9046fbbdec2cd97d":[1,0,1,0,74],
-"namespacemusx_1_1dom.html#a83d296c53df0e81b30707dfd6210b77b":[1,0,1,0,126],
-"namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65":[1,0,1,0,58],
-"namespacemusx_1_1dom.html#a85d511d77e60bbc95b83884133bd383f":[1,0,1,0,104],
-"namespacemusx_1_1dom.html#a85d511d77e60bbc95b83884133bd383fa2e17ed9e19024a0e0863360470252f70":[1,0,1,0,104,2],
-"namespacemusx_1_1dom.html#a85d511d77e60bbc95b83884133bd383fa7a1920d61156abc05a60135aefe8bc67":[1,0,1,0,104,0],
-"namespacemusx_1_1dom.html#a85d511d77e60bbc95b83884133bd383fae15a1a05181326142cc6422ad1199831":[1,0,1,0,104,1]
+"namespacemusx_1_1dom.html#a7e1523afa8705d91b1d694405c2feefb":[1,0,1,0,73]
 };
