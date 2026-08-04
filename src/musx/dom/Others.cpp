@@ -1066,7 +1066,7 @@ void Page::calcSystemInfo(const DocumentPtr& document)
                 if (!nextPage->isBlank()) {
                     foundFollowingNonBlankPage = true;
                     if (nextPage->firstSystemId > 0) {
-                        lastSystemId = nextPage->firstSystemId - 1;
+                        lastSystemId = SystemCmper(nextPage->firstSystemId - 1);
                     }
                     break;
                 }
