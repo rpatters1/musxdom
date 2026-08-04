@@ -1687,6 +1687,7 @@ public:
     Evpu shapeStartAdjust{};    ///< Start adjustment for the H-bar shape in Evpu. (xml node is `<startAdjust>`)
     Evpu shapeEndAdjust{};      ///< End adjustment for the shape in Evpu. (xml node is `<endAdjust>`)
     bool useSymbols{};          ///< Use symbols instead of an H-bar, based on #symbolThreshold. (xml node is `<useCharRestStyle>`)
+    bool noHorizontalStretch{}; ///< Inverse of "Stretch Horizontally" option.
 
     /// @brief Get the start measure of this multimeasure rest
     MeasCmper getStartMeasure() const { return getCmper(); }

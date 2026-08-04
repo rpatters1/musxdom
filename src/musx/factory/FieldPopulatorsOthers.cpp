@@ -889,6 +889,7 @@ MUSX_XML_ELEMENT_ARRAY(MultimeasureRest, {
     {"startAdjust", [](const XmlElementPtr& e, const std::shared_ptr<MultimeasureRest>& i) { i->shapeStartAdjust = e->getTextAs<Evpu>(); }},
     {"endAdjust", [](const XmlElementPtr& e, const std::shared_ptr<MultimeasureRest>& i) { i->shapeEndAdjust = e->getTextAs<Evpu>(); }},
     {"useCharRestStyle", [](const XmlElementPtr& e, const std::shared_ptr<MultimeasureRest>& i) { i->useSymbols = populateBoolean(e, i); }},
+    {"noHorizontalStretch", [](const XmlElementPtr& e, const std::shared_ptr<MultimeasureRest>& i) { i->noHorizontalStretch = populateBoolean(e, i); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(MultiStaffGroupId, {

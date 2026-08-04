@@ -43,6 +43,18 @@ constexpr static musxtest::string_view mmRestXml = R"xml(
       <endAdjust>2</endAdjust>
       <useCharRestStyle/>
     </mmRest>
+    <mmRest cmper="27" part="2" shared="false">
+      <meaSpace>576</meaSpace>
+      <nextMeas>32</nextMeas>
+      <numdec>-22</numdec>
+      <shapeDef>35</shapeDef>
+      <numStart>2</numStart>
+      <threshold>9</threshold>
+      <spacing>48</spacing>
+      <startAdjust>30</startAdjust>
+      <endAdjust>-30</endAdjust>
+      <noHorizontalStretch/>
+    </mmRest>
   </others>
 </finale>
     )xml";
@@ -67,6 +79,23 @@ TEST(MultimeasureRestTest, PopulateFields)
     EXPECT_EQ(mmRest->shapeStartAdjust, 1);
     EXPECT_EQ(mmRest->shapeEndAdjust, 2);
     EXPECT_TRUE(mmRest->useSymbols);
+    EXPECT_FALSE(mmRest->noHorizontalStretch);
+
+    auto mmRestNoStretch = others->get<others::MultimeasureRest>(2, 27);
+    ASSERT_TRUE(mmRestNoStretch) << "MultimeasureRest with partId 2, measure 27 not found";
+
+    EXPECT_EQ(mmRestNoStretch->measWidth, 576);
+    EXPECT_EQ(mmRestNoStretch->nextMeas, 32);
+    EXPECT_EQ(mmRestNoStretch->numVertAdj, -22);
+    EXPECT_EQ(mmRestNoStretch->shapeDef, 35);
+    EXPECT_EQ(mmRestNoStretch->numStart, 2);
+    EXPECT_EQ(mmRestNoStretch->symbolThreshold, 9);
+    EXPECT_EQ(mmRestNoStretch->symbolSpacing, 48);
+    EXPECT_EQ(mmRestNoStretch->numHorzAdj, 0);
+    EXPECT_EQ(mmRestNoStretch->shapeStartAdjust, 30);
+    EXPECT_EQ(mmRestNoStretch->shapeEndAdjust, -30);
+    EXPECT_FALSE(mmRestNoStretch->useSymbols);
+    EXPECT_TRUE(mmRestNoStretch->noHorizontalStretch);
 }
 
 TEST(MultimeasureRestTest, CalculatesUseSymbols)
