@@ -124,6 +124,34 @@ constexpr static musxtest::string_view staffGroupXml = R"xml(
 </finale>
 )xml";
 
+constexpr static musxtest::string_view unresolvedInstrumentMapDiagnosticXml = R"xml(
+<?xml version="1.0" encoding="UTF-8"?>
+<finale>
+  <others>
+    <instUsed cmper="0" inci="0">
+      <inst>1</inst>
+      <trackType>staff</trackType>
+    </instUsed>
+    <partDef cmper="0">
+      <defaultNameStaff>1</defaultNameStaff>
+    </partDef>
+    <partGlobals cmper="65534"/>
+    <staffSpec cmper="1">
+      <staffLines>5</staffLines>
+      <lineSpace>24</lineSpace>
+    </staffSpec>
+  </others>
+  <details>
+    <staffGroup cmper1="0" cmper2="1">
+      <startInst>1</startInst>
+      <endInst>2</endInst>
+      <startMeas>1</startMeas>
+      <endMeas>32767</endMeas>
+    </staffGroup>
+  </details>
+</finale>
+)xml";
+
 constexpr static musxtest::string_view singleInstrumentSectionXml = R"xml(
 <?xml version="1.0" encoding="UTF-8"?>
 <finale>
@@ -305,6 +333,25 @@ TEST(StaffGroupTest, PopulateFields)
     EXPECT_NE(staffGroup->staves.find(2), staffGroup->staves.end()) << "group contains staff 2";
     EXPECT_NE(staffGroup->staves.find(3), staffGroup->staves.end()) << "group contains staff 3";
     EXPECT_EQ(staffGroup->staves.find(4), staffGroup->staves.end()) << "group does not contain staff 4";
+}
+
+TEST(StaffGroupTest, DiagnosticPartNameDoesNotRequireInstrumentMap)
+{
+    auto previousLogger = musx::util::Logger::getCallback();
+    struct LoggerRestorer {
+        musx::util::Logger::LogCallback callback;
+        ~LoggerRestorer() { musx::util::Logger::setCallback(std::move(callback)); }
+    } loggerRestorer{previousLogger};
+
+    std::string diagnostic;
+    musx::util::Logger::setCallback([&](musx::util::Logger::LogLevel, const std::string& message) {
+        diagnostic = message;
+    });
+
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(unresolvedInstrumentMapDiagnosticXml);
+    ASSERT_TRUE(doc);
+    EXPECT_NE(diagnostic.find("non-existent start or end staff cmpers"), std::string::npos);
+    EXPECT_NO_THROW((void)doc->getInstruments());
 }
 
 TEST(StaffGroupTest, CalcIsSingleInstrumentSection)

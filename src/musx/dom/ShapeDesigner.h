@@ -368,7 +368,7 @@ struct ShapeDefInstruction
 
     /// @brief Holds the parsed data for a VerticalMode instruction.
     struct VerticalMode {
-        VerticalAlign mode; ///< The pen vertical alignment mode.
+        VerticalAlign mode{ VerticalAlign::Center }; ///< The pen vertical alignment mode.
     };
 
 

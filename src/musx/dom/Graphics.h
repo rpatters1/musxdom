@@ -86,7 +86,7 @@ public:
     uint32_t version{};         ///< Always 0x100, meaning perhaps "v1.0". (This was intended for tracking changes to the data format, but it was never used.)
     int volRefNum{};            ///< Classic Mac OS volume reference number, used with legacy MacFsSpec path.
     int dirId{};                ///< Classic Mac OS directory ID, used with legacy MacFsSpec path. (xml node is `<dirID>`)
-    PathType pathType;          ///< Path type. (Determines which of @ref FileAlias and @ref FileUrlBookmark to use as well as how to interpret #FilePath::path.)
+    PathType pathType{};        ///< Path type. (Determines which of @ref FileAlias and @ref FileUrlBookmark to use as well as how to interpret #FilePath::path.)
     Cmper pathId{};             ///< Cmper of @ref FilePath? It is unknown if this value ever differs from the cmper of #FileDescription. (xml node is `<pathID>`)
 
     constexpr static std::string_view XmlNodeName = "fileDesc"; ///< The XML node name for this type.

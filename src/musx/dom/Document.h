@@ -92,7 +92,7 @@ using RehearsalMarkKey = std::pair<MeasCmper, Cmper>;
 /// @brief Information associated with a rehearsal mark.
 struct RehearsalMarkInfo
 {
-    int rehearsalSequence;  ///< 1-based rehearsal mark sequence number for this measure.
+    int rehearsalSequence{};  ///< 1-based rehearsal mark sequence number for this measure.
 };
 
 /// @brief Maps each occurrence of a rehearsal mark to its sequence number for that measure.
@@ -193,12 +193,14 @@ public:
     void setCachedFontIsSMuFL(Cmper fontId, bool isSmufl) const;
 
     /// @brief Searches pages to find the page that contains the measure.
+    /// @return The page, or nullptr if the part's page layout is unavailable or the measure is not found.
     /// @param partId the linked part to search
     /// @param measureId the measure to find
     [[nodiscard]]
     MusxInstance<others::Page> calcPageFromMeasure(Cmper partId, MeasCmper measureId) const;
 
-    /// @brief Searches systems to find the page that contains the measure.
+    /// @brief Searches systems to find the system that contains the measure.
+    /// @return The system, or nullptr if the part's page layout is unavailable or the measure is not found.
     /// @param partId the linked part to search
     /// @param measureId the measure to find
     [[nodiscard]]
@@ -216,6 +218,15 @@ public:
             throw std::logic_error("Attempted to retrieve instrument map before it was constructed.");
         }
         return m_instruments.value();
+    }
+
+    /// @brief Returns the optional instrument map, which is empty until the map has been constructed.
+    /// @details This supports interpretation helpers that can provide a useful fallback while the
+    /// document factory is still resolving relationships. Call #getInstruments when the map is required.
+    [[nodiscard]]
+    const std::optional<InstrumentMap>& getInstrumentsIfAvailable() const noexcept
+    {
+        return m_instruments;
     }
 
     /// @brief Returns the path to the musx (or EnigmaXML) file used to create this document, if provided.
