@@ -92,7 +92,7 @@ using RehearsalMarkKey = std::pair<MeasCmper, Cmper>;
 /// @brief Information associated with a rehearsal mark.
 struct RehearsalMarkInfo
 {
-    int rehearsalSequence;  ///< 1-based rehearsal mark sequence number for this measure.
+    int rehearsalSequence{};  ///< 1-based rehearsal mark sequence number for this measure.
 };
 
 /// @brief Maps each occurrence of a rehearsal mark to its sequence number for that measure.

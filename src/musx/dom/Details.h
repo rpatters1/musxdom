@@ -1848,7 +1848,7 @@ public:
     BarlineType barlineType{};                ///< Group barline type (xml node is `<barline>`)
     AlignJustify fullNameJustify{};           ///< Full name justification (xml node is `<fullJustify>`)
     AlignJustify abbrvNameJustify{};          ///< Abbreviated name justification (xml node is `<abbrvJustify>`)
-    DrawBarlineStyle drawBarlines;            ///< "Draw Barlines" option (xml node is `<groupBarlineStyle>`)
+    DrawBarlineStyle drawBarlines{};          ///< "Draw Barlines" option (xml node is `<groupBarlineStyle>`)
     bool ownBarline{};                        ///< "Use Alternate Group Barline"
     bool fullNameIndivPos{};                  ///< Indicates if full name has individual position (xml node is `<fullIndivPos>`)
     bool abbrvNameIndivPos{};                 ///< Indicates if abbreviated name has individual position (xml node is `<abbrvIndivPos>`)
