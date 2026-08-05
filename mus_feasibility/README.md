@@ -14,7 +14,11 @@ Archive members use the same public `member_id` convention. Their ignored local 
 
 For StuffIt archives, install the `unar` package so that both `unar` and `lsar` are available. Use `lsar` for a non-destructive member listing and `unar -o <temporary-directory> <archive>` for extraction; never extract over the source corpus.
 
-No Enigma Portable/ETF files were present. They must be requested; the prioritized requests are in [EVIDENCE_REQUESTS.md](EVIDENCE_REQUESTS.md). No proprietary MakeMusic plugin-development code or headers were inspected.
+The initial ETF evidence set is now present locally under the ignored `private/evidence/` directory. It has since
+been extended with tracked controlled MUS/ETF pairs for Finale 2002–2005 under `evidence/F2002/` through
+`evidence/F2005/`. There are now fourteen ETF exports plus eight controlled-test MUS files in total. The public notes record
+provenance and hashes; the archival source files and their private layout remain uncommitted. No proprietary MakeMusic
+plugin-development code or headers were inspected.
 
 ## Current conclusion
 
@@ -79,4 +83,10 @@ The scripts are read-only with respect to the evidence corpus. `musx_semantics.p
 - [EXPERIMENT_LOG.md](EXPERIMENT_LOG.md): commands, observations, failed hypotheses, and follow-ups.
 - [FEASIBILITY_ASSESSMENT.md](FEASIBILITY_ASSESSMENT.md): direct recommendation, risks, architecture, and next steps.
 
-The Library of Congress format description independently confirms that legacy MUS is an Enigma Binary File and that ETF was Finale's text transport counterpart: [Finale Legacy Music Notation File](https://www.loc.gov/preservation/digital/formats/fdd/fdd000632.shtml).
+Public references used in the clean-room search include the Library of Congress description of legacy MUS and ETF,
+Finale's historical help/glossary stating that ETF creation ended after Finale 2006, and the independent LilyPond
+`etf2ly` ETF subset reader. These document ETF's role and grammar but do not provide the 2001–2006 MUS codec:
+[Library of Congress MUS description](https://www.loc.gov/preservation/digital/formats/fdd/fdd000632.shtml),
+[Finale ETF glossary](https://finale.jetzt/finalehelp/Finale26Win/Content/Finale/glossary.htm),
+[`etf2ly` manual](https://manpages.ubuntu.com/manpages/stable/man1/etf2ly.1.html), and
+[historical Finale format notes](https://preservation.tylerthorsted.com/2024/02/09/finale/).

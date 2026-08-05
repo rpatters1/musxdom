@@ -25,6 +25,13 @@ The expanded archive pass is cataloged separately in [`data/archive_members.csv`
 
 Archive members have no assumed Finale 27 counterpart. The deep probe confirms that the early explicit 1.8.7–2.6 files are structurally distinct from the 2007+ typed-zlib/framed-record era; it does not establish a fixed 16-word structure for them.
 
+Fourteen ETF evidence files are now available locally: the original six archival exports remain in ignored `private/evidence/`,
+and the controlled F2002–F2005 pairs are tracked in `evidence/`. They include the Finale 2005 nested-tuplet sample,
+the Finale 2000 template exported by Finale 2000 and Finale 2005, and archive-derived 1.8.7, 2.0.1, and 2.6 samples.
+They are semantic companions rather than new corpus binaries; their hashes, sizes, and observed section counts are
+documented in `FORMAT_NOTES.md` and `EXPERIMENT_LOG.md`. The ZIP-derived 2.6 Quartet `Score` was not usable by
+Finale 2.6.3 because the ZIP copy lacked its resource fork; the corresponding StuffIt source was used instead.
+
 | # | Corpus ID | Filename | Bytes | Source SHA-256 | Save product / era | Created app | ETF | Parts / notable converted features | Export | Export SHA-256 |
 |---:|---|---|---:|---|---|---|---|---|---|---|
 | 1 | `mus-2771d32f77fd2bd6` | `template.mus` | 7874 | `2771d32f77fd2bd6b2835298ca89ad1c9c1992f283548a06a0e9966a2052d8e6` | 2008 / typed-zlib transition (high) | 12.0.1.3 | no | parts=1; measures=1; staves=4; entries=4; expr=17; artic=27; wrapper=little | `template.fin27.musx` | `b5d17166d5082cb05d9eb467b8d509aec42273bc3bc8348a425c13780b473266` |

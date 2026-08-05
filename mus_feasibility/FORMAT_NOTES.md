@@ -22,15 +22,50 @@ Confidence labels: **confirmed** means reproduced across the stated sample; **st
 
 The last-save date matched the filesystem modification day for 1,147 of 1,163 files with a valid date (98.6%). The mismatches are consistent with later filesystem copies. Creation was not assumed from the filename. In 1,039 files where both dates decoded, creation was not later than last save.
 
-The banner is the best direct saving-product classifier. The adjacent version tuples distinguish original creator metadata from the last saver and appear to contain internal major/minor/build/status data, but their platform-dependent packing is not fully decoded. Finale 27 MUSX conversion preserves the legacy `created` tuple but rewrites `modified` to the conversion event; this was verified on `Score3Drop-Fin07.mus`.
+The banner is the best direct saving-product classifier. The adjacent version tuples distinguish original creator metadata from the last saver and appear to contain internal major/minor/build/status data, but their platform-dependent packing is not fully decoded. Finale 27 MUSX conversion preserves the legacy `created` tuple but rewrites `modified` to the conversion event; this was verified on corpus ID `mus-8565d1cad82178ae`.
 
 ### Pre-banner files
 
-**Strong.** Fifty-four substantive files—nearly all under directories named `Finale 2 Files`—lack `ENIGMA BINARY FILE` and commonly begin their body with forms such as `000000ab000002000000444100300000`. One additional `._ScoreI-Fin08.mus` is a 4 KiB AppleDouble metadata artifact, not a score data fork. The Finale 2 classification is path-supported, not explicitly encoded as a readable banner. `Cat Menagerie.org/Old Tom.mus` is also pre-banner but has weaker provenance.
+**Strong.** Fifty-four substantive files—nearly all under directories named `Finale 2 Files`—lack `ENIGMA BINARY FILE` and commonly begin their body with forms such as `000000ab000002000000444100300000`. One additional `._ScoreI-Fin08.mus` is a 4 KiB AppleDouble metadata artifact, not a score data fork. The Finale 2 classification is path-supported, not explicitly encoded as a readable banner. Corpus ID `mus-6d3b75475a2ca67b` is also pre-banner but has weaker provenance.
 
 ## Archive-derived early-version evidence
 
 The expanded archive survey changes the earliest-version picture. StuffIt extraction with `unar` 1.10.7 produced explicit pre-banner samples labeled Finale 1.8.7, 2.0.1, and 2.6, plus additional 3.0–3.7 files. The earliest explicit product currently observed is 1.8.7; no explicit Finale 1.0 sample has yet been found. These files have no Finale 27 exports and should not be conflated with the 55 direct pre-banner/unknown files. Public IDs and hashes are in `data/archive_members.csv`; original archive/member locations are private.
+
+### ETF evidence set
+
+**Confirmed.** Fourteen locally retained ETF exports now provide a semantic record-level reference for the older
+families. The original six archival exports remain under ignored `private/evidence/`; the controlled F2002–F2005 pairs
+are tracked under `evidence/` because they contain no private source layout. Their hashes and provenance are recorded
+in the experiment log.
+
+| Evidence | Source era | ETF size | Observed sections | Selected observations |
+|---|---|---:|---|---|
+| `nestedTupletFin05RC2.etf` (`mus-d89e8fe12e271440`) | Finale 2005 | 16,893 bytes | header, others, details, entries, text, lyrics | Explicit ETF header identifies Finale 2005; six `eE` entry records and tuple/detail records expose the high-entropy era's logical model. |
+| `template-Fin2000-from-Fin2000.etf` (`mus-3597fd4fce0c272b`) | Finale 2000 | 27,945 bytes | header, others, details, entries, text, lyrics | Explicit header identifies Finale 2000; no `eE` entries; compact options/defaults and text blocks. |
+| `template-Fin2000-from-Fin2005.etf` | Finale 2000 source, Finale 2005 saver | 34,029 bytes | header, others, details, entries, text, lyrics | Same source document but Finale 2005 header; adds `&f`, `PD`, `XA`, expressions, and other records. This is direct evidence that resaving can synthesize/upgrade records. |
+| `guitar pc.etf` (`mus-7aa45639c14b3864`) | Finale 1.8.7 | 123,084 bytes | others, details, entries, text, lyrics | 1,094 `eE` entry lines and 891 detail lines; no modern binary-style header section. |
+| `Dream of Summer I-from-Fin2.6.3.etf` (`mus-2c0a5e8897b436d5`) | Finale 2.0.1 source, Finale 2.6.3 exporter | 74,040 bytes | others, details, entries, text, lyrics | 549 `eE` entry lines and 497 detail lines; old ETF uses the same broad logical sections despite the pre-banner binary family. |
+| `Score-from-sit-archive.etf` (`mus-bd0042f8e0354192` source class) | Finale 2.6 | 1,272,164 bytes | others, details, entries, text, lyrics | 9,446 `eE` entry lines and 6,814 detail lines; the large sample is suitable for testing whether early records scale regularly. The StuffIt copy was necessary because the ZIP copy lacked the resource fork. |
+| `F2002-baseline.etf` | Finale 2002a.r1 | 14,068 bytes | header, others, details, entries, text, lyrics | Three `eE` entries; exact pair with `F2002-baseline.mus`. |
+| `F2002-changed-C-to-D.etf` | Finale 2002a.r1 | 14,075 bytes | header, others, details, entries, text, lyrics | Same three entries, with localized pitch-related field changes; exact pair with `F2002-changed-C-to-D.mus`. |
+| `F2003-baseline.etf` | Finale 2003a.r1 | 16,033 bytes | header, others, details, entries, text, lyrics | Three `eE` entries; exact pair with `F2003-baseline.mus`. |
+| `F2003-changed-C-to-D.etf` | Finale 2003a.r1 | 16,034 bytes | header, others, details, entries, text, lyrics | Same pool layout; one-byte length increase in the entry record and localized entry-payload change. |
+| `F2004-baseline.etf` | Finale 2004c.r1 | 16,334 bytes | header, others, details, entries, text, lyrics | Three `eE` entries; same typed pool sequence, with a larger `0x0010` record than F2002/03. |
+| `F2004-changed-C-to-D.etf` | Finale 2004c.r1 | 16,334 bytes | header, others, details, entries, text, lyrics | Entry pitch changes plus `BC` records; automatic note spacing is the leading explanation for the derived changes. |
+| `F2005-baseline.etf` | Finale 2005b.r1 | 16,381 bytes | header, others, details, entries, text, lyrics | Three `eE` entries; same typed pool sequence. |
+| `F2005-changed-C-to-D.etf` | Finale 2005b.r1 | 16,381 bytes | header, others, details, entries, text, lyrics | Entry pitch changes plus the same `BC` dependency pattern seen in F2004; automatic note spacing is the leading explanation. |
+
+ETF records are textual and use explicit section names plus two-character (or extended) structure identifiers, with
+`(cmper)` for “other” records and `(cmper,inci)`-like keys for details. `eE` is the prominent entry structure in the
+older exports. This confirms that the conceptual “other/detail/entry/text” decomposition predates the 2007 typed-zlib
+container. ETF **by itself** does not identify the pre-2007 binary codec: it contains no binary offsets, compressed
+bytes, or direct byte-for-byte rendering guarantee. An ETF paired with the exact `.mus` saved by the same Finale
+version can still be valuable as known semantic input for codec experiments, especially with controlled edits.
+
+The two exports of the same Finale 2000 template are especially important: the Finale 2005 export adds records and
+changes some defaults, while the header changes from Finale 2000 to Finale 2005. A later-version ETF must therefore be
+treated as a normalized semantic reference, not as a lossless reconstruction of the original binary save.
 
 ## Platform coverage risk
 
@@ -93,6 +128,32 @@ The literal **16-word fixed-record hypothesis is disproved for these blocks**:
 The hypothesized two unaccounted words do exist in this era, but as a **four-byte all-zero record trailer/reserved terminator**, not as the last two words of a fixed 16-word structure. Their semantic purpose remains open (reserved fields versus terminator/padding), but their position and zero value are strongly established.
 
 This does not disprove a 16-word in-memory or pre-2007 decompressed structure. ETF pairs are needed before generalizing backward.
+
+### Finale 2002 controlled pair
+
+**Strong for this sample; broader version coverage pending.** The F2002 baseline and one-pitch-change pair were saved
+by Finale `2002a.r1` under Mac OS 9.0.4 in SheepShaver. Beginning at `0x200`, both files expose a simple outer stream
+of big-endian variable-length records:
+
+| Offset | Type | Total record length | Baseline / changed |
+|---:|---:|---:|---:|
+| `0x0200` | `0x000f` | 1,976 | unchanged |
+| `0x09b8` | `0x0010` | 158 | unchanged |
+| `0x0a56` | `0x0011` | 53 / 57 | changed |
+| `0x0a8b` / `0x0a8f` | `0x0012` | 6 | terminal marker moved with preceding record |
+
+The six-byte outer header is two bytes of type followed by a four-byte **total record length including the header**.
+Records are not constrained to 16 words or 32-byte alignment; the terminal record begins at an odd offset in the
+changed file. Changing the pitch from C to D changes 45 observed bytes overall, including the length field and a
+four-byte extension, while the complete `0x000f` and `0x0010` records remain identical. The ETF changes only the
+`eE` entry payloads, supporting the interpretation that `0x0011` is an entry-related pool and that the edit is
+localized at the outer-record level.
+
+This does **not** solve the payload codec: the bytes inside `0x000f`–`0x0011` remain high-entropy and their internal
+fields are not yet decoded. It does, however, show that the 2001–2006 family may have a regular typed/length-framed
+container beneath the opaque payload encoding. The 2002 result should be tested against F2003–F2005 before treating
+the four type codes or framing as universal. F2003, F2004, and F2005 now independently confirm the same framing and
+type sequence. The outer framing is strong across 2002–2005, while payload semantics and codec remain open.
 
 ## Record fields
 

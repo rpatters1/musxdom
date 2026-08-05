@@ -1,0 +1,4 @@
+# Legacy Finale evidence is byte-sensitive. ETF uses classic CR line terminators;
+# MUS is binary. Do not normalize or whitespace-check these artifacts.
+mus_feasibility/evidence/**/*.etf -text
+mus_feasibility/evidence/**/*.mus binary
