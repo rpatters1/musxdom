@@ -1,0 +1,2 @@
+Version 2004c.r1
+Mac OS X 10.4.11 running in QEMU PowerPC emulator

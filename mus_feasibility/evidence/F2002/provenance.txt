@@ -1,0 +1,2 @@
+Version 2002a.r1
+Mac OS 9.0.4 running in SheepShaver
