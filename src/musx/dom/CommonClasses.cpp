@@ -28,6 +28,7 @@
 #include <numeric>
 #include <algorithm>
 #include <cmath>
+#include <cctype>
 #include <cwctype>
 #include <string_view>
 #include <unordered_map>
@@ -53,6 +54,22 @@ struct SmuflMetadataPathCacheEntry
     bool found{};
     std::filesystem::path path;
 };
+
+/// Normalizes a font name for comparison by removing whitespace and folding case. This lets a
+/// PostScript-style spelling ("FinaleMaestro") match the family name ("Finale Maestro").
+/// Matches normalizeFontKey() in the smufl-mapping project so the two agree on lookups.
+static std::string normalizeFontName(std::string_view name)
+{
+    std::string result;
+    result.reserve(name.size());
+    for (const char ch : name) {
+        const auto uch = static_cast<unsigned char>(ch);
+        if (!std::isspace(uch)) {
+            result.push_back(static_cast<char>(std::tolower(uch)));
+        }
+    }
+    return result;
+}
 
 static bool looksLikeSmuflDefaultMusicFont(const FontInfo& fontInfo)
 {
@@ -165,26 +182,48 @@ bool FontInfo::calcIsSMuFL() const
         return cached.value();
     }
 
-   static const std::set<std::string_view> knownSmuflFontNames =
+    // Mirrors the SMuFL fonts configured in source_json/smufl_fonts.json of the smufl-mapping
+    // project (https://github.com/rpatters1/smufl-mapping). That project is deliberately not a
+    // dependency of musxdom, so this list is maintained by hand and may need updating when
+    // smufl-mapping adds fonts. Entries are stored pre-normalized (see normalizeFontName), i.e.
+    // the family name lowercased with whitespace removed: add new fonts in that form. The comment
+    // on each line is the canonical family spelling, to make re-syncing with smufl_fonts.json easier.
+    static const std::unordered_set<std::string_view> knownSmuflFontNames =
     {
-        "Bravura",
-        "Leland",
-        "Emmentaler",
-        "Finale Ash",
-        "Finale Broadway",
-        "Finale Engraver",
-        "Finale Jazz",
-        "Finale Legacy",
-        "Finale Maestro",
-        "Gonville",
-        "MuseJazz",
-        "Petaluma",
+        "bravura",                   // Bravura
+        "bravuratext",               // Bravura Text
+        "chaconneex",                // Chaconne Ex
+        "emmentaler",                // Emmentaler
+        "emmentalertext",            // Emmentaler Text
+        "finaleash",                 // Finale Ash
+        "finaleashtext",             // Finale Ash Text
+        "finalebroadway",            // Finale Broadway
+        "finalebroadwaylegacytext",  // Finale Broadway Legacy Text
+        "finalebroadwaytext",        // Finale Broadway Text
+        "finaleengraver",            // Finale Engraver
+        "finalejazz",                // Finale Jazz
+        "finalejazztext",            // Finale Jazz Text
+        "finalejazztextlowercase",   // Finale Jazz Text Lowercase
+        "finalelegacy",              // Finale Legacy
+        "finalemaestro",             // Finale Maestro
+        "finalemaestrotext",         // Finale Maestro Text
+        "gonville",                  // Gonville
+        "gonvilletext",              // Gonville Text
+        "leland",                    // Leland
+        "lelandtext",                // Leland Text
+        "musejazz",                  // MuseJazz
+        "musejazztext",              // MuseJazz Text
+        "petaluma",                  // Petaluma
+        "petalumascript",            // Petaluma Script
+        "petalumatext",              // Petaluma Text
+        "sebastian",                 // Sebastian
+        "sebastiantext",             // Sebastian Text
     };
 
     bool result;
     if (calcSMuFLMetaDataPath().has_value()) {
         result = true;
-    } else if (auto it = knownSmuflFontNames.find(getName()); it != knownSmuflFontNames.end()) {
+    } else if (knownSmuflFontNames.count(normalizeFontName(getName())) > 0) {
         result = true;
     } else {
         result = looksLikeSmuflDefaultMusicFont(*this);

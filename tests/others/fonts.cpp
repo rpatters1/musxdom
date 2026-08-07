@@ -103,6 +103,50 @@ constexpr static musxtest::string_view unknownSmuflFontProperties = R"xml(
 </finale>
     )xml";
 
+constexpr static musxtest::string_view knownSmuflFontNameSpellings = R"xml(
+<?xml version="1.0" encoding="UTF-8"?>
+<finale>
+  <others>
+    <fontName cmper="1">
+      <name>Finale Maestro</name>
+    </fontName>
+    <fontName cmper="2">
+      <name>FinaleMaestro</name>
+    </fontName>
+    <fontName cmper="3">
+      <name>finale maestro text</name>
+    </fontName>
+    <fontName cmper="4">
+      <name>BRAVURATEXT</name>
+    </fontName>
+    <fontName cmper="5">
+      <name>Times New Roman</name>
+    </fontName>
+    <fontName cmper="6">
+      <name>Maestro</name>
+    </fontName>
+  </others>
+</finale>
+    )xml";
+
+TEST(FontTest, MatchesKnownSmuflFontNamesIgnoringSpacesAndCase)
+{
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(knownSmuflFontNameSpellings);
+
+    const auto isSmufl = [&doc](Cmper fontId) {
+        auto fontInfo = std::make_shared<FontInfo>(doc);
+        fontInfo->fontId = fontId;
+        return fontInfo->calcIsSMuFL();
+    };
+
+    EXPECT_TRUE(isSmufl(1));    // family name as spelled
+    EXPECT_TRUE(isSmufl(2));    // PostScript-style spelling with spaces removed
+    EXPECT_TRUE(isSmufl(3));    // lowercase
+    EXPECT_TRUE(isSmufl(4));    // uppercase and space-free
+    EXPECT_FALSE(isSmufl(5));   // not a music font
+    EXPECT_FALSE(isSmufl(6));   // legacy (non-SMuFL) Finale music font
+}
+
 TEST(FontTest, FontInfoPropertiesTest)
 {
     auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(fontProperties);
