@@ -30,6 +30,28 @@ Known or suspected exceptions include:
 * The format changed in small ways depending on which Finale version saved it.
 * There may be variable-length structures, indexes, directories, strings, or other data outside the apparent fixed-record organization.
 
+### Established Findings to Preserve
+
+The original 16-word hypothesis above has now been disproved for the recognized Finale 3.x–2006 files. Do not
+restart from it as though the question were still open:
+
+* Finale 3.x–2000 uses four uncompressed typed/total-length pools beginning at `0x200`: other/options, details,
+  entries, and raw text.
+* Finale 2001–2006 uses CRC-protected PKWARE DCL blocks containing the same physical record families.
+* Finale 3.x–2006 other and detail physical rows are 16 **bytes**; entries are 38 bytes. The remembered 12/10
+  payload capacities were bytes, so there are no two missing words in these rows.
+* The exact Finale 2000 `tremolos.mus`/ETF pair confirms one-for-one pool counts, literal ordinary tag order,
+  selected detail/entry fields, and raw text correspondence.
+* A two-endian corpus probe recognizes 189/190 direct Finale 3.x–2000 files. The four recognized Windows-origin
+  files are little-endian; 185 others are big-endian. Detect byte order from valid framing rather than release name.
+* Finale 2007–2012 uses typed zlib blocks and a different variable record frame.
+* ETF-backed Finale 1.8.7–2.6 files share 16-byte ordinary/detail cadence, byte-exact implicit-ID 32-byte entries,
+  literal/compact tag sequences, and raw text with Finale 3.0. Their index spans and generic pool boundaries remain
+  unresolved. Finale 27 opens all three tested files after `.mus` is added; Finale 1.0 is still untested.
+
+Treat these as reproducible baseline results documented in `FORMAT_NOTES.md` and `EXPERIMENT_LOG.md`. Further work
+should verify and extend them, not silently replace them with the original exploratory assumptions.
+
 ## Available Evidence
 
 You have access to a directory containing `.mus` files created by multiple Finale versions. This directory is at the top of this prompt.
@@ -38,11 +60,11 @@ The survey corpus should be expanded beyond files whose names end in `.mus`. Rec
 
 On the current macOS survey system, The Unarchiver command-line tools `lsar` and `unar` are available. Use `lsar` for a non-destructive listing and `unar -o <temporary-directory> <archive>` for extraction; never extract over the source corpus. Preserve resource forks and extended attributes when the extractor provides them. Treat StuffIt extraction as part of the required survey, not as an optional sample.
 
-Some legacy Finale files have no filename extension and depend on the classic Mac OS 9 type/creator codes or resource fork for identification. Treat extensionless files as possible Finale documents when their metadata, contents, or surrounding archive context supports that conclusion. Preserve and report resource-fork/type-creator evidence where available; do not rename the original evidence in place. The expanded survey should seek examples as far back as Finale 1.0. Finale 27 may not read files earlier than Finale 2.0, so pre-2.0 candidates may have no `.fin27.musx` counterpart and must be tracked as unconverted evidence rather than treated as missing files.
+Some legacy Finale files have no filename extension and depend on the classic Mac OS 9 type/creator codes or resource fork for identification. Treat extensionless files as possible Finale documents when their metadata, contents, or surrounding archive context supports that conclusion. Preserve and report resource-fork/type-creator evidence where available; do not rename the original evidence in place. The expanded survey should seek examples as far back as Finale 1.0. Finale 27 successfully opened tested 1.8.7, 2.0.1, and 2.6 data forks after `.mus` was appended to copies of their filenames; it did not recognize the extensionless names directly. Treat file discovery/type metadata separately from parser compatibility. Finale 1.0 remains untested.
 
 The completed archive pass currently covers 230 ZIP and 275 StuffIt archives, yielding 4,898 candidate members. It identified explicit pre-banner products through Finale 1.8.7, but no explicit Finale 1.0 file yet. Treat these counts and classifications as a reproducible baseline, not as a reason to stop searching for earlier material.
 
-Nearly all current evidence is Macintosh-derived. Treat this platform bias as a major feasibility risk: do not assume that Mac header tuples, byte order, resource-fork handling, string encoding, padding, or record serialization are platform-independent. Plan a separate Windows corpus and, where possible, matched Mac/Windows saves of the same document across early, 2001–2006, 2007/2008, and 2012 eras before making cross-platform claims.
+Nearly all current evidence is Macintosh-derived. Four Windows-origin files prove that Finale 3.x–2000 uses little-endian versions of the same four pools and fixed rows, while the recognized Mac samples are big-endian. Treat the remaining platform bias as a major feasibility risk: do not assume that header tuples, resource-fork handling, string encoding, padding, options, or later serialization are platform-independent. Plan a broader Windows corpus and, where possible, matched Mac/Windows saves across 2001–2006, 2007/2008, and 2012 before making general cross-platform claims.
 
 All available `.mus` files should have also been converted using Finale 27. The converted files are stored in an `-exports` directory and use names ending in:
 
@@ -52,7 +74,7 @@ All available `.mus` files should have also been converted using Finale 27. The 
 
 These `.fin27.musx` files should be the initial semantic reference for the investigation.
 
-Files discovered only inside archives, extensionless legacy files, and files from formats earlier than Finale 2.0 will generally not have Finale 27 counterparts. Inventory them separately, link them to their containing archive and member path, and do not infer that the absence of an export means the file is uninteresting. If a candidate appears especially valuable, add a targeted conversion or opening attempt to `EVIDENCE_REQUESTS.md` rather than assuming that an export already exists.
+Files discovered only inside archives and extensionless legacy files will generally lack pre-existing Finale 27 counterparts, even when Finale 27 can parse them after renaming a copy with `.mus`. Inventory them separately, link them to their containing archive and member path, and do not infer that absence of an export means either incompatibility or lack of value. If a candidate appears especially valuable, add a targeted conversion or opening attempt to `EVIDENCE_REQUESTS.md` rather than assuming that an export already exists.
 
 They can help identify the musical contents and Finale data represented by each legacy `.mus` file, even though the Finale 27 conversion may normalize, reorganize, upgrade, discard, or synthesize some information rather than preserving the original binary representation exactly.
 
@@ -130,26 +152,21 @@ Do not assume that the filename, filesystem timestamp, or surrounding directory 
 
 If no explicit version field is found, attempt to develop a version-classification method based on headers, structural signatures, record sets, or comparison with known-version samples.
 
-## Potential Additional Evidence: Proprietary MakeMusic Code
+## Public Historical PDK Evidence and Provenance Boundary
 
-There may also be access to plugin-development directories containing proprietary MakeMusic code or headers that could illuminate aspects of the `.mus` format.
+The investigation may consult historically public copies of Finale PDK material for factual information needed for interoperability. In particular, GRAME's public GUIDOLib repository contains a copy identified by its own README as the Finale 2000 PDK. Use the immutable public commit recorded in `FORMAT_NOTES.md`, not an unpinned branch.
 
-**Do not inspect or use this material by default.**
+This is a public-source provenance boundary rather than strict clean-room isolation:
 
-There are legal and provenance considerations around using proprietary source material in a reverse-engineering effort. Even though MakeMusic has discontinued Finale and the practical significance of this concern may now be lower, maintaining a clean legal or intellectual-property firewall may still be desirable.
+1. Do not copy PDK headers, source files, declarations, comments, or implementation code into this repository.
+2. Cite the immutable public URL, commit, file, and access date for every PDK-informed investigation.
+3. Label resulting claims `public-PDK-derived` until the MUS/ETF/MUSX corpus independently confirms them.
+4. Extract only factual interface information needed for interoperability, such as tags, primitive widths, structure sizes, field order, flags, key semantics, and version conditions.
+5. Restate those facts in the project's own terminology and verify them against legally possessed documents wherever practical.
+6. Promote a claim to `independently binary-verified` only when reproducible corpus evidence supports it.
+7. Never assume that public exposure grants an open-source license to the included third-party material.
 
-Instead:
-
-1. Conduct the investigation using the `.mus`, `.fin27.musx`, requested Enigma Portable, and other non-proprietary evidence first.
-2. If proprietary MakeMusic material appears likely to answer an important unresolved question, document:
-
-   * What question it might answer.
-   * Why the available clean-room evidence is insufficient.
-   * What type of information would be useful.
-3. Flag this as an optional research path rather than accessing the material automatically.
-4. Explicitly discuss the possible legal and provenance implications before recommending its use.
-
-The existence of this material should be considered an available option, but one with caveats.
+There may separately be access to private plugin-development directories containing proprietary MakeMusic material. **Do not inspect private proprietary material by default.** If it appears necessary after the public source and corpus evidence are exhausted, document the exact unresolved question, why public evidence is insufficient, what narrowly scoped information would help, and the provenance implications before requesting authorization.
 
 ## Versioning Challenges
 
@@ -604,7 +621,7 @@ Begin with the existing `.mus` corpus and the `.fin27.musx` files in the `-expor
 1. Inventory and hash all `.mus` files, extensionless candidates, and archive files.
 2. Inspect archives (especially `-Archive` directories) without modifying originals; extract candidates to a separate working area and record archive/member provenance.
 3. Capture classic Mac OS type/creator metadata and resource-fork evidence for extensionless candidates.
-4. Match directly available `.mus` files with their `.fin27.musx` counterparts; record archive-only and pre-2.0 candidates as unconverted rather than dropping them.
+4. Match directly available `.mus` files with their `.fin27.musx` counterparts; record archive-only or extensionless candidates separately and request targeted conversions rather than dropping them.
 5. Inspect and compare candidate file headers.
 6. Search for explicit or implicit version indicators, including Finale 1.0-era evidence.
 7. Cluster the files into likely versions or format eras.

@@ -4,6 +4,36 @@ This catalogs numeric identifiers observed after decompressing record-framed zli
 
 Frame fields are described in [FORMAT_NOTES.md](FORMAT_NOTES.md). `Example offset` is relative to the decompressed zlib member, not the file.
 
+## Finale 2000 PDK tag reference
+
+This reference table records two-character tags identified from the publicly accessible Finale 2000 PDK at GUIDOLib commit `9f74ba9b3e287f240bbd454c2259fc3f7737c6ad`. The meanings are `public-PDK-derived`; every listed tag is also observed in the available ETF evidence. Rows marked binary-verified occur at the expected position in Finale 2000 or decoded 2002–2005 fixed rows. See FORMAT_NOTES.md for provenance and the independent framing checks.
+
+| Tag | Logical meaning | Storage family | Verification |
+|---|---|---|---|
+| `CN` | notehead modification | entry detail | binary-verified in Finale 2000 |
+| `DI` | separate score-expression placement | other | ETF-observed |
+| `DO` | shape-expression definition | other | ETF-observed |
+| `DT` | text-expression definition | other | ETF-observed |
+| `DY` | score-expression assignment | other | ETF-observed |
+| `ED` | staff-expression assignment | entry detail | ETF-observed |
+| `GF` | frame holder | detail | binary-verified |
+| `IM` | articulation assignment | entry detail | ETF-observed |
+| `IS` | staff attributes | other | binary-verified |
+| `Iu` | staff-list membership / staff used | other | binary-verified |
+| `MN` | measure-number region | other | ETF-observed |
+| `MS` | measure attributes | other | binary-verified |
+| `NG` | staff-group attributes | detail | ETF-observed |
+| `PD` | expression MIDI-dump playback data | other | ETF-observed |
+| `PS` | page attributes | other | binary-verified |
+| `SD` | shape definition | other | binary-verified |
+| `SS` | staff-system attributes | other | binary-verified |
+| `TP` | tuplet definition | entry detail | binary-verified in Finale 2000 |
+| `TX` | text-block definition | other | ETF-observed |
+| `pT` | page-text assignment | other | ETF-observed |
+| `eE` | entry | entry pool | 38-byte row binary-verified |
+
+## Finale 2007+ numeric identifiers
+
 | Identifier | Proposed structure | Pool | Confidence | Versions | Payload bytes observed | Example (member:offset) |
 |---|---|---|---|---|---|---|
 | `0x000f` | unknown | unknown/options | open | 2007, 2008, 2009, 2010, 2012 | 12 | `mus-5d8b3820abbb676b` (0:0x0) |

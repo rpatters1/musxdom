@@ -4,13 +4,38 @@ This table includes every `.mus` data-fork candidate examined. Saving product co
 
 Version confidence is high when the banner is explicit and low for pre-banner path-based classification. ETF likelihood is an eligibility estimate, not a verified open/export result. `Created app` is the creator tuple preserved by Finale 27 and helps identify upgraded documents. `Parts` is based on converted `partDef` records; conversion may expand sharing.
 
+Rows labeled `high-entropy legacy` represent the Finale 2001–2006 era. Subsequent corpus-wide testing identified that
+encoding as PKWARE DCL: all 1,603 candidate compressed members encountered decoded with Mark Adler's `blast` and
+matched their stored CRC-32, while 410 files traverse cleanly as complete typed-block sequences. Some additional
+files yield valid leading members before their outer framing ceases to match the current probe. The older row label is retained as an inventory-era classification;
+see `FORMAT_NOTES.md` for the solved block layout and per-version validation counts. A later public-PDK-informed,
+independently checked pass over the 375 directly resolved framed source files found 4,601,857 fixed 16-byte other rows,
+1,574,280 fixed 16-byte detail rows, and 837,086 fixed 38-byte entry rows without a single size remainder. The fixed
+other/detail structure is therefore established through Finale 2006, not inferred only from the controlled files.
+
+The newly supplied exact Finale 2000 pair `mus-3a8b724cf3adba80` (`tremolos.mus` and
+`tremolos-from-Fin2000.etf`) resolves the formerly “low-entropy legacy” body. A corpus-wide two-endian probe recognizes
+189/190 direct Finale 3.x–2000 files as uncompressed type `1,2,3,4` pools. Across them, 1,552,762 other rows and
+770,960 detail rows are exact 16-byte records, while 394,984 entries are exact 38-byte records. The four
+little-endian files are Windows-origin; 185 are big-endian. The ETF pair gives exact pool counts and tag ordering and
+shows that its 573-byte raw text pool is byte-identical after removing ETF record separators.
+
+Re-extraction and correlation of the ETF-backed 1.8.7, 2.0.1, and 2.6 members reveals a related earlier family:
+16-byte ordinary/detail cadence beginning at `0x20a`, compact tags, implicit-ID 32-byte entries, and raw Enigma text.
+All 891, 497, and 6,814 detail-tag sequences match their ETFs, and all 1,094, 549, and 9,446 entry rows reconstruct
+byte-for-byte. Unlike Finale 3.0, these files lack the four simple typed/length pool headers and contain unresolved
+index/directory spans. Targeted Finale 27 conversions now exist privately for all three: Finale 27 accepted the data
+forks after `.mus` was appended to their extensionless names. The 2.6 file had non-blocking font issues. This
+disproves the suspected 2.6.x parser cutoff for the tested files while confirming that suffix/type discovery is a
+separate compatibility concern.
+
 ## Archive-derived candidates
 
 The expanded archive pass is cataloged separately in [`data/archive_members.csv`](data/archive_members.csv), keyed by `member_id`. It covers 230 ZIP and 275 StuffIt archives and adds 4,898 candidate members. The table below summarizes the deep binary probe (body entropy, zlib validation, and generic zero-trailed framing); archive paths are private and resolve through `mus_feasibility/private/archive_locations.csv`.
 
 | Saving product | Members | Unique hashes | Mean body entropy | Validated zlib members | Members with generic framed records | Notes |
 |---|---:|---:|---:|---:|---:|---|
-| Finale(TM) 1.8.7 | 18 | 10 | 4.096 | 0 | 0 | Earliest explicit product found; no MUSX export |
+| Finale(TM) 1.8.7 | 18 | 10 | 4.096 | 0 | 0 | Earliest explicit product found; targeted Finale 27 conversion succeeds after adding `.mus` |
 | Finale(TM) 2.0.1 | 32 | 26 | 4.152 | 0 | 0 | Pre-banner/low-entropy family |
 | Finale(TM) 2.6 | 110 | 100 | 4.319 | 0 | 0 | Pre-banner/low-entropy family |
 | Finale(R) 3.0 | 15 | 15 | 3.918 | 0 | 0 | Low-entropy legacy |
@@ -25,7 +50,7 @@ The expanded archive pass is cataloged separately in [`data/archive_members.csv`
 
 Archive members have no assumed Finale 27 counterpart. The deep probe confirms that the early explicit 1.8.7–2.6 files are structurally distinct from the 2007+ typed-zlib/framed-record era; it does not establish a fixed 16-word structure for them.
 
-Fourteen ETF evidence files are now available locally: the original six archival exports remain in ignored `private/evidence/`,
+Fifteen ETF evidence files are now available locally: seven archival/targeted exports remain in ignored `private/evidence/`,
 and the controlled F2002–F2005 pairs are tracked in `evidence/`. They include the Finale 2005 nested-tuplet sample,
 the Finale 2000 template exported by Finale 2000 and Finale 2005, and archive-derived 1.8.7, 2.0.1, and 2.6 samples.
 They are semantic companions rather than new corpus binaries; their hashes, sizes, and observed section counts are
