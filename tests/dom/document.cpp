@@ -428,3 +428,59 @@ TEST(DocumentConstructionTest, SupportsNoneAndPartialSharing)
     EXPECT_TRUE(partLayer->getUnlinkedNodes().count("restOffset"));
     EXPECT_EQ(unshared->getShareMode(), EnigmaBase::ShareMode::None);
 }
+
+TEST(DocumentConstructionTest, NodeFilterRestrictsPoolToAllowlistedNodes)
+{
+    constexpr static musxtest::string_view xml = R"xml(
+<others>
+  <layerAtts cmper="0"><restOffset>7</restOffset></layerAtts>
+  <fontName cmper="1"><name>Finale Maestro</name></fontName>
+  <layerAtts cmper="1"/>
+  <measSpec cmper="1"><width>500</width></measSpec>
+  <layerAtts cmper="2"/>
+  <layerAtts cmper="3"/>
+</others>
+    )xml";
+    auto xmlDocument = std::make_unique<musx::xml::pugi::Document>();
+    xmlDocument->loadFromBuffer(xml.data(), xml.size());
+
+    auto session = musx::factory::DocumentFactory::begin();
+    auto document = session.getDocument();
+    document->getOthers() = musx::factory::OthersFactory::create(
+        xmlDocument->getRootElement(), document,
+        [](const musx::xml::XmlElementPtr& node) {
+            return node->getTagName() == musx::dom::others::LayerAttributes::XmlNodeName;
+        });
+
+    auto finished = std::move(session).finish();
+    EXPECT_EQ(finished->getOthers()->getArray<musx::dom::others::LayerAttributes>(SCORE_PARTID).size(), 4u);
+    EXPECT_TRUE(finished->getOthers()->getArray<musx::dom::others::FontDefinition>(SCORE_PARTID).empty());
+    EXPECT_TRUE(finished->getOthers()->getArray<musx::dom::others::Measure>(SCORE_PARTID).empty());
+    auto layer = finished->getOthers()->get<musx::dom::others::LayerAttributes>(SCORE_PARTID, 0);
+    ASSERT_TRUE(layer);
+    EXPECT_EQ(layer->restOffset, 7);
+}
+
+TEST(DocumentConstructionTest, AbsentNodeFilterCreatesEveryChild)
+{
+    constexpr static musxtest::string_view xml = R"xml(
+<others>
+  <layerAtts cmper="0"/>
+  <layerAtts cmper="1"/>
+  <layerAtts cmper="2"/>
+  <layerAtts cmper="3"/>
+  <fontName cmper="1"><name>Finale Maestro</name></fontName>
+</others>
+    )xml";
+    auto xmlDocument = std::make_unique<musx::xml::pugi::Document>();
+    xmlDocument->loadFromBuffer(xml.data(), xml.size());
+
+    auto session = musx::factory::DocumentFactory::begin();
+    auto document = session.getDocument();
+    document->getOthers() = musx::factory::OthersFactory::create(
+        xmlDocument->getRootElement(), document);
+
+    auto finished = std::move(session).finish();
+    EXPECT_EQ(finished->getOthers()->getArray<musx::dom::others::LayerAttributes>(SCORE_PARTID).size(), 4u);
+    EXPECT_EQ(finished->getOthers()->getArray<musx::dom::others::FontDefinition>(SCORE_PARTID).size(), 1u);
+}

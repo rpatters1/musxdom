@@ -345,6 +345,7 @@ using RegisteredTexts = RegisteredTypes<
 template <typename ObjectBase, typename PoolType, typename Extractor>
 std::shared_ptr<PoolType> createPool(const xml::XmlElementPtr& element,
                                      const dom::DocumentPtr& document,
+                                     const NodeFilter& filter,
                                      Extractor&& extractor)
 {
     auto pool = std::make_shared<PoolType>(document);
@@ -356,6 +357,9 @@ std::shared_ptr<PoolType> createPool(const xml::XmlElementPtr& element,
     util::Logger::log(util::Logger::LogLevel::Verbose, "============");
 #endif
     for (auto child = element->getFirstChildElement(); child; child = child->getNextSibling()) {
+        if (filter && !filter(child)) {
+            continue;
+        }
         if (auto info = extractor(child, pool)) {
 #ifdef MUSX_DISPLAY_NODE_NAMES
             if (currentTag != child->getTagName()) {
@@ -412,18 +416,20 @@ dom::Cmper textTypeToCmper(const std::string& type)
 } // namespace
 
 dom::OptionsPoolPtr OptionsFactory::create(
-    const xml::XmlElementPtr& element, const dom::DocumentPtr& document)
+    const xml::XmlElementPtr& element, const dom::DocumentPtr& document,
+    const NodeFilter& filter)
 {
-    return createPool<dom::OptionsBase, dom::OptionsPool>(element, document,
+    return createPool<dom::OptionsBase, dom::OptionsPool>(element, document, filter,
         [&](const auto& child, const auto& pool) {
             return RegisteredOptions::createInstance(pool, child, document);
         });
 }
 
 dom::OthersPoolPtr OthersFactory::create(
-    const xml::XmlElementPtr& element, const dom::DocumentPtr& document)
+    const xml::XmlElementPtr& element, const dom::DocumentPtr& document,
+    const NodeFilter& filter)
 {
-    return createPool<dom::OthersBase, dom::OthersPool>(element, document,
+    return createPool<dom::OthersBase, dom::OthersPool>(element, document, filter,
         [&](const auto& child, const auto& pool) {
             auto cmper = child->findAttribute("cmper");
             if (!cmper) {
@@ -440,9 +446,10 @@ dom::OthersPoolPtr OthersFactory::create(
 }
 
 dom::DetailsPoolPtr DetailsFactory::create(
-    const xml::XmlElementPtr& element, const dom::DocumentPtr& document)
+    const xml::XmlElementPtr& element, const dom::DocumentPtr& document,
+    const NodeFilter& filter)
 {
-    return createPool<dom::DetailsBase, dom::DetailsPool>(element, document,
+    return createPool<dom::DetailsBase, dom::DetailsPool>(element, document, filter,
         [&](const auto& child, const auto& pool) {
             std::optional<dom::Inci> inci;
             if (auto attr = child->findAttribute("inci")) {
@@ -474,9 +481,10 @@ dom::DetailsPoolPtr DetailsFactory::create(
 }
 
 dom::EntryPoolPtr EntryFactory::create(
-    const xml::XmlElementPtr& element, const dom::DocumentPtr& document)
+    const xml::XmlElementPtr& element, const dom::DocumentPtr& document,
+    const NodeFilter& filter)
 {
-    return createPool<dom::Entry, dom::EntryPool>(element, document,
+    return createPool<dom::Entry, dom::EntryPool>(element, document, filter,
         [&](const auto& child, const auto& pool) {
             auto entnum = child->findAttribute("entnum");
             auto prev = child->findAttribute("prev");
@@ -492,9 +500,10 @@ dom::EntryPoolPtr EntryFactory::create(
 }
 
 dom::TextsPoolPtr TextsFactory::create(
-    const xml::XmlElementPtr& element, const dom::DocumentPtr& document)
+    const xml::XmlElementPtr& element, const dom::DocumentPtr& document,
+    const NodeFilter& filter)
 {
-    return createPool<dom::TextsBase, dom::TextsPool>(element, document,
+    return createPool<dom::TextsBase, dom::TextsPool>(element, document, filter,
         [&](const auto& child, const auto& pool) {
             const std::string attributeName = child->getTagName() == dom::texts::FileInfoText::XmlNodeName
                 ? "type" : "number";

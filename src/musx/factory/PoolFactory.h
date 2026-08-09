@@ -21,6 +21,7 @@
  */
 #pragma once
 
+#include <functional>
 #include <memory>
 #include <stdexcept>
 #include <string>
@@ -33,6 +34,19 @@
 
 namespace musx {
 namespace factory {
+
+/**
+ * @brief Selects which child elements a pool factory creates objects from.
+ * @details Returning `false` skips the element entirely, as if it were absent from the
+ * source. This lets a client seed a pool from an allowlisted subset of an element without
+ * editing or rebuilding the source XML. An empty (default-constructed) filter accepts every
+ * child, which is the behavior when no filter is supplied.
+ *
+ * Which nodes belong in a document is caller policy. A subset that omits nodes other nodes
+ * depend on produces a document that fails integrity validation when the construction
+ * session is finished, so the caller is responsible for selecting a self-consistent subset.
+ */
+using NodeFilter = std::function<bool(const xml::XmlElementPtr&)>;
 
 /** @brief Initializes a partially shared part object from its score object. */
 class PartSharingFactory
@@ -67,40 +81,60 @@ public:
 class OptionsFactory
 {
 public:
+    /// @param element The element whose children are created.
+    /// @param document The document that owns the created objects.
+    /// @param filter [optional] Restricts creation to the children it accepts. See @ref NodeFilter.
     [[nodiscard]] static dom::OptionsPoolPtr create(
-        const xml::XmlElementPtr& element, const dom::DocumentPtr& document);
+        const xml::XmlElementPtr& element, const dom::DocumentPtr& document,
+        const NodeFilter& filter = {});
 };
 
 /** @brief Creates an others pool from an XML `<others>` element. */
 class OthersFactory
 {
 public:
+    /// @param element The element whose children are created.
+    /// @param document The document that owns the created objects.
+    /// @param filter [optional] Restricts creation to the children it accepts. See @ref NodeFilter.
     [[nodiscard]] static dom::OthersPoolPtr create(
-        const xml::XmlElementPtr& element, const dom::DocumentPtr& document);
+        const xml::XmlElementPtr& element, const dom::DocumentPtr& document,
+        const NodeFilter& filter = {});
 };
 
 /** @brief Creates a details pool from an XML `<details>` element. */
 class DetailsFactory
 {
 public:
+    /// @param element The element whose children are created.
+    /// @param document The document that owns the created objects.
+    /// @param filter [optional] Restricts creation to the children it accepts. See @ref NodeFilter.
     [[nodiscard]] static dom::DetailsPoolPtr create(
-        const xml::XmlElementPtr& element, const dom::DocumentPtr& document);
+        const xml::XmlElementPtr& element, const dom::DocumentPtr& document,
+        const NodeFilter& filter = {});
 };
 
 /** @brief Creates an entry pool from an XML `<entries>` element. */
 class EntryFactory
 {
 public:
+    /// @param element The element whose children are created.
+    /// @param document The document that owns the created objects.
+    /// @param filter [optional] Restricts creation to the children it accepts. See @ref NodeFilter.
     [[nodiscard]] static dom::EntryPoolPtr create(
-        const xml::XmlElementPtr& element, const dom::DocumentPtr& document);
+        const xml::XmlElementPtr& element, const dom::DocumentPtr& document,
+        const NodeFilter& filter = {});
 };
 
 /** @brief Creates a texts pool from an XML `<texts>` element. */
 class TextsFactory
 {
 public:
+    /// @param element The element whose children are created.
+    /// @param document The document that owns the created objects.
+    /// @param filter [optional] Restricts creation to the children it accepts. See @ref NodeFilter.
     [[nodiscard]] static dom::TextsPoolPtr create(
-        const xml::XmlElementPtr& element, const dom::DocumentPtr& document);
+        const xml::XmlElementPtr& element, const dom::DocumentPtr& document,
+        const NodeFilter& filter = {});
 };
 
 } // namespace factory
