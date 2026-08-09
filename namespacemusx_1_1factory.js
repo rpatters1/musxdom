@@ -9,5 +9,6 @@ var namespacemusx_1_1factory =
     [ "OthersFactory", "classmusx_1_1factory_1_1OthersFactory.html", null ],
     [ "PartSharingFactory", "classmusx_1_1factory_1_1PartSharingFactory.html", null ],
     [ "TextsFactory", "classmusx_1_1factory_1_1TextsFactory.html", null ],
-    [ "unknown_xml_error", "classmusx_1_1factory_1_1unknown__xml__error.html", null ]
+    [ "unknown_xml_error", "classmusx_1_1factory_1_1unknown__xml__error.html", null ],
+    [ "NodeFilter", "namespacemusx_1_1factory.html#a52166ef8cca53046ac32e8c35a1dca65", null ]
 ];

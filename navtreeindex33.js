@@ -232,6 +232,7 @@ var NAVTREEINDEX33 =
 "namespacemusx_1_1dom_1_1uuid.html#afff525d1064dca9d0faeabb7f272f699":[1,0,1,0,5,580],
 "namespacemusx_1_1dom_1_1uuid.html#afff56e7259e019905588649b28964199":[1,0,1,0,5,714],
 "namespacemusx_1_1factory.html":[1,0,1,1],
+"namespacemusx_1_1factory.html#a52166ef8cca53046ac32e8c35a1dca65":[1,0,1,1,10],
 "namespacemusx_1_1xml.html":[1,0,1,2],
 "namespacemusx_1_1xml.html#a0e5401fa2c29d3ec62427c2b1dd9fab4":[1,0,1,2,8],
 "namespacemusx_1_1xml.html#a39bb6e9f7fd9e4cdc090566309a8dfe8":[1,0,1,2,7],
@@ -244,10 +245,9 @@ var NAVTREEINDEX33 =
 "namespacesmufl__glyph.html":[1,0,2],
 "namespacesymbol__glyph.html":[1,0,3],
 "pages.html":[],
-"structmusic__theory_1_1Pitch.html":[1,0,0,0],
 "structmusic__theory_1_1Pitch.html":[2,0,0,0],
-"structmusic__theory_1_1Pitch.html#a417284fb2ecf0dea7193240c78b3e1d4":[1,0,0,0,3],
+"structmusic__theory_1_1Pitch.html":[1,0,0,0],
 "structmusic__theory_1_1Pitch.html#a417284fb2ecf0dea7193240c78b3e1d4":[2,0,0,0,3],
-"structmusic__theory_1_1Pitch.html#a4f6043243691e1a652b488ebc855a742":[2,0,0,0,0],
+"structmusic__theory_1_1Pitch.html#a417284fb2ecf0dea7193240c78b3e1d4":[1,0,0,0,3],
 "structmusic__theory_1_1Pitch.html#a4f6043243691e1a652b488ebc855a742":[1,0,0,0,0]
 };

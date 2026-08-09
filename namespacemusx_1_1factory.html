@@ -93,7 +93,8 @@ $(document).ready(function(){initNavTree('namespacemusx_1_1factory.html',''); in
 
 <div class="header">
   <div class="summary">
-<a href="#nested-classes">Classes</a>  </div>
+<a href="#nested-classes">Classes</a> &#124;
+<a href="#typedef-members">Typedefs</a>  </div>
   <div class="headertitle"><div class="title">musx::factory Namespace Reference</div></div>
 </div><!--header-->
 <div class="contents">
@@ -133,10 +134,35 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1factory_1_1unknown__xml__error.html">unknown_xml_error</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Exception for unknown XML nodes when strict XML handling is enabled.  <a href="classmusx_1_1factory_1_1unknown__xml__error.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="typedef-members" name="typedef-members"></a>
+Typedefs</h2></td></tr>
+<tr class="memitem:a52166ef8cca53046ac32e8c35a1dca65" id="r_a52166ef8cca53046ac32e8c35a1dca65"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemusx_1_1factory.html#a52166ef8cca53046ac32e8c35a1dca65">NodeFilter</a> = std::function&lt; bool(const <a class="el" href="namespacemusx_1_1xml.html#a54b9e383b0a54d0c3ba00bb6c9ceff9e">xml::XmlElementPtr</a> &amp;)&gt;</td></tr>
+<tr class="memdesc:a52166ef8cca53046ac32e8c35a1dca65"><td class="mdescLeft">&#160;</td><td class="mdescRight">Selects which child elements a pool factory creates objects from.  <br /></td></tr>
+<tr class="separator:a52166ef8cca53046ac32e8c35a1dca65"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Class factories are in this namespace. </p>
-</div></div><!-- contents -->
+</div><h2 class="groupheader">Typedef Documentation</h2>
+<a id="a52166ef8cca53046ac32e8c35a1dca65" name="a52166ef8cca53046ac32e8c35a1dca65"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a52166ef8cca53046ac32e8c35a1dca65">&#9670;&#160;</a></span>NodeFilter</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="namespacemusx_1_1factory.html#a52166ef8cca53046ac32e8c35a1dca65">musx::factory::NodeFilter</a> = typedef std::function&lt;bool(const <a class="el" href="namespacemusx_1_1xml.html#a54b9e383b0a54d0c3ba00bb6c9ceff9e">xml::XmlElementPtr</a>&amp;)&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Selects which child elements a pool factory creates objects from. </p>
+<p>Returning <code>false</code> skips the element entirely, as if it were absent from the source. This lets a client seed a pool from an allowlisted subset of an element without editing or rebuilding the source XML. An empty (default-constructed) filter accepts every child, which is the behavior when no filter is supplied.</p>
+<p>Which nodes belong in a document is caller policy. A subset that omits nodes other nodes depend on produces a document that fails integrity validation when the construction session is finished, so the caller is responsible for selecting a self-consistent subset. </p>
+
+</div>
+</div>
+</div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
