@@ -25,16 +25,15 @@
 #include <string>
 #include <string_view>
 #include <optional>
-#include <functional>
 #include <unordered_set>
 #include <unordered_map>
-#include <map>
 #include <tuple>
 #include <sstream>
 #include <type_traits>
 #include <charconv>
 
 #include "musx/util/Logger.h"
+#include "musx/factory/FactoryExceptions.h"
 #include "musx/xml/XmlInterface.h"
 #include "musx/dom/BaseClasses.h"
 #include "musx/dom/Document.h"
@@ -49,82 +48,6 @@ namespace factory {
 
 using namespace musx::xml;
 using namespace musx::dom;
-
-
-/**
- * @brief Exception for unknown xml node errors. (Used when `MUSX_THROW_ON_UNKNOWN_XML` is defined.)
- */
-class unknown_xml_error : public std::runtime_error
-{
-public:
-    using std::runtime_error::runtime_error;
-};
-
-
-/**
- * @class ElementLinker
- * @brief A utility class for managing deferred relationships between elements during document construction.
- *
- * This class allows capturing relationships that cannot be resolved immediately during factory creation.
- * The relationships are stored as resolver functions, which are executed later when all elements have been created.
- * It also provides a mechanism to ensure that specific resolvers are added only once by using unique keys.
- */
-class ElementLinker {
-public:
-    /**
-     * @typedef Resolver
-     * @brief A callable type representing a deferred relationship resolver.
-     *
-     * Each resolver encapsulates the logic to resolve relationships between elements
-     * once the document is fully constructed.
-     */
-    using Resolver = std::function<void(const dom::DocumentPtr&)>;
-
-    /**
-     * @brief Adds a resolver function to the linker.
-     *
-     * This function captures the logic for resolving relationships that cannot be resolved immediately.
-     * Optionally, a unique key can be provided to ensure that the resolver is only added once.
-     *
-     * @param resolver A callable object that resolves a relationship when invoked.
-     * @param key An unique key for the resolver. Each resolver is added only once per key.
-     */
-    void addResolver(Resolver resolver, const std::string_view& key)
-    {
-        assert(!key.empty());
-        if (resolvers.count(std::string(key)) > 0) {
-            return; // Skip if already registered
-        }
-
-        resolvers[std::string(key)] = std::move(resolver);
-    }
-
-    /**
-     * @brief Resolves all deferred relationships.
-     *
-     * Executes all stored resolver functions, establishing relationships between elements.
-     * Clears the internal storage of resolvers and registered keys after execution.
-     *
-     * @param document The document in which relationships are resolved.
-     */
-    void resolveAll(const dom::DocumentPtr& document)
-    {
-        for (const auto& [key, resolver] : resolvers) {
-            resolver(document);
-        }
-
-        resolvers.clear(); ///< Clear resolvers after execution
-    }
-
-private:
-    /**
-     * @brief A collection of resolver functions, ordered by key.
-     *
-     * The map stores resolver functions associated with their unique keys, ensuring
-     * that they execute in lexicographical order of keys.
-     */
-    std::map<std::string, Resolver> resolvers;
-};
 
 
 /**
@@ -257,19 +180,6 @@ const ::musx::xml::XmlElementArray<Type>& Type::xmlMappingArray() { \
 } \
 static_assert(true, "") // require semicolon after macro
 
-using ResolverEntry = std::optional<ElementLinker::Resolver>;
-template <typename T>
-struct ResolverContainer
-{
-    inline static const ResolverEntry resolver = {};
-};
-
-#define MUSX_RESOLVER_ENTRY(Type, ...) \
-template <> \
-struct ResolverContainer<Type> { \
-    inline static const ResolverEntry resolver = ElementLinker::Resolver(__VA_ARGS__); \
-};
-
 template <typename T>
 struct FieldPopulator : public FactoryBase
 {
@@ -300,18 +210,6 @@ struct FieldPopulator : public FactoryBase
             for (auto child = element->getFirstChildElement(); child; child = child->getNextSibling()) {
                 populateField(instance, child);
             }
-        }
-        if constexpr (std::is_base_of_v<EnigmaBase, T>) {
-            instance->integrityCheck(instance);
-        }
-    }
-
-    template <typename SubClass = T>
-    static void populate(const std::shared_ptr<T>& instance, const XmlElementPtr& element, ElementLinker& elementLinker)
-    {
-        populate(instance, element);
-        if (ResolverContainer<SubClass>::resolver.has_value()) {
-            elementLinker.addResolver(ResolverContainer<SubClass>::resolver.value(), element->getTagName());
         }
     }
 

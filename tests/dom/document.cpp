@@ -24,6 +24,7 @@
 
 #include "gtest/gtest.h"
 #include "musx/musx.h"
+#include "musx/factory/PoolFactory.h"
 #include "test_utils.h"
 
 using namespace musx::dom;
@@ -306,4 +307,124 @@ TEST(DocumentTest, EmbeddedGraphicsRoundTrip)
     ASSERT_NE(itJpg, embedded.end());
     EXPECT_EQ(itJpg->second.extension, "jpg");
     EXPECT_EQ(itJpg->second.bytes, (EmbeddedGraphicBlob{0xFF, 0xD8, 0xFF}));
+}
+
+namespace {
+
+class CountingOptions final : public musx::dom::OptionsBase
+{
+public:
+    CountingOptions(const DocumentPtr& document, int& checkCount)
+        : OptionsBase(document, SCORE_PARTID, ShareMode::All), m_checkCount(checkCount) {}
+
+    void integrityCheck(const std::shared_ptr<EnigmaBase>&) override { ++m_checkCount; }
+
+private:
+    int& m_checkCount;
+};
+
+} // namespace
+
+TEST(DocumentConstructionTest, SessionInitializesAndValidatesPoolsAtFinish)
+{
+    auto session = musx::factory::DocumentFactory::begin();
+    auto document = session.getDocument();
+    ASSERT_TRUE(document->getHeader());
+    ASSERT_TRUE(document->getOptions());
+    ASSERT_TRUE(document->getOthers());
+    ASSERT_TRUE(document->getDetails());
+    ASSERT_TRUE(document->getEntries());
+    ASSERT_TRUE(document->getTexts());
+
+    int checkCount = 0;
+    document->getOptions()->add("countingOptions",
+        std::make_shared<CountingOptions>(document, checkCount));
+    EXPECT_EQ(checkCount, 0);
+
+    auto finished = std::move(session).finish();
+    EXPECT_EQ(checkCount, 1);
+    EXPECT_TRUE(finished->getInstruments().empty());
+    EXPECT_THROW((void)std::move(session).finish(), std::logic_error);
+}
+
+TEST(DocumentConstructionTest, OptionsFactorySupportsOverlayBeforeFinish)
+{
+    constexpr static musxtest::string_view xml = R"xml(
+<options>
+  <musicSpacingOptions>
+    <minWidth>12</minWidth>
+    <maxWidth>48</maxWidth>
+  </musicSpacingOptions>
+</options>
+    )xml";
+    auto xmlDocument = std::make_unique<musx::xml::pugi::Document>();
+    xmlDocument->loadFromBuffer(xml.data(), xml.size());
+
+    auto session = musx::factory::DocumentFactory::begin();
+    auto document = session.getDocument();
+    document->getOptions() = musx::factory::OptionsFactory::create(
+        xmlDocument->getRootElement(), document);
+    auto spacing = document->getOptions()->get<musx::dom::options::MusicSpacingOptions>();
+    ASSERT_TRUE(spacing);
+    const_cast<musx::dom::options::MusicSpacingOptions*>(spacing.get())->minWidth = 24;
+
+    auto finished = std::move(session).finish();
+    ASSERT_TRUE(finished->getOptions()->get<musx::dom::options::MusicSpacingOptions>());
+    EXPECT_EQ(finished->getOptions()->get<musx::dom::options::MusicSpacingOptions>()->minWidth, 24);
+}
+
+TEST(DocumentConstructionTest, DefersContainedIntegrityChecksUntilFinish)
+{
+    constexpr static musxtest::string_view xml = R"xml(
+<others>
+  <measNumbRegion cmper="1">
+    <scoreData/>
+    <partData/>
+  </measNumbRegion>
+</others>
+    )xml";
+    auto xmlDocument = std::make_unique<musx::xml::pugi::Document>();
+    xmlDocument->loadFromBuffer(xml.data(), xml.size());
+
+    auto session = musx::factory::DocumentFactory::begin();
+    auto document = session.getDocument();
+    EXPECT_NO_THROW(document->getOthers() = musx::factory::OthersFactory::create(
+        xmlDocument->getRootElement(), document));
+    EXPECT_THROW((void)std::move(session).finish(), musx::dom::integrity_error);
+}
+
+TEST(DocumentConstructionTest, SupportsNoneAndPartialSharing)
+{
+    auto session = musx::factory::DocumentFactory::begin();
+    auto document = session.getDocument();
+
+    for (Cmper layerId = 0; layerId < 4; ++layerId) {
+        auto score = std::make_shared<musx::dom::others::LayerAttributes>(
+            document, SCORE_PARTID, EnigmaBase::ShareMode::All, layerId);
+        score->restOffset = static_cast<int>(layerId + 10);
+        document->getOthers()->add(musx::dom::others::LayerAttributes::XmlNodeName, score);
+        if (layerId == 0) {
+            auto part = std::make_shared<musx::dom::others::LayerAttributes>(
+                document, 1, EnigmaBase::ShareMode::Partial, layerId);
+            musx::factory::PartSharingFactory::initializePartial(
+                part, std::shared_ptr<const musx::dom::others::LayerAttributes>(score),
+                std::vector<std::string_view>{"restOffset"});
+            part->restOffset = 99;
+            document->getOthers()->add(musx::dom::others::LayerAttributes::XmlNodeName, part);
+        }
+    }
+
+    auto unshared = std::make_shared<musx::dom::others::PartGlobals>(
+        document, 1, EnigmaBase::ShareMode::None, MUSX_GLOBALS_CMPER);
+    document->getOthers()->add(musx::dom::others::PartGlobals::XmlNodeName, unshared);
+
+    auto finished = std::move(session).finish();
+    auto scoreLayer = finished->getOthers()->get<musx::dom::others::LayerAttributes>(SCORE_PARTID, 0);
+    auto partLayer = finished->getOthers()->get<musx::dom::others::LayerAttributes>(1, 0);
+    ASSERT_TRUE(scoreLayer);
+    ASSERT_TRUE(partLayer);
+    EXPECT_EQ(scoreLayer->restOffset, 10);
+    EXPECT_EQ(partLayer->restOffset, 99);
+    EXPECT_TRUE(partLayer->getUnlinkedNodes().count("restOffset"));
+    EXPECT_EQ(unshared->getShareMode(), EnigmaBase::ShareMode::None);
 }

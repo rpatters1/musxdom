@@ -27,13 +27,10 @@
 #include <memory>
 #include <stdexcept>
 
+#include "music_theory/music_theory.hpp"
 #include "BaseClasses.h"
 #include "CommonClasses.h"
  // do not add other dom class dependencies. Use Implementations.h for implementations that need total class access.
-
-namespace music_theory {
-enum class ClefType;
-} // namespace music_theory
 
 namespace musx {
 namespace dom {

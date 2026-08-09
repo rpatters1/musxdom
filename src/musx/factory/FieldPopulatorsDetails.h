@@ -123,23 +123,13 @@ struct FieldPopulator<BaselineSystemLyricsVerse> : private FieldPopulator<Baseli
 template <>
 struct FieldPopulator<BeamAlterationsDownStem> : private FieldPopulator<BeamAlterations>
 {
-    static void populate(const std::shared_ptr<BeamAlterationsDownStem>& instance,
-                        const XmlElementPtr& element,
-                        ElementLinker& elementLinker)
-    {
-        FieldPopulator<BeamAlterations>::template populate<BeamAlterationsDownStem>(instance, element, elementLinker);
-    }
+    using FieldPopulator<BeamAlterations>::populate;
 };
 
 template <>
 struct FieldPopulator<BeamAlterationsUpStem> : private FieldPopulator<BeamAlterations>
 {
-    static void populate(const std::shared_ptr<BeamAlterationsUpStem>& instance,
-                        const XmlElementPtr& element,
-                        ElementLinker& elementLinker)
-    {
-        FieldPopulator<BeamAlterations>::template populate<BeamAlterationsUpStem>(instance, element, elementLinker);
-    }
+    using FieldPopulator<BeamAlterations>::populate;
 };
 
 template <>
@@ -187,23 +177,13 @@ struct FieldPopulator<LyricAssignVerse> : private FieldPopulator<LyricAssign>
 template <>
 struct FieldPopulator<SecondaryBeamAlterationsDownStem> : private FieldPopulator<BeamAlterations>
 {
-    static void populate(const std::shared_ptr<SecondaryBeamAlterationsDownStem>& instance,
-                        const XmlElementPtr& element,
-                        ElementLinker& elementLinker)
-    {
-        FieldPopulator<BeamAlterations>::template populate<SecondaryBeamAlterationsDownStem>(instance, element, elementLinker);
-    }
+    using FieldPopulator<BeamAlterations>::populate;
 };
 
 template <>
 struct FieldPopulator<SecondaryBeamAlterationsUpStem> : private FieldPopulator<BeamAlterations>
 {
-    static void populate(const std::shared_ptr<SecondaryBeamAlterationsUpStem>& instance,
-                        const XmlElementPtr& element,
-                        ElementLinker& elementLinker)
-    {
-        FieldPopulator<BeamAlterations>::template populate<SecondaryBeamAlterationsUpStem>(instance, element, elementLinker);
-    }
+    using FieldPopulator<BeamAlterations>::populate;
 };
 
 template <>
@@ -248,36 +228,6 @@ inline Bracket::BracketStyle toEnum<Bracket::BracketStyle>(const int& value)
     }
     return result;
 }
-
-MUSX_RESOLVER_ENTRY(BeamAlterationsDownStem, BeamAlterations::calcAllActiveFlags<BeamAlterationsDownStem>);
-MUSX_RESOLVER_ENTRY(BeamAlterationsUpStem, BeamAlterations::calcAllActiveFlags<BeamAlterationsUpStem>);
-MUSX_RESOLVER_ENTRY(SecondaryBeamAlterationsDownStem, BeamAlterations::calcAllActiveFlags<SecondaryBeamAlterationsDownStem>);
-MUSX_RESOLVER_ENTRY(SecondaryBeamAlterationsUpStem, BeamAlterations::calcAllActiveFlags<SecondaryBeamAlterationsUpStem>);
-
-MUSX_RESOLVER_ENTRY(StaffGroup, {
-    [](const dom::DocumentPtr& document) {
-        auto parts = document->getOthers()->getArray<others::PartDefinition>(SCORE_PARTID);
-        for (const auto& part : parts) {
-            auto groups = document->getDetails()->getArray<StaffGroup>(part->getCmper(), document->calcScrollViewCmper(part->getCmper()));
-            const auto baseList = document->getScrollViewStaves(part->getCmper());
-            for (const auto& instance : groups) {
-                auto startIndex = baseList.getIndexForStaff(instance->startInst);
-                auto endIndex = baseList.getIndexForStaff(instance->endInst);
-                if (!startIndex || !endIndex) {
-                    // this situation arises fairly commonly in Finale files, so the message is demoted to a verbose logging message
-                    // from an integrity error.
-                    util::Logger::log(util::Logger::LogLevel::Verbose, "Group " + std::to_string(instance->getCmper2()) + " in part " + part->getName()
-                        + " [" + std::to_string(part->getCmper()) + "] has non-existent start or end staff cmpers");
-                    continue;
-                }
-                for (size_t x = *startIndex; x <= *endIndex && x < baseList.size(); x++) {
-                    auto mutableInstance = const_cast<StaffGroup*>(instance.get());
-                    mutableInstance->staves.insert(baseList[x]->staffId);
-                }
-            }
-        }
-    }
-});
 
 } // namespace factory
 } // namespace musx

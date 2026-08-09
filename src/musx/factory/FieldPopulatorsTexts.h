@@ -32,39 +32,5 @@ namespace factory {
 using namespace dom;
 using namespace dom::texts;
 
-#ifndef DOXYGEN_SHOULD_IGNORE_THIS
-
-MUSX_RESOLVER_ENTRY(LyricsVerse, {
-    [](const dom::DocumentPtr& document) {
-        auto lyricsTexts = document->getTexts()->getArray<LyricsVerse>();
-        for (auto& text : lyricsTexts) {
-            auto mutableText = const_cast<LyricsVerse*>(text.get());
-            mutableText->createSyllableInfo(text);
-        }
-    }
-});
-
-MUSX_RESOLVER_ENTRY(LyricsChorus, {
-    [](const dom::DocumentPtr& document) {
-        auto lyricsTexts = document->getTexts()->getArray<LyricsChorus>();
-        for (auto& text : lyricsTexts) {
-            auto mutableText = const_cast<LyricsChorus*>(text.get());
-            mutableText->createSyllableInfo(text);
-        }
-    }
-});
-
-MUSX_RESOLVER_ENTRY(LyricsSection, {
-    [](const dom::DocumentPtr& document) {
-        auto lyricsTexts = document->getTexts()->getArray<LyricsSection>();
-        for (auto& text : lyricsTexts) {
-            auto mutableText = const_cast<LyricsSection*>(text.get());
-            mutableText->createSyllableInfo(text);
-        }
-    }
-});
-
-#endif // DOXYGEN_SHOULD_IGNORE_THIS
-
 } // namespace factory
 } // namespace musx

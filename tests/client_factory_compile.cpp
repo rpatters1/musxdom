@@ -19,20 +19,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-#pragma once
 
-#include "musx/dom/Header.h"
-#include "musx/xml/XmlInterface.h"
+#include "musx/factory/DocumentFactory.h"
+#include "musx/factory/PoolFactory.h"
 
-namespace musx {
-namespace factory {
-
-/** @brief Creates a header from an XML `<header>` element. */
-class HeaderFactory
+int main()
 {
-public:
-    [[nodiscard]] static dom::header::HeaderPtr create(const xml::XmlElementPtr& element);
-};
-
-} // namespace factory
-} // namespace musx
+    auto session = musx::factory::DocumentFactory::begin();
+    auto document = std::move(session).finish();
+    return document ? 0 : 1;
+}

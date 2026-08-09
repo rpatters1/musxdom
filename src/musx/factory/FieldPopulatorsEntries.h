@@ -34,8 +34,6 @@ namespace factory {
 using namespace ::musx::xml;
 using namespace ::musx::dom;
 
-MUSX_RESOLVER_ENTRY(Entry, Entry::calcLocations);
-
 } // namespace factory
 } // namespace musx
 
