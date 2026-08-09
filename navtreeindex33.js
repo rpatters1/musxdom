@@ -1,5 +1,9 @@
 var NAVTREEINDEX33 =
 {
+"namespacemusx_1_1dom_1_1uuid.html#ab5881d55ea45d3597874906cfc849b41":[1,0,1,0,5,247],
+"namespacemusx_1_1dom_1_1uuid.html#ab588b5aea142feb669402767cba7218e":[1,0,1,0,5,258],
+"namespacemusx_1_1dom_1_1uuid.html#ab647f23383a50e98424e27f35865769e":[1,0,1,0,5,52],
+"namespacemusx_1_1dom_1_1uuid.html#ab70d353ac3e0cc3249032eb9e3f5ac44":[1,0,1,0,5,406],
 "namespacemusx_1_1dom_1_1uuid.html#ab75aea63a4f99f79a44438c767a700af":[1,0,1,0,5,453],
 "namespacemusx_1_1dom_1_1uuid.html#ab7869a19290b7983e25a2b44cd54c585":[1,0,1,0,5,765],
 "namespacemusx_1_1dom_1_1uuid.html#ab78a473204b089c388c443201dda74cc":[1,0,1,0,5,134],
@@ -228,11 +232,6 @@ var NAVTREEINDEX33 =
 "namespacemusx_1_1dom_1_1uuid.html#afff525d1064dca9d0faeabb7f272f699":[1,0,1,0,5,580],
 "namespacemusx_1_1dom_1_1uuid.html#afff56e7259e019905588649b28964199":[1,0,1,0,5,714],
 "namespacemusx_1_1factory.html":[1,0,1,1],
-"namespacemusx_1_1factory.html#a71df86868e6c945b39f6eb15215dd3cf":[1,0,1,1,15],
-"namespacemusx_1_1factory.html#a997e3b28e66a949e87c72c4e37e83d4c":[1,0,1,1,12],
-"namespacemusx_1_1factory.html#aac047b739d7dc0cf228a9e59b923390b":[1,0,1,1,13],
-"namespacemusx_1_1factory.html#ab4b3b01a07b2ca81d2786686aeb69dd5":[1,0,1,1,16],
-"namespacemusx_1_1factory.html#ac4d6063196d631d772cb30558913044c":[1,0,1,1,14],
 "namespacemusx_1_1xml.html":[1,0,1,2],
 "namespacemusx_1_1xml.html#a0e5401fa2c29d3ec62427c2b1dd9fab4":[1,0,1,2,8],
 "namespacemusx_1_1xml.html#a39bb6e9f7fd9e4cdc090566309a8dfe8":[1,0,1,2,7],
@@ -247,7 +246,8 @@ var NAVTREEINDEX33 =
 "pages.html":[],
 "structmusic__theory_1_1Pitch.html":[1,0,0,0],
 "structmusic__theory_1_1Pitch.html":[2,0,0,0],
-"structmusic__theory_1_1Pitch.html#a417284fb2ecf0dea7193240c78b3e1d4":[2,0,0,0,3],
 "structmusic__theory_1_1Pitch.html#a417284fb2ecf0dea7193240c78b3e1d4":[1,0,0,0,3],
-"structmusic__theory_1_1Pitch.html#a4f6043243691e1a652b488ebc855a742":[2,0,0,0,0]
+"structmusic__theory_1_1Pitch.html#a417284fb2ecf0dea7193240c78b3e1d4":[2,0,0,0,3],
+"structmusic__theory_1_1Pitch.html#a4f6043243691e1a652b488ebc855a742":[2,0,0,0,0],
+"structmusic__theory_1_1Pitch.html#a4f6043243691e1a652b488ebc855a742":[1,0,0,0,0]
 };

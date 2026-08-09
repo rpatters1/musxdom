@@ -111,10 +111,18 @@ Public Member Functions</h2></td></tr>
 &#160;</td><td class="memItemRight" valign="bottom"><b>EntryPool</b> (const <a class="el" href="namespacemusx_1_1dom.html#aa76356b1ad3580081294898c79615c4d">DocumentWeakPtr</a> &amp;document)</td></tr>
 <tr class="memdesc:a018d9a2910c13c97b028cb1f076c97fa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor function. <br /></td></tr>
 <tr class="separator:a018d9a2910c13c97b028cb1f076c97fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a865acedc4277cd5c82c349bb63701de5" id="r_a865acedc4277cd5c82c349bb63701de5"><td class="memItemLeft" align="right" valign="top"><a id="a865acedc4277cd5c82c349bb63701de5" name="a865acedc4277cd5c82c349bb63701de5"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>empty</b> () const</td></tr>
+<tr class="memdesc:a865acedc4277cd5c82c349bb63701de5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns whether the pool contains no entries. <br /></td></tr>
+<tr class="separator:a865acedc4277cd5c82c349bb63701de5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a312fb65318327f071d157f71aa37d392" id="r_a312fb65318327f071d157f71aa37d392"><td class="memItemLeft" align="right" valign="top"><a id="a312fb65318327f071d157f71aa37d392" name="a312fb65318327f071d157f71aa37d392"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>add</b> (<a class="el" href="namespacemusx_1_1dom.html#aaf6ff3bd65d56ab74135ba5914f68f5b">EntryNumber</a> entryNumber, const std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1Entry.html">Entry</a> &gt; &amp;instance)</td></tr>
 <tr class="memdesc:a312fb65318327f071d157f71aa37d392"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add an entry to the <a class="el" href="classmusx_1_1dom_1_1EntryPool.html" title="Entry pool.">EntryPool</a>. (Used by the factory.) <br /></td></tr>
 <tr class="separator:a312fb65318327f071d157f71aa37d392"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a283590b4d355e659606b63b0aa734c4c" id="r_a283590b4d355e659606b63b0aa734c4c"><td class="memItemLeft" align="right" valign="top"><a id="a283590b4d355e659606b63b0aa734c4c" name="a283590b4d355e659606b63b0aa734c4c"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>integrityCheckAll</b> () const</td></tr>
+<tr class="memdesc:a283590b4d355e659606b63b0aa734c4c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Validates every entry in entry-number order. <br /></td></tr>
+<tr class="separator:a283590b4d355e659606b63b0aa734c4c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aafa4cd49a100c140d7f0cde0dd42f13a" id="r_aafa4cd49a100c140d7f0cde0dd42f13a"><td class="memItemLeft" align="right" valign="top"><a id="aafa4cd49a100c140d7f0cde0dd42f13a" name="aafa4cd49a100c140d7f0cde0dd42f13a"></a>
 <a class="el" href="namespacemusx_1_1dom.html#a4223cd531120dbef7acd854c3d2631b8">MusxInstance</a>&lt; <a class="el" href="classmusx_1_1dom_1_1Entry.html">Entry</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>get</b> (<a class="el" href="namespacemusx_1_1dom.html#aaf6ff3bd65d56ab74135ba5914f68f5b">EntryNumber</a> entryNumber) const</td></tr>
 <tr class="memdesc:aafa4cd49a100c140d7f0cde0dd42f13a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get an entry from the <a class="el" href="classmusx_1_1dom_1_1EntryPool.html" title="Entry pool.">EntryPool</a>. <br /></td></tr>

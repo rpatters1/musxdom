@@ -1,9 +1,13 @@
 var NAVTREEINDEX29 =
 {
+"functions_rela.html":[2,3,5],
+"functions_s.html":[2,3,0,18],
+"functions_t.html":[2,3,0,19],
+"functions_type.html":[2,3,3],
 "functions_u.html":[2,3,0,20],
 "functions_v.html":[2,3,0,21],
-"functions_vars.html":[2,3,2],
 "functions_vars.html":[2,3,2,0],
+"functions_vars.html":[2,3,2],
 "functions_vars_b.html":[2,3,2,1],
 "functions_vars_c.html":[2,3,2,2],
 "functions_vars_d.html":[2,3,2,3],
@@ -36,8 +40,8 @@ var NAVTREEINDEX29 =
 "index.html":[],
 "music__theory_8hpp_source.html":[3,0,0,0,0],
 "musx_8h_source.html":[3,0,0,1,4],
-"namespacemembers.html":[1,1,0,0],
 "namespacemembers.html":[1,1,0],
+"namespacemembers.html":[1,1,0,0],
 "namespacemembers_b.html":[1,1,0,1],
 "namespacemembers_c.html":[1,1,0,2],
 "namespacemembers_d.html":[1,1,0,3],
@@ -62,8 +66,8 @@ var NAVTREEINDEX29 =
 "namespacemembers_type.html":[1,1,3],
 "namespacemembers_u.html":[1,1,0,20],
 "namespacemembers_v.html":[1,1,0,21],
-"namespacemembers_vars.html":[1,1,2,0],
 "namespacemembers_vars.html":[1,1,2],
+"namespacemembers_vars.html":[1,1,2,0],
 "namespacemembers_vars_b.html":[1,1,2,1],
 "namespacemembers_vars_c.html":[1,1,2,2],
 "namespacemembers_vars_d.html":[1,1,2,3],
@@ -245,9 +249,5 @@ var NAVTREEINDEX29 =
 "namespacemusx_1_1dom.html#a7d5001a69f7120037cc0d75a4abcd99aa6fcdc090caeade09d0efd6253932b6f5":[1,0,1,0,95,0],
 "namespacemusx_1_1dom.html#a7d5001a69f7120037cc0d75a4abcd99aa89be9433646f5939040a78971a5d103a":[1,0,1,0,95,7],
 "namespacemusx_1_1dom.html#a7d5001a69f7120037cc0d75a4abcd99aac7b71f9f6b107c6617e4a70647e6a9a7":[1,0,1,0,95,5],
-"namespacemusx_1_1dom.html#a7d5001a69f7120037cc0d75a4abcd99aacb5c10c0b488ed4f3826ba628d18ca6a":[1,0,1,0,95,4],
-"namespacemusx_1_1dom.html#a7d5001a69f7120037cc0d75a4abcd99aad7a3fdf1351b72249a47454751549deb":[1,0,1,0,95,8],
-"namespacemusx_1_1dom.html#a7d5001a69f7120037cc0d75a4abcd99aafc5926c76c85889d86a8e6b6515467ec":[1,0,1,0,95,6],
-"namespacemusx_1_1dom.html#a7d5001a69f7120037cc0d75a4abcd99aaff60395b07a0d85c9ccdd153dfe4ec0e":[1,0,1,0,95,1],
-"namespacemusx_1_1dom.html#a7e1523afa8705d91b1d694405c2feefb":[1,0,1,0,73]
+"namespacemusx_1_1dom.html#a7d5001a69f7120037cc0d75a4abcd99aacb5c10c0b488ed4f3826ba628d18ca6a":[1,0,1,0,95,4]
 };

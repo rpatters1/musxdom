@@ -102,7 +102,7 @@ $(document).ready(function(){initNavTree('structmusx_1_1factory_1_1DocumentFacto
 </div><!--header-->
 <div class="contents">
 
-<p>Optional arguments for document creation.  
+<p>Optional inputs accepted by the existing XML creation interface.  
  <a href="structmusx_1_1factory_1_1DocumentFactory_1_1CreateOptions.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="DocumentFactory_8h_source.html">DocumentFactory.h</a>&gt;</code></p>
@@ -110,149 +110,44 @@ $(document).ready(function(){initNavTree('structmusx_1_1factory_1_1DocumentFacto
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmusx_1_1factory_1_1DocumentFactory_1_1CreateOptions_1_1EmbeddedGraphicFile.html">EmbeddedGraphicFile</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Raw embedded graphic file payload from a musx archive.  <a href="structmusx_1_1factory_1_1DocumentFactory_1_1CreateOptions_1_1EmbeddedGraphicFile.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-types" name="pub-types"></a>
 Public Types</h2></td></tr>
 <tr class="memitem:a2e20328fe45a8e07c11fd0940e8c7b52" id="r_a2e20328fe45a8e07c11fd0940e8c7b52"><td class="memItemLeft" align="right" valign="top"><a id="a2e20328fe45a8e07c11fd0940e8c7b52" name="a2e20328fe45a8e07c11fd0940e8c7b52"></a>
 using&#160;</td><td class="memItemRight" valign="bottom"><b>EmbeddedGraphicFiles</b> = std::vector&lt; <a class="el" href="structmusx_1_1factory_1_1DocumentFactory_1_1CreateOptions_1_1EmbeddedGraphicFile.html">EmbeddedGraphicFile</a> &gt;</td></tr>
-<tr class="memdesc:a2e20328fe45a8e07c11fd0940e8c7b52"><td class="mdescLeft">&#160;</td><td class="mdescRight">Embedded graphic files provided by caller. <br /></td></tr>
 <tr class="separator:a2e20328fe45a8e07c11fd0940e8c7b52"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a87dd3c13e9f21f92305feeaf359b5ae3" id="r_a87dd3c13e9f21f92305feeaf359b5ae3"><td class="memItemLeft" align="right" valign="top"><a id="a87dd3c13e9f21f92305feeaf359b5ae3" name="a87dd3c13e9f21f92305feeaf359b5ae3"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>CreateOptions</b> ()=default</td></tr>
-<tr class="memdesc:a87dd3c13e9f21f92305feeaf359b5ae3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default constructor. <br /></td></tr>
-<tr class="separator:a87dd3c13e9f21f92305feeaf359b5ae3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa647dfa210e7c69630322149e0eab636" id="r_aa647dfa210e7c69630322149e0eab636"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmusx_1_1factory_1_1DocumentFactory_1_1CreateOptions.html#aa647dfa210e7c69630322149e0eab636">CreateOptions</a> (<a class="el" href="namespacemusx_1_1dom.html#a8ff59967b46549e150ea4f524c00de95">dom::PartVoicingPolicy</a> policy)</td></tr>
-<tr class="memdesc:aa647dfa210e7c69630322149e0eab636"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct options with a part-voicing policy.  <br /></td></tr>
+<tr class="memitem:aa647dfa210e7c69630322149e0eab636" id="r_aa647dfa210e7c69630322149e0eab636"><td class="memItemLeft" align="right" valign="top"><a id="aa647dfa210e7c69630322149e0eab636" name="aa647dfa210e7c69630322149e0eab636"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>CreateOptions</b> (<a class="el" href="namespacemusx_1_1dom.html#a8ff59967b46549e150ea4f524c00de95">dom::PartVoicingPolicy</a> policy)</td></tr>
 <tr class="separator:aa647dfa210e7c69630322149e0eab636"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a03df0be246da251703d554b2baaf6f64" id="r_a03df0be246da251703d554b2baaf6f64"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmusx_1_1factory_1_1DocumentFactory_1_1CreateOptions.html#a03df0be246da251703d554b2baaf6f64">CreateOptions</a> (std::filesystem::path inputFilepath, std::vector&lt; char &gt; notationMetadata, <a class="el" href="structmusx_1_1factory_1_1DocumentFactory_1_1CreateOptions.html#a2e20328fe45a8e07c11fd0940e8c7b52">EmbeddedGraphicFiles</a> embeddedGraphicFiles, <a class="el" href="namespacemusx_1_1dom.html#a8ff59967b46549e150ea4f524c00de95">dom::PartVoicingPolicy</a> policy=<a class="el" href="namespacemusx_1_1dom.html#a8ff59967b46549e150ea4f524c00de95afd038fc7f319e48f3115d92bf5bdbef9">dom::PartVoicingPolicy::Ignore</a>)</td></tr>
-<tr class="memdesc:a03df0be246da251703d554b2baaf6f64"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct options with explicit inputs.  <br /></td></tr>
+<tr class="memitem:a03df0be246da251703d554b2baaf6f64" id="r_a03df0be246da251703d554b2baaf6f64"><td class="memItemLeft" align="right" valign="top"><a id="a03df0be246da251703d554b2baaf6f64" name="a03df0be246da251703d554b2baaf6f64"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>CreateOptions</b> (std::filesystem::path inputFilepath, std::vector&lt; char &gt; notationMetadata, EmbeddedGraphicFiles embeddedGraphicFiles, <a class="el" href="namespacemusx_1_1dom.html#a8ff59967b46549e150ea4f524c00de95">dom::PartVoicingPolicy</a> policy=<a class="el" href="namespacemusx_1_1dom.html#a8ff59967b46549e150ea4f524c00de95afd038fc7f319e48f3115d92bf5bdbef9">dom::PartVoicingPolicy::Ignore</a>)</td></tr>
 <tr class="separator:a03df0be246da251703d554b2baaf6f64"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a981a325f9dec39a70e25d466f46391b2" id="r_a981a325f9dec39a70e25d466f46391b2"><td class="memItemLeft" align="right" valign="top"><a id="a981a325f9dec39a70e25d466f46391b2" name="a981a325f9dec39a70e25d466f46391b2"></a>
 const std::vector&lt; char &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getNotationMetadata</b> () const</td></tr>
-<tr class="memdesc:a981a325f9dec39a70e25d466f46391b2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Optional NotationMetadata.xml content. <br /></td></tr>
 <tr class="separator:a981a325f9dec39a70e25d466f46391b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a151d7fda1aa35fa70350e9b7b3a9252c" id="r_a151d7fda1aa35fa70350e9b7b3a9252c"><td class="memItemLeft" align="right" valign="top"><a id="a151d7fda1aa35fa70350e9b7b3a9252c" name="a151d7fda1aa35fa70350e9b7b3a9252c"></a>
 const <a class="el" href="namespacemusx_1_1dom.html#ab6c9d6e38f68c0631771adfe88470077">dom::EmbeddedGraphicsMap</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getEmbeddedGraphics</b> () const</td></tr>
-<tr class="memdesc:a151d7fda1aa35fa70350e9b7b3a9252c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Embedded graphics keyed by graphic cmper. <br /></td></tr>
 <tr class="separator:a151d7fda1aa35fa70350e9b7b3a9252c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a884c1f4ad554cd98134659af9244b715" id="r_a884c1f4ad554cd98134659af9244b715"><td class="memItemLeft" align="right" valign="top"><a id="a884c1f4ad554cd98134659af9244b715" name="a884c1f4ad554cd98134659af9244b715"></a>
 const std::optional&lt; std::filesystem::path &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getSourcePath</b> () const</td></tr>
-<tr class="memdesc:a884c1f4ad554cd98134659af9244b715"><td class="mdescLeft">&#160;</td><td class="mdescRight">Optional path to the musx (or EnigmaXML) file being loaded. <br /></td></tr>
 <tr class="separator:a884c1f4ad554cd98134659af9244b715"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a193f18d451958c87b9b62d9678da0db0" id="r_a193f18d451958c87b9b62d9678da0db0"><td class="memItemLeft" align="right" valign="top"><a id="a193f18d451958c87b9b62d9678da0db0" name="a193f18d451958c87b9b62d9678da0db0"></a>
 <a class="el" href="namespacemusx_1_1dom.html#ab6c9d6e38f68c0631771adfe88470077">dom::EmbeddedGraphicsMap</a>&#160;</td><td class="memItemRight" valign="bottom"><b>takeEmbeddedGraphics</b> ()</td></tr>
-<tr class="memdesc:a193f18d451958c87b9b62d9678da0db0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Move out embedded graphics. <br /></td></tr>
 <tr class="separator:a193f18d451958c87b9b62d9678da0db0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:a97dd66a1acbdcec143bf68b0d484dfd3" id="r_a97dd66a1acbdcec143bf68b0d484dfd3"><td class="memItemLeft" align="right" valign="top"><a id="a97dd66a1acbdcec143bf68b0d484dfd3" name="a97dd66a1acbdcec143bf68b0d484dfd3"></a>
 <a class="el" href="namespacemusx_1_1dom.html#a8ff59967b46549e150ea4f524c00de95">dom::PartVoicingPolicy</a>&#160;</td><td class="memItemRight" valign="bottom"><b>partVoicingPolicy</b> = <a class="el" href="namespacemusx_1_1dom.html#a8ff59967b46549e150ea4f524c00de95afd038fc7f319e48f3115d92bf5bdbef9">dom::PartVoicingPolicy::Ignore</a></td></tr>
-<tr class="memdesc:a97dd66a1acbdcec143bf68b0d484dfd3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Part voicing behavior for this document. <br /></td></tr>
 <tr class="separator:a97dd66a1acbdcec143bf68b0d484dfd3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Optional arguments for document creation. </p>
-</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="aa647dfa210e7c69630322149e0eab636" name="aa647dfa210e7c69630322149e0eab636"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa647dfa210e7c69630322149e0eab636">&#9670;&#160;</a></span>CreateOptions() <span class="overload">[1/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">musx::factory::DocumentFactory::CreateOptions::CreateOptions </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="namespacemusx_1_1dom.html#a8ff59967b46549e150ea4f524c00de95">dom::PartVoicingPolicy</a>&#160;</td>
-          <td class="paramname"><em>policy</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Construct options with a part-voicing policy. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">policy</td><td>The policy to apply for this document. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="a03df0be246da251703d554b2baaf6f64" name="a03df0be246da251703d554b2baaf6f64"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a03df0be246da251703d554b2baaf6f64">&#9670;&#160;</a></span>CreateOptions() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">musx::factory::DocumentFactory::CreateOptions::CreateOptions </td>
-          <td>(</td>
-          <td class="paramtype">std::filesystem::path&#160;</td>
-          <td class="paramname"><em>inputFilepath</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">std::vector&lt; char &gt;&#160;</td>
-          <td class="paramname"><em>notationMetadata</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="structmusx_1_1factory_1_1DocumentFactory_1_1CreateOptions.html#a2e20328fe45a8e07c11fd0940e8c7b52">EmbeddedGraphicFiles</a>&#160;</td>
-          <td class="paramname"><em>embeddedGraphicFiles</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="namespacemusx_1_1dom.html#a8ff59967b46549e150ea4f524c00de95">dom::PartVoicingPolicy</a>&#160;</td>
-          <td class="paramname"><em>policy</em> = <code><a class="el" href="namespacemusx_1_1dom.html#a8ff59967b46549e150ea4f524c00de95afd038fc7f319e48f3115d92bf5bdbef9">dom::PartVoicingPolicy::Ignore</a></code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Construct options with explicit inputs. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">inputFilepath</td><td>Path to the musx (or EnigmaXML) file being loaded. </td></tr>
-    <tr><td class="paramname">notationMetadata</td><td>Buffer containing NotationMetadata.xml. </td></tr>
-    <tr><td class="paramname">embeddedGraphicFiles</td><td>Embedded graphic files in <code>cmper.ext</code> form. </td></tr>
-    <tr><td class="paramname">policy</td><td>The policy to apply for this document. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-</div><!-- contents -->
+<div class="textblock"><p>Optional inputs accepted by the existing XML creation interface. </p>
+</div></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->

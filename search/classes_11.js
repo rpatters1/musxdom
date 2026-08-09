@@ -33,6 +33,5 @@ var searchData=
   ['transposition_30',['Transposition',['../classmusx_1_1dom_1_1others_1_1Staff_1_1Transposition.html',1,'musx::dom::others::Staff']]],
   ['tupletdef_31',['TupletDef',['../classmusx_1_1dom_1_1details_1_1TupletDef.html',1,'musx::dom::details']]],
   ['tupletinfo_32',['TupletInfo',['../structmusx_1_1dom_1_1EntryFrame_1_1TupletInfo.html',1,'musx::dom::EntryFrame']]],
-  ['tupletoptions_33',['TupletOptions',['../classmusx_1_1dom_1_1options_1_1TupletOptions.html',1,'musx::dom::options']]],
-  ['typeregistry_34',['TypeRegistry',['../classmusx_1_1factory_1_1TypeRegistry.html',1,'musx::factory']]]
+  ['tupletoptions_33',['TupletOptions',['../classmusx_1_1dom_1_1options_1_1TupletOptions.html',1,'musx::dom::options']]]
 ];

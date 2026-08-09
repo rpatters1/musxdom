@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>MUSX Document Model: musx::factory::TypeRegistry&lt; Types &gt;::CreatedInstanceInfo Struct Reference</title>
+<title>MUSX Document Model: musx::factory::DocumentFactory::ConstructionOptions Struct Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -66,7 +66,7 @@ $(function() {
 </div>
 <script type="text/javascript">
 /* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
-$(document).ready(function(){initNavTree('structmusx_1_1factory_1_1TypeRegistry_1_1CreatedInstanceInfo.html',''); initResizable(); });
+$(document).ready(function(){initNavTree('structmusx_1_1factory_1_1DocumentFactory_1_1ConstructionOptions.html',''); initResizable(); });
 /* @license-end */
 </script>
 <div id="doc-content">
@@ -93,45 +93,40 @@ $(document).ready(function(){initNavTree('structmusx_1_1factory_1_1TypeRegistry_
 
 <div class="header">
   <div class="summary">
-<a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-attribs">Public Attributes</a> &#124;
-<a href="structmusx_1_1factory_1_1TypeRegistry_1_1CreatedInstanceInfo-members.html">List of all members</a>  </div>
-  <div class="headertitle"><div class="title">musx::factory::TypeRegistry&lt; Types &gt;::CreatedInstanceInfo Struct Reference</div></div>
+<a href="structmusx_1_1factory_1_1DocumentFactory_1_1ConstructionOptions-members.html">List of all members</a>  </div>
+  <div class="headertitle"><div class="title">musx::factory::DocumentFactory::ConstructionOptions Struct Reference</div></div>
 </div><!--header-->
 <div class="contents">
 
-<p>Information about a created instance returned by <a class="el" href="classmusx_1_1factory_1_1TypeRegistry.html#a5c231e3c3f759add19113ab6f3d8ca49" title="Creates an instance of the registered type corresponding to the provided node name.">createInstance</a>.  
- <a href="structmusx_1_1factory_1_1TypeRegistry_1_1CreatedInstanceInfo.html#details">More...</a></p>
+<p>Normalized inputs for a non-XML document construction session.  
+ <a href="structmusx_1_1factory_1_1DocumentFactory_1_1ConstructionOptions.html#details">More...</a></p>
 
-<p><code>#include &lt;<a class="el" href="TypeRegistry_8h_source.html">TypeRegistry.h</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="DocumentFactory_8h_source.html">DocumentFactory.h</a>&gt;</code></p>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
-Public Member Functions</h2></td></tr>
-<tr class="memitem:ad8324b00949f28632be0c6bbbf609c2c" id="r_ad8324b00949f28632be0c6bbbf609c2c"><td class="memItemLeft" align="right" valign="top"><a id="ad8324b00949f28632be0c6bbbf609c2c" name="ad8324b00949f28632be0c6bbbf609c2c"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>CreatedInstanceInfo</b> (std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1EnigmaBase.html">EnigmaBase</a> &gt; inst, std::string_view nodeName)</td></tr>
-<tr class="memdesc:ad8324b00949f28632be0c6bbbf609c2c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor. <br /></td></tr>
-<tr class="separator:ad8324b00949f28632be0c6bbbf609c2c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:a5d4f8d910a42e061cb4d2d56f333d43a" id="r_a5d4f8d910a42e061cb4d2d56f333d43a"><td class="memItemLeft" align="right" valign="top"><a id="a5d4f8d910a42e061cb4d2d56f333d43a" name="a5d4f8d910a42e061cb4d2d56f333d43a"></a>
-std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1EnigmaBase.html">EnigmaBase</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>instance</b></td></tr>
-<tr class="memdesc:a5d4f8d910a42e061cb4d2d56f333d43a"><td class="mdescLeft">&#160;</td><td class="mdescRight">The newly created instance. <br /></td></tr>
-<tr class="separator:a5d4f8d910a42e061cb4d2d56f333d43a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5ba450a034494d114b29489e8797f0bb" id="r_a5ba450a034494d114b29489e8797f0bb"><td class="memItemLeft" align="right" valign="top"><a id="a5ba450a034494d114b29489e8797f0bb" name="a5ba450a034494d114b29489e8797f0bb"></a>
-std::string_view&#160;</td><td class="memItemRight" valign="bottom"><b>xmlNodeName</b></td></tr>
-<tr class="memdesc:a5ba450a034494d114b29489e8797f0bb"><td class="mdescLeft">&#160;</td><td class="mdescRight">The static std::string_view containing the instance's node name. <br /></td></tr>
-<tr class="separator:a5ba450a034494d114b29489e8797f0bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6993bc7634b2404e12daa7f23943c499" id="r_a6993bc7634b2404e12daa7f23943c499"><td class="memItemLeft" align="right" valign="top"><a id="a6993bc7634b2404e12daa7f23943c499" name="a6993bc7634b2404e12daa7f23943c499"></a>
+<a class="el" href="namespacemusx_1_1dom.html#a8ff59967b46549e150ea4f524c00de95">dom::PartVoicingPolicy</a>&#160;</td><td class="memItemRight" valign="bottom"><b>partVoicingPolicy</b> = <a class="el" href="namespacemusx_1_1dom.html#a8ff59967b46549e150ea4f524c00de95afd038fc7f319e48f3115d92bf5bdbef9">dom::PartVoicingPolicy::Ignore</a></td></tr>
+<tr class="separator:a6993bc7634b2404e12daa7f23943c499"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a457b67686a9001db4bb67d3ed22e76fd" id="r_a457b67686a9001db4bb67d3ed22e76fd"><td class="memItemLeft" align="right" valign="top"><a id="a457b67686a9001db4bb67d3ed22e76fd" name="a457b67686a9001db4bb67d3ed22e76fd"></a>
+std::optional&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>scoreDurationSeconds</b></td></tr>
+<tr class="separator:a457b67686a9001db4bb67d3ed22e76fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2ad92035788c91acf3a5e8739d5b7641" id="r_a2ad92035788c91acf3a5e8739d5b7641"><td class="memItemLeft" align="right" valign="top"><a id="a2ad92035788c91acf3a5e8739d5b7641" name="a2ad92035788c91acf3a5e8739d5b7641"></a>
+<a class="el" href="namespacemusx_1_1dom.html#ab6c9d6e38f68c0631771adfe88470077">dom::EmbeddedGraphicsMap</a>&#160;</td><td class="memItemRight" valign="bottom"><b>embeddedGraphics</b></td></tr>
+<tr class="separator:a2ad92035788c91acf3a5e8739d5b7641"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af701d540c9e1cb8f8287e62c00a9c2f3" id="r_af701d540c9e1cb8f8287e62c00a9c2f3"><td class="memItemLeft" align="right" valign="top"><a id="af701d540c9e1cb8f8287e62c00a9c2f3" name="af701d540c9e1cb8f8287e62c00a9c2f3"></a>
+std::optional&lt; std::filesystem::path &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>sourcePath</b></td></tr>
+<tr class="separator:af701d540c9e1cb8f8287e62c00a9c2f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><div class="compoundTemplParams">template&lt;typename... Types&gt;<br />
-struct musx::factory::TypeRegistry&lt; Types &gt;::CreatedInstanceInfo</div><p>Information about a created instance returned by <a class="el" href="classmusx_1_1factory_1_1TypeRegistry.html#a5c231e3c3f759add19113ab6f3d8ca49" title="Creates an instance of the registered type corresponding to the provided node name.">createInstance</a>. </p>
+<div class="textblock"><p>Normalized inputs for a non-XML document construction session. </p>
 </div></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="namespacemusx.html">musx</a></li><li class="navelem"><a class="el" href="namespacemusx_1_1factory.html">factory</a></li><li class="navelem"><a class="el" href="classmusx_1_1factory_1_1TypeRegistry.html">TypeRegistry</a></li><li class="navelem"><a class="el" href="structmusx_1_1factory_1_1TypeRegistry_1_1CreatedInstanceInfo.html">CreatedInstanceInfo</a></li>
+    <li class="navelem"><a class="el" href="namespacemusx.html">musx</a></li><li class="navelem"><a class="el" href="namespacemusx_1_1factory.html">factory</a></li><li class="navelem"><a class="el" href="classmusx_1_1factory_1_1DocumentFactory.html">DocumentFactory</a></li><li class="navelem"><a class="el" href="structmusx_1_1factory_1_1DocumentFactory_1_1ConstructionOptions.html">ConstructionOptions</a></li>
     <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.8 </li>
   </ul>
 </div>

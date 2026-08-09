@@ -125,6 +125,9 @@ Public Member Functions</h2></td></tr>
 virtual&#160;</td><td class="memItemRight" valign="bottom"><b>~ObjectPool</b> ()=default</td></tr>
 <tr class="memdesc:a2e7d562c09f29c7bc68a8a2508f26961"><td class="mdescLeft">&#160;</td><td class="mdescRight">virtual destructor <br /></td></tr>
 <tr class="separator:a2e7d562c09f29c7bc68a8a2508f26961"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeaa08a2783ba63b0b0a64168a579825e" id="r_aeaa08a2783ba63b0b0a64168a579825e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1ObjectPool.html#aeaa08a2783ba63b0b0a64168a579825e">integrityCheckAll</a> () const</td></tr>
+<tr class="memdesc:aeaa08a2783ba63b0b0a64168a579825e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Runs object-local integrity validation for every stored source object.  <br /></td></tr>
+<tr class="separator:aeaa08a2783ba63b0b0a64168a579825e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad3ffb171f6897f6d8c4ee274c855d2b4" id="r_ad3ffb171f6897f6d8c4ee274c855d2b4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1ObjectPool.html#ad3ffb171f6897f6d8c4ee274c855d2b4">add</a> (<a class="el" href="structmusx_1_1dom_1_1ObjectPool_1_1ObjectKey.html">ObjectKey</a> key, <a class="el" href="classmusx_1_1dom_1_1ObjectPool.html#ae26eae6f8358d93cb80b692680875176">ObjectPtr</a> object)</td></tr>
 <tr class="memdesc:ad3ffb171f6897f6d8c4ee274c855d2b4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds an <code>ObjectBaseType</code> object to the pool.  <br /></td></tr>
 <tr class="separator:ad3ffb171f6897f6d8c4ee274c855d2b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -504,6 +507,36 @@ template&lt;typename T &gt; </div>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A shared_ptr to the type or nullptr if none exists </dd></dl>
+
+</div>
+</div>
+<a id="aeaa08a2783ba63b0b0a64168a579825e" name="aeaa08a2783ba63b0b0a64168a579825e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aeaa08a2783ba63b0b0a64168a579825e">&#9670;&#160;</a></span>integrityCheckAll()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename ObjectBaseType &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classmusx_1_1dom_1_1ObjectPool.html">musx::dom::ObjectPool</a>&lt; ObjectBaseType &gt;::integrityCheckAll </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Runs object-local integrity validation for every stored source object. </p>
+<p>This is called by the document construction finalizer after all overlays are complete. </p>
 
 </div>
 </div>
