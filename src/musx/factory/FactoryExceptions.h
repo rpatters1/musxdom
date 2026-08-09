@@ -21,17 +21,16 @@
  */
 #pragma once
 
-#include "musx/dom/Header.h"
-#include "musx/xml/XmlInterface.h"
+#include <stdexcept>
 
 namespace musx {
 namespace factory {
 
-/** @brief Creates a header from an XML `<header>` element. */
-class HeaderFactory
+/** @brief Exception for unknown XML nodes when strict XML handling is enabled. */
+class unknown_xml_error : public std::runtime_error
 {
 public:
-    [[nodiscard]] static dom::header::HeaderPtr create(const xml::XmlElementPtr& element);
+    using std::runtime_error::runtime_error;
 };
 
 } // namespace factory

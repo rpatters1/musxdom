@@ -21,6 +21,7 @@
  */
 #pragma once
 
+#include <algorithm>
 #include <string>
 #include <map>
 #include <unordered_map>
@@ -58,6 +59,23 @@ namespace dom {
 /// @tparam T The class to query
 template <typename Pool, typename T>
 struct is_pool_type : std::false_type {};  // default: not valid
+
+class OptionsPool;
+class OthersPool;
+class DetailsPool;
+class EntryPool;
+class TextsPool;
+
+template <typename T>
+struct is_pool_type<OptionsPool, T> : std::is_base_of<OptionsBase, T> {};
+template <typename T>
+struct is_pool_type<OthersPool, T> : std::is_base_of<OthersBase, T> {};
+template <typename T>
+struct is_pool_type<DetailsPool, T> : std::is_base_of<DetailsBase, T> {};
+template <typename T>
+struct is_pool_type<EntryPool, T> : std::is_same<Entry, T> {};
+template <typename T>
+struct is_pool_type<TextsPool, T> : std::is_base_of<TextsBase, T> {};
 
 /// @brief Value shortcut for @ref is_pool_type
 template <typename Pool, typename T>
@@ -182,6 +200,16 @@ private:
 public:
     /** @brief virtual destructor */
     virtual ~ObjectPool() = default;
+
+    /// @brief Runs object-local integrity validation for every stored source object.
+    /// @details This is called by the document construction finalizer after all overlays are complete.
+    void integrityCheckAll() const
+    {
+        for (const auto& [key, object] : m_pool) {
+            (void)key;
+            object->integrityCheck(object);
+        }
+    }
 
     /**
      * @brief Adds an `ObjectBaseType` object to the pool.
@@ -426,6 +454,9 @@ public:
         m_pool.add({ nodeName, basePtr->getSourcePartId() }, instance);
     }
 
+    /// @brief Validates every option object. Called by document construction finalization.
+    void integrityCheckAll() const { m_pool.integrityCheckAll(); }
+
     /** @brief Scalar version of #ObjectPool::getArray */
     template <typename T>
     MusxInstanceList<T> getArray() const
@@ -480,6 +511,9 @@ public:
     void add(std::string_view nodeName, const std::shared_ptr<OthersBase>& instance)
     { m_pool.add({nodeName, instance->getSourcePartId(), instance->getCmper(), std::nullopt, instance->getInci()}, instance); }
 
+    /// @brief Validates every others object. Called by document construction finalization.
+    void integrityCheckAll() const { m_pool.integrityCheckAll(); }
+
     /** @brief OthersPool version of #ObjectPool::getArray */
     template <typename T>
     MusxInstanceList<T> getArray(Cmper partId, std::optional<Cmper> cmper = std::nullopt) const
@@ -521,6 +555,9 @@ public:
     /** @brief DetailsPool version of #ObjectPool::add */
     void add(std::string_view nodeName, const std::shared_ptr<DetailsBase>& instance)
     { m_pool.add({nodeName, instance->getSourcePartId(), instance->getCmper1(), instance->getCmper2(), instance->getInci()}, instance); }
+
+    /// @brief Validates every details object. Called by document construction finalization.
+    void integrityCheckAll() const { m_pool.integrityCheckAll(); }
 
     /** @brief version of #ObjectPool::getArray for getting all of them */
     template <typename T, typename = std::enable_if_t<is_pool_type_v<DetailsPool, T>>>
@@ -592,12 +629,31 @@ public:
     /// @brief Constructor function
     EntryPool(const DocumentWeakPtr& document) : m_document(document) {}
 
+    /** @brief Returns whether the pool contains no entries. */
+    bool empty() const { return m_pool.empty(); }
+
     /** @brief Add an entry to the EntryPool. (Used by the factory.) */
     void add(EntryNumber entryNumber, const std::shared_ptr<Entry>& instance)
     {
         auto [it, emplaced] = m_pool.emplace(entryNumber, instance);
         if (!emplaced) {
             MUSX_INTEGRITY_ERROR("Entry number " + std::to_string(entryNumber) + " added twice.");
+        }
+    }
+
+    /// @brief Validates every entry in entry-number order.
+    void integrityCheckAll() const
+    {
+        std::vector<EntryNumber> entryNumbers;
+        entryNumbers.reserve(m_pool.size());
+        for (const auto& [entryNumber, entry] : m_pool) {
+            (void)entry;
+            entryNumbers.push_back(entryNumber);
+        }
+        std::sort(entryNumbers.begin(), entryNumbers.end());
+        for (const auto entryNumber : entryNumbers) {
+            const auto& entry = m_pool.at(entryNumber);
+            entry->integrityCheck(entry);
         }
     }
 
@@ -639,6 +695,9 @@ public:
         }
         m_pool.add({ nodeName, basePtr->getSourcePartId(), instance->getTextNumber() }, instance);
     }
+
+    /// @brief Validates every text object. Called by document construction finalization.
+    void integrityCheckAll() const { m_pool.integrityCheckAll(); }
 
     /** @brief Texts version of #ObjectPool::getArray */
     template <typename T>

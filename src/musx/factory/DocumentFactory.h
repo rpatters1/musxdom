@@ -22,8 +22,8 @@
 #pragma once
 
 #include <algorithm>
-#include <cstddef>
 #include <cctype>
+#include <cstddef>
 #include <filesystem>
 #include <limits>
 #include <memory>
@@ -35,53 +35,44 @@
 #include <vector>
 
 #include "musx/dom/Document.h"
-#include "musx/factory/HeaderFactory.h"
-#include "musx/factory/PoolFactory.h"
+#include "musx/factory/FactoryExceptions.h"
 #include "musx/xml/XmlInterface.h"
 
 namespace musx {
 namespace factory {
 
-/**
- * @brief Factory class for creating `Document` objects from XML.
- */
-class DocumentFactory : FactoryBase
+/** @brief Creates and finalizes musxdom documents from XML or client-provided data. */
+class DocumentFactory
 {
-    using Document = musx::dom::Document;
-    using DocumentPtr = std::shared_ptr<Document>;
+    using DocumentPtr = dom::DocumentPtr;
 
 public:
-    /// @brief SFINAE helper for containers whose element type is 1 byte (excluding `bool`).
     template <typename Container>
     using IsCharContainer = std::enable_if_t<
         (sizeof(std::remove_cv_t<typename Container::value_type>) == 1)
-        && !std::is_same_v<std::remove_cv_t<typename Container::value_type>, bool>
-    >;
+        && !std::is_same_v<std::remove_cv_t<typename Container::value_type>, bool>>;
 
-    /// @brief Optional arguments for document creation.
+    /** @brief Normalized inputs for a non-XML document construction session. */
+    struct ConstructionOptions
+    {
+        dom::PartVoicingPolicy partVoicingPolicy = dom::PartVoicingPolicy::Ignore;
+        std::optional<double> scoreDurationSeconds;
+        dom::EmbeddedGraphicsMap embeddedGraphics;
+        std::optional<std::filesystem::path> sourcePath;
+    };
+
+    /** @brief Optional inputs accepted by the existing XML creation interface. */
     struct CreateOptions
     {
-        /// @brief Raw embedded graphic file payload from a musx archive.
         struct EmbeddedGraphicFile
         {
-            std::string filename;                 ///< Archive filename in `cmper.ext` form.
-            dom::EmbeddedGraphicBlob bytes;       ///< Raw file bytes.
+            std::string filename;
+            dom::EmbeddedGraphicBlob bytes;
         };
+        using EmbeddedGraphicFiles = std::vector<EmbeddedGraphicFile>;
 
-        using EmbeddedGraphicFiles = std::vector<EmbeddedGraphicFile>; ///< Embedded graphic files provided by caller.
-
-        /// @brief Default constructor.
         CreateOptions() = default;
-
-        /// @brief Construct options with a part-voicing policy.
-        /// @param policy The policy to apply for this document.
         CreateOptions(dom::PartVoicingPolicy policy) : partVoicingPolicy(policy) {}
-
-        /// @brief Construct options with explicit inputs.
-        /// @param inputFilepath Path to the musx (or EnigmaXML) file being loaded.
-        /// @param notationMetadata Buffer containing NotationMetadata.xml.
-        /// @param embeddedGraphicFiles Embedded graphic files in `cmper.ext` form.
-        /// @param policy The policy to apply for this document.
         CreateOptions(std::filesystem::path inputFilepath,
                       std::vector<char> notationMetadata,
                       EmbeddedGraphicFiles embeddedGraphicFiles,
@@ -92,64 +83,35 @@ public:
               m_sourcePath(std::move(inputFilepath))
         {}
 
-        dom::PartVoicingPolicy partVoicingPolicy = dom::PartVoicingPolicy::Ignore; ///< Part voicing behavior for this document.
+        dom::PartVoicingPolicy partVoicingPolicy = dom::PartVoicingPolicy::Ignore;
 
-        /// @brief Optional NotationMetadata.xml content.
-        [[nodiscard]]
-        const std::vector<char>& getNotationMetadata() const { return m_notationMetadata; }
-
-        /// @brief Embedded graphics keyed by graphic cmper.
-        [[nodiscard]]
-        const dom::EmbeddedGraphicsMap& getEmbeddedGraphics() const { return m_embeddedGraphics; }
-
-        /// @brief Optional path to the musx (or EnigmaXML) file being loaded.
-        [[nodiscard]]
-        const std::optional<std::filesystem::path>& getSourcePath() const { return m_sourcePath; }
-
-        /// @brief Move out embedded graphics.
-        [[nodiscard]]
-        dom::EmbeddedGraphicsMap takeEmbeddedGraphics() { return std::move(m_embeddedGraphics); }
+        [[nodiscard]] const std::vector<char>& getNotationMetadata() const { return m_notationMetadata; }
+        [[nodiscard]] const dom::EmbeddedGraphicsMap& getEmbeddedGraphics() const { return m_embeddedGraphics; }
+        [[nodiscard]] const std::optional<std::filesystem::path>& getSourcePath() const { return m_sourcePath; }
+        [[nodiscard]] dom::EmbeddedGraphicsMap takeEmbeddedGraphics() { return std::move(m_embeddedGraphics); }
 
     private:
-        static dom::EmbeddedGraphicsMap parseEmbeddedGraphicFiles(EmbeddedGraphicFiles&& embeddedGraphicFiles)
+        static dom::EmbeddedGraphicsMap parseEmbeddedGraphicFiles(EmbeddedGraphicFiles&& files)
         {
-            dom::EmbeddedGraphicsMap embeddedGraphics;
-            for (auto& file : embeddedGraphicFiles) {
-                const auto parsed = parseEmbeddedGraphicFilename(file.filename);
-                if (!parsed) {
+            dom::EmbeddedGraphicsMap result;
+            for (auto& file : files) {
+                const auto dot = file.filename.find('.');
+                if (dot == std::string::npos || dot == 0 || dot + 1 >= file.filename.size()) continue;
+                const std::string_view idText(file.filename.data(), dot);
+                if (!std::all_of(idText.begin(), idText.end(),
+                    [](unsigned char ch) { return std::isdigit(ch) != 0; })) continue;
+                unsigned long long id = 0;
+                try {
+                    id = std::stoull(std::string(idText));
+                } catch (...) {
                     continue;
                 }
-                auto& entry = embeddedGraphics[parsed->first];
-                entry.extension = std::move(parsed->second);
+                if (id > static_cast<unsigned long long>((std::numeric_limits<dom::Cmper>::max)())) continue;
+                auto& entry = result[static_cast<dom::Cmper>(id)];
+                entry.extension = file.filename.substr(dot + 1);
                 entry.bytes = std::move(file.bytes);
             }
-            return embeddedGraphics;
-        }
-
-        static std::optional<std::pair<Cmper, std::string>> parseEmbeddedGraphicFilename(const std::string& filename)
-        {
-            const auto dotPos = filename.find('.');
-            if (dotPos == std::string::npos || dotPos == 0 || dotPos + 1 >= filename.size()) {
-                return std::nullopt;
-            }
-
-            const std::string_view cmperText(filename.data(), dotPos);
-            if (cmperText.empty() || !std::all_of(cmperText.begin(), cmperText.end(),
-                [](unsigned char ch) { return std::isdigit(ch) != 0; })) {
-                return std::nullopt;
-            }
-
-            unsigned long long cmperValue = 0;
-            try {
-                cmperValue = std::stoull(std::string(cmperText));
-            } catch (...) {
-                return std::nullopt;
-            }
-            if (cmperValue > static_cast<unsigned long long>((std::numeric_limits<Cmper>::max)())) {
-                return std::nullopt;
-            }
-
-            return std::make_pair(static_cast<Cmper>(cmperValue), filename.substr(dotPos + 1));
+            return result;
         }
 
         std::vector<char> m_notationMetadata;
@@ -157,120 +119,75 @@ public:
         std::optional<std::filesystem::path> m_sourcePath;
     };
 
-    /**
-     * @brief Creates a `Document` object from an XML buffer.
-     *
-     * @param data Pointer to a buffer containing EnigmaXML for a musx file.
-     * @param size The size of the buffer.
-     * @return A fully populated `Document` object.
-     * @throws std::invalid_argument If required nodes or attributes are missing or invalid.
-     */
+    /** @brief A move-only draft document that can be populated and finalized exactly once. */
+    class ConstructionSession
+    {
+    public:
+        ConstructionSession(const ConstructionSession&) = delete;
+        ConstructionSession& operator=(const ConstructionSession&) = delete;
+        ConstructionSession(ConstructionSession&&) noexcept = default;
+        ConstructionSession& operator=(ConstructionSession&&) noexcept = default;
+
+        [[nodiscard]] const DocumentPtr& getDocument() const;
+        [[nodiscard]] DocumentPtr finish() &&;
+
+    private:
+        enum class State { Active, Consumed };
+        explicit ConstructionSession(DocumentPtr document) : m_document(std::move(document)) {}
+
+        DocumentPtr m_document;
+        State m_state = State::Active;
+        friend class DocumentFactory;
+    };
+
+    /** @brief Begins construction of a document from client-provided data. */
+    [[nodiscard]] static ConstructionSession begin();
+    [[nodiscard]] static ConstructionSession begin(ConstructionOptions options);
+
     template <typename XmlDocumentType>
-    [[nodiscard]]
-    static DocumentPtr create(const char* data, size_t size)
+    [[nodiscard]] static DocumentPtr create(const char* data, size_t size)
     {
         return create<XmlDocumentType>(data, size, CreateOptions{});
     }
 
-    /// @brief Creates a `Document` object from a char container (e.g. std::string, std::vector<char>).
     template <typename XmlDocumentType, typename Container, typename = IsCharContainer<Container>>
-    [[nodiscard]]
-    static DocumentPtr create(const Container& xmlBuffer)
+    [[nodiscard]] static DocumentPtr create(const Container& xmlBuffer)
     {
         return create<XmlDocumentType>(asCharData(xmlBuffer), xmlBuffer.size(), CreateOptions{});
     }
 
-    /**
-     * @brief Creates a `Document` object from an XML buffer.
-     *
-     * @param data Pointer to a buffer containing EnigmaXML for a musx file.
-     * @param size The size of the buffer.
-     * @param createOptions Optional creation options, including part voicing policy and NotationMetadata.xml data.
-     * @return A fully populated `Document` object.
-     * @throws std::invalid_argument If required nodes or attributes are missing or invalid.
-     */
     template <typename XmlDocumentType>
-    [[nodiscard]]
-    static DocumentPtr create(const char* data, size_t size, CreateOptions&& createOptions)
+    [[nodiscard]] static DocumentPtr create(const char* data, size_t size, CreateOptions&& createOptions)
     {
-        static_assert(std::is_base_of<musx::xml::IXmlDocument, XmlDocumentType>::value,
-                      "XmlReaderType must derive from IXmlDocument.");
-
-        std::unique_ptr<musx::xml::IXmlDocument> xmlDocument = std::make_unique<XmlDocumentType>();
+        static_assert(std::is_base_of_v<xml::IXmlDocument, XmlDocumentType>,
+            "XmlDocumentType must derive from IXmlDocument.");
+        auto xmlDocument = std::make_unique<XmlDocumentType>();
         xmlDocument->loadFromBuffer(data, size);
-
-        auto rootElement = xmlDocument->getRootElement();
-        if (!rootElement || rootElement->getTagName() != "finale") {
+        auto root = xmlDocument->getRootElement();
+        if (!root || root->getTagName() != "finale") {
             throw std::invalid_argument("Missing <finale> element.");
         }
 
-        DocumentPtr document(new Document);
-        document->m_self = document;
-        document->m_partVoicingPolicy = createOptions.partVoicingPolicy;
-        document->m_scoreDurationSeconds = parseScoreDurationSeconds<XmlDocumentType>(createOptions.getNotationMetadata());
-        document->m_embeddedGraphics = createOptions.takeEmbeddedGraphics();
-        document->m_sourcePath = createOptions.getSourcePath();
-
-        ElementLinker elementLinker;
-        for (auto element = rootElement->getFirstChildElement(); element; element = element->getNextSibling()) {
-            if (element->getTagName() == "header") {
-                document->getHeader() = musx::factory::HeaderFactory::create(element);
-            } else if (element->getTagName() == "options") {
-                document->getOptions() = musx::factory::OptionsFactory::create(element, document, elementLinker);
-            } else if (element->getTagName() == "others") {
-                document->getOthers() = musx::factory::OthersFactory::create(element, document, elementLinker);
-            } else if (element->getTagName() == "details") {
-                document->getDetails() = musx::factory::DetailsFactory::create(element, document, elementLinker);
-            } else if (element->getTagName() == "entries") {
-                document->getEntries() = musx::factory::EntryFactory::create(element, document, elementLinker);
-            } else if (element->getTagName() == "texts") {
-                document->getTexts() = musx::factory::TextsFactory::create(element, document, elementLinker);
-            }
-        }
-        if (!document->getHeader()) document->getHeader() = std::make_shared<musx::dom::Header>();
-        if (!document->getOptions()) document->getOptions() = std::make_shared<musx::dom::OptionsPool>(document);
-        if (!document->getOthers()) document->getOthers() = std::make_shared<musx::dom::OthersPool>(document);
-        if (!document->getDetails()) document->getDetails() = std::make_shared<musx::dom::DetailsPool>(document);
-        if (!document->getEntries()) document->getEntries() = std::make_shared<musx::dom::EntryPool>(document);
-        if (!document->getTexts()) document->getTexts() = std::make_shared<musx::dom::TextsPool>(document);
-
-#ifdef MUSX_DISPLAY_NODE_NAMES
-        util::Logger::log(util::Logger::LogLevel::Verbose, "============");
-#endif
-        elementLinker.resolveAll(document);
-        document->m_instruments = document->createInstrumentMap(SCORE_PARTID);
-        document->createRehearsalMarkMap();
-        
-        document->m_maxBlankPages = 0;
-        auto linkedParts = document->getOthers()->getArray<PartDefinition>(SCORE_PARTID);
-        for (const auto& part : linkedParts) {
-            auto mutablePart = const_cast<PartDefinition*>(part.get());
-            mutablePart->numberOfLeadingBlankPages = 0;
-            auto pages = document->getOthers()->getArray<Page>(part->getCmper());
-            mutablePart->numberOfPages = int(pages.size());
-            for (const auto& page : pages) {
-                if (!page->isBlank()) {
-                    break;
-                }
-                mutablePart->numberOfLeadingBlankPages++;
-            }
-            if (mutablePart->numberOfLeadingBlankPages > document->m_maxBlankPages) {
-                document->m_maxBlankPages = part->numberOfLeadingBlankPages;
-            }
-        }
-
-        return document;
+        ConstructionOptions options;
+        options.partVoicingPolicy = createOptions.partVoicingPolicy;
+        options.scoreDurationSeconds = parseScoreDurationSeconds<XmlDocumentType>(
+            createOptions.getNotationMetadata());
+        options.embeddedGraphics = createOptions.takeEmbeddedGraphics();
+        options.sourcePath = createOptions.getSourcePath();
+        return createFromXmlRoot(root, std::move(options));
     }
 
-    /// @brief Creates a `Document` object from a char container and explicit create options.
     template <typename XmlDocumentType, typename Container, typename = IsCharContainer<Container>>
-    [[nodiscard]]
-    static DocumentPtr create(const Container& xmlBuffer, CreateOptions&& createOptions)
+    [[nodiscard]] static DocumentPtr create(const Container& xmlBuffer, CreateOptions&& createOptions)
     {
         return create<XmlDocumentType>(asCharData(xmlBuffer), xmlBuffer.size(), std::move(createOptions));
     }
 
 private:
+    static DocumentPtr createFromXmlRoot(
+        const xml::XmlElementPtr& root, ConstructionOptions&& options);
+    static void finalize(const DocumentPtr& document);
+
     template <typename Container>
     static const char* asCharData(const Container& buffer)
     {
@@ -278,37 +195,28 @@ private:
     }
 
     template <typename XmlDocumentType>
-    static std::optional<double> parseScoreDurationSeconds(const std::vector<char>& notationMetadata)
+    static std::optional<double> parseScoreDurationSeconds(const std::vector<char>& metadata)
     {
-        if (notationMetadata.empty()) {
-            return std::nullopt;
-        }
-
-        std::unique_ptr<musx::xml::IXmlDocument> xmlDocument = std::make_unique<XmlDocumentType>();
+        if (metadata.empty()) return std::nullopt;
+        auto document = std::make_unique<XmlDocumentType>();
         try {
-            xmlDocument->loadFromBuffer(notationMetadata.data(), notationMetadata.size());
+            document->loadFromBuffer(metadata.data(), metadata.size());
         } catch (...) {
             return std::nullopt;
         }
-
-        auto rootElement = xmlDocument->getRootElement();
-        if (!rootElement || rootElement->getTagName() != "metadata") {
+        auto root = document->getRootElement();
+        if (!root || root->getTagName() != "metadata") return std::nullopt;
+        auto fileInfo = root->getFirstChildElement("fileInfo");
+        if (!fileInfo) return std::nullopt;
+        auto creator = fileInfo->getFirstChildElement("creatorString");
+        if (!creator || creator->getTextTrimmed().rfind("Finale", 0) != 0) return std::nullopt;
+        auto duration = fileInfo->getFirstChildElement("scoreDuration");
+        if (!duration) return std::nullopt;
+        try {
+            return duration->template getTextAs<double>();
+        } catch (...) {
             return std::nullopt;
         }
-        if (auto fileInfo = rootElement->getFirstChildElement("fileInfo")) {
-            auto creatorString = fileInfo->getFirstChildElement("creatorString");
-            if (!creatorString || creatorString->getTextTrimmed().rfind("Finale", 0) != 0) {
-                return std::nullopt;
-            }
-            if (auto scoreDuration = fileInfo->getFirstChildElement("scoreDuration")) {
-                try {
-                    return scoreDuration->getTextAs<double>();
-                } catch (...) {
-                    return std::nullopt;
-                }
-            }
-        }
-        return std::nullopt;
     }
 };
 

@@ -1655,6 +1655,8 @@ public:
             partData = std::make_shared<ScorePartData>(ptrToThis);
             MUSX_INTEGRITY_ERROR("Measure number region " + std::to_string(getCmper()) + " is missing part data.");
         }
+        scoreData->integrityCheck(scoreData);
+        partData->integrityCheck(partData);
     }
 
     constexpr static std::string_view XmlNodeName = "measNumbRegion"; ///< The XML node name for this type.

@@ -163,6 +163,10 @@ target_link_libraries(musxdomtests PRIVATE
     musx
 )
 
+add_executable(factory_client_compile client_factory_compile.cpp)
+target_link_libraries(factory_client_compile PRIVATE musx)
+add_test(NAME FactoryClientCompileBoundary COMMAND factory_client_compile)
+
 # Add Precompiled Headers (PCH) for the test suite
 target_precompile_headers(musxdomtests PRIVATE
     "${gtest_SOURCE_DIR}/include/gtest/gtest.h"

@@ -20,6 +20,7 @@
  * THE SOFTWARE.
  */
 #include "musx/musx.h"
+#include "musx/factory/FieldPopulatorsEntries.h"
 
 #ifndef DOXYGEN_SHOULD_IGNORE_THIS
 

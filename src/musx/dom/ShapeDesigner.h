@@ -21,6 +21,8 @@
  */
 #pragma once
 
+#include <variant>
+
 #include "musx/util/Logger.h"
 #include "musx/util/Fraction.h"
 
