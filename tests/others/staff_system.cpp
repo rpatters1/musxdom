@@ -77,3 +77,132 @@ TEST(StaffSystemTest, PopulateFields)
     EXPECT_EQ(staffSystem->extraStartSystemSpace, 24);
     EXPECT_EQ(staffSystem->extraEndSystemSpace, 36);
 }
+
+constexpr static musxtest::string_view horzNeighborXml = R"xml(
+<?xml version="1.0" encoding="UTF-8"?>
+<finale>
+  <others>
+    <instUsed cmper="0" inci="0">
+      <inst>1</inst>
+      <trackType>staff</trackType>
+      <distFromTop>0</distFromTop>
+      <range>
+        <startMeas>1</startMeas>
+        <startEdu>0</startEdu>
+        <endMeas>32767</endMeas>
+        <endEdu>2147483647</endEdu>
+      </range>
+    </instUsed>
+    <instUsed cmper="0" inci="1">
+      <inst>2</inst>
+      <trackType>staff</trackType>
+      <distFromTop>-288</distFromTop>
+      <range>
+        <startMeas>1</startMeas>
+        <startEdu>0</startEdu>
+        <endMeas>32767</endMeas>
+        <endEdu>2147483647</endEdu>
+      </range>
+    </instUsed>
+    <instUsed cmper="0" inci="2">
+      <inst>3</inst>
+      <trackType>staff</trackType>
+      <distFromTop>-576</distFromTop>
+      <range>
+        <startMeas>1</startMeas>
+        <startEdu>0</startEdu>
+        <endMeas>32767</endMeas>
+        <endEdu>2147483647</endEdu>
+      </range>
+    </instUsed>
+    <instUsed cmper="1" inci="0">
+      <inst>1</inst>
+      <trackType>staff</trackType>
+      <distFromTop>0</distFromTop>
+      <range>
+        <startMeas>1</startMeas>
+        <startEdu>0</startEdu>
+        <endMeas>32767</endMeas>
+        <endEdu>2147483647</endEdu>
+      </range>
+    </instUsed>
+    <instUsed cmper="1" inci="1">
+      <inst>2</inst>
+      <trackType>staff</trackType>
+      <distFromTop>-288</distFromTop>
+      <range>
+        <startMeas>1</startMeas>
+        <startEdu>0</startEdu>
+        <endMeas>32767</endMeas>
+        <endEdu>2147483647</endEdu>
+      </range>
+    </instUsed>
+    <instUsed cmper="1" inci="2">
+      <inst>3</inst>
+      <trackType>staff</trackType>
+      <distFromTop>-576</distFromTop>
+      <range>
+        <startMeas>1</startMeas>
+        <startEdu>0</startEdu>
+        <endMeas>32767</endMeas>
+        <endEdu>2147483647</endEdu>
+      </range>
+    </instUsed>
+    <staffSystemSpec cmper="1">
+      <startMeas>1</startMeas>
+      <endMeas>2</endMeas>
+      <horzPercent>27083</horzPercent>
+      <ssysPercent>100</ssysPercent>
+      <staffHeight>5248</staffHeight>
+      <top>-432</top>
+      <left>144</left>
+      <right>-1080</right>
+      <bottom>-200</bottom>
+      <hasStaffScaling/>
+      <scaleVert/>
+      <scaleContentOnly/>
+    </staffSystemSpec>
+    <staffSystemSpec cmper="2">
+      <startMeas>2</startMeas>
+      <endMeas>3</endMeas>
+      <horzPercent>29821</horzPercent>
+      <ssysPercent>100</ssysPercent>
+      <staffHeight>5248</staffHeight>
+      <top>-432</top>
+      <left>1224</left>
+      <bottom>-200</bottom>
+      <hasStaffScaling/>
+      <scaleVert/>
+      <scaleContentOnly/>
+      <distanceToPrev>1095</distanceToPrev>
+    </staffSystemSpec>
+    <pageSpec cmper="1">
+      <height>3168</height>
+      <width>2448</width>
+      <percent>100</percent>
+      <firstSystem>1</firstSystem>
+      <scaleContentOnly/>
+      <margTop>-180</margTop>
+      <margLeft>144</margLeft>
+      <margBottom>180</margBottom>
+      <margRight>-144</margRight>
+    </pageSpec>
+)xml";
+
+TEST(StaffSystemTest, CalcHorizontalNeighbor)
+{
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(horzNeighborXml);
+    auto others = doc->getOthers();
+    ASSERT_TRUE(others);
+
+    auto staffSystem1 = others->get<others::StaffSystem>(SCORE_PARTID, 1);
+    ASSERT_TRUE(staffSystem1) << "StaffSystem with cmper 1 not found";
+    auto staffSystem2 = others->get<others::StaffSystem>(SCORE_PARTID, 2);
+    ASSERT_TRUE(staffSystem2) << "StaffSystem with cmper 2 not found";
+    auto page = others->get<others::Page>(SCORE_PARTID, 1);
+    ASSERT_TRUE(page) << "Page with cmper 1 not found";
+    const auto instrumentsInSystem = others->getArray<others::StaffUsed>(SCORE_PARTID, 1);
+    ASSERT_TRUE(!instrumentsInSystem.empty()) << "Empty or no StaffUsed list with cmper 1 found";
+
+    EXPECT_TRUE(staffSystem2->calcHorzNeighborSystemDistance().has_value());
+}
