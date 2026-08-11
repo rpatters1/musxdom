@@ -129,6 +129,14 @@ constexpr static musxtest::string_view knownSmuflFontNameSpellings = R"xml(
 </finale>
     )xml";
 
+TEST(FontTest, NormalizesFontNamesWithAsciiRules)
+{
+    EXPECT_EQ(normalizeFontName(" \t\n\v\f\rFinale Maestro"), "finalemaestro");
+    EXPECT_EQ(normalizeFontName("Maestro, Times"), "maestro,times");
+    EXPECT_EQ(normalizeFontName("ÉLAN"), "Élan");
+    EXPECT_EQ(normalizeFontName("finalemaestro"), "finalemaestro");
+}
+
 TEST(FontTest, MatchesKnownSmuflFontNamesIgnoringSpacesAndCase)
 {
     auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(knownSmuflFontNameSpellings);

@@ -29,7 +29,6 @@
 #include <algorithm>
 #include <cmath>
 #include <cctype>
-#include <cwctype>
 #include <string_view>
 #include <unordered_map>
 #include <unordered_set>
@@ -54,22 +53,6 @@ struct SmuflMetadataPathCacheEntry
     bool found{};
     std::filesystem::path path;
 };
-
-/// Normalizes a font name for comparison by removing whitespace and folding case. This lets a
-/// PostScript-style spelling ("FinaleMaestro") match the family name ("Finale Maestro").
-/// Matches normalizeFontKey() in the smufl-mapping project so the two agree on lookups.
-static std::string normalizeFontName(std::string_view name)
-{
-    std::string result;
-    result.reserve(name.size());
-    for (const char ch : name) {
-        const auto uch = static_cast<unsigned char>(ch);
-        if (!std::isspace(uch)) {
-            result.push_back(static_cast<char>(std::tolower(uch)));
-        }
-    }
-    return result;
-}
 
 static bool looksLikeSmuflDefaultMusicFont(const FontInfo& fontInfo)
 {
@@ -108,6 +91,22 @@ static bool looksLikeSmuflDefaultMusicFont(const FontInfo& fontInfo)
 }
 
 } // namespace
+
+std::string normalizeFontName(std::string_view name)
+{
+    std::string result;
+    result.reserve(name.size());
+    for (unsigned char ch : name) {
+        if (ch < 0x80) {
+            if (std::isspace(ch)) {
+                continue;
+            }
+            ch = static_cast<unsigned char>(std::tolower(ch));
+        }
+        result.push_back(static_cast<char>(ch));
+    }
+    return result;
+}
 
 // ********************
 // ***** FontInfo *****

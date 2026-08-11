@@ -24,6 +24,8 @@
 #include <numeric>
 #include <filesystem>
 #include <array>
+#include <string>
+#include <string_view>
 
 #include "musx/util/Fraction.h"
 #include "BaseClasses.h"
@@ -55,6 +57,17 @@ class Staff;
 using Duration = std::pair<NoteType, unsigned>;
 
 // This file contains common classes that are shared among Options, Others, and Details.
+
+/// @brief Normalizes a font name for comparison by removing ASCII whitespace and folding ASCII case.
+///
+/// Whitespace removal and case folding are applied only to bytes below `0x80`; all non-ASCII
+/// bytes pass through unchanged. This prevents locale-sensitive character classification from
+/// modifying bytes within a UTF-8 sequence.
+///
+/// @param name The font name to normalize.
+/// @return The normalized font name.
+[[nodiscard]]
+std::string normalizeFontName(std::string_view name);
 
 /**
  * @struct FontInfo
