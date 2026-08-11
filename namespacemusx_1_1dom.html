@@ -641,6 +641,9 @@ Enumerations</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
+<tr class="memitem:a52074e6f04c7b798c6eca1cf4b5185c5" id="r_a52074e6f04c7b798c6eca1cf4b5185c5"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemusx_1_1dom.html#a52074e6f04c7b798c6eca1cf4b5185c5">normalizeFontName</a> (std::string_view name)</td></tr>
+<tr class="memdesc:a52074e6f04c7b798c6eca1cf4b5185c5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Normalizes a font name for comparison by removing ASCII whitespace and folding ASCII case.  <br /></td></tr>
+<tr class="separator:a52074e6f04c7b798c6eca1cf4b5185c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad70355206e90c7b79b7860fc5d75bff0" id="r_ad70355206e90c7b79b7860fc5d75bff0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemusx_1_1dom.html#a9fd6f660a4f7c02787b6bbe3307a15af">Duration</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemusx_1_1dom.html#ad70355206e90c7b79b7860fc5d75bff0">calcDurationInfoFromEdu</a> (<a class="el" href="namespacemusx_1_1dom.html#a907ef641c247f1a5dbe75bbc972661f5">Edu</a> duration)</td></tr>
 <tr class="memdesc:ad70355206e90c7b79b7860fc5d75bff0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the <a class="el" href="namespacemusx_1_1dom.html#a3c91ee84b72cc27a2899191d6baee312">NoteType</a> and number of dots in an <a class="el" href="namespacemusx_1_1dom.html#a907ef641c247f1a5dbe75bbc972661f5">Edu</a> value.  <br /></td></tr>
 <tr class="separator:ad70355206e90c7b79b7860fc5d75bff0"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1479,6 +1482,34 @@ template&lt;typename T &gt; </div>
 
 <p>Returns the number of beams implied by an EDU duration. </p>
 <p>Uses calcDurationInfoFromEdu to determine the base note value. Durations greater than a quarter note return 0 flags. Dots are ignored. </p>
+
+</div>
+</div>
+<a id="a52074e6f04c7b798c6eca1cf4b5185c5" name="a52074e6f04c7b798c6eca1cf4b5185c5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a52074e6f04c7b798c6eca1cf4b5185c5">&#9670;&#160;</a></span>normalizeFontName()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string musx::dom::normalizeFontName </td>
+          <td>(</td>
+          <td class="paramtype">std::string_view&#160;</td>
+          <td class="paramname"><em>name</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Normalizes a font name for comparison by removing ASCII whitespace and folding ASCII case. </p>
+<p>Whitespace removal and case folding are applied only to bytes below <code>0x80</code>; all non-ASCII bytes pass through unchanged. This prevents locale-sensitive character classification from modifying bytes within a UTF-8 sequence.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">name</td><td>The font name to normalize. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The normalized font name. </dd></dl>
 
 </div>
 </div>

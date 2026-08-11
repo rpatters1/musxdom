@@ -1054,6 +1054,7 @@ var namespacemusx_1_1dom =
     [ "calcDurationInfoFromEdu", "namespacemusx_1_1dom.html#ad70355206e90c7b79b7860fc5d75bff0", null ],
     [ "calcNumberOfBeamsInEdu", "namespacemusx_1_1dom.html#aa75d341865ea5c3e1a8fcb735ea5e51b", null ],
     [ "instrumentFamilyFromUuid", "namespacemusx_1_1dom.html#aca8bd8022b86b8fc68930283cb07d674", null ],
+    [ "normalizeFontName", "namespacemusx_1_1dom.html#a52074e6f04c7b798c6eca1cf4b5185c5", null ],
     [ "BASE_SYSTEM_ID", "namespacemusx_1_1dom.html#ac87f0744ae26e5eb9f08d9615fc15bc5", null ],
     [ "EDU_PER_WHOLE_NOTE", "namespacemusx_1_1dom.html#ace087082aba8a546ecd9abe14e0b2fc2", null ],
     [ "EFIX_PER_EVPU", "namespacemusx_1_1dom.html#a6e7e94e8e870c83e2fb15709b0c87fa3", null ],
