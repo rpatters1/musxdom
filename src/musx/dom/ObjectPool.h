@@ -548,7 +548,7 @@ public:
         if (highest == (std::numeric_limits<Cmper>::max)()) {
             return std::nullopt;
         }
-        return static_cast<Cmper>(highest + 1);
+        return Cmper(highest + 1);
     }
 };
 /** @brief Shared `OthersPool` pointer */

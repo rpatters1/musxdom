@@ -413,7 +413,7 @@ TEST(FontTest, ImportFontDefinitionMatchesByNameNotCmper)
     ASSERT_TRUE(times);
     // The same typeface sits at cmper 1 in the source and 3 in the target, and the source spells
     // it with extra whitespace, so only a normalized comparison finds it.
-    EXPECT_EQ(importFontDefinitionInto(target, times), std::optional<Cmper>(3));
+    EXPECT_EQ(importFontDefinitionInto(target, times), std::optional<Cmper>(Cmper(3)));
     // Matching reuses what is there; nothing is added.
     EXPECT_EQ(target->getOthers()->getArray<others::FontDefinition>(SCORE_PARTID).size(), before);
 }
@@ -448,7 +448,7 @@ TEST(FontTest, ImportFontDefinitionPassesZeroThroughWithoutMatchingByName)
     ASSERT_TRUE(music);
     // Id 0 names the destination's own music font. Returning the source's typeface, or matching
     // "Maestro" into the target, would change what every element storing 0 renders as.
-    EXPECT_EQ(importFontDefinitionInto(target, music), std::optional<Cmper>(0));
+    EXPECT_EQ(importFontDefinitionInto(target, music), std::optional<Cmper>(Cmper(0)));
     auto zero = target->getOthers()->get<others::FontDefinition>(SCORE_PARTID, 0);
     ASSERT_TRUE(zero);
     EXPECT_EQ(zero->name, "Jazz");
@@ -464,7 +464,7 @@ TEST(FontTest, ImportFontDefinitionCreatesZeroWhenTargetLacksIt)
 
     auto music = source->getOthers()->get<others::FontDefinition>(SCORE_PARTID, 0);
     ASSERT_TRUE(music);
-    EXPECT_EQ(importFontDefinitionInto(target, music), std::optional<Cmper>(0));
+    EXPECT_EQ(importFontDefinitionInto(target, music), std::optional<Cmper>(Cmper(0)));
 
     auto created = target->getOthers()->get<others::FontDefinition>(SCORE_PARTID, 0);
     ASSERT_TRUE(created);
@@ -503,7 +503,7 @@ TEST(FontTest, ImportFontDefinitionTakesZeroFromTargetsOwnMusicFont)
     ASSERT_TRUE(music);
     EXPECT_EQ(music->name, "Maestro");
 
-    EXPECT_EQ(importFontDefinitionInto(target, music), std::optional<Cmper>(0));
+    EXPECT_EQ(importFontDefinitionInto(target, music), std::optional<Cmper>(Cmper(0)));
 
     // The target's own FontOptions name Broadway Copyist as its music font, so that is what id 0
     // stands for here. Taking the source's Maestro would have changed the typeface of everything
@@ -523,7 +523,7 @@ TEST(FontTest, ImportFontDefinitionFallbackAlsoGivesTheTypefaceANonZeroCmper)
 
     auto music = source->getOthers()->get<others::FontDefinition>(SCORE_PARTID, 0);
     ASSERT_TRUE(music);
-    EXPECT_EQ(importFontDefinitionInto(target, music), std::optional<Cmper>(0));
+    EXPECT_EQ(importFontDefinitionInto(target, music), std::optional<Cmper>(Cmper(0)));
 
     auto created = target->getOthers()->get<others::FontDefinition>(SCORE_PARTID, 0);
     ASSERT_TRUE(created);

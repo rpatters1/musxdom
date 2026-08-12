@@ -774,11 +774,11 @@ TEST(ShapeTest, NextFreeCmperIsPerType)
 
     // Each type numbers independently: this document holds shapeDef 6, shapeList 7, shapeData 8
     // and fontName 1, so no single answer serves all four.
-    EXPECT_EQ(others->nextFreeCmper<others::ShapeDef>(SCORE_PARTID), std::optional<Cmper>(7));
-    EXPECT_EQ(others->nextFreeCmper<others::ShapeInstructionList>(SCORE_PARTID), std::optional<Cmper>(8));
-    EXPECT_EQ(others->nextFreeCmper<others::ShapeData>(SCORE_PARTID), std::optional<Cmper>(9));
-    EXPECT_EQ(others->nextFreeCmper<others::FontDefinition>(SCORE_PARTID), std::optional<Cmper>(2));
+    EXPECT_EQ(others->nextFreeCmper<others::ShapeDef>(SCORE_PARTID), std::optional<Cmper>(Cmper(7)));
+    EXPECT_EQ(others->nextFreeCmper<others::ShapeInstructionList>(SCORE_PARTID), std::optional<Cmper>(Cmper(8)));
+    EXPECT_EQ(others->nextFreeCmper<others::ShapeData>(SCORE_PARTID), std::optional<Cmper>(Cmper(9)));
+    EXPECT_EQ(others->nextFreeCmper<others::FontDefinition>(SCORE_PARTID), std::optional<Cmper>(Cmper(2)));
 
     // An empty pool starts at 1, leaving 0 for whatever sentinel meaning the type gives it.
-    EXPECT_EQ(others->nextFreeCmper<others::TextExpressionDef>(SCORE_PARTID), std::optional<Cmper>(1));
+    EXPECT_EQ(others->nextFreeCmper<others::TextExpressionDef>(SCORE_PARTID), std::optional<Cmper>(Cmper(1)));
 }

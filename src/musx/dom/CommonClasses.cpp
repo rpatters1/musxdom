@@ -206,7 +206,9 @@ std::optional<Cmper> importFontDefinitionInto(const DocumentPtr& target,
             static_cast<void>(importNonZeroFontDefinition(target, source));
         }
     }
-    return 0;
+    // Cmper rather than a bare 0: constructing the optional from an int narrows, which MSVC
+    // reports under /W4 and the build treats as an error.
+    return Cmper(0);
 }
 
 std::string FontInfo::getName() const
