@@ -112,6 +112,106 @@ std::string normalizeFontName(std::string_view name)
 // ***** FontInfo *****
 // ********************
 
+namespace {
+
+/// @brief Copies every stored field of a font definition onto a fresh instance in @p target.
+MusxInstance<others::FontDefinition> cloneFontDefinition(const DocumentPtr& target,
+    const MusxInstance<others::FontDefinition>& source, Cmper cmper)
+{
+    auto clone = std::make_shared<others::FontDefinition>(
+        target, SCORE_PARTID, source->getShareMode(), cmper);
+    clone->charsetBank = source->charsetBank;
+    clone->charsetVal = source->charsetVal;
+    clone->pitch = source->pitch;
+    clone->family = source->family;
+    // The source spelling is retained deliberately. Normalization decides whether two names
+    // mean the same typeface; it is not a canonical form to store.
+    clone->name = source->name;
+    target->getOthers()->add(others::FontDefinition::XmlNodeName, clone);
+    return clone;
+}
+
+/// @brief The non-zero cmper in @p target naming @p source's typeface, cloning when absent.
+std::optional<Cmper> importNonZeroFontDefinition(const DocumentPtr& target,
+    const MusxInstance<others::FontDefinition>& source)
+{
+    // Match on typeface, never on cmper. Cmper 0 is excluded: its name follows whatever the
+    // document's default music font currently is, so matching a concrete typeface onto it would
+    // make that element track later changes to the music font. Lowest cmper wins so that
+    // repeated imports are stable.
+    const auto wanted = normalizeFontName(source->name);
+    std::optional<Cmper> matched;
+    Cmper highest = 0;
+    for (const auto& font : target->getOthers()->getArray<others::FontDefinition>(SCORE_PARTID)) {
+        const auto cmper = font->getCmper();
+        highest = (std::max)(highest, cmper);
+        if (cmper == 0 || normalizeFontName(font->name) != wanted) {
+            continue;
+        }
+        if (!matched || cmper < *matched) {
+            matched = cmper;
+        }
+    }
+    if (matched) {
+        return *matched;
+    }
+    if (highest == (std::numeric_limits<Cmper>::max)()) {
+        return std::nullopt;
+    }
+    return cloneFontDefinition(target, source, static_cast<Cmper>(highest + 1))->getCmper();
+}
+
+/// @brief The definition naming @p target's own default music font, when it can be determined.
+MusxInstance<others::FontDefinition> findDefaultMusicFont(const DocumentPtr& target)
+{
+    const auto music = options::FontOptions::getFontInfoOrNull(
+        target, options::FontOptions::FontType::Music);
+    // A music font stored as 0 says nothing here: it is the very reference being resolved.
+    if (!music || music->fontId == 0) {
+        return nullptr;
+    }
+    return target->getOthers()->get<others::FontDefinition>(SCORE_PARTID, music->fontId);
+}
+
+} // namespace
+
+std::optional<Cmper> importFontDefinitionInto(const DocumentPtr& target,
+    const MusxInstance<others::FontDefinition>& source)
+{
+    MUSX_ASSERT_IF(!target) {
+        throw std::invalid_argument("importFontDefinitionInto received a null target document");
+    }
+    MUSX_ASSERT_IF(!source) {
+        throw std::invalid_argument("importFontDefinitionInto received a null font definition");
+    }
+
+    if (source->getCmper() != 0) {
+        return importNonZeroFontDefinition(target, source);
+    }
+
+    // Id 0 names the destination's own default music font rather than a typeface, so it is passed
+    // through. The definition is still created when missing, because the returned id has to
+    // resolve: a reference naming nothing is the defect this function exists to avoid.
+    const auto existing = target->getOthers()->getArray<others::FontDefinition>(SCORE_PARTID);
+    const auto hasZero = std::any_of(existing.begin(), existing.end(),
+        [](const MusxInstance<others::FontDefinition>& font) { return font->getCmper() == 0; });
+    if (!hasZero) {
+        if (const auto music = findDefaultMusicFont(target)) {
+            // The target's own FontOptions already say which typeface id 0 stands for, and that
+            // answer outranks the source's.
+            cloneFontDefinition(target, music, 0);
+        } else {
+            cloneFontDefinition(target, source, 0);
+            // The same typeface must also be reachable by a concrete cmper. Id 0 tracks whatever
+            // the music font later becomes, and matching never selects it, so without this the
+            // typeface would be unaddressable as itself. Failing that leaves 0 resolvable, which
+            // is what was asked for, so the result still stands.
+            static_cast<void>(importNonZeroFontDefinition(target, source));
+        }
+    }
+    return 0;
+}
+
 std::string FontInfo::getName() const
 {
     if (auto fontDef = getDocument()->getOthers()->get<others::FontDefinition>(SCORE_PARTID, fontId)) {

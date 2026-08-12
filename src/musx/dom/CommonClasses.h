@@ -26,6 +26,7 @@
 #include <array>
 #include <string>
 #include <string_view>
+#include <optional>
 
 #include "musx/util/Fraction.h"
 #include "BaseClasses.h"
@@ -48,6 +49,7 @@ class LyricAssign;
 } // namespace details
 
 namespace others { // forward declarations
+class FontDefinition;
 class Measure;
 class OssiaHeader;
 class Staff;
@@ -68,6 +70,29 @@ using Duration = std::pair<NoteType, unsigned>;
 /// @return The normalized font name.
 [[nodiscard]]
 std::string normalizeFontName(std::string_view name);
+
+/// @brief Copies a font definition into another document, reusing an equivalent one when present.
+///
+/// A @ref Cmper is meaningful only within the document that issued it. A non-zero definition is
+/// therefore matched against @p target by normalized name (see @ref normalizeFontName) and never by
+/// cmper. The definition at cmper 0 is excluded from matching, and the lowest matching cmper wins.
+/// When nothing matches, the definition is copied to the next free cmper, retaining @p source's
+/// exact spelling.
+///
+/// Font id 0 is a sentinel for the document's default music font rather than an index to a
+/// typeface. It is returned unchanged, and a definition is created at 0 in @p target when absent,
+/// so that the returned id always resolves. The typeface for a created definition comes from
+/// @p target's own @ref options::FontOptions music font, falling back to @p source's definition
+/// at 0, which is then also given a non-zero cmper in @p target.
+///
+/// @param target The document to import into. May be the same document as @p source's.
+/// @param source The definition to import.
+/// @return The cmper naming the typeface within @p target, or std::nullopt when @p target has no
+/// free cmper left for a new definition. A returned 0 always means the default music font.
+/// @throws std::invalid_argument if @p target or @p source is null. Debug builds assert instead.
+[[nodiscard]]
+std::optional<Cmper> importFontDefinitionInto(const DocumentPtr& target,
+    const MusxInstance<others::FontDefinition>& source);
 
 /**
  * @struct FontInfo

@@ -465,10 +465,26 @@ public:
     std::unordered_map<FontType, MusxInstance<FontInfo>> fontOptions;
 
     /**
+     * @brief get the `FontInfo` for a particular type, if the document has one
+     * @param type the `FontType` to retrieve
+     * @return a shared pointer to the font info for that type, or nullptr if the document has none
+     */
+    MusxInstance<FontInfo> getFontInfoOrNull(FontType type) const;
+
+    /**
+     * @brief get the `FontInfo` for a particular type from the document pool, if there is one
+     * @param document the `Document` to search
+     * @param type the `FontType` to retrieve
+     * @return a shared pointer to the font info for that type, or nullptr if the document has no
+     * options, no default fonts, or no font of that type
+     */
+    static MusxInstance<FontInfo> getFontInfoOrNull(const DocumentPtr& document, FontType type);
+
+    /**
      * @brief get the `FontInfo` for a particular type
      * @param type the `FontType` to retrieve
      * @return a shared pointer to the font info for that type
-     * @throws std::invalid_paremter if the type is not found in the document
+     * @throws std::invalid_argument if the type is not found in the document
      */
     MusxInstance<FontInfo> getFontInfo(FontType type) const;
 
@@ -477,7 +493,7 @@ public:
      * @param document the `Document` to search
      * @param type the `FontType` to retrieve
      * @return a shared pointer to the font info for that type
-     * @throws std::invalid_paremter if the type is not found in the document
+     * @throws std::invalid_argument if the type is not found in the document
      */
     static MusxInstance<FontInfo> getFontInfo(const DocumentPtr& document, FontType type);
 
