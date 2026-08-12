@@ -118,8 +118,11 @@ namespace {
 MusxInstance<others::FontDefinition> cloneFontDefinition(const DocumentPtr& target,
     const MusxInstance<others::FontDefinition>& source, Cmper cmper)
 {
+    // SCORE_PARTID and ShareMode::All are correct for anything newly created: no linked part can
+    // reference an object that did not exist a moment ago, so there is nothing to unshare from.
+    // An importer for a ShareMode::None class would know to say so.
     auto clone = std::make_shared<others::FontDefinition>(
-        target, SCORE_PARTID, source->getShareMode(), cmper);
+        target, SCORE_PARTID, EnigmaBase::ShareMode::All, cmper);
     clone->charsetBank = source->charsetBank;
     clone->charsetVal = source->charsetVal;
     clone->pitch = source->pitch;
@@ -137,28 +140,22 @@ std::optional<Cmper> importNonZeroFontDefinition(const DocumentPtr& target,
 {
     // Match on typeface, never on cmper. Cmper 0 is excluded: its name follows whatever the
     // document's default music font currently is, so matching a concrete typeface onto it would
-    // make that element track later changes to the music font. Lowest cmper wins so that
-    // repeated imports are stable.
+    // make that element track later changes to the music font.
+    //
+    // At most one non-zero definition should name a given typeface; more than one means the
+    // document is malformed, and which of them is picked then does not matter.
     const auto wanted = normalizeFontName(source->name);
-    std::optional<Cmper> matched;
-    Cmper highest = 0;
     for (const auto& font : target->getOthers()->getArray<others::FontDefinition>(SCORE_PARTID)) {
         const auto cmper = font->getCmper();
-        highest = (std::max)(highest, cmper);
-        if (cmper == 0 || normalizeFontName(font->name) != wanted) {
-            continue;
-        }
-        if (!matched || cmper < *matched) {
-            matched = cmper;
+        if (cmper != 0 && normalizeFontName(font->name) == wanted) {
+            return cmper;
         }
     }
-    if (matched) {
-        return *matched;
-    }
-    if (highest == (std::numeric_limits<Cmper>::max)()) {
+    const auto available = target->getOthers()->nextFreeCmper<others::FontDefinition>(SCORE_PARTID);
+    if (!available) {
         return std::nullopt;
     }
-    return cloneFontDefinition(target, source, static_cast<Cmper>(highest + 1))->getCmper();
+    return cloneFontDefinition(target, source, *available)->getCmper();
 }
 
 /// @brief The definition naming @p target's own default music font, when it can be determined.

@@ -370,13 +370,6 @@ constexpr static musxtest::string_view importTargetProperties = R"xml(
       <family>0</family>
       <name>Times New Roman</name>
     </fontName>
-    <fontName cmper="7">
-      <charsetBank>Mac</charsetBank>
-      <charsetVal>0</charsetVal>
-      <pitch>0</pitch>
-      <family>0</family>
-      <name>timesnewroman</name>
-    </fontName>
   </others>
 </finale>
     )xml";
@@ -414,16 +407,15 @@ TEST(FontTest, ImportFontDefinitionMatchesByNameNotCmper)
 {
     auto target = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(importTargetProperties);
     auto source = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(importSourceProperties);
-    auto sourceFonts = source->getOthers()->getArray<others::FontDefinition>(SCORE_PARTID);
+    const auto before = target->getOthers()->getArray<others::FontDefinition>(SCORE_PARTID).size();
 
     auto times = source->getOthers()->get<others::FontDefinition>(SCORE_PARTID, 1);
     ASSERT_TRUE(times);
-    // The same typeface sits at cmper 1 in the source and 3 in the target, and the source spells it
-    // with extra whitespace. Matching is by normalized name, and the lowest matching cmper wins:
-    // the target holds it at both 3 and 7.
+    // The same typeface sits at cmper 1 in the source and 3 in the target, and the source spells
+    // it with extra whitespace, so only a normalized comparison finds it.
     EXPECT_EQ(importFontDefinitionInto(target, times), std::optional<Cmper>(3));
-    EXPECT_EQ(target->getOthers()->getArray<others::FontDefinition>(SCORE_PARTID).size(),
-        sourceFonts.size());
+    // Matching reuses what is there; nothing is added.
+    EXPECT_EQ(target->getOthers()->getArray<others::FontDefinition>(SCORE_PARTID).size(), before);
 }
 
 TEST(FontTest, ImportFontDefinitionClonesWhenAbsentAndKeepsSpelling)
@@ -435,7 +427,7 @@ TEST(FontTest, ImportFontDefinitionClonesWhenAbsentAndKeepsSpelling)
     ASSERT_TRUE(seville);
     const auto imported = importFontDefinitionInto(target, seville);
     ASSERT_TRUE(imported);
-    EXPECT_EQ(*imported, 8); // one past the target's highest existing cmper, which is 7
+    EXPECT_EQ(*imported, 4); // one past the target's highest existing cmper, which is 3
 
     auto added = target->getOthers()->get<others::FontDefinition>(SCORE_PARTID, *imported);
     ASSERT_TRUE(added);

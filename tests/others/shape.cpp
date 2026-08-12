@@ -590,3 +590,195 @@ TEST(ShapeDefTest, CalculateSlurContourDirection)
         EXPECT_EQ(direction, expectedDirections[i]) << "contour mismatch for cmper " << shapes[i]->getCmper();
     }
 }
+
+constexpr static musxtest::string_view shapeImportSourceXml = R"xml(
+<?xml version="1.0" encoding="UTF-8"?>
+<finale>
+    <others>
+        <fontName cmper="9">
+            <charsetBank>Mac</charsetBank>
+            <charsetVal>4095</charsetVal>
+            <pitch>0</pitch>
+            <family>0</family>
+            <name>Seville</name>
+        </fontName>
+        <shapeData cmper="3">
+            <data>9</data>
+            <data>24</data>
+            <data>1</data>
+            <data>57</data>
+        </shapeData>
+        <shapeDef cmper="2">
+            <instList>4</instList>
+            <dataList>3</dataList>
+            <shapeType>clef</shapeType>
+        </shapeDef>
+        <shapeList cmper="4">
+            <instruct>
+                <numData>3</numData>
+                <tag>setFont</tag>
+            </instruct>
+            <instruct>
+                <numData>1</numData>
+                <tag>drawChar</tag>
+            </instruct>
+        </shapeList>
+    </others>
+</finale>
+    )xml";
+
+constexpr static musxtest::string_view shapeImportTargetXml = R"xml(
+<?xml version="1.0" encoding="UTF-8"?>
+<finale>
+    <others>
+        <fontName cmper="1">
+            <charsetBank>Mac</charsetBank>
+            <charsetVal>0</charsetVal>
+            <pitch>0</pitch>
+            <family>0</family>
+            <name>Times New Roman</name>
+        </fontName>
+        <shapeData cmper="8">
+            <data>0</data>
+        </shapeData>
+        <shapeDef cmper="6">
+            <instList>7</instList>
+            <dataList>8</dataList>
+            <shapeType>articulation</shapeType>
+        </shapeDef>
+        <shapeList cmper="7">
+            <instruct>
+                <numData>1</numData>
+                <tag>lineWidth</tag>
+            </instruct>
+        </shapeList>
+    </others>
+</finale>
+    )xml";
+
+TEST(ShapeTest, ImportShapeDefCopiesListsAndRemapsItsFont)
+{
+    auto source = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(shapeImportSourceXml);
+    auto target = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(shapeImportTargetXml);
+
+    auto shape = source->getOthers()->get<others::ShapeDef>(SCORE_PARTID, 2);
+    ASSERT_TRUE(shape);
+
+    const auto imported = others::importShapeDefInto(target, shape);
+    ASSERT_TRUE(imported);
+    // Each pool numbers independently, so the copy takes the next free cmper in each.
+    EXPECT_EQ(*imported, 7);
+
+    auto copied = target->getOthers()->get<others::ShapeDef>(SCORE_PARTID, *imported);
+    ASSERT_TRUE(copied);
+    EXPECT_EQ(copied->shapeType, others::ShapeDef::ShapeType::Clef);
+    EXPECT_EQ(copied->instructionList, 8);
+    EXPECT_EQ(copied->dataList, 9);
+    // The source numbered its lists 4 and 3; carrying those across would have named the target's
+    // own unrelated shapeList 4 and shapeData 3.
+    EXPECT_NE(copied->instructionList, shape->instructionList);
+    EXPECT_NE(copied->dataList, shape->dataList);
+
+    // Seville is absent from the target, so it is cloned; the setFont data must name the new
+    // cmper rather than the source's 9.
+    bool sawFont = false;
+    copied->iterateInstructions([&](const ShapeDefInstruction::Decoded& decoded) {
+        if (const auto setFont = std::get_if<ShapeDefInstruction::SetFont>(&decoded.data)) {
+            sawFont = true;
+            EXPECT_NE(setFont->font.fontId, 9);
+            EXPECT_EQ(setFont->font.getName(), "Seville");
+            EXPECT_EQ(setFont->font.fontSize, 24);
+            EXPECT_TRUE(setFont->font.bold);
+        }
+        return true;
+    });
+    EXPECT_TRUE(sawFont);
+
+    // The instruction stream and the non-font data are copied verbatim.
+    auto copiedData = target->getOthers()->get<others::ShapeData>(SCORE_PARTID, copied->dataList);
+    ASSERT_TRUE(copiedData);
+    ASSERT_EQ(copiedData->values.size(), 4u);
+    EXPECT_EQ(copiedData->values[1], 24);
+    EXPECT_EQ(copiedData->values[3], 57);
+}
+
+constexpr static musxtest::string_view shapeWithGraphicXml = R"xml(
+<?xml version="1.0" encoding="UTF-8"?>
+<finale>
+    <others>
+        <shapeData cmper="1">
+            <data>100</data>
+            <data>200</data>
+            <data>12</data>
+        </shapeData>
+        <shapeDef cmper="1">
+            <instList>1</instList>
+            <dataList>1</dataList>
+            <shapeType>expression</shapeType>
+        </shapeDef>
+        <shapeList cmper="1">
+            <instruct>
+                <numData>3</numData>
+                <tag>extGraphic</tag>
+            </instruct>
+        </shapeList>
+        <shapeDef cmper="2">
+            <shapeType>other</shapeType>
+        </shapeDef>
+    </others>
+</finale>
+    )xml";
+
+TEST(ShapeTest, ImportShapeDefRefusesAShapeNamingAGraphic)
+{
+    auto source = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(shapeWithGraphicXml);
+    auto target = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(shapeImportTargetXml);
+
+    auto shape = source->getOthers()->get<others::ShapeDef>(SCORE_PARTID, 1);
+    ASSERT_TRUE(shape);
+
+    // The graphic is named by a cmper that means nothing in the target, and graphics are not
+    // copied yet, so the shape cannot be imported faithfully.
+    EXPECT_FALSE(others::importShapeDefInto(target, shape));
+
+    // Nothing partial is left behind: the target keeps only the shape it already had.
+    EXPECT_EQ(target->getOthers()->getArray<others::ShapeDef>(SCORE_PARTID).size(), 1u);
+    EXPECT_EQ(target->getOthers()->getArray<others::ShapeData>(SCORE_PARTID).size(), 1u);
+    EXPECT_EQ(target->getOthers()->getArray<others::ShapeInstructionList>(SCORE_PARTID).size(), 1u);
+}
+
+TEST(ShapeTest, ImportShapeDefCopiesABlankShapeWithoutLists)
+{
+    auto source = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(shapeWithGraphicXml);
+    auto target = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(shapeImportTargetXml);
+
+    auto blank = source->getOthers()->get<others::ShapeDef>(SCORE_PARTID, 2);
+    ASSERT_TRUE(blank);
+    ASSERT_TRUE(blank->isBlank());
+
+    const auto imported = others::importShapeDefInto(target, blank);
+    ASSERT_TRUE(imported);
+    auto copied = target->getOthers()->get<others::ShapeDef>(SCORE_PARTID, *imported);
+    ASSERT_TRUE(copied);
+    EXPECT_TRUE(copied->isBlank());
+    EXPECT_EQ(copied->instructionList, 0);
+    EXPECT_EQ(copied->dataList, 0);
+    // A shape that draws nothing owns no lists, so none were created.
+    EXPECT_EQ(target->getOthers()->getArray<others::ShapeData>(SCORE_PARTID).size(), 1u);
+}
+
+TEST(ShapeTest, NextFreeCmperIsPerType)
+{
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(shapeImportTargetXml);
+    auto others = doc->getOthers();
+
+    // Each type numbers independently: this document holds shapeDef 6, shapeList 7, shapeData 8
+    // and fontName 1, so no single answer serves all four.
+    EXPECT_EQ(others->nextFreeCmper<others::ShapeDef>(SCORE_PARTID), std::optional<Cmper>(7));
+    EXPECT_EQ(others->nextFreeCmper<others::ShapeInstructionList>(SCORE_PARTID), std::optional<Cmper>(8));
+    EXPECT_EQ(others->nextFreeCmper<others::ShapeData>(SCORE_PARTID), std::optional<Cmper>(9));
+    EXPECT_EQ(others->nextFreeCmper<others::FontDefinition>(SCORE_PARTID), std::optional<Cmper>(2));
+
+    // An empty pool starts at 1, leaving 0 for whatever sentinel meaning the type gives it.
+    EXPECT_EQ(others->nextFreeCmper<others::TextExpressionDef>(SCORE_PARTID), std::optional<Cmper>(1));
+}

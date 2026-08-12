@@ -219,6 +219,17 @@ ShapeDefInstruction::parseSetFont(const DocumentWeakPtr& document, const std::ve
     return std::nullopt;
 }
 
+std::vector<int> ShapeDefInstruction::encodeSetFont(const FontInfo& font)
+{
+    // Kept beside parseSetFont so the stored order is stated once. A caller rewriting a font
+    // reference in place would otherwise have to restate which item holds the id.
+    return {
+        int(font.fontId),
+        font.fontSize,
+        int(font.getEnigmaStyles())
+    };
+}
+
 std::optional<ShapeDefInstruction::SetGray>
 ShapeDefInstruction::parseSetGray(const std::vector<int>& data)
 {
@@ -631,6 +642,119 @@ bool ShapeDef::iterateInstructions(std::function<bool(const ShapeDefInstruction:
 
         return result;
     });
+}
+
+
+std::optional<Cmper> importShapeDefInto(const DocumentPtr& target,
+    const MusxInstance<ShapeDef>& source)
+{
+    MUSX_ASSERT_IF(!target) {
+        throw std::invalid_argument("importShapeDefInto received a null target document");
+    }
+    MUSX_ASSERT_IF(!source) {
+        throw std::invalid_argument("importShapeDefInto received a null shape");
+    }
+
+    const auto sourceDocument = source->getDocument();
+    const auto newShapeId = target->getOthers()->nextFreeCmper<ShapeDef>(SCORE_PARTID);
+    if (!newShapeId) {
+        return std::nullopt;
+    }
+
+    // SCORE_PARTID and ShareMode::All are correct for anything newly created: no linked part can
+    // reference an object that did not exist a moment ago, so there is nothing to unshare from.
+    // An importer for a ShareMode::None class would know to say so.
+    auto shape = std::make_shared<ShapeDef>(
+        target, SCORE_PARTID, EnigmaBase::ShareMode::All, *newShapeId);
+    shape->shapeType = source->shapeType;
+
+    // A shape that draws nothing owns no lists to copy.
+    if (source->instructionList == 0 && source->dataList == 0) {
+        target->getOthers()->add(ShapeDef::XmlNodeName, shape);
+        return *newShapeId;
+    }
+
+    const auto instructions = sourceDocument->getOthers()->get<ShapeInstructionList>(
+        source->getRequestedPartId(), source->instructionList);
+    const auto data = sourceDocument->getOthers()->get<ShapeData>(
+        source->getRequestedPartId(), source->dataList);
+    if (!instructions || !data) {
+        return std::nullopt;
+    }
+
+    // Every reference the instructions carry is resolved against the target before anything is
+    // added, so a shape that cannot be copied faithfully leaves no partial shape behind.
+    std::vector<int> values = data->values;
+    std::size_t dataIndex = 0;
+    for (const auto& instruction : instructions->instructions) {
+        const auto count = static_cast<std::size_t>(instruction->numData);
+        if (dataIndex + count > values.size()) {
+            return std::nullopt;
+        }
+        if (instruction->type == ShapeDefInstructionType::ExternalGraphic) {
+            /// @todo Copy the embedded graphic and remap the cmper, as is done for fonts below.
+            // Until then the instruction names a graphic by a cmper meaningful only in the source
+            // document, and refusing is the only answer that does not produce a shape pointing at
+            // the wrong thing.
+            return std::nullopt;
+        }
+        if (instruction->type == ShapeDefInstructionType::SetFont) {
+            const std::vector<int> stored(values.begin() + dataIndex,
+                values.begin() + dataIndex + count);
+            const auto parsed = ShapeDefInstruction::parseSetFont(sourceDocument, stored);
+            if (!parsed) {
+                return std::nullopt;
+            }
+            FontInfo font = parsed->font;
+            if (const auto sourceFont = sourceDocument->getOthers()->get<FontDefinition>(
+                    SCORE_PARTID, font.fontId)) {
+                const auto resolved = importFontDefinitionInto(target, sourceFont);
+                if (!resolved) {
+                    return std::nullopt;
+                }
+                font.fontId = *resolved;
+            } else if (font.fontId != 0) {
+                // The source names a font it does not itself define, so there is nothing to
+                // resolve and the number cannot be carried across.
+                return std::nullopt;
+            }
+            const auto encoded = ShapeDefInstruction::encodeSetFont(font);
+            for (std::size_t i = 0; i < encoded.size() && i < count; ++i) {
+                values[dataIndex + i] = encoded[i];
+            }
+        }
+        dataIndex += count;
+    }
+
+    const auto newInstructionsId =
+        target->getOthers()->nextFreeCmper<ShapeInstructionList>(SCORE_PARTID);
+    const auto newDataId = target->getOthers()->nextFreeCmper<ShapeData>(SCORE_PARTID);
+    if (!newInstructionsId || !newDataId) {
+        return std::nullopt;
+    }
+
+    auto newInstructions = std::make_shared<ShapeInstructionList>(
+        target, SCORE_PARTID, EnigmaBase::ShareMode::All, *newInstructionsId);
+    for (const auto& instruction : instructions->instructions) {
+        auto copy = std::make_shared<ShapeInstructionList::InstructionInfo>();
+        copy->numData = instruction->numData;
+        copy->type = instruction->type;
+        newInstructions->instructions.push_back(std::move(copy));
+    }
+
+    auto newData = std::make_shared<ShapeData>(
+        target, SCORE_PARTID, EnigmaBase::ShareMode::All, *newDataId);
+    newData->values = std::move(values);
+
+    // The three pools number independently, so the copied ShapeDef is rewired rather than
+    // assuming the source's numbers travel together.
+    shape->instructionList = *newInstructionsId;
+    shape->dataList = *newDataId;
+
+    target->getOthers()->add(ShapeInstructionList::XmlNodeName, newInstructions);
+    target->getOthers()->add(ShapeData::XmlNodeName, newData);
+    target->getOthers()->add(ShapeDef::XmlNodeName, shape);
+    return *newShapeId;
 }
 
 } // namespace others

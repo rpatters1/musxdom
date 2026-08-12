@@ -75,9 +75,8 @@ std::string normalizeFontName(std::string_view name);
 ///
 /// A @ref Cmper is meaningful only within the document that issued it. A non-zero definition is
 /// therefore matched against @p target by normalized name (see @ref normalizeFontName) and never by
-/// cmper. The definition at cmper 0 is excluded from matching, and the lowest matching cmper wins.
-/// When nothing matches, the definition is copied to the next free cmper, retaining @p source's
-/// exact spelling.
+/// cmper. The definition at cmper 0 is excluded from matching. When nothing matches, the
+/// definition is copied to the next free cmper, retaining @p source's exact spelling.
 ///
 /// Font id 0 is a sentinel for the document's default music font rather than an index to a
 /// typeface. It is returned unchanged, and a definition is created at 0 in @p target when absent,
