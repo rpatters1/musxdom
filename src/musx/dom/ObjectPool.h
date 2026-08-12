@@ -529,6 +529,27 @@ public:
         static_assert(is_pool_type_v<OthersPool, T>, "Type T is not registered in OthersPool");
         return m_pool.getEffectiveForPart<T>({ T::XmlNodeName, partId, cmper, std::nullopt, inci });
     }
+
+    /// @brief The cmper one past the highest currently used for @c T.
+    ///
+    /// Each type numbers independently, so a cmper free for one type says nothing about another.
+    ///
+    /// @tparam T The type whose cmpers are being counted.
+    /// @param partId The part to search.
+    /// @return The next free cmper, or std::nullopt when the cmper space for @c T is exhausted.
+    template <typename T>
+    std::optional<Cmper> nextFreeCmper(Cmper partId) const
+    {
+        static_assert(is_pool_type_v<OthersPool, T>, "Type T is not registered in OthersPool");
+        Cmper highest = 0;
+        for (const auto& item : getArray<T>(partId)) {
+            highest = (std::max)(highest, item->getCmper());
+        }
+        if (highest == (std::numeric_limits<Cmper>::max)()) {
+            return std::nullopt;
+        }
+        return Cmper(highest + 1);
+    }
 };
 /** @brief Shared `OthersPool` pointer */
 using OthersPoolPtr = std::shared_ptr<OthersPool>;

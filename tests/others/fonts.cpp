@@ -351,3 +351,218 @@ TEST(FontTest, SameTypefaceDoesNotCompareNamesOfTwoConcreteIds)
     EXPECT_TRUE(sentinel->calcIsSameTypeface(*duplicate));
     EXPECT_FALSE(other->calcIsSameTypeface(*duplicate));
 }
+
+constexpr static musxtest::string_view importTargetProperties = R"xml(
+<?xml version="1.0" encoding="UTF-8"?>
+<finale>
+  <others>
+    <fontName cmper="0">
+      <charsetBank>Mac</charsetBank>
+      <charsetVal>4095</charsetVal>
+      <pitch>0</pitch>
+      <family>0</family>
+      <name>Jazz</name>
+    </fontName>
+    <fontName cmper="3">
+      <charsetBank>Mac</charsetBank>
+      <charsetVal>0</charsetVal>
+      <pitch>0</pitch>
+      <family>0</family>
+      <name>Times New Roman</name>
+    </fontName>
+  </others>
+</finale>
+    )xml";
+
+constexpr static musxtest::string_view importSourceProperties = R"xml(
+<?xml version="1.0" encoding="UTF-8"?>
+<finale>
+  <others>
+    <fontName cmper="0">
+      <charsetBank>Win</charsetBank>
+      <charsetVal>2</charsetVal>
+      <pitch>0</pitch>
+      <family>0</family>
+      <name>Maestro</name>
+    </fontName>
+    <fontName cmper="1">
+      <charsetBank>Win</charsetBank>
+      <charsetVal>0</charsetVal>
+      <pitch>1</pitch>
+      <family>2</family>
+      <name>  Times   New Roman </name>
+    </fontName>
+    <fontName cmper="4">
+      <charsetBank>Win</charsetBank>
+      <charsetVal>0</charsetVal>
+      <pitch>0</pitch>
+      <family>0</family>
+      <name>Seville</name>
+    </fontName>
+  </others>
+</finale>
+    )xml";
+
+TEST(FontTest, ImportFontDefinitionMatchesByNameNotCmper)
+{
+    auto target = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(importTargetProperties);
+    auto source = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(importSourceProperties);
+    const auto before = target->getOthers()->getArray<others::FontDefinition>(SCORE_PARTID).size();
+
+    auto times = source->getOthers()->get<others::FontDefinition>(SCORE_PARTID, 1);
+    ASSERT_TRUE(times);
+    // The same typeface sits at cmper 1 in the source and 3 in the target, and the source spells
+    // it with extra whitespace, so only a normalized comparison finds it.
+    EXPECT_EQ(importFontDefinitionInto(target, times), std::optional<Cmper>(Cmper(3)));
+    // Matching reuses what is there; nothing is added.
+    EXPECT_EQ(target->getOthers()->getArray<others::FontDefinition>(SCORE_PARTID).size(), before);
+}
+
+TEST(FontTest, ImportFontDefinitionClonesWhenAbsentAndKeepsSpelling)
+{
+    auto target = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(importTargetProperties);
+    auto source = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(importSourceProperties);
+
+    auto seville = source->getOthers()->get<others::FontDefinition>(SCORE_PARTID, 4);
+    ASSERT_TRUE(seville);
+    const auto imported = importFontDefinitionInto(target, seville);
+    ASSERT_TRUE(imported);
+    EXPECT_EQ(*imported, 4); // one past the target's highest existing cmper, which is 3
+
+    auto added = target->getOthers()->get<others::FontDefinition>(SCORE_PARTID, *imported);
+    ASSERT_TRUE(added);
+    EXPECT_EQ(added->name, "Seville");
+    EXPECT_EQ(added->charsetBank, others::FontDefinition::CharacterSetBank::Windows);
+    EXPECT_EQ(added->charsetVal, 0);
+
+    // A second import of the same typeface finds the copy rather than making another.
+    EXPECT_EQ(importFontDefinitionInto(target, seville), imported);
+}
+
+TEST(FontTest, ImportFontDefinitionPassesZeroThroughWithoutMatchingByName)
+{
+    auto target = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(importTargetProperties);
+    auto source = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(importSourceProperties);
+
+    auto music = source->getOthers()->get<others::FontDefinition>(SCORE_PARTID, 0);
+    ASSERT_TRUE(music);
+    // Id 0 names the destination's own music font. Returning the source's typeface, or matching
+    // "Maestro" into the target, would change what every element storing 0 renders as.
+    EXPECT_EQ(importFontDefinitionInto(target, music), std::optional<Cmper>(Cmper(0)));
+    auto zero = target->getOthers()->get<others::FontDefinition>(SCORE_PARTID, 0);
+    ASSERT_TRUE(zero);
+    EXPECT_EQ(zero->name, "Jazz");
+}
+
+TEST(FontTest, ImportFontDefinitionCreatesZeroWhenTargetLacksIt)
+{
+    auto target = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(fontProperties);
+    auto source = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(importSourceProperties);
+
+    // This target defines only cmper 1, so the returned id would otherwise name nothing.
+    EXPECT_FALSE(target->getOthers()->get<others::FontDefinition>(SCORE_PARTID, 0));
+
+    auto music = source->getOthers()->get<others::FontDefinition>(SCORE_PARTID, 0);
+    ASSERT_TRUE(music);
+    EXPECT_EQ(importFontDefinitionInto(target, music), std::optional<Cmper>(Cmper(0)));
+
+    auto created = target->getOthers()->get<others::FontDefinition>(SCORE_PARTID, 0);
+    ASSERT_TRUE(created);
+    EXPECT_EQ(created->name, "Maestro");
+}
+
+constexpr static musxtest::string_view targetWithMusicFontButNoZero = R"xml(
+<?xml version="1.0" encoding="UTF-8"?>
+<finale>
+  <options>
+    <fontOptions>
+      <font type="music">
+        <fontID>5</fontID>
+        <fontSize>24</fontSize>
+      </font>
+    </fontOptions>
+  </options>
+  <others>
+    <fontName cmper="5">
+      <charsetBank>Mac</charsetBank>
+      <charsetVal>4095</charsetVal>
+      <pitch>0</pitch>
+      <family>0</family>
+      <name>Broadway Copyist</name>
+    </fontName>
+  </others>
+</finale>
+    )xml";
+
+TEST(FontTest, ImportFontDefinitionTakesZeroFromTargetsOwnMusicFont)
+{
+    auto target = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(targetWithMusicFontButNoZero);
+    auto source = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(importSourceProperties);
+
+    auto music = source->getOthers()->get<others::FontDefinition>(SCORE_PARTID, 0);
+    ASSERT_TRUE(music);
+    EXPECT_EQ(music->name, "Maestro");
+
+    EXPECT_EQ(importFontDefinitionInto(target, music), std::optional<Cmper>(Cmper(0)));
+
+    // The target's own FontOptions name Broadway Copyist as its music font, so that is what id 0
+    // stands for here. Taking the source's Maestro would have changed the typeface of everything
+    // in the target that stores 0.
+    auto created = target->getOthers()->get<others::FontDefinition>(SCORE_PARTID, 0);
+    ASSERT_TRUE(created);
+    EXPECT_EQ(created->name, "Broadway Copyist");
+}
+
+TEST(FontTest, ImportFontDefinitionFallbackAlsoGivesTheTypefaceANonZeroCmper)
+{
+    // This target has no FontOptions, so it cannot say what its music font is, and no definition
+    // at 0. The source's own default music font is the only remaining answer.
+    auto target = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(fontProperties);
+    auto source = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(importSourceProperties);
+    EXPECT_FALSE(target->getOthers()->get<others::FontDefinition>(SCORE_PARTID, 0));
+
+    auto music = source->getOthers()->get<others::FontDefinition>(SCORE_PARTID, 0);
+    ASSERT_TRUE(music);
+    EXPECT_EQ(importFontDefinitionInto(target, music), std::optional<Cmper>(Cmper(0)));
+
+    auto created = target->getOthers()->get<others::FontDefinition>(SCORE_PARTID, 0);
+    ASSERT_TRUE(created);
+    EXPECT_EQ(created->name, "Maestro");
+
+    // Id 0 tracks whatever the music font later becomes and is never selected by matching, so the
+    // typeface must also be addressable under a concrete cmper.
+    auto fonts = target->getOthers()->getArray<others::FontDefinition>(SCORE_PARTID);
+    const auto named = std::count_if(fonts.begin(), fonts.end(),
+        [](const MusxInstance<others::FontDefinition>& font) {
+            return font->getCmper() != 0 && normalizeFontName(font->name) == "maestro";
+        });
+    EXPECT_EQ(named, 1);
+}
+
+TEST(FontTest, GetFontInfoOrNullReportsAbsenceInsteadOfThrowing)
+{
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(fontProperties);
+    auto fontOptions = doc->getOptions()->get<options::FontOptions>();
+    ASSERT_TRUE(fontOptions);
+
+    // Present: both forms agree with the throwing accessor.
+    auto music = fontOptions->getFontInfoOrNull(options::FontOptions::FontType::Music);
+    ASSERT_TRUE(music);
+    EXPECT_EQ(music->fontId, 13);
+    EXPECT_EQ(options::FontOptions::getFontInfoOrNull(doc, options::FontOptions::FontType::Music)->fontId, 13);
+    EXPECT_EQ(fontOptions->getFontInfo(options::FontOptions::FontType::Music)->fontId, 13);
+
+    // Absent: null rather than an exception, while the throwing accessor still throws.
+    EXPECT_FALSE(fontOptions->getFontInfoOrNull(options::FontOptions::FontType::Tablature));
+    EXPECT_FALSE(options::FontOptions::getFontInfoOrNull(doc, options::FontOptions::FontType::Tablature));
+    EXPECT_THROW(static_cast<void>(fontOptions->getFontInfo(options::FontOptions::FontType::Tablature)),
+        std::invalid_argument);
+}
+
+TEST(FontTest, GetFontInfoOrNullHandlesADocumentWithNoFontOptions)
+{
+    // A document whose options pool has no FontOptions at all must not throw from the static form.
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(importTargetProperties);
+    EXPECT_FALSE(doc->getOptions()->get<options::FontOptions>());
+    EXPECT_FALSE(options::FontOptions::getFontInfoOrNull(doc, options::FontOptions::FontType::Music));
+}

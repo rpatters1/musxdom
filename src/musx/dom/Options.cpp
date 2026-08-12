@@ -133,26 +133,39 @@ MusxInstance<FontInfo> ClefOptions::ClefDef::calcFont() const
 // ***** FontOptions *****
 // ***********************
 
-MusxInstance<FontInfo> FontOptions::getFontInfo(FontOptions::FontType type) const
+MusxInstance<FontInfo> FontOptions::getFontInfoOrNull(FontOptions::FontType type) const
 {
     auto it = fontOptions.find(type);
-    if (it == fontOptions.end()) {
-        throw std::invalid_argument("Font type " + std::to_string(int(type)) + " not found in document");
+    return it == fontOptions.end() ? nullptr : it->second;
+}
+
+MusxInstance<FontInfo> FontOptions::getFontInfoOrNull(const DocumentPtr& document, FontOptions::FontType type)
+{
+    auto options = document->getOptions();
+    if (!options) {
+        return nullptr;
     }
-    return it->second;
+    auto fontOptions = options->get<FontOptions>();
+    if (!fontOptions) {
+        return nullptr;
+    }
+    return fontOptions->getFontInfoOrNull(type);
+}
+
+MusxInstance<FontInfo> FontOptions::getFontInfo(FontOptions::FontType type) const
+{
+    if (auto result = getFontInfoOrNull(type)) {
+        return result;
+    }
+    throw std::invalid_argument("Font type " + std::to_string(int(type)) + " not found in document");
 }
 
 MusxInstance<FontInfo> FontOptions::getFontInfo(const DocumentPtr& document, FontOptions::FontType type)
 {
-    auto options = document->getOptions();
-    if (!options) {
-        throw std::invalid_argument("No options found in document");
+    if (auto result = getFontInfoOrNull(document, type)) {
+        return result;
     }
-    auto fontOptions = options->get<FontOptions>();
-    if (!fontOptions) {
-        throw std::invalid_argument("Default fonts not found in document");
-    }
-    return fontOptions->getFontInfo(type);
+    throw std::invalid_argument("Font type " + std::to_string(int(type)) + " not found in document");
 }
 
 // *****************************

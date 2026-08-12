@@ -470,6 +470,11 @@ struct ShapeDefInstruction
     /// @brief Attempts to parse a SetFont instruction.
     static std::optional<SetFont> parseSetFont(const DocumentWeakPtr& document, const std::vector<int>& data);
 
+    /// @brief Builds the instruction data for a SetFont instruction.
+    /// @param font The font to encode.
+    /// @return The data items a SetFont instruction consumes, in stored order.
+    static std::vector<int> encodeSetFont(const FontInfo& font);
+
     /// @brief Attempts to parse a SetGray instruction.
     static std::optional<SetGray> parseSetGray(const std::vector<int>& data);
 
@@ -615,6 +620,30 @@ public:
     constexpr static std::string_view XmlNodeName = "shapeList"; ///< The XML node name for this type.
     static const xml::XmlElementArray<ShapeInstructionList>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
+
+/// @brief Copies a shape and everything it owns into another document.
+///
+/// A shape is more than its @ref ShapeDef: the instruction list and data list it names are
+/// separate objects in their own pools, and a SetFont instruction inside the data names a font.
+/// Each is copied to the next free cmper in its own pool of @p target, and the copied
+/// @ref ShapeDef is rewired to the new numbers. Font references are resolved by
+/// @ref importFontDefinitionInto, so a copied shape never names a font by @p source's cmper.
+///
+/// Nothing is added to @p target unless the whole shape can be copied. Font definitions resolved
+/// along the way are an exception and may remain, which is harmless: an unreferenced definition
+/// changes no rendering.
+///
+/// @param target The document to import into. May be the same document as @p source's.
+/// @param source The shape to import.
+/// @return The @ref ShapeDef cmper within @p target, or std::nullopt when a pool has no free
+/// cmper left, when the source is missing its instruction or data list, or when a font it names
+/// cannot be resolved.
+/// @throws std::invalid_argument if @p target or @p source is null. Debug builds assert instead.
+/// @todo Copy embedded graphics, so that a shape containing an ExternalGraphic instruction can be
+/// imported rather than refused.
+[[nodiscard]]
+std::optional<Cmper> importShapeDefInto(const DocumentPtr& target,
+    const MusxInstance<ShapeDef>& source);
 
 } // namespace others
 } // namespace dom
