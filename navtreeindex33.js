@@ -1,5 +1,11 @@
 var NAVTREEINDEX33 =
 {
+"namespacemusx_1_1dom_1_1uuid.html#ab3b96fd1f08ef7ac11abbd50013d8c34":[1,0,1,0,5,450],
+"namespacemusx_1_1dom_1_1uuid.html#ab3d06a0be681b3b73defd5cda67eadbd":[1,0,1,0,5,268],
+"namespacemusx_1_1dom_1_1uuid.html#ab48f2b5fdf9273a8bb0f3679cd0a212f":[1,0,1,0,5,499],
+"namespacemusx_1_1dom_1_1uuid.html#ab4bfa946c4dcf86c4690b3f5c6cb52ec":[1,0,1,0,5,379],
+"namespacemusx_1_1dom_1_1uuid.html#ab4c92cbd6c63310a2e0742e5baef556c":[1,0,1,0,5,223],
+"namespacemusx_1_1dom_1_1uuid.html#ab51f4e3a0ab5446e52ed484965713085":[1,0,1,0,5,165],
 "namespacemusx_1_1dom_1_1uuid.html#ab52fbe04a58ee43014558cb4d23b4524":[1,0,1,0,5,34],
 "namespacemusx_1_1dom_1_1uuid.html#ab5881d55ea45d3597874906cfc849b41":[1,0,1,0,5,247],
 "namespacemusx_1_1dom_1_1uuid.html#ab588b5aea142feb669402767cba7218e":[1,0,1,0,5,258],
@@ -243,11 +249,5 @@ var NAVTREEINDEX33 =
 "namespacemusx_1_1xml_1_1rapidxml.html":[1,0,1,2,1],
 "namespacemusx_1_1xml_1_1tinyxml2.html":[1,0,1,2,2],
 "namespaces.html":[1,0],
-"namespacesmufl__glyph.html":[1,0,2],
-"namespacesymbol__glyph.html":[1,0,3],
-"pages.html":[],
-"structmusic__theory_1_1Pitch.html":[1,0,0,0],
-"structmusic__theory_1_1Pitch.html":[2,0,0,0],
-"structmusic__theory_1_1Pitch.html#a417284fb2ecf0dea7193240c78b3e1d4":[1,0,0,0,3],
-"structmusic__theory_1_1Pitch.html#a417284fb2ecf0dea7193240c78b3e1d4":[2,0,0,0,3]
+"namespacesmufl__glyph.html":[1,0,2]
 };

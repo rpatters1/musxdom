@@ -1,5 +1,11 @@
 var NAVTREEINDEX36 =
 {
+"structmusx_1_1dom_1_1others_1_1ArticulationDef_1_1SelectedSymbol.html#a6b52c7bc9c231924b5c741b8ae4c95b5":[1,0,1,0,3,4,0,4],
+"structmusx_1_1dom_1_1others_1_1ArticulationDef_1_1SelectedSymbol.html#a6b52c7bc9c231924b5c741b8ae4c95b5":[2,0,1,0,3,4,0,4],
+"structmusx_1_1dom_1_1others_1_1ArticulationDef_1_1SelectedSymbol.html#abd42859a8a0638a026ca33ba80157bcd":[1,0,1,0,3,4,0,1],
+"structmusx_1_1dom_1_1others_1_1ArticulationDef_1_1SelectedSymbol.html#abd42859a8a0638a026ca33ba80157bcd":[2,0,1,0,3,4,0,1],
+"structmusx_1_1dom_1_1others_1_1Staff_1_1ClefChange.html":[1,0,1,0,3,64,1],
+"structmusx_1_1dom_1_1others_1_1Staff_1_1ClefChange.html":[2,0,1,0,3,64,1],
 "structmusx_1_1dom_1_1others_1_1Staff_1_1ClefChange.html#a2391af978745bb9e784ac994cb222d75":[2,0,1,0,3,64,1,3],
 "structmusx_1_1dom_1_1others_1_1Staff_1_1ClefChange.html#a2391af978745bb9e784ac994cb222d75":[1,0,1,0,3,64,1,3],
 "structmusx_1_1dom_1_1others_1_1Staff_1_1ClefChange.html#a3febf5d7b98a15ca7ce6d1c4e34a2628":[2,0,1,0,3,64,1,6],

@@ -49,5 +49,6 @@ var classmusx_1_1dom_1_1options_1_1FontOptions =
     ] ],
     [ "FontOptions", "classmusx_1_1dom_1_1options_1_1FontOptions.html#ad02a81fefc0688893ddf06685aa6da8c", null ],
     [ "getFontInfo", "classmusx_1_1dom_1_1options_1_1FontOptions.html#a4043870e499f106a52098e0e179dd6d0", null ],
+    [ "getFontInfoOrNull", "classmusx_1_1dom_1_1options_1_1FontOptions.html#a6f1bb93dd368113d95da10ec7cc46713", null ],
     [ "fontOptions", "classmusx_1_1dom_1_1options_1_1FontOptions.html#a5d0b36d1d664fd4122ca7611f1d18e4f", null ]
 ];

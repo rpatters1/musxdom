@@ -240,6 +240,9 @@ static std::optional&lt; <a class="el" href="structmusx_1_1dom_1_1ShapeDefInstru
 static std::optional&lt; <a class="el" href="structmusx_1_1dom_1_1ShapeDefInstruction_1_1SetFont.html">SetFont</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>parseSetFont</b> (const <a class="el" href="namespacemusx_1_1dom.html#aa76356b1ad3580081294898c79615c4d">DocumentWeakPtr</a> &amp;document, const std::vector&lt; int &gt; &amp;data)</td></tr>
 <tr class="memdesc:a00e9ab7459423417256b22b2d57099ca"><td class="mdescLeft">&#160;</td><td class="mdescRight">Attempts to parse a <a class="el" href="structmusx_1_1dom_1_1ShapeDefInstruction_1_1SetFont.html" title="Holds the parsed data for a SetFont instruction.">SetFont</a> instruction. <br /></td></tr>
 <tr class="separator:a00e9ab7459423417256b22b2d57099ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac7a26e87c3cd122a2efed3bd8567ff1e" id="r_ac7a26e87c3cd122a2efed3bd8567ff1e"><td class="memItemLeft" align="right" valign="top">static std::vector&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmusx_1_1dom_1_1ShapeDefInstruction.html#ac7a26e87c3cd122a2efed3bd8567ff1e">encodeSetFont</a> (const <a class="el" href="classmusx_1_1dom_1_1FontInfo.html">FontInfo</a> &amp;font)</td></tr>
+<tr class="memdesc:ac7a26e87c3cd122a2efed3bd8567ff1e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Builds the instruction data for a <a class="el" href="structmusx_1_1dom_1_1ShapeDefInstruction_1_1SetFont.html" title="Holds the parsed data for a SetFont instruction.">SetFont</a> instruction.  <br /></td></tr>
+<tr class="separator:ac7a26e87c3cd122a2efed3bd8567ff1e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a471da3b950e9640e412e3b7b1656417d" id="r_a471da3b950e9640e412e3b7b1656417d"><td class="memItemLeft" align="right" valign="top"><a id="a471da3b950e9640e412e3b7b1656417d" name="a471da3b950e9640e412e3b7b1656417d"></a>
 static std::optional&lt; <a class="el" href="structmusx_1_1dom_1_1ShapeDefInstruction_1_1SetGray.html">SetGray</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>parseSetGray</b> (const std::vector&lt; int &gt; &amp;data)</td></tr>
 <tr class="memdesc:a471da3b950e9640e412e3b7b1656417d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Attempts to parse a <a class="el" href="structmusx_1_1dom_1_1ShapeDefInstruction_1_1SetGray.html" title="Holds the parsed data for a SetGray instruction.">SetGray</a> instruction. <br /></td></tr>
@@ -293,6 +296,42 @@ static std::optional&lt; <a class="el" href="structmusx_1_1dom_1_1ShapeDefInstru
 <tr><td class="fieldname"><a id="a88ea001d415764ce8c52d01b7b96503ba92b09c7c48c520c3c55e497875da437c" name="a88ea001d415764ce8c52d01b7b96503ba92b09c7c48c520c3c55e497875da437c"></a>Right&#160;</td><td class="fielddoc"><p>Draw line on the "right" side of the coordinates. </p>
 </td></tr>
 </table>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="ac7a26e87c3cd122a2efed3bd8567ff1e" name="ac7a26e87c3cd122a2efed3bd8567ff1e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac7a26e87c3cd122a2efed3bd8567ff1e">&#9670;&#160;</a></span>encodeSetFont()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; int &gt; musx::dom::ShapeDefInstruction::encodeSetFont </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classmusx_1_1dom_1_1FontInfo.html">FontInfo</a> &amp;&#160;</td>
+          <td class="paramname"><em>font</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Builds the instruction data for a <a class="el" href="structmusx_1_1dom_1_1ShapeDefInstruction_1_1SetFont.html" title="Holds the parsed data for a SetFont instruction.">SetFont</a> instruction. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">font</td><td>The font to encode. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The data items a <a class="el" href="structmusx_1_1dom_1_1ShapeDefInstruction_1_1SetFont.html" title="Holds the parsed data for a SetFont instruction.">SetFont</a> instruction consumes, in stored order. </dd></dl>
 
 </div>
 </div>

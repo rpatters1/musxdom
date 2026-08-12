@@ -644,6 +644,9 @@ Functions</h2></td></tr>
 <tr class="memitem:a52074e6f04c7b798c6eca1cf4b5185c5" id="r_a52074e6f04c7b798c6eca1cf4b5185c5"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemusx_1_1dom.html#a52074e6f04c7b798c6eca1cf4b5185c5">normalizeFontName</a> (std::string_view name)</td></tr>
 <tr class="memdesc:a52074e6f04c7b798c6eca1cf4b5185c5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Normalizes a font name for comparison by removing ASCII whitespace and folding ASCII case.  <br /></td></tr>
 <tr class="separator:a52074e6f04c7b798c6eca1cf4b5185c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abc7a5964448cf4e48814d95fc3572e69" id="r_abc7a5964448cf4e48814d95fc3572e69"><td class="memItemLeft" align="right" valign="top">std::optional&lt; <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemusx_1_1dom.html#abc7a5964448cf4e48814d95fc3572e69">importFontDefinitionInto</a> (const <a class="el" href="namespacemusx_1_1dom.html#ac52edbaa60f81ba3df76ee77b37e95fd">DocumentPtr</a> &amp;target, const <a class="el" href="namespacemusx_1_1dom.html#a4223cd531120dbef7acd854c3d2631b8">MusxInstance</a>&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1FontDefinition.html">others::FontDefinition</a> &gt; &amp;source)</td></tr>
+<tr class="memdesc:abc7a5964448cf4e48814d95fc3572e69"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copies a font definition into another document, reusing an equivalent one when present.  <br /></td></tr>
+<tr class="separator:abc7a5964448cf4e48814d95fc3572e69"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad70355206e90c7b79b7860fc5d75bff0" id="r_ad70355206e90c7b79b7860fc5d75bff0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemusx_1_1dom.html#a9fd6f660a4f7c02787b6bbe3307a15af">Duration</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemusx_1_1dom.html#ad70355206e90c7b79b7860fc5d75bff0">calcDurationInfoFromEdu</a> (<a class="el" href="namespacemusx_1_1dom.html#a907ef641c247f1a5dbe75bbc972661f5">Edu</a> duration)</td></tr>
 <tr class="memdesc:ad70355206e90c7b79b7860fc5d75bff0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the <a class="el" href="namespacemusx_1_1dom.html#a3c91ee84b72cc27a2899191d6baee312">NoteType</a> and number of dots in an <a class="el" href="namespacemusx_1_1dom.html#a907ef641c247f1a5dbe75bbc972661f5">Edu</a> value.  <br /></td></tr>
 <tr class="separator:ad70355206e90c7b79b7860fc5d75bff0"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1482,6 +1485,52 @@ template&lt;typename T &gt; </div>
 
 <p>Returns the number of beams implied by an EDU duration. </p>
 <p>Uses calcDurationInfoFromEdu to determine the base note value. Durations greater than a quarter note return 0 flags. Dots are ignored. </p>
+
+</div>
+</div>
+<a id="abc7a5964448cf4e48814d95fc3572e69" name="abc7a5964448cf4e48814d95fc3572e69"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abc7a5964448cf4e48814d95fc3572e69">&#9670;&#160;</a></span>importFontDefinitionInto()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::optional&lt; <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> &gt; musx::dom::importFontDefinitionInto </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="namespacemusx_1_1dom.html#ac52edbaa60f81ba3df76ee77b37e95fd">DocumentPtr</a> &amp;&#160;</td>
+          <td class="paramname"><em>target</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="namespacemusx_1_1dom.html#a4223cd531120dbef7acd854c3d2631b8">MusxInstance</a>&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1FontDefinition.html">others::FontDefinition</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>source</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Copies a font definition into another document, reusing an equivalent one when present. </p>
+<p>A <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> is meaningful only within the document that issued it. A non-zero definition is therefore matched against <code>target</code> by normalized name (see <a class="el" href="namespacemusx_1_1dom.html#a52074e6f04c7b798c6eca1cf4b5185c5">normalizeFontName</a>) and never by cmper. The definition at cmper 0 is excluded from matching. When nothing matches, the definition is copied to the next free cmper, retaining <code>source's</code> exact spelling.</p>
+<p>Font id 0 is a sentinel for the document's default music font rather than an index to a typeface. It is returned unchanged, and a definition is created at 0 in <code>target</code> when absent, so that the returned id always resolves. The typeface for a created definition comes from <code>target's</code> own <a class="el" href="classmusx_1_1dom_1_1options_1_1FontOptions.html">options::FontOptions</a> music font, falling back to <code>source's</code> definition at 0, which is then also given a non-zero cmper in <code>target</code>.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">target</td><td>The document to import into. May be the same document as <code>source's</code>. </td></tr>
+    <tr><td class="paramname">source</td><td>The definition to import. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The cmper naming the typeface within <code>target</code>, or std::nullopt when <code>target</code> has no free cmper left for a new definition. A returned 0 always means the default music font. </dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::invalid_argument</td><td>if <code>target</code> or <code>source</code> is null. Debug builds assert instead. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

@@ -164,5 +164,6 @@ var namespacemusx_1_1dom_1_1others =
       [ "BelowEntry", "namespacemusx_1_1dom_1_1others.html#a023ae0114cd3ab43481656c49ef69371a8b9f1adf7751215ad7b7f65e44b5bbc7", null ],
       [ "AboveStaffOrEntry", "namespacemusx_1_1dom_1_1others.html#a023ae0114cd3ab43481656c49ef69371a17a026eb256d96a5d552b198c50dd42d", null ],
       [ "BelowStaffOrEntry", "namespacemusx_1_1dom_1_1others.html#a023ae0114cd3ab43481656c49ef69371abb687185d85176091c6c1b32eff713e4", null ]
-    ] ]
+    ] ],
+    [ "importShapeDefInto", "namespacemusx_1_1dom_1_1others.html#a880b66c681a10cd77409352dbff075dc", null ]
 ];
