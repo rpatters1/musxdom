@@ -24,6 +24,19 @@ This repository implements a C++ document object model for Finale `musx` / Enigm
 - Follow the surrounding C++ style in the file being edited.
 - Keep changes focused. Avoid unrelated refactors while fixing or adding a behavior.
 - Prefer existing DOM helper APIs such as `Document`, `ObjectPool`, `MusxInstance`, `StaffComposite`, and `GFrameHoldContext` over duplicating traversal logic.
+- Doxygen comments document the contract, not its history. State what a caller must know:
+  behavior, parameters, return values, and what is thrown. Do not explain why a function or
+  property was added, what it replaced, or which problem prompted it. A reader arriving at the
+  published API has none of that context, and the rationale ages badly once the surrounding code
+  moves on. Such explanation belongs in an ordinary implementation comment, a commit message, or
+  a design note.
+- Null-check anything that should never be null short of a program bug, input parameters
+  especially, with `MUSX_ASSERT_IF`, and throw from its body. The assertion halts a debug build at
+  the fault, and the throw stops a release build from continuing on a bad pointer. Reserve a
+  sentinel or an empty `std::optional` for outcomes a caller can legitimately encounter; a
+  violated precondition is not one of them. A parameter that genuinely accepts null is the
+  exception and must say so at the declaration, so that the absence of a check reads as deliberate
+  rather than forgotten.
 - Use `MUSX_INTEGRITY_ERROR` for malformed document relationships that existing code treats as integrity failures.
 - For future variable, parameter, field, and method-local names representing `...Cmper` identifiers, prefer names ending in `Id`, such as `measureId`, `partId`, `staffId`, `systemId`, and `pageId`.
 
