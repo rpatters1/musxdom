@@ -60,6 +60,8 @@ var hierarchy =
           [ "musx::dom::others::SmartShapeCustomLine::DashedParams", "classmusx_1_1dom_1_1others_1_1SmartShapeCustomLine_1_1DashedParams.html", null ],
           [ "musx::dom::others::SmartShapeCustomLine::SolidParams", "classmusx_1_1dom_1_1others_1_1SmartShapeCustomLine_1_1SolidParams.html", null ],
           [ "musx::dom::others::Staff::Transposition", "classmusx_1_1dom_1_1others_1_1Staff_1_1Transposition.html", null ],
+          [ "musx::dom::others::StaffPlayData::PlaybackSettings", "classmusx_1_1dom_1_1others_1_1StaffPlayData_1_1PlaybackSettings.html", null ],
+          [ "musx::dom::others::StaffPlayData::VelocityControl", "classmusx_1_1dom_1_1others_1_1StaffPlayData_1_1VelocityControl.html", null ],
           [ "musx::dom::others::StaffStyle::Masks", "classmusx_1_1dom_1_1others_1_1StaffStyle_1_1Masks.html", null ],
           [ "musx::dom::smartshape::ControlPointAdjustment", "classmusx_1_1dom_1_1smartshape_1_1ControlPointAdjustment.html", null ],
           [ "musx::dom::smartshape::EndPoint", "classmusx_1_1dom_1_1smartshape_1_1EndPoint.html", null ],
@@ -272,6 +274,8 @@ var hierarchy =
           [ "musx::dom::others::PartGlobals", "classmusx_1_1dom_1_1others_1_1PartGlobals.html", null ],
           [ "musx::dom::others::PartVoicing", "classmusx_1_1dom_1_1others_1_1PartVoicing.html", null ],
           [ "musx::dom::others::PercussionNoteInfo", "classmusx_1_1dom_1_1others_1_1PercussionNoteInfo.html", null ],
+          [ "musx::dom::others::PlaybackRoute", "classmusx_1_1dom_1_1others_1_1PlaybackRoute.html", null ],
+          [ "musx::dom::others::PlaybackRouteName", "classmusx_1_1dom_1_1others_1_1PlaybackRouteName.html", null ],
           [ "musx::dom::others::RepeatBack", "classmusx_1_1dom_1_1others_1_1RepeatBack.html", null ],
           [ "musx::dom::others::RepeatEndingStart", "classmusx_1_1dom_1_1others_1_1RepeatEndingStart.html", null ],
           [ "musx::dom::others::RepeatEndingText", "classmusx_1_1dom_1_1others_1_1RepeatEndingText.html", null ],
@@ -291,6 +295,7 @@ var hierarchy =
               [ "musx::dom::others::StaffComposite", "classmusx_1_1dom_1_1others_1_1StaffComposite.html", null ]
             ] ]
           ] ],
+          [ "musx::dom::others::StaffPlayData", "classmusx_1_1dom_1_1others_1_1StaffPlayData.html", null ],
           [ "musx::dom::others::StaffSystem", "classmusx_1_1dom_1_1others_1_1StaffSystem.html", null ],
           [ "musx::dom::others::StaffUsed", "classmusx_1_1dom_1_1others_1_1StaffUsed.html", null ],
           [ "musx::dom::others::SystemLock", "classmusx_1_1dom_1_1others_1_1SystemLock.html", null ],

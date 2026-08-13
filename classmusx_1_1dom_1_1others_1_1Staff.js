@@ -66,6 +66,7 @@ var classmusx_1_1dom_1_1others_1_1Staff =
     [ "getMultiStaffInstGroup", "classmusx_1_1dom_1_1others_1_1Staff.html#a3f539dcfa7b2a81589c84f398563f435", null ],
     [ "getMultiStaffInstVisualGroup", "classmusx_1_1dom_1_1others_1_1Staff.html#ae023ecd87b3b43f79764a96c739cc79d", null ],
     [ "getNoteShapes", "classmusx_1_1dom_1_1others_1_1Staff.html#a65dddeed8b69726453a77e4d378f39b8", null ],
+    [ "getPlaybackRouteName", "classmusx_1_1dom_1_1others_1_1Staff.html#a9540ad0d5203a9a990ecc63c6bcca030", null ],
     [ "hasInstrumentAssigned", "classmusx_1_1dom_1_1others_1_1Staff.html#a76f425b19ecab6f653dedb641f226748", null ],
     [ "integrityCheck", "classmusx_1_1dom_1_1others_1_1Staff.html#a307f203b57bd0e60a5255f8758fb44a8", null ],
     [ "iterateClefChangesAtMeasure", "classmusx_1_1dom_1_1others_1_1Staff.html#a2287feb684527946505a21535094557b", null ],

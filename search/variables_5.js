@@ -105,5 +105,6 @@ var searchData=
   ['fullnameposid_102',['fullNamePosId',['../classmusx_1_1dom_1_1others_1_1Staff.html#ac9034c5f9adfd6a5a3e498f64590eb20',1,'musx::dom::others::Staff']]],
   ['fullnametextid_103',['fullNameTextId',['../classmusx_1_1dom_1_1others_1_1Staff.html#a7a173d78c6d1576fd312ea346567d4af',1,'musx::dom::others::Staff']]],
   ['fullnamexadj_104',['fullNameXadj',['../classmusx_1_1dom_1_1details_1_1StaffGroup.html#a3c9be7efc002d3d687b5a144c6eca141',1,'musx::dom::details::StaffGroup']]],
-  ['fullnameyadj_105',['fullNameYadj',['../classmusx_1_1dom_1_1details_1_1StaffGroup.html#a818a56f77bc86e1d52daf7bb36c34ea4',1,'musx::dom::details::StaffGroup']]]
+  ['fullnameyadj_105',['fullNameYadj',['../classmusx_1_1dom_1_1details_1_1StaffGroup.html#a818a56f77bc86e1d52daf7bb36c34ea4',1,'musx::dom::details::StaffGroup']]],
+  ['function_106',['function',['../classmusx_1_1dom_1_1others_1_1StaffPlayData_1_1VelocityControl.html#a469e4a37e6117d89c658d4a4a4895031',1,'musx::dom::others::StaffPlayData::VelocityControl']]]
 ];

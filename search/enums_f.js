@@ -15,10 +15,11 @@ var searchData=
   ['slurcontrolstyletype_12',['SlurControlStyleType',['../classmusx_1_1dom_1_1options_1_1SmartShapeOptions.html#a05b8443a71ed569f9a290d6f22931e4a',1,'musx::dom::options::SmartShapeOptions']]],
   ['slurinteractionmode_13',['SlurInteractionMode',['../classmusx_1_1dom_1_1others_1_1ArticulationDef.html#a49310a914cbb3b992e53028b19643e42',1,'musx::dom::others::ArticulationDef']]],
   ['smarthyphenstart_14',['SmartHyphenStart',['../classmusx_1_1dom_1_1options_1_1LyricOptions.html#a89de44eb63730ee7173a32501db28c89',1,'musx::dom::options::LyricOptions']]],
-  ['specialposmode_15',['SpecialPosMode',['../classmusx_1_1dom_1_1options_1_1TieOptions.html#ad53e3cd44d59908f22715495cab187bc',1,'musx::dom::options::TieOptions']]],
-  ['stemdirection_16',['StemDirection',['../namespacemusx_1_1dom.html#a85d511d77e60bbc95b83884133bd383f',1,'musx::dom']]],
-  ['stemselection_17',['StemSelection',['../classmusx_1_1dom_1_1EntryDetailsBase.html#a91249025ef9184270efb1e8a749727ca',1,'musx::dom::EntryDetailsBase']]],
-  ['svgunit_18',['SvgUnit',['../classmusx_1_1util_1_1SvgConvert.html#aec8aa781edbb07156c2299287a118e7b',1,'musx::util::SvgConvert']]],
-  ['syllableposstyletype_19',['SyllablePosStyleType',['../classmusx_1_1dom_1_1options_1_1LyricOptions.html#af8f5c0bceb30383a2c1fa569c63192be',1,'musx::dom::options::LyricOptions']]],
-  ['systembreaktype_20',['SystemBreakType',['../classmusx_1_1dom_1_1others_1_1SmartShape.html#a32fe76ae46a68c0b50e282c7918bed54',1,'musx::dom::others::SmartShape']]]
+  ['soloorensemble_15',['SoloOrEnsemble',['../namespacemusx_1_1dom.html#aa712b5f91607eaf5bf241de52dd5fa5d',1,'musx::dom']]],
+  ['specialposmode_16',['SpecialPosMode',['../classmusx_1_1dom_1_1options_1_1TieOptions.html#ad53e3cd44d59908f22715495cab187bc',1,'musx::dom::options::TieOptions']]],
+  ['stemdirection_17',['StemDirection',['../namespacemusx_1_1dom.html#a85d511d77e60bbc95b83884133bd383f',1,'musx::dom']]],
+  ['stemselection_18',['StemSelection',['../classmusx_1_1dom_1_1EntryDetailsBase.html#a91249025ef9184270efb1e8a749727ca',1,'musx::dom::EntryDetailsBase']]],
+  ['svgunit_19',['SvgUnit',['../classmusx_1_1util_1_1SvgConvert.html#aec8aa781edbb07156c2299287a118e7b',1,'musx::util::SvgConvert']]],
+  ['syllableposstyletype_20',['SyllablePosStyleType',['../classmusx_1_1dom_1_1options_1_1LyricOptions.html#af8f5c0bceb30383a2c1fa569c63192be',1,'musx::dom::options::LyricOptions']]],
+  ['systembreaktype_21',['SystemBreakType',['../classmusx_1_1dom_1_1others_1_1SmartShape.html#a32fe76ae46a68c0b50e282c7918bed54',1,'musx::dom::others::SmartShape']]]
 ];

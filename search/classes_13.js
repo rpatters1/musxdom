@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['verticalmode_0',['VerticalMode',['../structmusx_1_1dom_1_1ShapeDefInstruction_1_1VerticalMode.html',1,'musx::dom::ShapeDefInstruction']]]
+  ['velocitycontrol_0',['VelocityControl',['../classmusx_1_1dom_1_1others_1_1StaffPlayData_1_1VelocityControl.html',1,'musx::dom::others::StaffPlayData']]],
+  ['verticalmode_1',['VerticalMode',['../structmusx_1_1dom_1_1ShapeDefInstruction_1_1VerticalMode.html',1,'musx::dom::ShapeDefInstruction']]]
 ];

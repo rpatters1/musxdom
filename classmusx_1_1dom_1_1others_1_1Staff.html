@@ -225,6 +225,9 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>calcShowName</b> () c
 <tr class="memitem:af1c317f8ad198ae1788ca7a565fbc4b7" id="r_af1c317f8ad198ae1788ca7a565fbc4b7"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html#af1c317f8ad198ae1788ca7a565fbc4b7">getAbbreviatedInstrumentName</a> (<a class="el" href="classmusx_1_1util_1_1EnigmaString.html#a4692b7b51e78c89ee59a2871fee34455">util::EnigmaString::AccidentalStyle</a> accidentalStyle=<a class="el" href="classmusx_1_1util_1_1EnigmaString.html#a4692b7b51e78c89ee59a2871fee34455a76b8d0dcd02ccaf203c167ced6d7ef31">util::EnigmaString::AccidentalStyle::Ascii</a>, bool preferStaffName=false) const</td></tr>
 <tr class="memdesc:af1c317f8ad198ae1788ca7a565fbc4b7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the abbreviated instrument name for this staff without Enigma tags and with autonumbering (if any)  <br /></td></tr>
 <tr class="separator:af1c317f8ad198ae1788ca7a565fbc4b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9540ad0d5203a9a990ecc63c6bcca030" id="r_a9540ad0d5203a9a990ecc63c6bcca030"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1Staff.html#a9540ad0d5203a9a990ecc63c6bcca030">getPlaybackRouteName</a> () const</td></tr>
+<tr class="memdesc:a9540ad0d5203a9a990ecc63c6bcca030"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the first nonempty playback route name assigned to this staff.  <br /></td></tr>
+<tr class="separator:a9540ad0d5203a9a990ecc63c6bcca030"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5f5673a3186d7261bbc96dddd096114c" id="r_a5f5673a3186d7261bbc96dddd096114c"><td class="memItemLeft" align="right" valign="top"><a id="a5f5673a3186d7261bbc96dddd096114c" name="a5f5673a3186d7261bbc96dddd096114c"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>calcShowInstrumentName</b> () const</td></tr>
 <tr class="memdesc:a5f5673a3186d7261bbc96dddd096114c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if the staff shows its full or abbreviated instrument name for the current requested partId. <br /></td></tr>
@@ -1658,6 +1661,26 @@ template&lt;typename BaselineType , std::enable_if_t&lt; std::is_base_of&lt; <a 
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a id="a9540ad0d5203a9a990ecc63c6bcca030" name="a9540ad0d5203a9a990ecc63c6bcca030"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9540ad0d5203a9a990ecc63c6bcca030">&#9670;&#160;</a></span>getPlaybackRouteName()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string musx::dom::others::Staff::getPlaybackRouteName </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the first nonempty playback route name assigned to this staff. </p>
+<p>Playback routes are searched by notation layer in ascending order, followed by chord-symbol playback and MIDI-expression playback. Disabled and soloed playback streams remain eligible. </p><dl class="section return"><dt>Returns</dt><dd>The playback route name, or an empty string if no assigned route has a nonempty name. </dd></dl>
 
 </div>
 </div>

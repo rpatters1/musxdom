@@ -37,6 +37,8 @@ var searchData=
   ['pianobracebracketoptions_34',['PianoBraceBracketOptions',['../classmusx_1_1dom_1_1options_1_1PianoBraceBracketOptions.html#a51d77142d65ca9b0ce116347b08df22d',1,'musx::dom::options::PianoBraceBracketOptions']]],
   ['pitch_35',['pitch',['../structmusic__theory_1_1Pitch.html#a4f6043243691e1a652b488ebc855a742',1,'music_theory::Pitch::Pitch()=default'],['../structmusic__theory_1_1Pitch.html#a75dd7e1355d0f4dfb8bea60195ce4727',1,'music_theory::Pitch::Pitch(NoteName pitchName, int pitchOctave, int pitchAlteration=0)']]],
   ['plaintextfromchunks_36',['plainTextFromChunks',['../classmusx_1_1util_1_1EnigmaString.html#ac48816ba74d7c6df14c74e361e77a455',1,'musx::util::EnigmaString']]],
-  ['positivemodulus_37',['positiveModulus',['../namespacemusic__theory.html#ad044685489c9b3d008be12762a490463',1,'music_theory']]],
-  ['presetarrowheadassvg_38',['presetArrowheadAsSvg',['../classmusx_1_1util_1_1SvgConvert.html#a2618282059e8a4a05b4b54f52048adf0',1,'musx::util::SvgConvert']]]
+  ['playbackroute_37',['PlaybackRoute',['../classmusx_1_1dom_1_1others_1_1PlaybackRoute.html#abd40523ba556b629682ea5509ed58074',1,'musx::dom::others::PlaybackRoute']]],
+  ['playbackroutename_38',['PlaybackRouteName',['../classmusx_1_1dom_1_1others_1_1PlaybackRouteName.html#a422521b3cff8c98bbbfe110d48ae6dcf',1,'musx::dom::others::PlaybackRouteName']]],
+  ['positivemodulus_39',['positiveModulus',['../namespacemusic__theory.html#ad044685489c9b3d008be12762a490463',1,'music_theory']]],
+  ['presetarrowheadassvg_40',['presetArrowheadAsSvg',['../classmusx_1_1util_1_1SvgConvert.html#a2618282059e8a4a05b4b54f52048adf0',1,'musx::util::SvgConvert']]]
 ];

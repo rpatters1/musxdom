@@ -15,6 +15,9 @@ var searchData=
   ['percussionnotetype_12',['PercussionNoteType',['../structmusx_1_1dom_1_1percussion_1_1PercussionNoteType.html',1,'musx::dom::percussion']]],
   ['pianobracebracketoptions_13',['PianoBraceBracketOptions',['../classmusx_1_1dom_1_1options_1_1PianoBraceBracketOptions.html',1,'musx::dom::options']]],
   ['pitch_14',['Pitch',['../structmusic__theory_1_1Pitch.html',1,'music_theory']]],
-  ['pseudotieinfo_15',['PseudoTieInfo',['../structmusx_1_1dom_1_1NoteInfoPtr_1_1PseudoTieInfo.html',1,'musx::dom::NoteInfoPtr']]],
-  ['pseudotieshapeinfo_16',['PseudoTieShapeInfo',['../structmusx_1_1utils_1_1PseudoTieShapeInfo.html',1,'musx::utils']]]
+  ['playbackroute_15',['PlaybackRoute',['../classmusx_1_1dom_1_1others_1_1PlaybackRoute.html',1,'musx::dom::others']]],
+  ['playbackroutename_16',['PlaybackRouteName',['../classmusx_1_1dom_1_1others_1_1PlaybackRouteName.html',1,'musx::dom::others']]],
+  ['playbacksettings_17',['PlaybackSettings',['../classmusx_1_1dom_1_1others_1_1StaffPlayData_1_1PlaybackSettings.html',1,'musx::dom::others::StaffPlayData']]],
+  ['pseudotieinfo_18',['PseudoTieInfo',['../structmusx_1_1dom_1_1NoteInfoPtr_1_1PseudoTieInfo.html',1,'musx::dom::NoteInfoPtr']]],
+  ['pseudotieshapeinfo_19',['PseudoTieShapeInfo',['../structmusx_1_1utils_1_1PseudoTieShapeInfo.html',1,'musx::utils']]]
 ];

@@ -465,6 +465,17 @@ var namespacemusx_1_1dom =
       [ "Murchang", "namespacemusx_1_1dom_1_1uuid.html#a33a60ef19230e7b84220dd9d4e6f117c", null ],
       [ "MusicalBow", "namespacemusx_1_1dom_1_1uuid.html#a85ba54b8ce5d2cbee4aa04e8e5502ae2", null ],
       [ "MusicalSaw", "namespacemusx_1_1dom_1_1uuid.html#a40a30d5ac65fea0ab4a6d459548127a3", null ],
+      [ "MusicXmlAccordion", "namespacemusx_1_1dom_1_1uuid.html#a25874af96db0c168444072daa44149e7", null ],
+      [ "MusicXmlAlbogue", "namespacemusx_1_1dom_1_1uuid.html#a5be489e828162403ed34bcb70514f053", null ],
+      [ "MusicXmlCalliope", "namespacemusx_1_1dom_1_1uuid.html#a25807674038eddb5414bc602b33ea6cb", null ],
+      [ "MusicXmlCavaquinho", "namespacemusx_1_1dom_1_1uuid.html#af60e68ea5eaa2b29d50dfbc2815b263f", null ],
+      [ "MusicXmlDrumGroup", "namespacemusx_1_1dom_1_1uuid.html#aab558cdcaf114bcb73c71e42d508a48f", null ],
+      [ "MusicXmlDrumGroupSet", "namespacemusx_1_1dom_1_1uuid.html#a13d315a7bcbe9099d43c8e2a990100ce", null ],
+      [ "MusicXmlHandchimes", "namespacemusx_1_1dom_1_1uuid.html#a442ac33537bef2607db6d972203ac12f", null ],
+      [ "MusicXmlMusicBox", "namespacemusx_1_1dom_1_1uuid.html#a2a42ded9e7068ee36d289f007c984e8b", null ],
+      [ "MusicXmlSuspendedCymbal", "namespacemusx_1_1dom_1_1uuid.html#ac1e2e43c777a801d14754a5b0b701583", null ],
+      [ "MusicXmlTabor", "namespacemusx_1_1dom_1_1uuid.html#a49562f9b460b632dcd311a9efb6109a5", null ],
+      [ "MusicXmlVocals", "namespacemusx_1_1dom_1_1uuid.html#a6f72ebf1437da2de7cdbc1d9eda4ca80", null ],
       [ "Naal", "namespacemusx_1_1dom_1_1uuid.html#a1295ed96f6a66ca5e1afb71a0eb2c2a6", null ],
       [ "Nadaswaram", "namespacemusx_1_1dom_1_1uuid.html#abb2298d6f970f98aa4ad4fee7b0b2c9b", null ],
       [ "NagaDodaiko", "namespacemusx_1_1dom_1_1uuid.html#a1f24e00f42fae57a7ed64b6a32750154", null ],
@@ -1026,6 +1037,11 @@ var namespacemusx_1_1dom =
       [ "Never", "namespacemusx_1_1dom.html#a09b81b6535bd382e3afc1a00ba080215a6e7b34fa59e1bd229b207892956dc41c", null ],
       [ "Always", "namespacemusx_1_1dom.html#a09b81b6535bd382e3afc1a00ba080215a68eec46437c384d8dad18d5464ebc35c", null ]
     ] ],
+    [ "SoloOrEnsemble", "namespacemusx_1_1dom.html#aa712b5f91607eaf5bf241de52dd5fa5d", [
+      [ "Unspecified", "namespacemusx_1_1dom.html#aa712b5f91607eaf5bf241de52dd5fa5da6fcdc090caeade09d0efd6253932b6f5", null ],
+      [ "Solo", "namespacemusx_1_1dom.html#aa712b5f91607eaf5bf241de52dd5fa5da26c04769d2607a2234d4329b7630ed35", null ],
+      [ "Ensemble", "namespacemusx_1_1dom.html#aa712b5f91607eaf5bf241de52dd5fa5dabe5dd267794f8f209543995a5461710f", null ]
+    ] ],
     [ "StemDirection", "namespacemusx_1_1dom.html#a85d511d77e60bbc95b83884133bd383f", [
       [ "Default", "namespacemusx_1_1dom.html#a85d511d77e60bbc95b83884133bd383fa7a1920d61156abc05a60135aefe8bc67", null ],
       [ "AlwaysUp", "namespacemusx_1_1dom.html#a85d511d77e60bbc95b83884133bd383fae15a1a05181326142cc6422ad1199831", null ],
@@ -1055,6 +1071,7 @@ var namespacemusx_1_1dom =
     [ "calcNumberOfBeamsInEdu", "namespacemusx_1_1dom.html#aa75d341865ea5c3e1a8fcb735ea5e51b", null ],
     [ "importFontDefinitionInto", "namespacemusx_1_1dom.html#abc7a5964448cf4e48814d95fc3572e69", null ],
     [ "instrumentFamilyFromUuid", "namespacemusx_1_1dom.html#aca8bd8022b86b8fc68930283cb07d674", null ],
+    [ "instrumentSoloOrEnsembleFromUuid", "namespacemusx_1_1dom.html#af2b19f44f6d0121ff79ab1e9abe6c1b9", null ],
     [ "normalizeFontName", "namespacemusx_1_1dom.html#a52074e6f04c7b798c6eca1cf4b5185c5", null ],
     [ "BASE_SYSTEM_ID", "namespacemusx_1_1dom.html#ac87f0744ae26e5eb9f08d9615fc15bc5", null ],
     [ "EDU_PER_WHOLE_NOTE", "namespacemusx_1_1dom.html#ace087082aba8a546ecd9abe14e0b2fc2", null ],
