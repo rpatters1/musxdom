@@ -40,6 +40,19 @@ inline constexpr std::string_view BlankStaff2 = "00000000-4627-4100-abbf-064eedc
 inline constexpr std::string_view GrandStaff = "24b4c18d-6f6a-461c-983f-e0b0c3abcdbc"; ///< Grand Staff
 inline constexpr std::string_view Unknown = "a925648a-abc9-4dc7-a619-a6ce355ad33c"; ///< Unknown Instrument
 
+// Additional UUIDs found only in Finale's bundled MusicXML sounds.xml.
+inline constexpr std::string_view MusicXmlDrumGroup = "cfb58dd1-135c-43d3-b0b8-b9a1b36c31b7"; ///< drum.group
+inline constexpr std::string_view MusicXmlDrumGroupSet = "fd54e2db-ca6c-437f-9dd0-f78185897fbd"; ///< drum.group.set
+inline constexpr std::string_view MusicXmlTabor = "8309a72c-0c62-4954-aa8e-92c9f21fce53"; ///< drum.tabor
+inline constexpr std::string_view MusicXmlAccordion = "4296d516-063d-4970-8853-46c3572dc479"; ///< keyboard.accordion
+inline constexpr std::string_view MusicXmlSuspendedCymbal = "fcb40297-2b10-42a5-8099-fbdbaaec8b2f"; ///< metal.cymbal.suspended
+inline constexpr std::string_view MusicXmlHandchimes = "79e3e7cf-36f1-4a51-8534-32245a43f862"; ///< pitched-percussion.handchimes
+inline constexpr std::string_view MusicXmlMusicBox = "70e0b497-1cf3-4a56-8f8f-b316e9d6bdfb"; ///< pitched-percussion.music-box
+inline constexpr std::string_view MusicXmlCavaquinho = "cac9fe1b-251a-44c7-825e-cf43a2e3d94e"; ///< pluck.cavaquinho
+inline constexpr std::string_view MusicXmlVocals = "c1ed5485-1bc6-4bdd-b4e2-609a1203b47f"; ///< voice.vocals
+inline constexpr std::string_view MusicXmlCalliope = "ca55289e-d1e6-4e2c-95a2-bec8e7d27052"; ///< wind.flutes.calliope
+inline constexpr std::string_view MusicXmlAlbogue = "068a2f5d-dd22-47e8-ad53-b4b4dbd149e"; ///< wind.reed.albogue
+
 // Strings
 inline constexpr std::string_view Violin = "29d81c10-dfed-42e4-8d93-64af7d6d5689"; ///< Violin
 inline constexpr std::string_view Viola = "992dcb2b-64a2-454b-b043-2a530d24fc18"; ///< Viola
