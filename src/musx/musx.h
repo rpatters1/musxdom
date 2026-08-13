@@ -85,6 +85,7 @@
 #include "dom/Graphics.h"
 #include "dom/Ossia.h"
 #include "dom/Options.h"
+#include "dom/Playback.h"
 #include "dom/ShapeDesigner.h"
 #include "dom/SmartShape.h"
 #include "dom/Staff.h"

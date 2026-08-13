@@ -407,6 +407,11 @@ MUSX_XML_ENUM_MAPPING(musx::dom::others::PlaybackType, {
     {"hpOff", PlaybackType::SmartPlaybackOff}
 });
 
+MUSX_XML_ENUM_MAPPING(musx::dom::others::StaffPlayData::VelocityControlFunction, {
+    {"absolute", StaffPlayData::VelocityControlFunction::Absolute},
+    {"relative", StaffPlayData::VelocityControlFunction::Relative},
+});
+
 MUSX_XML_ENUM_MAPPING(musx::dom::others::HorizontalMeasExprAlign, {
     {"manual", HorizontalMeasExprAlign::Manual},
     {"leftOfAllNoteheads", HorizontalMeasExprAlign::LeftOfAllNoteheads},
@@ -1047,6 +1052,19 @@ MUSX_XML_ELEMENT_ARRAY(PercussionNoteInfo, {
     {"dwholeNotehead",  [](const XmlElementPtr& e, const std::shared_ptr<PercussionNoteInfo>& i) { i->dwholeNotehead = e->getTextAs<char32_t>(); }},
 });
 
+MUSX_XML_ELEMENT_ARRAY(PlaybackRoute, {
+    {"virtChannel", [](const XmlElementPtr& e, const std::shared_ptr<PlaybackRoute>& i) { i->virtualChannel = e->getTextAs<int>(); }},
+    {"patchType", [](const XmlElementPtr& e, const std::shared_ptr<PlaybackRoute>& i) { i->patchType = e->getText(); }},
+    {"patch", [](const XmlElementPtr& e, const std::shared_ptr<PlaybackRoute>& i) { i->patch = e->getTextAs<int>(); }},
+    {"msb", [](const XmlElementPtr& e, const std::shared_ptr<PlaybackRoute>& i) { i->midiBankSelectMostSignificantByte = e->getTextAs<int>(); }},
+    {"percMapRefID", [](const XmlElementPtr& e, const std::shared_ptr<PlaybackRoute>& i) { i->percussionMapId = e->getTextAs<Cmper>(); }},
+    {"soundUUID", [](const XmlElementPtr& e, const std::shared_ptr<PlaybackRoute>& i) { i->soundUuid = e->getText(); }},
+});
+
+MUSX_XML_ELEMENT_ARRAY(PlaybackRouteName, {
+    {"name", [](const XmlElementPtr& e, const std::shared_ptr<PlaybackRouteName>& i) { i->name = e->getText(); }},
+});
+
 MUSX_XML_ELEMENT_ARRAY(RepeatBack, {
     {"actuate", [](const XmlElementPtr& e, const std::shared_ptr<RepeatBack>& i) { i->passNumber = e->getTextAs<int>(); }},
     {"target", [](const XmlElementPtr& e, const std::shared_ptr<RepeatBack>& i) { i->targetValue = e->getTextAs<int>(); }},
@@ -1400,6 +1418,35 @@ MUSX_XML_ELEMENT_ARRAY(Staff, {
 
 MUSX_XML_ELEMENT_ARRAY(StaffList, {
     {"inst", [](const XmlElementPtr& e, const std::shared_ptr<StaffList>& i) { i->values.push_back(e->getTextAs<StaffCmper>()); }},
+});
+
+MUSX_XML_ELEMENT_ARRAY(StaffPlayData::PlaybackSettings, {
+    {"playbackRouteNum", [](const XmlElementPtr& e, const std::shared_ptr<StaffPlayData::PlaybackSettings>& i) { i->playbackRouteIndex = e->getTextAs<int>(); }},
+    {"velControlLevel", [](const XmlElementPtr& e, const std::shared_ptr<StaffPlayData::PlaybackSettings>& i) { i->velocityControlLevel = e->getTextAs<int>(); }},
+    {"velControlSaveFlags", [](const XmlElementPtr& e, const std::shared_ptr<StaffPlayData::PlaybackSettings>& i)
+        { i->velocityControl = FieldPopulator<StaffPlayData::VelocityControl>::createAndPopulate(e, i); }},
+    {"play", [](const XmlElementPtr& e, const std::shared_ptr<StaffPlayData::PlaybackSettings>& i) { i->play = populateBoolean(e, i); }},
+    {"solo", [](const XmlElementPtr& e, const std::shared_ptr<StaffPlayData::PlaybackSettings>& i) { i->solo = populateBoolean(e, i); }},
+});
+
+MUSX_XML_ELEMENT_ARRAY(StaffPlayData::VelocityControl, {
+    {"controlOn", [](const XmlElementPtr& e, const std::shared_ptr<StaffPlayData::VelocityControl>& i) { i->controlOn = populateBoolean(e, i); }},
+    {"function", [](const XmlElementPtr& e, const std::shared_ptr<StaffPlayData::VelocityControl>& i) { i->function = toEnum<StaffPlayData::VelocityControlFunction>(e); }},
+});
+
+MUSX_XML_ELEMENT_ARRAY(StaffPlayData, {
+    {"chords", [](const XmlElementPtr& e, const std::shared_ptr<StaffPlayData>& i)
+        { i->chords = FieldPopulator<StaffPlayData::PlaybackSettings>::createAndPopulate(e, i); }},
+    {"midiExpressions", [](const XmlElementPtr& e, const std::shared_ptr<StaffPlayData>& i)
+        { i->midiExpressions = FieldPopulator<StaffPlayData::PlaybackSettings>::createAndPopulate(e, i); }},
+    {"layer1", [](const XmlElementPtr& e, const std::shared_ptr<StaffPlayData>& i)
+        { i->layers[0] = FieldPopulator<StaffPlayData::PlaybackSettings>::createAndPopulate(e, i); }},
+    {"layer2", [](const XmlElementPtr& e, const std::shared_ptr<StaffPlayData>& i)
+        { i->layers[1] = FieldPopulator<StaffPlayData::PlaybackSettings>::createAndPopulate(e, i); }},
+    {"layer3", [](const XmlElementPtr& e, const std::shared_ptr<StaffPlayData>& i)
+        { i->layers[2] = FieldPopulator<StaffPlayData::PlaybackSettings>::createAndPopulate(e, i); }},
+    {"layer4", [](const XmlElementPtr& e, const std::shared_ptr<StaffPlayData>& i)
+        { i->layers[3] = FieldPopulator<StaffPlayData::PlaybackSettings>::createAndPopulate(e, i); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(StaffStyle::Masks, {

@@ -103,6 +103,7 @@ add_executable(musxdomtests
 	others/part_globals.cpp
 	others/part_voicing.cpp
 	others/percussion_notes.cpp
+    others/playback.cpp
     others/repeats.cpp
     others/shape.cpp
     others/smart_shape.cpp

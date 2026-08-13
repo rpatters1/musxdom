@@ -34,6 +34,7 @@
 #include "musx/dom/Options.h"
 #include "musx/dom/Ossia.h"
 #include "musx/dom/Others.h"
+#include "musx/dom/Playback.h"
 #include "musx/dom/ShapeDesigner.h"
 #include "musx/dom/SmartShape.h"
 #include "musx/dom/Staff.h"
@@ -216,6 +217,8 @@ using RegisteredOthers = RegisteredTypes<
     dom::others::NamePositionFull,
     dom::others::NamePositionStyleFull,
     dom::others::TextBlock,
+    dom::others::PlaybackRoute,
+    dom::others::PlaybackRouteName,
     dom::others::Page,
     dom::others::PageGraphicAssign,
     dom::others::PageOssiaAssign,
@@ -243,6 +246,7 @@ using RegisteredOthers = RegisteredTypes<
     dom::others::StaffListRepeatScore,
     dom::others::StaffListRepeatScoreForced,
     dom::others::Staff,
+    dom::others::StaffPlayData,
     dom::others::StaffStyle,
     dom::others::StaffStyleAssign,
     dom::others::ShapeExpressionDef,

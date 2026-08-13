@@ -332,6 +332,13 @@ public:
     /// @param preferStaffName When true, use the staff name if there is one (rather than the multi-instrument group name)
     std::string getAbbreviatedInstrumentName(util::EnigmaString::AccidentalStyle accidentalStyle = util::EnigmaString::AccidentalStyle::Ascii, bool preferStaffName = false) const;
 
+    /// @brief Returns the first nonempty playback route name assigned to this staff.
+    ///
+    /// Playback routes are searched by notation layer in ascending order, followed by chord-symbol
+    /// playback and MIDI-expression playback. Disabled and soloed playback streams remain eligible.
+    /// @return The playback route name, or an empty string if no assigned route has a nonempty name.
+    std::string getPlaybackRouteName() const;
+
     /// @brief Returns true if the staff shows its full or abbreviated instrument name for the current requested partId.
     bool calcShowInstrumentName() const;
 
