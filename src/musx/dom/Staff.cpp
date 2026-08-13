@@ -392,6 +392,35 @@ std::string Staff::getAbbreviatedInstrumentName(util::EnigmaString::AccidentalSt
     return {};
 }
 
+std::string Staff::getPlaybackRouteName() const
+{
+    const auto staffPlayData = getDocument()->getOthers()->get<StaffPlayData>(getRequestedPartId(), getCmper());
+    if (!staffPlayData) {
+        return {};
+    }
+
+    const auto findRouteName = [this](const std::shared_ptr<StaffPlayData::PlaybackSettings>& settings) {
+        if (settings) {
+            const auto routeName = getDocument()->getOthers()->get<PlaybackRouteName>(
+                getRequestedPartId(), settings->getPlaybackRouteId());
+            if (routeName && !routeName->name.empty()) {
+                return routeName->name;
+            }
+        }
+        return std::string{};
+    };
+
+    for (const auto& layer : staffPlayData->layers) {
+        if (auto name = findRouteName(layer); !name.empty()) {
+            return name;
+        }
+    }
+    if (auto name = findRouteName(staffPlayData->chords); !name.empty()) {
+        return name;
+    }
+    return findRouteName(staffPlayData->midiExpressions);
+}
+
 bool Staff::calcShowInstrumentName() const
 {
     if (auto group = getMultiStaffInstVisualGroup(getRequestedPartId())) {

@@ -24,6 +24,9 @@ This repository implements a C++ document object model for Finale `musx` / Enigm
 - Follow the surrounding C++ style in the file being edited.
 - Keep changes focused. Avoid unrelated refactors while fixing or adding a behavior.
 - Prefer existing DOM helper APIs such as `Document`, `ObjectPool`, `MusxInstance`, `StaffComposite`, and `GFrameHoldContext` over duplicating traversal logic.
+- Except in rare circumstances confirmed by the user, hard-code only the numeric value `0`; use
+  named constants for other fixed values. Mathematical operations and mathematical formulas are an
+  exception and do not require separate confirmation.
 - Doxygen comments document the contract, not its history. State what a caller must know:
   behavior, parameters, return values, and what is thrown. Do not explain why a function or
   property was added, what it replaced, or which problem prompted it. A reader arriving at the

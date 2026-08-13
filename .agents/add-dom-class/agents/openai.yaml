@@ -1,0 +1,4 @@
+interface:
+  display_name: "Add musxdom DOM Class"
+  short_description: "Add and register EnigmaXML DOM classes"
+  default_prompt: "Use $add-dom-class to add a new EnigmaXML-backed DOM class to musxdom."

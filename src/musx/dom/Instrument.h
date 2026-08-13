@@ -56,8 +56,19 @@ enum class InstrumentFamily
     Other
 };
 
+/// @brief Whether a Finale instrument UUID represents a solo instrument or an ensemble.
+enum class SoloOrEnsemble
+{
+    Unspecified, ///< The UUID is not classified as either solo or ensemble.
+    Solo,        ///< The UUID represents a solo instrument.
+    Ensemble,    ///< The UUID represents an ensemble.
+};
+
 /// @brief Returns the broad source-domain family for a Finale instrument UUID.
 InstrumentFamily instrumentFamilyFromUuid(InstrumentUuid uuid);
+
+/// @brief Returns whether a Finale instrument UUID represents a solo instrument or an ensemble.
+SoloOrEnsemble instrumentSoloOrEnsembleFromUuid(InstrumentUuid uuid);
 
 /**
  * @class InstrumentInfo

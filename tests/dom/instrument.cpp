@@ -56,3 +56,17 @@ TEST(InstrumentTest, InstrumentFamilySpecialAndUnknownUuids)
     EXPECT_EQ(instrumentFamilyFromUuid(uuid::HornF_WWQuintet), InstrumentFamily::Brass);
     EXPECT_EQ(instrumentFamilyFromUuid("not-a-finale-instrument-uuid"), InstrumentFamily::Unspecified);
 }
+
+TEST(InstrumentTest, InstrumentSoloOrEnsembleFromUuid)
+{
+    EXPECT_EQ(instrumentSoloOrEnsembleFromUuid(uuid::Violin), SoloOrEnsemble::Solo);
+    EXPECT_EQ(instrumentSoloOrEnsembleFromUuid(uuid::TrumpetBFlat), SoloOrEnsemble::Solo);
+    EXPECT_EQ(instrumentSoloOrEnsembleFromUuid(uuid::ViolinSection), SoloOrEnsemble::Ensemble);
+    EXPECT_EQ(instrumentSoloOrEnsembleFromUuid(uuid::BrassSection), SoloOrEnsemble::Ensemble);
+    EXPECT_EQ(instrumentSoloOrEnsembleFromUuid(uuid::DrumSet), SoloOrEnsemble::Ensemble);
+    EXPECT_EQ(instrumentSoloOrEnsembleFromUuid(uuid::GrandStaff), SoloOrEnsemble::Unspecified);
+    EXPECT_EQ(instrumentSoloOrEnsembleFromUuid(uuid::VioloncelloSection), SoloOrEnsemble::Unspecified);
+    EXPECT_EQ(instrumentSoloOrEnsembleFromUuid(uuid::MusicXmlDrumGroup), SoloOrEnsemble::Ensemble);
+    EXPECT_EQ(instrumentSoloOrEnsembleFromUuid(uuid::MusicXmlAccordion), SoloOrEnsemble::Solo);
+    EXPECT_EQ(instrumentSoloOrEnsembleFromUuid("not-a-finale-instrument-uuid"), SoloOrEnsemble::Unspecified);
+}
