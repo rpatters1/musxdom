@@ -312,6 +312,64 @@ TEST(ShapeDefTest, RecognizeShapes)
     }
 }
 
+TEST(ShapeDefTest, RecognizeResolvedEmptyInstructionListAsBlank)
+{
+    constexpr musxtest::string_view xml = R"xml(
+<?xml version="1.0" encoding="UTF-8"?>
+<finale>
+    <others>
+        <shapeDef cmper="1">
+            <instList>9</instList>
+            <dataList>9</dataList>
+        </shapeDef>
+        <shapeList cmper="9"/>
+    </others>
+</finale>
+)xml";
+    auto document = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml);
+    ASSERT_TRUE(document);
+    const auto shape = document->getOthers()->get<others::ShapeDef>(SCORE_PARTID, 1);
+    ASSERT_TRUE(shape);
+    EXPECT_EQ(shape->instructionList, 9);
+    EXPECT_EQ(shape->dataList, 9);
+    EXPECT_TRUE(shape->isBlank());
+    EXPECT_EQ(shape->recognize(), KnownShapeDefType::Blank);
+}
+
+TEST(ShapeDefTest, MissingInstructionListIsVerboseAndNotBlank)
+{
+    constexpr musxtest::string_view xml = R"xml(
+<?xml version="1.0" encoding="UTF-8"?>
+<finale>
+    <others>
+        <shapeDef cmper="1">
+            <instList>9</instList>
+            <dataList>9</dataList>
+        </shapeDef>
+    </others>
+</finale>
+)xml";
+    auto document = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml);
+    ASSERT_TRUE(document);
+    const auto shape = document->getOthers()->get<others::ShapeDef>(SCORE_PARTID, 1);
+    ASSERT_TRUE(shape);
+
+    auto previousLogger = musx::util::Logger::getCallback();
+    struct LoggerRestorer {
+        musx::util::Logger::LogCallback callback;
+        ~LoggerRestorer() { musx::util::Logger::setCallback(std::move(callback)); }
+    } loggerRestorer{previousLogger};
+    std::vector<std::pair<musx::util::Logger::LogLevel, std::string>> diagnostics;
+    musx::util::Logger::setCallback([&](musx::util::Logger::LogLevel level, const std::string& message) {
+        diagnostics.emplace_back(level, message);
+    });
+
+    EXPECT_FALSE(shape->isBlank());
+    ASSERT_EQ(diagnostics.size(), 1u);
+    EXPECT_EQ(diagnostics[0].first, musx::util::Logger::LogLevel::Verbose);
+    EXPECT_EQ(diagnostics[0].second, "ShapeDef 1 references missing instruction list 9.");
+}
+
 TEST(ShapeDefTest, RecognizeVerticalLineRightHooks)
 {
     auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(verticalLineRightHooksXml);

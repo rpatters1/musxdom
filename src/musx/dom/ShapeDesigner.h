@@ -558,9 +558,8 @@ public:
     Cmper dataList{};           ///< Instruction data list @ref Cmper.
     ShapeType shapeType{};      ///< Shape type (specifies which type of entity this shape pertains to)
 
-    /// @brief Returns true if this shape does not draw anything.
-    bool isBlank() const
-    { return instructionList == 0; }
+    /// @brief Returns true if this shape has no instruction list or its resolved list is empty.
+    bool isBlank() const;
 
     /// @brief Iterates through the instructions in the shape
     /// @param callback The callback function. Returning `false` from this function aborts the iteration loop.
