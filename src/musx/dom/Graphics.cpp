@@ -38,7 +38,7 @@ MusxInstance<ShapeGraphicAssign> ShapeGraphicAssign::findForGraphic(
     // up without that incidence does not match its object key. Older documents may also key
     // assignments independently and carry the instruction comparator in graphicCmper.
     if (auto assignment = document->getOthers()
-            ->get<ShapeGraphicAssign>(partId, graphicCmper, Inci{})) {
+            ->get<ShapeGraphicAssign>(partId, graphicCmper, Inci(0))) {
         return assignment;
     }
     for (const auto& assignment : document->getOthers()
