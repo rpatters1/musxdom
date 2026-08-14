@@ -205,6 +205,9 @@ virtual&#160;</td><td class="memItemRight" valign="bottom"><b>~DocumentElement</
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
+<tr class="memitem:a46043eafa4f8b2663c450aebd81639c8" id="r_a46043eafa4f8b2663c450aebd81639c8"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="namespacemusx_1_1dom.html#a4223cd531120dbef7acd854c3d2631b8">MusxInstance</a>&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1ShapeGraphicAssign.html">ShapeGraphicAssign</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1ShapeGraphicAssign.html#a46043eafa4f8b2663c450aebd81639c8">findForGraphic</a> (const <a class="el" href="namespacemusx_1_1dom.html#ac52edbaa60f81ba3df76ee77b37e95fd">DocumentPtr</a> &amp;document, <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> partId, <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> <a class="el" href="classmusx_1_1dom_1_1others_1_1ShapeGraphicAssign.html#a213f92ba8af85b5cdf57d969d7b5de14">graphicCmper</a>)</td></tr>
+<tr class="memdesc:a46043eafa4f8b2663c450aebd81639c8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Finds the assignment used by a ShapeDef ExternalGraphic instruction.  <br /></td></tr>
+<tr class="separator:a46043eafa4f8b2663c450aebd81639c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8bfdbe26791e83ab958e302390f8c1ea" id="r_a8bfdbe26791e83ab958e302390f8c1ea"><td class="memItemLeft" align="right" valign="top"><a id="a8bfdbe26791e83ab958e302390f8c1ea" name="a8bfdbe26791e83ab958e302390f8c1ea"></a>
 static const <a class="el" href="namespacemusx_1_1xml.html#a39bb6e9f7fd9e4cdc090566309a8dfe8">xml::XmlElementArray</a>&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1ShapeGraphicAssign.html">ShapeGraphicAssign</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>xmlMappingArray</b> ()</td></tr>
 <tr class="memdesc:a8bfdbe26791e83ab958e302390f8c1ea"><td class="mdescLeft">&#160;</td><td class="mdescRight">Required for musx::factory::FieldPopulator. <br /></td></tr>
@@ -399,6 +402,60 @@ Additional Inherited Members</h2></td></tr>
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a46043eafa4f8b2663c450aebd81639c8" name="a46043eafa4f8b2663c450aebd81639c8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a46043eafa4f8b2663c450aebd81639c8">&#9670;&#160;</a></span>findForGraphic()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacemusx_1_1dom.html#a4223cd531120dbef7acd854c3d2631b8">MusxInstance</a>&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1ShapeGraphicAssign.html">ShapeGraphicAssign</a> &gt; musx::dom::others::ShapeGraphicAssign::findForGraphic </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="namespacemusx_1_1dom.html#ac52edbaa60f81ba3df76ee77b37e95fd">DocumentPtr</a> &amp;&#160;</td>
+          <td class="paramname"><em>document</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a>&#160;</td>
+          <td class="paramname"><em>partId</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a>&#160;</td>
+          <td class="paramname"><em>graphicCmper</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Finds the assignment used by a ShapeDef ExternalGraphic instruction. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">document</td><td>The document containing the shape and assignment. </td></tr>
+    <tr><td class="paramname">partId</td><td>The requested part ID. </td></tr>
+    <tr><td class="paramname">graphicCmper</td><td>The comparator stored by the ExternalGraphic instruction. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The matching assignment, or an empty instance when none exists. </dd></dl>
 
 </div>
 </div>
