@@ -2359,18 +2359,8 @@ std::string SvgConvert::toSvg(const dom::others::ShapeDef& shape,
             dom::MusxInstance<dom::others::ShapeGraphicAssign> assignment;
 
             if (auto doc = shape.getDocument()) {
-                if (auto others = doc->getOthers()) {
-                    assignment = others->get<dom::others::ShapeGraphicAssign>(shape.getRequestedPartId(), graphicCmper);
-                    if (!assignment) {
-                        auto assigns = others->getArray<dom::others::ShapeGraphicAssign>(shape.getRequestedPartId());
-                        for (const auto& nextAssign : assigns) {
-                            if (nextAssign->graphicCmper == graphicCmper) {
-                                assignment = nextAssign;
-                                break;
-                            }
-                        }
-                    }
-                }
+                assignment = dom::others::ShapeGraphicAssign::findForGraphic(
+                    doc, shape.getRequestedPartId(), graphicCmper);
             }
 
             std::optional<ExternalGraphicPayload> payload;

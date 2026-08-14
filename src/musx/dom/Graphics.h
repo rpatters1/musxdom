@@ -313,6 +313,14 @@ public:
     Evpu origHeight{};      ///< Original (intrinsic) height in Evpu
     Cmper graphicCmper{};   ///< Graphic instance Cmper. (See #others::PageGraphicAssign::graphicCmper for full explanation.)
 
+    /// @brief Finds the assignment used by a ShapeDef ExternalGraphic instruction.
+    /// @param document The document containing the shape and assignment.
+    /// @param partId The requested part ID.
+    /// @param graphicCmper The comparator stored by the ExternalGraphic instruction.
+    /// @return The matching assignment, or an empty instance when none exists.
+    static MusxInstance<ShapeGraphicAssign> findForGraphic(
+        const DocumentPtr& document, Cmper partId, Cmper graphicCmper);
+
     constexpr static std::string_view XmlNodeName = "shapeGraphicAssign"; ///< The XML node name for this type.
     static const xml::XmlElementArray<ShapeGraphicAssign>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };

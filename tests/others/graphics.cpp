@@ -304,7 +304,7 @@ TEST(ShapeGraphicAssignTest, PopulateFields)
       <savedRecord/>
       <origWidth>336</origWidth>
       <origHeight>168</origHeight>
-      <graphicCmper>1</graphicCmper>
+      <graphicCmper>0</graphicCmper>
     </shapeGraphicAssign>
   </others>
 </finale>
@@ -332,6 +332,10 @@ TEST(ShapeGraphicAssignTest, PopulateFields)
     EXPECT_EQ(g->hAlign, others::ShapeGraphicAssign::HorizontalAlignment::Left);
     EXPECT_EQ(g->vAlign, others::ShapeGraphicAssign::VerticalAlignment::Top);
 
+    // Legacy assignments may omit graphicCmper and are then identified by their own
+    // comparator. The lookup must include the class's mandatory zero incidence.
+    EXPECT_EQ(others::ShapeGraphicAssign::findForGraphic(doc, SCORE_PARTID, 1), g);
+
     // Boolean-presence nodes
     EXPECT_TRUE(g->fixedPerc);
     EXPECT_TRUE(g->savedRecord);
@@ -341,5 +345,5 @@ TEST(ShapeGraphicAssignTest, PopulateFields)
 
     EXPECT_EQ(g->origWidth, 336);
     EXPECT_EQ(g->origHeight, 168);
-    EXPECT_EQ(g->graphicCmper, 1);
+    EXPECT_EQ(g->graphicCmper, 0);
 }

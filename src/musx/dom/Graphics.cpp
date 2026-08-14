@@ -30,6 +30,24 @@ namespace musx {
 namespace dom {
 namespace others {
 
+MusxInstance<ShapeGraphicAssign> ShapeGraphicAssign::findForGraphic(
+    const DocumentPtr& document, Cmper partId, Cmper graphicCmper)
+{
+    if (!document || !document->getOthers()) return {};
+    // ShapeGraphicAssign is an incident class whose observed incidence is zero. Looking it
+    // up without that incidence does not match its object key. Older documents may also key
+    // assignments independently and carry the instruction comparator in graphicCmper.
+    if (auto assignment = document->getOthers()
+            ->get<ShapeGraphicAssign>(partId, graphicCmper, Inci(0))) {
+        return assignment;
+    }
+    for (const auto& assignment : document->getOthers()
+            ->getArray<ShapeGraphicAssign>(partId)) {
+        if (assignment->graphicCmper == graphicCmper) return assignment;
+    }
+    return {};
+}
+
 // *****************************
 // ***** PageGraphicAssign *****
 // *****************************
