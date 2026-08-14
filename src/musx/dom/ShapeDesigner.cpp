@@ -499,6 +499,24 @@ CurveContourDirection ShapeDef::calcSlurContour() const
     return (topExtent >= bottomExtent) ? CurveContourDirection::Up : CurveContourDirection::Down;
 }
 
+bool ShapeDef::isBlank() const
+{
+    if (instructionList == 0) {
+        return true;
+    }
+    // Some legacy documents retain a nonzero reference to an intentionally empty
+    // instruction collection. A missing collection is unresolved rather than blank.
+    const auto instructions = getDocument()->getOthers()->get<ShapeInstructionList>(
+        getRequestedPartId(), instructionList);
+    if (!instructions) {
+        util::Logger::log(util::Logger::LogLevel::Verbose,
+            "ShapeDef " + std::to_string(getCmper()) + " references missing instruction list "
+                + std::to_string(instructionList) + ".");
+        return false;
+    }
+    return instructions->instructions.empty();
+}
+
 bool ShapeDef::iterateInstructions(std::function<bool(ShapeDefInstructionType, std::vector<int>)> callback) const
 {
     if (instructionList == 0 && dataList == 0) {
