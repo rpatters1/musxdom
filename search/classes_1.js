@@ -1,7 +1,7 @@
 var searchData=
 [
   ['barlineoptions_0',['BarlineOptions',['../classmusx_1_1dom_1_1options_1_1BarlineOptions.html',1,'musx::dom::options']]],
-  ['barre_1',['Barre',['../classmusx_1_1dom_1_1details_1_1FretboardDiagram_1_1Barre.html',1,'musx::dom::details::FretboardDiagram']]],
+  ['barre_1',['barre',['../classmusx_1_1dom_1_1details_1_1FretboardDiagram_1_1Barre.html',1,'musx::dom::details::FretboardDiagram::Barre'],['../structmusx_1_1util_1_1FretboardDisplayData_1_1Barre.html',1,'musx::util::FretboardDisplayData::Barre']]],
   ['baseline_2',['Baseline',['../classmusx_1_1dom_1_1details_1_1Baseline.html',1,'musx::dom::details']]],
   ['baselinechords_3',['BaselineChords',['../classmusx_1_1dom_1_1details_1_1BaselineChords.html',1,'musx::dom::details']]],
   ['baselineexpressionsabove_4',['BaselineExpressionsAbove',['../classmusx_1_1dom_1_1details_1_1BaselineExpressionsAbove.html',1,'musx::dom::details']]],

@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['cell_0',['Cell',['../classmusx_1_1dom_1_1details_1_1FretboardDiagram_1_1Cell.html',1,'musx::dom::details::FretboardDiagram']]],
+  ['cell_0',['cell',['../structmusx_1_1util_1_1FretboardDisplayData_1_1Cell.html',1,'musx::util::FretboardDisplayData::Cell'],['../classmusx_1_1dom_1_1details_1_1FretboardDiagram_1_1Cell.html',1,'musx::dom::details::FretboardDiagram::Cell']]],
   ['centershape_1',['CenterShape',['../classmusx_1_1dom_1_1details_1_1CenterShape.html',1,'musx::dom::details']]],
   ['charparams_2',['CharParams',['../classmusx_1_1dom_1_1others_1_1SmartShapeCustomLine_1_1CharParams.html',1,'musx::dom::others::SmartShapeCustomLine']]],
   ['chordassign_3',['ChordAssign',['../classmusx_1_1dom_1_1details_1_1ChordAssign.html',1,'musx::dom::details']]],

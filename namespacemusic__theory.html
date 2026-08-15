@@ -173,6 +173,12 @@ Functions</h2></td></tr>
 <tr class="memitem:ad044685489c9b3d008be12762a490463"><td class="memTemplItemLeft" align="right" valign="top">constexpr T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacemusic__theory.html#ad044685489c9b3d008be12762a490463">positiveModulus</a> (T n, T d, T *q=nullptr)</td></tr>
 <tr class="memdesc:ad044685489c9b3d008be12762a490463"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates a positive modulus in the range [0, d-1], even for negative dividends.  <br /></td></tr>
 <tr class="separator:ad044685489c9b3d008be12762a490463"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a576b1f677b0f4523577220da415d7f03" id="r_a576b1f677b0f4523577220da415d7f03"><td class="memItemLeft" align="right" valign="top">constexpr int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemusic__theory.html#a576b1f677b0f4523577220da415d7f03">calcPitchClass</a> (<a class="el" href="namespacemusic__theory.html#acb68e55d250cfd1ba7a7d5ca0bcbb869">NoteName</a> noteName, int alteration=0, int numberOfEdoDivisions=<a class="el" href="namespacemusic__theory.html#a9c6d3371d0dbd13ad22c18e667a6d384">STANDARD_12EDO_STEPS</a>, const std::array&lt; int, <a class="el" href="namespacemusic__theory.html#ab35adc6b33ebe9aa9f6606f04216c1d5">STANDARD_DIATONIC_STEPS</a> &gt; &amp;keyMap=<a class="el" href="namespacemusic__theory.html#a6bd660ac8929dd467be2713bec8e4402">MAJOR_KEYMAP</a>)</td></tr>
+<tr class="memdesc:a576b1f677b0f4523577220da415d7f03"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the pitch class of a spelled note name.  <br /></td></tr>
+<tr class="separator:a576b1f677b0f4523577220da415d7f03"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8177c164efac95187c5c4fa3be61c69c" id="r_a8177c164efac95187c5c4fa3be61c69c"><td class="memItemLeft" align="right" valign="top">constexpr int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemusic__theory.html#a8177c164efac95187c5c4fa3be61c69c">calcPitchClass</a> (const <a class="el" href="structmusic__theory_1_1Pitch.html">Pitch</a> &amp;pitch, int numberOfEdoDivisions=<a class="el" href="namespacemusic__theory.html#a9c6d3371d0dbd13ad22c18e667a6d384">STANDARD_12EDO_STEPS</a>, const std::array&lt; int, <a class="el" href="namespacemusic__theory.html#ab35adc6b33ebe9aa9f6606f04216c1d5">STANDARD_DIATONIC_STEPS</a> &gt; &amp;keyMap=<a class="el" href="namespacemusic__theory.html#a6bd660ac8929dd467be2713bec8e4402">MAJOR_KEYMAP</a>)</td></tr>
+<tr class="memdesc:a8177c164efac95187c5c4fa3be61c69c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the pitch class of a spelled pitch, ignoring its octave.  <br /></td></tr>
+<tr class="separator:a8177c164efac95187c5c4fa3be61c69c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acf8c49a568a6a6043714a796c4de89e4" id="r_acf8c49a568a6a6043714a796c4de89e4"><td class="memItemLeft" align="right" valign="top">constexpr int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemusic__theory.html#acf8c49a568a6a6043714a796c4de89e4">calc12EdoHalfstepsInInterval</a> (int interval, int chromaticAlteration)</td></tr>
 <tr class="memdesc:acf8c49a568a6a6043714a796c4de89e4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the number of 12-EDO chromatic halfsteps in the specified interval.  <br /></td></tr>
 <tr class="separator:acf8c49a568a6a6043714a796c4de89e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -521,6 +527,120 @@ constexpr std::array&lt; int, <a class="el" href="namespacemusic__theory.html#ab
 
 </div>
 </div>
+<a id="a8177c164efac95187c5c4fa3be61c69c" name="a8177c164efac95187c5c4fa3be61c69c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8177c164efac95187c5c4fa3be61c69c">&#9670;&#160;</a></span>calcPitchClass() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr int music_theory::calcPitchClass </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structmusic__theory_1_1Pitch.html">Pitch</a> &amp;&#160;</td>
+          <td class="paramname"><em>pitch</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>numberOfEdoDivisions</em> = <code><a class="el" href="namespacemusic__theory.html#a9c6d3371d0dbd13ad22c18e667a6d384">STANDARD_12EDO_STEPS</a></code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::array&lt; int, <a class="el" href="namespacemusic__theory.html#ab35adc6b33ebe9aa9f6606f04216c1d5">STANDARD_DIATONIC_STEPS</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>keyMap</em> = <code><a class="el" href="namespacemusic__theory.html#a6bd660ac8929dd467be2713bec8e4402">MAJOR_KEYMAP</a></code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Calculates the pitch class of a spelled pitch, ignoring its octave. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pitch</td><td>The pitch to convert. Its alteration is relative to the natural note name. </td></tr>
+    <tr><td class="paramname">numberOfEdoDivisions</td><td>The number of divisions in the EDO. (E.g., 31-EDO would pass 31.) </td></tr>
+    <tr><td class="paramname">keyMap</td><td>A 7-element map giving the EDO division of each natural note name, C first. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The pitch class, in the range [0, <code>numberOfEdoDivisions</code> - 1]. </dd></dl>
+
+</div>
+</div>
+<a id="a576b1f677b0f4523577220da415d7f03" name="a576b1f677b0f4523577220da415d7f03"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a576b1f677b0f4523577220da415d7f03">&#9670;&#160;</a></span>calcPitchClass() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr int music_theory::calcPitchClass </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespacemusic__theory.html#acb68e55d250cfd1ba7a7d5ca0bcbb869">NoteName</a>&#160;</td>
+          <td class="paramname"><em>noteName</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>alteration</em> = <code>0</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>numberOfEdoDivisions</em> = <code><a class="el" href="namespacemusic__theory.html#a9c6d3371d0dbd13ad22c18e667a6d384">STANDARD_12EDO_STEPS</a></code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::array&lt; int, <a class="el" href="namespacemusic__theory.html#ab35adc6b33ebe9aa9f6606f04216c1d5">STANDARD_DIATONIC_STEPS</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>keyMap</em> = <code><a class="el" href="namespacemusic__theory.html#a6bd660ac8929dd467be2713bec8e4402">MAJOR_KEYMAP</a></code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Calculates the pitch class of a spelled note name. </p>
+<p>The pitch class is the note's chromatic position within one octave, counting from the natural note name and then applying the alteration. Enharmonics share a pitch class, so C♯ and D♭ both return 1 in 12-EDO.</p>
+<p><code>keyMap</code> gives the EDO division of each natural note name in C-first order, which is the same thing as the major scale rooted at C. It cannot be derived from <code>numberOfEdoDivisions</code> alone: 31-EDO places the naturals at <code>{ 0, 5, 10, 13, 18, 23, 28 }</code>, so both values are needed, exactly as <a class="el" href="classmusic__theory_1_1Transposer.html">Transposer</a> takes them. Note that a key signature's own key map is relative to its tonal center, so it suits <a class="el" href="classmusic__theory_1_1Transposer.html">Transposer</a> rather than this function. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">noteName</td><td>The diatonic note name. </td></tr>
+    <tr><td class="paramname">alteration</td><td>The alteration relative to the natural note name, in EDO divisions. </td></tr>
+    <tr><td class="paramname">numberOfEdoDivisions</td><td>The number of divisions in the EDO. (E.g., 31-EDO would pass 31.) </td></tr>
+    <tr><td class="paramname">keyMap</td><td>A 7-element map giving the EDO division of each natural note name, C first. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The pitch class, in the range [0, <code>numberOfEdoDivisions</code> - 1]. </dd></dl>
+
+</div>
+</div>
 <a id="aaf657cfd2d18ef5386cc35a5d1283ea4" name="aaf657cfd2d18ef5386cc35a5d1283ea4"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aaf657cfd2d18ef5386cc35a5d1283ea4">&#9670;&#160;</a></span>calcTranspositionIsOctave()</h2>
 
@@ -715,6 +835,7 @@ template&lt;typename T &gt; </div>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>For non-negative, the result is the same as <code>%</code>. For negative numbers, the result is <code>-1 * (abs(n) % d)</code>. </dd></dl>
+<dl class="section note"><dt>Note</dt><dd>Since C++11 integer division is guaranteed to truncate toward zero, which makes <code>%</code> already carry the sign of <code>n</code>. Spelling this out with <code>abs</code> instead would defeat constant evaluation on any standard library that has not yet made <code>std::abs</code> constexpr, and is undefined for the most negative value of <code>T</code>. </dd></dl>
 
 </div>
 </div>

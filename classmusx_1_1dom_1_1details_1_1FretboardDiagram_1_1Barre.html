@@ -116,15 +116,15 @@ static const <a class="el" href="namespacemusx_1_1xml.html#a39bb6e9f7fd9e4cdc090
 Public Attributes</h2></td></tr>
 <tr class="memitem:ad69856ecf270ff1c4aaa6037e8e694b2" id="r_ad69856ecf270ff1c4aaa6037e8e694b2"><td class="memItemLeft" align="right" valign="top"><a id="ad69856ecf270ff1c4aaa6037e8e694b2" name="ad69856ecf270ff1c4aaa6037e8e694b2"></a>
 int&#160;</td><td class="memItemRight" valign="bottom"><b>fret</b> {}</td></tr>
-<tr class="memdesc:ad69856ecf270ff1c4aaa6037e8e694b2"><td class="mdescLeft">&#160;</td><td class="mdescRight">0-based fret number, where 0 signifies the open string. (Finale allows nut barres.) <br /></td></tr>
+<tr class="memdesc:ad69856ecf270ff1c4aaa6037e8e694b2"><td class="mdescLeft">&#160;</td><td class="mdescRight">0-based fret number counting from the diagram's first fret, so 0 is the fret that <a class="el" href="classmusx_1_1dom_1_1details_1_1FretboardDiagram_1_1Cell.html">Cell</a> identifies as fret 1. This differs from <a class="el" href="classmusx_1_1dom_1_1details_1_1FretboardDiagram_1_1Cell.html#aa84994e372bfd863a1757d0278d60f69">Cell::fret</a>, which reserves 0 for the open string; a barre's equivalent cell fret is always <code>fret + 1</code>. <br /></td></tr>
 <tr class="separator:ad69856ecf270ff1c4aaa6037e8e694b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aca25b6c61ca3288f7a609e7710da7795" id="r_aca25b6c61ca3288f7a609e7710da7795"><td class="memItemLeft" align="right" valign="top"><a id="aca25b6c61ca3288f7a609e7710da7795" name="aca25b6c61ca3288f7a609e7710da7795"></a>
 int&#160;</td><td class="memItemRight" valign="bottom"><b>startString</b> {}</td></tr>
-<tr class="memdesc:aca25b6c61ca3288f7a609e7710da7795"><td class="mdescLeft">&#160;</td><td class="mdescRight">Starting 1-based string number. <br /></td></tr>
+<tr class="memdesc:aca25b6c61ca3288f7a609e7710da7795"><td class="mdescLeft">&#160;</td><td class="mdescRight">Starting 1-based string number. This is the lowest-numbered string in the barre. <br /></td></tr>
 <tr class="separator:aca25b6c61ca3288f7a609e7710da7795"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5c06fb37bfc0541f3cb6cdcaf7ff6976" id="r_a5c06fb37bfc0541f3cb6cdcaf7ff6976"><td class="memItemLeft" align="right" valign="top"><a id="a5c06fb37bfc0541f3cb6cdcaf7ff6976" name="a5c06fb37bfc0541f3cb6cdcaf7ff6976"></a>
 int&#160;</td><td class="memItemRight" valign="bottom"><b>endString</b> {}</td></tr>
-<tr class="memdesc:a5c06fb37bfc0541f3cb6cdcaf7ff6976"><td class="mdescLeft">&#160;</td><td class="mdescRight">Ending 1-based string number. <br /></td></tr>
+<tr class="memdesc:a5c06fb37bfc0541f3cb6cdcaf7ff6976"><td class="mdescLeft">&#160;</td><td class="mdescRight">Ending 1-based string number. This is the highest-numbered string in the barre. <br /></td></tr>
 <tr class="separator:a5c06fb37bfc0541f3cb6cdcaf7ff6976"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>

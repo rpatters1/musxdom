@@ -45,7 +45,7 @@ var searchData=
   ['endpointkind_42',['endPointKind',['../structmusx_1_1util_1_1Tie_1_1ContourGeometry.html#a6ea8922e324cd85a811a58a0ea7decb6',1,'musx::util::Tie::ContourGeometry']]],
   ['endpos_43',['endPos',['../classmusx_1_1dom_1_1others_1_1BeatChartElement.html#adb327bda05a97fa9ec21188a68a17978',1,'musx::dom::others::BeatChartElement']]],
   ['endslot_44',['endSlot',['../classmusx_1_1dom_1_1details_1_1StaffGroupInfo.html#a4c79b042fef2d07fd0c9cc9817ae50ba',1,'musx::dom::details::StaffGroupInfo']]],
-  ['endstring_45',['endString',['../classmusx_1_1dom_1_1details_1_1FretboardDiagram_1_1Barre.html#a5c06fb37bfc0541f3cb6cdcaf7ff6976',1,'musx::dom::details::FretboardDiagram::Barre']]],
+  ['endstring_45',['endstring',['../structmusx_1_1util_1_1FretboardDisplayData_1_1Barre.html#aa146b8ce97fa41b3e4bf438f1e713673',1,'musx::util::FretboardDisplayData::Barre::endString'],['../classmusx_1_1dom_1_1details_1_1FretboardDiagram_1_1Barre.html#a5c06fb37bfc0541f3cb6cdcaf7ff6976',1,'musx::dom::details::FretboardDiagram::Barre::endString']]],
   ['endtermseg_46',['endTermSeg',['../classmusx_1_1dom_1_1others_1_1SmartShape.html#a4e56b4c73aef844dcbdb8753768824a5',1,'musx::dom::others::SmartShape']]],
   ['englishhorn_47',['EnglishHorn',['../namespacemusx_1_1dom_1_1uuid.html#aba90da05f0a5f611a0202753567578e9',1,'musx::dom::uuid']]],
   ['engraverslurstate_48',['engraverSlurState',['../classmusx_1_1dom_1_1others_1_1SmartShape.html#a76f47c85e23c3feeb7c33030cd3d0e02',1,'musx::dom::others::SmartShape']]],

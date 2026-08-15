@@ -20,7 +20,7 @@ var searchData=
   ['celesta_17',['Celesta',['../namespacemusx_1_1dom_1_1uuid.html#ae79da2dd9cc89c0918c93a761b87479a',1,'musx::dom::uuid']]],
   ['cello_18',['Cello',['../namespacemusx_1_1dom_1_1uuid.html#a60c7d585b3c422cf4b8ccbd38cc617eb',1,'musx::dom::uuid']]],
   ['cellosection_19',['CelloSection',['../namespacemusx_1_1dom_1_1uuid.html#a612c51aa4013ee642a03dc6e2eec9d83',1,'musx::dom::uuid']]],
-  ['cells_20',['cells',['../classmusx_1_1dom_1_1details_1_1FretboardDiagram.html#affad7983345fe9d9c4178b1ccdb6054f',1,'musx::dom::details::FretboardDiagram']]],
+  ['cells_20',['cells',['../structmusx_1_1util_1_1FretboardDisplayData.html#a7d5b6c4e8030e3169345c5b5096a857c',1,'musx::util::FretboardDisplayData::cells'],['../classmusx_1_1dom_1_1details_1_1FretboardDiagram.html#affad7983345fe9d9c4178b1ccdb6054f',1,'musx::dom::details::FretboardDiagram::cells']]],
   ['cengcenggamelan_21',['CengCengGamelan',['../namespacemusx_1_1dom_1_1uuid.html#a8c2184d1c7f0df725243ae532299d3fe',1,'musx::dom::uuid']]],
   ['centerabbrrawtextid_22',['centerAbbrRawTextId',['../classmusx_1_1dom_1_1others_1_1SmartShapeCustomLine.html#abd73c0038c330ecc5218bdd194459415',1,'musx::dom::others::SmartShapeCustomLine']]],
   ['centerabbrx_23',['centerAbbrX',['../classmusx_1_1dom_1_1others_1_1SmartShapeCustomLine.html#a8dc79a8b08031124e2127984652b730d',1,'musx::dom::others::SmartShapeCustomLine']]],
