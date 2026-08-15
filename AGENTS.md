@@ -2,6 +2,10 @@
 
 Guidance for coding agents and contributors working in this repository.
 
+## Skills
+
+- `.agents/music-theory-sync/SKILL.md` — changes to `src/music_theory/music_theory.hpp` must be synchronized with mnxdom.
+
 ## Project Context
 
 This repository implements a C++ document object model for Finale `musx` / EnigmaXml data. Prefer changes that preserve the existing DOM/factory/test structure and keep Finale-specific interpretation in musxdom while leaving export-format policy decisions to caller layers.
