@@ -74,6 +74,7 @@
 #include "util/Cue.h"
 #include "util/DateTimeFormat.h"
 #include "util/EnigmaString.h"
+#include "util/Fretboard.h"
 #include "util/PseudoTieUtils.h"
 #include "util/ShapeRecognize.h"
 #include "util/SmartShapeRecognize.h"

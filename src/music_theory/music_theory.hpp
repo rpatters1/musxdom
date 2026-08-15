@@ -157,11 +157,15 @@ constexpr T sign(T n)
 /// @param n The number (positive or negative) for which to calculate the modulus
 /// @param d The base of the modulus. This must be a positive number.
 /// @return For non-negative, the result is the same as `%`. For negative numbers, the result is `-1 * (abs(n) % d)`.
+/// @note Since C++11 integer division is guaranteed to truncate toward zero, which makes `%` already
+/// carry the sign of @p n. Spelling this out with `abs` instead would defeat constant evaluation on any
+/// standard library that has not yet made `std::abs` constexpr, and is undefined for the most negative
+/// value of @p T.
 template <typename T>
 constexpr T signedModulus(T n, T d)
 {
     static_assert(std::is_integral_v<T>, "signedModulus requires an integer type");
-    return sign(n) * (std::abs(n) % d);
+    return n % d;
 }
 
 /// @brief Calculates a positive modulus in the range [0, d-1], even for negative dividends.
@@ -181,6 +185,41 @@ constexpr T positiveModulus(T n, T d, T* q = nullptr)
         if (q) --(*q);
     }
     return result;
+}
+
+/// @brief Calculates the pitch class of a spelled note name.
+/// @details The pitch class is the note's chromatic position within one octave, counting from the
+/// natural note name and then applying the alteration. Enharmonics share a pitch class, so C♯ and D♭
+/// both return 1 in 12-EDO.
+///
+/// @p keyMap gives the EDO division of each natural note name in C-first order, which is the same
+/// thing as the major scale rooted at C. It cannot be derived from @p numberOfEdoDivisions alone:
+/// 31-EDO places the naturals at `{ 0, 5, 10, 13, 18, 23, 28 }`, so both values are needed, exactly
+/// as @ref Transposer takes them. Note that a key signature's own key map is relative to its tonal
+/// center, so it suits @ref Transposer rather than this function.
+/// @param noteName The diatonic note name.
+/// @param alteration The alteration relative to the natural note name, in EDO divisions.
+/// @param numberOfEdoDivisions The number of divisions in the EDO. (E.g., 31-EDO would pass 31.)
+/// @param keyMap A 7-element map giving the EDO division of each natural note name, C first.
+/// @return The pitch class, in the range [0, @p numberOfEdoDivisions - 1].
+constexpr int calcPitchClass(NoteName noteName, int alteration = 0,
+    int numberOfEdoDivisions = STANDARD_12EDO_STEPS,
+    const std::array<int, STANDARD_DIATONIC_STEPS>& keyMap = MAJOR_KEYMAP)
+{
+    const int natural = keyMap[positiveModulus(int(noteName), STANDARD_DIATONIC_STEPS)];
+    return positiveModulus(natural + alteration, numberOfEdoDivisions);
+}
+
+/// @brief Calculates the pitch class of a spelled pitch, ignoring its octave.
+/// @param pitch The pitch to convert. Its alteration is relative to the natural note name.
+/// @param numberOfEdoDivisions The number of divisions in the EDO. (E.g., 31-EDO would pass 31.)
+/// @param keyMap A 7-element map giving the EDO division of each natural note name, C first.
+/// @return The pitch class, in the range [0, @p numberOfEdoDivisions - 1].
+constexpr int calcPitchClass(const Pitch& pitch,
+    int numberOfEdoDivisions = STANDARD_12EDO_STEPS,
+    const std::array<int, STANDARD_DIATONIC_STEPS>& keyMap = MAJOR_KEYMAP)
+{
+    return calcPitchClass(pitch.noteName, pitch.alteration, numberOfEdoDivisions, keyMap);
 }
 
 /// @brief Calculates the number of 12-EDO chromatic halfsteps in the specified interval
