@@ -420,3 +420,50 @@ TEST(TransposerTest, CalcKeySigChangeFromInterval_Theoretical)
     // D# Transposition down: from your test {-1, -1} should produce -9
     EXPECT_EQ(calcKeySigChangeFromInterval(-1, -1), -9) << "interval should be down aug 2nd {-1, -1}";
 }
+
+TEST(MusicTheoryTest, CalcPitchClass)
+{
+    // The naturals are the major scale rooted at C.
+    EXPECT_EQ(calcPitchClass(NoteName::C), 0);
+    EXPECT_EQ(calcPitchClass(NoteName::D), 2);
+    EXPECT_EQ(calcPitchClass(NoteName::E), 4);
+    EXPECT_EQ(calcPitchClass(NoteName::F), 5);
+    EXPECT_EQ(calcPitchClass(NoteName::G), 7);
+    EXPECT_EQ(calcPitchClass(NoteName::A), 9);
+    EXPECT_EQ(calcPitchClass(NoteName::B), 11);
+
+    // Enharmonics share a pitch class.
+    EXPECT_EQ(calcPitchClass(NoteName::C, 1), calcPitchClass(NoteName::D, -1));
+    EXPECT_EQ(calcPitchClass(NoteName::E, 1), calcPitchClass(NoteName::F));
+    EXPECT_EQ(calcPitchClass(NoteName::B, 1), calcPitchClass(NoteName::C));
+
+    // Alterations wrap in both directions rather than escaping the octave.
+    EXPECT_EQ(calcPitchClass(NoteName::B, 1), 0);
+    EXPECT_EQ(calcPitchClass(NoteName::C, -1), 11);
+    EXPECT_EQ(calcPitchClass(NoteName::C, -2), 10);
+    EXPECT_EQ(calcPitchClass(NoteName::B, 2), 1);
+
+    // An alteration larger than an octave still lands in range.
+    EXPECT_EQ(calcPitchClass(NoteName::C, 13), 1);
+    EXPECT_EQ(calcPitchClass(NoteName::C, -13), 11);
+
+    // The octave is ignored when converting a spelled pitch.
+    EXPECT_EQ(calcPitchClass(Pitch(NoteName::E, 4, -1)), 3);
+    EXPECT_EQ(calcPitchClass(Pitch(NoteName::E, 9, -1)), calcPitchClass(Pitch(NoteName::E, -2, -1)));
+
+    // A non-12 EDO needs its own key map, which its EDO count alone does not supply.
+    constexpr std::array<int, STANDARD_DIATONIC_STEPS> major31EDO = { 0, 5, 10, 13, 18, 23, 28 };
+    EXPECT_EQ(calcPitchClass(NoteName::E, 0, 31, major31EDO), 10);
+    EXPECT_EQ(calcPitchClass(NoteName::B, 3, 31, major31EDO), 0);
+    EXPECT_EQ(calcPitchClass(NoteName::C, -1, 31, major31EDO), 30);
+
+    // In 31-EDO a sharp and its enharmonic flat are distinct pitches, unlike in 12-EDO.
+    EXPECT_NE(calcPitchClass(NoteName::C, 2, 31, major31EDO), calcPitchClass(NoteName::D, -2, 31, major31EDO));
+
+    // These are usable in a constant expression, which also guards the modulus helpers they rest on
+    // against regaining a dependency on a non-constexpr std::abs.
+    static_assert(calcPitchClass(NoteName::G, -1) == 6);
+    static_assert(calcPitchClass(Pitch(NoteName::B, 4, 1)) == 0);
+    static_assert(positiveModulus(-13, 12) == 11);
+    static_assert(signedModulus(-13, 12) == -1);
+}

@@ -1094,9 +1094,12 @@ public:
     class Barre
     {
     public:
-        int fret{};         ///< 0-based fret number, where 0 signifies the open string. (Finale allows nut barres.)
-        int startString{};  ///< Starting 1-based string number.
-        int endString{};    ///< Ending 1-based string number.
+        /// @brief 0-based fret number counting from the diagram's first fret, so 0 is the fret that
+        /// @ref Cell identifies as fret 1. This differs from @ref Cell::fret, which reserves 0 for the
+        /// open string; a barre's equivalent cell fret is always `fret + 1`.
+        int fret{};
+        int startString{};  ///< Starting 1-based string number. This is the lowest-numbered string in the barre.
+        int endString{};    ///< Ending 1-based string number. This is the highest-numbered string in the barre.
 
         static const xml::XmlElementArray<Barre>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
     };

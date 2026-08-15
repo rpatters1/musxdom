@@ -183,7 +183,9 @@ TEST(FretboardDiagramTest, PopulateFields)
     {
         auto b0 = fb->barres[0];
         ASSERT_TRUE(b0);
-        EXPECT_EQ(b0->fret, 0); // Finale allows nut/capo representation as fret 0
+        // Barre frets count from zero at the diagram's first fret, so 0 here is the fret that the cells
+        // above call fret 1. See FretboardDisplayData for the conversion into display frets.
+        EXPECT_EQ(b0->fret, 0);
         EXPECT_EQ(b0->startString, 1);
         EXPECT_EQ(b0->endString, 5);
     }
