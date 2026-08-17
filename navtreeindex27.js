@@ -1,5 +1,9 @@
 var NAVTREEINDEX27 =
 {
+"classmusx_1_1dom_1_1others_1_1TextExpressionDef.html#a13bbf631cd6f1733b1ab5b728128c16d":[1,0,1,0,3,86,18],
+"classmusx_1_1dom_1_1others_1_1TextExpressionDef.html#a1b22dd5b0cb6dc1d10398b6839524ce3":[2,0,1,0,3,86,14],
+"classmusx_1_1dom_1_1others_1_1TextExpressionDef.html#a1b22dd5b0cb6dc1d10398b6839524ce3":[1,0,1,0,3,86,14],
+"classmusx_1_1dom_1_1others_1_1TextExpressionDef.html#a203d2da849aa2ce8f0695ca26ce22a85":[2,0,1,0,3,86,11],
 "classmusx_1_1dom_1_1others_1_1TextExpressionDef.html#a203d2da849aa2ce8f0695ca26ce22a85":[1,0,1,0,3,86,11],
 "classmusx_1_1dom_1_1others_1_1TextExpressionDef.html#a239e82274fbcd62be18029f9935ce29d":[2,0,1,0,3,86,1],
 "classmusx_1_1dom_1_1others_1_1TextExpressionDef.html#a239e82274fbcd62be18029f9935ce29d":[1,0,1,0,3,86,1],
@@ -245,9 +249,5 @@ var NAVTREEINDEX27 =
 "classmusx_1_1dom_1_1texts_1_1LyricsTextBase.html#aaa07f7d49633f9ff62d6441cc696f7eb":[1,0,1,0,4,6,1],
 "classmusx_1_1dom_1_1texts_1_1LyricsTextBase.html#aaa07f7d49633f9ff62d6441cc696f7eb":[2,0,1,0,6,6,1],
 "classmusx_1_1dom_1_1texts_1_1LyricsTextBase.html#aba62017f8e8a23f2657322d1d245c1a1":[1,0,1,0,4,6,2],
-"classmusx_1_1dom_1_1texts_1_1LyricsTextBase.html#aba62017f8e8a23f2657322d1d245c1a1":[2,0,1,0,6,6,2],
-"classmusx_1_1dom_1_1texts_1_1LyricsTextBase.html#ad53b94532b92f2f6a9ddaa892c87f3e5":[1,0,1,0,4,6,0],
-"classmusx_1_1dom_1_1texts_1_1LyricsTextBase.html#ad53b94532b92f2f6a9ddaa892c87f3e5":[2,0,1,0,6,6,0],
-"classmusx_1_1dom_1_1texts_1_1LyricsVerse.html":[1,0,1,0,4,7],
-"classmusx_1_1dom_1_1texts_1_1LyricsVerse.html":[2,0,1,0,6,7]
+"classmusx_1_1dom_1_1texts_1_1LyricsTextBase.html#aba62017f8e8a23f2657322d1d245c1a1":[2,0,1,0,6,6,2]
 };

@@ -15,6 +15,7 @@ var classmusx_1_1dom_1_1options_1_1TextOptions =
       [ "Bottom", "classmusx_1_1dom_1_1options_1_1TextOptions.html#a7e1e7080f6cc6710d79429f7b7a83021a2ad9d63b69c4a10a5cc9cad923133bc4", null ]
     ] ],
     [ "TextOptions", "classmusx_1_1dom_1_1options_1_1TextOptions.html#a2c785cf4704c1add23bdf6ddd9a6fd43", null ],
+    [ "integrityCheck", "classmusx_1_1dom_1_1options_1_1TextOptions.html#abe350bb2b09acbd14f82deca8d344dac", null ],
     [ "dateFormat", "classmusx_1_1dom_1_1options_1_1TextOptions.html#adeb68132c83937c4952fd6afaee5f34b", null ],
     [ "showTimeSeconds", "classmusx_1_1dom_1_1options_1_1TextOptions.html#a401bb3727ec68761cc0cc711a37be381", null ],
     [ "symbolInserts", "classmusx_1_1dom_1_1options_1_1TextOptions.html#a9c7a66de9b0b31f331b9df2073d34c19", null ],
@@ -24,7 +25,8 @@ var classmusx_1_1dom_1_1options_1_1TextOptions =
     [ "textHorzAlign", "classmusx_1_1dom_1_1options_1_1TextOptions.html#a1badfa4724995a548f2d0749eeeee33a", null ],
     [ "textIsEdgeAligned", "classmusx_1_1dom_1_1options_1_1TextOptions.html#af924f037c1b4f3edd366efe98ad5eb94", null ],
     [ "textJustify", "classmusx_1_1dom_1_1options_1_1TextOptions.html#a82315732260bf8a37bcf446b71b36c8e", null ],
-    [ "textLineSpacingPercent", "classmusx_1_1dom_1_1options_1_1TextOptions.html#a3f6752299ad009f7b12f061f6b1dbc46", null ],
+    [ "textLineSpacingEvpu", "classmusx_1_1dom_1_1options_1_1TextOptions.html#aca5fb9073d15f9981425da6e06aefbc8", null ],
+    [ "textLineSpacingPercent", "classmusx_1_1dom_1_1options_1_1TextOptions.html#a4afb0617f49a7dd069d49a3dfcc999a0", null ],
     [ "textPageOffset", "classmusx_1_1dom_1_1options_1_1TextOptions.html#a6e3993a19a7a71294fdddf5ca01cabcd", null ],
     [ "textSuperscript", "classmusx_1_1dom_1_1options_1_1TextOptions.html#a4aa7516d10e59e6a8bfb4deab6688002", null ],
     [ "textTracking", "classmusx_1_1dom_1_1options_1_1TextOptions.html#a11e47e599b30959841e3e797655e83d4", null ],

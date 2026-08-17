@@ -1,5 +1,9 @@
 var NAVTREEINDEX36 =
 {
+"structmusx_1_1dom_1_1is__pool__type_3_01OptionsPool_00_01T_01_4.html":[1,0,1,0,30],
+"structmusx_1_1dom_1_1is__pool__type_3_01OptionsPool_00_01T_01_4.html":[2,0,1,0,31],
+"structmusx_1_1dom_1_1is__pool__type_3_01OthersPool_00_01T_01_4.html":[1,0,1,0,31],
+"structmusx_1_1dom_1_1is__pool__type_3_01OthersPool_00_01T_01_4.html":[2,0,1,0,32],
 "structmusx_1_1dom_1_1is__pool__type_3_01TextsPool_00_01T_01_4.html":[2,0,1,0,33],
 "structmusx_1_1dom_1_1is__pool__type_3_01TextsPool_00_01T_01_4.html":[1,0,1,0,32],
 "structmusx_1_1dom_1_1options_1_1LyricOptions_1_1SyllablePosStyle.html":[1,0,1,0,2,12,0],

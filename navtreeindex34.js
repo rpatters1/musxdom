@@ -1,5 +1,9 @@
 var NAVTREEINDEX34 =
 {
+"namespacemusx_1_1dom_1_1uuid.html#ae7fa9dd28599b5b0fc03c9e822272365":[1,0,1,0,5,451],
+"namespacemusx_1_1dom_1_1uuid.html#ae87e4c9347e20b69df3a03366356dc45":[1,0,1,0,5,7],
+"namespacemusx_1_1dom_1_1uuid.html#ae8dd7f2d327a46ab89b1b60f25d48c0f":[1,0,1,0,5,764],
+"namespacemusx_1_1dom_1_1uuid.html#ae9dbbad56689ce15245c9645e05e613c":[1,0,1,0,5,171],
 "namespacemusx_1_1dom_1_1uuid.html#aea14a78bb2a2026b90072562868ecda1":[1,0,1,0,5,159],
 "namespacemusx_1_1dom_1_1uuid.html#aea1b6c06c678d1a83fddfe4bf3918764":[1,0,1,0,5,524],
 "namespacemusx_1_1dom_1_1uuid.html#aea8acc70313d55c98867289d25cf7223":[1,0,1,0,5,206],
@@ -245,9 +249,5 @@ var NAVTREEINDEX34 =
 "structmusx_1_1dom_1_1ShapeDefInstruction.html#ace9d9dd29f296c13c06a0473e065cf0b":[2,0,1,0,53,20],
 "structmusx_1_1dom_1_1ShapeDefInstruction.html#ace9d9dd29f296c13c06a0473e065cf0b":[1,0,1,0,52,20],
 "structmusx_1_1dom_1_1ShapeDefInstruction_1_1Bracket.html":[2,0,1,0,53,0],
-"structmusx_1_1dom_1_1ShapeDefInstruction_1_1Bracket.html":[1,0,1,0,52,0],
-"structmusx_1_1dom_1_1ShapeDefInstruction_1_1Bracket.html#a21cb90ce8616fd425a7c4b8ca57e7caf":[1,0,1,0,52,0,0],
-"structmusx_1_1dom_1_1ShapeDefInstruction_1_1Bracket.html#a21cb90ce8616fd425a7c4b8ca57e7caf":[2,0,1,0,53,0,0],
-"structmusx_1_1dom_1_1ShapeDefInstruction_1_1CloneChar.html":[1,0,1,0,52,1],
-"structmusx_1_1dom_1_1ShapeDefInstruction_1_1CloneChar.html":[2,0,1,0,53,1]
+"structmusx_1_1dom_1_1ShapeDefInstruction_1_1Bracket.html":[1,0,1,0,52,0]
 };
