@@ -167,7 +167,12 @@ MusxInstance<others::FontDefinition> findDefaultMusicFont(const DocumentPtr& tar
     if (!music || music->fontId == 0) {
         return nullptr;
     }
-    return target->getOthers()->get<others::FontDefinition>(SCORE_PARTID, music->fontId);
+    auto result = target->getOthers()->get<others::FontDefinition>(SCORE_PARTID, music->fontId);
+    if (!result) {
+        return nullptr;
+    }
+    const auto placeholderName = "Missing Font (" + std::to_string(music->fontId) + ")";
+    return result->name == placeholderName ? nullptr : result;
 }
 
 } // namespace

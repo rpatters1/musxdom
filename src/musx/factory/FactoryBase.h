@@ -37,6 +37,7 @@
 #include "musx/xml/XmlInterface.h"
 #include "musx/dom/BaseClasses.h"
 #include "musx/dom/Document.h"
+#include "musx/factory/ConstructionContext.h"
 
 namespace musx {
 
@@ -48,7 +49,6 @@ namespace factory {
 
 using namespace musx::xml;
 using namespace musx::dom;
-
 
 /**
  * @brief Factory base class.
@@ -183,11 +183,11 @@ static_assert(true, "") // require semicolon after macro
 template <typename T>
 struct FieldPopulator : public FactoryBase
 {
-    static void populateField(const std::shared_ptr<T>& instance, const XmlElementPtr& fieldElement)
+    static void populateField(ConstructionContext& context, const std::shared_ptr<T>& instance, const XmlElementPtr& fieldElement)
     {
         auto it = elementXref().find(fieldElement->getTagName());
         if (it != elementXref().end()) {
-            std::get<1>(*it)(fieldElement, instance);
+            std::get<1>(*it)(context, fieldElement, instance);
         } else {
             const bool requireFields = [instance]() {
                 if constexpr (std::is_base_of_v<EnigmaBase, T>) {
@@ -202,32 +202,32 @@ struct FieldPopulator : public FactoryBase
         }
     }
 
-    static void populate(const std::shared_ptr<T>& instance, const XmlElementPtr& element)
+    static void populate(ConstructionContext& context, const std::shared_ptr<T>& instance, const XmlElementPtr& element)
     {
         if constexpr (std::is_base_of_v<TextsBase, T>) {
             instance->text = element->getText();
         } else {
             for (auto child = element->getFirstChildElement(); child; child = child->getNextSibling()) {
-                populateField(instance, child);
+                populateField(context, instance, child);
             }
         }
     }
 
     template <typename... Args>
-    static std::shared_ptr<T> createAndPopulate(const XmlElementPtr& element, Args&&... args)
+    static std::shared_ptr<T> createAndPopulate(ConstructionContext& context, const XmlElementPtr& element, Args&&... args)
     {
-       return FieldPopulator<T>::createAndPopulateImpl(element, std::forward<Args>(args)...);
+       return FieldPopulator<T>::createAndPopulateImpl(context, element, std::forward<Args>(args)...);
     }
 
     /// @brief Populates an existing contained instance, or creates it first if it does not exist.
     template <typename... Args>
     static std::shared_ptr<T> populateExistingOrCreate(
-        const XmlElementPtr& element, std::shared_ptr<T> instance, Args&&... args)
+        ConstructionContext& context, const XmlElementPtr& element, std::shared_ptr<T> instance, Args&&... args)
     {
         if (!instance) {
             instance = std::make_shared<T>(std::forward<Args>(args)...);
         }
-        FieldPopulator<T>::populate(instance, element);
+        FieldPopulator<T>::populate(context, instance, element);
         return instance;
     }
 
@@ -248,10 +248,10 @@ private:
     }
 
     template <typename... Args>
-    static std::shared_ptr<T> createAndPopulateImpl(const XmlElementPtr& element, Args&&... args)
+    static std::shared_ptr<T> createAndPopulateImpl(ConstructionContext& context, const XmlElementPtr& element, Args&&... args)
     {
         auto instance = std::make_shared<T>(std::forward<Args>(args)...);
-        FieldPopulator<T>::populate(instance, element);
+        FieldPopulator<T>::populate(context, instance, element);
         return instance;
     }
 };
@@ -263,13 +263,14 @@ private:
 /// @param e The xml node containing the class members
 /// @param listArray The unordred_map to which to add the new instance.
 template <typename EnumClass, typename EmbeddedClass, typename... Args>
-inline void populateEmbeddedClass(const XmlElementPtr& e, std::unordered_map<EnumClass, std::shared_ptr<EmbeddedClass>>& listArray, Args&&... args)
+inline void populateEmbeddedClass(ConstructionContext& context, const XmlElementPtr& e,
+    std::unordered_map<EnumClass, std::shared_ptr<EmbeddedClass>>& listArray, Args&&... args)
 {
     auto typeAttr = e->findAttribute("type");
     if (!typeAttr) {
         throw std::invalid_argument("<" + e->getTagName() + "> element has no type attribute");
     }
-    listArray.emplace(toEnum<EnumClass>(typeAttr->getValueTrimmed()), FieldPopulator<EmbeddedClass>::createAndPopulate(e, std::forward<Args>(args)...));
+    listArray.emplace(toEnum<EnumClass>(typeAttr->getValueTrimmed()), FieldPopulator<EmbeddedClass>::createAndPopulate(context, e, std::forward<Args>(args)...));
 }
 
 /// @brief creates a vector of type T from a set of nodes with identical tags within a parent tag. (See the `<customStaff>` node in @ref others::Staff)
@@ -278,7 +279,7 @@ inline void populateEmbeddedClass(const XmlElementPtr& e, std::unordered_map<Enu
 /// @param elementNodeName The nodename for each element. In the case of `<customStaff>` this nodename is "staffLine".
 /// @return The populated array.
 template <typename T>
-inline std::vector<T> populateEmbeddedArray(const XmlElementPtr& e, const std::string_view& elementNodeName)
+inline std::vector<T> populateEmbeddedArray(ConstructionContext& context, const XmlElementPtr& e, const std::string_view& elementNodeName)
 {
     std::vector<T> result;
     for (auto child = e->getFirstChildElement(); child; child = child->getNextSibling()) {
@@ -291,16 +292,25 @@ inline std::vector<T> populateEmbeddedArray(const XmlElementPtr& e, const std::s
         } else if constexpr (std::is_same_v<T, std::string>) {
             result.push_back(child->getText());
         } else {
-            result.push_back(FieldPopulator<T>::createAndPopulate(child));
+            result.push_back(FieldPopulator<T>::createAndPopulate(context, child));
         }
     }
     return result;
 }
 
-void populateFontEfx(const XmlElementPtr& e, const std::shared_ptr<dom::FontInfo>& i);
+void populateFontEfx(ConstructionContext& context, const XmlElementPtr& e, const std::shared_ptr<dom::FontInfo>& i);
+
+/// @brief Populates a font definition ID from an XML element.
+/// @param e The XML element containing the font ID.
+/// @param fontId The destination font ID.
+inline void populateFontId(ConstructionContext& context, const XmlElementPtr& e, dom::Cmper& fontId)
+{
+    fontId = e->getTextAs<dom::Cmper>();
+    context.registerFontId(fontId);
+}
 
 template <typename T>
-inline bool populateBoolean(const XmlElementPtr& element, const std::shared_ptr<T>& instance)
+inline bool populateBoolean(ConstructionContext&, const XmlElementPtr& element, const std::shared_ptr<T>& instance)
 {
     MUSX_ASSERT_IF(!element) {
         throw std::logic_error("Null element passed to populateBoolean function.");

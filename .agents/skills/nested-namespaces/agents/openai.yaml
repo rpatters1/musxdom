@@ -1,0 +1,4 @@
+interface:
+  display_name: "Nested Namespaces"
+  short_description: "Require block-style C++ namespaces"
+  default_prompt: "Use $nested-namespaces when editing C++ namespace declarations."

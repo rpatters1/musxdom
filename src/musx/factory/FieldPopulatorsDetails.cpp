@@ -107,449 +107,449 @@ using namespace ::musx::xml;
 using namespace ::musx::factory;
 
 MUSX_XML_ELEMENT_ARRAY(AccidentalAlterations, {
-    {"noteID", [](const XmlElementPtr& e, const std::shared_ptr<AccidentalAlterations>& i) { i->noteId = e->getTextAs<NoteNumber>(); }},
-    {"percent", [](const XmlElementPtr& e, const std::shared_ptr<AccidentalAlterations>& i) { i->percent = e->getTextAs<int>(); }},
-    {"ayDisp", [](const XmlElementPtr& e, const std::shared_ptr<AccidentalAlterations>& i) { i->vOffset = e->getTextAs<Evpu>(); }},
-    {"axDisp", [](const XmlElementPtr& e, const std::shared_ptr<AccidentalAlterations>& i) { i->hOffset = e->getTextAs<Evpu>(); }},
-    {"altChar", [](const XmlElementPtr& e, const std::shared_ptr<AccidentalAlterations>& i) { i->altChar = e->getTextAs<char32_t>(); }},
-    {"fontID", [](const XmlElementPtr& e, const std::shared_ptr<AccidentalAlterations>& i) { FieldPopulator<FontInfo>::populateField(i->customFont, e); }},
-    {"fontSize", [](const XmlElementPtr& e, const std::shared_ptr<AccidentalAlterations>& i) { FieldPopulator<FontInfo>::populateField(i->customFont, e); }},
-    {"efx", [](const XmlElementPtr& e, const std::shared_ptr<AccidentalAlterations>& i) { FieldPopulator<FontInfo>::populateField(i->customFont, e); }},
-    {"useOwnFont", [](const XmlElementPtr& e, const std::shared_ptr<AccidentalAlterations>& i) { i->useOwnFont = populateBoolean(e, i); }},
-    {"allowVertPos", [](const XmlElementPtr& e, const std::shared_ptr<AccidentalAlterations>& i) { i->allowVertPos = populateBoolean(e, i); }},
+    {"noteID", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<AccidentalAlterations>& i) { i->noteId = e->getTextAs<NoteNumber>(); }},
+    {"percent", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<AccidentalAlterations>& i) { i->percent = e->getTextAs<int>(); }},
+    {"ayDisp", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<AccidentalAlterations>& i) { i->vOffset = e->getTextAs<Evpu>(); }},
+    {"axDisp", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<AccidentalAlterations>& i) { i->hOffset = e->getTextAs<Evpu>(); }},
+    {"altChar", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<AccidentalAlterations>& i) { i->altChar = e->getTextAs<char32_t>(); }},
+    {"fontID", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<AccidentalAlterations>& i) { FieldPopulator<FontInfo>::populateField(c, i->customFont, e); }},
+    {"fontSize", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<AccidentalAlterations>& i) { FieldPopulator<FontInfo>::populateField(c, i->customFont, e); }},
+    {"efx", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<AccidentalAlterations>& i) { FieldPopulator<FontInfo>::populateField(c, i->customFont, e); }},
+    {"useOwnFont", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<AccidentalAlterations>& i) { i->useOwnFont = populateBoolean(c, e, i); }},
+    {"allowVertPos", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<AccidentalAlterations>& i) { i->allowVertPos = populateBoolean(c, e, i); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(ArticulationAssign, {
-    {"articDef", [](const XmlElementPtr& e, const std::shared_ptr<ArticulationAssign>& i) { i->articDef = e->getTextAs<Cmper>(); }},
-    {"horzOff", [](const XmlElementPtr& e, const std::shared_ptr<ArticulationAssign>& i) { i->horzOffset = e->getTextAs<Evpu>(); }},
-    {"horzAdd", [](const XmlElementPtr& e, const std::shared_ptr<ArticulationAssign>& i) { i->horzAdd = e->getTextAs<Evpu>(); }},
-    {"vertOff", [](const XmlElementPtr& e, const std::shared_ptr<ArticulationAssign>& i) { i->vertOffset = e->getTextAs<Evpu>(); }},
-    {"vertAdd", [](const XmlElementPtr& e, const std::shared_ptr<ArticulationAssign>& i) { i->vertAdd = e->getTextAs<Evpu>(); }},
-    {"overridePlacement", [](const XmlElementPtr& e, const std::shared_ptr<ArticulationAssign>& i) { i->overridePlacement = populateBoolean(e, i); }},
-    {"aboveEntry", [](const XmlElementPtr& e, const std::shared_ptr<ArticulationAssign>& i) { i->aboveEntry = populateBoolean(e, i); }},
-    {"hide", [](const XmlElementPtr& e, const std::shared_ptr<ArticulationAssign>& i) { i->hide = populateBoolean(e, i); }},
-    {"neverStack", [](const XmlElementPtr& e, const std::shared_ptr<ArticulationAssign>& i) { i->neverStack = populateBoolean(e, i); }},
-    {"avoidSlur", [](const XmlElementPtr& e, const std::shared_ptr<ArticulationAssign>& i) { i->avoidSlur = populateBoolean(e, i); }},
-    {"numSlursAvoided", [](const XmlElementPtr& e, const std::shared_ptr<ArticulationAssign>& i) { i->numSlursAvoided = e->getTextAs<int>(); }},
+    {"articDef", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<ArticulationAssign>& i) { i->articDef = e->getTextAs<Cmper>(); }},
+    {"horzOff", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<ArticulationAssign>& i) { i->horzOffset = e->getTextAs<Evpu>(); }},
+    {"horzAdd", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<ArticulationAssign>& i) { i->horzAdd = e->getTextAs<Evpu>(); }},
+    {"vertOff", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<ArticulationAssign>& i) { i->vertOffset = e->getTextAs<Evpu>(); }},
+    {"vertAdd", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<ArticulationAssign>& i) { i->vertAdd = e->getTextAs<Evpu>(); }},
+    {"overridePlacement", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<ArticulationAssign>& i) { i->overridePlacement = populateBoolean(c, e, i); }},
+    {"aboveEntry", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<ArticulationAssign>& i) { i->aboveEntry = populateBoolean(c, e, i); }},
+    {"hide", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<ArticulationAssign>& i) { i->hide = populateBoolean(c, e, i); }},
+    {"neverStack", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<ArticulationAssign>& i) { i->neverStack = populateBoolean(c, e, i); }},
+    {"avoidSlur", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<ArticulationAssign>& i) { i->avoidSlur = populateBoolean(c, e, i); }},
+    {"numSlursAvoided", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<ArticulationAssign>& i) { i->numSlursAvoided = e->getTextAs<int>(); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(Baseline, {
-    {"basedisp", [](const XmlElementPtr& e, const std::shared_ptr<Baseline>& i) { i->baselineDisplacement = e->getTextAs<Evpu>(); }},
-    {"lyricNumber", [](const XmlElementPtr& e, const std::shared_ptr<Baseline>& i) { i->lyricNumber = e->getTextAs<Cmper>(); }},
+    {"basedisp", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<Baseline>& i) { i->baselineDisplacement = e->getTextAs<Evpu>(); }},
+    {"lyricNumber", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<Baseline>& i) { i->lyricNumber = e->getTextAs<Cmper>(); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(BeamAlterations, {
-    {"xAdd", [](const XmlElementPtr& e, const std::shared_ptr<BeamAlterations>& i) { i->leftOffsetH = e->getTextAs<Evpu>(); }},
-    {"yAdd", [](const XmlElementPtr& e, const std::shared_ptr<BeamAlterations>& i) { i->leftOffsetY = e->getTextAs<Evpu>(); }},
-    {"sxAdd", [](const XmlElementPtr& e, const std::shared_ptr<BeamAlterations>& i) { i->rightOffsetH = e->getTextAs<Evpu>(); }},
-    {"syAdd", [](const XmlElementPtr& e, const std::shared_ptr<BeamAlterations>& i) { i->rightOffsetY = e->getTextAs<Evpu>(); }},
-    {"dura", [](const XmlElementPtr& e, const std::shared_ptr<BeamAlterations>& i) { i->dura = e->getTextAs<Edu>(); }},
-    {"context", [](const XmlElementPtr& e, const std::shared_ptr<BeamAlterations>& i) { i->flattenStyle = toEnum<BeamAlterations::FlattenStyle>(e); }},
-    {"beamWidth", [](const XmlElementPtr& e, const std::shared_ptr<BeamAlterations>& i) { i->beamWidth = e->getTextAs<Efix>(); }},
+    {"xAdd", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<BeamAlterations>& i) { i->leftOffsetH = e->getTextAs<Evpu>(); }},
+    {"yAdd", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<BeamAlterations>& i) { i->leftOffsetY = e->getTextAs<Evpu>(); }},
+    {"sxAdd", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<BeamAlterations>& i) { i->rightOffsetH = e->getTextAs<Evpu>(); }},
+    {"syAdd", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<BeamAlterations>& i) { i->rightOffsetY = e->getTextAs<Evpu>(); }},
+    {"dura", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<BeamAlterations>& i) { i->dura = e->getTextAs<Edu>(); }},
+    {"context", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<BeamAlterations>& i) { i->flattenStyle = toEnum<BeamAlterations::FlattenStyle>(e); }},
+    {"beamWidth", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<BeamAlterations>& i) { i->beamWidth = e->getTextAs<Efix>(); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(BeamExtension, {
-    {"x3Disp", [](const XmlElementPtr& e, const std::shared_ptr<BeamExtension>& i) { i->leftOffset = e->getTextAs<Evpu>(); }},
-    {"x4Disp", [](const XmlElementPtr& e, const std::shared_ptr<BeamExtension>& i) { i->rightOffset = e->getTextAs<Evpu>(); }},
-    {"do8th", [](const XmlElementPtr&, const std::shared_ptr<BeamExtension>& i) { i->mask |= unsigned(NoteType::Eighth); }},
-    {"do16th", [](const XmlElementPtr&, const std::shared_ptr<BeamExtension>& i) { i->mask |= unsigned(NoteType::Note16th); }},
-    {"do32nd", [](const XmlElementPtr&, const std::shared_ptr<BeamExtension>& i) { i->mask |= unsigned(NoteType::Note32nd); }},
-    {"do64th", [](const XmlElementPtr&, const std::shared_ptr<BeamExtension>& i) { i->mask |= unsigned(NoteType::Note64th); }},
-    {"do128th", [](const XmlElementPtr&, const std::shared_ptr<BeamExtension>& i) { i->mask |= unsigned(NoteType::Note128th); }},
-    {"do256th", [](const XmlElementPtr&, const std::shared_ptr<BeamExtension>& i) { i->mask |= unsigned(NoteType::Note256th); }},
-    {"do512th", [](const XmlElementPtr&, const std::shared_ptr<BeamExtension>& i) { i->mask |= unsigned(NoteType::Note512th); }},
-    {"do1024th", [](const XmlElementPtr&, const std::shared_ptr<BeamExtension>& i) { i->mask |= unsigned(NoteType::Note1024th); }},
-    {"do2048th", [](const XmlElementPtr&, const std::shared_ptr<BeamExtension>& i) { i->mask |= unsigned(NoteType::Note2048th); }},
-    {"do4096th", [](const XmlElementPtr&, const std::shared_ptr<BeamExtension>& i) { i->mask |= unsigned(NoteType::Note4096th); }},
-    {"extBeyond8th", [](const XmlElementPtr& e, const std::shared_ptr<BeamExtension>& i) { i->extBeyond8th = populateBoolean(e, i); }},
+    {"x3Disp", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<BeamExtension>& i) { i->leftOffset = e->getTextAs<Evpu>(); }},
+    {"x4Disp", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<BeamExtension>& i) { i->rightOffset = e->getTextAs<Evpu>(); }},
+    {"do8th", [](ConstructionContext&, const XmlElementPtr&, const std::shared_ptr<BeamExtension>& i) { i->mask |= unsigned(NoteType::Eighth); }},
+    {"do16th", [](ConstructionContext&, const XmlElementPtr&, const std::shared_ptr<BeamExtension>& i) { i->mask |= unsigned(NoteType::Note16th); }},
+    {"do32nd", [](ConstructionContext&, const XmlElementPtr&, const std::shared_ptr<BeamExtension>& i) { i->mask |= unsigned(NoteType::Note32nd); }},
+    {"do64th", [](ConstructionContext&, const XmlElementPtr&, const std::shared_ptr<BeamExtension>& i) { i->mask |= unsigned(NoteType::Note64th); }},
+    {"do128th", [](ConstructionContext&, const XmlElementPtr&, const std::shared_ptr<BeamExtension>& i) { i->mask |= unsigned(NoteType::Note128th); }},
+    {"do256th", [](ConstructionContext&, const XmlElementPtr&, const std::shared_ptr<BeamExtension>& i) { i->mask |= unsigned(NoteType::Note256th); }},
+    {"do512th", [](ConstructionContext&, const XmlElementPtr&, const std::shared_ptr<BeamExtension>& i) { i->mask |= unsigned(NoteType::Note512th); }},
+    {"do1024th", [](ConstructionContext&, const XmlElementPtr&, const std::shared_ptr<BeamExtension>& i) { i->mask |= unsigned(NoteType::Note1024th); }},
+    {"do2048th", [](ConstructionContext&, const XmlElementPtr&, const std::shared_ptr<BeamExtension>& i) { i->mask |= unsigned(NoteType::Note2048th); }},
+    {"do4096th", [](ConstructionContext&, const XmlElementPtr&, const std::shared_ptr<BeamExtension>& i) { i->mask |= unsigned(NoteType::Note4096th); }},
+    {"extBeyond8th", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<BeamExtension>& i) { i->extBeyond8th = populateBoolean(c, e, i); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(BeamStubDirection, {
-    {"do8th", [](const XmlElementPtr&, const std::shared_ptr<BeamStubDirection>& i) { i->mask |= unsigned(NoteType::Eighth); }},
-    {"do16th", [](const XmlElementPtr&, const std::shared_ptr<BeamStubDirection>& i) { i->mask |= unsigned(NoteType::Note16th); }},
-    {"do32nd", [](const XmlElementPtr&, const std::shared_ptr<BeamStubDirection>& i) { i->mask |= unsigned(NoteType::Note32nd); }},
-    {"do64th", [](const XmlElementPtr&, const std::shared_ptr<BeamStubDirection>& i) { i->mask |= unsigned(NoteType::Note64th); }},
-    {"do128th", [](const XmlElementPtr&, const std::shared_ptr<BeamStubDirection>& i) { i->mask |= unsigned(NoteType::Note128th); }},
-    {"do256th", [](const XmlElementPtr&, const std::shared_ptr<BeamStubDirection>& i) { i->mask |= unsigned(NoteType::Note256th); }},
-    {"do512th", [](const XmlElementPtr&, const std::shared_ptr<BeamStubDirection>& i) { i->mask |= unsigned(NoteType::Note512th); }},
-    {"do1024th", [](const XmlElementPtr&, const std::shared_ptr<BeamStubDirection>& i) { i->mask |= unsigned(NoteType::Note1024th); }},
-    {"do2048th", [](const XmlElementPtr&, const std::shared_ptr<BeamStubDirection>& i) { i->mask |= unsigned(NoteType::Note2048th); }},
-    {"do4096th", [](const XmlElementPtr&, const std::shared_ptr<BeamStubDirection>& i) { i->mask |= unsigned(NoteType::Note4096th); }},
+    {"do8th", [](ConstructionContext&, const XmlElementPtr&, const std::shared_ptr<BeamStubDirection>& i) { i->mask |= unsigned(NoteType::Eighth); }},
+    {"do16th", [](ConstructionContext&, const XmlElementPtr&, const std::shared_ptr<BeamStubDirection>& i) { i->mask |= unsigned(NoteType::Note16th); }},
+    {"do32nd", [](ConstructionContext&, const XmlElementPtr&, const std::shared_ptr<BeamStubDirection>& i) { i->mask |= unsigned(NoteType::Note32nd); }},
+    {"do64th", [](ConstructionContext&, const XmlElementPtr&, const std::shared_ptr<BeamStubDirection>& i) { i->mask |= unsigned(NoteType::Note64th); }},
+    {"do128th", [](ConstructionContext&, const XmlElementPtr&, const std::shared_ptr<BeamStubDirection>& i) { i->mask |= unsigned(NoteType::Note128th); }},
+    {"do256th", [](ConstructionContext&, const XmlElementPtr&, const std::shared_ptr<BeamStubDirection>& i) { i->mask |= unsigned(NoteType::Note256th); }},
+    {"do512th", [](ConstructionContext&, const XmlElementPtr&, const std::shared_ptr<BeamStubDirection>& i) { i->mask |= unsigned(NoteType::Note512th); }},
+    {"do1024th", [](ConstructionContext&, const XmlElementPtr&, const std::shared_ptr<BeamStubDirection>& i) { i->mask |= unsigned(NoteType::Note1024th); }},
+    {"do2048th", [](ConstructionContext&, const XmlElementPtr&, const std::shared_ptr<BeamStubDirection>& i) { i->mask |= unsigned(NoteType::Note2048th); }},
+    {"do4096th", [](ConstructionContext&, const XmlElementPtr&, const std::shared_ptr<BeamStubDirection>& i) { i->mask |= unsigned(NoteType::Note4096th); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(Bracket, {
-    {"id", [](const XmlElementPtr& e, const std::shared_ptr<Bracket>& i) { i->style = toEnum<Bracket::BracketStyle>(e->getTextAs<int>()); }},
-    {"bracPos", [](const XmlElementPtr& e, const std::shared_ptr<Bracket>& i) { i->horzAdjLeft = e->getTextAs<Evpu>(); }},
-    {"bracTop", [](const XmlElementPtr& e, const std::shared_ptr<Bracket>& i) { i->vertAdjTop = e->getTextAs<Evpu>(); }},
-    {"bracBot", [](const XmlElementPtr& e, const std::shared_ptr<Bracket>& i) { i->vertAdjBot = e->getTextAs<Evpu>(); }},
-    {"onSingle", [](const XmlElementPtr& e, const std::shared_ptr<Bracket>& i) { i->showOnSingleStaff = populateBoolean(e, i); }},
+    {"id", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<Bracket>& i) { i->style = toEnum<Bracket::BracketStyle>(e->getTextAs<int>()); }},
+    {"bracPos", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<Bracket>& i) { i->horzAdjLeft = e->getTextAs<Evpu>(); }},
+    {"bracTop", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<Bracket>& i) { i->vertAdjTop = e->getTextAs<Evpu>(); }},
+    {"bracBot", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<Bracket>& i) { i->vertAdjBot = e->getTextAs<Evpu>(); }},
+    {"onSingle", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<Bracket>& i) { i->showOnSingleStaff = populateBoolean(c, e, i); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(CenterShape, {
-    {"startBreakAdj", [](const XmlElementPtr& e, const std::shared_ptr<CenterShape>& i)
-        { i->startBreakAdj = FieldPopulator<smartshape::EndPointAdjustment>::populateExistingOrCreate(e, i->startBreakAdj, i); }},
-    {"endBreakAdj", [](const XmlElementPtr& e, const std::shared_ptr<CenterShape>& i)
-        { i->endBreakAdj = FieldPopulator<smartshape::EndPointAdjustment>::populateExistingOrCreate(e, i->endBreakAdj, i); }},
-    {"ctlPtAdj", [](const XmlElementPtr& e, const std::shared_ptr<CenterShape>& i)
-        { i->ctlPtAdj = FieldPopulator<smartshape::ControlPointAdjustment>::populateExistingOrCreate(e, i->ctlPtAdj, i); }},
+    {"startBreakAdj", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<CenterShape>& i)
+        { i->startBreakAdj = FieldPopulator<smartshape::EndPointAdjustment>::populateExistingOrCreate(c, e, i->startBreakAdj, i); }},
+    {"endBreakAdj", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<CenterShape>& i)
+        { i->endBreakAdj = FieldPopulator<smartshape::EndPointAdjustment>::populateExistingOrCreate(c, e, i->endBreakAdj, i); }},
+    {"ctlPtAdj", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<CenterShape>& i)
+        { i->ctlPtAdj = FieldPopulator<smartshape::ControlPointAdjustment>::populateExistingOrCreate(c, e, i->ctlPtAdj, i); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(ChordAssign, {
-    {"suffix", [](const XmlElementPtr& e, const std::shared_ptr<ChordAssign>& i) { i->suffixId = e->getTextAs<Cmper>(); }},
-    {"fbStyleID", [](const XmlElementPtr& e, const std::shared_ptr<ChordAssign>& i) { i->fbStyleId = e->getTextAs<Cmper>(); }},
-    {"rootScaleNum", [](const XmlElementPtr& e, const std::shared_ptr<ChordAssign>& i) { i->rootScaleNum = e->getTextAs<int>(); }},
-    {"rootAlter", [](const XmlElementPtr& e, const std::shared_ptr<ChordAssign>& i) { i->rootAlter = e->getTextAs<int>(); }},
-    {"rootLowerCase", [](const XmlElementPtr& e, const std::shared_ptr<ChordAssign>& i) { i->rootLowerCase = populateBoolean(e, i); }},
-    {"playSuffix", [](const XmlElementPtr& e, const std::shared_ptr<ChordAssign>& i) { i->playSuffix = populateBoolean(e, i); }},
-    {"showRoot", [](const XmlElementPtr& e, const std::shared_ptr<ChordAssign>& i) { i->showRoot = populateBoolean(e, i); }},
-    {"playRoot", [](const XmlElementPtr& e, const std::shared_ptr<ChordAssign>& i) { i->playRoot = populateBoolean(e, i); }},
-    {"showFretboard", [](const XmlElementPtr& e, const std::shared_ptr<ChordAssign>& i) { i->showFretboard = populateBoolean(e, i); }},
-    {"showSuffix", [](const XmlElementPtr& e, const std::shared_ptr<ChordAssign>& i) { i->showSuffix = populateBoolean(e, i); }},
-    {"playFretboard", [](const XmlElementPtr& e, const std::shared_ptr<ChordAssign>& i) { i->playFretboard = populateBoolean(e, i); }},
-    {"bassScaleNum", [](const XmlElementPtr& e, const std::shared_ptr<ChordAssign>& i) { i->bassScaleNum = e->getTextAs<int>(); }},
-    {"bassAlter", [](const XmlElementPtr& e, const std::shared_ptr<ChordAssign>& i) { i->bassAlter = e->getTextAs<int>(); }},
-    {"bassLowerCase", [](const XmlElementPtr& e, const std::shared_ptr<ChordAssign>& i) { i->bassLowerCase = populateBoolean(e, i); }},
-    {"bassPosition", [](const XmlElementPtr& e, const std::shared_ptr<ChordAssign>& i) { i->bassPosition = toEnum<ChordAssign::BassPosition>(e); }},
-    {"showAltBass", [](const XmlElementPtr& e, const std::shared_ptr<ChordAssign>& i) { i->showAltBass = populateBoolean(e, i); }},
-    {"playAltBass", [](const XmlElementPtr& e, const std::shared_ptr<ChordAssign>& i) { i->playAltBass = populateBoolean(e, i); }},
-    {"capoValue", [](const XmlElementPtr& e, const std::shared_ptr<ChordAssign>& i) { i->capoValue = e->getTextAs<int>(); }},
-    {"useLocalCapo", [](const XmlElementPtr& e, const std::shared_ptr<ChordAssign>& i) { i->useLocalCapo = populateBoolean(e, i); }},
-    {"fretInci", [](const XmlElementPtr& e, const std::shared_ptr<ChordAssign>& i) { i->fretboardGroupInci = e->getTextAs<Inci>(); }},
-    {"useFretFont", [](const XmlElementPtr& e, const std::shared_ptr<ChordAssign>& i) { i->useFretboardFont = populateBoolean(e, i); }},
-    {"horzOff", [](const XmlElementPtr& e, const std::shared_ptr<ChordAssign>& i) { i->horzOff = e->getTextAs<Evpu>(); }},
-    {"vertOff", [](const XmlElementPtr& e, const std::shared_ptr<ChordAssign>& i) { i->vertOff = e->getTextAs<Evpu>(); }},
-    {"fbHorzOff", [](const XmlElementPtr& e, const std::shared_ptr<ChordAssign>& i) { i->fbHorzOff = e->getTextAs<Evpu>(); }},
-    {"fbVertOff", [](const XmlElementPtr& e, const std::shared_ptr<ChordAssign>& i) { i->fbVertOff = e->getTextAs<Evpu>(); }},
-    {"horzEdu", [](const XmlElementPtr& e, const std::shared_ptr<ChordAssign>& i) { i->horzEdu = e->getTextAs<Edu>(); }},
-    {"chPercent", [](const XmlElementPtr& e, const std::shared_ptr<ChordAssign>& i) { i->chPercent = e->getTextAs<int>(); }},
-    {"fbPercent", [](const XmlElementPtr& e, const std::shared_ptr<ChordAssign>& i) { i->fbPercent = e->getTextAs<int>(); }},
+    {"suffix", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<ChordAssign>& i) { i->suffixId = e->getTextAs<Cmper>(); }},
+    {"fbStyleID", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<ChordAssign>& i) { i->fbStyleId = e->getTextAs<Cmper>(); }},
+    {"rootScaleNum", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<ChordAssign>& i) { i->rootScaleNum = e->getTextAs<int>(); }},
+    {"rootAlter", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<ChordAssign>& i) { i->rootAlter = e->getTextAs<int>(); }},
+    {"rootLowerCase", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<ChordAssign>& i) { i->rootLowerCase = populateBoolean(c, e, i); }},
+    {"playSuffix", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<ChordAssign>& i) { i->playSuffix = populateBoolean(c, e, i); }},
+    {"showRoot", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<ChordAssign>& i) { i->showRoot = populateBoolean(c, e, i); }},
+    {"playRoot", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<ChordAssign>& i) { i->playRoot = populateBoolean(c, e, i); }},
+    {"showFretboard", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<ChordAssign>& i) { i->showFretboard = populateBoolean(c, e, i); }},
+    {"showSuffix", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<ChordAssign>& i) { i->showSuffix = populateBoolean(c, e, i); }},
+    {"playFretboard", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<ChordAssign>& i) { i->playFretboard = populateBoolean(c, e, i); }},
+    {"bassScaleNum", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<ChordAssign>& i) { i->bassScaleNum = e->getTextAs<int>(); }},
+    {"bassAlter", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<ChordAssign>& i) { i->bassAlter = e->getTextAs<int>(); }},
+    {"bassLowerCase", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<ChordAssign>& i) { i->bassLowerCase = populateBoolean(c, e, i); }},
+    {"bassPosition", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<ChordAssign>& i) { i->bassPosition = toEnum<ChordAssign::BassPosition>(e); }},
+    {"showAltBass", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<ChordAssign>& i) { i->showAltBass = populateBoolean(c, e, i); }},
+    {"playAltBass", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<ChordAssign>& i) { i->playAltBass = populateBoolean(c, e, i); }},
+    {"capoValue", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<ChordAssign>& i) { i->capoValue = e->getTextAs<int>(); }},
+    {"useLocalCapo", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<ChordAssign>& i) { i->useLocalCapo = populateBoolean(c, e, i); }},
+    {"fretInci", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<ChordAssign>& i) { i->fretboardGroupInci = e->getTextAs<Inci>(); }},
+    {"useFretFont", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<ChordAssign>& i) { i->useFretboardFont = populateBoolean(c, e, i); }},
+    {"horzOff", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<ChordAssign>& i) { i->horzOff = e->getTextAs<Evpu>(); }},
+    {"vertOff", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<ChordAssign>& i) { i->vertOff = e->getTextAs<Evpu>(); }},
+    {"fbHorzOff", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<ChordAssign>& i) { i->fbHorzOff = e->getTextAs<Evpu>(); }},
+    {"fbVertOff", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<ChordAssign>& i) { i->fbVertOff = e->getTextAs<Evpu>(); }},
+    {"horzEdu", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<ChordAssign>& i) { i->horzEdu = e->getTextAs<Edu>(); }},
+    {"chPercent", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<ChordAssign>& i) { i->chPercent = e->getTextAs<int>(); }},
+    {"fbPercent", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<ChordAssign>& i) { i->fbPercent = e->getTextAs<int>(); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(ClefOctaveFlats, {
-    {"ocAdds", [](const XmlElementPtr& e, const std::shared_ptr<ClefOctaveFlats>& i) { i->values.push_back(e->getTextAs<int>()); }},
+    {"ocAdds", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<ClefOctaveFlats>& i) { i->values.push_back(e->getTextAs<int>()); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(ClefOctaveSharps, {
-    {"ocAdds", [](const XmlElementPtr& e, const std::shared_ptr<ClefOctaveSharps>& i) { i->values.push_back(e->getTextAs<int>()); }},
+    {"ocAdds", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<ClefOctaveSharps>& i) { i->values.push_back(e->getTextAs<int>()); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(CrossStaff, {
-    {"noteID", [](const XmlElementPtr& e, const std::shared_ptr<CrossStaff>& i) { i->noteId = e->getTextAs<NoteNumber>(); }},
-    {"instrument", [](const XmlElementPtr& e, const std::shared_ptr<CrossStaff>& i) { i->staff = e->getTextAs<StaffCmper>(); }},
+    {"noteID", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<CrossStaff>& i) { i->noteId = e->getTextAs<NoteNumber>(); }},
+    {"instrument", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<CrossStaff>& i) { i->staff = e->getTextAs<StaffCmper>(); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(CustomStem, {
-    {"shapeDef", [](const XmlElementPtr& e, const std::shared_ptr<CustomStem>& i) { i->shapeDef = e->getTextAs<Cmper>(); }},
-    {"xdisp", [](const XmlElementPtr& e, const std::shared_ptr<CustomStem>& i) { i->xOffset = e->getTextAs<Evpu>(); }},
-    {"ydisp", [](const XmlElementPtr& e, const std::shared_ptr<CustomStem>& i) { i->yOffset = e->getTextAs<Evpu>(); }},
+    {"shapeDef", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<CustomStem>& i) { i->shapeDef = e->getTextAs<Cmper>(); }},
+    {"xdisp", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<CustomStem>& i) { i->xOffset = e->getTextAs<Evpu>(); }},
+    {"ydisp", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<CustomStem>& i) { i->yOffset = e->getTextAs<Evpu>(); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(DotAlterations, {
-    {"noteID", [](const XmlElementPtr& e, const std::shared_ptr<DotAlterations>& i) { i->noteId = e->getTextAs<NoteNumber>(); }},
-    {"xadd", [](const XmlElementPtr& e, const std::shared_ptr<DotAlterations>& i) { i->hOffset = e->getTextAs<Evpu>(); }},
-    {"yadd", [](const XmlElementPtr& e, const std::shared_ptr<DotAlterations>& i) { i->vOffset = e->getTextAs<Evpu>(); }},
-    {"posIncr", [](const XmlElementPtr& e, const std::shared_ptr<DotAlterations>& i) { i->interdotSpacing = e->getTextAs<Evpu>(); }},
+    {"noteID", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<DotAlterations>& i) { i->noteId = e->getTextAs<NoteNumber>(); }},
+    {"xadd", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<DotAlterations>& i) { i->hOffset = e->getTextAs<Evpu>(); }},
+    {"yadd", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<DotAlterations>& i) { i->vOffset = e->getTextAs<Evpu>(); }},
+    {"posIncr", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<DotAlterations>& i) { i->interdotSpacing = e->getTextAs<Evpu>(); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(EntryPartFieldDetail, {
-    {"posi", [](const XmlElementPtr& e, const std::shared_ptr<EntryPartFieldDetail>& i) { i->hOffset = e->getTextAs<Evpu>(); }},
-    {"freezeStem", [](const XmlElementPtr& e, const std::shared_ptr<EntryPartFieldDetail>& i) { i->freezeStem = populateBoolean(e, i); }},
-    {"upStem", [](const XmlElementPtr& e, const std::shared_ptr<EntryPartFieldDetail>& i) { i->upStem = populateBoolean(e, i); }},
+    {"posi", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<EntryPartFieldDetail>& i) { i->hOffset = e->getTextAs<Evpu>(); }},
+    {"freezeStem", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<EntryPartFieldDetail>& i) { i->freezeStem = populateBoolean(c, e, i); }},
+    {"upStem", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<EntryPartFieldDetail>& i) { i->upStem = populateBoolean(c, e, i); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(EntrySize, {
-    {"percent", [](const XmlElementPtr& e, const std::shared_ptr<EntrySize>& i) { i->percent = e->getTextAs<int>(); }},
+    {"percent", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<EntrySize>& i) { i->percent = e->getTextAs<int>(); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(FretboardDiagram::Cell, {
-    {"string",[](const XmlElementPtr& e,const std::shared_ptr<FretboardDiagram::Cell>& i) { i->string = e->getTextAs<int>(); }},
-    {"fret",[](const XmlElementPtr& e,const std::shared_ptr<FretboardDiagram::Cell>& i){ i->fret = e->getTextAs<int>(); }},
-    {"shape",[](const XmlElementPtr& e,const std::shared_ptr<FretboardDiagram::Cell>& i){ i->shape = toEnum<FretboardDiagram::Shape>(e); }},
-    {"fingerNum",[](const XmlElementPtr& e,const std::shared_ptr<FretboardDiagram::Cell>& i){ i->fingerNum = e->getTextAs<int>(); }},
+    {"string",[](ConstructionContext&, const XmlElementPtr& e,const std::shared_ptr<FretboardDiagram::Cell>& i) { i->string = e->getTextAs<int>(); }},
+    {"fret",[](ConstructionContext&, const XmlElementPtr& e,const std::shared_ptr<FretboardDiagram::Cell>& i){ i->fret = e->getTextAs<int>(); }},
+    {"shape",[](ConstructionContext&, const XmlElementPtr& e,const std::shared_ptr<FretboardDiagram::Cell>& i){ i->shape = toEnum<FretboardDiagram::Shape>(e); }},
+    {"fingerNum",[](ConstructionContext&, const XmlElementPtr& e,const std::shared_ptr<FretboardDiagram::Cell>& i){ i->fingerNum = e->getTextAs<int>(); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(FretboardDiagram::Barre, {
-    {"fret",[](const XmlElementPtr& e,const std::shared_ptr<FretboardDiagram::Barre>& i){ i->fret = e->getTextAs<int>(); }},
-    {"startString",[](const XmlElementPtr& e,const std::shared_ptr<FretboardDiagram::Barre>& i){ i->startString = e->getTextAs<int>(); }},
-    {"endString",[](const XmlElementPtr& e,const std::shared_ptr<FretboardDiagram::Barre>& i){ i->endString = e->getTextAs<int>(); }},
+    {"fret",[](ConstructionContext&, const XmlElementPtr& e,const std::shared_ptr<FretboardDiagram::Barre>& i){ i->fret = e->getTextAs<int>(); }},
+    {"startString",[](ConstructionContext&, const XmlElementPtr& e,const std::shared_ptr<FretboardDiagram::Barre>& i){ i->startString = e->getTextAs<int>(); }},
+    {"endString",[](ConstructionContext&, const XmlElementPtr& e,const std::shared_ptr<FretboardDiagram::Barre>& i){ i->endString = e->getTextAs<int>(); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(FretboardDiagram, {
-    {"numFrets",[](const XmlElementPtr& e,const std::shared_ptr<FretboardDiagram>& i){ i->numFrets = e->getTextAs<int>(); }},
-    {"fretNum",[](const XmlElementPtr& e,const std::shared_ptr<FretboardDiagram>& i){ i->fretboardNum = e->getTextAs<int>(); }},
-    {"lock",[](const XmlElementPtr& e,const std::shared_ptr<FretboardDiagram>& i){ i->lock = populateBoolean(e, i); }},
-    {"showNum",[](const XmlElementPtr& e,const std::shared_ptr<FretboardDiagram>& i){ i->showNum = populateBoolean(e, i); }},
-    {"numFretCells",[](const XmlElementPtr& e,const std::shared_ptr<FretboardDiagram>& i){ i->numFretCells = e->getTextAs<int>(); }},
-    {"numFretBarres",[](const XmlElementPtr& e,const std::shared_ptr<FretboardDiagram>& i){ i->numFretBarres = e->getTextAs<int>(); }},
-    {"cell",[](const XmlElementPtr& e,const std::shared_ptr<FretboardDiagram>& i)
-        { i->cells.push_back(FieldPopulator<FretboardDiagram::Cell>::createAndPopulate(e)); }},
-    {"barre",[](const XmlElementPtr& e,const std::shared_ptr<FretboardDiagram>& i)
-        { i->barres.push_back(FieldPopulator<FretboardDiagram::Barre>::createAndPopulate(e)); }},
+    {"numFrets",[](ConstructionContext&, const XmlElementPtr& e,const std::shared_ptr<FretboardDiagram>& i){ i->numFrets = e->getTextAs<int>(); }},
+    {"fretNum",[](ConstructionContext&, const XmlElementPtr& e,const std::shared_ptr<FretboardDiagram>& i){ i->fretboardNum = e->getTextAs<int>(); }},
+    {"lock",[](ConstructionContext& c, const XmlElementPtr& e,const std::shared_ptr<FretboardDiagram>& i){ i->lock = populateBoolean(c, e, i); }},
+    {"showNum",[](ConstructionContext& c, const XmlElementPtr& e,const std::shared_ptr<FretboardDiagram>& i){ i->showNum = populateBoolean(c, e, i); }},
+    {"numFretCells",[](ConstructionContext&, const XmlElementPtr& e,const std::shared_ptr<FretboardDiagram>& i){ i->numFretCells = e->getTextAs<int>(); }},
+    {"numFretBarres",[](ConstructionContext&, const XmlElementPtr& e,const std::shared_ptr<FretboardDiagram>& i){ i->numFretBarres = e->getTextAs<int>(); }},
+    {"cell",[](ConstructionContext& c, const XmlElementPtr& e,const std::shared_ptr<FretboardDiagram>& i)
+        { i->cells.push_back(FieldPopulator<FretboardDiagram::Cell>::createAndPopulate(c, e)); }},
+    {"barre",[](ConstructionContext& c, const XmlElementPtr& e,const std::shared_ptr<FretboardDiagram>& i)
+        { i->barres.push_back(FieldPopulator<FretboardDiagram::Barre>::createAndPopulate(c, e)); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(GFrameHold, {
-    {"clefID", [](const XmlElementPtr& e, const std::shared_ptr<GFrameHold>& i) { i->clefId = e->getTextAs<ClefIndex>(); }},
-    {"clefListID", [](const XmlElementPtr& e, const std::shared_ptr<GFrameHold>& i) { i->clefListId = e->getTextAs<Cmper>(); }},
-    {"clefMode", [](const XmlElementPtr& e, const std::shared_ptr<GFrameHold>& i) { i->showClefMode = toEnum<ShowClefMode>(e); }},
-    {"mirrorFrame", [](const XmlElementPtr& e, const std::shared_ptr<GFrameHold>& i) { i->mirrorFrame = populateBoolean(e, i); }},
-    {"clefAfterBarline", [](const XmlElementPtr& e, const std::shared_ptr<GFrameHold>& i) { i->clefAfterBarline = populateBoolean(e, i); }},
-    {"clefPercent", [](const XmlElementPtr& e, const std::shared_ptr<GFrameHold>& i) { i->clefPercent = e->getTextAs<int>(); }},
-    {"frame1", [](const XmlElementPtr& e, const std::shared_ptr<GFrameHold>& i) { i->frames[0] = e->getTextAs<Cmper>(); }},
-    {"frame2", [](const XmlElementPtr& e, const std::shared_ptr<GFrameHold>& i) { i->frames[1] = e->getTextAs<Cmper>(); }},
-    {"frame3", [](const XmlElementPtr& e, const std::shared_ptr<GFrameHold>& i) { i->frames[2] = e->getTextAs<Cmper>(); }},
-    {"frame4", [](const XmlElementPtr& e, const std::shared_ptr<GFrameHold>& i) { i->frames[3] = e->getTextAs<Cmper>(); }},
+    {"clefID", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<GFrameHold>& i) { i->clefId = e->getTextAs<ClefIndex>(); }},
+    {"clefListID", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<GFrameHold>& i) { i->clefListId = e->getTextAs<Cmper>(); }},
+    {"clefMode", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<GFrameHold>& i) { i->showClefMode = toEnum<ShowClefMode>(e); }},
+    {"mirrorFrame", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<GFrameHold>& i) { i->mirrorFrame = populateBoolean(c, e, i); }},
+    {"clefAfterBarline", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<GFrameHold>& i) { i->clefAfterBarline = populateBoolean(c, e, i); }},
+    {"clefPercent", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<GFrameHold>& i) { i->clefPercent = e->getTextAs<int>(); }},
+    {"frame1", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<GFrameHold>& i) { i->frames[0] = e->getTextAs<Cmper>(); }},
+    {"frame2", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<GFrameHold>& i) { i->frames[1] = e->getTextAs<Cmper>(); }},
+    {"frame3", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<GFrameHold>& i) { i->frames[2] = e->getTextAs<Cmper>(); }},
+    {"frame4", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<GFrameHold>& i) { i->frames[3] = e->getTextAs<Cmper>(); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(IndependentStaffDetails, {
-    {"keySig", [](const XmlElementPtr& e, const std::shared_ptr<IndependentStaffDetails>& i)
-        { i->keySig = FieldPopulator<KeySignature>::createAndPopulate(e, i->getDocument()); }},
-    {"hasKey", [](const XmlElementPtr& e, const std::shared_ptr<IndependentStaffDetails>& i) { i->hasKey = populateBoolean(e, i); }},
-    {"beats", [](const XmlElementPtr& e, const std::shared_ptr<IndependentStaffDetails>& i) { i->beats = e->getTextAs<Cmper>(); }},
-    {"divBeat", [](const XmlElementPtr& e, const std::shared_ptr<IndependentStaffDetails>& i) { i->divBeat = e->getTextAs<Cmper>(); }},
-    {"dispBeats", [](const XmlElementPtr& e, const std::shared_ptr<IndependentStaffDetails>& i) { i->dispBeats = e->getTextAs<Cmper>(); }},
-    {"dispDivBeat", [](const XmlElementPtr& e, const std::shared_ptr<IndependentStaffDetails>& i) { i->dispDivBeat = e->getTextAs<Cmper>(); }},
-    {"displayAltNumTsig", [](const XmlElementPtr& e, const std::shared_ptr<IndependentStaffDetails>& i) { i->displayAltNumTsig = populateBoolean(e, i); }},
-    {"displayAltDenTsig", [](const XmlElementPtr& e, const std::shared_ptr<IndependentStaffDetails>& i) { i->displayAltDenTsig = populateBoolean(e, i); }},
-    {"altNumTsig", [](const XmlElementPtr& e, const std::shared_ptr<IndependentStaffDetails>& i) { i->altNumTsig = populateBoolean(e, i); }},
-    {"altDenTsig", [](const XmlElementPtr& e, const std::shared_ptr<IndependentStaffDetails>& i) { i->altDenTsig = populateBoolean(e, i); }},
-    {"displayAbbrvTime", [](const XmlElementPtr& e, const std::shared_ptr<IndependentStaffDetails>& i) { i->displayAbbrvTime = populateBoolean(e, i); }},
-    {"hasDispTime", [](const XmlElementPtr& e, const std::shared_ptr<IndependentStaffDetails>& i) { i->hasDispTime = populateBoolean(e, i); }},
-    {"hasTime", [](const XmlElementPtr& e, const std::shared_ptr<IndependentStaffDetails>& i) { i->hasTime = populateBoolean(e, i); }},
+    {"keySig", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<IndependentStaffDetails>& i)
+        { i->keySig = FieldPopulator<KeySignature>::createAndPopulate(c, e, i->getDocument()); }},
+    {"hasKey", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<IndependentStaffDetails>& i) { i->hasKey = populateBoolean(c, e, i); }},
+    {"beats", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<IndependentStaffDetails>& i) { i->beats = e->getTextAs<Cmper>(); }},
+    {"divBeat", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<IndependentStaffDetails>& i) { i->divBeat = e->getTextAs<Cmper>(); }},
+    {"dispBeats", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<IndependentStaffDetails>& i) { i->dispBeats = e->getTextAs<Cmper>(); }},
+    {"dispDivBeat", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<IndependentStaffDetails>& i) { i->dispDivBeat = e->getTextAs<Cmper>(); }},
+    {"displayAltNumTsig", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<IndependentStaffDetails>& i) { i->displayAltNumTsig = populateBoolean(c, e, i); }},
+    {"displayAltDenTsig", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<IndependentStaffDetails>& i) { i->displayAltDenTsig = populateBoolean(c, e, i); }},
+    {"altNumTsig", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<IndependentStaffDetails>& i) { i->altNumTsig = populateBoolean(c, e, i); }},
+    {"altDenTsig", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<IndependentStaffDetails>& i) { i->altDenTsig = populateBoolean(c, e, i); }},
+    {"displayAbbrvTime", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<IndependentStaffDetails>& i) { i->displayAbbrvTime = populateBoolean(c, e, i); }},
+    {"hasDispTime", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<IndependentStaffDetails>& i) { i->hasDispTime = populateBoolean(c, e, i); }},
+    {"hasTime", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<IndependentStaffDetails>& i) { i->hasTime = populateBoolean(c, e, i); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(KeySymbolListElement, {
-    {"string", [](const XmlElementPtr& e, const std::shared_ptr<KeySymbolListElement>& i) { i->accidentalString = e->getText(); }},
+    {"string", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<KeySymbolListElement>& i) { i->accidentalString = e->getText(); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(LyricAssign, {
-    {"lyricNumber", [](const XmlElementPtr& e, const std::shared_ptr<LyricAssign>& i) { i->lyricNumber = e->getTextAs<Cmper>(); }},
-    {"syll", [](const XmlElementPtr& e, const std::shared_ptr<LyricAssign>& i) { i->syllable = e->getTextAs<unsigned>(); }},
-    {"horzOff", [](const XmlElementPtr& e, const std::shared_ptr<LyricAssign>& i) { i->horzOffset = e->getTextAs<Evpu>(); }},
-    {"vertOff", [](const XmlElementPtr& e, const std::shared_ptr<LyricAssign>& i) { i->vertOffset = e->getTextAs<Evpu>(); }},
-    {"floatingHorzOff", [](const XmlElementPtr& e, const std::shared_ptr<LyricAssign>& i) { i->floatingHorzOff = e->getTextAs<Evpu>(); }},
-    {"wext", [](const XmlElementPtr& e, const std::shared_ptr<LyricAssign>& i) { i->wext = e->getTextAs<Evpu>(); }},
-    {"displayVerseNum", [](const XmlElementPtr& e, const std::shared_ptr<LyricAssign>& i) { i->displayVerseNum = populateBoolean(e, i); }},
+    {"lyricNumber", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<LyricAssign>& i) { i->lyricNumber = e->getTextAs<Cmper>(); }},
+    {"syll", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<LyricAssign>& i) { i->syllable = e->getTextAs<unsigned>(); }},
+    {"horzOff", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<LyricAssign>& i) { i->horzOffset = e->getTextAs<Evpu>(); }},
+    {"vertOff", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<LyricAssign>& i) { i->vertOffset = e->getTextAs<Evpu>(); }},
+    {"floatingHorzOff", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<LyricAssign>& i) { i->floatingHorzOff = e->getTextAs<Evpu>(); }},
+    {"wext", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<LyricAssign>& i) { i->wext = e->getTextAs<Evpu>(); }},
+    {"displayVerseNum", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<LyricAssign>& i) { i->displayVerseNum = populateBoolean(c, e, i); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(LyricEntryInfo, {
-    {"justify", [](const XmlElementPtr& e, const std::shared_ptr<LyricEntryInfo>& i) { i->justify = toEnum<AlignJustify>(e); }},
-    {"align",   [](const XmlElementPtr& e, const std::shared_ptr<LyricEntryInfo>& i) { i->align   = toEnum<AlignJustify>(e); }},
+    {"justify", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<LyricEntryInfo>& i) { i->justify = toEnum<AlignJustify>(e); }},
+    {"align",   [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<LyricEntryInfo>& i) { i->align   = toEnum<AlignJustify>(e); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(MeasureGraphicAssign, {
-    {"version", [](const XmlElementPtr& e, const std::shared_ptr<MeasureGraphicAssign>& i) { i->version = e->getTextAs<uint32_t>(); }},
-    {"left", [](const XmlElementPtr& e, const std::shared_ptr<MeasureGraphicAssign>& i) { i->left = e->getTextAs<Evpu>(); }},
-    {"bottom", [](const XmlElementPtr& e, const std::shared_ptr<MeasureGraphicAssign>& i) { i->bottom = e->getTextAs<Evpu>(); }},
-    {"width", [](const XmlElementPtr& e, const std::shared_ptr<MeasureGraphicAssign>& i) { i->width = e->getTextAs<Evpu>(); }},
-    {"height", [](const XmlElementPtr& e, const std::shared_ptr<MeasureGraphicAssign>& i) { i->height = e->getTextAs<Evpu>(); }},
-    {"fDescID", [](const XmlElementPtr& e, const std::shared_ptr<MeasureGraphicAssign>& i) { i->fDescId = e->getTextAs<Cmper>(); }},
-    {"displayType", [](const XmlElementPtr& e, const std::shared_ptr<MeasureGraphicAssign>&)
+    {"version", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<MeasureGraphicAssign>& i) { i->version = e->getTextAs<uint32_t>(); }},
+    {"left", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<MeasureGraphicAssign>& i) { i->left = e->getTextAs<Evpu>(); }},
+    {"bottom", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<MeasureGraphicAssign>& i) { i->bottom = e->getTextAs<Evpu>(); }},
+    {"width", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<MeasureGraphicAssign>& i) { i->width = e->getTextAs<Evpu>(); }},
+    {"height", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<MeasureGraphicAssign>& i) { i->height = e->getTextAs<Evpu>(); }},
+    {"fDescID", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<MeasureGraphicAssign>& i) { i->fDescId = e->getTextAs<Cmper>(); }},
+    {"displayType", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<MeasureGraphicAssign>&)
         {
             if (toEnum<others::PageGraphicAssign::PageAssignType>(e) != others::PageGraphicAssign::PageAssignType::One) {
                 util::Logger::log(util::Logger::LogLevel::Warning, "Encountered measure graphic with multipage positioning.");
             }
         }
     },
-    {"displayHidden", [](const XmlElementPtr& e, const std::shared_ptr<MeasureGraphicAssign>& i) { i->hidden = populateBoolean(e, i); }},
-    {"savedRecord", [](const XmlElementPtr& e, const std::shared_ptr<MeasureGraphicAssign>& i) { i->savedRecord = populateBoolean(e, i); }},
-    {"origWidth", [](const XmlElementPtr& e, const std::shared_ptr<MeasureGraphicAssign>& i) { i->origWidth = e->getTextAs<Evpu>(); }},
-    {"origHeight", [](const XmlElementPtr& e, const std::shared_ptr<MeasureGraphicAssign>& i) { i->origHeight = e->getTextAs<Evpu>(); }},
-    {"graphicCmper", [](const XmlElementPtr& e, const std::shared_ptr<MeasureGraphicAssign>& i) { i->graphicCmper = e->getTextAs<Cmper>(); }},
+    {"displayHidden", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<MeasureGraphicAssign>& i) { i->hidden = populateBoolean(c, e, i); }},
+    {"savedRecord", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<MeasureGraphicAssign>& i) { i->savedRecord = populateBoolean(c, e, i); }},
+    {"origWidth", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<MeasureGraphicAssign>& i) { i->origWidth = e->getTextAs<Evpu>(); }},
+    {"origHeight", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<MeasureGraphicAssign>& i) { i->origHeight = e->getTextAs<Evpu>(); }},
+    {"graphicCmper", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<MeasureGraphicAssign>& i) { i->graphicCmper = e->getTextAs<Cmper>(); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(MeasureNumberIndividualPositioning, {
-    {"region", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberIndividualPositioning>& i) { i->measNumRegion = e->getTextAs<Cmper>(); }},
-    {"x1add", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberIndividualPositioning>& i) { i->xOffset = e->getTextAs<Evpu>(); }},
-    {"y1add", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberIndividualPositioning>& i) { i->yOffset = e->getTextAs<Evpu>(); }},
-    {"x2add", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberIndividualPositioning>& i) { i->xOffset2 = e->getTextAs<Evpu>(); }},
-    {"forceHide", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberIndividualPositioning>& i)
+    {"region", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<MeasureNumberIndividualPositioning>& i) { i->measNumRegion = e->getTextAs<Cmper>(); }},
+    {"x1add", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<MeasureNumberIndividualPositioning>& i) { i->xOffset = e->getTextAs<Evpu>(); }},
+    {"y1add", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<MeasureNumberIndividualPositioning>& i) { i->yOffset = e->getTextAs<Evpu>(); }},
+    {"x2add", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<MeasureNumberIndividualPositioning>& i) { i->xOffset2 = e->getTextAs<Evpu>(); }},
+    {"forceHide", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<MeasureNumberIndividualPositioning>& i)
         { i->forceVisibility = toEnum<MeasureNumberIndividualPositioning::ForceVisibility>(e); }},
-    {"useEncl", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberIndividualPositioning>& i) { i->useEnclosure = populateBoolean(e, i); }},
-    {"encl", [](const XmlElementPtr& e, const std::shared_ptr<MeasureNumberIndividualPositioning>& i)
-        { i->enclosure = FieldPopulator<others::Enclosure>::populateExistingOrCreate(e, i->enclosure, i->getDocument()); }}
+    {"useEncl", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<MeasureNumberIndividualPositioning>& i) { i->useEnclosure = populateBoolean(c, e, i); }},
+    {"encl", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<MeasureNumberIndividualPositioning>& i)
+        { i->enclosure = FieldPopulator<others::Enclosure>::populateExistingOrCreate(c, e, i->enclosure, i->getDocument()); }}
 });
 
 MUSX_XML_ELEMENT_ARRAY(MeasureOssiaAssign, {
-    {"arbnum", [](const XmlElementPtr& e, const std::shared_ptr<MeasureOssiaAssign>& i) { i->ossiaId = e->getTextAs<Cmper>(); }},
-    {"topAdd", [](const XmlElementPtr& e, const std::shared_ptr<MeasureOssiaAssign>& i) { i->xOffset = e->getTextAs<Evpu>(); }},
-    {"leftAdd", [](const XmlElementPtr& e, const std::shared_ptr<MeasureOssiaAssign>& i) { i->yOffset = e->getTextAs<Evpu>(); }},
-    {"hidden", [](const XmlElementPtr& e, const std::shared_ptr<MeasureOssiaAssign>& i) { i->hidden = populateBoolean(e, i); }},
+    {"arbnum", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<MeasureOssiaAssign>& i) { i->ossiaId = e->getTextAs<Cmper>(); }},
+    {"topAdd", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<MeasureOssiaAssign>& i) { i->xOffset = e->getTextAs<Evpu>(); }},
+    {"leftAdd", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<MeasureOssiaAssign>& i) { i->yOffset = e->getTextAs<Evpu>(); }},
+    {"hidden", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<MeasureOssiaAssign>& i) { i->hidden = populateBoolean(c, e, i); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(MeasureTextAssign, {
-    {"block", [](const XmlElementPtr& e, const std::shared_ptr<MeasureTextAssign>& i) { i->block = e->getTextAs<Cmper>(); }},
-    {"xdispEdu", [](const XmlElementPtr& e, const std::shared_ptr<MeasureTextAssign>& i) { i->xDispEdu = e->getTextAs<Edu>(); }},
-    {"xdispEvpu", [](const XmlElementPtr& e, const std::shared_ptr<MeasureTextAssign>& i) { i->xDispEvpu = e->getTextAs<Evpu>(); }},
-    {"ydisp", [](const XmlElementPtr& e, const std::shared_ptr<MeasureTextAssign>& i) { i->yDisp = e->getTextAs<Evpu>(); }},
-    {"postIt", [](const XmlElementPtr& e, const std::shared_ptr<MeasureTextAssign>& i) { i->hidden = populateBoolean(e, i); }},
+    {"block", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<MeasureTextAssign>& i) { i->block = e->getTextAs<Cmper>(); }},
+    {"xdispEdu", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<MeasureTextAssign>& i) { i->xDispEdu = e->getTextAs<Edu>(); }},
+    {"xdispEvpu", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<MeasureTextAssign>& i) { i->xDispEvpu = e->getTextAs<Evpu>(); }},
+    {"ydisp", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<MeasureTextAssign>& i) { i->yDisp = e->getTextAs<Evpu>(); }},
+    {"postIt", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<MeasureTextAssign>& i) { i->hidden = populateBoolean(c, e, i); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(NoteAlterations, {
-    {"noteID", [](const XmlElementPtr& e, const std::shared_ptr<NoteAlterations>& i) { i->noteId = e->getTextAs<NoteNumber>(); }},
-    {"percent", [](const XmlElementPtr& e, const std::shared_ptr<NoteAlterations>& i) { i->percent = e->getTextAs<int>(); }},
-    {"nxdisp", [](const XmlElementPtr& e, const std::shared_ptr<NoteAlterations>& i) { i->nxdisp = e->getTextAs<Evpu>(); }},
-    {"altNhead", [](const XmlElementPtr& e, const std::shared_ptr<NoteAlterations>& i) { i->altNhead = e->getTextAs<char32_t>(); }},
-    {"useOwnFont", [](const XmlElementPtr& e, const std::shared_ptr<NoteAlterations>& i) { i->useOwnFont = populateBoolean(e, i); }},
-    {"fontID", [](const XmlElementPtr& e, const std::shared_ptr<NoteAlterations>& i) { FieldPopulator<FontInfo>::populateField(i->customFont, e); }},
-    {"fontSize", [](const XmlElementPtr& e, const std::shared_ptr<NoteAlterations>& i) { FieldPopulator<FontInfo>::populateField(i->customFont, e); }},
-    {"efx", [](const XmlElementPtr& e, const std::shared_ptr<NoteAlterations>& i) { FieldPopulator<FontInfo>::populateField(i->customFont, e); }},
-    {"allowVertPos", [](const XmlElementPtr& e, const std::shared_ptr<NoteAlterations>& i) { i->allowVertPos = populateBoolean(e, i); }},
-    {"nydisp", [](const XmlElementPtr& e, const std::shared_ptr<NoteAlterations>& i) { i->nydisp = e->getTextAs<Evpu>(); }},
-    {"enharmonic", [](const XmlElementPtr& e, const std::shared_ptr<NoteAlterations>& i) { i->enharmonic = populateBoolean(e, i); }},
+    {"noteID", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<NoteAlterations>& i) { i->noteId = e->getTextAs<NoteNumber>(); }},
+    {"percent", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<NoteAlterations>& i) { i->percent = e->getTextAs<int>(); }},
+    {"nxdisp", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<NoteAlterations>& i) { i->nxdisp = e->getTextAs<Evpu>(); }},
+    {"altNhead", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<NoteAlterations>& i) { i->altNhead = e->getTextAs<char32_t>(); }},
+    {"useOwnFont", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<NoteAlterations>& i) { i->useOwnFont = populateBoolean(c, e, i); }},
+    {"fontID", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<NoteAlterations>& i) { FieldPopulator<FontInfo>::populateField(c, i->customFont, e); }},
+    {"fontSize", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<NoteAlterations>& i) { FieldPopulator<FontInfo>::populateField(c, i->customFont, e); }},
+    {"efx", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<NoteAlterations>& i) { FieldPopulator<FontInfo>::populateField(c, i->customFont, e); }},
+    {"allowVertPos", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<NoteAlterations>& i) { i->allowVertPos = populateBoolean(c, e, i); }},
+    {"nydisp", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<NoteAlterations>& i) { i->nydisp = e->getTextAs<Evpu>(); }},
+    {"enharmonic", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<NoteAlterations>& i) { i->enharmonic = populateBoolean(c, e, i); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(PercussionNoteCode, {
-    {"noteID",    [](const XmlElementPtr& e, const std::shared_ptr<PercussionNoteCode>& i) { i->noteId = e->getTextAs<NoteNumber>(); }},
-    {"noteCode",  [](const XmlElementPtr& e, const std::shared_ptr<PercussionNoteCode>& i) { i->noteCode = e->getTextAs<PercussionNoteTypeId>(); }},
+    {"noteID",    [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<PercussionNoteCode>& i) { i->noteId = e->getTextAs<NoteNumber>(); }},
+    {"noteCode",  [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<PercussionNoteCode>& i) { i->noteCode = e->getTextAs<PercussionNoteTypeId>(); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(SecondaryBeamBreak, {
-    {"do16th", [](const XmlElementPtr&, const std::shared_ptr<SecondaryBeamBreak>& i) { i->mask |= unsigned(NoteType::Note16th); }},
-    {"do32nd", [](const XmlElementPtr&, const std::shared_ptr<SecondaryBeamBreak>& i) { i->mask |= unsigned(NoteType::Note32nd); }},
-    {"do64th", [](const XmlElementPtr&, const std::shared_ptr<SecondaryBeamBreak>& i) { i->mask |= unsigned(NoteType::Note64th); }},
-    {"do128th", [](const XmlElementPtr&, const std::shared_ptr<SecondaryBeamBreak>& i) { i->mask |= unsigned(NoteType::Note128th); }},
-    {"do256th", [](const XmlElementPtr&, const std::shared_ptr<SecondaryBeamBreak>& i) { i->mask |= unsigned(NoteType::Note256th); }},
-    {"do512th", [](const XmlElementPtr&, const std::shared_ptr<SecondaryBeamBreak>& i) { i->mask |= unsigned(NoteType::Note512th); }},
-    {"do1024th", [](const XmlElementPtr&, const std::shared_ptr<SecondaryBeamBreak>& i) { i->mask |= unsigned(NoteType::Note1024th); }},
-    {"do2048th", [](const XmlElementPtr&, const std::shared_ptr<SecondaryBeamBreak>& i) { i->mask |= unsigned(NoteType::Note2048th); }},
-    {"do4096th", [](const XmlElementPtr&, const std::shared_ptr<SecondaryBeamBreak>& i) { i->mask |= unsigned(NoteType::Note4096th); }},
-    {"beamThrough", [](const XmlElementPtr& e, const std::shared_ptr<SecondaryBeamBreak>& i) { i->breakThrough = populateBoolean(e, i); }},
+    {"do16th", [](ConstructionContext&, const XmlElementPtr&, const std::shared_ptr<SecondaryBeamBreak>& i) { i->mask |= unsigned(NoteType::Note16th); }},
+    {"do32nd", [](ConstructionContext&, const XmlElementPtr&, const std::shared_ptr<SecondaryBeamBreak>& i) { i->mask |= unsigned(NoteType::Note32nd); }},
+    {"do64th", [](ConstructionContext&, const XmlElementPtr&, const std::shared_ptr<SecondaryBeamBreak>& i) { i->mask |= unsigned(NoteType::Note64th); }},
+    {"do128th", [](ConstructionContext&, const XmlElementPtr&, const std::shared_ptr<SecondaryBeamBreak>& i) { i->mask |= unsigned(NoteType::Note128th); }},
+    {"do256th", [](ConstructionContext&, const XmlElementPtr&, const std::shared_ptr<SecondaryBeamBreak>& i) { i->mask |= unsigned(NoteType::Note256th); }},
+    {"do512th", [](ConstructionContext&, const XmlElementPtr&, const std::shared_ptr<SecondaryBeamBreak>& i) { i->mask |= unsigned(NoteType::Note512th); }},
+    {"do1024th", [](ConstructionContext&, const XmlElementPtr&, const std::shared_ptr<SecondaryBeamBreak>& i) { i->mask |= unsigned(NoteType::Note1024th); }},
+    {"do2048th", [](ConstructionContext&, const XmlElementPtr&, const std::shared_ptr<SecondaryBeamBreak>& i) { i->mask |= unsigned(NoteType::Note2048th); }},
+    {"do4096th", [](ConstructionContext&, const XmlElementPtr&, const std::shared_ptr<SecondaryBeamBreak>& i) { i->mask |= unsigned(NoteType::Note4096th); }},
+    {"beamThrough", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<SecondaryBeamBreak>& i) { i->breakThrough = populateBoolean(c, e, i); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(ShapeNoteBase::NoteShapes, {
-    {"d", [](const XmlElementPtr& e, const std::shared_ptr<ShapeNoteBase::NoteShapes>& i) { i->doubleWhole = e->getTextAs<char32_t>(); }},
-    {"w", [](const XmlElementPtr& e, const std::shared_ptr<ShapeNoteBase::NoteShapes>& i) { i->whole = e->getTextAs<char32_t>(); }},
-    {"h", [](const XmlElementPtr& e, const std::shared_ptr<ShapeNoteBase::NoteShapes>& i) { i->half = e->getTextAs<char32_t>(); }},
-    {"q", [](const XmlElementPtr& e, const std::shared_ptr<ShapeNoteBase::NoteShapes>& i) { i->quarter = e->getTextAs<char32_t>(); }},
+    {"d", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<ShapeNoteBase::NoteShapes>& i) { i->doubleWhole = e->getTextAs<char32_t>(); }},
+    {"w", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<ShapeNoteBase::NoteShapes>& i) { i->whole = e->getTextAs<char32_t>(); }},
+    {"h", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<ShapeNoteBase::NoteShapes>& i) { i->half = e->getTextAs<char32_t>(); }},
+    {"q", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<ShapeNoteBase::NoteShapes>& i) { i->quarter = e->getTextAs<char32_t>(); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(ShapeNoteBase, {
-    {"noteShapes", [](const XmlElementPtr& e, const std::shared_ptr<ShapeNoteBase>& i) {
+    {"noteShapes", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<ShapeNoteBase>& i) {
             auto idxAttr = e->findAttribute("index");
             size_t index = idxAttr ? idxAttr->getValueAs<size_t>() : static_cast<size_t>(-1);
             if (i->noteShapes.size() != index) {
                 throw std::invalid_argument("noteShapes index mismatch. Expected: " + std::to_string(i->noteShapes.size())
                                             + ", Found: " + std::to_string(index));
             }
-            i->noteShapes.push_back(FieldPopulator<ShapeNoteBase::NoteShapes>::createAndPopulate(e));
+            i->noteShapes.push_back(FieldPopulator<ShapeNoteBase::NoteShapes>::createAndPopulate(c, e));
         }
     },
-    {"arrangedByPitch", [](const XmlElementPtr& e, const std::shared_ptr<ShapeNoteBase>& i) { i->arrangedByPitch = populateBoolean(e, i); }},
+    {"arrangedByPitch", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<ShapeNoteBase>& i) { i->arrangedByPitch = populateBoolean(c, e, i); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(SmartShapeEntryAssign, {
-    {"shapeNum", [](const XmlElementPtr& e, const std::shared_ptr<SmartShapeEntryAssign>& i) { i->shapeNum = e->getTextAs<Cmper>(); }},
+    {"shapeNum", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<SmartShapeEntryAssign>& i) { i->shapeNum = e->getTextAs<Cmper>(); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(StaffGroup, {
-    {"startInst", [](const XmlElementPtr& e, const std::shared_ptr<StaffGroup>& i) { i->startInst = e->getTextAs<StaffCmper>(); }},
-    {"endInst", [](const XmlElementPtr& e, const std::shared_ptr<StaffGroup>& i) { i->endInst = e->getTextAs<StaffCmper>(); }},
-    {"startMeas", [](const XmlElementPtr& e, const std::shared_ptr<StaffGroup>& i) { i->startMeas = e->getTextAs<MeasCmper>(); }},
-    {"endMeas", [](const XmlElementPtr& e, const std::shared_ptr<StaffGroup>& i) { i->endMeas = e->getTextAs<MeasCmper>(); }},
-    {"fullID", [](const XmlElementPtr& e, const std::shared_ptr<StaffGroup>& i) { i->fullNameId = e->getTextAs<Cmper>(); }},
-    {"fullXadj", [](const XmlElementPtr& e, const std::shared_ptr<StaffGroup>& i) { i->fullNameXadj = e->getTextAs<int>(); }},
-    {"fullYadj", [](const XmlElementPtr& e, const std::shared_ptr<StaffGroup>& i) { i->fullNameYadj = e->getTextAs<int>(); }},
-    {"bracket", [](const XmlElementPtr& e, const std::shared_ptr<StaffGroup>& i) { i->bracket = FieldPopulator<Bracket>::createAndPopulate(e, i->getDocument()); }},
-    {"barline", [](const XmlElementPtr& e, const std::shared_ptr<StaffGroup>& i) { i->barlineType = toEnum<StaffGroup::BarlineType>(e); }},
-    {"fullJustify", [](const XmlElementPtr& e, const std::shared_ptr<StaffGroup>& i) { i->fullNameJustify = toEnum<AlignJustify>(e); }},
-    {"abbrvJustify", [](const XmlElementPtr& e, const std::shared_ptr<StaffGroup>& i) { i->abbrvNameJustify = toEnum<AlignJustify>(e); }},
-    {"groupBarlineStyle", [](const XmlElementPtr& e, const std::shared_ptr<StaffGroup>& i) { i->drawBarlines = toEnum<StaffGroup::DrawBarlineStyle>(e); }},
-    {"ownBarline", [](const XmlElementPtr& e, const std::shared_ptr<StaffGroup>& i) { i->ownBarline = populateBoolean(e, i); }},
-    {"fullIndivPos", [](const XmlElementPtr& e, const std::shared_ptr<StaffGroup>& i) { i->fullNameIndivPos = populateBoolean(e, i); }},
-    {"abbrvIndivPos", [](const XmlElementPtr& e, const std::shared_ptr<StaffGroup>& i) { i->abbrvNameIndivPos = populateBoolean(e, i); }},
-    {"hideName", [](const XmlElementPtr& e, const std::shared_ptr<StaffGroup>& i) { i->hideName = populateBoolean(e, i); }},
-    {"abbrvID", [](const XmlElementPtr& e, const std::shared_ptr<StaffGroup>& i) { i->abbrvNameId = e->getTextAs<Cmper>(); }},
-    {"abbrvXadj", [](const XmlElementPtr& e, const std::shared_ptr<StaffGroup>& i) { i->abbrvNameXadj = e->getTextAs<int>(); }},
-    {"abbrvYadj", [](const XmlElementPtr& e, const std::shared_ptr<StaffGroup>& i) { i->abbrvNameYadj = e->getTextAs<int>(); }},
-    {"fullHAlign", [](const XmlElementPtr& e, const std::shared_ptr<StaffGroup>& i) { i->fullNameAlign = toEnum<AlignJustify>(e); }},
-    {"abbrvHAlign", [](const XmlElementPtr& e, const std::shared_ptr<StaffGroup>& i) { i->abbrvNameAlign = toEnum<AlignJustify>(e); }},
-    {"fullExpand", [](const XmlElementPtr& e, const std::shared_ptr<StaffGroup>& i) { i->fullNameExpand = populateBoolean(e, i); }},
-    {"abbrvExpand", [](const XmlElementPtr& e, const std::shared_ptr<StaffGroup>& i) { i->abbrvNameExpand = populateBoolean(e, i); }},
-    {"optimize", [](const XmlElementPtr& e, const std::shared_ptr<StaffGroup>& i) { i->hideStaves = toEnum<StaffGroup::HideStaves>(e); }},
+    {"startInst", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<StaffGroup>& i) { i->startInst = e->getTextAs<StaffCmper>(); }},
+    {"endInst", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<StaffGroup>& i) { i->endInst = e->getTextAs<StaffCmper>(); }},
+    {"startMeas", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<StaffGroup>& i) { i->startMeas = e->getTextAs<MeasCmper>(); }},
+    {"endMeas", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<StaffGroup>& i) { i->endMeas = e->getTextAs<MeasCmper>(); }},
+    {"fullID", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<StaffGroup>& i) { i->fullNameId = e->getTextAs<Cmper>(); }},
+    {"fullXadj", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<StaffGroup>& i) { i->fullNameXadj = e->getTextAs<int>(); }},
+    {"fullYadj", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<StaffGroup>& i) { i->fullNameYadj = e->getTextAs<int>(); }},
+    {"bracket", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<StaffGroup>& i) { i->bracket = FieldPopulator<Bracket>::createAndPopulate(c, e, i->getDocument()); }},
+    {"barline", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<StaffGroup>& i) { i->barlineType = toEnum<StaffGroup::BarlineType>(e); }},
+    {"fullJustify", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<StaffGroup>& i) { i->fullNameJustify = toEnum<AlignJustify>(e); }},
+    {"abbrvJustify", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<StaffGroup>& i) { i->abbrvNameJustify = toEnum<AlignJustify>(e); }},
+    {"groupBarlineStyle", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<StaffGroup>& i) { i->drawBarlines = toEnum<StaffGroup::DrawBarlineStyle>(e); }},
+    {"ownBarline", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<StaffGroup>& i) { i->ownBarline = populateBoolean(c, e, i); }},
+    {"fullIndivPos", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<StaffGroup>& i) { i->fullNameIndivPos = populateBoolean(c, e, i); }},
+    {"abbrvIndivPos", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<StaffGroup>& i) { i->abbrvNameIndivPos = populateBoolean(c, e, i); }},
+    {"hideName", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<StaffGroup>& i) { i->hideName = populateBoolean(c, e, i); }},
+    {"abbrvID", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<StaffGroup>& i) { i->abbrvNameId = e->getTextAs<Cmper>(); }},
+    {"abbrvXadj", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<StaffGroup>& i) { i->abbrvNameXadj = e->getTextAs<int>(); }},
+    {"abbrvYadj", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<StaffGroup>& i) { i->abbrvNameYadj = e->getTextAs<int>(); }},
+    {"fullHAlign", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<StaffGroup>& i) { i->fullNameAlign = toEnum<AlignJustify>(e); }},
+    {"abbrvHAlign", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<StaffGroup>& i) { i->abbrvNameAlign = toEnum<AlignJustify>(e); }},
+    {"fullExpand", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<StaffGroup>& i) { i->fullNameExpand = populateBoolean(c, e, i); }},
+    {"abbrvExpand", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<StaffGroup>& i) { i->abbrvNameExpand = populateBoolean(c, e, i); }},
+    {"optimize", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<StaffGroup>& i) { i->hideStaves = toEnum<StaffGroup::HideStaves>(e); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(StaffSize, {
-    {"staffPercent", [](const XmlElementPtr& e, const std::shared_ptr<StaffSize>& i) { i->staffPercent = e->getTextAs<int>(); }},
+    {"staffPercent", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<StaffSize>& i) { i->staffPercent = e->getTextAs<int>(); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(StemAlterations, {
-    {"upVertAdjust", [](const XmlElementPtr& e, const std::shared_ptr<StemAlterations>& i) { i->upVertAdjust = e->getTextAs<Evpu>(); }},
-    {"downVertAdjust", [](const XmlElementPtr& e, const std::shared_ptr<StemAlterations>& i) { i->downVertAdjust = e->getTextAs<Evpu>(); }},
-    {"upHorzAdjust", [](const XmlElementPtr& e, const std::shared_ptr<StemAlterations>& i) { i->upHorzAdjust = e->getTextAs<Evpu>(); }},
-    {"downHorzAdjust", [](const XmlElementPtr& e, const std::shared_ptr<StemAlterations>& i) { i->downHorzAdjust = e->getTextAs<Evpu>(); }},
+    {"upVertAdjust", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<StemAlterations>& i) { i->upVertAdjust = e->getTextAs<Evpu>(); }},
+    {"downVertAdjust", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<StemAlterations>& i) { i->downVertAdjust = e->getTextAs<Evpu>(); }},
+    {"upHorzAdjust", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<StemAlterations>& i) { i->upHorzAdjust = e->getTextAs<Evpu>(); }},
+    {"downHorzAdjust", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<StemAlterations>& i) { i->downHorzAdjust = e->getTextAs<Evpu>(); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(TablatureNoteMods, {
-    {"noteID", [](const XmlElementPtr& e, const std::shared_ptr<TablatureNoteMods>& i) { i->noteId = e->getTextAs<NoteNumber>(); }},
-    {"stringNumber", [](const XmlElementPtr& e, const std::shared_ptr<TablatureNoteMods>& i) { i->stringNumber = e->getTextAs<int>(); }},
+    {"noteID", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<TablatureNoteMods>& i) { i->noteId = e->getTextAs<NoteNumber>(); }},
+    {"stringNumber", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<TablatureNoteMods>& i) { i->stringNumber = e->getTextAs<int>(); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(TieAlterBase, {
-    {"noteID", [](const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->noteId = e->getTextAs<NoteNumber>(); }},
-    {"xStart", [](const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->xStart = e->getTextAs<Evpu>(); }},
-    {"xEnd", [](const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->xEnd = e->getTextAs<Evpu>(); }},
-    {"yStart", [](const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->yStart = e->getTextAs<Evpu>(); }},
-    {"yEnd", [](const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->yEnd = e->getTextAs<Evpu>(); }},
-    {"outerLocal", [](const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->outerLocal = populateBoolean(e, i); }},
-    {"outerOn", [](const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->outerOn = populateBoolean(e, i); }},
-    {"afterSingleDotLocal", [](const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->afterSingleDotLocal = populateBoolean(e, i); }},
-    {"afterSingleDotOn", [](const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->afterSingleDotOn = populateBoolean(e, i); }},
-    {"afterMultiDotsLocal", [](const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->afterMultiDotsLocal = populateBoolean(e, i); }},
-    {"afterMultiDotsOn", [](const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->afterMultiDotsOn = populateBoolean(e, i); }},
-    {"shiftForSecondsLocal", [](const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->shiftForSecondsLocal = populateBoolean(e, i); }},
-    {"shiftForSecondsOn", [](const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->shiftForSecondsOn = populateBoolean(e, i); }},
-    {"beforeSingleAcciLocal", [](const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->beforeSingleAcciLocal = populateBoolean(e, i); }},
-    {"beforeSingleAcciOn", [](const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->beforeSingleAcciOn = populateBoolean(e, i); }},
-    {"down", [](const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->down = populateBoolean(e, i); }},
-    {"breakTimeLocal", [](const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->breakTimeLocal = populateBoolean(e, i); }},
-    {"breakTimeOn", [](const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->breakTimeOn = populateBoolean(e, i); }},
-    {"breakKeyLocal", [](const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->breakKeyLocal = populateBoolean(e, i); }},
-    {"breakKeyOn", [](const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->breakKeyOn = populateBoolean(e, i); }},
-    {"freeze", [](const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->freezeDirection = populateBoolean(e, i); }},
-    {"noSpecialArc", [](const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->noSpecialArc = populateBoolean(e, i); }},
-    {"stPtAdjOn", [](const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->stPtAdjOn = populateBoolean(e, i); }},
-    {"stPtEntCnct", [](const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->stPtEntCnct = toEnum<TieAlterBase::ConnectionType>(e); }},
-    {"stPtContext", [](const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->stPtContext = toEnum<TieAlterBase::DirectionContext>(e); }},
-    {"enPtAdjOn", [](const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->enPtAdjOn = populateBoolean(e, i); }},
-    {"enPtEntCnct", [](const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->enPtEntCnct = toEnum<TieAlterBase::ConnectionType>(e); }},
-    {"enPtContext", [](const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->enPtContext = toEnum<TieAlterBase::DirectionContext>(e); }},
-    {"insetRatio1", [](const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->insetRatio1 = e->getTextAs<Evpu>(); }},
-    {"height1", [](const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->height1 = e->getTextAs<Evpu>(); }},
-    {"insetRatio2", [](const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->insetRatio2 = e->getTextAs<Evpu>(); }},
-    {"height2", [](const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->height2 = e->getTextAs<Evpu>(); }},
-    {"ctlPtAdjOn", [](const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->ctlPtAdjOn = populateBoolean(e, i); }},
-    {"ctlPtFixed", [](const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->ctlPtFixed = populateBoolean(e, i); }},
+    {"noteID", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->noteId = e->getTextAs<NoteNumber>(); }},
+    {"xStart", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->xStart = e->getTextAs<Evpu>(); }},
+    {"xEnd", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->xEnd = e->getTextAs<Evpu>(); }},
+    {"yStart", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->yStart = e->getTextAs<Evpu>(); }},
+    {"yEnd", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->yEnd = e->getTextAs<Evpu>(); }},
+    {"outerLocal", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->outerLocal = populateBoolean(c, e, i); }},
+    {"outerOn", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->outerOn = populateBoolean(c, e, i); }},
+    {"afterSingleDotLocal", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->afterSingleDotLocal = populateBoolean(c, e, i); }},
+    {"afterSingleDotOn", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->afterSingleDotOn = populateBoolean(c, e, i); }},
+    {"afterMultiDotsLocal", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->afterMultiDotsLocal = populateBoolean(c, e, i); }},
+    {"afterMultiDotsOn", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->afterMultiDotsOn = populateBoolean(c, e, i); }},
+    {"shiftForSecondsLocal", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->shiftForSecondsLocal = populateBoolean(c, e, i); }},
+    {"shiftForSecondsOn", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->shiftForSecondsOn = populateBoolean(c, e, i); }},
+    {"beforeSingleAcciLocal", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->beforeSingleAcciLocal = populateBoolean(c, e, i); }},
+    {"beforeSingleAcciOn", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->beforeSingleAcciOn = populateBoolean(c, e, i); }},
+    {"down", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->down = populateBoolean(c, e, i); }},
+    {"breakTimeLocal", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->breakTimeLocal = populateBoolean(c, e, i); }},
+    {"breakTimeOn", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->breakTimeOn = populateBoolean(c, e, i); }},
+    {"breakKeyLocal", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->breakKeyLocal = populateBoolean(c, e, i); }},
+    {"breakKeyOn", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->breakKeyOn = populateBoolean(c, e, i); }},
+    {"freeze", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->freezeDirection = populateBoolean(c, e, i); }},
+    {"noSpecialArc", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->noSpecialArc = populateBoolean(c, e, i); }},
+    {"stPtAdjOn", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->stPtAdjOn = populateBoolean(c, e, i); }},
+    {"stPtEntCnct", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->stPtEntCnct = toEnum<TieAlterBase::ConnectionType>(e); }},
+    {"stPtContext", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->stPtContext = toEnum<TieAlterBase::DirectionContext>(e); }},
+    {"enPtAdjOn", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->enPtAdjOn = populateBoolean(c, e, i); }},
+    {"enPtEntCnct", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->enPtEntCnct = toEnum<TieAlterBase::ConnectionType>(e); }},
+    {"enPtContext", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->enPtContext = toEnum<TieAlterBase::DirectionContext>(e); }},
+    {"insetRatio1", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->insetRatio1 = e->getTextAs<Evpu>(); }},
+    {"height1", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->height1 = e->getTextAs<Evpu>(); }},
+    {"insetRatio2", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->insetRatio2 = e->getTextAs<Evpu>(); }},
+    {"height2", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->height2 = e->getTextAs<Evpu>(); }},
+    {"ctlPtAdjOn", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->ctlPtAdjOn = populateBoolean(c, e, i); }},
+    {"ctlPtFixed", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<TieAlterBase>& i) { i->ctlPtFixed = populateBoolean(c, e, i); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(TupletDef, {
-    {"symbolicNum", [](const XmlElementPtr& e, const std::shared_ptr<TupletDef>& i) { i->displayNumber = e->getTextAs<int>(); }},
-    {"symbolicDur", [](const XmlElementPtr& e, const std::shared_ptr<TupletDef>& i) { i->displayDuration = e->getTextAs<Edu>(); }},
-    {"refNum", [](const XmlElementPtr& e, const std::shared_ptr<TupletDef>& i) { i->referenceNumber = e->getTextAs<int>(); }},
-    {"refDur", [](const XmlElementPtr& e, const std::shared_ptr<TupletDef>& i) { i->referenceDuration = e->getTextAs<Edu>(); }},
-    {"flat", [](const XmlElementPtr& e, const std::shared_ptr<TupletDef>& i) { i->alwaysFlat = populateBoolean(e, i); }},
-    {"fullDura", [](const XmlElementPtr& e, const std::shared_ptr<TupletDef>& i) { i->fullDura = populateBoolean(e, i); }},
-    {"metricCenter", [](const XmlElementPtr& e, const std::shared_ptr<TupletDef>& i) { i->metricCenter = populateBoolean(e, i); }},
-    {"avoidStaff", [](const XmlElementPtr& e, const std::shared_ptr<TupletDef>& i) { i->avoidStaff = populateBoolean(e, i); }},
-    {"autoBracketStyle", [](const XmlElementPtr& e, const std::shared_ptr<TupletDef>& i) { i->autoBracketStyle = toEnum<TupletDef::AutoBracketStyle>(e); }},
-    {"hidden", [](const XmlElementPtr& e, const std::shared_ptr<TupletDef>& i) { i->hidden = populateBoolean(e, i); }},
-    {"tupOffX", [](const XmlElementPtr& e, const std::shared_ptr<TupletDef>& i) { i->tupOffX = e->getTextAs<Evpu>(); }},
-    {"tupOffY", [](const XmlElementPtr& e, const std::shared_ptr<TupletDef>& i) { i->tupOffY = e->getTextAs<Evpu>(); }},
-    {"brackOffX", [](const XmlElementPtr& e, const std::shared_ptr<TupletDef>& i) { i->brackOffX = e->getTextAs<Evpu>(); }},
-    {"brackOffY", [](const XmlElementPtr& e, const std::shared_ptr<TupletDef>& i) { i->brackOffY = e->getTextAs<Evpu>(); }},
-    {"numStyle", [](const XmlElementPtr& e, const std::shared_ptr<TupletDef>& i) { i->numStyle = toEnum<TupletDef::NumberStyle>(e); }},
-    {"posStyle", [](const XmlElementPtr& e, const std::shared_ptr<TupletDef>& i) { i->posStyle = toEnum<TupletDef::PositioningStyle>(e); }},
-    {"allowHorz", [](const XmlElementPtr& e, const std::shared_ptr<TupletDef>& i) { i->allowHorz = populateBoolean(e, i); }},
-    {"ignoreGlOffs", [](const XmlElementPtr& e, const std::shared_ptr<TupletDef>& i) { i->ignoreHorzNumOffset = populateBoolean(e, i); }},
-    {"breakBracket", [](const XmlElementPtr& e, const std::shared_ptr<TupletDef>& i) { i->breakBracket = populateBoolean(e, i); }},
-    {"matchHooks", [](const XmlElementPtr& e, const std::shared_ptr<TupletDef>& i) { i->matchHooks = populateBoolean(e, i); }},
-    {"noteBelow", [](const XmlElementPtr& e, const std::shared_ptr<TupletDef>& i) { i->useBottomNote = populateBoolean(e, i); }},
-    {"brackStyle", [](const XmlElementPtr& e, const std::shared_ptr<TupletDef>& i) { i->brackStyle = toEnum<TupletDef::BracketStyle>(e); }},
-    {"smartTuplet", [](const XmlElementPtr& e, const std::shared_ptr<TupletDef>& i) { i->smartTuplet = populateBoolean(e, i); }},
-    {"leftHookLen", [](const XmlElementPtr& e, const std::shared_ptr<TupletDef>& i) { i->leftHookLen = e->getTextAs<Evpu>(); }},
-    {"leftHookExt", [](const XmlElementPtr& e, const std::shared_ptr<TupletDef>& i) { i->leftHookExt = e->getTextAs<Evpu>(); }},
-    {"rightHookLen", [](const XmlElementPtr& e, const std::shared_ptr<TupletDef>& i) { i->rightHookLen = e->getTextAs<Evpu>(); }},
-    {"rightHookExt", [](const XmlElementPtr& e, const std::shared_ptr<TupletDef>& i) { i->rightHookExt = e->getTextAs<Evpu>(); }},
-    {"slope", [](const XmlElementPtr& e, const std::shared_ptr<TupletDef>& i) { i->manualSlopeAdj = e->getTextAs<Evpu>(); }},
+    {"symbolicNum", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<TupletDef>& i) { i->displayNumber = e->getTextAs<int>(); }},
+    {"symbolicDur", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<TupletDef>& i) { i->displayDuration = e->getTextAs<Edu>(); }},
+    {"refNum", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<TupletDef>& i) { i->referenceNumber = e->getTextAs<int>(); }},
+    {"refDur", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<TupletDef>& i) { i->referenceDuration = e->getTextAs<Edu>(); }},
+    {"flat", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<TupletDef>& i) { i->alwaysFlat = populateBoolean(c, e, i); }},
+    {"fullDura", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<TupletDef>& i) { i->fullDura = populateBoolean(c, e, i); }},
+    {"metricCenter", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<TupletDef>& i) { i->metricCenter = populateBoolean(c, e, i); }},
+    {"avoidStaff", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<TupletDef>& i) { i->avoidStaff = populateBoolean(c, e, i); }},
+    {"autoBracketStyle", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<TupletDef>& i) { i->autoBracketStyle = toEnum<TupletDef::AutoBracketStyle>(e); }},
+    {"hidden", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<TupletDef>& i) { i->hidden = populateBoolean(c, e, i); }},
+    {"tupOffX", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<TupletDef>& i) { i->tupOffX = e->getTextAs<Evpu>(); }},
+    {"tupOffY", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<TupletDef>& i) { i->tupOffY = e->getTextAs<Evpu>(); }},
+    {"brackOffX", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<TupletDef>& i) { i->brackOffX = e->getTextAs<Evpu>(); }},
+    {"brackOffY", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<TupletDef>& i) { i->brackOffY = e->getTextAs<Evpu>(); }},
+    {"numStyle", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<TupletDef>& i) { i->numStyle = toEnum<TupletDef::NumberStyle>(e); }},
+    {"posStyle", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<TupletDef>& i) { i->posStyle = toEnum<TupletDef::PositioningStyle>(e); }},
+    {"allowHorz", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<TupletDef>& i) { i->allowHorz = populateBoolean(c, e, i); }},
+    {"ignoreGlOffs", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<TupletDef>& i) { i->ignoreHorzNumOffset = populateBoolean(c, e, i); }},
+    {"breakBracket", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<TupletDef>& i) { i->breakBracket = populateBoolean(c, e, i); }},
+    {"matchHooks", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<TupletDef>& i) { i->matchHooks = populateBoolean(c, e, i); }},
+    {"noteBelow", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<TupletDef>& i) { i->useBottomNote = populateBoolean(c, e, i); }},
+    {"brackStyle", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<TupletDef>& i) { i->brackStyle = toEnum<TupletDef::BracketStyle>(e); }},
+    {"smartTuplet", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<TupletDef>& i) { i->smartTuplet = populateBoolean(c, e, i); }},
+    {"leftHookLen", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<TupletDef>& i) { i->leftHookLen = e->getTextAs<Evpu>(); }},
+    {"leftHookExt", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<TupletDef>& i) { i->leftHookExt = e->getTextAs<Evpu>(); }},
+    {"rightHookLen", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<TupletDef>& i) { i->rightHookLen = e->getTextAs<Evpu>(); }},
+    {"rightHookExt", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<TupletDef>& i) { i->rightHookExt = e->getTextAs<Evpu>(); }},
+    {"slope", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<TupletDef>& i) { i->manualSlopeAdj = e->getTextAs<Evpu>(); }},
 });
 // Field populators are maintained to populate in the order that nodes are observed to occur in EnigmaXml.
 // The goal is that this may facilitate serialization in the future.
@@ -557,6 +557,5 @@ MUSX_XML_ELEMENT_ARRAY(TupletDef, {
 } // namespace details
 } // namespace dom
 } // namespace musx
-
 
 #endif // DOXYGEN_SHOULD_IGNORE_THIS

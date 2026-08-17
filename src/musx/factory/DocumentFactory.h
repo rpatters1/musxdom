@@ -28,6 +28,7 @@
 #include <limits>
 #include <memory>
 #include <optional>
+#include <set>
 #include <string>
 #include <string_view>
 #include <type_traits>
@@ -35,6 +36,7 @@
 #include <vector>
 
 #include "musx/dom/Document.h"
+#include "musx/factory/ConstructionContext.h"
 #include "musx/factory/FactoryExceptions.h"
 #include "musx/xml/XmlInterface.h"
 
@@ -129,6 +131,8 @@ public:
         ConstructionSession& operator=(ConstructionSession&&) noexcept = default;
 
         [[nodiscard]] const DocumentPtr& getDocument() const;
+        [[nodiscard]] ConstructionContext& getConstructionContext() { return m_context; }
+        [[nodiscard]] const ConstructionContext& getConstructionContext() const { return m_context; }
         [[nodiscard]] DocumentPtr finish() &&;
 
     private:
@@ -136,6 +140,7 @@ public:
         explicit ConstructionSession(DocumentPtr document) : m_document(std::move(document)) {}
 
         DocumentPtr m_document;
+        ConstructionContext m_context;
         State m_state = State::Active;
         friend class DocumentFactory;
     };
@@ -186,7 +191,7 @@ public:
 private:
     static DocumentPtr createFromXmlRoot(
         const xml::XmlElementPtr& root, ConstructionOptions&& options);
-    static void finalize(const DocumentPtr& document);
+    static void finalize(const DocumentPtr& document, ConstructionContext& context);
 
     template <typename Container>
     static const char* asCharData(const Container& buffer)

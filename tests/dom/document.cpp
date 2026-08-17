@@ -363,7 +363,7 @@ TEST(DocumentConstructionTest, OptionsFactorySupportsOverlayBeforeFinish)
     auto session = musx::factory::DocumentFactory::begin();
     auto document = session.getDocument();
     document->getOptions() = musx::factory::OptionsFactory::create(
-        xmlDocument->getRootElement(), document);
+        session.getConstructionContext(), xmlDocument->getRootElement(), document);
     auto spacing = document->getOptions()->get<musx::dom::options::MusicSpacingOptions>();
     ASSERT_TRUE(spacing);
     const_cast<musx::dom::options::MusicSpacingOptions*>(spacing.get())->minWidth = 24;
@@ -389,7 +389,7 @@ TEST(DocumentConstructionTest, DefersContainedIntegrityChecksUntilFinish)
     auto session = musx::factory::DocumentFactory::begin();
     auto document = session.getDocument();
     EXPECT_NO_THROW(document->getOthers() = musx::factory::OthersFactory::create(
-        xmlDocument->getRootElement(), document));
+        session.getConstructionContext(), xmlDocument->getRootElement(), document));
     EXPECT_THROW((void)std::move(session).finish(), musx::dom::integrity_error);
 }
 
@@ -447,7 +447,7 @@ TEST(DocumentConstructionTest, NodeFilterRestrictsPoolToAllowlistedNodes)
     auto session = musx::factory::DocumentFactory::begin();
     auto document = session.getDocument();
     document->getOthers() = musx::factory::OthersFactory::create(
-        xmlDocument->getRootElement(), document,
+        session.getConstructionContext(), xmlDocument->getRootElement(), document,
         [](const musx::xml::XmlElementPtr& node) {
             return node->getTagName() == musx::dom::others::LayerAttributes::XmlNodeName;
         });
@@ -478,7 +478,7 @@ TEST(DocumentConstructionTest, AbsentNodeFilterCreatesEveryChild)
     auto session = musx::factory::DocumentFactory::begin();
     auto document = session.getDocument();
     document->getOthers() = musx::factory::OthersFactory::create(
-        xmlDocument->getRootElement(), document);
+        session.getConstructionContext(), xmlDocument->getRootElement(), document);
 
     auto finished = std::move(session).finish();
     EXPECT_EQ(finished->getOthers()->getArray<musx::dom::others::LayerAttributes>(SCORE_PARTID).size(), 4u);

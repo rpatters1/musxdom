@@ -75,6 +75,7 @@ auto getScoreValue(const PoolPtr& pool, Args&&... args)
 
 template <typename T, typename PoolPtr, typename... Args>
 CreatedInstanceInfo createRegisteredType(const PoolPtr& pool,
+                                         ConstructionContext& context,
                                          const xml::XmlElementPtr& node,
                                          const dom::DocumentPtr& document,
                                          Args&&... args)
@@ -105,20 +106,20 @@ CreatedInstanceInfo createRegisteredType(const PoolPtr& pool,
             PartSharingFactory::initializePartial(instance, scoreValue, unlinkedNodeNames);
         }
     }
-    FieldPopulator<T>::populate(instance, node);
+    FieldPopulator<T>::populate(context, instance, node);
     return {instance, T::XmlNodeName};
 }
 
 template <typename T, typename... Rest, typename PoolPtr, typename... Args>
 std::optional<CreatedInstanceInfo> createRegisteredInstance(
-    const PoolPtr& pool, const xml::XmlElementPtr& node,
+    const PoolPtr& pool, ConstructionContext& context, const xml::XmlElementPtr& node,
     const dom::DocumentPtr& document, Args&&... args)
 {
     if (node->getTagName() == T::XmlNodeName) {
         if constexpr (std::is_constructible_v<T, const dom::DocumentPtr&, dom::Cmper,
             dom::EnigmaBase::ShareMode, Args...>) {
             return createRegisteredType<T>(
-                pool, node, document, std::forward<Args>(args)...);
+                pool, context, node, document, std::forward<Args>(args)...);
         } else {
             assert(false);
             throw std::logic_error("Type for " + node->getTagName()
@@ -127,7 +128,7 @@ std::optional<CreatedInstanceInfo> createRegisteredInstance(
     }
     if constexpr (sizeof...(Rest) > 0) {
         return createRegisteredInstance<Rest...>(
-            pool, node, document, std::forward<Args>(args)...);
+            pool, context, node, document, std::forward<Args>(args)...);
     } else {
         return std::nullopt;
     }
@@ -138,11 +139,11 @@ struct RegisteredTypes
 {
     template <typename PoolPtr, typename... Args>
     static std::optional<CreatedInstanceInfo> createInstance(
-        const PoolPtr& pool, const xml::XmlElementPtr& node,
+        const PoolPtr& pool, ConstructionContext& context, const xml::XmlElementPtr& node,
         const dom::DocumentPtr& document, Args&&... args)
     {
         return createRegisteredInstance<Types...>(
-            pool, node, document, std::forward<Args>(args)...);
+            pool, context, node, document, std::forward<Args>(args)...);
     }
 };
 
@@ -348,6 +349,7 @@ using RegisteredTexts = RegisteredTypes<
 
 template <typename ObjectBase, typename PoolType, typename Extractor>
 std::shared_ptr<PoolType> createPool(const xml::XmlElementPtr& element,
+                                     ConstructionContext& context,
                                      const dom::DocumentPtr& document,
                                      const NodeFilter& filter,
                                      Extractor&& extractor)
@@ -364,7 +366,7 @@ std::shared_ptr<PoolType> createPool(const xml::XmlElementPtr& element,
         if (filter && !filter(child)) {
             continue;
         }
-        if (auto info = extractor(child, pool)) {
+        if (auto info = extractor(context, child, pool)) {
 #ifdef MUSX_DISPLAY_NODE_NAMES
             if (currentTag != child->getTagName()) {
                 if (!currentTag.empty()) {
@@ -420,51 +422,51 @@ dom::Cmper textTypeToCmper(const std::string& type)
 } // namespace
 
 dom::OptionsPoolPtr OptionsFactory::create(
-    const xml::XmlElementPtr& element, const dom::DocumentPtr& document,
+    ConstructionContext& context, const xml::XmlElementPtr& element, const dom::DocumentPtr& document,
     const NodeFilter& filter)
 {
-    return createPool<dom::OptionsBase, dom::OptionsPool>(element, document, filter,
-        [&](const auto& child, const auto& pool) {
-            return RegisteredOptions::createInstance(pool, child, document);
+    return createPool<dom::OptionsBase, dom::OptionsPool>(element, context, document, filter,
+        [&](auto& c, const auto& child, const auto& pool) {
+            return RegisteredOptions::createInstance(pool, c, child, document);
         });
 }
 
 dom::OthersPoolPtr OthersFactory::create(
-    const xml::XmlElementPtr& element, const dom::DocumentPtr& document,
+    ConstructionContext& context, const xml::XmlElementPtr& element, const dom::DocumentPtr& document,
     const NodeFilter& filter)
 {
-    return createPool<dom::OthersBase, dom::OthersPool>(element, document, filter,
-        [&](const auto& child, const auto& pool) {
+    return createPool<dom::OthersBase, dom::OthersPool>(element, context, document, filter,
+        [&](auto& c, const auto& child, const auto& pool) {
             auto cmper = child->findAttribute("cmper");
             if (!cmper) {
                 throw std::invalid_argument("missing cmper for others element " + child->getTagName());
             }
             if (auto inci = child->findAttribute("inci")) {
-                return RegisteredOthers::createInstance(pool, child, document,
+                return RegisteredOthers::createInstance(pool, c, child, document,
                     cmper->template getValueAs<dom::Cmper>(),
                     inci->template getValueAs<dom::Inci>());
             }
-            return RegisteredOthers::createInstance(pool, child, document,
+            return RegisteredOthers::createInstance(pool, c, child, document,
                 cmper->template getValueAs<dom::Cmper>());
         });
 }
 
 dom::DetailsPoolPtr DetailsFactory::create(
-    const xml::XmlElementPtr& element, const dom::DocumentPtr& document,
+    ConstructionContext& context, const xml::XmlElementPtr& element, const dom::DocumentPtr& document,
     const NodeFilter& filter)
 {
-    return createPool<dom::DetailsBase, dom::DetailsPool>(element, document, filter,
-        [&](const auto& child, const auto& pool) {
+    return createPool<dom::DetailsBase, dom::DetailsPool>(element, context, document, filter,
+        [&](auto& c, const auto& child, const auto& pool) {
             std::optional<dom::Inci> inci;
             if (auto attr = child->findAttribute("inci")) {
                 inci = attr->template getValueAs<dom::Inci>();
             }
             if (auto entnum = child->findAttribute("entnum")) {
                 if (inci) {
-                    return RegisteredDetails::createInstance(pool, child, document,
+                    return RegisteredDetails::createInstance(pool, c, child, document,
                         entnum->template getValueAs<dom::EntryNumber>(), *inci);
                 }
-                return RegisteredDetails::createInstance(pool, child, document,
+                return RegisteredDetails::createInstance(pool, c, child, document,
                     entnum->template getValueAs<dom::EntryNumber>());
             }
             auto cmper1 = child->findAttribute("cmper1");
@@ -474,29 +476,29 @@ dom::DetailsPoolPtr DetailsFactory::create(
                     + child->getTagName());
             }
             if (inci) {
-                return RegisteredDetails::createInstance(pool, child, document,
+                return RegisteredDetails::createInstance(pool, c, child, document,
                     cmper1->template getValueAs<dom::Cmper>(),
                     cmper2->template getValueAs<dom::Cmper>(), *inci);
             }
-            return RegisteredDetails::createInstance(pool, child, document,
+            return RegisteredDetails::createInstance(pool, c, child, document,
                 cmper1->template getValueAs<dom::Cmper>(),
                 cmper2->template getValueAs<dom::Cmper>());
         });
 }
 
 dom::EntryPoolPtr EntryFactory::create(
-    const xml::XmlElementPtr& element, const dom::DocumentPtr& document,
+    ConstructionContext& context, const xml::XmlElementPtr& element, const dom::DocumentPtr& document,
     const NodeFilter& filter)
 {
-    return createPool<dom::Entry, dom::EntryPool>(element, document, filter,
-        [&](const auto& child, const auto& pool) {
+    return createPool<dom::Entry, dom::EntryPool>(element, context, document, filter,
+        [&](auto& c, const auto& child, const auto& pool) {
             auto entnum = child->findAttribute("entnum");
             auto prev = child->findAttribute("prev");
             auto next = child->findAttribute("next");
             if (!entnum || !prev || !next) {
                 throw std::invalid_argument("entry is missing entnum, prev, or next attribute");
             }
-            return RegisteredEntries::createInstance(pool, child, document,
+            return RegisteredEntries::createInstance(pool, c, child, document,
                 entnum->template getValueAs<dom::EntryNumber>(),
                 prev->template getValueAs<dom::EntryNumber>(),
                 next->template getValueAs<dom::EntryNumber>());
@@ -504,11 +506,11 @@ dom::EntryPoolPtr EntryFactory::create(
 }
 
 dom::TextsPoolPtr TextsFactory::create(
-    const xml::XmlElementPtr& element, const dom::DocumentPtr& document,
+    ConstructionContext& context, const xml::XmlElementPtr& element, const dom::DocumentPtr& document,
     const NodeFilter& filter)
 {
-    return createPool<dom::TextsBase, dom::TextsPool>(element, document, filter,
-        [&](const auto& child, const auto& pool) {
+    return createPool<dom::TextsBase, dom::TextsPool>(element, context, document, filter,
+        [&](auto& c, const auto& child, const auto& pool) {
             const std::string attributeName = child->getTagName() == dom::texts::FileInfoText::XmlNodeName
                 ? "type" : "number";
             auto attribute = child->findAttribute(attributeName);
@@ -519,7 +521,7 @@ dom::TextsPoolPtr TextsFactory::create(
             const auto number = attributeName == "type"
                 ? textTypeToCmper(attribute->getValue())
                 : attribute->template getValueAs<dom::Cmper>();
-            return RegisteredTexts::createInstance(pool, child, document, number);
+            return RegisteredTexts::createInstance(pool, c, child, document, number);
         });
 }
 
