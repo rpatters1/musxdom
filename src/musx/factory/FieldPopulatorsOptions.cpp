@@ -965,6 +965,7 @@ MUSX_XML_ELEMENT_ARRAY(TextOptions::InsertSymbolInfo, {
 
 MUSX_XML_ELEMENT_ARRAY(TextOptions, {
     {"textLineSpacingPercent", [](const XmlElementPtr& e, const std::shared_ptr<TextOptions>& i) { i->textLineSpacingPercent = e->getTextAs<int>(); }},
+    {"textLineSpacingEvpu",    [](const XmlElementPtr& e, const std::shared_ptr<TextOptions>& i) { i->textLineSpacingEvpu = e->getTextAs<Evpu>(); }},
     {"showTimeSeconds",        [](const XmlElementPtr& e, const std::shared_ptr<TextOptions>& i) { i->showTimeSeconds = populateBoolean(e, i); }},
     {"dateFormat",             [](const XmlElementPtr& e, const std::shared_ptr<TextOptions>& i) { i->dateFormat = toEnum<DateFormat>(e); }},
     {"tabSpaces",              [](const XmlElementPtr& e, const std::shared_ptr<TextOptions>& i) { i->tabSpaces = e->getTextAs<int>(); }},
