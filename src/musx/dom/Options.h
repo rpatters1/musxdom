@@ -25,6 +25,7 @@
 #include <unordered_map>
 #include <vector>
 #include <memory>
+#include <optional>
 #include <stdexcept>
 
 #include "music_theory/music_theory.hpp"
@@ -1500,6 +1501,8 @@ enum class AccidentalInsertSymbolType
  */
 class TextOptions : public OptionsBase
 {
+    static constexpr int DEFAULT_LINE_SPACING_PERCENT = 100;
+
 public:
     /// @brief Constructor
     explicit TextOptions(const DocumentWeakPtr& document, Cmper partId = 0, ShareMode shareMode = ShareMode::All)
@@ -1533,7 +1536,12 @@ public:
         ForcedFull      ///< "forcedFull"
     };
 
-    int textLineSpacingPercent{};                 ///< "Line Spacing: Automatic" percent value
+    /// @brief "Line Spacing: Automatic" percent value.
+    ///
+    /// Line spacing is either a percent or an absolute distance, and the xml carries whichever applies.
+    /// Exactly one of this and #textLineSpacingEvpu has a value once #integrityCheck has run.
+    std::optional<int> textLineSpacingPercent;
+    std::optional<Evpu> textLineSpacingEvpu;      ///< "Line Spacing: Set To" absolute value. (See #textLineSpacingPercent.)
     bool showTimeSeconds{};                       ///< "Include Seconds in Time Stamp"
     DateFormat dateFormat{};                      ///< "Date Format"
     int tabSpaces{};                              ///< "Use [x] Spaces in Place of One Tab Character"
@@ -1573,6 +1581,20 @@ public:
     };
 
     std::unordered_map<AccidentalInsertSymbolType, std::shared_ptr<InsertSymbolInfo>> symbolInserts; ///< Insert symbol information map
+
+    void integrityCheck(const std::shared_ptr<EnigmaBase>& ptrToThis) override
+    {
+        this->OptionsBase::integrityCheck(ptrToThis);
+        if (textLineSpacingPercent && textLineSpacingEvpu) {
+            textLineSpacingEvpu.reset();
+            MUSX_INTEGRITY_ERROR("Text options specify both a percent and an absolute line spacing. "
+                "The absolute value was discarded.");
+        } else if (!textLineSpacingPercent && !textLineSpacingEvpu) {
+            textLineSpacingPercent = DEFAULT_LINE_SPACING_PERCENT;
+            MUSX_INTEGRITY_ERROR("Text options specify no line spacing. "
+                + std::to_string(DEFAULT_LINE_SPACING_PERCENT) + " percent was assumed.");
+        }
+    }
 
     constexpr static std::string_view XmlNodeName = "textOptions"; ///< The XML node name for this type.
     static const xml::XmlElementArray<TextOptions>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.

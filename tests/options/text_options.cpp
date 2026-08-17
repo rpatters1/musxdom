@@ -93,6 +93,18 @@ constexpr static musxtest::string_view textOptsXml = R"xml(
 </finale>
 )xml";
 
+constexpr static musxtest::string_view textOptsLineSpacingEvpuXml = R"xml(
+<?xml version="1.0" encoding="UTF-8"?>
+<finale>
+  <options>
+    <textOptions>
+      <textLineSpacingEvpu>137</textLineSpacingEvpu>
+      <tabSpaces>4</tabSpaces>
+    </textOptions>
+  </options>
+</finale>
+)xml";
+
 TEST(TextOptionsTest, PropertiesAndSymbolInserts)
 {
     using TextOptions = musx::dom::options::TextOptions;
@@ -105,7 +117,9 @@ TEST(TextOptionsTest, PropertiesAndSymbolInserts)
     auto textOptions = options->get<TextOptions>();
     ASSERT_TRUE(textOptions);
 
-    EXPECT_EQ(textOptions->textLineSpacingPercent, 100);
+    ASSERT_TRUE(textOptions->textLineSpacingPercent.has_value());
+    EXPECT_EQ(textOptions->textLineSpacingPercent.value(), 100);
+    EXPECT_FALSE(textOptions->textLineSpacingEvpu.has_value()); // not in xml
     EXPECT_TRUE(textOptions->showTimeSeconds);
     EXPECT_EQ(textOptions->dateFormat, musx::dom::DateFormat::Abbrev);
     EXPECT_EQ(textOptions->tabSpaces, 4);
@@ -160,4 +174,44 @@ TEST(TextOptionsTest, PropertiesAndSymbolInserts)
     EXPECT_EQ(dblFlatInfo->baselineShiftPerc, 19);
     EXPECT_TRUE(dblFlatInfo->symFont);
     EXPECT_EQ(dblFlatInfo->symChar, U'\u00BA'); // Unicode 186 is º (same note as above)
+}
+
+TEST(TextOptionsTest, LineSpacingEvpu)
+{
+    using TextOptions = musx::dom::options::TextOptions;
+
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(textOptsLineSpacingEvpuXml);
+    auto options = doc->getOptions();
+    ASSERT_TRUE(options);
+
+    auto textOptions = options->get<TextOptions>();
+    ASSERT_TRUE(textOptions);
+
+    ASSERT_TRUE(textOptions->textLineSpacingEvpu.has_value());
+    EXPECT_EQ(textOptions->textLineSpacingEvpu.value(), 137);
+    EXPECT_FALSE(textOptions->textLineSpacingPercent.has_value()); // not in xml
+    EXPECT_EQ(textOptions->tabSpaces, 4);
+}
+
+TEST(TextOptionsTest, LineSpacingIntegrity)
+{
+    using TextOptions = musx::dom::options::TextOptions;
+
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(textOptsXml);
+
+    // Neither spelling present. The fix is applied before the error is reported, so it survives the throw.
+    auto neither = std::make_shared<TextOptions>(doc);
+    EXPECT_THROW(neither->integrityCheck(neither), musx::dom::integrity_error) << "no line spacing supplied";
+    ASSERT_TRUE(neither->textLineSpacingPercent.has_value());
+    EXPECT_EQ(neither->textLineSpacingPercent.value(), 100);
+    EXPECT_FALSE(neither->textLineSpacingEvpu.has_value());
+
+    // Both spellings present. The stated percent is kept and the absolute value is discarded.
+    auto both = std::make_shared<TextOptions>(doc);
+    both->textLineSpacingPercent = 89;
+    both->textLineSpacingEvpu = 137;
+    EXPECT_THROW(both->integrityCheck(both), musx::dom::integrity_error) << "both line spacings supplied";
+    ASSERT_TRUE(both->textLineSpacingPercent.has_value());
+    EXPECT_EQ(both->textLineSpacingPercent.value(), 89);
+    EXPECT_FALSE(both->textLineSpacingEvpu.has_value());
 }
