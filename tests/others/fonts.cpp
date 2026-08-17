@@ -103,6 +103,26 @@ constexpr static musxtest::string_view unknownSmuflFontProperties = R"xml(
 </finale>
     )xml";
 
+constexpr static musxtest::string_view windowsMissingFont = R"xml(
+<?xml version="1.0" encoding="UTF-8"?>
+<finale>
+  <header>
+    <headerData>
+      <created>
+        <platform>WIN</platform>
+      </created>
+    </headerData>
+  </header>
+  <options>
+    <fontOptions>
+      <font type="music">
+        <fontID>13</fontID>
+      </font>
+    </fontOptions>
+  </options>
+</finale>
+    )xml";
+
 constexpr static musxtest::string_view knownSmuflFontNameSpellings = R"xml(
 <?xml version="1.0" encoding="UTF-8"?>
 <finale>
@@ -206,11 +226,18 @@ TEST(FontTest, FontInfoNoName)
     EXPECT_FALSE(fontInfo->strikeout);
     EXPECT_FALSE(fontInfo->absolute);
     EXPECT_FALSE(fontInfo->hidden);
-    EXPECT_THROW(
-        // no fontName record for this font in xml, so this will throw
-        ASSERT_EQ(fontInfo->getName(), "Finale Maestro"),
-        std::invalid_argument
-    );
+    const auto missingFont = doc->getOthers()->get<others::FontDefinition>(SCORE_PARTID, 13);
+    ASSERT_TRUE(missingFont);
+    EXPECT_EQ(missingFont->charsetBank, others::FontDefinition::CharacterSetBank::MacOS);
+    EXPECT_EQ(fontInfo->getName(), "Missing Font (13)");
+}
+
+TEST(FontTest, MissingFontUsesWindowsHeaderPlatform)
+{
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(windowsMissingFont);
+    const auto missingFont = doc->getOthers()->get<others::FontDefinition>(SCORE_PARTID, 13);
+    ASSERT_TRUE(missingFont);
+    EXPECT_EQ(missingFont->charsetBank, others::FontDefinition::CharacterSetBank::Windows);
 }
 
 TEST(FontTest, DetectsUnknownDefaultSmuflFontFromMusicSymbols)

@@ -5,6 +5,7 @@ Guidance for coding agents and contributors working in this repository.
 ## Skills
 
 - `.agents/music-theory-sync/SKILL.md` — changes to `src/music_theory/music_theory.hpp` must be synchronized with mnxdom.
+- `.agents/skills/nested-namespaces/SKILL.md` — all C++ namespace declarations must use nested namespace blocks, not concatenated namespace syntax.
 
 ## Project Context
 

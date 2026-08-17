@@ -62,7 +62,7 @@ MUSX_XML_ENUM_MAPPING(StemDirection, {
 });
 
 #ifndef DOXYGEN_SHOULD_IGNORE_THIS
-void populateFontEfx(const XmlElementPtr& e, const std::shared_ptr<dom::FontInfo>& i)
+void populateFontEfx(ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<dom::FontInfo>& i)
 {
     for (auto efxChild = e->getFirstChildElement(); efxChild; efxChild = efxChild->getNextSibling()) {
         auto efxName = efxChild->getTagName();
@@ -91,52 +91,52 @@ using namespace musx::xml;
 using namespace ::musx::factory;
 
 MUSX_XML_ELEMENT_ARRAY(FontInfo, {
-    {"fontID", [](const XmlElementPtr& e, const std::shared_ptr<dom::FontInfo>& i) { i->fontId = e->getTextAs<Cmper>(); }},
-    {"fontSize", [](const XmlElementPtr& e, const std::shared_ptr<dom::FontInfo>& i) { i->fontSize = e->getTextAs<int>(); }},
+    {"fontID", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<dom::FontInfo>& i) { populateFontId(c, e, i->fontId); }},
+    {"fontSize", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<dom::FontInfo>& i) { i->fontSize = e->getTextAs<int>(); }},
     {"efx", factory::populateFontEfx },
 });
 
 MUSX_XML_ELEMENT_ARRAY(KeySignature, {
-    {"key", [](const XmlElementPtr& e, const std::shared_ptr<KeySignature>& i) { i->key = e->getTextAs<Cmper>(); }},
-    {"keyless", [](const XmlElementPtr& e, const std::shared_ptr<KeySignature>& i) { i->keyless = populateBoolean(e, i); }},
-    {"hideKeySigShowAccis", [](const XmlElementPtr& e, const std::shared_ptr<KeySignature>& i) { i->hideKeySigShowAccis = populateBoolean(e, i); }},
+    {"key", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<KeySignature>& i) { i->key = e->getTextAs<Cmper>(); }},
+    {"keyless", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<KeySignature>& i) { i->keyless = populateBoolean(c, e, i); }},
+    {"hideKeySigShowAccis", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<KeySignature>& i) { i->hideKeySigShowAccis = populateBoolean(c, e, i); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(OthersName, {
-    {"name", [](const XmlElementPtr& e, const std::shared_ptr<OthersName>& i) { i->name = e->getText(); }},
+    {"name", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<OthersName>& i) { i->name = e->getText(); }},
 });
 
 namespace others {
 
 MUSX_XML_ELEMENT_ARRAY(Enclosure, {
-    {"xAdd", [](const XmlElementPtr& e, const std::shared_ptr<Enclosure>& i) { i->xAdd = e->getTextAs<Evpu>(); }},
-    {"yAdd", [](const XmlElementPtr& e, const std::shared_ptr<Enclosure>& i) { i->yAdd = e->getTextAs<Evpu>(); }},
-    {"xMargin", [](const XmlElementPtr& e, const std::shared_ptr<Enclosure>& i) { i->xMargin = e->getTextAs<Evpu>(); }},
-    {"yMargin", [](const XmlElementPtr& e, const std::shared_ptr<Enclosure>& i) { i->yMargin = e->getTextAs<Evpu>(); }},
-    {"lineWidth", [](const XmlElementPtr& e, const std::shared_ptr<Enclosure>& i) { i->lineWidth = e->getTextAs<Efix>(); }},
-    {"sides", [](const XmlElementPtr& e, const std::shared_ptr<Enclosure>& i) { i->shape = toEnum<Enclosure::Shape>(e->getTextAs<uint8_t>()); }},
-    {"cornerRadius", [](const XmlElementPtr& e, const std::shared_ptr<Enclosure>& i) { i->cornerRadius = e->getTextAs<Efix>(); }},
-    {"fixedSize", [](const XmlElementPtr& e, const std::shared_ptr<Enclosure>& i) { i->fixedSize = populateBoolean(e, i); }},
-    {"equalAspect", [](const XmlElementPtr& e, const std::shared_ptr<Enclosure>& i) { i->equalAspect = populateBoolean(e, i); }},
-    {"notTall", [](const XmlElementPtr& e, const std::shared_ptr<Enclosure>& i) { i->notTall = populateBoolean(e, i); }},
-    {"opaque", [](const XmlElementPtr& e, const std::shared_ptr<Enclosure>& i) { i->opaque = populateBoolean(e, i); }},
-    {"roundCorners", [](const XmlElementPtr& e, const std::shared_ptr<Enclosure>& i) { i->roundCorners = populateBoolean(e, i); }},
+    {"xAdd", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<Enclosure>& i) { i->xAdd = e->getTextAs<Evpu>(); }},
+    {"yAdd", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<Enclosure>& i) { i->yAdd = e->getTextAs<Evpu>(); }},
+    {"xMargin", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<Enclosure>& i) { i->xMargin = e->getTextAs<Evpu>(); }},
+    {"yMargin", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<Enclosure>& i) { i->yMargin = e->getTextAs<Evpu>(); }},
+    {"lineWidth", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<Enclosure>& i) { i->lineWidth = e->getTextAs<Efix>(); }},
+    {"sides", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<Enclosure>& i) { i->shape = toEnum<Enclosure::Shape>(e->getTextAs<uint8_t>()); }},
+    {"cornerRadius", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<Enclosure>& i) { i->cornerRadius = e->getTextAs<Efix>(); }},
+    {"fixedSize", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<Enclosure>& i) { i->fixedSize = populateBoolean(c, e, i); }},
+    {"equalAspect", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<Enclosure>& i) { i->equalAspect = populateBoolean(c, e, i); }},
+    {"notTall", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<Enclosure>& i) { i->notTall = populateBoolean(c, e, i); }},
+    {"opaque", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<Enclosure>& i) { i->opaque = populateBoolean(c, e, i); }},
+    {"roundCorners", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<Enclosure>& i) { i->roundCorners = populateBoolean(c, e, i); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(EnigmaMusicRange, {
-    {"startMeas", [](const XmlElementPtr& e, const std::shared_ptr<EnigmaMusicRange>& i) { i->startMeas = e->getTextAs<MeasCmper>(); }},
-    {"startEdu", [](const XmlElementPtr& e, const std::shared_ptr<EnigmaMusicRange>& i) { i->startEdu = e->getTextAs<Edu>(); }},
-    {"endMeas", [](const XmlElementPtr& e, const std::shared_ptr<EnigmaMusicRange>& i) { i->endMeas = e->getTextAs<MeasCmper>(); }},
-    {"endEdu", [](const XmlElementPtr& e, const std::shared_ptr<EnigmaMusicRange>& i) { i->endEdu = e->getTextAs<Edu>(); }},
+    {"startMeas", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<EnigmaMusicRange>& i) { i->startMeas = e->getTextAs<MeasCmper>(); }},
+    {"startEdu", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<EnigmaMusicRange>& i) { i->startEdu = e->getTextAs<Edu>(); }},
+    {"endMeas", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<EnigmaMusicRange>& i) { i->endMeas = e->getTextAs<MeasCmper>(); }},
+    {"endEdu", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<EnigmaMusicRange>& i) { i->endEdu = e->getTextAs<Edu>(); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(NamePositioning, {
-    {"horzOff", [](const XmlElementPtr& e, const std::shared_ptr<NamePositioning>& i) { i->horzOff = e->getTextAs<Evpu>(); }},
-    {"vertOff", [](const XmlElementPtr& e, const std::shared_ptr<NamePositioning>& i) { i->vertOff = e->getTextAs<Evpu>(); }},
-    {"justify", [](const XmlElementPtr& e, const std::shared_ptr<NamePositioning>& i) { i->justify = toEnum<AlignJustify>(e); }},
-    {"indivPos", [](const XmlElementPtr& e, const std::shared_ptr<NamePositioning>& i) { i->indivPos = populateBoolean(e, i); }},
-    {"halign", [](const XmlElementPtr& e, const std::shared_ptr<NamePositioning>& i) { i->hAlign = toEnum<AlignJustify>(e); }},
-    {"expand", [](const XmlElementPtr& e, const std::shared_ptr<NamePositioning>& i) { i->expand = populateBoolean(e, i); }},
+    {"horzOff", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<NamePositioning>& i) { i->horzOff = e->getTextAs<Evpu>(); }},
+    {"vertOff", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<NamePositioning>& i) { i->vertOff = e->getTextAs<Evpu>(); }},
+    {"justify", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<NamePositioning>& i) { i->justify = toEnum<AlignJustify>(e); }},
+    {"indivPos", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<NamePositioning>& i) { i->indivPos = populateBoolean(c, e, i); }},
+    {"halign", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<NamePositioning>& i) { i->hAlign = toEnum<AlignJustify>(e); }},
+    {"expand", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<NamePositioning>& i) { i->expand = populateBoolean(c, e, i); }},
 });
 
 } // namespace others

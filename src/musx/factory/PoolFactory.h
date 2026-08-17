@@ -31,6 +31,7 @@
 #include "musx/dom/Document.h"
 #include "musx/dom/ObjectPool.h"
 #include "musx/xml/XmlInterface.h"
+#include "musx/factory/ConstructionContext.h"
 
 namespace musx {
 namespace factory {
@@ -85,7 +86,7 @@ public:
     /// @param document The document that owns the created objects.
     /// @param filter [optional] Restricts creation to the children it accepts. See @ref NodeFilter.
     [[nodiscard]] static dom::OptionsPoolPtr create(
-        const xml::XmlElementPtr& element, const dom::DocumentPtr& document,
+        ConstructionContext& context, const xml::XmlElementPtr& element, const dom::DocumentPtr& document,
         const NodeFilter& filter = {});
 };
 
@@ -97,7 +98,7 @@ public:
     /// @param document The document that owns the created objects.
     /// @param filter [optional] Restricts creation to the children it accepts. See @ref NodeFilter.
     [[nodiscard]] static dom::OthersPoolPtr create(
-        const xml::XmlElementPtr& element, const dom::DocumentPtr& document,
+        ConstructionContext& context, const xml::XmlElementPtr& element, const dom::DocumentPtr& document,
         const NodeFilter& filter = {});
 };
 
@@ -109,7 +110,7 @@ public:
     /// @param document The document that owns the created objects.
     /// @param filter [optional] Restricts creation to the children it accepts. See @ref NodeFilter.
     [[nodiscard]] static dom::DetailsPoolPtr create(
-        const xml::XmlElementPtr& element, const dom::DocumentPtr& document,
+        ConstructionContext& context, const xml::XmlElementPtr& element, const dom::DocumentPtr& document,
         const NodeFilter& filter = {});
 };
 
@@ -121,7 +122,7 @@ public:
     /// @param document The document that owns the created objects.
     /// @param filter [optional] Restricts creation to the children it accepts. See @ref NodeFilter.
     [[nodiscard]] static dom::EntryPoolPtr create(
-        const xml::XmlElementPtr& element, const dom::DocumentPtr& document,
+        ConstructionContext& context, const xml::XmlElementPtr& element, const dom::DocumentPtr& document,
         const NodeFilter& filter = {});
 };
 
@@ -133,7 +134,7 @@ public:
     /// @param document The document that owns the created objects.
     /// @param filter [optional] Restricts creation to the children it accepts. See @ref NodeFilter.
     [[nodiscard]] static dom::TextsPoolPtr create(
-        const xml::XmlElementPtr& element, const dom::DocumentPtr& document,
+        ConstructionContext& context, const xml::XmlElementPtr& element, const dom::DocumentPtr& document,
         const NodeFilter& filter = {});
 };
 

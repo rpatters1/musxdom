@@ -30,6 +30,7 @@
 #include "musx/dom/Entries.h"
 #include "musx/dom/Options.h"
 #include "musx/dom/Others.h"
+#include "musx/dom/ShapeDesigner.h"
 #include "musx/dom/Staff.h"
 #include "musx/dom/Texts.h"
 #include "musx/factory/HeaderFactory.h"
@@ -38,9 +39,37 @@
 
 namespace musx {
 namespace factory {
+
+void resolveFontDefinitions(const dom::DocumentPtr& document, const ConstructionContext& context)
+{
+    for (const auto fontId : context.referencedFontIds()) {
+        if (fontId == 0) continue;
+        if (document->getOthers()->get<dom::others::FontDefinition>(dom::SCORE_PARTID, fontId)) {
+            continue;
+        }
+        auto font = std::make_shared<dom::others::FontDefinition>(
+            document,
+            dom::SCORE_PARTID,
+            dom::EnigmaBase::ShareMode::All,
+            fontId);
+        if (document->getHeader()->created.platform == dom::header::Platform::Windows) {
+            font->charsetBank = dom::others::FontDefinition::CharacterSetBank::Windows;
+        }
+        font->name = "Missing Font (" + std::to_string(fontId) + ")";
+        document->getOthers()->add(dom::others::FontDefinition::XmlNodeName, font);
+    }
+}
+
 namespace {
 
-using Resolver = std::function<void(const dom::DocumentPtr&)>;
+using Resolver = std::function<void(const dom::DocumentPtr&, ConstructionContext&)>;
+
+template <typename BeamType>
+void resolveBeamAlterations(const dom::DocumentPtr& document)
+{
+    if (document->getDetails()->getArray<BeamType>(dom::SCORE_PARTID).empty()) return;
+    dom::details::BeamAlterations::calcAllActiveFlags<BeamType>(document);
+}
 
 void resolveClefOptions(const dom::DocumentPtr& document)
 {
@@ -51,6 +80,33 @@ void resolveClefOptions(const dom::DocumentPtr& document)
         if (def->useOwnFont && !def->font) {
             MUSX_INTEGRITY_ERROR("Use own font was specified for clef " + std::to_string(i)
                 + ", but no font was found in the xml.");
+        }
+    }
+}
+
+void resolveEntries(const dom::DocumentPtr& document)
+{
+    if (document->getEntries()->empty()) return;
+    dom::Entry::calcLocations(document);
+}
+
+template <typename ExpressionType>
+void resolveExpressions(const dom::DocumentPtr& document)
+{
+    for (const auto& expression : document->getOthers()->getArray<ExpressionType>(dom::SCORE_PARTID)) {
+        if (!expression->categoryId) continue;
+        auto category = document->getOthers()->get<dom::others::MarkingCategory>(
+            expression->getSourcePartId(), expression->categoryId);
+        if (!category) {
+            util::Logger::log(util::Logger::LogLevel::Info, "Marking category for expression "
+                + std::to_string(expression->getCmper()) + " does not exist.");
+            continue;
+        }
+        auto* mutableCategory = const_cast<dom::others::MarkingCategory*>(category.get());
+        if constexpr (std::is_same_v<ExpressionType, dom::others::ShapeExpressionDef>) {
+            mutableCategory->shapeExpressions.emplace(expression->getCmper(), expression);
+        } else {
+            mutableCategory->textExpressions.emplace(expression->getCmper(), expression);
         }
     }
 }
@@ -99,6 +155,14 @@ void resolveLayerAttributes(const dom::DocumentPtr& document)
     }
 }
 
+template <typename LyricsType>
+void resolveLyrics(const dom::DocumentPtr& document)
+{
+    for (const auto& text : document->getTexts()->getArray<LyricsType>()) {
+        const_cast<LyricsType*>(text.get())->createSyllableInfo(text);
+    }
+}
+
 void resolveMarkingCategories(const dom::DocumentPtr& document)
 {
     for (const auto& category : document->getOthers()->getArray<dom::others::MarkingCategory>(dom::SCORE_PARTID)) {
@@ -125,6 +189,12 @@ void resolveMultiStaffGroupIds(const dom::DocumentPtr& document)
     }
 }
 
+void resolveMultiStaffInstrumentGroups(const dom::DocumentPtr& document)
+{
+    if (document->getOthers()->getArray<dom::others::MultiStaffInstrumentGroup>(dom::SCORE_PARTID).empty()) return;
+    dom::others::MultiStaffInstrumentGroup::calcAllMultiStaffGroupIds(document);
+}
+
 void resolvePartDefinitions(const dom::DocumentPtr& document)
 {
     for (const auto& part : document->getOthers()->getArray<dom::others::PartDefinition>(dom::SCORE_PARTID)) {
@@ -135,23 +205,24 @@ void resolvePartDefinitions(const dom::DocumentPtr& document)
     }
 }
 
-template <typename ExpressionType>
-void resolveExpressions(const dom::DocumentPtr& document)
+void resolveShapeDefs(const dom::DocumentPtr& document, ConstructionContext& context)
 {
-    for (const auto& expression : document->getOthers()->getArray<ExpressionType>(dom::SCORE_PARTID)) {
-        if (!expression->categoryId) continue;
-        auto category = document->getOthers()->get<dom::others::MarkingCategory>(
-            expression->getSourcePartId(), expression->categoryId);
-        if (!category) {
-            util::Logger::log(util::Logger::LogLevel::Info, "Marking category for expression "
-                + std::to_string(expression->getCmper()) + " does not exist.");
-            continue;
-        }
-        auto* mutableCategory = const_cast<dom::others::MarkingCategory*>(category.get());
-        if constexpr (std::is_same_v<ExpressionType, dom::others::ShapeExpressionDef>) {
-            mutableCategory->shapeExpressions.emplace(expression->getCmper(), expression);
-        } else {
-            mutableCategory->textExpressions.emplace(expression->getCmper(), expression);
+    for (const auto& shape : document->getOthers()->getArray<dom::others::ShapeDef>(dom::SCORE_PARTID)) {
+        const auto instructions = document->getOthers()->get<dom::others::ShapeInstructionList>(
+            shape->getRequestedPartId(), shape->instructionList);
+        const auto data = document->getOthers()->get<dom::others::ShapeData>(
+            shape->getRequestedPartId(), shape->dataList);
+        if (!instructions || !data) continue;
+
+        std::size_t dataIndex = 0;
+        for (const auto& instruction : instructions->instructions) {
+            const auto dataCount = static_cast<std::size_t>(instruction->numData);
+            if (dataIndex + dataCount > data->values.size()) break;
+            if (instruction->type == dom::ShapeDefInstructionType::SetFont && dataCount >= 3) {
+                const auto fontId = dom::Cmper(data->values[dataIndex]);
+                context.registerFontId(fontId);
+            }
+            dataIndex += dataCount;
         }
     }
 }
@@ -163,24 +234,6 @@ void resolveStaff(const dom::DocumentPtr& document)
     if (document->getOthers()->getArray<dom::others::MultiStaffInstrumentGroup>(dom::SCORE_PARTID).empty()) {
         dom::others::Staff::calcAllAutoNumberValues(document);
     }
-}
-
-void resolveEntries(const dom::DocumentPtr& document)
-{
-    if (document->getEntries()->empty()) return;
-    dom::Entry::calcLocations(document);
-}
-
-void resolveStaffStyles(const dom::DocumentPtr& document)
-{
-    if (document->getOthers()->getArray<dom::others::StaffStyle>(dom::SCORE_PARTID).empty()) return;
-    dom::others::Staff::calcAllRuntimeValues<dom::others::StaffStyle>(document);
-}
-
-void resolveMultiStaffInstrumentGroups(const dom::DocumentPtr& document)
-{
-    if (document->getOthers()->getArray<dom::others::MultiStaffInstrumentGroup>(dom::SCORE_PARTID).empty()) return;
-    dom::others::MultiStaffInstrumentGroup::calcAllMultiStaffGroupIds(document);
 }
 
 void resolveStaffGroups(const dom::DocumentPtr& document)
@@ -207,52 +260,51 @@ void resolveStaffGroups(const dom::DocumentPtr& document)
     }
 }
 
-template <typename LyricsType>
-void resolveLyrics(const dom::DocumentPtr& document)
+void resolveStaffStyles(const dom::DocumentPtr& document)
 {
-    for (const auto& text : document->getTexts()->getArray<LyricsType>()) {
-        const_cast<LyricsType*>(text.get())->createSyllableInfo(text);
-    }
+    if (document->getOthers()->getArray<dom::others::StaffStyle>(dom::SCORE_PARTID).empty()) return;
+    dom::others::Staff::calcAllRuntimeValues<dom::others::StaffStyle>(document);
 }
 
-template <typename BeamType>
-void resolveBeamAlterations(const dom::DocumentPtr& document)
+template <typename Function>
+Resolver makeResolver(Function function)
 {
-    if (document->getDetails()->getArray<BeamType>(dom::SCORE_PARTID).empty()) return;
-    dom::details::BeamAlterations::calcAllActiveFlags<BeamType>(document);
+    return [function](const dom::DocumentPtr& document, ConstructionContext&) { function(document); };
 }
 
-const std::map<std::string_view, Resolver>& resolvers()
+const std::vector<std::pair<std::string_view, Resolver>>& resolvers()
 {
-    // std::map deliberately preserves the historic XML-tag ordering while running every pass.
-    static const std::map<std::string_view, Resolver> result = {
+    static const std::vector<std::pair<std::string_view, Resolver>> result = {
         {dom::details::BeamAlterationsDownStem::XmlNodeName,
-            resolveBeamAlterations<dom::details::BeamAlterationsDownStem>},
+            makeResolver(resolveBeamAlterations<dom::details::BeamAlterationsDownStem>)},
         {dom::details::BeamAlterationsUpStem::XmlNodeName,
-            resolveBeamAlterations<dom::details::BeamAlterationsUpStem>},
-        {dom::options::ClefOptions::XmlNodeName, resolveClefOptions},
-        {dom::Entry::XmlNodeName, resolveEntries},
-        {dom::others::KeyMapArray::XmlNodeName, resolveKeyMapArrays},
-        {dom::others::LayerAttributes::XmlNodeName, resolveLayerAttributes},
-        {dom::texts::LyricsChorus::XmlNodeName, resolveLyrics<dom::texts::LyricsChorus>},
-        {dom::texts::LyricsSection::XmlNodeName, resolveLyrics<dom::texts::LyricsSection>},
-        {dom::texts::LyricsVerse::XmlNodeName, resolveLyrics<dom::texts::LyricsVerse>},
-        {dom::others::MarkingCategory::XmlNodeName, resolveMarkingCategories},
-        {dom::others::Measure::XmlNodeName, dom::others::Measure::checkMeasureCmperSequence},
-        {dom::others::MultiStaffGroupId::XmlNodeName, resolveMultiStaffGroupIds},
+            makeResolver(resolveBeamAlterations<dom::details::BeamAlterationsUpStem>)},
+        {dom::options::ClefOptions::XmlNodeName, makeResolver(resolveClefOptions)},
+        {dom::Entry::XmlNodeName, makeResolver(resolveEntries)},
+        {dom::others::KeyMapArray::XmlNodeName, makeResolver(resolveKeyMapArrays)},
+        {dom::others::LayerAttributes::XmlNodeName, makeResolver(resolveLayerAttributes)},
+        {dom::texts::LyricsChorus::XmlNodeName, makeResolver(resolveLyrics<dom::texts::LyricsChorus>)},
+        {dom::texts::LyricsSection::XmlNodeName, makeResolver(resolveLyrics<dom::texts::LyricsSection>)},
+        {dom::texts::LyricsVerse::XmlNodeName, makeResolver(resolveLyrics<dom::texts::LyricsVerse>)},
+        {dom::others::MarkingCategory::XmlNodeName, makeResolver(resolveMarkingCategories)},
+        {dom::others::Measure::XmlNodeName, makeResolver(dom::others::Measure::checkMeasureCmperSequence)},
+        {dom::others::MultiStaffGroupId::XmlNodeName, makeResolver(resolveMultiStaffGroupIds)},
         {dom::others::MultiStaffInstrumentGroup::XmlNodeName,
-            resolveMultiStaffInstrumentGroups},
-        {dom::others::Page::XmlNodeName, dom::others::Page::calcSystemInfo},
-        {dom::others::PartDefinition::XmlNodeName, resolvePartDefinitions},
+            makeResolver(resolveMultiStaffInstrumentGroups)},
+        {dom::others::Page::XmlNodeName, makeResolver(dom::others::Page::calcSystemInfo)},
+        {dom::others::PartDefinition::XmlNodeName, makeResolver(resolvePartDefinitions)},
         {dom::details::SecondaryBeamAlterationsDownStem::XmlNodeName,
-            resolveBeamAlterations<dom::details::SecondaryBeamAlterationsDownStem>},
+            makeResolver(resolveBeamAlterations<dom::details::SecondaryBeamAlterationsDownStem>)},
         {dom::details::SecondaryBeamAlterationsUpStem::XmlNodeName,
-            resolveBeamAlterations<dom::details::SecondaryBeamAlterationsUpStem>},
-        {dom::others::ShapeExpressionDef::XmlNodeName, resolveExpressions<dom::others::ShapeExpressionDef>},
-        {dom::others::Staff::XmlNodeName, resolveStaff},
-        {dom::details::StaffGroup::XmlNodeName, resolveStaffGroups},
-        {dom::others::StaffStyle::XmlNodeName, resolveStaffStyles},
-        {dom::others::TextExpressionDef::XmlNodeName, resolveExpressions<dom::others::TextExpressionDef>}
+            makeResolver(resolveBeamAlterations<dom::details::SecondaryBeamAlterationsUpStem>)},
+        {dom::others::ShapeDef::XmlNodeName, resolveShapeDefs},
+        {dom::others::ShapeExpressionDef::XmlNodeName, makeResolver(resolveExpressions<dom::others::ShapeExpressionDef>)},
+        {dom::others::Staff::XmlNodeName, makeResolver(resolveStaff)},
+        {dom::details::StaffGroup::XmlNodeName, makeResolver(resolveStaffGroups)},
+        {dom::others::StaffStyle::XmlNodeName, makeResolver(resolveStaffStyles)},
+        {dom::others::TextExpressionDef::XmlNodeName, makeResolver(resolveExpressions<dom::others::TextExpressionDef>)},
+        // Keep resolveFontDefinitions last so every resolver has registered its font references first.
+        {dom::others::FontDefinition::XmlNodeName, resolveFontDefinitions}
     };
     return result;
 }
@@ -296,7 +348,7 @@ DocumentFactory::DocumentPtr DocumentFactory::ConstructionSession::finish() &&
     }
     m_state = State::Consumed;
     auto document = std::move(m_document);
-    DocumentFactory::finalize(document);
+    DocumentFactory::finalize(document, m_context);
     return document;
 }
 
@@ -309,21 +361,21 @@ DocumentFactory::DocumentPtr DocumentFactory::createFromXmlRoot(
         if (element->getTagName() == "header") {
             document->getHeader() = HeaderFactory::create(element);
         } else if (element->getTagName() == "options") {
-            document->getOptions() = OptionsFactory::create(element, document);
+            document->getOptions() = OptionsFactory::create(session.getConstructionContext(), element, document);
         } else if (element->getTagName() == "others") {
-            document->getOthers() = OthersFactory::create(element, document);
+            document->getOthers() = OthersFactory::create(session.getConstructionContext(), element, document);
         } else if (element->getTagName() == "details") {
-            document->getDetails() = DetailsFactory::create(element, document);
+            document->getDetails() = DetailsFactory::create(session.getConstructionContext(), element, document);
         } else if (element->getTagName() == "entries") {
-            document->getEntries() = EntryFactory::create(element, document);
+            document->getEntries() = EntryFactory::create(session.getConstructionContext(), element, document);
         } else if (element->getTagName() == "texts") {
-            document->getTexts() = TextsFactory::create(element, document);
+            document->getTexts() = TextsFactory::create(session.getConstructionContext(), element, document);
         }
     }
     return std::move(session).finish();
 }
 
-void DocumentFactory::finalize(const DocumentPtr& document)
+void DocumentFactory::finalize(const DocumentPtr& document, ConstructionContext& context)
 {
     document->getOptions()->integrityCheckAll();
     document->getOthers()->integrityCheckAll();
@@ -336,7 +388,7 @@ void DocumentFactory::finalize(const DocumentPtr& document)
 #endif
     for (const auto& [key, resolver] : resolvers()) {
         (void)key;
-        resolver(document);
+        resolver(document, context);
     }
     document->m_instruments = document->createInstrumentMap(dom::SCORE_PARTID);
     document->createRehearsalMarkMap();
