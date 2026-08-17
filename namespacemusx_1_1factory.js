@@ -1,5 +1,6 @@
 var namespacemusx_1_1factory =
 [
+    [ "ConstructionContext", "classmusx_1_1factory_1_1ConstructionContext.html", "classmusx_1_1factory_1_1ConstructionContext" ],
     [ "DetailsFactory", "classmusx_1_1factory_1_1DetailsFactory.html", null ],
     [ "DocumentFactory", "classmusx_1_1factory_1_1DocumentFactory.html", "classmusx_1_1factory_1_1DocumentFactory" ],
     [ "EntryFactory", "classmusx_1_1factory_1_1EntryFactory.html", null ],

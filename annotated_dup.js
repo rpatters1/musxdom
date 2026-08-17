@@ -283,6 +283,7 @@ var annotated_dup =
         [ "TimeSignature", "classmusx_1_1dom_1_1TimeSignature.html", "classmusx_1_1dom_1_1TimeSignature" ]
       ] ],
       [ "factory", "namespacemusx_1_1factory.html", [
+        [ "ConstructionContext", "classmusx_1_1factory_1_1ConstructionContext.html", "classmusx_1_1factory_1_1ConstructionContext" ],
         [ "DetailsFactory", "classmusx_1_1factory_1_1DetailsFactory.html", null ],
         [ "DocumentFactory", "classmusx_1_1factory_1_1DocumentFactory.html", "classmusx_1_1factory_1_1DocumentFactory" ],
         [ "EntryFactory", "classmusx_1_1factory_1_1EntryFactory.html", null ],

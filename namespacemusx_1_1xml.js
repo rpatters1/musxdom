@@ -9,6 +9,6 @@ var namespacemusx_1_1xml =
     [ "load_error", "classmusx_1_1xml_1_1load__error.html", null ],
     [ "XmlElementArray", "namespacemusx_1_1xml.html#a39bb6e9f7fd9e4cdc090566309a8dfe8", null ],
     [ "XmlElementDescriptor", "namespacemusx_1_1xml.html#a0e5401fa2c29d3ec62427c2b1dd9fab4", null ],
-    [ "XmlElementPopulator", "namespacemusx_1_1xml.html#a79a1be853e423d5782896f9a9c44d9af", null ],
+    [ "XmlElementPopulator", "namespacemusx_1_1xml.html#a43316a6c60258189c559af36e9bcfa15", null ],
     [ "XmlElementPtr", "namespacemusx_1_1xml.html#a54b9e383b0a54d0c3ba00bb6c9ceff9e", null ]
 ];

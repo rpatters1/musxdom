@@ -16,6 +16,7 @@ var hierarchy =
     [ "musx::dom::others::TimeCompositeUpper::CompositeItem", "classmusx_1_1dom_1_1others_1_1TimeCompositeUpper_1_1CompositeItem.html", null ],
     [ "musx::dom::options::SmartShapeOptions::ConnectionStyle", "structmusx_1_1dom_1_1options_1_1SmartShapeOptions_1_1ConnectionStyle.html", null ],
     [ "musx::dom::options::TieOptions::ConnectStyle", "structmusx_1_1dom_1_1options_1_1TieOptions_1_1ConnectStyle.html", null ],
+    [ "musx::factory::ConstructionContext", "classmusx_1_1factory_1_1ConstructionContext.html", null ],
     [ "musx::factory::DocumentFactory::ConstructionOptions", "structmusx_1_1factory_1_1DocumentFactory_1_1ConstructionOptions.html", null ],
     [ "musx::factory::DocumentFactory::ConstructionSession", "classmusx_1_1factory_1_1DocumentFactory_1_1ConstructionSession.html", null ],
     [ "musx::util::Tie::ContourControlPoint", "structmusx_1_1util_1_1Tie_1_1ContourControlPoint.html", null ],
