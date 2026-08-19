@@ -31,10 +31,13 @@ using namespace ::musx::xml;
 using namespace ::musx::dom::details;
 
 extern template const XmlEnumMappingElement<AlignJustify> XmlEnumMapping<AlignJustify>::mapping;
+extern template const XmlEnumMappingElement<options::BeamOptions::FlattenStyle> XmlEnumMapping<options::BeamOptions::FlattenStyle>::mapping;
 extern template const XmlEnumMappingElement<ShowClefMode> XmlEnumMapping<ShowClefMode>::mapping;
 extern template const XmlEnumMappingElement<others::Measure::BarlineType> XmlEnumMapping<others::Measure::BarlineType>::mapping;
 extern template const XmlEnumMappingElement<others::PageGraphicAssign::PageAssignType> XmlEnumMapping<others::PageGraphicAssign::PageAssignType>::mapping;
-extern template const XmlEnumMappingElement<options::BeamOptions::FlattenStyle> XmlEnumMapping<options::BeamOptions::FlattenStyle>::mapping;
+extern template const XmlEnumMappingElement<others::PageGraphicAssign::PositionFrom> XmlEnumMapping<others::PageGraphicAssign::PositionFrom>::mapping;
+extern template const XmlEnumMappingElement<options::TextOptions::HorizontalAlignment> XmlEnumMapping<options::TextOptions::HorizontalAlignment>::mapping;
+extern template const XmlEnumMappingElement<options::TextOptions::VerticalAlignment> XmlEnumMapping<options::TextOptions::VerticalAlignment>::mapping;
 extern template const XmlEnumMappingElement<options::TupletOptions::AutoBracketStyle> XmlEnumMapping<options::TupletOptions::AutoBracketStyle>::mapping;
 extern template const XmlEnumMappingElement<options::TupletOptions::BracketStyle> XmlEnumMapping<options::TupletOptions::BracketStyle>::mapping;
 extern template const XmlEnumMappingElement<options::TupletOptions::NumberStyle> XmlEnumMapping<options::TupletOptions::NumberStyle>::mapping;
@@ -351,6 +354,10 @@ MUSX_XML_ELEMENT_ARRAY(MeasureGraphicAssign, {
         }
     },
     {"displayHidden", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<MeasureGraphicAssign>& i) { i->hidden = populateBoolean(c, e, i); }},
+    {"halign", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<MeasureGraphicAssign>& i) { i->hAlign = toEnum<MeasureGraphicAssign::HorizontalAlignment>(e); }},
+    {"valign", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<MeasureGraphicAssign>& i) { i->vAlign = toEnum<MeasureGraphicAssign::VerticalAlignment>(e); }},
+    {"posFrom", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<MeasureGraphicAssign>& i) { i->posFrom = toEnum<MeasureGraphicAssign::PositionFrom>(e); }},
+    {"fixedPerc", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<MeasureGraphicAssign>& i) { i->fixedPerc = populateBoolean(c, e, i); }},
     {"savedRecord", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<MeasureGraphicAssign>& i) { i->savedRecord = populateBoolean(c, e, i); }},
     {"origWidth", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<MeasureGraphicAssign>& i) { i->origWidth = e->getTextAs<Evpu>(); }},
     {"origHeight", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<MeasureGraphicAssign>& i) { i->origHeight = e->getTextAs<Evpu>(); }},

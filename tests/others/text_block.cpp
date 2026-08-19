@@ -48,7 +48,7 @@ TEST(TextBlockTest, PopulateFields)
     </textBlock>
     <textBlock cmper="33">
       <textID>221</textID>
-      <lineSpacingPercent>100</lineSpacingPercent>
+      <lineSpacingEvpu>78</lineSpacingEvpu>
       <justify>forcedFull</justify>
       <newPos36/>
       <showShape/>
@@ -68,6 +68,7 @@ TEST(TextBlockTest, PopulateFields)
     ASSERT_TRUE(textBlock1) << "TextBlock 32 not found but does exist";
     EXPECT_EQ(textBlock1->textId, 31);
     EXPECT_EQ(textBlock1->lineSpacingPercentage, 100);
+    EXPECT_FALSE(textBlock1->lineSpacingEvpu.has_value());
     EXPECT_EQ(textBlock1->justify, others::TextBlock::TextJustify::Full);
     EXPECT_TRUE(textBlock1->newPos36);
     EXPECT_TRUE(textBlock1->showShape);
@@ -83,7 +84,8 @@ TEST(TextBlockTest, PopulateFields)
     auto textBlock2 = others->get<others::TextBlock>(SCORE_PARTID, 33);
     ASSERT_TRUE(textBlock2) << "TextBlock 33 not found but does exist";
     EXPECT_EQ(textBlock2->textId, 221);
-    EXPECT_EQ(textBlock2->lineSpacingPercentage, 100);
+    EXPECT_FALSE(textBlock2->lineSpacingPercentage.has_value());
+    EXPECT_EQ(textBlock2->lineSpacingEvpu, 78);
     EXPECT_EQ(textBlock2->justify, others::TextBlock::TextJustify::ForcedFull);
     EXPECT_TRUE(textBlock2->newPos36);
     EXPECT_TRUE(textBlock2->showShape);

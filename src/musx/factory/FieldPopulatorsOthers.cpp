@@ -1568,6 +1568,7 @@ MUSX_XML_ELEMENT_ARRAY(TextBlock, {
     {"width", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<TextBlock>& i) { i->width = e->getTextAs<Evpu>(); }},
     {"height", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<TextBlock>& i) { i->height = e->getTextAs<Evpu>(); }},
     {"lineSpacingPercent", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<TextBlock>& i) { i->lineSpacingPercentage = e->getTextAs<int>(); }},
+    {"lineSpacingEvpu", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<TextBlock>& i) { i->lineSpacingEvpu = e->getTextAs<Evpu>(); }},
     {"xAdd", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<TextBlock>& i) { i->xAdd = e->getTextAs<Evpu>(); }},
     {"yAdd", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<TextBlock>& i) { i->yAdd = e->getTextAs<Evpu>(); }},
     {"justify", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<TextBlock>& i) { i->justify = toEnum<TextBlock::TextJustify>(e); }},

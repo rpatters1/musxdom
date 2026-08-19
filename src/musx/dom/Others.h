@@ -3026,7 +3026,12 @@ public:
     Cmper shapeId{};                   ///< If non-zero, the Cmper of the custom frame shape. (xml tag is `<shapeID>`)
     Evpu width{};                      ///< Width of standard frame. If zero, the width expands to fit the text.
     Evpu height{};                     ///< Height of standard frame. If zero, the height expands to fit the text.
-    int lineSpacingPercentage{};       ///< Line spacing percentage.
+    /// @brief "Line Spacing: Automatic" percent value.
+    ///
+    /// Line spacing is either a percent or an absolute distance, and the xml carries whichever applies.
+    /// Exactly one of this and #lineSpacingEvpu has a value once #integrityCheck has run.
+    std::optional<int> lineSpacingPercentage;
+    std::optional<Evpu> lineSpacingEvpu;  ///< "Line Spacing: Set To" absolute value. (See #lineSpacingPercentage.)
     Evpu xAdd{};                       ///< Horizontal offset from handle.
     Evpu yAdd{};                       ///< Vertical offset from handle.
     TextJustify justify{};             ///< Justification (left, center, right, full, force full)
@@ -3053,6 +3058,21 @@ public:
     /** @brief return displayable text with Enigma tags removed */
     static std::string getText(const DocumentPtr& document, const Cmper textId, Cmper forPartId, bool trimTags = false,
         util::EnigmaString::AccidentalStyle accidentalStyle = util::EnigmaString::AccidentalStyle::Ascii);
+
+    void integrityCheck(const std::shared_ptr<EnigmaBase>& ptrToThis) override
+    {
+        this->OptionsBase::integrityCheck(ptrToThis);
+        if (lineSpacingPercentage && lineSpacingEvpu) {
+            lineSpacingEvpu.reset();
+            MUSX_INTEGRITY_ERROR("Text options specify both a percent and an absolute line spacing. "
+                "The absolute value was discarded.");
+        } else if (!lineSpacingPercentage && !lineSpacingEvpu) {
+            lineSpacingPercentage = options::TextOptions::DEFAULT_LINE_SPACING_PERCENT;
+            util::Logger::log(util::Logger::LogLevel::Verbose,
+                "Text block specifies no line spacing. "
+                + std::to_string(options::TextOptions::DEFAULT_LINE_SPACING_PERCENT) + " percent was assumed.");
+        }
+    }
 
     constexpr static std::string_view XmlNodeName = "textBlock"; ///< The XML node name for this type.
     static const xml::XmlElementArray<TextBlock>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.

@@ -773,6 +773,7 @@ TEST(MeasureExprAssign, RawTextCtxResolvesMeasureNumberRehearsalAndExpressionDef
     </measSpec>
     <textBlock cmper="1">
       <textID>1</textID>
+      <lineSpacingPercent>100</lineSpacingPercent>
       <textTag>expression</textTag>
     </textBlock>
     <textExprDef cmper="1">

@@ -1501,9 +1501,9 @@ enum class AccidentalInsertSymbolType
  */
 class TextOptions : public OptionsBase
 {
+public:
     static constexpr int DEFAULT_LINE_SPACING_PERCENT = 100;
 
-public:
     /// @brief Constructor
     explicit TextOptions(const DocumentWeakPtr& document, Cmper partId = 0, ShareMode shareMode = ShareMode::All)
         : OptionsBase(document, partId, shareMode)
