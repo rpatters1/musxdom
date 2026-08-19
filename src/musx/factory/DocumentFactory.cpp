@@ -57,6 +57,8 @@ void resolveFontDefinitions(const dom::DocumentPtr& document, const Construction
         }
         font->name = "Missing Font (" + std::to_string(fontId) + ")";
         document->getOthers()->add(dom::others::FontDefinition::XmlNodeName, font);
+        util::Logger::log(util::Logger::LogLevel::Info, "Font " + std::to_string(fontId)
+            + " is referenced but not defined; it will show as \"" + font->name + "\".");
     }
 }
 
