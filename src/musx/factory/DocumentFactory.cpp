@@ -25,6 +25,7 @@
 #include <functional>
 #include <map>
 #include <stdexcept>
+#include <string>
 
 #include "musx/dom/Details.h"
 #include "musx/dom/Entries.h"
@@ -147,10 +148,14 @@ void resolveLayerAttributes(const dom::DocumentPtr& document)
 {
     const auto layers = document->getOthers()->getArray<dom::others::LayerAttributes>(dom::SCORE_PARTID);
     if (layers.empty()) return;
-    if (layers.size() != 4) {
-        MUSX_INTEGRITY_ERROR("Expected exactly 4 <layerAtts> elements.");
+    if (layers.size() < dom::MAX_LAYERS) {
+        MUSX_INTEGRITY_ERROR("Expected at least " + std::to_string(dom::MAX_LAYERS)
+            + " <layerAtts> elements. Got " + std::to_string(layers.size()) + ".");
+    } else if (layers.size() > dom::MAX_LAYERS) {
+        util::Logger::log(util::Logger::LogLevel::Verbose,
+            "Ignoring " + std::to_string(layers.size() - dom::MAX_LAYERS) + " extra <layerAtts> elements.");
     }
-    for (size_t i = 0; i < layers.size(); ++i) {
+    for (size_t i = 0; i < dom::MAX_LAYERS; ++i) {
         if (layers[i]->getCmper() != i) {
             MUSX_INTEGRITY_ERROR("Expected <layerAtts> elements to have cmper values 0, 1, 2, 3 in order.");
         }

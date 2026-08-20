@@ -158,9 +158,8 @@ TEST(LayerAttributesTest, WrongNumberOfLayers)
 </finale>
     )xml";
 
-    EXPECT_THROW(
-        auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml2),
-        integrity_error
+    EXPECT_NO_THROW(
+        auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml2)
     );
 }
 

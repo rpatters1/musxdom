@@ -1474,6 +1474,7 @@ public:
     Evpu yOffset{};                                 ///< Vertical offset for the measure number. (xml node is `<y1add>`)
     Evpu xOffset2{};                                ///< Horizontal offset for the measure number range under a multimeasure rest (Page View only). (xml node is `<x2add>`)
     ForceVisibility forceVisibility{};              ///< Force-visibility behavior. (xml node is `<forceHide>`)
+    bool isAlternateNumber{};                       ///< Whether this is an alternate number, such as a boxed number. (xml node is `<isAltNum>`)
     bool useEnclosure{};                            ///< Whether to use an enclosure for this number. (xml node is `<useEncl>`)
     std::shared_ptr<others::Enclosure> enclosure;   ///< Optional enclosure settings. (xml node is `<encl>`)
 

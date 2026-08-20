@@ -371,6 +371,7 @@ MUSX_XML_ELEMENT_ARRAY(MeasureNumberIndividualPositioning, {
     {"x2add", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<MeasureNumberIndividualPositioning>& i) { i->xOffset2 = e->getTextAs<Evpu>(); }},
     {"forceHide", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<MeasureNumberIndividualPositioning>& i)
         { i->forceVisibility = toEnum<MeasureNumberIndividualPositioning::ForceVisibility>(e); }},
+    {"isAltNum", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<MeasureNumberIndividualPositioning>& i) { i->isAlternateNumber = populateBoolean(c, e, i); }},
     {"useEncl", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<MeasureNumberIndividualPositioning>& i) { i->useEnclosure = populateBoolean(c, e, i); }},
     {"encl", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<MeasureNumberIndividualPositioning>& i)
         { i->enclosure = FieldPopulator<others::Enclosure>::populateExistingOrCreate(c, e, i->enclosure, i->getDocument()); }}

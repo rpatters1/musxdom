@@ -42,6 +42,7 @@ TEST(ChordOptionsTest, PropertiesTest)
       <fretStyleID>2</fretStyleID>
       <fretInstID>1</fretInstID>
       <multiFretItemsPerStr/>
+      <useFretFont/>
       <italicizeCapoChords/>
       <chordAlignment>center</chordAlignment>
       <chordStyle>solfeggio</chordStyle>
@@ -69,6 +70,7 @@ TEST(ChordOptionsTest, PropertiesTest)
     EXPECT_EQ(chordOptions->fretStyleId, 2);
     EXPECT_EQ(chordOptions->fretInstId, 1);
     EXPECT_TRUE(chordOptions->multiFretItemsPerStr);
+    EXPECT_TRUE(chordOptions->useFretboardFont);
     EXPECT_TRUE(chordOptions->italicizeCapoChords);
     EXPECT_EQ(chordOptions->chordAlignment, options::ChordOptions::ChordAlignment::Center);
     EXPECT_EQ(chordOptions->chordStyle, options::ChordOptions::ChordStyle::Solfeggio);
@@ -116,6 +118,7 @@ TEST(ChordOptionsTest, PropertiesDefaultTest)
     EXPECT_EQ(chordOptions->fretStyleId, 2);
     EXPECT_EQ(chordOptions->fretInstId, 1);
     EXPECT_TRUE(chordOptions->multiFretItemsPerStr);
+    EXPECT_FALSE(chordOptions->useFretboardFont);
     EXPECT_TRUE(chordOptions->italicizeCapoChords);
     EXPECT_EQ(chordOptions->chordAlignment, options::ChordOptions::ChordAlignment::Left);
     EXPECT_EQ(chordOptions->chordStyle, options::ChordOptions::ChordStyle::Standard);

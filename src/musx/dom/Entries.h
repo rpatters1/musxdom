@@ -504,10 +504,8 @@ public:
         if (size_t(numNotes) != notes.size()) {
             MUSX_INTEGRITY_ERROR("Entry " + std::to_string(m_entnum) + " has an incorrect number of notes.");
         }
-        if (notes.empty() && !floatRest && isNote) {
-            MUSX_INTEGRITY_ERROR("Entry " + std::to_string(m_entnum)
-                + " has an invalid rest representation: the entry has no notes but is not floatRest.");
-        }
+        // Finale allows both zero-note non-floating rests and even
+        // zero-note non-rests, so there is no check against zero notes here.
     }
 
     /// @brief Calculates the locations for all entries in the document. This function is normally only called by the document factory.
@@ -753,12 +751,13 @@ public:
     /// @return A std::pair<int, int> with the first being the top staff position and the second being the bottom staff position.
     [[nodiscard]] std::pair<int, int> calcTopBottomStaffPositions() const;
 
-    /// @brief Calculates the staff position for a rest with no note data.
-    /// @details This applies to floating rests and to non-floating rests with no note data. A non-floating rest with note data
-    /// gets its staff position from its RESTID note through #NoteInfoPtr::calcNotePropertiesInView.
-    /// @return The staff position used to place the rest.
+    /// @brief Calculates the staff position for an entry with no note data.
+    /// @details Empty non-rest entries are positioned on the staff reference line. For rests, this applies the floating-rest
+    /// and default-rest positioning rules. A rest with note data gets its staff position from its RESTID note through
+    /// #NoteInfoPtr::calcNotePropertiesInView.
+    /// @return The staff position used to place the entry.
     /// @throw std::logic_error if the entry has note data, or if required positioning data is unavailable.
-    [[nodiscard]] int calcZeroNoteRestStaffPosition() const;
+    [[nodiscard]] int calcZeroNotePosition() const;
 
     /// @brief Calculates the top and bottom EVPU extent of the entry's approximate visual footprint.
     /// @details This is a layout-free approximation intended for expression placement. The returned values are not note positions;

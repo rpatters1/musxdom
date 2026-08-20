@@ -32,6 +32,7 @@ using namespace ::musx::dom::smartshape;
 using namespace ::musx::dom::others;
 
 extern template const XmlEnumMappingElement<AlignJustify> XmlEnumMapping<AlignJustify>::mapping;
+extern template const XmlEnumMappingElement<ShapeDirection> XmlEnumMapping<ShapeDirection>::mapping;
 extern template const XmlEnumMappingElement<LyricTextType> XmlEnumMapping<LyricTextType>::mapping;
 extern template const XmlEnumMappingElement<ShowClefMode> XmlEnumMapping<ShowClefMode>::mapping;
 extern template const XmlEnumMappingElement<StemDirection> XmlEnumMapping<StemDirection>::mapping;
@@ -1221,6 +1222,7 @@ MUSX_XML_ELEMENT_ARRAY(SmartShape, {
     {"fullCtlPtAdj", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<SmartShape>& i)
         { i->fullCtlPtAdj = FieldPopulator<smartshape::ControlPointAdjustment>::populateExistingOrCreate(c, e, i->fullCtlPtAdj, i); }},
     {"hidden", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<SmartShape>& i) { i->hidden = populateBoolean(c, e, i); }},
+    {"dir", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<SmartShape>& i) { i->direction = toEnum<ShapeDirection>(e); }},
     {"startNoteID", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<SmartShape>& i) { i->startNoteId= e->getTextAs<NoteNumber>(); }},
     {"endNoteID", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<SmartShape>& i) { i->endNoteId = e->getTextAs<NoteNumber>(); }},
     {"lineStyleID", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<SmartShape>& i) { i->lineStyleId = e->getTextAs<Cmper>(); }},

@@ -243,6 +243,7 @@ public:
     Cmper fretStyleId{};             ///< Default @ref others::FretboardStyle ID.
     Cmper fretInstId{};              ///< Default @ref others::FretInstrument ID.
     bool multiFretItemsPerStr{};     ///< Allow multiple fret items per string.
+    bool useFretboardFont{};         ///< Default value for whether to use the fretboard font rather that group/style (xml node is `<useFretFont>`)
     bool italicizeCapoChords{};      ///< Italicize capo chords.
     ChordAlignment chordAlignment{}; ///< Horizontal alignment for chord symbols.
     ChordStyle chordStyle{};         ///< Style of chord spelling.
@@ -1206,15 +1207,6 @@ public:
     explicit SmartShapeOptions(const DocumentWeakPtr& document, Cmper partId = 0, ShareMode shareMode = ShareMode::All)
         : OptionsBase(document, partId, shareMode) {}
 
-    /// @enum DefaultDirection
-    /// @brief Default slur direction
-    enum class DefaultDirection
-    {
-        Automatic,
-        Over,
-        Under
-    };
-
     /// @enum ConnectionIndex
     /// @brief Connection index values
     enum class ConnectionIndex
@@ -1336,7 +1328,7 @@ public:
     Evpu smartDashOn{};                      ///< "Smart Dash On Length"
     Evpu smartDashOff{};                     ///< "Smart Dash Off Length"
     bool crescHorizontal{};                    ///< "Horizontal Crescendo"
-    DefaultDirection direction{};           ///< Default slur direction
+    ShapeDirection direction{};              ///< Default slur direction
     Evpu slurThicknessCp1X{};                ///< "Slur Thickness Control Point 1 X"
     Evpu slurThicknessCp1Y{};                ///< "Slur Thickness Control Point 1 Y"
     Evpu slurThicknessCp2X{};                ///< "Slur Thickness Control Point 2 X"
@@ -1630,7 +1622,8 @@ public:
     {
         OutsideInside,          ///< Legacy Finale 3.7 behavior (the default)
         StemReversal,           ///< Split at stem reversal point.
-        SplitEvenly             ///< Split evenly
+        SplitEvenly,            ///< Split evenly
+        Unknown                 ///< Unknown (seen sometimes in upgraded legacy files)
     };
 
     /**

@@ -19,6 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+#include "musx/dom/Options.h"
 #include "musx/musx.h"
 #include "musx/factory/FieldPopulatorsOptions.h"
 
@@ -32,6 +33,7 @@ using namespace ::musx::dom::options;
 
 extern template const XmlEnumMappingElement<AlignJustify> XmlEnumMapping<AlignJustify>::mapping;
 extern template const XmlEnumMappingElement<DateFormat> XmlEnumMapping<DateFormat>::mapping;
+extern template const XmlEnumMappingElement<ShapeDirection> XmlEnumMapping<ShapeDirection>::mapping;
 
 MUSX_XML_ENUM_MAPPING(BeamOptions::FlattenStyle, {
     {"onEndNotes", BeamOptions::FlattenStyle::OnEndNotes},
@@ -179,12 +181,6 @@ MUSX_XML_ENUM_MAPPING(RepeatOptions::WingStyle, {
     {"doubleLine", RepeatOptions::WingStyle::DoubleLine}
 });
 
-MUSX_XML_ENUM_MAPPING(SmartShapeOptions::DefaultDirection, {
-    {"automatic", SmartShapeOptions::DefaultDirection::Automatic},
-    {"over", SmartShapeOptions::DefaultDirection::Over},
-    {"under", SmartShapeOptions::DefaultDirection::Under},
-});
-
 MUSX_XML_ENUM_MAPPING(SmartShapeOptions::ConnectionIndex, {
     {"headRightTop", SmartShapeOptions::ConnectionIndex::HeadRightTop},
     {"headLeftTop", SmartShapeOptions::ConnectionIndex::HeadLeftTop},
@@ -305,8 +301,10 @@ MUSX_XML_ENUM_MAPPING(TieOptions::SecondsPlacement, {
 });
 
 MUSX_XML_ENUM_MAPPING(TieOptions::ChordTieDirType, {
+    // {"outsideInside", TieOptions::ChordTieDirType::OutsideInside}, // default value: not know to occur in vml
     {"stemReversal", TieOptions::ChordTieDirType::StemReversal},
-    {"splitEvenly", TieOptions::ChordTieDirType::SplitEvenly}
+    {"splitEvenly", TieOptions::ChordTieDirType::SplitEvenly},
+    {"unknown", TieOptions::ChordTieDirType::Unknown}
 });
 
 MUSX_XML_ENUM_MAPPING(TieOptions::MixedStemDirection, {
@@ -457,6 +455,7 @@ MUSX_XML_ELEMENT_ARRAY(ChordOptions, {
     {"fretStyleID", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<ChordOptions>& i) { i->fretStyleId = e->getTextAs<Cmper>(); }},
     {"fretInstID", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<ChordOptions>& i) { i->fretInstId = e->getTextAs<Cmper>(); }},
     {"multiFretItemsPerStr", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<ChordOptions>& i) { i->multiFretItemsPerStr = populateBoolean(c, e, i); }},
+    {"useFretFont", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<ChordOptions>& i) { i->useFretboardFont = populateBoolean(c, e, i); }},
     {"italicizeCapoChords", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<ChordOptions>& i) { i->italicizeCapoChords = populateBoolean(c, e, i); }},
     {"chordAlignment", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<ChordOptions>& i) { i->chordAlignment = toEnum<ChordOptions::ChordAlignment>(e); }},
     {"chordStyle", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<ChordOptions>& i) { i->chordStyle = toEnum<ChordOptions::ChordStyle>(e); }},
@@ -869,7 +868,7 @@ MUSX_XML_ELEMENT_ARRAY(SmartShapeOptions, {
     {"smartDashOn", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<SmartShapeOptions>& i) { i->smartDashOn = e->getTextAs<Evpu>(); }},
     {"smartDashOff", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<SmartShapeOptions>& i) { i->smartDashOff = e->getTextAs<Evpu>(); }},
     {"crescHorizontal", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<SmartShapeOptions>& i) { i->crescHorizontal = populateBoolean(c, e, i); }},
-    {"direction", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<SmartShapeOptions>& i) { i->direction = toEnum<SmartShapeOptions::DefaultDirection>(e); }},
+    {"direction", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<SmartShapeOptions>& i) { i->direction = toEnum<ShapeDirection>(e); }},
     {"slurThicknessCp1X", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<SmartShapeOptions>& i) { i->slurThicknessCp1X = e->getTextAs<Evpu>(); }},
     {"slurThicknessCp1Y", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<SmartShapeOptions>& i) { i->slurThicknessCp1Y = e->getTextAs<Evpu>(); }},
     {"slurThicknessCp2X", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<SmartShapeOptions>& i) { i->slurThicknessCp2X = e->getTextAs<Evpu>(); }},
