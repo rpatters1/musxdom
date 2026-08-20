@@ -957,19 +957,24 @@ bool EntryInfoPtr::calcDisplaysAsRest() const
     return false;
 }
 
-int EntryInfoPtr::calcFloatingRestStaffPosition() const
+int EntryInfoPtr::calcZeroNoteRestStaffPosition() const
 {
-    const auto entry = (*this)->getEntry();    
-    MUSX_ASSERT_IF(!entry->notes.empty() && !entry->floatRest) {
-        throw std::logic_error("calcFloatingRestStaffPosition() called on a non-floating rest.");
-    }
+    const auto entry = (*this)->getEntry();
     const auto staff = createCurrentStaff();
     MUSX_ASSERT_IF(!staff) {
-        throw std::logic_error("calcFloatingRestStaffPosition() could not find the staff for entry " + std::to_string(entry->getEntryNumber()));
+        throw std::logic_error("calcZeroNoteRestStaffPosition() could not find the staff for entry " + std::to_string(entry->getEntryNumber()));
     }
+
+    if (!entry->floatRest) {
+        MUSX_ASSERT_IF(!entry->notes.empty()) {
+            throw std::logic_error("calcZeroNoteRestStaffPosition() called on a rest with note data.");
+        }
+        return staff->calcRestOffset(entry->duration);
+    }
+
     const auto layerAttr = getFrame()->getLayerAttributes();
     MUSX_ASSERT_IF(!layerAttr) {
-        throw std::logic_error("calcFloatingRestStaffPosition() could not find the layer attributes for entry " + std::to_string(entry->getEntryNumber()));
+        throw std::logic_error("calcZeroNoteRestStaffPosition() could not find the layer attributes for entry " + std::to_string(entry->getEntryNumber()));
     }
 
     auto result = staff->calcRestOffset(entry->duration);
@@ -980,7 +985,7 @@ int EntryInfoPtr::calcFloatingRestStaffPosition() const
     if (calcIfLayerSettingsApply()) {
         const auto miscOptions = entry->getDocument()->getOptions()->get<options::MiscOptions>();
         MUSX_ASSERT_IF(!miscOptions) {
-            throw std::logic_error("calcFloatingRestStaffPosition() could not find the miscellaneous options");
+            throw std::logic_error("calcZeroNoteRestStaffPosition() could not find the miscellaneous options");
         }
         if (miscOptions->consolidateRestsAcrossLayers && !entry->splitRest) {
             return result;
@@ -995,8 +1000,8 @@ std::pair<int, int> EntryInfoPtr::calcTopBottomStaffPositions() const
 {
     const auto& entry = (*this)->getEntry();
     if (entry->notes.empty() || entry->floatRest) {
-        const auto floatingRestPos = calcFloatingRestStaffPosition();
-        return std::make_pair(floatingRestPos, floatingRestPos);
+        const auto restPos = calcZeroNoteRestStaffPosition();
+        return std::make_pair(restPos, restPos);
     }
     int topLine = (std::numeric_limits<int>::min)();
     int botLine = (std::numeric_limits<int>::max)();

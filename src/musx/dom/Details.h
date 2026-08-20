@@ -1917,7 +1917,11 @@ public:
     {
         this->DetailsBase::integrityCheck(ptrToThis);
         if (endMeas <= startMeas || startMeas <= 0) {
-            MUSX_INTEGRITY_ERROR("Staff group " + std::to_string(getCmper2()) + " for part " + std::to_string(getSourcePartId())
+            // Especially when a file was upgraded from pre-modern group settings,
+            // the staff groups can get a bit squirrelly. Groups like this should just
+            // be ignored.                
+            util::Logger::log(util::Logger::LogLevel::Info,
+                "Staff group " + std::to_string(getCmper2()) + " for part " + std::to_string(getSourcePartId())
                 + " starts at measure " + std::to_string(startMeas) + " and ends at measure " + std::to_string(endMeas));
         }
         if (!bracket) {

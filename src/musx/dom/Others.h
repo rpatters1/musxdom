@@ -2040,6 +2040,7 @@ public:
     bool applyFormat{};                 ///< Meaning uncertain. May have to do with page format for parts and whether it has been applied.
     bool needsRecalc{};                 ///< Indicates if the part needs update layout.
     bool useAsSmpInst{};                ///< Indicates if the part is used as a SmartMusic instrument.
+    bool unlinkInsts{};                 ///< Finale flag with currently unknown semantics. (xml node is `<unlinkInsts>`)
     int smartMusicInst{};               ///< SmartMusic instrument ID (-1 if not used).
     Cmper defaultNameStaff{};           ///< If non-zero, this points to the @ref Staff that has the default name (if unspecified by #nameId.)
     Cmper defaultNameGroup{};           ///< If non-zero, this points to the @ref details::StaffGroup that has the default name (if unspecified by #nameId.)

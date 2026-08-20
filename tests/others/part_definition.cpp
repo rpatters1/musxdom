@@ -169,6 +169,7 @@ constexpr static musxtest::string_view partDefXml = R"xml(
       <extractPart/>
       <needsRecalc/>
       <useAsSmpInst/>
+      <unlinkInsts/>
       <smartMusicInst>-1</smartMusicInst>
     </partDef>
     <partGlobals cmper="65534">
@@ -211,6 +212,7 @@ TEST(PartDefinitionTest, PopulateFields)
     EXPECT_TRUE(partDef->extractPart);
     EXPECT_TRUE(partDef->needsRecalc);
     EXPECT_TRUE(partDef->useAsSmpInst);
+    EXPECT_TRUE(partDef->unlinkInsts);
     EXPECT_EQ(partDef->smartMusicInst, -1);
 }
 

@@ -504,7 +504,7 @@ public:
         if (size_t(numNotes) != notes.size()) {
             MUSX_INTEGRITY_ERROR("Entry " + std::to_string(m_entnum) + " has an incorrect number of notes.");
         }
-        if (notes.empty() && !floatRest) {
+        if (notes.empty() && !floatRest && isNote) {
             MUSX_INTEGRITY_ERROR("Entry " + std::to_string(m_entnum)
                 + " has an invalid rest representation: the entry has no notes but is not floatRest.");
         }
@@ -753,11 +753,12 @@ public:
     /// @return A std::pair<int, int> with the first being the top staff position and the second being the bottom staff position.
     [[nodiscard]] std::pair<int, int> calcTopBottomStaffPositions() const;
 
-    /// @brief Calculates the staff position of a floating rest.
-    /// @note This helper is only valid when the entry is a floating rest.
-    /// @return The staff position used to place the floating rest.
-    /// @throw std::logic_error if the entry is not a floating rest.
-    [[nodiscard]] int calcFloatingRestStaffPosition() const;
+    /// @brief Calculates the staff position for a rest with no note data.
+    /// @details This applies to floating rests and to non-floating rests with no note data. A non-floating rest with note data
+    /// gets its staff position from its RESTID note through #NoteInfoPtr::calcNotePropertiesInView.
+    /// @return The staff position used to place the rest.
+    /// @throw std::logic_error if the entry has note data, or if required positioning data is unavailable.
+    [[nodiscard]] int calcZeroNoteRestStaffPosition() const;
 
     /// @brief Calculates the top and bottom EVPU extent of the entry's approximate visual footprint.
     /// @details This is a layout-free approximation intended for expression placement. The returned values are not note positions;

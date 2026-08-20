@@ -1048,6 +1048,10 @@ MUSX_XML_ELEMENT_ARRAY(TimeSignatureOptions, {
 });
 
 MUSX_XML_ELEMENT_ARRAY(TupletOptions, {
+    {"symbolicNum", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<TupletOptions>& i) { i->displayNumber = e->getTextAs<int>(); }},
+    {"symbolicDur", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<TupletOptions>& i) { i->displayDuration = e->getTextAs<Edu>(); }},
+    {"refNum", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<TupletOptions>& i) { i->referenceNumber = e->getTextAs<int>(); }},
+    {"refDur", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<TupletOptions>& i) { i->referenceDuration = e->getTextAs<Edu>(); }},
     {"flat", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<TupletOptions>& i) { i->alwaysFlat = populateBoolean(c, e, i); }},
     {"fullDura", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<TupletOptions>& i) { i->fullDura = populateBoolean(c, e, i); }},
     {"metricCenter", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<TupletOptions>& i) { i->metricCenter = populateBoolean(c, e, i); }},
