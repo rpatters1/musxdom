@@ -1647,6 +1647,11 @@ public:
     void integrityCheck(const std::shared_ptr<EnigmaBase>& ptrToThis) override
     {
         this->OthersBase::integrityCheck(ptrToThis);
+        if (startMeas >= endMeas) {
+            MUSX_INTEGRITY_ERROR("Measure number region " + std::to_string(getCmper())
+                + " has an invalid measure range: start measure " + std::to_string(startMeas)
+                + " is not before end measure " + std::to_string(endMeas) + ".");
+        }
         if (!scoreData) {
             scoreData = std::make_shared<ScorePartData>(ptrToThis);
             MUSX_INTEGRITY_ERROR("Measure number region " + std::to_string(getCmper()) + " is missing score data.");

@@ -277,8 +277,12 @@ TEST(PartDefinitionTest, MissingPartGlobals)
 </finale>
 )xml";
 
-    EXPECT_THROW(
-        static_cast<void>(musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(missingPartGlobalXml)),
-        musx::dom::integrity_error
-    );
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(missingPartGlobalXml);
+    ASSERT_TRUE(doc);
+
+    auto partGlobals = doc->getOthers()->get<others::PartGlobals>(SCORE_PARTID, MUSX_GLOBALS_CMPER);
+    ASSERT_TRUE(partGlobals);
+    EXPECT_EQ(partGlobals->scrollViewIUlist, BASE_SYSTEM_ID);
+    EXPECT_EQ(partGlobals->studioViewIUlist, STUDIO_VIEW_SYSTEM_ID);
+    EXPECT_EQ(partGlobals->specialPartExtractionIUList, 0);
 }

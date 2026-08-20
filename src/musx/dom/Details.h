@@ -1701,11 +1701,13 @@ public:
         EntryDetailsBase::integrityCheck(ptrToThis);
         if (!mask) {
             mask = unsigned(NoteType::Note4096th);
-            MUSX_INTEGRITY_ERROR("Secondary beam break for entry" + std::to_string(getEntryNumber()) + " has no breaks.");
+            util::Logger::log(util::Logger::LogLevel::Verbose,
+                "Secondary beam break for entry " + std::to_string(getEntryNumber())
+                + " has no breaks; the 4096th-note beam was assumed.");
         }
         if (mask >= unsigned(NoteType::Eighth)) {
             mask = unsigned(NoteType::Eighth) - 1;
-            MUSX_INTEGRITY_ERROR("Secondary beam break for entry" + std::to_string(getEntryNumber()) + " specifies a value that cannot be a secondary beam.");
+            MUSX_INTEGRITY_ERROR("Secondary beam break for entry " + std::to_string(getEntryNumber()) + " specifies a value that cannot be a secondary beam.");
         }
     }
 
