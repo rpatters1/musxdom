@@ -370,7 +370,9 @@ TEST(ArticulationAssignTest, CalcAssociatedNote)
     ASSERT_TRUE(entryDoc);
 
     auto staffPositionOf = [](const NoteInfoPtr& note) {
-        return std::get<3>(note.calcNotePropertiesInView(/*alwaysUseEntryStaff*/ true));
+        NotePropertiesOptions options;
+        options.alwaysUseEntryStaff = true;
+        return note.calcNoteProperties(options).staffPosition;
     };
 
     { // up-stem chord E4/G4/B4 (staff positions -8/-6/-4): zero offset selects the bottom note

@@ -35,9 +35,9 @@ TEST(Fraction, HashTest)
     fractionMap.emplace(Fraction(1, 2), 1);
     fractionMap.emplace(Fraction(3, 4), 2);
 
-    EXPECT_FALSE(fractionMap.contains(Fraction(5, 6)));
-    EXPECT_TRUE(fractionMap.contains(Fraction(2, 4)));
-    EXPECT_TRUE(fractionMap.contains(Fraction(6, 8)));
+    EXPECT_EQ(fractionMap.find(Fraction(5, 6)), fractionMap.end());
+    EXPECT_NE(fractionMap.find(Fraction(2, 4)), fractionMap.end());
+    EXPECT_NE(fractionMap.find(Fraction(6, 8)), fractionMap.end());
     EXPECT_EQ(fractionMap[Fraction(1, 2)], 1);
     EXPECT_EQ(fractionMap[Fraction(3, 4)], 2);
 }

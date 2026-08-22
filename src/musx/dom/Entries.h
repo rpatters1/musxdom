@@ -171,12 +171,6 @@ public:
     [[nodiscard]]
     std::map<LayerIndex, int> calcVoices(bool excludeHidden = false) const;
 
-    /// @brief Returns whether every significant layer is classified as a cue layer.
-    /// @details This compatibility convenience delegates cue interpretation to #util::Cue.
-    /// @todo Remove this function once MuseScore's Finale importer uses #util::Cue directly.
-    [[nodiscard]]
-    bool calcIsCuesOnly() const;
-
     /// @brief Calculates the nearest non-grace-note entry at the given @p position.
     /// @param position The measure position to find.
     /// @param findExact If true, only find an entry that matches to within 1 evpu. Otherwise find the closest entry in the measure.
@@ -283,14 +277,26 @@ public:
     /// @brief Non floating rests have a note with this noteId that defines their staff positions.
     static constexpr NoteNumber RESTID = 31;
 
-    /**
-     * @brief Note properites. A tuple containing:
-     *         - NoteName: The note name (C, D, E, F, G, A, B)
-     *         - int: The octave number (where 4 is the middle C octave)
-     *         - int: The actual alteration in EDO divisions (normally semitones), relative to natural
-     *         - int: The staff position of the note relative to the staff reference line. (For 5-line staves this is the top line.)
-     */
-    using NoteProperties = std::tuple<music_theory::NoteName, int, int, int>;
+    /// @struct NoteProperties
+    /// @brief Contextual pitch and staff-position properties of a note.
+    struct NoteProperties
+    {
+        music_theory::NoteName noteName{}; ///< The note name (C, D, E, F, G, A, or B).
+        int octave{}; ///< The octave number, where middle C is C4.
+        int alteration{}; ///< The actual alteration in EDO divisions, relative to the natural note name.
+        int staffPosition{}; ///< The position relative to the staff reference line, normally the top line of a five-line staff.
+
+        /// @brief Equality comparison operator.
+        bool operator==(const NoteProperties& other) const
+        {
+            return noteName == other.noteName && octave == other.octave
+                && alteration == other.alteration && staffPosition == other.staffPosition;
+        }
+
+        /// @brief Inequality comparison operator.
+        bool operator!=(const NoteProperties& other) const
+        { return !(*this == other); }
+    };
 
     int harmLev{};      ///< Diatonic displacement relative to middle C or to the tonic in the middle C octave (if the key signature tonic is not C).
     int harmAlt{};      ///< Chromatic alteration relative to the key signature. Never has a magnitude greater than +/-7.
@@ -525,6 +531,23 @@ class EntryInfo;
 class EntryFrame;
 class NoteInfoPtr;
 
+/// @struct StaffPositionPitchOptions
+/// @brief Options for converting a staff position to a spelled pitch.
+struct StaffPositionPitchOptions
+{
+    PitchMode pitchMode{ PitchMode::CurrentView }; ///< The pitch representation to calculate.
+    std::optional<int> actualAlteration{}; ///< Optional alteration relative to the natural note name, in EDO divisions.
+};
+
+/// @struct NotePropertiesOptions
+/// @brief Options for calculating contextual note properties.
+struct NotePropertiesOptions
+{
+    PitchMode pitchMode{ PitchMode::CurrentView }; ///< The pitch representation to calculate.
+    EnharmonicOverride enharmonicOverride{ EnharmonicOverride::None }; ///< Overrides enharmonic respelling behavior.
+    bool alwaysUseEntryStaff{}; ///< If true, do not check the note for cross-staff placement.
+};
+
 /// @brief Wraps a frame of shared_ptr<const EntryInfo> and an index for per entry access.
 /// This class manages ownership of the frame so that any instance of it keeps the frame alive
 /// without the need for circular references.
@@ -652,37 +675,13 @@ public:
     [[nodiscard]] MusxInstance<KeySignature> getKeySignature() const;
 
     /**
-     * @brief Calculates the written pitch at a staff position using the entry's effective key and clef.
+     * @brief Calculates the pitch at a staff position using the entry's effective key and clef.
      * @param staffPosition Staff position relative to the staff reference line.
-     * @param actualAlteration Alteration relative to the natural note name, in EDO divisions. If omitted, the
-     * effective written key signature supplies the alteration.
-     * @return The spelled written pitch at the staff position.
+     * @param options Calculation options, including pitch representation and optional actual alteration.
+     * @return The spelled pitch at the staff position.
      */
     [[nodiscard]]
-    music_theory::Pitch calcPitchFromStaffPosition(int staffPosition,
-        std::optional<int> actualAlteration = std::nullopt) const;
-
-    /**
-     * @brief Calculates the concert pitch at a staff position using the entry's effective key and clef.
-     * @param staffPosition Staff position relative to the staff reference line.
-     * @param actualAlteration Alteration relative to the natural note name, in EDO divisions. If omitted, the
-     * effective concert key signature supplies the alteration.
-     * @return The spelled concert pitch at the staff position.
-     */
-    [[nodiscard]]
-    music_theory::Pitch calcPitchFromStaffPositionConcert(int staffPosition,
-        std::optional<int> actualAlteration = std::nullopt) const;
-
-    /**
-     * @brief Calculates the pitch at a staff position in the current part's concert- or written-pitch view.
-     * @param staffPosition Staff position relative to the staff reference line.
-     * @param actualAlteration Alteration relative to the natural note name, in EDO divisions. If omitted, the
-     * effective key signature in the selected view supplies the alteration.
-     * @return The spelled pitch at the staff position in the selected view.
-     */
-    [[nodiscard]]
-    music_theory::Pitch calcPitchFromStaffPositionInView(int staffPosition,
-        std::optional<int> actualAlteration = std::nullopt) const;
+    music_theory::Pitch calcPitchFromStaffPosition(int staffPosition, StaffPositionPitchOptions options = {}) const;
 
     /// @brief Gets the applicable part data for the entry, or nullptr if none.
     [[nodiscard]] MusxInstance<details::EntryPartFieldDetail> getPartFieldData() const;
@@ -787,7 +786,7 @@ public:
     /// @brief Calculates the staff position for an entry with no note data.
     /// @details Empty non-rest entries are positioned on the staff reference line. For rests, this applies the floating-rest
     /// and default-rest positioning rules. A rest with note data gets its staff position from its RESTID note through
-    /// #NoteInfoPtr::calcNotePropertiesInView.
+    /// #NoteInfoPtr::calcNoteProperties.
     /// @return The staff position used to place the entry.
     /// @throw std::logic_error if the entry has note data, or if required positioning data is unavailable.
     [[nodiscard]] int calcZeroNotePosition() const;
@@ -1671,34 +1670,11 @@ public:
      * @note In Finale, the default whole rest staff position is the middle staff line. Other music notation systems
      * frequently expect the standard whole rest staff position to be the second line from the top. You may need to interpolate
      * the staff position returned by #calcNoteProperties for whole rests.
-     * @param enharmonicOverride Overrides the enharmonic respelling behavior. Use #EnharmonicOverride::None to defer
-     * to the score/part data (default), #EnharmonicOverride::Respell to force respelling, or #EnharmonicOverride::NoRespell
-     * to prevent respelling even if the part would otherwise respell.
-     * @param alwaysUseEntryStaff If true, the entry is not checked for cross-staff staffing. Normally you omit this.
+     * @param options Calculation options, including pitch representation, enharmonic behavior, and cross-staff handling.
      * @return #Note::NoteProperties
      */
     [[nodiscard]]
-    Note::NoteProperties calcNoteProperties(EnharmonicOverride enharmonicOverride = EnharmonicOverride::None, bool alwaysUseEntryStaff = false) const;
-
-    /**
-     * @brief Calculates the note name, octave number, actual alteration, and staff position for the concert pitch of the note. The staff position
-     * takes into account percussion notes and their staff position override.
-     * @param alwaysUseEntryStaff If true, the entry is not checked for cross-staff staffing. Normally you omit this.
-     * @return #Note::NoteProperties
-     */
-    [[nodiscard]]
-    Note::NoteProperties calcNotePropertiesConcert(bool alwaysUseEntryStaff = false) const;
-
-    /**
-     * @brief Calculates the note name, octave number, actual alteration, and staff position for the pitch of the note in the currently
-     * selected "Display In Concert Pitch" view for the current part. This may be
-     * particularly useful with non-floating rests, but it can be used with any note. As with other versions of the function, the staff
-     * position takes into account the staff position override of percussion notes.
-     * @param alwaysUseEntryStaff If true, the entry is not checked for cross-staff staffing. Normally you omit this.
-     * @return #Note::NoteProperties
-     */
-    [[nodiscard]]
-    Note::NoteProperties calcNotePropertiesInView(bool alwaysUseEntryStaff = false) const;
+    Note::NoteProperties calcNoteProperties(NotePropertiesOptions options = {}) const;
 
     /// @brief Calculates the percussion note info for this note, if any.
     /// @return If the note is on a percussion staff and has percussion note info assigned, returns it. Otherwise `nullptr`.

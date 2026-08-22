@@ -156,6 +156,15 @@ enum class NoteType : Edu
     Note4096th = 0x0001
 };
 
+/// @enum PitchMode
+/// @brief Selects the pitch representation used by contextual pitch calculations.
+enum class PitchMode
+{
+    CurrentView, ///< Use the pitch representation displayed in the requested Finale score or part.
+    Written,     ///< Use written pitch regardless of the requested Finale view.
+    Concert      ///< Use concert pitch regardless of the requested Finale view.
+};
+
 /// @enum ShapeDirection
 /// @brief Direction settings shared by smart-shape options and instances.
 enum class ShapeDirection

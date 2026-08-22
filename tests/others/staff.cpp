@@ -750,8 +750,12 @@ TEST(StaffTest, Transposition)
         for (size_t x = 0; x < 2; x++) {
             auto note = NoteInfoPtr(EntryInfoPtr(entries, x), 0);
 
-            auto [wNote, wOctave, wAlter, wStaff] = note.calcNoteProperties();
-            auto [cNote, cOctave, cAlter, cStaff] = note.calcNotePropertiesConcert();
+            NotePropertiesOptions writtenOptions;
+            writtenOptions.pitchMode = PitchMode::Written;
+            auto [wNote, wOctave, wAlter, wStaff] = note.calcNoteProperties(writtenOptions);
+            NotePropertiesOptions concertOptions;
+            concertOptions.pitchMode = PitchMode::Concert;
+            auto [cNote, cOctave, cAlter, cStaff] = note.calcNoteProperties(concertOptions);
 
             const auto& [expWNote, expWOct, expWAlt, expWStaff] = expectedWrittenResults[measId - 1][x];
             const auto& [expCNote, expCOct, expCAlt, expCStaff] = expectedConcertResult[x];
@@ -769,23 +773,28 @@ TEST(StaffTest, Transposition)
             EXPECT_EQ(cStaff, expCStaff) << "Concert staff mismatch at entry " << x << " in measure " << measId;
 
             const auto entryInfo = note.getEntryInfo();
-            const auto writtenPitch = entryInfo.calcPitchFromStaffPosition(wStaff);
+            StaffPositionPitchOptions writtenPitchOptions;
+            writtenPitchOptions.pitchMode = PitchMode::Written;
+            const auto writtenPitch = entryInfo.calcPitchFromStaffPosition(wStaff, writtenPitchOptions);
             EXPECT_EQ(writtenPitch.noteName, wNote);
             EXPECT_EQ(writtenPitch.octave, wOctave);
             EXPECT_EQ(writtenPitch.alteration,
                 entryInfo.getKeySignature()->calcAlterationOnNote(unsigned(wNote), KeySignature::KeyContext::Written));
 
-            const auto naturalWrittenPitch = entryInfo.calcPitchFromStaffPosition(wStaff, 0);
+            writtenPitchOptions.actualAlteration = 0;
+            const auto naturalWrittenPitch = entryInfo.calcPitchFromStaffPosition(wStaff, writtenPitchOptions);
             EXPECT_EQ(naturalWrittenPitch.noteName, wNote);
             EXPECT_EQ(naturalWrittenPitch.octave, wOctave);
             EXPECT_EQ(naturalWrittenPitch.alteration, 0);
 
-            const auto concertPitch = entryInfo.calcPitchFromStaffPositionConcert(cStaff);
+            StaffPositionPitchOptions concertPitchOptions;
+            concertPitchOptions.pitchMode = PitchMode::Concert;
+            const auto concertPitch = entryInfo.calcPitchFromStaffPosition(cStaff, concertPitchOptions);
             EXPECT_EQ(concertPitch.noteName, cNote);
             EXPECT_EQ(concertPitch.octave, cOctave);
             EXPECT_EQ(concertPitch.alteration, cAlter);
 
-            const auto viewPitch = entryInfo.calcPitchFromStaffPositionInView(wStaff);
+            const auto viewPitch = entryInfo.calcPitchFromStaffPosition(wStaff);
             EXPECT_EQ(viewPitch.noteName, writtenPitch.noteName);
             EXPECT_EQ(viewPitch.octave, writtenPitch.octave);
             EXPECT_EQ(viewPitch.alteration, writtenPitch.alteration);
@@ -813,11 +822,59 @@ TEST(StaffTest, Transposition)
     auto entries = gfhold.createEntryFrame(0);
     ASSERT_TRUE(entries);
     auto note = NoteInfoPtr(EntryInfoPtr(entries, 0), 0);
-    const auto [concertNote, concertOctave, concertAlteration, concertStaffPosition] = note.calcNotePropertiesConcert();
-    const auto viewPitch = note.getEntryInfo().calcPitchFromStaffPositionInView(concertStaffPosition);
+    NotePropertiesOptions concertOptions;
+    concertOptions.pitchMode = PitchMode::Concert;
+    const auto [concertNote, concertOctave, concertAlteration, concertStaffPosition] = note.calcNoteProperties(concertOptions);
+    const auto viewPitch = note.getEntryInfo().calcPitchFromStaffPosition(concertStaffPosition);
     EXPECT_EQ(viewPitch.noteName, concertNote);
     EXPECT_EQ(viewPitch.octave, concertOctave);
     EXPECT_EQ(viewPitch.alteration, concertAlteration);
+
+    std::string retainedOctaveXml = concertXml;
+    const std::string nonOctaveInterval = "<interval>12</interval>";
+    const auto nonOctaveIntervalPosition = retainedOctaveXml.find(nonOctaveInterval);
+    ASSERT_NE(nonOctaveIntervalPosition, std::string::npos);
+    retainedOctaveXml.replace(nonOctaveIntervalPosition, nonOctaveInterval.size(), "<interval>7</interval>");
+    const std::string nonOctaveAdjustment = "<adjust>3</adjust>";
+    const auto nonOctaveAdjustmentPosition = retainedOctaveXml.find(nonOctaveAdjustment, nonOctaveIntervalPosition);
+    ASSERT_NE(nonOctaveAdjustmentPosition, std::string::npos);
+    retainedOctaveXml.replace(nonOctaveAdjustmentPosition, nonOctaveAdjustment.size(), "<adjust>0</adjust>");
+    auto retainedOctaveDoc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(retainedOctaveXml);
+    ASSERT_TRUE(retainedOctaveDoc);
+
+    constexpr StaffCmper testStaffId = 1;
+    constexpr MeasCmper octaveTranspositionMeasure = 5;
+    auto retainedOctaveFrame = details::GFrameHoldContext(
+        retainedOctaveDoc, SCORE_PARTID, testStaffId, octaveTranspositionMeasure).createEntryFrame(0);
+    ASSERT_TRUE(retainedOctaveFrame);
+    auto retainedOctaveNote = NoteInfoPtr(EntryInfoPtr(retainedOctaveFrame, 0), 0);
+    NotePropertiesOptions writtenOptions;
+    writtenOptions.pitchMode = PitchMode::Written;
+    const auto writtenProperties = retainedOctaveNote.calcNoteProperties(writtenOptions);
+    NotePropertiesOptions retainedConcertOptions;
+    retainedConcertOptions.pitchMode = PitchMode::Concert;
+    const auto retainedConcertProperties = retainedOctaveNote.calcNoteProperties(retainedConcertOptions);
+    const auto retainedViewProperties = retainedOctaveNote.calcNoteProperties();
+    EXPECT_EQ(retainedViewProperties, writtenProperties);
+    EXPECT_NE(retainedViewProperties.staffPosition, retainedConcertProperties.staffPosition);
+
+    const auto retainedViewPitch = retainedOctaveNote.getEntryInfo().calcPitchFromStaffPosition(writtenProperties.staffPosition);
+    EXPECT_EQ(retainedViewPitch.noteName, writtenProperties.noteName);
+    EXPECT_EQ(retainedViewPitch.octave, writtenProperties.octave);
+
+    const std::string retainOctaveElement = "<retainOctaveTransInConcertPitch/>";
+    const auto retainOctavePosition = retainedOctaveXml.find(retainOctaveElement);
+    ASSERT_NE(retainOctavePosition, std::string::npos);
+    retainedOctaveXml.erase(retainOctavePosition, retainOctaveElement.size());
+    auto unretainedOctaveDoc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(retainedOctaveXml);
+    ASSERT_TRUE(unretainedOctaveDoc);
+    auto unretainedOctaveFrame = details::GFrameHoldContext(
+        unretainedOctaveDoc, SCORE_PARTID, testStaffId, octaveTranspositionMeasure).createEntryFrame(0);
+    ASSERT_TRUE(unretainedOctaveFrame);
+    auto unretainedOctaveNote = NoteInfoPtr(EntryInfoPtr(unretainedOctaveFrame, 0), 0);
+    NotePropertiesOptions unretainedConcertOptions;
+    unretainedConcertOptions.pitchMode = PitchMode::Concert;
+    EXPECT_EQ(unretainedOctaveNote.calcNoteProperties(), unretainedOctaveNote.calcNoteProperties(unretainedConcertOptions));
 }
 
 TEST(StaffTest, Transposition31Edo)
@@ -859,8 +916,12 @@ TEST(StaffTest, Transposition31Edo)
         for (size_t x = 0; x < 2; x++) {
             auto note = NoteInfoPtr(EntryInfoPtr(entries, x), 0);
 
-            auto [wNote, wOctave, wAlter, wStaff] = note.calcNoteProperties();
-            auto [cNote, cOctave, cAlter, cStaff] = note.calcNotePropertiesConcert();
+            NotePropertiesOptions writtenOptions;
+            writtenOptions.pitchMode = PitchMode::Written;
+            auto [wNote, wOctave, wAlter, wStaff] = note.calcNoteProperties(writtenOptions);
+            NotePropertiesOptions concertOptions;
+            concertOptions.pitchMode = PitchMode::Concert;
+            auto [cNote, cOctave, cAlter, cStaff] = note.calcNoteProperties(concertOptions);
 
             const auto& [expWNote, expWOct, expWAlt, expWStaff] = expectedWrittenResults[measId - 1][x];
             const auto& [expCNote, expCOct, expCAlt, expCStaff] = expectedConcertResult[x];
@@ -878,18 +939,23 @@ TEST(StaffTest, Transposition31Edo)
             EXPECT_EQ(cStaff, expCStaff) << "Concert staff mismatch at entry " << x << " in measure " << measId;
 
             const auto entryInfo = note.getEntryInfo();
-            const auto writtenPitch = entryInfo.calcPitchFromStaffPosition(wStaff);
+            StaffPositionPitchOptions writtenPitchOptions;
+            writtenPitchOptions.pitchMode = PitchMode::Written;
+            const auto writtenPitch = entryInfo.calcPitchFromStaffPosition(wStaff, writtenPitchOptions);
             EXPECT_EQ(writtenPitch.noteName, wNote);
             EXPECT_EQ(writtenPitch.octave, wOctave);
             EXPECT_EQ(writtenPitch.alteration,
                 entryInfo.getKeySignature()->calcAlterationOnNote(unsigned(wNote), KeySignature::KeyContext::Written));
 
-            const auto naturalWrittenPitch = entryInfo.calcPitchFromStaffPosition(wStaff, 0);
+            writtenPitchOptions.actualAlteration = 0;
+            const auto naturalWrittenPitch = entryInfo.calcPitchFromStaffPosition(wStaff, writtenPitchOptions);
             EXPECT_EQ(naturalWrittenPitch.noteName, wNote);
             EXPECT_EQ(naturalWrittenPitch.octave, wOctave);
             EXPECT_EQ(naturalWrittenPitch.alteration, 0);
 
-            const auto concertPitch = entryInfo.calcPitchFromStaffPositionConcert(cStaff);
+            StaffPositionPitchOptions concertPitchOptions;
+            concertPitchOptions.pitchMode = PitchMode::Concert;
+            const auto concertPitch = entryInfo.calcPitchFromStaffPosition(cStaff, concertPitchOptions);
             EXPECT_EQ(concertPitch.noteName, cNote);
             EXPECT_EQ(concertPitch.octave, cOctave);
             EXPECT_EQ(concertPitch.alteration, cAlter);

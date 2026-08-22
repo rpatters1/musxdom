@@ -261,9 +261,10 @@ TEST(EntryTest, UnlinkedEnharmonicSpelling)
                             EnharmonicOverride enharmonicOverride = EnharmonicOverride::None) {
         NoteInfoPtr noteInfo(entryInfo, 0); // assume 1st note
         ASSERT_TRUE(noteInfo);
-        auto [noteName, octave, alteration, staffLine] = forWrittenPitch
-                                                       ? noteInfo.calcNoteProperties(enharmonicOverride)
-                                                       : noteInfo.calcNotePropertiesConcert();
+        NotePropertiesOptions options;
+        options.pitchMode = forWrittenPitch ? PitchMode::Written : PitchMode::Concert;
+        options.enharmonicOverride = enharmonicOverride;
+        auto [noteName, octave, alteration, staffLine] = noteInfo.calcNoteProperties(options);
         EXPECT_EQ(noteName, expectedNoteName);
         EXPECT_EQ(octave, expectedOctave);
         EXPECT_EQ(alteration, expectedAlteration);
@@ -300,6 +301,8 @@ TEST(EntryTest, UnlinkedEnharmonicSpelling)
         noteAlts = details->getForNote<details::NoteAlterations>(firstNote, 1);
         ASSERT_TRUE(noteAlts);
         EXPECT_TRUE(noteAlts->enharmonic) << "Part is enharmonically respelled";
+        checkEntry(false, firstNote.getEntryInfo(), music_theory::NoteName::E, 4, 1, EnharmonicOverride::NoRespell);
+        checkEntry(false, firstNote.getEntryInfo(), music_theory::NoteName::F, 4, 0, EnharmonicOverride::Respell);
         checkEntry(true, firstNote.getEntryInfo(), music_theory::NoteName::F, 4, 2, EnharmonicOverride::NoRespell);
         checkEntry(true, firstNote.getEntryInfo(), music_theory::NoteName::G, 4, 0, EnharmonicOverride::Respell);
     }
@@ -442,11 +445,15 @@ TEST(EntryTest, TransposedConcert)
                             music_theory::NoteName expectedConcertNoteName, int expectedConcertOctave, int expectedConcertAlteration) {
         NoteInfoPtr noteInfo(entryInfo, 0); // assume 1st note
         ASSERT_TRUE(noteInfo);
-        auto [noteName, octave, alteration, staffLine] = noteInfo.calcNoteProperties();
+        NotePropertiesOptions writtenOptions;
+        writtenOptions.pitchMode = PitchMode::Written;
+        auto [noteName, octave, alteration, staffLine] = noteInfo.calcNoteProperties(writtenOptions);
         EXPECT_EQ(noteName, expectedNoteName);
         EXPECT_EQ(octave, expectedOctave);
         EXPECT_EQ(alteration, expectedAlteration);
-        auto [noteNameConcert, octaveConcert, alterationConcert, staffLineConcert] = noteInfo.calcNotePropertiesConcert();
+        NotePropertiesOptions concertOptions;
+        concertOptions.pitchMode = PitchMode::Concert;
+        auto [noteNameConcert, octaveConcert, alterationConcert, staffLineConcert] = noteInfo.calcNoteProperties(concertOptions);
         EXPECT_EQ(noteNameConcert, expectedConcertNoteName);
         EXPECT_EQ(octaveConcert, expectedConcertOctave);
         EXPECT_EQ(alterationConcert, expectedConcertAlteration);
@@ -667,7 +674,9 @@ TEST(EntryTest, CalcPitchFromStaffPositionWithoutNotes)
     EXPECT_EQ(pitch.octave, 5);
     EXPECT_EQ(pitch.alteration, 0);
 
-    const auto alteredPitch = entryInfo.calcPitchFromStaffPosition(0, 1);
+    StaffPositionPitchOptions options;
+    options.actualAlteration = 1;
+    const auto alteredPitch = entryInfo.calcPitchFromStaffPosition(0, options);
     EXPECT_EQ(alteredPitch.noteName, music_theory::NoteName::F);
     EXPECT_EQ(alteredPitch.octave, 5);
     EXPECT_EQ(alteredPitch.alteration, 1);

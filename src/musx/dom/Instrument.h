@@ -90,6 +90,10 @@ public:
         bool operator==(const InstrumentIdentity& other) const
         { return instUuid == other.instUuid; }
 
+        /// @brief Inequality comparison operator.
+        bool operator!=(const InstrumentIdentity& other) const
+        { return !(*this == other); }
+
         /// @brief Ordering operator for use in ordered containers.
         bool operator<(const InstrumentIdentity& other) const
         { return instUuid < other.instUuid; }
