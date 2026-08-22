@@ -32,6 +32,7 @@
 #include <stdexcept>
 #include <functional>
 #include <limits>
+#include <typeindex>
 
 #include "MusxInstance.h"
 
@@ -98,6 +99,7 @@ public:
     using ObjectPtr = std::shared_ptr<ObjectBaseType>;
     /** @brief key type for storing in pool */
     struct ObjectKey {
+        std::type_index typeId;         ///< runtime identity of the object's concrete class.
         std::string_view nodeId;        ///< the identifier for this node. usually the XML node name.
         Cmper partId;                   ///< the part this item is associated with (or 0 for score).
         std::optional<Cmper> cmper1;    ///< optional cmper1 for Others, Texts, Details.
@@ -106,19 +108,20 @@ public:
         std::optional<int> inci;        ///< optional inci for multi-inci classes
 
         /** @brief explicit constructor for optional parameters */
-        ObjectKey(std::string_view n,
+        ObjectKey(std::type_index t,
+            std::string_view n,
             Cmper p,
             std::optional<Cmper> c1 = std::nullopt,
             std::optional<Cmper> c2 = std::nullopt,
-            std::optional<int> i = std::nullopt) : nodeId(n), partId(p), cmper1(c1), cmper2(c2), inci(i)
+            std::optional<int> i = std::nullopt) : typeId(t), nodeId(n), partId(p), cmper1(c1), cmper2(c2), inci(i)
         {
         }
 
         /** @brief comparison operator for std::map */
         bool operator<(const ObjectKey& other) const
         {
-            if (nodeId != other.nodeId) {
-                return nodeId < other.nodeId;
+            if (typeId != other.typeId) {
+                return typeId < other.typeId;
             }
             if (partId != other.partId) {
                 return partId < other.partId;
@@ -165,6 +168,7 @@ private:
     inline static ObjectKey makeEndKey(const ObjectKey& key)
     {
         return ObjectKey{
+            key.typeId,
             key.nodeId,
             key.partId,
             key.cmper1.value_or((std::numeric_limits<Cmper>::max)()),
@@ -453,7 +457,7 @@ public:
             MUSX_INTEGRITY_ERROR("Options node " + std::string(nodeName) + " hase non-score part id [" + std::to_string(basePtr->getSourcePartId()) + "]");
         }
         const ObjectPool<OptionsBase>::ObjectKey key{
-            nodeName, basePtr->getSourcePartId()};
+            std::type_index(typeid(*basePtr)), nodeName, basePtr->getSourcePartId()};
         m_pool.add(key, std::move(instance));
     }
 
@@ -465,7 +469,8 @@ public:
     MusxInstanceList<T> getArray() const
     {
         static_assert(is_pool_type_v<OptionsPool, T>, "Type T is not registered in OptionsPool");
-        return m_pool.getArray<T>({ T::XmlNodeName, SCORE_PARTID }, SCORE_PARTID);
+        return m_pool.getArray<T>({ std::type_index(typeid(T)), T::XmlNodeName,
+            SCORE_PARTID }, SCORE_PARTID);
     }
 
     /** @brief Get a single item out of the pool */
@@ -473,7 +478,8 @@ public:
     MusxInstance<T> get() const
     {
         static_assert(is_pool_type_v<OptionsPool, T>, "Type T is not registered in OptionsPool");
-        return m_pool.getSource<T>({ T::XmlNodeName, SCORE_PARTID });
+        return m_pool.getSource<T>({ std::type_index(typeid(T)), T::XmlNodeName,
+            SCORE_PARTID });
     }
 };
 /** @brief Shared `OptionsPool` pointer */
@@ -491,7 +497,9 @@ class OthersPool
 
     MusxInstance<others::Staff> getRawStaff(Cmper partId, StaffCmper staffId)
     {
-        return m_pool.getEffectiveSourceForPart<others::Staff>({ std::string(others::Staff::XmlNodeName), partId, staffId, std::nullopt, std::nullopt });
+        return m_pool.getEffectiveSourceForPart<others::Staff>({
+            std::type_index(typeid(others::Staff)), others::Staff::XmlNodeName,
+            partId, staffId, std::nullopt, std::nullopt });
     }
 
 public:
@@ -513,8 +521,10 @@ public:
     /** @brief OthersPool version of #ObjectPool::add */
     void add(std::string_view nodeName, std::shared_ptr<OthersBase> instance)
     {
+        const OthersBase* instancePtr = instance.get();
         const ObjectPool<OthersBase>::ObjectKey key{
-            nodeName, instance->getSourcePartId(), instance->getCmper(),
+            std::type_index(typeid(*instancePtr)), nodeName,
+            instance->getSourcePartId(), instance->getCmper(),
             std::nullopt, instance->getInci()};
         m_pool.add(key, std::move(instance));
     }
@@ -527,7 +537,8 @@ public:
     MusxInstanceList<T> getArray(Cmper partId, std::optional<Cmper> cmper = std::nullopt) const
     {
         static_assert(is_pool_type_v<OthersPool, T>, "Type T is not registered in OthersPool");
-        return m_pool.getArrayForPart<T>({ T::XmlNodeName, partId, cmper });
+        return m_pool.getArrayForPart<T>({ std::type_index(typeid(T)),
+            T::XmlNodeName, partId, cmper });
     }
 
     /** @brief Get a single item out of the pool */
@@ -535,7 +546,8 @@ public:
     MusxInstance<T> get(Cmper partId, Cmper cmper, std::optional<Inci> inci = std::nullopt) const
     {
         static_assert(is_pool_type_v<OthersPool, T>, "Type T is not registered in OthersPool");
-        return m_pool.getEffectiveForPart<T>({ T::XmlNodeName, partId, cmper, std::nullopt, inci });
+        return m_pool.getEffectiveForPart<T>({ std::type_index(typeid(T)),
+            T::XmlNodeName, partId, cmper, std::nullopt, inci });
     }
 
     /// @brief The cmper one past the highest currently used for @c T.
@@ -584,8 +596,10 @@ public:
     /** @brief DetailsPool version of #ObjectPool::add */
     void add(std::string_view nodeName, std::shared_ptr<DetailsBase> instance)
     {
+        const DetailsBase* instancePtr = instance.get();
         const ObjectPool<DetailsBase>::ObjectKey key{
-            nodeName, instance->getSourcePartId(), instance->getCmper1(),
+            std::type_index(typeid(*instancePtr)), nodeName,
+            instance->getSourcePartId(), instance->getCmper1(),
             instance->getCmper2(), instance->getInci()};
         m_pool.add(key, std::move(instance));
     }
@@ -596,14 +610,15 @@ public:
     /** @brief version of #ObjectPool::getArray for getting all of them */
     template <typename T, typename = std::enable_if_t<is_pool_type_v<DetailsPool, T>>>
     MusxInstanceList<T> getArray(Cmper partId) const
-    { return m_pool.template getArrayForPart<T>({ T::XmlNodeName, partId }); }
+    { return m_pool.template getArrayForPart<T>({ std::type_index(typeid(T)), T::XmlNodeName, partId }); }
 
     /** @brief DetailsPool version of #ObjectPool::getArray */
     template <typename T, typename std::enable_if_t<!std::is_base_of_v<EntryDetailsBase, T>, int> = 0>
     MusxInstanceList<T> getArray(Cmper partId, Cmper cmper1, std::optional<Cmper> cmper2 = std::nullopt) const
     {
         static_assert(is_pool_type_v<DetailsPool, T>, "Type T is not registered in DetailsPool");
-        return m_pool.template getArrayForPart<T>({ T::XmlNodeName, partId, cmper1, cmper2 });
+        return m_pool.template getArrayForPart<T>({ std::type_index(typeid(T)),
+            T::XmlNodeName, partId, cmper1, cmper2 });
     }
 
     /** @brief EntryDetailsPool version of #ObjectPool::getArray */
@@ -611,7 +626,8 @@ public:
     MusxInstanceList<T> getArray(Cmper partId, EntryNumber entnum) const
     {
         static_assert(is_pool_type_v<DetailsPool, T>, "Type T is not registered in DetailsPool");
-        return m_pool.template getArrayForPart<T>({ T::XmlNodeName, partId, Cmper(entnum >> 16), Cmper(entnum & 0xffff) });
+        return m_pool.template getArrayForPart<T>({ std::type_index(typeid(T)),
+            T::XmlNodeName, partId, Cmper(entnum >> 16), Cmper(entnum & 0xffff) });
     }
 
     /** @brief Get a single DetailsBase item out of the pool (not EntryDetailsBase) */
@@ -619,7 +635,8 @@ public:
     MusxInstance<T> get(Cmper partId, Cmper cmper1, Cmper cmper2, std::optional<Inci> inci = std::nullopt) const
     {
         static_assert(is_pool_type_v<DetailsPool, T>, "Type T is not registered in DetailsPool");
-        return m_pool.getEffectiveForPart<T>({ T::XmlNodeName, partId, cmper1, cmper2, inci });
+        return m_pool.getEffectiveForPart<T>({ std::type_index(typeid(T)),
+            T::XmlNodeName, partId, cmper1, cmper2, inci });
     }
 
     /** @brief Get a single EntryDetailsBase item out of the pool */
@@ -627,7 +644,8 @@ public:
     MusxInstance<T> get(Cmper partId, EntryNumber entnum, std::optional<Inci> inci = std::nullopt) const
     {
         static_assert(is_pool_type_v<DetailsPool, T>, "Type T is not registered in DetailsPool");
-        return m_pool.getEffectiveForPart<T>({ T::XmlNodeName, partId, Cmper(entnum >> 16), Cmper(entnum & 0xffff), inci });
+        return m_pool.getEffectiveForPart<T>({ std::type_index(typeid(T)),
+            T::XmlNodeName, partId, Cmper(entnum >> 16), Cmper(entnum & 0xffff), inci });
     }
 
     /// @brief Returns the detail for a particular note
@@ -727,8 +745,10 @@ public:
         if (basePtr->getSourcePartId() != SCORE_PARTID) {
             MUSX_INTEGRITY_ERROR("Texts node " + std::string(nodeName) + " hase non-score part id [" + std::to_string(basePtr->getSourcePartId()) + "]");
         }
+        const TextsBase* instancePtr = instance.get();
         const ObjectPool<TextsBase>::ObjectKey key{
-            nodeName, basePtr->getSourcePartId(), instance->getTextNumber()};
+            std::type_index(typeid(*instancePtr)), nodeName,
+            basePtr->getSourcePartId(), instance->getTextNumber()};
         m_pool.add(key, std::move(instance));
     }
 
@@ -740,7 +760,8 @@ public:
     MusxInstanceList<T> getArray(std::optional<Cmper> cmper = std::nullopt) const
     {
         static_assert(is_pool_type_v<TextsPool, T>, "Type T is not registered in TextsPool");
-        return m_pool.getArray<T>({ T::XmlNodeName, SCORE_PARTID, cmper }, SCORE_PARTID);
+        return m_pool.getArray<T>({ std::type_index(typeid(T)), T::XmlNodeName,
+            SCORE_PARTID, cmper }, SCORE_PARTID);
     }
 
     /** @brief Get a single item out of the pool */
@@ -748,7 +769,8 @@ public:
     MusxInstance<T> get(Cmper cmper) const
     {
         static_assert(is_pool_type_v<TextsPool, T>, "Type T is not registered in TextsPool");
-        return m_pool.getSource<T>({ T::XmlNodeName, SCORE_PARTID, cmper, std::nullopt, std::nullopt });
+        return m_pool.getSource<T>({ std::type_index(typeid(T)), T::XmlNodeName,
+            SCORE_PARTID, cmper, std::nullopt, std::nullopt });
     }
 };
 /** @brief Shared `OthersPool` pointer */

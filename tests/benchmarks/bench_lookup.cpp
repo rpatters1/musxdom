@@ -251,13 +251,29 @@ void benchmarkOthersArrays(const DocumentPtr& doc, Cmper partId)
 {
     using clock = std::chrono::high_resolution_clock;
 
-    const std::vector<std::string> nodeIds = {
-        "articDef", "beatChart", "frameSpec",
-        "instUsed", "layerAtts", "measSpec", "measExprAssign", "measNumbRegion",
-        "miscNoExist", "mmRest", "multiStaffInstGroup", "pageSpec",
-        "pageTextAssign", "partDef", "partGlobals", "repeatEndingStart",
-        "shapeDef", "smartShape", "staffSpec", "staffStyle", "staffSystemSpec",
-        "textBlock"
+    const std::vector<std::pair<std::string_view, std::type_index>> nodeIds = {
+        {others::ArticulationDef::XmlNodeName, typeid(others::ArticulationDef)},
+        {others::BeatChartElement::XmlNodeName, typeid(others::BeatChartElement)},
+        {others::Frame::XmlNodeName, typeid(others::Frame)},
+        {others::StaffUsed::XmlNodeName, typeid(others::StaffUsed)},
+        {others::LayerAttributes::XmlNodeName, typeid(others::LayerAttributes)},
+        {others::Measure::XmlNodeName, typeid(others::Measure)},
+        {others::MeasureExprAssign::XmlNodeName, typeid(others::MeasureExprAssign)},
+        {others::MeasureNumberRegion::XmlNodeName, typeid(others::MeasureNumberRegion)},
+        {"miscNoExist", typeid(void)},
+        {others::MultimeasureRest::XmlNodeName, typeid(others::MultimeasureRest)},
+        {others::MultiStaffGroupId::XmlNodeName, typeid(others::MultiStaffGroupId)},
+        {others::Page::XmlNodeName, typeid(others::Page)},
+        {others::PageTextAssign::XmlNodeName, typeid(others::PageTextAssign)},
+        {others::PartDefinition::XmlNodeName, typeid(others::PartDefinition)},
+        {others::PartGlobals::XmlNodeName, typeid(others::PartGlobals)},
+        {others::RepeatEndingStart::XmlNodeName, typeid(others::RepeatEndingStart)},
+        {others::ShapeDef::XmlNodeName, typeid(others::ShapeDef)},
+        {others::SmartShape::XmlNodeName, typeid(others::SmartShape)},
+        {others::Staff::XmlNodeName, typeid(others::Staff)},
+        {others::StaffStyle::XmlNodeName, typeid(others::StaffStyle)},
+        {others::StaffSystem::XmlNodeName, typeid(others::StaffSystem)},
+        {others::TextBlock::XmlNodeName, typeid(others::TextBlock)}
     };
 
     std::string partName = "Part " + std::to_string(partId);
@@ -268,9 +284,9 @@ void benchmarkOthersArrays(const DocumentPtr& doc, Cmper partId)
 
     auto othersPool = bench::PoolAccessor<OthersPool>::get(*doc->getOthers());
 
-    for (const auto& nodeId : nodeIds) {
+    for (const auto& [nodeId, typeId] : nodeIds) {
         using ObjectPool = ObjectPool<OthersBase>;
-        ObjectPool::ObjectKey key(nodeId, partId);
+        ObjectPool::ObjectKey key(typeId, nodeId, partId);
 
         auto start = clock::now();
         auto result = othersPool.getArrayForPart<OthersBase>(key);
@@ -315,25 +331,26 @@ void benchmarkOthers(const DocumentPtr& doc)
     constexpr Cmper staff2 = 2;
 
     struct TestCase {
-        std::string nodeId;
+        std::type_index typeId;
+        std::string_view nodeId;
         Cmper partId;
         std::optional<Cmper> cmper1;
         std::optional<Inci> inci;
     };
 
     const std::vector<TestCase> cases = {
-        {"staffSpec", score, staff2, std::nullopt},
-        {"staffStyle", score, Cmper{2}, std::nullopt},
-        {"smartShape", score, Cmper{337}, std::nullopt},
-        {"instUsed", score, Cmper{17}, Inci{3}},
-        {"partGlobals", part1, MUSX_GLOBALS_CMPER, std::nullopt},
-        {"textBlock", score, Cmper{345}, std::nullopt},
-        {"measSpec", part2, meas5, std::nullopt},
-        {"repeatEndingStart", score, meas5, std::nullopt},
-        {"layerAtts", score, Cmper{1}, std::nullopt},
-        {"pageSpec", part2, Cmper{4}, std::nullopt},
-        {"frameSpec", score, Cmper{678}, Inci{0}},
-        {"nonExistent", part2, Cmper{12345}, Inci{0}}
+        {typeid(others::Staff), others::Staff::XmlNodeName, score, staff2, std::nullopt},
+        {typeid(others::StaffStyle), others::StaffStyle::XmlNodeName, score, Cmper{2}, std::nullopt},
+        {typeid(others::SmartShape), others::SmartShape::XmlNodeName, score, Cmper{337}, std::nullopt},
+        {typeid(others::StaffUsed), others::StaffUsed::XmlNodeName, score, Cmper{17}, Inci{3}},
+        {typeid(others::PartGlobals), others::PartGlobals::XmlNodeName, part1, MUSX_GLOBALS_CMPER, std::nullopt},
+        {typeid(others::TextBlock), others::TextBlock::XmlNodeName, score, Cmper{345}, std::nullopt},
+        {typeid(others::Measure), others::Measure::XmlNodeName, part2, meas5, std::nullopt},
+        {typeid(others::RepeatEndingStart), others::RepeatEndingStart::XmlNodeName, score, meas5, std::nullopt},
+        {typeid(others::LayerAttributes), others::LayerAttributes::XmlNodeName, score, Cmper{1}, std::nullopt},
+        {typeid(others::Page), others::Page::XmlNodeName, part2, Cmper{4}, std::nullopt},
+        {typeid(others::Frame), others::Frame::XmlNodeName, score, Cmper{678}, Inci{0}},
+        {typeid(void), "nonExistent", part2, Cmper{12345}, Inci{0}}
     };
 
     int foundCount = 0;
@@ -341,7 +358,8 @@ void benchmarkOthers(const DocumentPtr& doc)
 
     for (const auto& c : cases) {
         using ObjectPool = ObjectPool<OthersBase>;
-        ObjectPool::ObjectKey key(c.nodeId, c.partId, c.cmper1, std::nullopt, c.inci);
+        ObjectPool::ObjectKey key(c.typeId, c.nodeId, c.partId,
+            c.cmper1, std::nullopt, c.inci);
 
         auto start = clock::now();
         auto result = othersPool.getSource<OthersBase>(key);
