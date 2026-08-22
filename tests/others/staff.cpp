@@ -768,6 +768,28 @@ TEST(StaffTest, Transposition)
             EXPECT_EQ(cAlter, expCAlt) << "Concert alteration mismatch at entry " << x << " in measure " << measId;
             EXPECT_EQ(cStaff, expCStaff) << "Concert staff mismatch at entry " << x << " in measure " << measId;
 
+            const auto entryInfo = note.getEntryInfo();
+            const auto writtenPitch = entryInfo.calcPitchFromStaffPosition(wStaff);
+            EXPECT_EQ(writtenPitch.noteName, wNote);
+            EXPECT_EQ(writtenPitch.octave, wOctave);
+            EXPECT_EQ(writtenPitch.alteration,
+                entryInfo.getKeySignature()->calcAlterationOnNote(unsigned(wNote), KeySignature::KeyContext::Written));
+
+            const auto naturalWrittenPitch = entryInfo.calcPitchFromStaffPosition(wStaff, 0);
+            EXPECT_EQ(naturalWrittenPitch.noteName, wNote);
+            EXPECT_EQ(naturalWrittenPitch.octave, wOctave);
+            EXPECT_EQ(naturalWrittenPitch.alteration, 0);
+
+            const auto concertPitch = entryInfo.calcPitchFromStaffPositionConcert(cStaff);
+            EXPECT_EQ(concertPitch.noteName, cNote);
+            EXPECT_EQ(concertPitch.octave, cOctave);
+            EXPECT_EQ(concertPitch.alteration, cAlter);
+
+            const auto viewPitch = entryInfo.calcPitchFromStaffPositionInView(wStaff);
+            EXPECT_EQ(viewPitch.noteName, writtenPitch.noteName);
+            EXPECT_EQ(viewPitch.octave, writtenPitch.octave);
+            EXPECT_EQ(viewPitch.alteration, writtenPitch.alteration);
+
     /*
             // Optional: print results
             static constexpr std::array<char, 7> noteNames = { 'C', 'D', 'E', 'F', 'G', 'A', 'B' };
@@ -777,6 +799,25 @@ TEST(StaffTest, Transposition)
     */
         }
     }
+
+    std::string concertXml(transposeXml.begin(), transposeXml.end());
+    const std::string showTransposedElement = "<showTransposed/>";
+    const auto showTransposedPosition = concertXml.find(showTransposedElement);
+    ASSERT_NE(showTransposedPosition, std::string::npos);
+    concertXml.erase(showTransposedPosition, showTransposedElement.size());
+    auto concertDoc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(concertXml);
+    ASSERT_TRUE(concertDoc);
+
+    auto gfhold = details::GFrameHoldContext(concertDoc, SCORE_PARTID, 1, 2);
+    ASSERT_TRUE(gfhold);
+    auto entries = gfhold.createEntryFrame(0);
+    ASSERT_TRUE(entries);
+    auto note = NoteInfoPtr(EntryInfoPtr(entries, 0), 0);
+    const auto [concertNote, concertOctave, concertAlteration, concertStaffPosition] = note.calcNotePropertiesConcert();
+    const auto viewPitch = note.getEntryInfo().calcPitchFromStaffPositionInView(concertStaffPosition);
+    EXPECT_EQ(viewPitch.noteName, concertNote);
+    EXPECT_EQ(viewPitch.octave, concertOctave);
+    EXPECT_EQ(viewPitch.alteration, concertAlteration);
 }
 
 TEST(StaffTest, Transposition31Edo)
@@ -835,6 +876,23 @@ TEST(StaffTest, Transposition31Edo)
             EXPECT_EQ(cOctave, expCOct) << "Concert octave mismatch at entry " << x << " in measure " << measId;
             EXPECT_EQ(cAlter, expCAlt) << "Concert alteration mismatch at entry " << x << " in measure " << measId;
             EXPECT_EQ(cStaff, expCStaff) << "Concert staff mismatch at entry " << x << " in measure " << measId;
+
+            const auto entryInfo = note.getEntryInfo();
+            const auto writtenPitch = entryInfo.calcPitchFromStaffPosition(wStaff);
+            EXPECT_EQ(writtenPitch.noteName, wNote);
+            EXPECT_EQ(writtenPitch.octave, wOctave);
+            EXPECT_EQ(writtenPitch.alteration,
+                entryInfo.getKeySignature()->calcAlterationOnNote(unsigned(wNote), KeySignature::KeyContext::Written));
+
+            const auto naturalWrittenPitch = entryInfo.calcPitchFromStaffPosition(wStaff, 0);
+            EXPECT_EQ(naturalWrittenPitch.noteName, wNote);
+            EXPECT_EQ(naturalWrittenPitch.octave, wOctave);
+            EXPECT_EQ(naturalWrittenPitch.alteration, 0);
+
+            const auto concertPitch = entryInfo.calcPitchFromStaffPositionConcert(cStaff);
+            EXPECT_EQ(concertPitch.noteName, cNote);
+            EXPECT_EQ(concertPitch.octave, cOctave);
+            EXPECT_EQ(concertPitch.alteration, cAlter);
 
     /*
             // Optional: print results

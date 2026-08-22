@@ -678,6 +678,29 @@ MeasCmper EntryInfoPtr::getMeasure() const { return m_entryFrame->getMeasure(); 
 
 MusxInstance<KeySignature> EntryInfoPtr::getKeySignature() const { return m_entryFrame->keySignature; }
 
+music_theory::Pitch EntryInfoPtr::calcPitchFromStaffPosition(int staffPosition, std::optional<int> actualAlteration) const
+{
+    return getKeySignature()->calcPitchFromStaffPosition(staffPosition, (*this)->clefIndex,
+        KeySignature::KeyContext::Written, actualAlteration);
+}
+
+music_theory::Pitch EntryInfoPtr::calcPitchFromStaffPositionConcert(int staffPosition, std::optional<int> actualAlteration) const
+{
+    return getKeySignature()->calcPitchFromStaffPosition(staffPosition, (*this)->clefIndexConcert,
+        KeySignature::KeyContext::Concert, actualAlteration);
+}
+
+music_theory::Pitch EntryInfoPtr::calcPitchFromStaffPositionInView(int staffPosition, std::optional<int> actualAlteration) const
+{
+    bool forWrittenPitch = false;
+    if (auto partGlobals = getFrame()->getDocument()->getOthers()->get<others::PartGlobals>(
+            getFrame()->getRequestedPartId(), MUSX_GLOBALS_CMPER)) {
+        forWrittenPitch = partGlobals->showTransposed;
+    }
+    return forWrittenPitch ? calcPitchFromStaffPosition(staffPosition, actualAlteration)
+                           : calcPitchFromStaffPositionConcert(staffPosition, actualAlteration);
+}
+
 MusxInstance<details::EntryPartFieldDetail> EntryInfoPtr::getPartFieldData() const
 {
     const auto frame = getFrame();

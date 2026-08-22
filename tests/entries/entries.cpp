@@ -639,6 +639,40 @@ TEST(EntryTest, FullMeasureRestV1V2)
     }
 }
 
+TEST(EntryTest, CalcPitchFromStaffPositionWithoutNotes)
+{
+    std::vector<char> xml;
+    musxtest::readFile(musxtest::getInputPath() / "beam_stubs.enigmaxml", xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml);
+    ASSERT_TRUE(doc);
+
+    auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, 6);
+    ASSERT_TRUE(gfhold);
+    auto entryFrame = gfhold.createEntryFrame(0);
+    ASSERT_TRUE(entryFrame);
+
+    EntryInfoPtr entryInfo;
+    for (size_t index = 0; index < entryFrame->getEntries().size(); ++index) {
+        auto candidate = EntryInfoPtr(entryFrame, index);
+        if (candidate->getEntry()->notes.empty()) {
+            entryInfo = candidate;
+            break;
+        }
+    }
+    ASSERT_TRUE(entryInfo);
+    ASSERT_TRUE(entryInfo->getEntry()->notes.empty());
+
+    const auto pitch = entryInfo.calcPitchFromStaffPosition(0);
+    EXPECT_EQ(pitch.noteName, music_theory::NoteName::F);
+    EXPECT_EQ(pitch.octave, 5);
+    EXPECT_EQ(pitch.alteration, 0);
+
+    const auto alteredPitch = entryInfo.calcPitchFromStaffPosition(0, 1);
+    EXPECT_EQ(alteredPitch.noteName, music_theory::NoteName::F);
+    EXPECT_EQ(alteredPitch.octave, 5);
+    EXPECT_EQ(alteredPitch.alteration, 1);
+}
+
 TEST(NoteheadInfoTest, DefaultByDuration)
 {
     std::vector<char> xml;
