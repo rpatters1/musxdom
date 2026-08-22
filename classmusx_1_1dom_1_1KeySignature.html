@@ -197,6 +197,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setTransposition</b> 
 <tr class="memitem:a617d4a6f2d041136f13f58ed69d79746" id="r_a617d4a6f2d041136f13f58ed69d79746"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structmusic__theory_1_1Pitch.html">music_theory::Pitch</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1KeySignature.html#a617d4a6f2d041136f13f58ed69d79746">calcPitch</a> (int displacement, int alteration, <a class="el" href="classmusx_1_1dom_1_1KeySignature.html#a4d33316242050ce5ae7f0fadd6466e28">KeyContext</a> ctx) const</td></tr>
 <tr class="memdesc:a617d4a6f2d041136f13f58ed69d79746"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a key-relative pitch representation into a spelled pitch.  <br /></td></tr>
 <tr class="separator:a617d4a6f2d041136f13f58ed69d79746"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6ac21dfb4089d665ca1d51108bf5de5f" id="r_a6ac21dfb4089d665ca1d51108bf5de5f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structmusic__theory_1_1Pitch.html">music_theory::Pitch</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1KeySignature.html#a6ac21dfb4089d665ca1d51108bf5de5f">calcPitchFromStaffPosition</a> (int staffPosition, <a class="el" href="namespacemusx_1_1dom.html#a894a6de7cd017628a3b75a07ed40952c">ClefIndex</a> clefIndex, <a class="el" href="classmusx_1_1dom_1_1KeySignature.html#a4d33316242050ce5ae7f0fadd6466e28">KeyContext</a> ctx, std::optional&lt; int &gt; actualAlteration=std::nullopt) const</td></tr>
+<tr class="memdesc:a6ac21dfb4089d665ca1d51108bf5de5f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a staff position into a spelled pitch using the specified clef and key context.  <br /></td></tr>
+<tr class="separator:a6ac21dfb4089d665ca1d51108bf5de5f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a69c8e8176511a3ad8e5d50c0e0ed424a" id="r_a69c8e8176511a3ad8e5d50c0e0ed424a"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1KeySignature.html#a69c8e8176511a3ad8e5d50c0e0ed424a">getOctaveDisplacement</a> (<a class="el" href="classmusx_1_1dom_1_1KeySignature.html#a4d33316242050ce5ae7f0fadd6466e28">KeyContext</a> ctx) const</td></tr>
 <tr class="memdesc:a69c8e8176511a3ad8e5d50c0e0ed424a"><td class="mdescLeft">&#160;</td><td class="mdescRight">The octave displacement if this key is a transposed key.  <br /></td></tr>
 <tr class="separator:a69c8e8176511a3ad8e5d50c0e0ed424a"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -462,6 +465,65 @@ const <a class="el" href="classmusx_1_1dom_1_1EnigmaBase.html#a1e53d536ab5b5c2c0
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The resulting note name, octave, and alteration relative to the natural note name. </dd></dl>
+
+</div>
+</div>
+<a id="a6ac21dfb4089d665ca1d51108bf5de5f" name="a6ac21dfb4089d665ca1d51108bf5de5f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6ac21dfb4089d665ca1d51108bf5de5f">&#9670;&#160;</a></span>calcPitchFromStaffPosition()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structmusic__theory_1_1Pitch.html">music_theory::Pitch</a> musx::dom::KeySignature::calcPitchFromStaffPosition </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>staffPosition</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacemusx_1_1dom.html#a894a6de7cd017628a3b75a07ed40952c">ClefIndex</a>&#160;</td>
+          <td class="paramname"><em>clefIndex</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classmusx_1_1dom_1_1KeySignature.html#a4d33316242050ce5ae7f0fadd6466e28">KeyContext</a>&#160;</td>
+          <td class="paramname"><em>ctx</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::optional&lt; int &gt;&#160;</td>
+          <td class="paramname"><em>actualAlteration</em> = <code>std::nullopt</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Converts a staff position into a spelled pitch using the specified clef and key context. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">staffPosition</td><td>Staff position relative to the staff reference line. </td></tr>
+    <tr><td class="paramname">clefIndex</td><td>Index of the clef used to interpret the staff position. </td></tr>
+    <tr><td class="paramname">ctx</td><td>Whether to use concert or written key-signature values. </td></tr>
+    <tr><td class="paramname">actualAlteration</td><td>Alteration relative to the natural note name, in EDO divisions. If omitted, the effective key signature supplies the alteration. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The resulting note name, octave, and alteration relative to the natural note name. </dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::invalid_argument</td><td>if the document contains no clef options. </td></tr>
+    <tr><td class="paramname">std::out_of_range</td><td>if <code>clefIndex</code> is invalid. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

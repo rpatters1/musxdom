@@ -1,5 +1,13 @@
 var NAVTREEINDEX37 =
 {
+"structmusx_1_1util_1_1FretboardDisplayData_1_1Cell.html#a048e8da47f75b3443b7ef4acedae530e":[2,0,1,2,10,1,1],
+"structmusx_1_1util_1_1FretboardDisplayData_1_1Cell.html#a3c0e33c6a307e22782e68dd905c1510c":[2,0,1,2,10,1,2],
+"structmusx_1_1util_1_1FretboardDisplayData_1_1Cell.html#a7050d1e54423feb233c1950c14d73f83":[2,0,1,2,10,1,3],
+"structmusx_1_1util_1_1FretboardDisplayData_1_1Cell.html#a7da04d8b43ce7485e06ad05c7b011140":[2,0,1,2,10,1,0],
+"structmusx_1_1util_1_1StaffOriginOffsetRequest.html":[2,0,1,2,12],
+"structmusx_1_1util_1_1StaffOriginOffsetRequest.html#a3ccb1cdee21ea8ff15fcee311a521dd4":[2,0,1,2,12,3],
+"structmusx_1_1util_1_1StaffOriginOffsetRequest.html#a7da174e0f146b90771778e78bcd09277":[2,0,1,2,12,2],
+"structmusx_1_1util_1_1StaffOriginOffsetRequest.html#a970abbaef386e8255133abf2a89780b6":[2,0,1,2,12,1],
 "structmusx_1_1util_1_1StaffOriginOffsetRequest.html#ad85edf71b97e8aee7e6987d620235a02":[2,0,1,2,12,0],
 "structmusx_1_1util_1_1StaffOriginOffsetResolverResult.html":[2,0,1,2,13],
 "structmusx_1_1util_1_1StaffOriginOffsetResolverResult.html#a356e80eda2c6b660551b1ca4d9ca3357":[2,0,1,2,13,0],

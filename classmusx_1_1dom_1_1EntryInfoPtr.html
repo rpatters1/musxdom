@@ -185,6 +185,15 @@ size_t&#160;</td><td class="memItemRight" valign="bottom"><b>getIndexInFrame</b>
 <a class="el" href="namespacemusx_1_1dom.html#a4223cd531120dbef7acd854c3d2631b8">MusxInstance</a>&lt; <a class="el" href="classmusx_1_1dom_1_1KeySignature.html">KeySignature</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getKeySignature</b> () const</td></tr>
 <tr class="memdesc:a91de76e696c547eccfe0bf49ae82c7ed"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the key signature of the entry. <br /></td></tr>
 <tr class="separator:a91de76e696c547eccfe0bf49ae82c7ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a484c4cf524a2373d90b95cc22f56a005" id="r_a484c4cf524a2373d90b95cc22f56a005"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structmusic__theory_1_1Pitch.html">music_theory::Pitch</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#a484c4cf524a2373d90b95cc22f56a005">calcPitchFromStaffPosition</a> (int staffPosition, std::optional&lt; int &gt; actualAlteration=std::nullopt) const</td></tr>
+<tr class="memdesc:a484c4cf524a2373d90b95cc22f56a005"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the written pitch at a staff position using the entry's effective key and clef.  <br /></td></tr>
+<tr class="separator:a484c4cf524a2373d90b95cc22f56a005"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8bdd83be560438906b384202e8494aae" id="r_a8bdd83be560438906b384202e8494aae"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structmusic__theory_1_1Pitch.html">music_theory::Pitch</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#a8bdd83be560438906b384202e8494aae">calcPitchFromStaffPositionConcert</a> (int staffPosition, std::optional&lt; int &gt; actualAlteration=std::nullopt) const</td></tr>
+<tr class="memdesc:a8bdd83be560438906b384202e8494aae"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the concert pitch at a staff position using the entry's effective key and clef.  <br /></td></tr>
+<tr class="separator:a8bdd83be560438906b384202e8494aae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2361b262e30fba828ad9fa45890a0fdf" id="r_a2361b262e30fba828ad9fa45890a0fdf"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structmusic__theory_1_1Pitch.html">music_theory::Pitch</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#a2361b262e30fba828ad9fa45890a0fdf">calcPitchFromStaffPositionInView</a> (int staffPosition, std::optional&lt; int &gt; actualAlteration=std::nullopt) const</td></tr>
+<tr class="memdesc:a2361b262e30fba828ad9fa45890a0fdf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the pitch at a staff position in the current part's concert- or written-pitch view.  <br /></td></tr>
+<tr class="separator:a2361b262e30fba828ad9fa45890a0fdf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2e66f9a4903c145849fd1d908ff14dab" id="r_a2e66f9a4903c145849fd1d908ff14dab"><td class="memItemLeft" align="right" valign="top"><a id="a2e66f9a4903c145849fd1d908ff14dab" name="a2e66f9a4903c145849fd1d908ff14dab"></a>
 <a class="el" href="namespacemusx_1_1dom.html#a4223cd531120dbef7acd854c3d2631b8">MusxInstance</a>&lt; <a class="el" href="classmusx_1_1dom_1_1details_1_1EntryPartFieldDetail.html">details::EntryPartFieldDetail</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getPartFieldData</b> () const</td></tr>
 <tr class="memdesc:a2e66f9a4903c145849fd1d908ff14dab"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the applicable part data for the entry, or nullptr if none. <br /></td></tr>
@@ -1171,6 +1180,120 @@ Static Public Member Functions</h2></td></tr>
 
 <p>Returns the lowest beam stub at this entry, where 2 = 16th note stub, 3 = 32nd note stub, etc. </p>
 <dl class="section return"><dt>Returns</dt><dd>0 if not beamed or no beam stub exists on this entry; otherwise, the lowest beam stub number </dd></dl>
+
+</div>
+</div>
+<a id="a484c4cf524a2373d90b95cc22f56a005" name="a484c4cf524a2373d90b95cc22f56a005"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a484c4cf524a2373d90b95cc22f56a005">&#9670;&#160;</a></span>calcPitchFromStaffPosition()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structmusic__theory_1_1Pitch.html">music_theory::Pitch</a> musx::dom::EntryInfoPtr::calcPitchFromStaffPosition </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>staffPosition</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::optional&lt; int &gt;&#160;</td>
+          <td class="paramname"><em>actualAlteration</em> = <code>std::nullopt</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Calculates the written pitch at a staff position using the entry's effective key and clef. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">staffPosition</td><td>Staff position relative to the staff reference line. </td></tr>
+    <tr><td class="paramname">actualAlteration</td><td>Alteration relative to the natural note name, in EDO divisions. If omitted, the effective written key signature supplies the alteration. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The spelled written pitch at the staff position. </dd></dl>
+
+</div>
+</div>
+<a id="a8bdd83be560438906b384202e8494aae" name="a8bdd83be560438906b384202e8494aae"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8bdd83be560438906b384202e8494aae">&#9670;&#160;</a></span>calcPitchFromStaffPositionConcert()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structmusic__theory_1_1Pitch.html">music_theory::Pitch</a> musx::dom::EntryInfoPtr::calcPitchFromStaffPositionConcert </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>staffPosition</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::optional&lt; int &gt;&#160;</td>
+          <td class="paramname"><em>actualAlteration</em> = <code>std::nullopt</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Calculates the concert pitch at a staff position using the entry's effective key and clef. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">staffPosition</td><td>Staff position relative to the staff reference line. </td></tr>
+    <tr><td class="paramname">actualAlteration</td><td>Alteration relative to the natural note name, in EDO divisions. If omitted, the effective concert key signature supplies the alteration. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The spelled concert pitch at the staff position. </dd></dl>
+
+</div>
+</div>
+<a id="a2361b262e30fba828ad9fa45890a0fdf" name="a2361b262e30fba828ad9fa45890a0fdf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2361b262e30fba828ad9fa45890a0fdf">&#9670;&#160;</a></span>calcPitchFromStaffPositionInView()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structmusic__theory_1_1Pitch.html">music_theory::Pitch</a> musx::dom::EntryInfoPtr::calcPitchFromStaffPositionInView </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>staffPosition</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::optional&lt; int &gt;&#160;</td>
+          <td class="paramname"><em>actualAlteration</em> = <code>std::nullopt</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Calculates the pitch at a staff position in the current part's concert- or written-pitch view. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">staffPosition</td><td>Staff position relative to the staff reference line. </td></tr>
+    <tr><td class="paramname">actualAlteration</td><td>Alteration relative to the natural note name, in EDO divisions. If omitted, the effective key signature in the selected view supplies the alteration. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The spelled pitch at the staff position in the selected view. </dd></dl>
 
 </div>
 </div>
