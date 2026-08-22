@@ -39,5 +39,5 @@ var searchData=
   ['wordwrap_36',['wordWrap',['../classmusx_1_1dom_1_1others_1_1TextBlock.html#a455aa1dd5ffa529bbdb3a305dfa95b8d',1,'musx::dom::others::TextBlock']]],
   ['workaround_37',['workaround',['../classmusx_1_1dom_1_1EntryInfoPtr_1_1InterpretedIterator.html#autotoc_md0',1,'Beamed-rest workaround'],['../classmusx_1_1dom_1_1EntryInfoPtr_1_1InterpretedIterator.html#autotoc_md1',1,'Singleton beam workaround']]],
   ['wrestoffset_38',['wRestOffset',['../classmusx_1_1dom_1_1others_1_1Staff.html#a58bfd410b0e5d3dd368adbd497215b31',1,'musx::dom::others::Staff']]],
-  ['written_39',['Written',['../classmusx_1_1dom_1_1KeySignature.html#a4d33316242050ce5ae7f0fadd6466e28a685710b38fa0c2510fc1079843dec6b9',1,'musx::dom::KeySignature']]]
+  ['written_39',['written',['../classmusx_1_1dom_1_1KeySignature.html#a4d33316242050ce5ae7f0fadd6466e28a685710b38fa0c2510fc1079843dec6b9',1,'musx::dom::KeySignature::Written'],['../namespacemusx_1_1dom.html#a652018b9275f7a37b1a022e5d3f3b398a685710b38fa0c2510fc1079843dec6b9',1,'musx::dom::Written']]]
 ];

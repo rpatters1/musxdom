@@ -844,6 +844,7 @@ var namespacemusx_1_1dom =
     [ "Note", "classmusx_1_1dom_1_1Note.html", "classmusx_1_1dom_1_1Note" ],
     [ "NoteDetailsBase", "classmusx_1_1dom_1_1NoteDetailsBase.html", "classmusx_1_1dom_1_1NoteDetailsBase" ],
     [ "NoteInfoPtr", "classmusx_1_1dom_1_1NoteInfoPtr.html", "classmusx_1_1dom_1_1NoteInfoPtr" ],
+    [ "NotePropertiesOptions", "structmusx_1_1dom_1_1NotePropertiesOptions.html", "structmusx_1_1dom_1_1NotePropertiesOptions" ],
     [ "ObjectPool", "classmusx_1_1dom_1_1ObjectPool.html", "classmusx_1_1dom_1_1ObjectPool" ],
     [ "OptionsBase", "classmusx_1_1dom_1_1OptionsBase.html", "classmusx_1_1dom_1_1OptionsBase" ],
     [ "OptionsPool", "classmusx_1_1dom_1_1OptionsPool.html", "classmusx_1_1dom_1_1OptionsPool" ],
@@ -853,6 +854,7 @@ var namespacemusx_1_1dom =
     [ "OthersPool", "classmusx_1_1dom_1_1OthersPool.html", "classmusx_1_1dom_1_1OthersPool" ],
     [ "RehearsalMarkInfo", "structmusx_1_1dom_1_1RehearsalMarkInfo.html", "structmusx_1_1dom_1_1RehearsalMarkInfo" ],
     [ "ShapeDefInstruction", "structmusx_1_1dom_1_1ShapeDefInstruction.html", "structmusx_1_1dom_1_1ShapeDefInstruction" ],
+    [ "StaffPositionPitchOptions", "structmusx_1_1dom_1_1StaffPositionPitchOptions.html", "structmusx_1_1dom_1_1StaffPositionPitchOptions" ],
     [ "TextsBase", "classmusx_1_1dom_1_1TextsBase.html", "classmusx_1_1dom_1_1TextsBase" ],
     [ "TextsPool", "classmusx_1_1dom_1_1TextsPool.html", "classmusx_1_1dom_1_1TextsPool" ],
     [ "TimeSignature", "classmusx_1_1dom_1_1TimeSignature.html", "classmusx_1_1dom_1_1TimeSignature" ],
@@ -1001,6 +1003,11 @@ var namespacemusx_1_1dom =
     [ "PartVoicingPolicy", "namespacemusx_1_1dom.html#a8ff59967b46549e150ea4f524c00de95", [
       [ "Ignore", "namespacemusx_1_1dom.html#a8ff59967b46549e150ea4f524c00de95afd038fc7f319e48f3115d92bf5bdbef9", null ],
       [ "Apply", "namespacemusx_1_1dom.html#a8ff59967b46549e150ea4f524c00de95a9639e32cab248434a17ab32237cb3b71", null ]
+    ] ],
+    [ "PitchMode", "namespacemusx_1_1dom.html#a652018b9275f7a37b1a022e5d3f3b398", [
+      [ "CurrentView", "namespacemusx_1_1dom.html#a652018b9275f7a37b1a022e5d3f3b398a0927f41ac54c89b52ea38691ce7e9696", null ],
+      [ "Written", "namespacemusx_1_1dom.html#a652018b9275f7a37b1a022e5d3f3b398a685710b38fa0c2510fc1079843dec6b9", null ],
+      [ "Concert", "namespacemusx_1_1dom.html#a652018b9275f7a37b1a022e5d3f3b398a6c8730a0f73d13d796f39d636d3623ae", null ]
     ] ],
     [ "ShapeDefInstructionType", "namespacemusx_1_1dom.html#a93764339b56e531ea37af5181b20b113", [
       [ "Undocumented", "namespacemusx_1_1dom.html#a93764339b56e531ea37af5181b20b113afcb2132b65cdd119b19be66fbc3622e2", null ],

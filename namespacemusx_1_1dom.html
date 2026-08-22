@@ -238,6 +238,9 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html">NoteInfoPtr</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wraps an <a class="el" href="classmusx_1_1dom_1_1EntryInfo.html">EntryInfo</a> instance and a note index.  <a href="classmusx_1_1dom_1_1NoteInfoPtr.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmusx_1_1dom_1_1NotePropertiesOptions.html">NotePropertiesOptions</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Options for calculating contextual note properties.  <a href="structmusx_1_1dom_1_1NotePropertiesOptions.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1ObjectPool.html">ObjectPool</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A pool that manages collections of <code><a class="el" href="classmusx_1_1dom_1_1OthersBase.html" title="EnigmaBase class for all &quot;others&quot; types.">OthersBase</a></code> objects, organized by XML node names and <code>Cmper</code> values.  <a href="classmusx_1_1dom_1_1ObjectPool.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -264,6 +267,9 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmusx_1_1dom_1_1ShapeDefInstruction.html">ShapeDefInstruction</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper functions and structs for decoding instruction data vectors in others::ShapeDef.  <a href="structmusx_1_1dom_1_1ShapeDefInstruction.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmusx_1_1dom_1_1StaffPositionPitchOptions.html">StaffPositionPitchOptions</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Options for converting a staff position to a spelled pitch.  <a href="structmusx_1_1dom_1_1StaffPositionPitchOptions.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1TextsBase.html">TextsBase</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classmusx_1_1dom_1_1EnigmaBase.html" title="Base for DOM classes that are represented in EnigmaData.">EnigmaBase</a> class for all text blocks.  <a href="classmusx_1_1dom_1_1TextsBase.html#details">More...</a><br /></td></tr>
@@ -514,6 +520,12 @@ Enumerations</h2></td></tr>
  }</td></tr>
 <tr class="memdesc:a3c91ee84b72cc27a2899191d6baee312"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enum class representing note types based on EDU values.  <a href="namespacemusx_1_1dom.html#a3c91ee84b72cc27a2899191d6baee312">More...</a><br /></td></tr>
 <tr class="separator:a3c91ee84b72cc27a2899191d6baee312"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a652018b9275f7a37b1a022e5d3f3b398" id="r_a652018b9275f7a37b1a022e5d3f3b398"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemusx_1_1dom.html#a652018b9275f7a37b1a022e5d3f3b398">PitchMode</a> { <a class="el" href="namespacemusx_1_1dom.html#a652018b9275f7a37b1a022e5d3f3b398a0927f41ac54c89b52ea38691ce7e9696">CurrentView</a>
+, <a class="el" href="namespacemusx_1_1dom.html#a652018b9275f7a37b1a022e5d3f3b398a685710b38fa0c2510fc1079843dec6b9">Written</a>
+, <a class="el" href="namespacemusx_1_1dom.html#a652018b9275f7a37b1a022e5d3f3b398a6c8730a0f73d13d796f39d636d3623ae">Concert</a>
+ }</td></tr>
+<tr class="memdesc:a652018b9275f7a37b1a022e5d3f3b398"><td class="mdescLeft">&#160;</td><td class="mdescRight">Selects the pitch representation used by contextual pitch calculations.  <a href="namespacemusx_1_1dom.html#a652018b9275f7a37b1a022e5d3f3b398">More...</a><br /></td></tr>
+<tr class="separator:a652018b9275f7a37b1a022e5d3f3b398"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5293597f9afe24c9bac919434bdeea44" id="r_a5293597f9afe24c9bac919434bdeea44"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemusx_1_1dom.html#a5293597f9afe24c9bac919434bdeea44">ShapeDirection</a> { <a class="el" href="namespacemusx_1_1dom.html#a5293597f9afe24c9bac919434bdeea44a086247a9b57fde6eefee2a0c4752242d">Automatic</a>
 , <a class="el" href="namespacemusx_1_1dom.html#a5293597f9afe24c9bac919434bdeea44aef087651eb482bae4624478696f4ad4f">Over</a>
 , <a class="el" href="namespacemusx_1_1dom.html#a5293597f9afe24c9bac919434bdeea44a02552d3c116b8a96f9ff0001b6ae661c">Under</a>
@@ -1245,6 +1257,38 @@ template&lt;typename T &gt; </div>
 <tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a8ff59967b46549e150ea4f524c00de95afd038fc7f319e48f3115d92bf5bdbef9" name="a8ff59967b46549e150ea4f524c00de95afd038fc7f319e48f3115d92bf5bdbef9"></a>Ignore&#160;</td><td class="fielddoc"><p>Default. Part voicing is ignored entirely. All layers in a staff are visible to all parts, and entries behave as if no part-voicing definitions exist. </p>
 </td></tr>
 <tr><td class="fieldname"><a id="a8ff59967b46549e150ea4f524c00de95a9639e32cab248434a17ab32237cb3b71" name="a8ff59967b46549e150ea4f524c00de95a9639e32cab248434a17ab32237cb3b71"></a>Apply&#160;</td><td class="fielddoc"><p>Apply Finale’s voiced-part interpretation. When enabled, entry iteration filters layers according to the active part voicing, and individual notes may be included or excluded based on voicing rules. Callers that operate at the note level should use <a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html#aa078714d4ad095bd9be5da204e9bc438" title="Returns true if this note is included in the part voicing. This function returns the correct value ev...">NoteInfoPtr::calcIsIncludedInVoicing</a> to test note visibility. If all notes in an entry are excluded by voicing, then <a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#a91dd4f09e8c863732cfa52f13275995b" title="Calculates if an entry displays as a rest.">EntryInfoPtr::calcDisplaysAsRest</a> returns true for that entry. </p>
+</td></tr>
+</table>
+
+</div>
+</div>
+<a id="a652018b9275f7a37b1a022e5d3f3b398" name="a652018b9275f7a37b1a022e5d3f3b398"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a652018b9275f7a37b1a022e5d3f3b398">&#9670;&#160;</a></span>PitchMode</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum class <a class="el" href="namespacemusx_1_1dom.html#a652018b9275f7a37b1a022e5d3f3b398">musx::dom::PitchMode</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">strong</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Selects the pitch representation used by contextual pitch calculations. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a652018b9275f7a37b1a022e5d3f3b398a0927f41ac54c89b52ea38691ce7e9696" name="a652018b9275f7a37b1a022e5d3f3b398a0927f41ac54c89b52ea38691ce7e9696"></a>CurrentView&#160;</td><td class="fielddoc"><p>Use the pitch representation displayed in the requested Finale score or part. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a652018b9275f7a37b1a022e5d3f3b398a685710b38fa0c2510fc1079843dec6b9" name="a652018b9275f7a37b1a022e5d3f3b398a685710b38fa0c2510fc1079843dec6b9"></a>Written&#160;</td><td class="fielddoc"><p>Use written pitch regardless of the requested Finale view. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a652018b9275f7a37b1a022e5d3f3b398a6c8730a0f73d13d796f39d636d3623ae" name="a652018b9275f7a37b1a022e5d3f3b398a6c8730a0f73d13d796f39d636d3623ae"></a>Concert&#160;</td><td class="fielddoc"><p>Use concert pitch regardless of the requested Finale view. </p>
 </td></tr>
 </table>
 

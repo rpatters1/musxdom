@@ -269,6 +269,7 @@ var annotated_dup =
         [ "Note", "classmusx_1_1dom_1_1Note.html", "classmusx_1_1dom_1_1Note" ],
         [ "NoteDetailsBase", "classmusx_1_1dom_1_1NoteDetailsBase.html", "classmusx_1_1dom_1_1NoteDetailsBase" ],
         [ "NoteInfoPtr", "classmusx_1_1dom_1_1NoteInfoPtr.html", "classmusx_1_1dom_1_1NoteInfoPtr" ],
+        [ "NotePropertiesOptions", "structmusx_1_1dom_1_1NotePropertiesOptions.html", "structmusx_1_1dom_1_1NotePropertiesOptions" ],
         [ "ObjectPool", "classmusx_1_1dom_1_1ObjectPool.html", "classmusx_1_1dom_1_1ObjectPool" ],
         [ "OptionsBase", "classmusx_1_1dom_1_1OptionsBase.html", "classmusx_1_1dom_1_1OptionsBase" ],
         [ "OptionsPool", "classmusx_1_1dom_1_1OptionsPool.html", "classmusx_1_1dom_1_1OptionsPool" ],
@@ -278,6 +279,7 @@ var annotated_dup =
         [ "OthersPool", "classmusx_1_1dom_1_1OthersPool.html", "classmusx_1_1dom_1_1OthersPool" ],
         [ "RehearsalMarkInfo", "structmusx_1_1dom_1_1RehearsalMarkInfo.html", "structmusx_1_1dom_1_1RehearsalMarkInfo" ],
         [ "ShapeDefInstruction", "structmusx_1_1dom_1_1ShapeDefInstruction.html", "structmusx_1_1dom_1_1ShapeDefInstruction" ],
+        [ "StaffPositionPitchOptions", "structmusx_1_1dom_1_1StaffPositionPitchOptions.html", "structmusx_1_1dom_1_1StaffPositionPitchOptions" ],
         [ "TextsBase", "classmusx_1_1dom_1_1TextsBase.html", "classmusx_1_1dom_1_1TextsBase" ],
         [ "TextsPool", "classmusx_1_1dom_1_1TextsPool.html", "classmusx_1_1dom_1_1TextsPool" ],
         [ "TimeSignature", "classmusx_1_1dom_1_1TimeSignature.html", "classmusx_1_1dom_1_1TimeSignature" ]

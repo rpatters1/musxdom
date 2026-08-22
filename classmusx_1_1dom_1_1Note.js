@@ -1,6 +1,6 @@
 var classmusx_1_1dom_1_1Note =
 [
-    [ "NoteProperties", "classmusx_1_1dom_1_1Note.html#abbde1ac182d8dc432c6aab9a8c08cf68", null ],
+    [ "NoteProperties", "structmusx_1_1dom_1_1Note_1_1NoteProperties.html", "structmusx_1_1dom_1_1Note_1_1NoteProperties" ],
     [ "Note", "classmusx_1_1dom_1_1Note.html#a7b5fc7c3dd8fe22c524c311b8eae5463", null ],
     [ "calcDefaultEnharmonic", "classmusx_1_1dom_1_1Note.html#a8b42277ba09844d042d326b07c5ab867", null ],
     [ "calcNoteProperties", "classmusx_1_1dom_1_1Note.html#afeba0d3ccb453653cdc2183a8d4129c0", null ],

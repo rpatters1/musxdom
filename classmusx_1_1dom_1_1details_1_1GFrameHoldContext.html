@@ -145,9 +145,6 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a50f8aa19e33a4cc5aa5fd9053b2a0592" id="r_a50f8aa19e33a4cc5aa5fd9053b2a0592"><td class="memItemLeft" align="right" valign="top">std::map&lt; <a class="el" href="namespacemusx_1_1dom.html#a58ecc2c31e1c1ff88267f87f028b5981">LayerIndex</a>, int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1details_1_1GFrameHoldContext.html#a50f8aa19e33a4cc5aa5fd9053b2a0592">calcVoices</a> (bool excludeHidden=false) const</td></tr>
 <tr class="memdesc:a50f8aa19e33a4cc5aa5fd9053b2a0592"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the number of voices used by the <a class="el" href="classmusx_1_1dom_1_1details_1_1GFrameHold.html" title="Represents the attributes of a Finale frame holder.">GFrameHold</a> instance.  <br /></td></tr>
 <tr class="separator:a50f8aa19e33a4cc5aa5fd9053b2a0592"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9bd6e36a5e4e34486fb3d75c4d031de1" id="r_a9bd6e36a5e4e34486fb3d75c4d031de1"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1details_1_1GFrameHoldContext.html#a9bd6e36a5e4e34486fb3d75c4d031de1">calcIsCuesOnly</a> () const</td></tr>
-<tr class="memdesc:a9bd6e36a5e4e34486fb3d75c4d031de1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns whether every significant layer is classified as a cue layer.  <br /></td></tr>
-<tr class="separator:a9bd6e36a5e4e34486fb3d75c4d031de1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af473e66f4ab01194143db805fba5f191" id="r_af473e66f4ab01194143db805fba5f191"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1details_1_1GFrameHoldContext.html#af473e66f4ab01194143db805fba5f191">calcNearestEntry</a> (<a class="el" href="classmusx_1_1util_1_1Fraction.html">util::Fraction</a> position, bool findExact=true, std::optional&lt; <a class="el" href="namespacemusx_1_1dom.html#a58ecc2c31e1c1ff88267f87f028b5981">LayerIndex</a> &gt; matchLayer=std::nullopt, <a class="el" href="namespacemusx_1_1dom.html#a2ce10a96e600e1368dd4b8cefdf12d5b">MatchVoice</a> matchVoice=<a class="el" href="namespacemusx_1_1dom.html#a2ce10a96e600e1368dd4b8cefdf12d5ba7a1920d61156abc05a60135aefe8bc67">MatchVoice::Default</a>, <a class="el" href="classmusx_1_1util_1_1Fraction.html">util::Fraction</a> atGraceNoteDuration=0) const</td></tr>
 <tr class="memdesc:af473e66f4ab01194143db805fba5f191"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the nearest non-grace-note entry at the given <code>position</code>.  <br /></td></tr>
 <tr class="separator:af473e66f4ab01194143db805fba5f191"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -329,26 +326,6 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>calcPolicyVoicingIncl
   </table>
   </dd>
 </dl>
-
-</div>
-</div>
-<a id="a9bd6e36a5e4e34486fb3d75c4d031de1" name="a9bd6e36a5e4e34486fb3d75c4d031de1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9bd6e36a5e4e34486fb3d75c4d031de1">&#9670;&#160;</a></span>calcIsCuesOnly()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool musx::dom::details::GFrameHoldContext::calcIsCuesOnly </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Returns whether every significant layer is classified as a cue layer. </p>
-<p>This compatibility convenience delegates cue interpretation to #util::Cue. </p><dl class="todo"><dt><b><a class="el" href="todo.html#_todo000004">Todo:</a></b></dt><dd>Remove this function once MuseScore's Finale importer uses #util::Cue directly. </dd></dl>
 
 </div>
 </div>
