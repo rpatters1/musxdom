@@ -991,7 +991,7 @@ TEST(TextsTest, ParseEnigmaInsertsBaseLevel)
 
     output.clear();
     EnigmaString::parseEnigmaText(doc, SCORE_PARTID, "^fdate(0) | ^fdate(1) | ^fdate(2)", accumulateChunk);
-    EXPECT_TRUE(output.contains("2025"));
+    EXPECT_NE(output.find("2025"), std::string::npos);
     musxtest::g_endMessages << "parsed file dates: " << output << std::endl;
 }
 

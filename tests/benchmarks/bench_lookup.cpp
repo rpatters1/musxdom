@@ -171,7 +171,7 @@ void traverseEntries(const DocumentPtr& doc)
 
     std::vector<EntryNumber> missing;
     for (const auto& x : entryList) {
-        if (!entryListLightweight.contains(x)) {
+        if (entryListLightweight.find(x) == entryListLightweight.end()) {
             missing.push_back(x);
         }
     }

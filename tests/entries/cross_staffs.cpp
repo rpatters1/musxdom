@@ -39,7 +39,7 @@ static void checkCrossStaff(const NoteInfoPtr& note, StaffCmper expectedStaff, C
     ASSERT_TRUE(staff) << msg << " unable to create current staff";
     EXPECT_EQ(staff->calcClefIndexAt(note.getEntryInfo().getMeasure(), note.getEntryInfo()->elapsedDuration.calcEduDuration()), expectedClef)
         << msg << " clef does note match";
-    EXPECT_EQ(std::get<3>(note.calcNoteProperties()), expectedStaffPos) << msg << " staff position does not match";
+    EXPECT_EQ(note.calcNoteProperties().staffPosition, expectedStaffPos) << msg << " staff position does not match";
 }
 TEST(CrossStaff, Measure3)
 {

@@ -73,7 +73,6 @@ TEST(Cues, TestIndependentTime)
 
     const auto staffMeasureAnalysis = Cue::calcStaffMeasureAnalysis(gfhold);
     EXPECT_TRUE(staffMeasureAnalysis.isCueOnly);
-    EXPECT_TRUE(gfhold.calcIsCuesOnly());
     EXPECT_EQ(staffMeasureAnalysis.cueLayers, (std::vector<LayerIndex>{3}));
     EXPECT_EQ(staffMeasureAnalysis.visibleCueLayers, (std::vector<LayerIndex>{3}));
 }

@@ -191,7 +191,9 @@ NoteInfoPtr details::ArticulationAssign::calcAssociatedNote(const EntryInfoPtr& 
     }
 
     const auto staffPositionOf = [](const NoteInfoPtr& note) {
-        return std::get<3>(note.calcNotePropertiesInView(/*alwaysUseEntryStaff*/ true));
+        NotePropertiesOptions options;
+        options.alwaysUseEntryStaff = true;
+        return note.calcNoteProperties(options).staffPosition;
     };
 
     // A zero offset places the symbol at the staff position of the note furthest from the stem.

@@ -51,6 +51,38 @@ T selectByDuration(Edu duration, T quarterAndShorter, T half, T whole, T breveAn
     return quarterAndShorter;
 }
 
+bool calcUsesWrittenPitch(const EntryInfoPtr& entryInfo, PitchMode pitchMode,
+    const std::optional<StaffCmper>& forStaffId = std::nullopt)
+{
+    if (pitchMode == PitchMode::Written) {
+        return true;
+    }
+    if (pitchMode == PitchMode::Concert) {
+        return false;
+    }
+
+    const auto frame = entryInfo.getFrame();
+    const auto document = frame->getDocument();
+    if (const auto partGlobals = document->getOthers()->get<others::PartGlobals>(
+            frame->getRequestedPartId(), MUSX_GLOBALS_CMPER)) {
+        if (partGlobals->showTransposed) {
+            return true;
+        }
+    }
+
+    const auto miscOptions = document->getOptions()->get<options::MiscOptions>();
+    if (!miscOptions || !miscOptions->keepWrittenOctaveInConcertPitch) {
+        return false;
+    }
+    const auto staff = entryInfo.createCurrentStaff(forStaffId);
+    if (!staff) {
+        return false;
+    }
+    const auto [displacement, alteration] = staff->calcTranspositionInterval();
+    return (displacement != 0 || alteration != 0)
+        && music_theory::calcTranspositionIsOctave(displacement, alteration);
+}
+
 int calcVoiceRank(MatchVoice matchVoice, bool voice2)
 {
     switch (matchVoice) {
@@ -579,8 +611,11 @@ bool EntryInfoPtr::calcContainsPitchContent(const EntryInfoPtr& src, bool compar
                     break;
                 }
             } else {
-                auto [noteTypeThis, octaveThis, alterThis, staffLineThis] = noteThis.calcNotePropertiesConcert(true);
-                auto [noteTypeSrc, octaveSrc, alterSrc, staffLineSrc] = noteSrc.calcNotePropertiesConcert(true);
+                NotePropertiesOptions options;
+                options.pitchMode = PitchMode::Concert;
+                options.alwaysUseEntryStaff = true;
+                auto [noteTypeThis, octaveThis, alterThis, staffLineThis] = noteThis.calcNoteProperties(options);
+                auto [noteTypeSrc, octaveSrc, alterSrc, staffLineSrc] = noteSrc.calcNoteProperties(options);
                 if (noteTypeThis == noteTypeSrc && octaveThis == octaveSrc && alterThis == alterSrc) {
                     found = true;
                     ++thisIndex;
@@ -621,8 +656,11 @@ bool EntryInfoPtr::calcIsSamePitchContent(const EntryInfoPtr& src, bool compareC
                 return false;
             }
         } else {
-            auto [noteTypeThis, octaveThis, alterThis, staffLineThis] = noteThis.calcNotePropertiesConcert(true);
-            auto [noteTypeSrc, octaveSrc, alterSrc, staffLineSrc] = noteSrc.calcNotePropertiesConcert(true);
+            NotePropertiesOptions options;
+            options.pitchMode = PitchMode::Concert;
+            options.alwaysUseEntryStaff = true;
+            auto [noteTypeThis, octaveThis, alterThis, staffLineThis] = noteThis.calcNoteProperties(options);
+            auto [noteTypeSrc, octaveSrc, alterSrc, staffLineSrc] = noteSrc.calcNoteProperties(options);
             if (noteTypeThis != noteTypeSrc || octaveThis != octaveSrc || alterThis != alterSrc) {
                 return false;
             }
@@ -678,27 +716,12 @@ MeasCmper EntryInfoPtr::getMeasure() const { return m_entryFrame->getMeasure(); 
 
 MusxInstance<KeySignature> EntryInfoPtr::getKeySignature() const { return m_entryFrame->keySignature; }
 
-music_theory::Pitch EntryInfoPtr::calcPitchFromStaffPosition(int staffPosition, std::optional<int> actualAlteration) const
+music_theory::Pitch EntryInfoPtr::calcPitchFromStaffPosition(int staffPosition, StaffPositionPitchOptions options) const
 {
-    return getKeySignature()->calcPitchFromStaffPosition(staffPosition, (*this)->clefIndex,
-        KeySignature::KeyContext::Written, actualAlteration);
-}
-
-music_theory::Pitch EntryInfoPtr::calcPitchFromStaffPositionConcert(int staffPosition, std::optional<int> actualAlteration) const
-{
-    return getKeySignature()->calcPitchFromStaffPosition(staffPosition, (*this)->clefIndexConcert,
-        KeySignature::KeyContext::Concert, actualAlteration);
-}
-
-music_theory::Pitch EntryInfoPtr::calcPitchFromStaffPositionInView(int staffPosition, std::optional<int> actualAlteration) const
-{
-    bool forWrittenPitch = false;
-    if (auto partGlobals = getFrame()->getDocument()->getOthers()->get<others::PartGlobals>(
-            getFrame()->getRequestedPartId(), MUSX_GLOBALS_CMPER)) {
-        forWrittenPitch = partGlobals->showTransposed;
-    }
-    return forWrittenPitch ? calcPitchFromStaffPosition(staffPosition, actualAlteration)
-                           : calcPitchFromStaffPositionConcert(staffPosition, actualAlteration);
+    const bool forWrittenPitch = calcUsesWrittenPitch(*this, options.pitchMode);
+    const auto clefIndex = forWrittenPitch ? (*this)->clefIndex : (*this)->clefIndexConcert;
+    const auto keyContext = forWrittenPitch ? KeySignature::KeyContext::Written : KeySignature::KeyContext::Concert;
+    return getKeySignature()->calcPitchFromStaffPosition(staffPosition, clefIndex, keyContext, options.actualAlteration);
 }
 
 MusxInstance<details::EntryPartFieldDetail> EntryInfoPtr::getPartFieldData() const
@@ -1034,7 +1057,9 @@ std::pair<int, int> EntryInfoPtr::calcTopBottomStaffPositions() const
     int botLine = (std::numeric_limits<int>::max)();
 
     auto updateLines = [&](const NoteInfoPtr note) {
-        const int staffLine = std::get<3>(note.calcNotePropertiesInView(/*alwaysUseEntryStaff*/ true));
+        NotePropertiesOptions options;
+        options.alwaysUseEntryStaff = true;
+        const int staffLine = note.calcNoteProperties(options).staffPosition;
         if (staffLine > topLine) {
             topLine = staffLine;
         }
@@ -3027,20 +3052,20 @@ StaffCmper NoteInfoPtr::calcStaff() const
     return m_entry.getStaff();
 }
 
-Note::NoteProperties NoteInfoPtr::calcNoteProperties(EnharmonicOverride enharmonicOverride, bool alwaysUseEntryStaff) const
+Note::NoteProperties NoteInfoPtr::calcNoteProperties(NotePropertiesOptions options) const
 {
     StaffCmper staffId = getEntryInfo().getStaff();
-    ClefIndex clefIndex = getEntryInfo()->clefIndex;
-    if (!alwaysUseEntryStaff) {
+    if (!options.alwaysUseEntryStaff) {
         staffId = calcStaff();
-        if (staffId != m_entry.getStaff()) {
-            if (auto staff = m_entry.createCurrentStaff(staffId)) {
-                clefIndex = staff->calcClefIndex(/*forWrittenPitch*/ true);
-            }
-        }
+    }
+    const bool forWrittenPitch = calcUsesWrittenPitch(m_entry, options.pitchMode, staffId);
+    ClefIndex clefIndex = forWrittenPitch ? getEntryInfo()->clefIndex : getEntryInfo()->clefIndexConcert;
+    const auto staff = m_entry.createCurrentStaff(staffId);
+    if (staffId != m_entry.getStaff() && staff) {
+        clefIndex = staff->calcClefIndex(forWrittenPitch);
     }
     const bool respell = [&]() -> bool {
-        switch (enharmonicOverride) {
+        switch (options.enharmonicOverride) {
         default:
         case EnharmonicOverride::None:
             return calcIsEnharmonicRespell();
@@ -3050,34 +3075,9 @@ Note::NoteProperties NoteInfoPtr::calcNoteProperties(EnharmonicOverride enharmon
             return false;
         }
     }();
-    return (*this)->calcNoteProperties(m_entry.getKeySignature(), KeySignature::KeyContext::Written, clefIndex, calcPercussionNoteInfo(),
-                                       m_entry.createCurrentStaff(staffId), respell);
-}
-
-Note::NoteProperties NoteInfoPtr::calcNotePropertiesConcert(bool alwaysUseEntryStaff) const
-{
-    const ClefIndex clefIndex = [&]() {
-        if (!alwaysUseEntryStaff) {
-            StaffCmper staffId = calcStaff();
-            if (staffId != m_entry.getStaff()) {
-                if (auto staff = m_entry.createCurrentStaff(staffId)) {
-                    return staff->calcClefIndex(/*forWrittenPitch*/ false);
-                }
-            }
-        }
-        return m_entry->clefIndexConcert;
-    }();
-    return (*this)->calcNoteProperties(m_entry.getKeySignature(), KeySignature::KeyContext::Concert, clefIndex, calcPercussionNoteInfo(), nullptr, calcIsEnharmonicRespell());
-}
-
-Note::NoteProperties NoteInfoPtr::calcNotePropertiesInView(bool alwaysUseEntryStaff) const
-{
-    bool forWrittenPitch = false;
-    auto entryFrame = m_entry.getFrame();
-    if (auto partGlobals = entryFrame->getDocument()->getOthers()->get<others::PartGlobals>(entryFrame->getRequestedPartId(), MUSX_GLOBALS_CMPER)) {
-        forWrittenPitch = partGlobals->showTransposed;
-    }
-    return forWrittenPitch ? calcNoteProperties(EnharmonicOverride::None, alwaysUseEntryStaff) : calcNotePropertiesConcert(alwaysUseEntryStaff);
+    const auto keyContext = forWrittenPitch ? KeySignature::KeyContext::Written : KeySignature::KeyContext::Concert;
+    return (*this)->calcNoteProperties(m_entry.getKeySignature(), keyContext, clefIndex, calcPercussionNoteInfo(),
+        forWrittenPitch ? staff : nullptr, respell);
 }
 
 MusxInstance<others::PercussionNoteInfo> NoteInfoPtr::calcPercussionNoteInfo() const
@@ -3148,7 +3148,7 @@ NoteInfoPtr::NoteheadInfo NoteInfoPtr::calcNoteheadInfo() const
     if (currStaff) {
         if (auto noteShapes = currStaff->getNoteShapes()) {
             const size_t index = noteShapes->arrangedByPitch
-                ? size_t(std::get<0>(calcNoteProperties()))
+                ? size_t(calcNoteProperties().noteName)
                 : size_t(music_theory::positiveModulus(int((*this)->harmLev), music_theory::STANDARD_DIATONIC_STEPS));
             if (index < noteShapes->noteShapes.size() && noteShapes->noteShapes[index]) {
                 const auto& shape = noteShapes->noteShapes[index];
@@ -3218,8 +3218,10 @@ bool NoteInfoPtr::isSamePitch(const NoteInfoPtr& src) const
         return thisPercInfo->percNoteType == srcPercInfo->percNoteType
             && thisPercInfo->staffPosition == srcPercInfo->staffPosition;
     }
-    auto [thisPitch, thisOctave, thisAlter, thisStaffPos] = calcNotePropertiesConcert();
-    auto [srcPitch, srcOctave, srcAlter, srcStaffPos] = src.calcNotePropertiesConcert();
+    NotePropertiesOptions options;
+    options.pitchMode = PitchMode::Concert;
+    auto [thisPitch, thisOctave, thisAlter, thisStaffPos] = calcNoteProperties(options);
+    auto [srcPitch, srcOctave, srcAlter, srcStaffPos] = src.calcNoteProperties(options);
     return srcPitch == thisPitch && srcOctave == thisOctave && srcAlter == thisAlter;
 }
 

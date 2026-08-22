@@ -427,7 +427,9 @@ CurveContourDirection Tie::calcDefaultDirection(const dom::NoteInfoPtr& noteInfo
             }
         }
 
-        const int staffPos = std::get<3>(noteInfo.calcNotePropertiesInView(/*alwaysUseEntryStaff*/ true));
+        NotePropertiesOptions propertiesOptions;
+        propertiesOptions.alwaysUseEntryStaff = true;
+        const int staffPos = noteInfo.calcNoteProperties(propertiesOptions).staffPosition;
         const auto staff = entryInfo.createCurrentStaff();
         int stemReversalPos = staff->stemReversal;
         return applyOpposingSeconds((staffPos < stemReversalPos) ? CurveContourDirection::Down : CurveContourDirection::Up);
@@ -581,8 +583,10 @@ std::optional<std::pair<TieConnectStyleType, TieConnectStyleType>> Tie::calcConn
                 if (!nextEntry.calcDisplaysAsRest() && !nextEntry->getEntry()->notes.empty()) {
                     if (direction == CurveContourDirection::Down) {
                         NoteInfoPtr nextNote(nextEntry, 0);
-                        const int nextStaffPos = std::get<3>(nextNote.calcNotePropertiesInView(/*alwaysUseEntryStaff*/ true));
-                        const int currStaffPos = std::get<3>(noteInfo.calcNotePropertiesInView(/*alwaysUseEntryStaff*/ true));
+                        NotePropertiesOptions propertiesOptions;
+                        propertiesOptions.alwaysUseEntryStaff = true;
+                        const int nextStaffPos = nextNote.calcNoteProperties(propertiesOptions).staffPosition;
+                        const int currStaffPos = noteInfo.calcNoteProperties(propertiesOptions).staffPosition;
                         if (nextStaffPos < currStaffPos) {
                             // Ties to an adjacent empty bar have inner placement on both ends. (weird but true)
                             endStyle = TieConnectStyleType::UnderEndPosInner;
@@ -596,8 +600,10 @@ std::optional<std::pair<TieConnectStyleType, TieConnectStyleType>> Tie::calcConn
                     } else {
                         const auto nextEntryNoteCount = nextEntry->getEntry()->notes.size();
                         NoteInfoPtr nextNote(nextEntry, nextEntryNoteCount - 1);
-                        const int nextStaffPos = std::get<3>(nextNote.calcNotePropertiesInView(/*alwaysUseEntryStaff*/ true));
-                        const int currStaffPos = std::get<3>(noteInfo.calcNotePropertiesInView(/*alwaysUseEntryStaff*/ true));
+                        NotePropertiesOptions propertiesOptions;
+                        propertiesOptions.alwaysUseEntryStaff = true;
+                        const int nextStaffPos = nextNote.calcNoteProperties(propertiesOptions).staffPosition;
+                        const int currStaffPos = noteInfo.calcNoteProperties(propertiesOptions).staffPosition;
                         if (nextStaffPos > currStaffPos) {
                             // Ties to an adjacent empty bar have inner placement on both ends. (weird but true)
                             endStyle = TieConnectStyleType::OverEndPosInner;
