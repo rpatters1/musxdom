@@ -3067,7 +3067,7 @@ public:
 
     void integrityCheck(const std::shared_ptr<EnigmaBase>& ptrToThis) override
     {
-        this->OptionsBase::integrityCheck(ptrToThis);
+        this->OthersBase::integrityCheck(ptrToThis);
         if (lineSpacingPercentage && lineSpacingEvpu) {
             lineSpacingEvpu.reset();
             MUSX_INTEGRITY_ERROR("Text options specify both a percent and an absolute line spacing. "
