@@ -1,7 +1,7 @@
 var classmusx_1_1dom_1_1OptionsPool =
 [
     [ "OptionsPool", "classmusx_1_1dom_1_1OptionsPool.html#afc1d25a91373642b13e2d29892816e7e", null ],
-    [ "add", "classmusx_1_1dom_1_1OptionsPool.html#a3fdcfb2ae672198eae420306440fa236", null ],
+    [ "add", "classmusx_1_1dom_1_1OptionsPool.html#adc7a28f26f727673988a0ead01a9b0b1", null ],
     [ "get", "classmusx_1_1dom_1_1OptionsPool.html#a79f8d42b65b79c32275f2f73280d7a4e", null ],
     [ "getArray", "classmusx_1_1dom_1_1OptionsPool.html#a90a64919e68f17b89cdc054d81fbedf8", null ],
     [ "integrityCheckAll", "classmusx_1_1dom_1_1OptionsPool.html#a724deee581d2d4a660ec8584f403dbae", null ]

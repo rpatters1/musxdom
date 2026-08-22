@@ -118,6 +118,9 @@ Public Types</h2></td></tr>
 using&#160;</td><td class="memItemRight" valign="bottom"><b>ObjectPtr</b> = std::shared_ptr&lt; ObjectBaseType &gt;</td></tr>
 <tr class="memdesc:ae26eae6f8358d93cb80b692680875176"><td class="mdescLeft">&#160;</td><td class="mdescRight">shared pointer to <code>ObjectBaseType</code> <br /></td></tr>
 <tr class="separator:ae26eae6f8358d93cb80b692680875176"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2d8332f59339435bb47ffad7785ca4cf" id="r_a2d8332f59339435bb47ffad7785ca4cf"><td class="memItemLeft" align="right" valign="top"><a id="a2d8332f59339435bb47ffad7785ca4cf" name="a2d8332f59339435bb47ffad7785ca4cf"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>PoolMap</b> = std::map&lt; <a class="el" href="structmusx_1_1dom_1_1ObjectPool_1_1ObjectKey.html">ObjectKey</a>, <a class="el" href="classmusx_1_1dom_1_1ObjectPool.html#ae26eae6f8358d93cb80b692680875176">ObjectPtr</a> &gt;</td></tr>
+<tr class="separator:a2d8332f59339435bb47ffad7785ca4cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -154,6 +157,20 @@ virtual&#160;</td><td class="memItemRight" valign="bottom"><b>~ObjectPool</b> ()
 <tr class="memitem:a0ae0ef4e948779d7230251dcc5ab73b2" id="r_a0ae0ef4e948779d7230251dcc5ab73b2"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1ObjectPool.html#a0ae0ef4e948779d7230251dcc5ab73b2">ObjectPool</a> (const <a class="el" href="namespacemusx_1_1dom.html#aa76356b1ad3580081294898c79615c4d">DocumentWeakPtr</a> &amp;document, const std::unordered_map&lt; std::string_view, <a class="el" href="classmusx_1_1dom_1_1EnigmaBase.html#ac655bdce0724d5e32cfcd6203c9a5d1f">dom::EnigmaBase::ShareMode</a> &gt; &amp;knownShareModes={})</td></tr>
 <tr class="memdesc:a0ae0ef4e948779d7230251dcc5ab73b2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs the object pool.  <br /></td></tr>
 <tr class="separator:a0ae0ef4e948779d7230251dcc5ab73b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a620120a282c01ea0cab21653d215a6ce" id="r_a620120a282c01ea0cab21653d215a6ce"><td class="memItemLeft" align="right" valign="top"><a id="a620120a282c01ea0cab21653d215a6ce" name="a620120a282c01ea0cab21653d215a6ce"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>ObjectPool</b> (const <a class="el" href="classmusx_1_1dom_1_1ObjectPool.html">ObjectPool</a> &amp;other)</td></tr>
+<tr class="memdesc:a620120a282c01ea0cab21653d215a6ce"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copies the stored objects without retaining an iterator into the source pool. <br /></td></tr>
+<tr class="separator:a620120a282c01ea0cab21653d215a6ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab782dd82481200bfdb89c584532ac801" id="r_ab782dd82481200bfdb89c584532ac801"><td class="memItemLeft" align="right" valign="top"><a id="ab782dd82481200bfdb89c584532ac801" name="ab782dd82481200bfdb89c584532ac801"></a>
+<a class="el" href="classmusx_1_1dom_1_1ObjectPool.html">ObjectPool</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (const <a class="el" href="classmusx_1_1dom_1_1ObjectPool.html">ObjectPool</a> &amp;other)</td></tr>
+<tr class="memdesc:ab782dd82481200bfdb89c584532ac801"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copies the stored objects without retaining an iterator into the source pool. <br /></td></tr>
+<tr class="separator:ab782dd82481200bfdb89c584532ac801"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeb7f36859f489a7c77ef1219755ef640" id="r_aeb7f36859f489a7c77ef1219755ef640"><td class="memItemLeft" align="right" valign="top"><a id="aeb7f36859f489a7c77ef1219755ef640" name="aeb7f36859f489a7c77ef1219755ef640"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>ObjectPool</b> (<a class="el" href="classmusx_1_1dom_1_1ObjectPool.html">ObjectPool</a> &amp;&amp;)=default</td></tr>
+<tr class="separator:aeb7f36859f489a7c77ef1219755ef640"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6396d393583330d7fc6bdea306ff6740" id="r_a6396d393583330d7fc6bdea306ff6740"><td class="memItemLeft" align="right" valign="top"><a id="a6396d393583330d7fc6bdea306ff6740" name="a6396d393583330d7fc6bdea306ff6740"></a>
+<a class="el" href="classmusx_1_1dom_1_1ObjectPool.html">ObjectPool</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (<a class="el" href="classmusx_1_1dom_1_1ObjectPool.html">ObjectPool</a> &amp;&amp;)=default</td></tr>
+<tr class="separator:a6396d393583330d7fc6bdea306ff6740"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><div class="compoundTemplParams">template&lt;typename ObjectBaseType&gt;<br />

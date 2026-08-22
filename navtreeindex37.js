@@ -1,5 +1,11 @@
 var NAVTREEINDEX37 =
 {
+"structmusx_1_1util_1_1EnigmaStyles.html#a44d9baabb1ff9f1a44c0d201936bd39e":[2,0,1,2,7,1],
+"structmusx_1_1util_1_1EnigmaStyles.html#a5a7ee150f534afc35cc5a5545742ed80":[2,0,1,2,7,5],
+"structmusx_1_1util_1_1EnigmaStyles.html#a5c7a62c1475b70521ba54e0ccec5768d":[2,0,1,2,7,0],
+"structmusx_1_1util_1_1EnigmaStyles.html#a5c7a62c1475b70521ba54e0ccec5768da2db06b134b30d1a9303e42979b213050":[2,0,1,2,7,0,3],
+"structmusx_1_1util_1_1EnigmaStyles.html#a5c7a62c1475b70521ba54e0ccec5768da35be34bf77ce7236e902456f5702deaa":[2,0,1,2,7,0,2],
+"structmusx_1_1util_1_1EnigmaStyles.html#a5c7a62c1475b70521ba54e0ccec5768da6adf97f83acf6453d4a6a4b1070f3754":[2,0,1,2,7,0,0],
 "structmusx_1_1util_1_1EnigmaStyles.html#a5c7a62c1475b70521ba54e0ccec5768daa04c4b5345691a366bf4015c05d9e664":[2,0,1,2,7,0,1],
 "structmusx_1_1util_1_1EnigmaStyles.html#a6008a34e4e4779a8e944829cc2c8d06f":[2,0,1,2,7,7],
 "structmusx_1_1util_1_1EnigmaStyles.html#a6f6cd93795becf51ee465644f5d69021":[2,0,1,2,7,2],

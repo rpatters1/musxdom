@@ -107,10 +107,10 @@ $(document).ready(function(){initNavTree('structmusx_1_1dom_1_1ObjectPool_1_1Obj
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a37842776e0b73ab5df710876c093f5b9" id="r_a37842776e0b73ab5df710876c093f5b9"><td class="memItemLeft" align="right" valign="top"><a id="a37842776e0b73ab5df710876c093f5b9" name="a37842776e0b73ab5df710876c093f5b9"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>ObjectKey</b> (std::string_view n, <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> p, std::optional&lt; <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> &gt; c1=std::nullopt, std::optional&lt; <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> &gt; c2=std::nullopt, std::optional&lt; int &gt; i=std::nullopt)</td></tr>
-<tr class="memdesc:a37842776e0b73ab5df710876c093f5b9"><td class="mdescLeft">&#160;</td><td class="mdescRight">explicit constructor for optional parameters <br /></td></tr>
-<tr class="separator:a37842776e0b73ab5df710876c093f5b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac2cd0ed3f33ba0e813e02a8c313a502f" id="r_ac2cd0ed3f33ba0e813e02a8c313a502f"><td class="memItemLeft" align="right" valign="top"><a id="ac2cd0ed3f33ba0e813e02a8c313a502f" name="ac2cd0ed3f33ba0e813e02a8c313a502f"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>ObjectKey</b> (std::type_index t, std::string_view n, <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> p, std::optional&lt; <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> &gt; c1=std::nullopt, std::optional&lt; <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> &gt; c2=std::nullopt, std::optional&lt; int &gt; i=std::nullopt)</td></tr>
+<tr class="memdesc:ac2cd0ed3f33ba0e813e02a8c313a502f"><td class="mdescLeft">&#160;</td><td class="mdescRight">explicit constructor for optional parameters <br /></td></tr>
+<tr class="separator:ac2cd0ed3f33ba0e813e02a8c313a502f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac9374e43ae430d732c3aaf12dd0c5b8d" id="r_ac9374e43ae430d732c3aaf12dd0c5b8d"><td class="memItemLeft" align="right" valign="top"><a id="ac9374e43ae430d732c3aaf12dd0c5b8d" name="ac9374e43ae430d732c3aaf12dd0c5b8d"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator&lt;</b> (const <a class="el" href="structmusx_1_1dom_1_1ObjectPool_1_1ObjectKey.html">ObjectKey</a> &amp;other) const</td></tr>
 <tr class="memdesc:ac9374e43ae430d732c3aaf12dd0c5b8d"><td class="mdescLeft">&#160;</td><td class="mdescRight">comparison operator for std::map <br /></td></tr>
@@ -122,6 +122,10 @@ std::string&#160;</td><td class="memItemRight" valign="bottom"><b>description</b
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
+<tr class="memitem:aaf1eba6830f3110650f7b1c4cda04945" id="r_aaf1eba6830f3110650f7b1c4cda04945"><td class="memItemLeft" align="right" valign="top"><a id="aaf1eba6830f3110650f7b1c4cda04945" name="aaf1eba6830f3110650f7b1c4cda04945"></a>
+std::type_index&#160;</td><td class="memItemRight" valign="bottom"><b>typeId</b></td></tr>
+<tr class="memdesc:aaf1eba6830f3110650f7b1c4cda04945"><td class="mdescLeft">&#160;</td><td class="mdescRight">runtime identity of the object's concrete class. <br /></td></tr>
+<tr class="separator:aaf1eba6830f3110650f7b1c4cda04945"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acf2e6818f0cea369ce48784084d0c86b" id="r_acf2e6818f0cea369ce48784084d0c86b"><td class="memItemLeft" align="right" valign="top"><a id="acf2e6818f0cea369ce48784084d0c86b" name="acf2e6818f0cea369ce48784084d0c86b"></a>
 std::string_view&#160;</td><td class="memItemRight" valign="bottom"><b>nodeId</b></td></tr>
 <tr class="memdesc:acf2e6818f0cea369ce48784084d0c86b"><td class="mdescLeft">&#160;</td><td class="mdescRight">the identifier for this node. usually the XML node name. <br /></td></tr>
