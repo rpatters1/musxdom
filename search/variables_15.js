@@ -1,7 +1,7 @@
 var searchData=
 [
   ['v2launch_0',['v2Launch',['../classmusx_1_1dom_1_1Entry.html#ac219415d1a965e63bfaf2d9a6b18b28c',1,'musx::dom::Entry']]],
-  ['valign_1',['valign',['../classmusx_1_1dom_1_1others_1_1PageGraphicAssign.html#abe058b6a676a51e19e2d15105fccecea',1,'musx::dom::others::PageGraphicAssign::vAlign'],['../classmusx_1_1dom_1_1others_1_1ShapeGraphicAssign.html#a3af51d416bfc1d243eac23edf08eac68',1,'musx::dom::others::ShapeGraphicAssign::vAlign']]],
+  ['valign_1',['valign',['../classmusx_1_1dom_1_1others_1_1PageGraphicAssign.html#abe058b6a676a51e19e2d15105fccecea',1,'musx::dom::others::PageGraphicAssign::vAlign'],['../classmusx_1_1dom_1_1details_1_1MeasureGraphicAssign.html#abb5a80cd92dbea5c1f1ae3bdb14a88eb',1,'musx::dom::details::MeasureGraphicAssign::vAlign'],['../classmusx_1_1dom_1_1others_1_1ShapeGraphicAssign.html#a3af51d416bfc1d243eac23edf08eac68',1,'musx::dom::others::ShapeGraphicAssign::vAlign']]],
   ['valiha_2',['Valiha',['../namespacemusx_1_1dom_1_1uuid.html#a7dc69a7da70d27c2066aa73eb737cd3b',1,'musx::dom::uuid']]],
   ['value_3',['value',['../classmusx_1_1dom_1_1others_1_1ShapeExpressionDef.html#a2e2a1f41cad06f04e8981bbfdd81ace0',1,'musx::dom::others::ShapeExpressionDef::value'],['../classmusx_1_1dom_1_1others_1_1TextExpressionDef.html#aa8955b31c98ef5c54ed402b10fa108b2',1,'musx::dom::others::TextExpressionDef::value']]],
   ['values_4',['values',['../classmusx_1_1dom_1_1OthersArray.html#a8028099cdd3b81d93efda82d90b944c1',1,'musx::dom::OthersArray::values'],['../classmusx_1_1dom_1_1DetailsArray.html#ab352a48be28b48abf083a563742c1d48',1,'musx::dom::DetailsArray::values']]],

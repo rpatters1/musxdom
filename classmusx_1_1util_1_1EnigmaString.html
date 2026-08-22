@@ -244,7 +244,8 @@ static <a class="el" href="classmusx_1_1util_1_1EnigmaString.html#ad0503e291556a
 <li><code>^rehearsal()</code>: inserts the text for a rehearsal sequence into a text expression.</li>
 <li><code>^subtitle()</code>: inserts the subtitle from File Info (ScoreManager window).</li>
 <li><code>^title()</code>: inserts the title from File Info (ScoreManager window).</li>
-<li><code>^totpages()</code>: inserts the total number of pages in the document. </li>
+<li><code>^totpages()</code>: inserts the total number of pages in the document.</li>
+<li><code>^url(textId)</code>: probably intended for adding hyperlinks to enigma text but never implemented. The <code>textId</code> is the cmper of the hyperlink block text, but Finale does not render anything for this insert. </li>
 </ul>
 </div><h2 class="groupheader">Member Typedef Documentation</h2>
 <a id="ab7774814f864c7fc4e840f73af322936" name="ab7774814f864c7fc4e840f73af322936"></a>
@@ -261,7 +262,7 @@ static <a class="el" href="classmusx_1_1util_1_1EnigmaString.html#ad0503e291556a
 
 <p>Iteration function type that the parser calls back when the font has changed or when recursively parsing an insert that is itself an enigma string, such as (in particular) the part name. </p>
 <ul>
-<li>text: the chunk of text styled with the specified font information</li>
+<li>text: the chunk of text, with the same UTF-8 contract as <a class="el" href="structmusx_1_1util_1_1EnigmaTextChunk.html#a10b6b922df3a05a7c934a849127430b8" title="The chunk as valid UTF-8.">EnigmaTextChunk::text</a></li>
 <li>font: the font information. </li>
 </ul>
 

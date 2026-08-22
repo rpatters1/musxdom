@@ -73,6 +73,7 @@ var classmusx_1_1dom_1_1others_1_1SmartShape =
     [ "createMusicRange", "classmusx_1_1dom_1_1others_1_1SmartShape.html#a90603f232daf80405ea7bf56f840392a", null ],
     [ "integrityCheck", "classmusx_1_1dom_1_1others_1_1SmartShape.html#a7ad6f30fe7066c2dce90eb3db694d401", null ],
     [ "iterateEntries", "classmusx_1_1dom_1_1others_1_1SmartShape.html#a247e5ea76b94a8de228db134de7092c1", null ],
+    [ "direction", "classmusx_1_1dom_1_1others_1_1SmartShape.html#af3702df3d2d82001cc53eec1c58af73f", null ],
     [ "endLyricNum", "classmusx_1_1dom_1_1others_1_1SmartShape.html#a8788a59bf45fc907bdc16daa4d3d639d", null ],
     [ "endLyricType", "classmusx_1_1dom_1_1others_1_1SmartShape.html#a2c6f50d410ca198a830b429394844010", null ],
     [ "endNoteId", "classmusx_1_1dom_1_1others_1_1SmartShape.html#a5fa83fc067c41f14b3cc56dc45af82dd", null ],

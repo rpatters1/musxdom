@@ -1,6 +1,7 @@
 var classmusx_1_1dom_1_1others_1_1PlaybackRoute =
 [
     [ "PlaybackRoute", "classmusx_1_1dom_1_1others_1_1PlaybackRoute.html#abd40523ba556b629682ea5509ed58074", null ],
+    [ "midiBankSelectLeastSignificantByte", "classmusx_1_1dom_1_1others_1_1PlaybackRoute.html#aa625e098ada866d181121dc1679bd1a2", null ],
     [ "midiBankSelectMostSignificantByte", "classmusx_1_1dom_1_1others_1_1PlaybackRoute.html#a2d8101809825d8f3b447de206ee7b18c", null ],
     [ "patch", "classmusx_1_1dom_1_1others_1_1PlaybackRoute.html#ad836f79346653e5602f26b10796f0109", null ],
     [ "patchType", "classmusx_1_1dom_1_1others_1_1PlaybackRoute.html#a19606b00709b30ec737158951335a304", null ],

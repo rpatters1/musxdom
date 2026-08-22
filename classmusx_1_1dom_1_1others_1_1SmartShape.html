@@ -245,7 +245,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>calcIsSlur</b> () con
 <tr class="memdesc:afbbeca7ef4d9d32b9f2f4275bc62bdcd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the tied-to note if this slur is being used as an arpeggiated tie on the specified entry.  <br /></td></tr>
 <tr class="separator:afbbeca7ef4d9d32b9f2f4275bc62bdcd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8e4270d6ae14b235f9df565782ee1e28" id="r_a8e4270d6ae14b235f9df565782ee1e28"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemusx_1_1dom.html#a0dc36a86e1ae0cadd7b7e4c624b07b55">CurveContourDirection</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1SmartShape.html#a8e4270d6ae14b235f9df565782ee1e28">calcContourDirection</a> () const</td></tr>
-<tr class="memdesc:a8e4270d6ae14b235f9df565782ee1e28"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines if a smart shape slur or curve has a fixed direction (up or down) or floats automatically.  <br /></td></tr>
+<tr class="memdesc:a8e4270d6ae14b235f9df565782ee1e28"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines whether the smart shape's contour runs up or down.  <br /></td></tr>
 <tr class="separator:a8e4270d6ae14b235f9df565782ee1e28"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5fe1a12dabd649547c603ba62bd8a585" id="r_a5fe1a12dabd649547c603ba62bd8a585"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemusx_1_1dom.html#a5f47ab5a8dd3f3cab33730ac7e178ad3">VerticalPlacement</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1SmartShape.html#a5fe1a12dabd649547c603ba62bd8a585">calcVerticalPlacementForBeatAttached</a> () const</td></tr>
 <tr class="memdesc:a5fe1a12dabd649547c603ba62bd8a585"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates a vertical placement classification for beat-attached smart shapes.  <br /></td></tr>
@@ -379,6 +379,10 @@ std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1smartshape_1_1Contro
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>hidden</b> {}</td></tr>
 <tr class="memdesc:a60c90bf5763c866d6b83100db09e46cd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Inverse of "Show" option. <br /></td></tr>
 <tr class="separator:a60c90bf5763c866d6b83100db09e46cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af3702df3d2d82001cc53eec1c58af73f" id="r_af3702df3d2d82001cc53eec1c58af73f"><td class="memItemLeft" align="right" valign="top"><a id="af3702df3d2d82001cc53eec1c58af73f" name="af3702df3d2d82001cc53eec1c58af73f"></a>
+<a class="el" href="namespacemusx_1_1dom.html#a5293597f9afe24c9bac919434bdeea44">ShapeDirection</a>&#160;</td><td class="memItemRight" valign="bottom"><b>direction</b> {}</td></tr>
+<tr class="memdesc:af3702df3d2d82001cc53eec1c58af73f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Direction setting for this shape (xml node is <code>&lt;dir&gt;</code>). <br /></td></tr>
+<tr class="separator:af3702df3d2d82001cc53eec1c58af73f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2ea630f2e58899b51ec9d83b213defd7" id="r_a2ea630f2e58899b51ec9d83b213defd7"><td class="memItemLeft" align="right" valign="top"><a id="a2ea630f2e58899b51ec9d83b213defd7" name="a2ea630f2e58899b51ec9d83b213defd7"></a>
 <a class="el" href="namespacemusx_1_1dom.html#ab7553a97242f576eaef75f3e2197d5be">NoteNumber</a>&#160;</td><td class="memItemRight" valign="bottom"><b>startNoteId</b> {}</td></tr>
 <tr class="memdesc:a2ea630f2e58899b51ec9d83b213defd7"><td class="mdescLeft">&#160;</td><td class="mdescRight">If non-zero, the specific note with the entry that this shape starts from. (xml node is <code>&lt;startNoteID&gt;</code>) <br /></td></tr>
@@ -752,9 +756,8 @@ Over System Break" in the Finale U.I. </p>
       </table>
 </div><div class="memdoc">
 
-<p>Determines if a smart shape slur or curve has a fixed direction (up or down) or floats automatically. </p>
-<dl class="section note"><dt>Note</dt><dd>If the smart shape is not a slur or curve, the return value is <code><a class="el" href="namespacemusx_1_1dom.html#a0dc36a86e1ae0cadd7b7e4c624b07b55a6fcdc090caeade09d0efd6253932b6f5" title="contour is automatic, indeterminate, or does not apply">CurveContourDirection::Unspecified</a></code>. </dd></dl>
-<dl class="section return"><dt>Returns</dt><dd>The curve contour direction for fixed-direction shapes; <code><a class="el" href="namespacemusx_1_1dom.html#a0dc36a86e1ae0cadd7b7e4c624b07b55a6fcdc090caeade09d0efd6253932b6f5" title="contour is automatic, indeterminate, or does not apply">CurveContourDirection::Unspecified</a></code> if floating/automatic. </dd></dl>
+<p>Determines whether the smart shape's contour runs up or down. </p>
+<dl class="section return"><dt>Returns</dt><dd>The contour direction, or <code><a class="el" href="namespacemusx_1_1dom.html#a0dc36a86e1ae0cadd7b7e4c624b07b55a6fcdc090caeade09d0efd6253932b6f5" title="contour is automatic, indeterminate, or does not apply">CurveContourDirection::Unspecified</a></code> when the direction is automatic. </dd></dl>
 
 </div>
 </div>

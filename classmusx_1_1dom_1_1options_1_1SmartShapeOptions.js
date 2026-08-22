@@ -28,11 +28,6 @@ var classmusx_1_1dom_1_1options_1_1SmartShapeOptions =
       [ "NoteRightTop", "classmusx_1_1dom_1_1options_1_1SmartShapeOptions.html#a27c3004019ee7ce50ddb667492080b3caa0eb9d1bb59f412ef47865f3f8ab5ff5", null ],
       [ "NoteLeftTop", "classmusx_1_1dom_1_1options_1_1SmartShapeOptions.html#a27c3004019ee7ce50ddb667492080b3cac32bea98d082a16da8635bbb1876ea90", null ]
     ] ],
-    [ "DefaultDirection", "classmusx_1_1dom_1_1options_1_1SmartShapeOptions.html#a356ba665f662d71f0a1733bc636ca613", [
-      [ "Automatic", "classmusx_1_1dom_1_1options_1_1SmartShapeOptions.html#a356ba665f662d71f0a1733bc636ca613a086247a9b57fde6eefee2a0c4752242d", null ],
-      [ "Over", "classmusx_1_1dom_1_1options_1_1SmartShapeOptions.html#a356ba665f662d71f0a1733bc636ca613aef087651eb482bae4624478696f4ad4f", null ],
-      [ "Under", "classmusx_1_1dom_1_1options_1_1SmartShapeOptions.html#a356ba665f662d71f0a1733bc636ca613a02552d3c116b8a96f9ff0001b6ae661c", null ]
-    ] ],
     [ "GlissandoConnectStyleType", "classmusx_1_1dom_1_1options_1_1SmartShapeOptions.html#aaff1cea140b40412884990309ba6f60f", [
       [ "DefaultStart", "classmusx_1_1dom_1_1options_1_1SmartShapeOptions.html#aaff1cea140b40412884990309ba6f60fa18eb7db36373f1d600eb2eac8d51c822", null ],
       [ "DefaultEnd", "classmusx_1_1dom_1_1options_1_1SmartShapeOptions.html#aaff1cea140b40412884990309ba6f60fa3613a3232318cd676fa0dbe420acd430", null ]
@@ -100,7 +95,7 @@ var classmusx_1_1dom_1_1options_1_1SmartShapeOptions =
     [ "crescHeight", "classmusx_1_1dom_1_1options_1_1SmartShapeOptions.html#a84433d738fc0a3a6440ef08631e91d56", null ],
     [ "crescHorizontal", "classmusx_1_1dom_1_1options_1_1SmartShapeOptions.html#af22a19fdbe1c6194a0231bbb80e87745", null ],
     [ "crescLineWidth", "classmusx_1_1dom_1_1options_1_1SmartShapeOptions.html#ae7d6a4ef9413915e8db231afa8b8a1b5", null ],
-    [ "direction", "classmusx_1_1dom_1_1options_1_1SmartShapeOptions.html#ad0f1328764b68196e7bede9423a1dd94", null ],
+    [ "direction", "classmusx_1_1dom_1_1options_1_1SmartShapeOptions.html#af28fda233fb87044a8ae71e10993e61c", null ],
     [ "glissandoConnectStyles", "classmusx_1_1dom_1_1options_1_1SmartShapeOptions.html#afce3d80b5561735b8363889eefc0eac0", null ],
     [ "guitarBendGenText", "classmusx_1_1dom_1_1options_1_1SmartShapeOptions.html#aeffcdfab05f3e35aa9773545eae34695", null ],
     [ "guitarBendHideBendTo", "classmusx_1_1dom_1_1options_1_1SmartShapeOptions.html#a5c73f134a44ff04965bf758d6206e818", null ],

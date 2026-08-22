@@ -28,5 +28,6 @@ var classmusx_1_1dom_1_1options_1_1ChordOptions =
     [ "italicizeCapoChords", "classmusx_1_1dom_1_1options_1_1ChordOptions.html#a1aae380524b833c9fa2a1586b8aefdb2", null ],
     [ "multiFretItemsPerStr", "classmusx_1_1dom_1_1options_1_1ChordOptions.html#a836893aa17fd46b5e562fe56ef07550b", null ],
     [ "showFretboards", "classmusx_1_1dom_1_1options_1_1ChordOptions.html#abf7f420e8e7df13398ec9646514a346c", null ],
+    [ "useFretboardFont", "classmusx_1_1dom_1_1options_1_1ChordOptions.html#a4bbe048b17473fd8ea8dfc9d6fe9c64a", null ],
     [ "useSimpleChordSpelling", "classmusx_1_1dom_1_1options_1_1ChordOptions.html#a9510d54254e89a1012e7a6c7dd66c851", null ]
 ];

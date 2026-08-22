@@ -153,6 +153,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a8cddce35e4be909a8bae31192d69d7f0" id="r_a8cddce35e4be909a8bae31192d69d7f0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1util_1_1EnigmaParsingContext.html">util::EnigmaParsingContext</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1TextBlock.html#a8cddce35e4be909a8bae31192d69d7f0">getRawTextCtx</a> (<a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> forPartId, std::optional&lt; <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> &gt; forPageId=std::nullopt, <a class="el" href="classmusx_1_1util_1_1EnigmaString.html#ad0503e291556abece57b9c47b16bbf1e">util::EnigmaString::TextInsertCallback</a> defaultInsertFunc=<a class="el" href="classmusx_1_1util_1_1EnigmaString.html#a78c97ffac1f57121cedf8d72ce879c11">util::EnigmaString::defaultInsertsCallback</a>) const</td></tr>
 <tr class="memdesc:a8cddce35e4be909a8bae31192d69d7f0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the raw text block context (from the <code>texts</code> pool) based on <a class="el" href="classmusx_1_1dom_1_1others_1_1TextBlock.html#a00eb2e5fa0b0233bb07c2272e8896f52" title="Text tag indicating the type of text block. (xml tag is &lt;textTag&gt;)">textType</a>.  <br /></td></tr>
 <tr class="separator:a8cddce35e4be909a8bae31192d69d7f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a29968bbe2957d7a8fa5fb6a3d25adfbc" id="r_a29968bbe2957d7a8fa5fb6a3d25adfbc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1TextBlock.html#a29968bbe2957d7a8fa5fb6a3d25adfbc">integrityCheck</a> (const std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1EnigmaBase.html">EnigmaBase</a> &gt; &amp;ptrToThis) override</td></tr>
+<tr class="memdesc:a29968bbe2957d7a8fa5fb6a3d25adfbc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Performs a final consistency check after population.  <br /></td></tr>
+<tr class="separator:a29968bbe2957d7a8fa5fb6a3d25adfbc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classmusx_1_1dom_1_1OthersBase"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classmusx_1_1dom_1_1OthersBase')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classmusx_1_1dom_1_1OthersBase.html">musx::dom::OthersBase</a></td></tr>
 <tr class="memitem:aeea2dce2bc876010d075adcba280c1ab inherit pub_methods_classmusx_1_1dom_1_1OthersBase" id="r_aeea2dce2bc876010d075adcba280c1ab"><td class="memItemLeft" align="right" valign="top">
 &#160;</td><td class="memItemRight" valign="bottom"><b>OthersBase</b> (const <a class="el" href="classmusx_1_1dom_1_1OthersBase.html">OthersBase</a> &amp;)=default</td></tr>
@@ -188,9 +191,6 @@ const <a class="el" href="classmusx_1_1dom_1_1EnigmaBase.html#a1e53d536ab5b5c2c0
 void&#160;</td><td class="memItemRight" valign="bottom"><b>addUnlinkedNode</b> (const std::string &amp;nodeName)</td></tr>
 <tr class="memdesc:a661cfa916bbefd7ee30ed777af97491f inherit pub_methods_classmusx_1_1dom_1_1EnigmaBase"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a shared node for this instance. <br /></td></tr>
 <tr class="separator:a661cfa916bbefd7ee30ed777af97491f inherit pub_methods_classmusx_1_1dom_1_1EnigmaBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afe002b3162a9e31032d84196c80f6f74 inherit pub_methods_classmusx_1_1dom_1_1EnigmaBase" id="r_afe002b3162a9e31032d84196c80f6f74"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EnigmaBase.html#afe002b3162a9e31032d84196c80f6f74">integrityCheck</a> (const std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1EnigmaBase.html">EnigmaBase</a> &gt; &amp;ptrToThis)</td></tr>
-<tr class="memdesc:afe002b3162a9e31032d84196c80f6f74 inherit pub_methods_classmusx_1_1dom_1_1EnigmaBase"><td class="mdescLeft">&#160;</td><td class="mdescRight">Performs a final consistency check after population.  <br /></td></tr>
-<tr class="separator:afe002b3162a9e31032d84196c80f6f74 inherit pub_methods_classmusx_1_1dom_1_1EnigmaBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0766cc6a150c2335b4aa94bbad6d28b0 inherit pub_methods_classmusx_1_1dom_1_1EnigmaBase" id="r_a0766cc6a150c2335b4aa94bbad6d28b0"><td class="memItemLeft" align="right" valign="top">
 virtual bool&#160;</td><td class="memItemRight" valign="bottom"><b>requireAllFields</b> () const</td></tr>
 <tr class="memdesc:a0766cc6a150c2335b4aa94bbad6d28b0 inherit pub_methods_classmusx_1_1dom_1_1EnigmaBase"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if all fields are required for valid input. <br /></td></tr>
@@ -233,14 +233,15 @@ Public Attributes</h2></td></tr>
 <a class="el" href="namespacemusx_1_1dom.html#a7f27f66bcae06e7ccf1173bfca211da2">Evpu</a>&#160;</td><td class="memItemRight" valign="bottom"><b>width</b> {}</td></tr>
 <tr class="memdesc:ab0d9f62a5a82d35db19b3a1ca003c04a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Width of standard frame. If zero, the width expands to fit the text. <br /></td></tr>
 <tr class="separator:ab0d9f62a5a82d35db19b3a1ca003c04a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab8e19bab2325cbccfa82c87690428d37" id="r_ab8e19bab2325cbccfa82c87690428d37"><td class="memItemLeft" align="right" valign="top"><a id="ab8e19bab2325cbccfa82c87690428d37" name="ab8e19bab2325cbccfa82c87690428d37"></a>
-<a class="el" href="namespacemusx_1_1dom.html#a7f27f66bcae06e7ccf1173bfca211da2">Evpu</a>&#160;</td><td class="memItemRight" valign="bottom"><b>height</b> {}</td></tr>
-<tr class="memdesc:ab8e19bab2325cbccfa82c87690428d37"><td class="mdescLeft">&#160;</td><td class="mdescRight">Height of standard frame. If zero, the height expands to fit the text. <br /></td></tr>
+<tr class="memitem:ab8e19bab2325cbccfa82c87690428d37" id="r_ab8e19bab2325cbccfa82c87690428d37"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemusx_1_1dom.html#a7f27f66bcae06e7ccf1173bfca211da2">Evpu</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1TextBlock.html#ab8e19bab2325cbccfa82c87690428d37">height</a> {}</td></tr>
 <tr class="separator:ab8e19bab2325cbccfa82c87690428d37"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac45a6402d4c9f830a248b2e4d0d94ca5" id="r_ac45a6402d4c9f830a248b2e4d0d94ca5"><td class="memItemLeft" align="right" valign="top"><a id="ac45a6402d4c9f830a248b2e4d0d94ca5" name="ac45a6402d4c9f830a248b2e4d0d94ca5"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>lineSpacingPercentage</b> {}</td></tr>
-<tr class="memdesc:ac45a6402d4c9f830a248b2e4d0d94ca5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Line spacing percentage. <br /></td></tr>
-<tr class="separator:ac45a6402d4c9f830a248b2e4d0d94ca5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af451421411cb271de69a237a6c6b37ad" id="r_af451421411cb271de69a237a6c6b37ad"><td class="memItemLeft" align="right" valign="top">std::optional&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1TextBlock.html#af451421411cb271de69a237a6c6b37ad">lineSpacingPercentage</a></td></tr>
+<tr class="memdesc:af451421411cb271de69a237a6c6b37ad"><td class="mdescLeft">&#160;</td><td class="mdescRight">"Line Spacing: Automatic" percent value.  <br /></td></tr>
+<tr class="separator:af451421411cb271de69a237a6c6b37ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a996e54d1d3cd44c21147e57d81f8c1ed" id="r_a996e54d1d3cd44c21147e57d81f8c1ed"><td class="memItemLeft" align="right" valign="top"><a id="a996e54d1d3cd44c21147e57d81f8c1ed" name="a996e54d1d3cd44c21147e57d81f8c1ed"></a>
+std::optional&lt; <a class="el" href="namespacemusx_1_1dom.html#a7f27f66bcae06e7ccf1173bfca211da2">Evpu</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>lineSpacingEvpu</b></td></tr>
+<tr class="memdesc:a996e54d1d3cd44c21147e57d81f8c1ed"><td class="mdescLeft">&#160;</td><td class="mdescRight">"Line Spacing: Set To" absolute value. (See <a class="el" href="classmusx_1_1dom_1_1others_1_1TextBlock.html#af451421411cb271de69a237a6c6b37ad" title="&quot;Line Spacing: Automatic&quot; percent value.">lineSpacingPercentage</a>.) <br /></td></tr>
+<tr class="separator:a996e54d1d3cd44c21147e57d81f8c1ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac0ed1e3643a5816ce0955fa3437d6a04" id="r_ac0ed1e3643a5816ce0955fa3437d6a04"><td class="memItemLeft" align="right" valign="top"><a id="ac0ed1e3643a5816ce0955fa3437d6a04" name="ac0ed1e3643a5816ce0955fa3437d6a04"></a>
 <a class="el" href="namespacemusx_1_1dom.html#a7f27f66bcae06e7ccf1173bfca211da2">Evpu</a>&#160;</td><td class="memItemRight" valign="bottom"><b>xAdd</b> {}</td></tr>
 <tr class="memdesc:ac0ed1e3643a5816ce0955fa3437d6a04"><td class="mdescLeft">&#160;</td><td class="mdescRight">Horizontal offset from handle. <br /></td></tr>
@@ -429,7 +430,69 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
+<a id="a29968bbe2957d7a8fa5fb6a3d25adfbc" name="a29968bbe2957d7a8fa5fb6a3d25adfbc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a29968bbe2957d7a8fa5fb6a3d25adfbc">&#9670;&#160;</a></span>integrityCheck()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void musx::dom::others::TextBlock::integrityCheck </td>
+          <td>(</td>
+          <td class="paramtype">const std::shared_ptr&lt; <a class="el" href="classmusx_1_1dom_1_1EnigmaBase.html">EnigmaBase</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>ptrToThis</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Performs a final consistency check after population. </p>
+
+<p>Reimplemented from <a class="el" href="classmusx_1_1dom_1_1EnigmaBase.html#afe002b3162a9e31032d84196c80f6f74">musx::dom::EnigmaBase</a>.</p>
+
+</div>
+</div>
 <h2 class="groupheader">Member Data Documentation</h2>
+<a id="ab8e19bab2325cbccfa82c87690428d37" name="ab8e19bab2325cbccfa82c87690428d37"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab8e19bab2325cbccfa82c87690428d37">&#9670;&#160;</a></span>height</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacemusx_1_1dom.html#a7f27f66bcae06e7ccf1173bfca211da2">Evpu</a> musx::dom::others::TextBlock::height {}</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Height of standard frame. If zero, the height expands to fit the text. </p>
+
+</div>
+</div>
+<a id="af451421411cb271de69a237a6c6b37ad" name="af451421411cb271de69a237a6c6b37ad"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af451421411cb271de69a237a6c6b37ad">&#9670;&#160;</a></span>lineSpacingPercentage</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::optional&lt;int&gt; musx::dom::others::TextBlock::lineSpacingPercentage</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>"Line Spacing: Automatic" percent value. </p>
+<p>Line spacing is either a percent or an absolute distance, and the xml carries whichever applies. Exactly one of this and <a class="el" href="classmusx_1_1dom_1_1others_1_1TextBlock.html#a996e54d1d3cd44c21147e57d81f8c1ed" title="&quot;Line Spacing: Set To&quot; absolute value. (See lineSpacingPercentage.)">lineSpacingEvpu</a> has a value once <a class="el" href="classmusx_1_1dom_1_1others_1_1TextBlock.html#a29968bbe2957d7a8fa5fb6a3d25adfbc" title="Performs a final consistency check after population.">integrityCheck</a> has run. </p>
+
+</div>
+</div>
 <a id="a4e4b6ab69888bba10dbd27f470bc385f" name="a4e4b6ab69888bba10dbd27f470bc385f"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a4e4b6ab69888bba10dbd27f470bc385f">&#9670;&#160;</a></span>newPos36</h2>
 

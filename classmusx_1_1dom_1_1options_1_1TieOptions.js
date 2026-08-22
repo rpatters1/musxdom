@@ -6,7 +6,8 @@ var classmusx_1_1dom_1_1options_1_1TieOptions =
     [ "ChordTieDirType", "classmusx_1_1dom_1_1options_1_1TieOptions.html#a8e717bcfa8a196892b462c27ccb5084f", [
       [ "OutsideInside", "classmusx_1_1dom_1_1options_1_1TieOptions.html#a8e717bcfa8a196892b462c27ccb5084fa18b7c5400f904c5ebe1f2501f87e526e", null ],
       [ "StemReversal", "classmusx_1_1dom_1_1options_1_1TieOptions.html#a8e717bcfa8a196892b462c27ccb5084fa0674e7e4fbd13db5049c5f7b8847bbd2", null ],
-      [ "SplitEvenly", "classmusx_1_1dom_1_1options_1_1TieOptions.html#a8e717bcfa8a196892b462c27ccb5084fab9e279a647b045b9b8046f152ce466e5", null ]
+      [ "SplitEvenly", "classmusx_1_1dom_1_1options_1_1TieOptions.html#a8e717bcfa8a196892b462c27ccb5084fab9e279a647b045b9b8046f152ce466e5", null ],
+      [ "Unknown", "classmusx_1_1dom_1_1options_1_1TieOptions.html#a8e717bcfa8a196892b462c27ccb5084fa88183b946cc5f0e8c96b2e66e1c74a7e", null ]
     ] ],
     [ "ControlStyleType", "classmusx_1_1dom_1_1options_1_1TieOptions.html#ac17e09ac7e1de61a6afa2b6638806555", [
       [ "ShortSpan", "classmusx_1_1dom_1_1options_1_1TieOptions.html#ac17e09ac7e1de61a6afa2b6638806555a7b7ce44994a4a2997770c417296af75c", null ],

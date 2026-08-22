@@ -8,6 +8,7 @@ var classmusx_1_1dom_1_1details_1_1MeasureNumberIndividualPositioning =
     [ "MeasureNumberIndividualPositioning", "classmusx_1_1dom_1_1details_1_1MeasureNumberIndividualPositioning.html#a4906ce08a82cb90a4d05950f9fee9e29", null ],
     [ "enclosure", "classmusx_1_1dom_1_1details_1_1MeasureNumberIndividualPositioning.html#ace833fda4bb0f1ef5a0c09f4d832f185", null ],
     [ "forceVisibility", "classmusx_1_1dom_1_1details_1_1MeasureNumberIndividualPositioning.html#aa5086f5876a1baf50be26d74c591395b", null ],
+    [ "isAlternateNumber", "classmusx_1_1dom_1_1details_1_1MeasureNumberIndividualPositioning.html#acffb4943b111cdcb7b6f94ac9b13d221", null ],
     [ "measNumRegion", "classmusx_1_1dom_1_1details_1_1MeasureNumberIndividualPositioning.html#ac5d6230767b029380aa6dcc894068b0d", null ],
     [ "useEnclosure", "classmusx_1_1dom_1_1details_1_1MeasureNumberIndividualPositioning.html#a08129fc40e6e2705ff083acb78e2ba30", null ],
     [ "xOffset", "classmusx_1_1dom_1_1details_1_1MeasureNumberIndividualPositioning.html#a3788e80e8b2e2b36f70f39086384c8ff", null ],

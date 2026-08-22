@@ -1,10 +1,10 @@
 var searchData=
 [
   ['unbeamedonly_0',['UnbeamedOnly',['../classmusx_1_1dom_1_1options_1_1TupletOptions.html#a6934b666a5a0ee40f9b20cac9f0f9fcaac309ef90f7b9602fb6be73eb81f3f47e',1,'musx::dom::options::TupletOptions']]],
-  ['under_1',['Under',['../classmusx_1_1dom_1_1details_1_1TieAlterBase.html#a01450d31978c4de387ad4b1f80c9083da02552d3c116b8a96f9ff0001b6ae661c',1,'musx::dom::details::TieAlterBase']]],
+  ['under_1',['under',['../classmusx_1_1dom_1_1details_1_1TieAlterBase.html#a01450d31978c4de387ad4b1f80c9083da02552d3c116b8a96f9ff0001b6ae661c',1,'musx::dom::details::TieAlterBase::Under'],['../namespacemusx_1_1dom.html#a5293597f9afe24c9bac919434bdeea44a02552d3c116b8a96f9ff0001b6ae661c',1,'musx::dom::Under']]],
   ['undocumented_2',['Undocumented',['../namespacemusx_1_1dom.html#a93764339b56e531ea37af5181b20b113afcb2132b65cdd119b19be66fbc3622e2',1,'musx::dom']]],
   ['unicode_3',['Unicode',['../classmusx_1_1util_1_1EnigmaString.html#a4692b7b51e78c89ee59a2871fee34455a7f6c02d96265dd1d37b1101de1101541',1,'musx::util::EnigmaString']]],
-  ['unknown_4',['Unknown',['../namespacemusic__theory.html#a815d2a1e748a138127d59c252e4fa946a88183b946cc5f0e8c96b2e66e1c74a7e',1,'music_theory']]],
+  ['unknown_4',['unknown',['../classmusx_1_1dom_1_1options_1_1TieOptions.html#a8e717bcfa8a196892b462c27ccb5084fa88183b946cc5f0e8c96b2e66e1c74a7e',1,'musx::dom::options::TieOptions::Unknown'],['../namespacemusic__theory.html#a815d2a1e748a138127d59c252e4fa946a88183b946cc5f0e8c96b2e66e1c74a7e',1,'music_theory::Unknown']]],
   ['unknown4_5',['Unknown4',['../classmusx_1_1dom_1_1details_1_1Bracket.html#a94b9ba6a2a06355200a730432e7788c2a5adad30d647e2e10b57045c5b488d77e',1,'musx::dom::details::Bracket']]],
   ['unknown5_6',['Unknown5',['../classmusx_1_1dom_1_1details_1_1Bracket.html#a94b9ba6a2a06355200a730432e7788c2a9438fee56697232b35b5fddd839f5557',1,'musx::dom::details::Bracket']]],
   ['unknown7_7',['Unknown7',['../classmusx_1_1dom_1_1details_1_1Bracket.html#a94b9ba6a2a06355200a730432e7788c2a5d0feb5e862d1330b3932ebc38be7d40',1,'musx::dom::details::Bracket']]],

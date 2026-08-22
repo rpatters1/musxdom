@@ -1032,6 +1032,11 @@ var namespacemusx_1_1dom =
       [ "Stroke", "namespacemusx_1_1dom.html#a93764339b56e531ea37af5181b20b113a8e763d9065582268c9ffa345a3f81f5f", null ],
       [ "VerticalMode", "namespacemusx_1_1dom.html#a93764339b56e531ea37af5181b20b113a95196e7fcad262a2a801cb4ab78b3520", null ]
     ] ],
+    [ "ShapeDirection", "namespacemusx_1_1dom.html#a5293597f9afe24c9bac919434bdeea44", [
+      [ "Automatic", "namespacemusx_1_1dom.html#a5293597f9afe24c9bac919434bdeea44a086247a9b57fde6eefee2a0c4752242d", null ],
+      [ "Over", "namespacemusx_1_1dom.html#a5293597f9afe24c9bac919434bdeea44aef087651eb482bae4624478696f4ad4f", null ],
+      [ "Under", "namespacemusx_1_1dom.html#a5293597f9afe24c9bac919434bdeea44a02552d3c116b8a96f9ff0001b6ae661c", null ]
+    ] ],
     [ "ShowClefMode", "namespacemusx_1_1dom.html#a09b81b6535bd382e3afc1a00ba080215", [
       [ "WhenNeeded", "namespacemusx_1_1dom.html#a09b81b6535bd382e3afc1a00ba080215a1547a66f02e98611ff7d77d5ba567377", null ],
       [ "Never", "namespacemusx_1_1dom.html#a09b81b6535bd382e3afc1a00ba080215a6e7b34fa59e1bd229b207892956dc41c", null ],

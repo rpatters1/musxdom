@@ -261,9 +261,9 @@ std::optional&lt; size_t &gt;&#160;</td><td class="memItemRight" valign="bottom"
 <tr class="memitem:aa7cecd561c595a6685ab1204b919e442" id="r_aa7cecd561c595a6685ab1204b919e442"><td class="memItemLeft" align="right" valign="top">std::pair&lt; int, int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#aa7cecd561c595a6685ab1204b919e442">calcTopBottomStaffPositions</a> () const</td></tr>
 <tr class="memdesc:aa7cecd561c595a6685ab1204b919e442"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the top and bottom staff positions of the entry, taking into account percussion notes. This function must not be called on a floating rest. It asserts and throws if so.  <br /></td></tr>
 <tr class="separator:aa7cecd561c595a6685ab1204b919e442"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac514cd494c387eb82a78a3cfb472cf91" id="r_ac514cd494c387eb82a78a3cfb472cf91"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#ac514cd494c387eb82a78a3cfb472cf91">calcFloatingRestStaffPosition</a> () const</td></tr>
-<tr class="memdesc:ac514cd494c387eb82a78a3cfb472cf91"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the staff position of a floating rest.  <br /></td></tr>
-<tr class="separator:ac514cd494c387eb82a78a3cfb472cf91"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0b974c77c6258f700c14a003d2790448" id="r_a0b974c77c6258f700c14a003d2790448"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#a0b974c77c6258f700c14a003d2790448">calcZeroNotePosition</a> () const</td></tr>
+<tr class="memdesc:a0b974c77c6258f700c14a003d2790448"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the staff position for an entry with no note data.  <br /></td></tr>
+<tr class="separator:a0b974c77c6258f700c14a003d2790448"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aee5a24c2959499b513c8bee591ecd5f0" id="r_aee5a24c2959499b513c8bee591ecd5f0"><td class="memItemLeft" align="right" valign="top">std::pair&lt; <a class="el" href="namespacemusx_1_1dom.html#a7f27f66bcae06e7ccf1173bfca211da2">Evpu</a>, <a class="el" href="namespacemusx_1_1dom.html#a7f27f66bcae06e7ccf1173bfca211da2">Evpu</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#aee5a24c2959499b513c8bee591ecd5f0">calcTopBottomExtent</a> () const</td></tr>
 <tr class="memdesc:aee5a24c2959499b513c8bee591ecd5f0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the top and bottom EVPU extent of the entry's approximate visual footprint.  <br /></td></tr>
 <tr class="separator:aee5a24c2959499b513c8bee591ecd5f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -735,33 +735,6 @@ Static Public Member Functions</h2></td></tr>
 <p>Returns the <a class="el" href="classmusx_1_1dom_1_1Entry.html" title="Represents an entry containing metadata and notes.">Entry</a> stem settings for the current requested part. This function encapsulates handling of the case when the two booleans are unlinked and different in score and part(s). </p>
 <dl class="section note"><dt>Note</dt><dd>This function is only for getting the entry's two boolean stem settings. Use <a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html#a87a183870482e7322a06c94d953a31aa" title="Determines the effective stem direction of the entry, taking into account voices, layers,...">calcUpStem</a> to get the entry's effective stem direction, taking into account all options and situations. </dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>A std::pair&lt;bool, bool&gt; with the first being the freezeStem setting and the second being the upStem setting. </dd></dl>
-
-</div>
-</div>
-<a id="ac514cd494c387eb82a78a3cfb472cf91" name="ac514cd494c387eb82a78a3cfb472cf91"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac514cd494c387eb82a78a3cfb472cf91">&#9670;&#160;</a></span>calcFloatingRestStaffPosition()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">int musx::dom::EntryInfoPtr::calcFloatingRestStaffPosition </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Calculates the staff position of a floating rest. </p>
-<dl class="section note"><dt>Note</dt><dd>This helper is only valid when the entry is a floating rest. </dd></dl>
-<dl class="section return"><dt>Returns</dt><dd>The staff position used to place the floating rest. </dd></dl>
-<dl class="exception"><dt>Exceptions</dt><dd>
-  <table class="exception">
-    <tr><td class="paramname">std::logic_error</td><td>if the entry is not a floating rest. </td></tr>
-  </table>
-  </dd>
-</dl>
 
 </div>
 </div>
@@ -1329,6 +1302,32 @@ Static Public Member Functions</h2></td></tr>
 
 <p>Calculates if the entry is upstem by default, without considering voices, layers, staff options, cross-staffing, or manual overrides. </p>
 <dl class="section return"><dt>Returns</dt><dd>True if the entry is upstem barring any other factors that would override the stem direction. False if it is downstem. </dd></dl>
+
+</div>
+</div>
+<a id="a0b974c77c6258f700c14a003d2790448" name="a0b974c77c6258f700c14a003d2790448"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0b974c77c6258f700c14a003d2790448">&#9670;&#160;</a></span>calcZeroNotePosition()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int musx::dom::EntryInfoPtr::calcZeroNotePosition </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Calculates the staff position for an entry with no note data. </p>
+<p>Empty non-rest entries are positioned on the staff reference line. For rests, this applies the floating-rest and default-rest positioning rules. A rest with note data gets its staff position from its RESTID note through <a class="el" href="classmusx_1_1dom_1_1NoteInfoPtr.html#aacb76820577ceef2195da88bfbe37435" title="Calculates the note name, octave number, actual alteration, and staff position for the pitch of the n...">NoteInfoPtr::calcNotePropertiesInView</a>. </p><dl class="section return"><dt>Returns</dt><dd>The staff position used to place the entry. </dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::logic_error</td><td>if the entry has note data, or if required positioning data is unavailable. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

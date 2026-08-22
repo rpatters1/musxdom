@@ -20,5 +20,6 @@ var classmusx_1_1dom_1_1others_1_1PartDefinition =
     [ "partOrder", "classmusx_1_1dom_1_1others_1_1PartDefinition.html#a905607c86784a417ba48bbd86cc01f4a", null ],
     [ "printPart", "classmusx_1_1dom_1_1others_1_1PartDefinition.html#afc48be3da07b0fa0b0e8dd84faf87b9f", null ],
     [ "smartMusicInst", "classmusx_1_1dom_1_1others_1_1PartDefinition.html#a2196083a94f56555b95331ddd206ff2c", null ],
+    [ "unlinkInsts", "classmusx_1_1dom_1_1others_1_1PartDefinition.html#a624679595c87864de22fcbc23c6efc11", null ],
     [ "useAsSmpInst", "classmusx_1_1dom_1_1others_1_1PartDefinition.html#ae04fcc1db50fdb0732bf8cd1c14460bc", null ]
 ];
