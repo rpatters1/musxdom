@@ -228,17 +228,18 @@ public:
             }
         }
         auto shareModeIt = m_shareMode.find(key.nodeId);
-        auto [poolIt, emplaced] = m_pool.emplace(std::move(key), object);
+        const auto objectShareMode = object->getShareMode();
+        auto [poolIt, emplaced] = m_pool.emplace(std::move(key), std::move(object));
         if (!emplaced) {
             MUSX_INTEGRITY_ERROR("Attempted to add same key more than once: " + poolIt->first.description());
         }
         if (shareModeIt == m_shareMode.end()) {
-            m_shareMode.emplace(poolIt->first.nodeId, object->getShareMode());
-        } else if (object->getShareMode() != shareModeIt->second && object->getShareMode() != EnigmaBase::ShareMode::All) {
+            m_shareMode.emplace(poolIt->first.nodeId, objectShareMode);
+        } else if (objectShareMode != shareModeIt->second && objectShareMode != EnigmaBase::ShareMode::All) {
             if (shareModeIt->second == EnigmaBase::ShareMode::All) {
-                m_shareMode[poolIt->first.nodeId] = object->getShareMode();
+                m_shareMode[poolIt->first.nodeId] = objectShareMode;
             } else {
-                MUSX_INTEGRITY_ERROR("Share mode for added " + std::string(poolIt->first.nodeId) + " object [" + std::to_string(int(object->getShareMode()))
+                MUSX_INTEGRITY_ERROR("Share mode for added " + std::string(poolIt->first.nodeId) + " object [" + std::to_string(int(objectShareMode))
                     + "] does not match previous [" + std::to_string(int(shareModeIt->second)) + "]");
             }
         }
@@ -445,13 +446,15 @@ public:
     OptionsPool(const DocumentWeakPtr& document) : m_pool(document) {}
 
     /** @brief Scalar version of #ObjectPool::add */
-    void add(std::string_view nodeName, const std::shared_ptr<OptionsBase>& instance)
+    void add(std::string_view nodeName, std::shared_ptr<OptionsBase> instance)
     {
         const EnigmaBase* basePtr = instance.get();
         if (basePtr->getSourcePartId() != SCORE_PARTID) {
             MUSX_INTEGRITY_ERROR("Options node " + std::string(nodeName) + " hase non-score part id [" + std::to_string(basePtr->getSourcePartId()) + "]");
         }
-        m_pool.add({ nodeName, basePtr->getSourcePartId() }, instance);
+        const ObjectPool<OptionsBase>::ObjectKey key{
+            nodeName, basePtr->getSourcePartId()};
+        m_pool.add(key, std::move(instance));
     }
 
     /// @brief Validates every option object. Called by document construction finalization.
@@ -508,8 +511,13 @@ public:
     }) {}
 
     /** @brief OthersPool version of #ObjectPool::add */
-    void add(std::string_view nodeName, const std::shared_ptr<OthersBase>& instance)
-    { m_pool.add({nodeName, instance->getSourcePartId(), instance->getCmper(), std::nullopt, instance->getInci()}, instance); }
+    void add(std::string_view nodeName, std::shared_ptr<OthersBase> instance)
+    {
+        const ObjectPool<OthersBase>::ObjectKey key{
+            nodeName, instance->getSourcePartId(), instance->getCmper(),
+            std::nullopt, instance->getInci()};
+        m_pool.add(key, std::move(instance));
+    }
 
     /// @brief Validates every others object. Called by document construction finalization.
     void integrityCheckAll() const { m_pool.integrityCheckAll(); }
@@ -574,8 +582,13 @@ public:
     }) {}
 
     /** @brief DetailsPool version of #ObjectPool::add */
-    void add(std::string_view nodeName, const std::shared_ptr<DetailsBase>& instance)
-    { m_pool.add({nodeName, instance->getSourcePartId(), instance->getCmper1(), instance->getCmper2(), instance->getInci()}, instance); }
+    void add(std::string_view nodeName, std::shared_ptr<DetailsBase> instance)
+    {
+        const ObjectPool<DetailsBase>::ObjectKey key{
+            nodeName, instance->getSourcePartId(), instance->getCmper1(),
+            instance->getCmper2(), instance->getInci()};
+        m_pool.add(key, std::move(instance));
+    }
 
     /// @brief Validates every details object. Called by document construction finalization.
     void integrityCheckAll() const { m_pool.integrityCheckAll(); }
@@ -654,9 +667,9 @@ public:
     bool empty() const { return m_pool.empty(); }
 
     /** @brief Add an entry to the EntryPool. (Used by the factory.) */
-    void add(EntryNumber entryNumber, const std::shared_ptr<Entry>& instance)
+    void add(EntryNumber entryNumber, std::shared_ptr<Entry> instance)
     {
-        auto [it, emplaced] = m_pool.emplace(entryNumber, instance);
+        auto [it, emplaced] = m_pool.emplace(entryNumber, std::move(instance));
         if (!emplaced) {
             MUSX_INTEGRITY_ERROR("Entry number " + std::to_string(entryNumber) + " added twice.");
         }
@@ -708,13 +721,15 @@ public:
     TextsPool(const DocumentWeakPtr& document) : m_pool(document) {}
 
     /** @brief Texts version of #ObjectPool::add */
-    void add(std::string_view nodeName, const std::shared_ptr<TextsBase>& instance)
+    void add(std::string_view nodeName, std::shared_ptr<TextsBase> instance)
     {
         const EnigmaBase* basePtr = instance.get();
         if (basePtr->getSourcePartId() != SCORE_PARTID) {
             MUSX_INTEGRITY_ERROR("Texts node " + std::string(nodeName) + " hase non-score part id [" + std::to_string(basePtr->getSourcePartId()) + "]");
         }
-        m_pool.add({ nodeName, basePtr->getSourcePartId(), instance->getTextNumber() }, instance);
+        const ObjectPool<TextsBase>::ObjectKey key{
+            nodeName, basePtr->getSourcePartId(), instance->getTextNumber()};
+        m_pool.add(key, std::move(instance));
     }
 
     /// @brief Validates every text object. Called by document construction finalization.

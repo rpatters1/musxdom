@@ -388,9 +388,10 @@ std::shared_ptr<PoolType> createPool(const xml::XmlElementPtr& element,
                     + std::string(info->xmlNodeName));
             }
             if constexpr (std::is_same_v<PoolType, dom::EntryPool>) {
-                pool->add(typed->getEntryNumber(), typed);
+                const auto entryNumber = typed->getEntryNumber();
+                pool->add(entryNumber, std::move(typed));
             } else {
-                pool->add(info->xmlNodeName, typed);
+                pool->add(info->xmlNodeName, std::move(typed));
             }
         }
     }
