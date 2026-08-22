@@ -31,7 +31,9 @@
 #include <variant>
 #include <stdexcept>
 #include <functional>
+#include <iterator>
 #include <limits>
+#include <typeindex>
 
 #include "MusxInstance.h"
 
@@ -98,6 +100,7 @@ public:
     using ObjectPtr = std::shared_ptr<ObjectBaseType>;
     /** @brief key type for storing in pool */
     struct ObjectKey {
+        std::type_index typeId;         ///< runtime identity of the object's concrete class.
         std::string_view nodeId;        ///< the identifier for this node. usually the XML node name.
         Cmper partId;                   ///< the part this item is associated with (or 0 for score).
         std::optional<Cmper> cmper1;    ///< optional cmper1 for Others, Texts, Details.
@@ -106,19 +109,20 @@ public:
         std::optional<int> inci;        ///< optional inci for multi-inci classes
 
         /** @brief explicit constructor for optional parameters */
-        ObjectKey(std::string_view n,
+        ObjectKey(std::type_index t,
+            std::string_view n,
             Cmper p,
             std::optional<Cmper> c1 = std::nullopt,
             std::optional<Cmper> c2 = std::nullopt,
-            std::optional<int> i = std::nullopt) : nodeId(n), partId(p), cmper1(c1), cmper2(c2), inci(i)
+            std::optional<int> i = std::nullopt) : typeId(t), nodeId(n), partId(p), cmper1(c1), cmper2(c2), inci(i)
         {
         }
 
         /** @brief comparison operator for std::map */
         bool operator<(const ObjectKey& other) const
         {
-            if (nodeId != other.nodeId) {
-                return nodeId < other.nodeId;
+            if (typeId != other.typeId) {
+                return typeId < other.typeId;
             }
             if (partId != other.partId) {
                 return partId < other.partId;
@@ -150,6 +154,8 @@ public:
         }
     };
 
+    using PoolMap = std::map<ObjectKey, ObjectPtr>;
+
 private:
     template <typename T>
     std::shared_ptr<const T> bindWithPartId(std::shared_ptr<const T> obj, Cmper requestedPartId) const
@@ -165,6 +171,7 @@ private:
     inline static ObjectKey makeEndKey(const ObjectKey& key)
     {
         return ObjectKey{
+            key.typeId,
             key.nodeId,
             key.partId,
             key.cmper1.value_or((std::numeric_limits<Cmper>::max)()),
@@ -228,17 +235,29 @@ public:
             }
         }
         auto shareModeIt = m_shareMode.find(key.nodeId);
-        auto [poolIt, emplaced] = m_pool.emplace(std::move(key), object);
+        const auto objectShareMode = object->getShareMode();
+        const auto priorSize = m_pool.size();
+        typename PoolMap::iterator poolIt;
+        if (m_insertionHint
+            && (*m_insertionHint)->first.typeId == key.typeId
+            && (*m_insertionHint)->first < key) {
+            poolIt = m_pool.emplace_hint(
+                std::next(*m_insertionHint), std::move(key), std::move(object));
+        } else {
+            poolIt = m_pool.emplace(std::move(key), std::move(object)).first;
+        }
+        const bool emplaced = m_pool.size() != priorSize;
+        m_insertionHint = poolIt;
         if (!emplaced) {
             MUSX_INTEGRITY_ERROR("Attempted to add same key more than once: " + poolIt->first.description());
         }
         if (shareModeIt == m_shareMode.end()) {
-            m_shareMode.emplace(poolIt->first.nodeId, object->getShareMode());
-        } else if (object->getShareMode() != shareModeIt->second && object->getShareMode() != EnigmaBase::ShareMode::All) {
+            m_shareMode.emplace(poolIt->first.nodeId, objectShareMode);
+        } else if (objectShareMode != shareModeIt->second && objectShareMode != EnigmaBase::ShareMode::All) {
             if (shareModeIt->second == EnigmaBase::ShareMode::All) {
-                m_shareMode[poolIt->first.nodeId] = object->getShareMode();
+                m_shareMode[poolIt->first.nodeId] = objectShareMode;
             } else {
-                MUSX_INTEGRITY_ERROR("Share mode for added " + std::string(poolIt->first.nodeId) + " object [" + std::to_string(int(object->getShareMode()))
+                MUSX_INTEGRITY_ERROR("Share mode for added " + std::string(poolIt->first.nodeId) + " object [" + std::to_string(int(objectShareMode))
                     + "] does not match previous [" + std::to_string(int(shareModeIt->second)) + "]");
             }
         }
@@ -424,11 +443,31 @@ public:
     ObjectPool(const DocumentWeakPtr& document, const std::unordered_map<std::string_view, dom::EnigmaBase::ShareMode>& knownShareModes = {})
         : m_document(document), m_shareMode(knownShareModes) {}
 
+    /// @brief Copies the stored objects without retaining an iterator into the source pool.
+    ObjectPool(const ObjectPool& other)
+        : m_document(other.m_document), m_shareMode(other.m_shareMode), m_pool(other.m_pool) {}
+
+    /// @brief Copies the stored objects without retaining an iterator into the source pool.
+    ObjectPool& operator=(const ObjectPool& other)
+    {
+        if (this != &other) {
+            m_document = other.m_document;
+            m_shareMode = other.m_shareMode;
+            m_pool = other.m_pool;
+            m_insertionHint.reset();
+        }
+        return *this;
+    }
+
+    ObjectPool(ObjectPool&&) = default;
+    ObjectPool& operator=(ObjectPool&&) = default;
+
 private:
     DocumentWeakPtr m_document;
     std::unordered_map<std::string_view, dom::EnigmaBase::ShareMode> m_shareMode;
 
-    std::map<ObjectKey, ObjectPtr> m_pool;
+    PoolMap m_pool;
+    std::optional<typename PoolMap::iterator> m_insertionHint;
 };
 
 /**
@@ -445,13 +484,15 @@ public:
     OptionsPool(const DocumentWeakPtr& document) : m_pool(document) {}
 
     /** @brief Scalar version of #ObjectPool::add */
-    void add(std::string_view nodeName, const std::shared_ptr<OptionsBase>& instance)
+    void add(std::string_view nodeName, std::shared_ptr<OptionsBase> instance)
     {
         const EnigmaBase* basePtr = instance.get();
         if (basePtr->getSourcePartId() != SCORE_PARTID) {
             MUSX_INTEGRITY_ERROR("Options node " + std::string(nodeName) + " hase non-score part id [" + std::to_string(basePtr->getSourcePartId()) + "]");
         }
-        m_pool.add({ nodeName, basePtr->getSourcePartId() }, instance);
+        const ObjectPool<OptionsBase>::ObjectKey key{
+            std::type_index(typeid(*basePtr)), nodeName, basePtr->getSourcePartId()};
+        m_pool.add(key, std::move(instance));
     }
 
     /// @brief Validates every option object. Called by document construction finalization.
@@ -462,7 +503,8 @@ public:
     MusxInstanceList<T> getArray() const
     {
         static_assert(is_pool_type_v<OptionsPool, T>, "Type T is not registered in OptionsPool");
-        return m_pool.getArray<T>({ T::XmlNodeName, SCORE_PARTID }, SCORE_PARTID);
+        return m_pool.getArray<T>({ std::type_index(typeid(T)), T::XmlNodeName,
+            SCORE_PARTID }, SCORE_PARTID);
     }
 
     /** @brief Get a single item out of the pool */
@@ -470,7 +512,8 @@ public:
     MusxInstance<T> get() const
     {
         static_assert(is_pool_type_v<OptionsPool, T>, "Type T is not registered in OptionsPool");
-        return m_pool.getSource<T>({ T::XmlNodeName, SCORE_PARTID });
+        return m_pool.getSource<T>({ std::type_index(typeid(T)), T::XmlNodeName,
+            SCORE_PARTID });
     }
 };
 /** @brief Shared `OptionsPool` pointer */
@@ -488,7 +531,9 @@ class OthersPool
 
     MusxInstance<others::Staff> getRawStaff(Cmper partId, StaffCmper staffId)
     {
-        return m_pool.getEffectiveSourceForPart<others::Staff>({ std::string(others::Staff::XmlNodeName), partId, staffId, std::nullopt, std::nullopt });
+        return m_pool.getEffectiveSourceForPart<others::Staff>({
+            std::type_index(typeid(others::Staff)), others::Staff::XmlNodeName,
+            partId, staffId, std::nullopt, std::nullopt });
     }
 
 public:
@@ -508,8 +553,15 @@ public:
     }) {}
 
     /** @brief OthersPool version of #ObjectPool::add */
-    void add(std::string_view nodeName, const std::shared_ptr<OthersBase>& instance)
-    { m_pool.add({nodeName, instance->getSourcePartId(), instance->getCmper(), std::nullopt, instance->getInci()}, instance); }
+    void add(std::string_view nodeName, std::shared_ptr<OthersBase> instance)
+    {
+        const OthersBase* instancePtr = instance.get();
+        const ObjectPool<OthersBase>::ObjectKey key{
+            std::type_index(typeid(*instancePtr)), nodeName,
+            instance->getSourcePartId(), instance->getCmper(),
+            std::nullopt, instance->getInci()};
+        m_pool.add(key, std::move(instance));
+    }
 
     /// @brief Validates every others object. Called by document construction finalization.
     void integrityCheckAll() const { m_pool.integrityCheckAll(); }
@@ -519,7 +571,8 @@ public:
     MusxInstanceList<T> getArray(Cmper partId, std::optional<Cmper> cmper = std::nullopt) const
     {
         static_assert(is_pool_type_v<OthersPool, T>, "Type T is not registered in OthersPool");
-        return m_pool.getArrayForPart<T>({ T::XmlNodeName, partId, cmper });
+        return m_pool.getArrayForPart<T>({ std::type_index(typeid(T)),
+            T::XmlNodeName, partId, cmper });
     }
 
     /** @brief Get a single item out of the pool */
@@ -527,7 +580,8 @@ public:
     MusxInstance<T> get(Cmper partId, Cmper cmper, std::optional<Inci> inci = std::nullopt) const
     {
         static_assert(is_pool_type_v<OthersPool, T>, "Type T is not registered in OthersPool");
-        return m_pool.getEffectiveForPart<T>({ T::XmlNodeName, partId, cmper, std::nullopt, inci });
+        return m_pool.getEffectiveForPart<T>({ std::type_index(typeid(T)),
+            T::XmlNodeName, partId, cmper, std::nullopt, inci });
     }
 
     /// @brief The cmper one past the highest currently used for @c T.
@@ -574,8 +628,15 @@ public:
     }) {}
 
     /** @brief DetailsPool version of #ObjectPool::add */
-    void add(std::string_view nodeName, const std::shared_ptr<DetailsBase>& instance)
-    { m_pool.add({nodeName, instance->getSourcePartId(), instance->getCmper1(), instance->getCmper2(), instance->getInci()}, instance); }
+    void add(std::string_view nodeName, std::shared_ptr<DetailsBase> instance)
+    {
+        const DetailsBase* instancePtr = instance.get();
+        const ObjectPool<DetailsBase>::ObjectKey key{
+            std::type_index(typeid(*instancePtr)), nodeName,
+            instance->getSourcePartId(), instance->getCmper1(),
+            instance->getCmper2(), instance->getInci()};
+        m_pool.add(key, std::move(instance));
+    }
 
     /// @brief Validates every details object. Called by document construction finalization.
     void integrityCheckAll() const { m_pool.integrityCheckAll(); }
@@ -583,14 +644,15 @@ public:
     /** @brief version of #ObjectPool::getArray for getting all of them */
     template <typename T, typename = std::enable_if_t<is_pool_type_v<DetailsPool, T>>>
     MusxInstanceList<T> getArray(Cmper partId) const
-    { return m_pool.template getArrayForPart<T>({ T::XmlNodeName, partId }); }
+    { return m_pool.template getArrayForPart<T>({ std::type_index(typeid(T)), T::XmlNodeName, partId }); }
 
     /** @brief DetailsPool version of #ObjectPool::getArray */
     template <typename T, typename std::enable_if_t<!std::is_base_of_v<EntryDetailsBase, T>, int> = 0>
     MusxInstanceList<T> getArray(Cmper partId, Cmper cmper1, std::optional<Cmper> cmper2 = std::nullopt) const
     {
         static_assert(is_pool_type_v<DetailsPool, T>, "Type T is not registered in DetailsPool");
-        return m_pool.template getArrayForPart<T>({ T::XmlNodeName, partId, cmper1, cmper2 });
+        return m_pool.template getArrayForPart<T>({ std::type_index(typeid(T)),
+            T::XmlNodeName, partId, cmper1, cmper2 });
     }
 
     /** @brief EntryDetailsPool version of #ObjectPool::getArray */
@@ -598,7 +660,8 @@ public:
     MusxInstanceList<T> getArray(Cmper partId, EntryNumber entnum) const
     {
         static_assert(is_pool_type_v<DetailsPool, T>, "Type T is not registered in DetailsPool");
-        return m_pool.template getArrayForPart<T>({ T::XmlNodeName, partId, Cmper(entnum >> 16), Cmper(entnum & 0xffff) });
+        return m_pool.template getArrayForPart<T>({ std::type_index(typeid(T)),
+            T::XmlNodeName, partId, Cmper(entnum >> 16), Cmper(entnum & 0xffff) });
     }
 
     /** @brief Get a single DetailsBase item out of the pool (not EntryDetailsBase) */
@@ -606,7 +669,8 @@ public:
     MusxInstance<T> get(Cmper partId, Cmper cmper1, Cmper cmper2, std::optional<Inci> inci = std::nullopt) const
     {
         static_assert(is_pool_type_v<DetailsPool, T>, "Type T is not registered in DetailsPool");
-        return m_pool.getEffectiveForPart<T>({ T::XmlNodeName, partId, cmper1, cmper2, inci });
+        return m_pool.getEffectiveForPart<T>({ std::type_index(typeid(T)),
+            T::XmlNodeName, partId, cmper1, cmper2, inci });
     }
 
     /** @brief Get a single EntryDetailsBase item out of the pool */
@@ -614,7 +678,8 @@ public:
     MusxInstance<T> get(Cmper partId, EntryNumber entnum, std::optional<Inci> inci = std::nullopt) const
     {
         static_assert(is_pool_type_v<DetailsPool, T>, "Type T is not registered in DetailsPool");
-        return m_pool.getEffectiveForPart<T>({ T::XmlNodeName, partId, Cmper(entnum >> 16), Cmper(entnum & 0xffff), inci });
+        return m_pool.getEffectiveForPart<T>({ std::type_index(typeid(T)),
+            T::XmlNodeName, partId, Cmper(entnum >> 16), Cmper(entnum & 0xffff), inci });
     }
 
     /// @brief Returns the detail for a particular note
@@ -654,9 +719,9 @@ public:
     bool empty() const { return m_pool.empty(); }
 
     /** @brief Add an entry to the EntryPool. (Used by the factory.) */
-    void add(EntryNumber entryNumber, const std::shared_ptr<Entry>& instance)
+    void add(EntryNumber entryNumber, std::shared_ptr<Entry> instance)
     {
-        auto [it, emplaced] = m_pool.emplace(entryNumber, instance);
+        auto [it, emplaced] = m_pool.emplace(entryNumber, std::move(instance));
         if (!emplaced) {
             MUSX_INTEGRITY_ERROR("Entry number " + std::to_string(entryNumber) + " added twice.");
         }
@@ -708,13 +773,17 @@ public:
     TextsPool(const DocumentWeakPtr& document) : m_pool(document) {}
 
     /** @brief Texts version of #ObjectPool::add */
-    void add(std::string_view nodeName, const std::shared_ptr<TextsBase>& instance)
+    void add(std::string_view nodeName, std::shared_ptr<TextsBase> instance)
     {
         const EnigmaBase* basePtr = instance.get();
         if (basePtr->getSourcePartId() != SCORE_PARTID) {
             MUSX_INTEGRITY_ERROR("Texts node " + std::string(nodeName) + " hase non-score part id [" + std::to_string(basePtr->getSourcePartId()) + "]");
         }
-        m_pool.add({ nodeName, basePtr->getSourcePartId(), instance->getTextNumber() }, instance);
+        const TextsBase* instancePtr = instance.get();
+        const ObjectPool<TextsBase>::ObjectKey key{
+            std::type_index(typeid(*instancePtr)), nodeName,
+            basePtr->getSourcePartId(), instance->getTextNumber()};
+        m_pool.add(key, std::move(instance));
     }
 
     /// @brief Validates every text object. Called by document construction finalization.
@@ -725,7 +794,8 @@ public:
     MusxInstanceList<T> getArray(std::optional<Cmper> cmper = std::nullopt) const
     {
         static_assert(is_pool_type_v<TextsPool, T>, "Type T is not registered in TextsPool");
-        return m_pool.getArray<T>({ T::XmlNodeName, SCORE_PARTID, cmper }, SCORE_PARTID);
+        return m_pool.getArray<T>({ std::type_index(typeid(T)), T::XmlNodeName,
+            SCORE_PARTID, cmper }, SCORE_PARTID);
     }
 
     /** @brief Get a single item out of the pool */
@@ -733,7 +803,8 @@ public:
     MusxInstance<T> get(Cmper cmper) const
     {
         static_assert(is_pool_type_v<TextsPool, T>, "Type T is not registered in TextsPool");
-        return m_pool.getSource<T>({ T::XmlNodeName, SCORE_PARTID, cmper, std::nullopt, std::nullopt });
+        return m_pool.getSource<T>({ std::type_index(typeid(T)), T::XmlNodeName,
+            SCORE_PARTID, cmper, std::nullopt, std::nullopt });
     }
 };
 /** @brief Shared `OthersPool` pointer */
