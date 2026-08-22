@@ -87,6 +87,31 @@ constexpr static musxtest::string_view shapeXml = R"xml(
 </finale>
     )xml";
 
+constexpr static musxtest::string_view insufficientShapeDataXml = R"xml(
+<?xml version="1.0" encoding="UTF-8"?>
+<finale>
+    <others>
+        <shapeData cmper="5">
+            <data>1</data>
+        </shapeData>
+        <shapeDef cmper="6">
+            <instList>7</instList>
+            <dataList>5</dataList>
+        </shapeDef>
+        <shapeList cmper="7">
+            <instruct>
+                <numData>1</numData>
+                <tag>lineWidth</tag>
+            </instruct>
+            <instruct>
+                <numData>1</numData>
+                <tag>lineWidth</tag>
+            </instruct>
+        </shapeList>
+    </others>
+</finale>
+    )xml";
+
 constexpr static musxtest::string_view verticalLineRightHooksXml = R"xml(
 <?xml version="1.0" encoding="UTF-8"?>
 <finale>
@@ -275,6 +300,23 @@ TEST(ShapeDefTest, InterateInstructions)
     });
     EXPECT_EQ(nextIndex, shapeList->instructions.size()) << "iteration value " << nextIndex
         << " does not equal number of instructions " << shapeList->instructions.size();
+}
+
+TEST(ShapeDefTest, IterateInstructionsRejectsInsufficientDataBeforeCallback)
+{
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(insufficientShapeDataXml);
+    auto shapeDef = doc->getOthers()->get<others::ShapeDef>(SCORE_PARTID, 6);
+    ASSERT_TRUE(shapeDef);
+
+    size_t callbackCount = 0;
+    EXPECT_THROW(
+        musx::dom::others::ShapeDefTestAccessor::iterateInstructions(shapeDef,
+            [&](ShapeDefInstructionType, std::vector<int>) {
+                ++callbackCount;
+                return true;
+            }),
+        musx::dom::integrity_error);
+    EXPECT_EQ(callbackCount, 0);
 }
 
 TEST(ShapeDefTest, RecognizeShapes)

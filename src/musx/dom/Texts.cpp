@@ -22,6 +22,7 @@
 #include <string>
 #include <vector>
 #include <cstdlib>
+#include <cctype>
 #include <exception>
 
 #include "musx/musx.h"
@@ -40,6 +41,18 @@ util::EnigmaParsingContext TextsBase::getRawTextCtx(const MusxInstance<TextsBase
 }
 
 namespace texts {
+
+namespace {
+
+bool isLyricsWhitespace(unsigned char value)
+{
+    // U+0001 and U+0006 have been seen in legacy Finale lyric text where they
+    // behave as whitespace. Treat other control characters this way as they
+    // are confirmed in the data.
+    return value == 0x01 || value == 0x06 || (value < 128 && std::isspace(value) != 0);
+}
+
+} // namespace
 
 // **************************
 // ***** LyricsTextBase *****
@@ -70,7 +83,7 @@ void LyricsTextBase::createSyllableInfo(const MusxInstance<TextsBase>& ptrToThis
         currentEnigmaStyles.push_back({ current.size(), current.size(), m_syllableStyles.size() - 1 });
         for (auto c : nextChunk) {
             const unsigned char uc = static_cast<unsigned char>(c);
-            if (c == '-' || (uc < 128 && isspace(uc)) || (stripUnderscores && c == '_')) {
+            if (c == '-' || isLyricsWhitespace(uc) || (stripUnderscores && c == '_')) {
                 if (!inSeparator) {
                     inSeparator = true;
                     sepSawSpaceOrUnderscore = false;

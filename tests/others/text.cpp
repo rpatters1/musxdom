@@ -716,7 +716,21 @@ TEST(TextsTest, ParseEnigmaTextLowLevel)
     };
     EXPECT_EQ(output, expected2);
 
-    // Test 3: Command is handled and replaced
+    // Test 3: A url command is stripped independently of the unknown-command policy
+    output.clear();
+    EnigmaString::EnigmaParsingOptions urlOptions;
+    EnigmaString::parseEnigmaText(doc, SCORE_PARTID, "Before ^url(0) after", recordChunk, handleNothing, urlOptions);
+    std::vector<std::pair<std::string, std::string>> expectedUrlStripped = {
+        {"TEXT", "Before  after"}
+    };
+    EXPECT_EQ(output, expectedUrlStripped);
+
+    output.clear();
+    urlOptions.stripUnknownTags = false;
+    EnigmaString::parseEnigmaText(doc, SCORE_PARTID, "Before ^url(0) after", recordChunk, handleNothing, urlOptions);
+    EXPECT_EQ(output, expectedUrlStripped);
+
+    // Test 4: Command is handled and replaced
     output.clear();
     EnigmaString::parseEnigmaText(doc, SCORE_PARTID, "Before ^page(2) after",
         recordChunk,
@@ -1177,6 +1191,32 @@ TEST(TextsTest, LyricSyllableParsing)
     checkSyllable(lyrics[5], 1, "fi", false, true);
     checkSyllable(lyrics[5], 2, "na", true, true);
     checkSyllable(lyrics[5], 3, "le", true, false);
+}
+
+TEST(TextsTest, LyricSyllableLegacyWhitespace)
+{
+    using texts::LyricsVerse;
+
+    std::vector<char> syllXml;
+    musxtest::readFile(musxtest::getInputPath() / "syllables.enigmaxml", syllXml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(syllXml);
+    ASSERT_TRUE(doc);
+
+    auto texts = doc->getTexts();
+    ASSERT_TRUE(texts);
+    auto lyrics = texts->getArray<LyricsVerse>();
+    ASSERT_FALSE(lyrics.empty());
+
+    // Finale legacy lyric data uses these control bytes as spacing markers.
+    auto mutableLyrics = const_cast<LyricsVerse*>(lyrics[0].get());
+    mutableLyrics->text = "^fontid(1)^size(12)^nfx(0)soft-ly and \x01\x06\x01\x01sud-den-ly";
+
+    checkSyllable(lyrics[0], 0, "soft", false, true);
+    checkSyllable(lyrics[0], 1, "ly", true, false);
+    checkSyllable(lyrics[0], 2, "and", false, false);
+    checkSyllable(lyrics[0], 3, "sud", false, true);
+    checkSyllable(lyrics[0], 4, "den", true, true);
+    checkSyllable(lyrics[0], 5, "ly", true, false);
 }
 
 TEST(TextsTest, LyricSyllableUnderscoreParsing)

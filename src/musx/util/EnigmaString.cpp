@@ -545,8 +545,10 @@ bool EnigmaString::parseEnigmaTextImpl(const std::shared_ptr<dom::Document>& doc
         } else if (components[0] == "totpages") {
             auto pages = document->getOthers()->getArray<others::Page>(forPartId);
             addToBuf(std::to_string(pages.size()));
+        } else if (components[0] == "url") {
+            continue;
         } else {
-            // fall-thru causes unhandled command to be stripped or inserted, based on configuration options
+            // fall-thru causes unhandled commands to be stripped or inserted, based on configuration options
             if (!options.stripUnknownTags) {
                 addToBuf(fullCommand);
             }
