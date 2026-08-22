@@ -130,6 +130,12 @@ struct XmlEnumMapping
 template <> \
 const XmlEnumMappingElement<Type> XmlEnumMapping<Type>::mapping = __VA_ARGS__
 
+#if defined(_MSC_VER)
+#define MUSX_ENUM_CONVERSION_SIGNATURE __FUNCSIG__
+#else
+#define MUSX_ENUM_CONVERSION_SIGNATURE __PRETTY_FUNCTION__
+#endif
+
 template <typename EnumClass, bool IgnoreUnknown, typename FromClass = std::string_view>
 class EnumMapper
 {
@@ -145,17 +151,20 @@ public:
         if constexpr (!IgnoreUnknown) {
             std::string msg = [value]() {
                 if constexpr (std::is_arithmetic_v<FromClass>) {
-                    return "Invalid enum value from xml: " + std::to_string(value);
+                    return "Invalid enum value from xml: `" + std::to_string(value) + "`";
                 }
                 else {
-                    return "Invalid enum value from xml: " + std::string(value);
+                    return "Invalid enum value from xml: `" + std::string(value) + "`";
                 }
             }();
+            msg += " in " + std::string(MUSX_ENUM_CONVERSION_SIGNATURE);
             MUSX_UNKNOWN_XML(msg);
         }
         return {};
     }
 };
+
+#undef MUSX_ENUM_CONVERSION_SIGNATURE
 
 template<typename EnumClass, typename FromClass, bool IgnoreUnknown = false>
 EnumClass toEnum(const FromClass& value)

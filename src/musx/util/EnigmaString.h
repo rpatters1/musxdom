@@ -81,7 +81,10 @@ struct EnigmaStyles
 /// @brief A text chunk with the Enigma styles active for that chunk.
 struct EnigmaTextChunk
 {
-    std::string text;       ///< the chunk of text
+    /// @brief The chunk as valid UTF-8.
+    /// @details With a symbol font, each Unicode code point is a raw glyph index; call
+    /// #dom::FontInfo::calcIsSymbolFont on the font in #styles to identify those chunks.
+    std::string text;
     EnigmaStyles styles;    ///< the styles active for the chunk
 };
 
@@ -152,6 +155,8 @@ class EnigmaParsingContext;
  * - `^subtitle()`: inserts the subtitle from File Info (ScoreManager window).
  * - `^title()`: inserts the title from File Info (ScoreManager window).
  * - `^totpages()`: inserts the total number of pages in the document.
+ * - `^url(textId)`: probably intended for adding hyperlinks to enigma text but never implemented. The `textId` is the cmper of the hyperlink block text,
+ * but Finale does not render anything for this insert.
 */
 class EnigmaString
 {
@@ -327,7 +332,7 @@ public:
 
     /// @brief Iteration function type that the parser calls back when the font has changed or when recursively parsing
     /// an insert that is itself an enigma string, such as (in particular) the part name.
-    /// - text: the chunk of text styled with the specified font information
+    /// - text: the chunk of text, with the same UTF-8 contract as #EnigmaTextChunk::text
     /// - font: the font information.
     using TextChunkCallback = std::function<bool(
         const std::string& text,

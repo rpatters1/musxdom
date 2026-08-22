@@ -31,6 +31,10 @@ TEST(TupletOptionsTest, PropertiesTest)
 <finale>
   <options>
     <tupletOptions>
+      <symbolicNum>48</symbolicNum>
+      <symbolicDur>-12</symbolicDur>
+      <refNum>24</refNum>
+      <refDur>-12</refDur>
       <flat/>
       <fullDura/>
       <metricCenter/>
@@ -71,6 +75,10 @@ TEST(TupletOptionsTest, PropertiesTest)
     ASSERT_TRUE(tupletOptions);
 
     // Test all properties of TupletOptions
+    EXPECT_EQ(tupletOptions->displayNumber, 48);
+    EXPECT_EQ(tupletOptions->displayDuration, -12);
+    EXPECT_EQ(tupletOptions->referenceNumber, 24);
+    EXPECT_EQ(tupletOptions->referenceDuration, -12);
     EXPECT_TRUE(tupletOptions->alwaysFlat);
     EXPECT_TRUE(tupletOptions->fullDura);
     EXPECT_TRUE(tupletOptions->metricCenter);

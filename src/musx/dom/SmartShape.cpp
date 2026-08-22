@@ -424,11 +424,22 @@ CurveContourDirection others::SmartShape::calcContourDirection() const
                 }
             }
         }
-        return CurveContourDirection::Unspecified;
+        break;
 
     default:
-        return CurveContourDirection::Unspecified;
+        break;
     }
+
+    switch (direction) {
+    case ShapeDirection::Over:
+        return CurveContourDirection::Up;
+    case ShapeDirection::Under:
+        return CurveContourDirection::Down;
+    case ShapeDirection::Automatic:
+        break;
+    }
+
+    return CurveContourDirection::Unspecified;
 }
 
 VerticalPlacement others::SmartShape::calcVerticalPlacementForBeatAttached() const

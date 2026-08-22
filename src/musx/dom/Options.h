@@ -243,6 +243,7 @@ public:
     Cmper fretStyleId{};             ///< Default @ref others::FretboardStyle ID.
     Cmper fretInstId{};              ///< Default @ref others::FretInstrument ID.
     bool multiFretItemsPerStr{};     ///< Allow multiple fret items per string.
+    bool useFretboardFont{};         ///< Default value for whether to use the fretboard font rather that group/style (xml node is `<useFretFont>`)
     bool italicizeCapoChords{};      ///< Italicize capo chords.
     ChordAlignment chordAlignment{}; ///< Horizontal alignment for chord symbols.
     ChordStyle chordStyle{};         ///< Style of chord spelling.
@@ -1206,15 +1207,6 @@ public:
     explicit SmartShapeOptions(const DocumentWeakPtr& document, Cmper partId = 0, ShareMode shareMode = ShareMode::All)
         : OptionsBase(document, partId, shareMode) {}
 
-    /// @enum DefaultDirection
-    /// @brief Default slur direction
-    enum class DefaultDirection
-    {
-        Automatic,
-        Over,
-        Under
-    };
-
     /// @enum ConnectionIndex
     /// @brief Connection index values
     enum class ConnectionIndex
@@ -1336,7 +1328,7 @@ public:
     Evpu smartDashOn{};                      ///< "Smart Dash On Length"
     Evpu smartDashOff{};                     ///< "Smart Dash Off Length"
     bool crescHorizontal{};                    ///< "Horizontal Crescendo"
-    DefaultDirection direction{};           ///< Default slur direction
+    ShapeDirection direction{};              ///< Default slur direction
     Evpu slurThicknessCp1X{};                ///< "Slur Thickness Control Point 1 X"
     Evpu slurThicknessCp1Y{};                ///< "Slur Thickness Control Point 1 Y"
     Evpu slurThicknessCp2X{};                ///< "Slur Thickness Control Point 2 X"
@@ -1501,9 +1493,9 @@ enum class AccidentalInsertSymbolType
  */
 class TextOptions : public OptionsBase
 {
+public:
     static constexpr int DEFAULT_LINE_SPACING_PERCENT = 100;
 
-public:
     /// @brief Constructor
     explicit TextOptions(const DocumentWeakPtr& document, Cmper partId = 0, ShareMode shareMode = ShareMode::All)
         : OptionsBase(document, partId, shareMode)
@@ -1630,7 +1622,8 @@ public:
     {
         OutsideInside,          ///< Legacy Finale 3.7 behavior (the default)
         StemReversal,           ///< Split at stem reversal point.
-        SplitEvenly             ///< Split evenly
+        SplitEvenly,            ///< Split evenly
+        Unknown                 ///< Unknown (seen sometimes in upgraded legacy files)
     };
 
     /**
@@ -1835,6 +1828,10 @@ public:
         Bracket     ///< Use a bracket.
     };
 
+    int displayNumber{};                    ///< The number of notes to display (xml node is `<symbolicNum>`)
+    Edu displayDuration{};                  ///< The duration of each note to display (xml node is `<symbolicDur>`)
+    int referenceNumber{};                  ///< The number of notes "in the time of" (xml node is `<refNum>`)
+    Edu referenceDuration{};                ///< The duration of each note "in the time of" (xml node is `<refDur>`)
     bool alwaysFlat{};                      ///< "Always Flat" (xml node is `<flat>`)
     bool fullDura{};                        ///< "Bracket Full Duration"
     bool metricCenter{};                    ///< "Center Number Using Duration"

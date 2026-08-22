@@ -51,7 +51,8 @@ public:
     int virtualChannel{};                       ///< The zero-based virtual MIDI channel. (xml node is `<virtChannel>`)
     std::string patchType;                      ///< The encoding used for the MIDI bank and patch values.
     int patch{};                                ///< The MIDI patch or program value.
-    int midiBankSelectMostSignificantByte{};   ///< The MIDI Bank Select most-significant-byte value. (xml node is `<msb>`)
+    int midiBankSelectLeastSignificantByte{};   ///< The MIDI Bank Select least-significant-byte value. (xml node is `<lsb>`)
+    int midiBankSelectMostSignificantByte{};    ///< The MIDI Bank Select most-significant-byte value. (xml node is `<msb>`)
     Cmper percussionMapId{};                    ///< The percussion map reference ID. (xml node is `<percMapRefID>`)
     std::string soundUuid;                      ///< The UUID of the sound assigned to the route. (xml node is `<soundUUID>`)
 

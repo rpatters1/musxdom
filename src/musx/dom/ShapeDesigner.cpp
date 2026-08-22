@@ -528,15 +528,28 @@ bool ShapeDef::iterateInstructions(std::function<bool(ShapeDefInstructionType, s
     bool result = true;
 
     if (insts && data) {
-        size_t currentDataIndex = 0;
+        size_t requiredData = 0;
         for (const auto& inst : insts->instructions) {
-            if (currentDataIndex + inst->numData > data->values.size()) {
-                throw std::invalid_argument("ShapeDef " + std::to_string(getCmper()) + " does not have enough data for instructions.");
+            if (!result) {
+                break;
             }
-            if (!callback(inst->type, { data->values.begin() + currentDataIndex, data->values.begin() + currentDataIndex + inst->numData })) {
-                return false;
+            const auto numData = static_cast<size_t>(inst->numData);
+            if (numData > data->values.size() - requiredData) {
+                result = false;
+                MUSX_INTEGRITY_ERROR("ShapeDef " + std::to_string(getCmper()) + " does not have enough data for instructions.");
+            } else {
+                requiredData += numData;
             }
-            currentDataIndex += inst->numData;
+        }
+
+        size_t currentDataIndex = 0;
+        if (result) {
+            for (const auto& inst : insts->instructions) {
+                if (!callback(inst->type, { data->values.begin() + currentDataIndex, data->values.begin() + currentDataIndex + inst->numData })) {
+                    return false;
+                }
+                currentDataIndex += inst->numData;
+            }
         }
     } else {
         result = false;

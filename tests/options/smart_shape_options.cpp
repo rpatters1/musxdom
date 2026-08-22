@@ -359,7 +359,7 @@ TEST(SmartShapeOptionsTest, PropertiesTest)
     EXPECT_EQ(smartShapeOptions->smartDashOn, 18);
     EXPECT_EQ(smartShapeOptions->smartDashOff, 18);
     EXPECT_TRUE(smartShapeOptions->crescHorizontal);
-    EXPECT_EQ(smartShapeOptions->direction, SmartShapeOptions::DefaultDirection::Under);
+    EXPECT_EQ(smartShapeOptions->direction, ::musx::dom::ShapeDirection::Under);
     EXPECT_EQ(smartShapeOptions->slurThicknessCp1X, 2);
     EXPECT_EQ(smartShapeOptions->slurThicknessCp1Y, 8);
     EXPECT_EQ(smartShapeOptions->slurThicknessCp2X, 3);

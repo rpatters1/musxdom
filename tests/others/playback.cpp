@@ -34,6 +34,7 @@ constexpr static musxtest::string_view playbackXml = R"xml(
       <virtChannel>7</virtChannel>
       <patchType>C0_C32_PC</patchType>
       <patch>42</patch>
+      <lsb>5</lsb>
       <msb>121</msb>
       <percMapRefID>3</percMapRefID>
       <soundUUID>db30b478-5871-3ba5-9553-6f964bb3aeb7</soundUUID>
@@ -94,6 +95,7 @@ TEST(PlaybackTest, PopulatePlaybackRoute)
     EXPECT_EQ(route->virtualChannel, 7);
     EXPECT_EQ(route->patchType, "C0_C32_PC");
     EXPECT_EQ(route->patch, 42);
+    EXPECT_EQ(route->midiBankSelectLeastSignificantByte, 5);
     EXPECT_EQ(route->midiBankSelectMostSignificantByte, 121);
     EXPECT_EQ(route->percussionMapId, 3);
     EXPECT_EQ(route->soundUuid, "db30b478-5871-3ba5-9553-6f964bb3aeb7");

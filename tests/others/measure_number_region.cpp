@@ -208,6 +208,36 @@ TEST(MeasureNumberRegionTest, PropertiesTest)
     EXPECT_TRUE(scoreData->breakMmRest);
 }
 
+TEST(MeasureNumberRegionTest, InvalidMeasureRange)
+{
+    constexpr static musxtest::string_view xml = R"xml(
+<?xml version="1.0" encoding="UTF-8"?>
+<finale>
+  <others>
+    <measNumbRegion cmper="1">
+      <scoreData>
+        <startFont/>
+        <multipleFont/>
+        <mmRestFont/>
+      </scoreData>
+      <partData>
+        <startFont/>
+        <multipleFont/>
+        <mmRestFont/>
+      </partData>
+      <startMeas>2</startMeas>
+      <endMeas>2</endMeas>
+    </measNumbRegion>
+  </others>
+</finale>
+)xml";
+
+    EXPECT_THROW(
+        static_cast<void>(musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml)),
+        musx::dom::integrity_error
+    );
+}
+
 TEST(MeasureNumberIndividualPositioningTest, PopulateFields)
 {
     constexpr static musxtest::string_view xml = R"xml(
@@ -219,6 +249,7 @@ TEST(MeasureNumberIndividualPositioningTest, PopulateFields)
       <x1add>-70</x1add>
       <y1add>-21</y1add>
       <forceHide>force</forceHide>
+      <isAltNum/>
       <useEncl/>
       <encl>
         <xAdd>3</xAdd>
@@ -261,6 +292,7 @@ TEST(MeasureNumberIndividualPositioningTest, PopulateFields)
     EXPECT_EQ(pos1->yOffset, Evpu{-21});
     EXPECT_EQ(pos1->xOffset2, Evpu{0}); // not present -> default
     EXPECT_EQ(pos1->forceVisibility, details::MeasureNumberIndividualPositioning::ForceVisibility::Show);
+    EXPECT_TRUE(pos1->isAlternateNumber);
     EXPECT_TRUE(pos1->useEnclosure);
     EXPECT_TRUE(pos1->enclosure);
 

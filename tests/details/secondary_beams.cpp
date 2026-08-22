@@ -108,10 +108,11 @@ TEST(SecondaryBeamBreakTest, NoBeamsSpecified)
     </finale>
     )xml";
 
-    EXPECT_THROW(
-        auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xmlInvalid),
-        integrity_error
-    );
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xmlInvalid);
+    ASSERT_TRUE(doc);
+    auto beamBreak = doc->getDetails()->get<details::SecondaryBeamBreak>(SCORE_PARTID, 7);
+    ASSERT_TRUE(beamBreak);
+    EXPECT_EQ(beamBreak->mask, unsigned(NoteType::Note4096th));
 }
 
 TEST(SecondaryBeamBreakTest, DetectSecondaryBeams)

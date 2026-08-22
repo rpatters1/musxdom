@@ -156,6 +156,15 @@ enum class NoteType : Edu
     Note4096th = 0x0001
 };
 
+/// @enum ShapeDirection
+/// @brief Direction settings shared by smart-shape options and instances.
+enum class ShapeDirection
+{
+    Automatic,  ///< Direction is determined automatically.
+    Over,       ///< The shape is placed over its reference.
+    Under       ///< The shape is placed under its reference.
+};
+
 /**
  * @enum ShowClefMode
  * @brief Enum representing the clef display mode for a frame.

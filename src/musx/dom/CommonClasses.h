@@ -867,6 +867,7 @@ public:
     bool indivPos{};            ///< Indicates that this positioning overrides the default positioning. (Not used by @ref options::StaffOptions.)
     AlignJustify hAlign{};      ///< Horizontal alignment for the name text. (xml node is `<halign>`)
     bool expand{};              ///< "Expand Single Word"
+    bool hidden{};              ///< Inverse of "Show": it hides the name.
 
     static const xml::XmlElementArray<NamePositioning>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };

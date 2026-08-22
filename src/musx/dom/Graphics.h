@@ -357,6 +357,10 @@ public:
     {
     }
 
+    using HorizontalAlignment = options::TextOptions::HorizontalAlignment;  ///< Horizontal alignment options.
+    using VerticalAlignment = options::TextOptions::VerticalAlignment;      ///< Vertical alignment options.
+    using PositionFrom = others::PageGraphicAssign::PositionFrom;           ///< Postion relative to page. (Meaningless here.)
+    
     uint32_t version{};     ///< Always 0x100, meaning perhaps "v1.0". (This was intended for tracking changes to the data format, but it was never used.)
     Evpu left{};            ///< Graphic left coordinate in Evpu
     Evpu bottom{};          ///< Graphic bottom coordinate in Evpu
@@ -364,6 +368,10 @@ public:
     Evpu height{};          ///< Graphic height in Evpu
     Cmper fDescId{};        ///< The Cmper of the assigned @ref others::FileDescription. (xml tag is `<fDescID>`)
     bool hidden{};          ///< Indicates the graphic is hidden from print/displayed as hidden (xml node is `<displayHidden>`)
+    HorizontalAlignment hAlign{}; ///< Horizontal alignment for left/all pages. Meaningless here, but sometimes provided. (xml tag is `<halign>`)
+    VerticalAlignment vAlign{}; ///< Vertical alignment for left/all pages. Meaningless here, but sometimes provided. (xml tag is `<valign>`)
+    PositionFrom posFrom{}; ///< Position reference for left/all pages. Meaningless here, but sometimes provided.
+    bool fixedPerc{};       ///< If true, preserve aspect ratio. This is a UI setting. Use width/origWidth and height/origHeight for actual scaling.
     bool savedRecord{};     ///< Indicates a stored/saved record. (Used internally by Finale when a graphic is created.)
     Evpu origWidth{};       ///< Original (intrinsic) width in Evpu
     Evpu origHeight{};      ///< Original (intrinsic) height in Evpu

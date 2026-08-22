@@ -74,6 +74,7 @@ TEST(SmartShape, Populate)
                         <on/>
                     </breakAdj>
                 </endTermSeg>
+                <dir>over</dir>
                 <fullCtlPtAdj>
                     <startCtlPtX>573</startCtlPtX>
                     <startCtlPtY>35</startCtlPtY>
@@ -160,6 +161,7 @@ TEST(SmartShape, Populate)
         ASSERT_TRUE(smartShape) << "SmartShape with cmper 1 not found";
 
         EXPECT_EQ(smartShape->shapeType, others::SmartShape::ShapeType::SlurAuto);
+        EXPECT_EQ(smartShape->direction, ShapeDirection::Over);
         EXPECT_TRUE(smartShape->entryBased);
         EXPECT_EQ(smartShape->startNoteId, 0);
         EXPECT_EQ(smartShape->endNoteId, 0);

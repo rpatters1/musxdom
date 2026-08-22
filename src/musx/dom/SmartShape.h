@@ -372,6 +372,7 @@ public:
     std::shared_ptr<TerminationSeg> endTermSeg;     ///< End termination segment.
     std::shared_ptr<smartshape::ControlPointAdjustment> fullCtlPtAdj; ///< If the shape is only on one staff system, this is where the manual edits are.
     bool hidden{};                                  ///< Inverse of "Show" option.
+    ShapeDirection direction{};                     ///< Direction setting for this shape (xml node is `<dir>`).
     NoteNumber startNoteId{};                       ///< If non-zero, the specific note with the entry that this shape starts from. (xml node is `<startNoteID>`)
     NoteNumber endNoteId{};                         ///< If non-zero, the specific note with the entry that this shape ends on. (xml node is `<endNoteID>`)
     Cmper lineStyleId{};                            ///< If non-zero, the @ref SmartShapeCustomLine for this shape. Several #ShapeType values use it. (xml node is `<lineStyleID>`)
@@ -420,9 +421,8 @@ public:
     /// @return The NoteInfoPtr that is the tied-to note for this note, or null if none.
     [[nodiscard]] NoteInfoPtr calcArpeggiatedTieToNote(const EntryInfoPtr& forStartEntry) const;
 
-    /// @brief Determines if a smart shape slur or curve has a fixed direction (up or down) or floats automatically.
-    /// @note If the smart shape is not a slur or curve, the return value is `CurveContourDirection::Unspecified`.
-    /// @return The curve contour direction for fixed-direction shapes; `CurveContourDirection::Unspecified` if floating/automatic.
+    /// @brief Determines whether the smart shape's contour runs up or down.
+    /// @return The contour direction, or `CurveContourDirection::Unspecified` when the direction is automatic.
     [[nodiscard]]
     CurveContourDirection calcContourDirection() const;
 

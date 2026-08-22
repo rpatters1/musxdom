@@ -32,6 +32,7 @@ using namespace ::musx::dom::smartshape;
 using namespace ::musx::dom::others;
 
 extern template const XmlEnumMappingElement<AlignJustify> XmlEnumMapping<AlignJustify>::mapping;
+extern template const XmlEnumMappingElement<ShapeDirection> XmlEnumMapping<ShapeDirection>::mapping;
 extern template const XmlEnumMappingElement<LyricTextType> XmlEnumMapping<LyricTextType>::mapping;
 extern template const XmlEnumMappingElement<ShowClefMode> XmlEnumMapping<ShowClefMode>::mapping;
 extern template const XmlEnumMappingElement<StemDirection> XmlEnumMapping<StemDirection>::mapping;
@@ -1012,6 +1013,7 @@ MUSX_XML_ELEMENT_ARRAY(PartDefinition, {
     {"applyFormat", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<PartDefinition>& i) { i->applyFormat = populateBoolean(c, e, i); }},
     {"needsRecalc", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<PartDefinition>& i) { i->needsRecalc = populateBoolean(c, e, i); }},
     {"useAsSmpInst", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<PartDefinition>& i) { i->useAsSmpInst = populateBoolean(c, e, i); }},
+    {"unlinkInsts", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<PartDefinition>& i) { i->unlinkInsts = populateBoolean(c, e, i); }},
     {"smartMusicInst", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<PartDefinition>& i) { i->smartMusicInst = e->getTextAs<int>(); }},
     {"defaultNameStaff", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<PartDefinition>& i) { i->defaultNameStaff = e->getTextAs<Cmper>(); }},
     {"defaultNameGroup", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<PartDefinition>& i) { i->defaultNameGroup = e->getTextAs<Cmper>(); }},
@@ -1052,6 +1054,7 @@ MUSX_XML_ELEMENT_ARRAY(PlaybackRoute, {
     {"virtChannel", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<PlaybackRoute>& i) { i->virtualChannel = e->getTextAs<int>(); }},
     {"patchType", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<PlaybackRoute>& i) { i->patchType = e->getText(); }},
     {"patch", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<PlaybackRoute>& i) { i->patch = e->getTextAs<int>(); }},
+    {"lsb", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<PlaybackRoute>& i) { i->midiBankSelectLeastSignificantByte = e->getTextAs<int>(); }},
     {"msb", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<PlaybackRoute>& i) { i->midiBankSelectMostSignificantByte = e->getTextAs<int>(); }},
     {"percMapRefID", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<PlaybackRoute>& i) { i->percussionMapId = e->getTextAs<Cmper>(); }},
     {"soundUUID", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<PlaybackRoute>& i) { i->soundUuid = e->getText(); }},
@@ -1219,6 +1222,7 @@ MUSX_XML_ELEMENT_ARRAY(SmartShape, {
     {"fullCtlPtAdj", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<SmartShape>& i)
         { i->fullCtlPtAdj = FieldPopulator<smartshape::ControlPointAdjustment>::populateExistingOrCreate(c, e, i->fullCtlPtAdj, i); }},
     {"hidden", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<SmartShape>& i) { i->hidden = populateBoolean(c, e, i); }},
+    {"dir", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<SmartShape>& i) { i->direction = toEnum<ShapeDirection>(e); }},
     {"startNoteID", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<SmartShape>& i) { i->startNoteId= e->getTextAs<NoteNumber>(); }},
     {"endNoteID", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<SmartShape>& i) { i->endNoteId = e->getTextAs<NoteNumber>(); }},
     {"lineStyleID", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<SmartShape>& i) { i->lineStyleId = e->getTextAs<Cmper>(); }},
@@ -1568,6 +1572,7 @@ MUSX_XML_ELEMENT_ARRAY(TextBlock, {
     {"width", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<TextBlock>& i) { i->width = e->getTextAs<Evpu>(); }},
     {"height", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<TextBlock>& i) { i->height = e->getTextAs<Evpu>(); }},
     {"lineSpacingPercent", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<TextBlock>& i) { i->lineSpacingPercentage = e->getTextAs<int>(); }},
+    {"lineSpacingEvpu", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<TextBlock>& i) { i->lineSpacingEvpu = e->getTextAs<Evpu>(); }},
     {"xAdd", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<TextBlock>& i) { i->xAdd = e->getTextAs<Evpu>(); }},
     {"yAdd", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<TextBlock>& i) { i->yAdd = e->getTextAs<Evpu>(); }},
     {"justify", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<TextBlock>& i) { i->justify = toEnum<TextBlock::TextJustify>(e); }},

@@ -957,19 +957,28 @@ bool EntryInfoPtr::calcDisplaysAsRest() const
     return false;
 }
 
-int EntryInfoPtr::calcFloatingRestStaffPosition() const
+int EntryInfoPtr::calcZeroNotePosition() const
 {
-    const auto entry = (*this)->getEntry();    
-    MUSX_ASSERT_IF(!entry->notes.empty() && !entry->floatRest) {
-        throw std::logic_error("calcFloatingRestStaffPosition() called on a non-floating rest.");
+    const auto entry = (*this)->getEntry();
+    MUSX_ASSERT_IF(!entry->notes.empty()) {
+        throw std::logic_error("calcZeroNotePosition() called on an entry with note data.");
     }
+    if (entry->isNote) {
+        return 0;
+    }
+
     const auto staff = createCurrentStaff();
     MUSX_ASSERT_IF(!staff) {
-        throw std::logic_error("calcFloatingRestStaffPosition() could not find the staff for entry " + std::to_string(entry->getEntryNumber()));
+        throw std::logic_error("calcZeroNotePosition() could not find the staff for entry " + std::to_string(entry->getEntryNumber()));
     }
+
+    if (!entry->floatRest) {
+        return staff->calcRestOffset(entry->duration);
+    }
+
     const auto layerAttr = getFrame()->getLayerAttributes();
     MUSX_ASSERT_IF(!layerAttr) {
-        throw std::logic_error("calcFloatingRestStaffPosition() could not find the layer attributes for entry " + std::to_string(entry->getEntryNumber()));
+        throw std::logic_error("calcZeroNotePosition() could not find the layer attributes for entry " + std::to_string(entry->getEntryNumber()));
     }
 
     auto result = staff->calcRestOffset(entry->duration);
@@ -980,7 +989,7 @@ int EntryInfoPtr::calcFloatingRestStaffPosition() const
     if (calcIfLayerSettingsApply()) {
         const auto miscOptions = entry->getDocument()->getOptions()->get<options::MiscOptions>();
         MUSX_ASSERT_IF(!miscOptions) {
-            throw std::logic_error("calcFloatingRestStaffPosition() could not find the miscellaneous options");
+            throw std::logic_error("calcZeroNotePosition() could not find the miscellaneous options");
         }
         if (miscOptions->consolidateRestsAcrossLayers && !entry->splitRest) {
             return result;
@@ -994,9 +1003,9 @@ int EntryInfoPtr::calcFloatingRestStaffPosition() const
 std::pair<int, int> EntryInfoPtr::calcTopBottomStaffPositions() const
 {
     const auto& entry = (*this)->getEntry();
-    if (entry->notes.empty() || entry->floatRest) {
-        const auto floatingRestPos = calcFloatingRestStaffPosition();
-        return std::make_pair(floatingRestPos, floatingRestPos);
+    if (entry->notes.empty() || (!entry->isNote && entry->floatRest)) {
+        const auto restPos = calcZeroNotePosition();
+        return std::make_pair(restPos, restPos);
     }
     int topLine = (std::numeric_limits<int>::min)();
     int botLine = (std::numeric_limits<int>::max)();
@@ -1058,16 +1067,16 @@ bool EntryInfoPtr::calcUpStemDefault() const
     int numAbove = 0;
     int numBelow = 0;
     bool gotNonGrace = false;
-    bool gotNonFloatRest = false;
+    bool gotPositionedEntry = false;
 
     for (auto next = beamStart; next; next = next.getNextInBeamGroup()) {
         const auto& entry = next->getEntry();
         if (!entry->graceNote) {
             gotNonGrace = true;
-            if (entry->notes.empty() || entry->floatRest) {
+            if (!entry->isNote && (entry->notes.empty() || entry->floatRest)) {
                 continue;
             }
-            gotNonFloatRest = true;
+            gotPositionedEntry = true;
             auto staff = next.createCurrentStaff();
             auto [topLine, botLine] = next.calcTopBottomStaffPositions();
             const int currTopDiff = topLine - staff->stemReversal;
@@ -1091,7 +1100,7 @@ bool EntryInfoPtr::calcUpStemDefault() const
         return true;
     }
 
-    if (!gotNonFloatRest) {
+    if (!gotPositionedEntry) {
         return std::get<1>(calcEntryStemSettings()); // Use whatever Finale last calculated.
     }
 

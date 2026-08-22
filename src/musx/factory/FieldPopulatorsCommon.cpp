@@ -43,6 +43,12 @@ MUSX_XML_ENUM_MAPPING(DateFormat, {
     {"abbrev", DateFormat::Abbrev}
 });
 
+MUSX_XML_ENUM_MAPPING(ShapeDirection, {
+    {"automatic", ShapeDirection::Automatic},
+    {"over", ShapeDirection::Over},
+    {"under", ShapeDirection::Under}
+});
+
 MUSX_XML_ENUM_MAPPING(LyricTextType, {
     {"verse", LyricTextType::Verse},
     {"chorus", LyricTextType::Chorus},
@@ -137,6 +143,7 @@ MUSX_XML_ELEMENT_ARRAY(NamePositioning, {
     {"indivPos", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<NamePositioning>& i) { i->indivPos = populateBoolean(c, e, i); }},
     {"halign", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<NamePositioning>& i) { i->hAlign = toEnum<AlignJustify>(e); }},
     {"expand", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<NamePositioning>& i) { i->expand = populateBoolean(c, e, i); }},
+    {"hidden", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<NamePositioning>& i) { i->hidden = populateBoolean(c, e, i); }},
 });
 
 } // namespace others

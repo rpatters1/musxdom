@@ -1474,6 +1474,7 @@ public:
     Evpu yOffset{};                                 ///< Vertical offset for the measure number. (xml node is `<y1add>`)
     Evpu xOffset2{};                                ///< Horizontal offset for the measure number range under a multimeasure rest (Page View only). (xml node is `<x2add>`)
     ForceVisibility forceVisibility{};              ///< Force-visibility behavior. (xml node is `<forceHide>`)
+    bool isAlternateNumber{};                       ///< Whether this is an alternate number, such as a boxed number. (xml node is `<isAltNum>`)
     bool useEnclosure{};                            ///< Whether to use an enclosure for this number. (xml node is `<useEncl>`)
     std::shared_ptr<others::Enclosure> enclosure;   ///< Optional enclosure settings. (xml node is `<encl>`)
 
@@ -1701,11 +1702,13 @@ public:
         EntryDetailsBase::integrityCheck(ptrToThis);
         if (!mask) {
             mask = unsigned(NoteType::Note4096th);
-            MUSX_INTEGRITY_ERROR("Secondary beam break for entry" + std::to_string(getEntryNumber()) + " has no breaks.");
+            util::Logger::log(util::Logger::LogLevel::Verbose,
+                "Secondary beam break for entry " + std::to_string(getEntryNumber())
+                + " has no breaks; the 4096th-note beam was assumed.");
         }
         if (mask >= unsigned(NoteType::Eighth)) {
             mask = unsigned(NoteType::Eighth) - 1;
-            MUSX_INTEGRITY_ERROR("Secondary beam break for entry" + std::to_string(getEntryNumber()) + " specifies a value that cannot be a secondary beam.");
+            MUSX_INTEGRITY_ERROR("Secondary beam break for entry " + std::to_string(getEntryNumber()) + " specifies a value that cannot be a secondary beam.");
         }
     }
 
@@ -1917,7 +1920,11 @@ public:
     {
         this->DetailsBase::integrityCheck(ptrToThis);
         if (endMeas <= startMeas || startMeas <= 0) {
-            MUSX_INTEGRITY_ERROR("Staff group " + std::to_string(getCmper2()) + " for part " + std::to_string(getSourcePartId())
+            // Especially when a file was upgraded from pre-modern group settings,
+            // the staff groups can get a bit squirrelly. Groups like this should just
+            // be ignored.                
+            util::Logger::log(util::Logger::LogLevel::Info,
+                "Staff group " + std::to_string(getCmper2()) + " for part " + std::to_string(getSourcePartId())
                 + " starts at measure " + std::to_string(startMeas) + " and ends at measure " + std::to_string(endMeas));
         }
         if (!bracket) {
