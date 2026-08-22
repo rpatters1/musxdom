@@ -31,6 +31,7 @@
 #include <variant>
 #include <stdexcept>
 #include <functional>
+#include <iterator>
 #include <limits>
 #include <typeindex>
 
@@ -153,6 +154,8 @@ public:
         }
     };
 
+    using PoolMap = std::map<ObjectKey, ObjectPtr>;
+
 private:
     template <typename T>
     std::shared_ptr<const T> bindWithPartId(std::shared_ptr<const T> obj, Cmper requestedPartId) const
@@ -233,7 +236,18 @@ public:
         }
         auto shareModeIt = m_shareMode.find(key.nodeId);
         const auto objectShareMode = object->getShareMode();
-        auto [poolIt, emplaced] = m_pool.emplace(std::move(key), std::move(object));
+        const auto priorSize = m_pool.size();
+        typename PoolMap::iterator poolIt;
+        if (m_insertionHint
+            && (*m_insertionHint)->first.typeId == key.typeId
+            && (*m_insertionHint)->first < key) {
+            poolIt = m_pool.emplace_hint(
+                std::next(*m_insertionHint), std::move(key), std::move(object));
+        } else {
+            poolIt = m_pool.emplace(std::move(key), std::move(object)).first;
+        }
+        const bool emplaced = m_pool.size() != priorSize;
+        m_insertionHint = poolIt;
         if (!emplaced) {
             MUSX_INTEGRITY_ERROR("Attempted to add same key more than once: " + poolIt->first.description());
         }
@@ -429,11 +443,31 @@ public:
     ObjectPool(const DocumentWeakPtr& document, const std::unordered_map<std::string_view, dom::EnigmaBase::ShareMode>& knownShareModes = {})
         : m_document(document), m_shareMode(knownShareModes) {}
 
+    /// @brief Copies the stored objects without retaining an iterator into the source pool.
+    ObjectPool(const ObjectPool& other)
+        : m_document(other.m_document), m_shareMode(other.m_shareMode), m_pool(other.m_pool) {}
+
+    /// @brief Copies the stored objects without retaining an iterator into the source pool.
+    ObjectPool& operator=(const ObjectPool& other)
+    {
+        if (this != &other) {
+            m_document = other.m_document;
+            m_shareMode = other.m_shareMode;
+            m_pool = other.m_pool;
+            m_insertionHint.reset();
+        }
+        return *this;
+    }
+
+    ObjectPool(ObjectPool&&) = default;
+    ObjectPool& operator=(ObjectPool&&) = default;
+
 private:
     DocumentWeakPtr m_document;
     std::unordered_map<std::string_view, dom::EnigmaBase::ShareMode> m_shareMode;
 
-    std::map<ObjectKey, ObjectPtr> m_pool;
+    PoolMap m_pool;
+    std::optional<typename PoolMap::iterator> m_insertionHint;
 };
 
 /**
