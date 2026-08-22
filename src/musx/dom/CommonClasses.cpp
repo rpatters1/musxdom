@@ -589,6 +589,23 @@ music_theory::Pitch KeySignature::calcPitch(int displacement, int alteration, Ke
     return { music_theory::noteNames[step], octave, alteration + calcAlterationOnNote(step, ctx) };
 }
 
+music_theory::Pitch KeySignature::calcPitchFromStaffPosition(int staffPosition, ClefIndex clefIndex, KeyContext ctx,
+    std::optional<int> actualAlteration) const
+{
+    const auto& clefOptions = getDocument()->getOptions()->get<options::ClefOptions>();
+    if (!clefOptions) {
+        throw std::invalid_argument("Document contains no clef options!");
+    }
+    const int middleCPosition = clefOptions->getClefDef(clefIndex)->middleCPos;
+    const int displacement = staffPosition - middleCPosition - calcTonalCenterIndex(ctx)
+                           - (getOctaveDisplacement(ctx) * music_theory::STANDARD_DIATONIC_STEPS);
+    auto result = calcPitch(displacement, 0, ctx);
+    if (actualAlteration) {
+        result.alteration = *actualAlteration;
+    }
+    return result;
+}
+
 int KeySignature::calcScaleDegree(int displacement) const
 {
     const int diatonicSteps = [&]() {

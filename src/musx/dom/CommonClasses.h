@@ -363,6 +363,22 @@ public:
     [[nodiscard]]
     music_theory::Pitch calcPitch(int displacement, int alteration, KeyContext ctx) const;
 
+    /**
+     * @brief Converts a staff position into a spelled pitch using the specified clef and key context.
+     *
+     * @param staffPosition Staff position relative to the staff reference line.
+     * @param clefIndex Index of the clef used to interpret the staff position.
+     * @param ctx Whether to use concert or written key-signature values.
+     * @param actualAlteration Alteration relative to the natural note name, in EDO divisions. If omitted, the
+     * effective key signature supplies the alteration.
+     * @return The resulting note name, octave, and alteration relative to the natural note name.
+     * @throws std::invalid_argument if the document contains no clef options.
+     * @throws std::out_of_range if @p clefIndex is invalid.
+     */
+    [[nodiscard]]
+    music_theory::Pitch calcPitchFromStaffPosition(int staffPosition, ClefIndex clefIndex, KeyContext ctx,
+        std::optional<int> actualAlteration = std::nullopt) const;
+
     /// @brief The octave displacement if this key is a transposed key.
     /// @return 0 for non-transposing keys or the octave displacement for transposed keys.
     int getOctaveDisplacement(KeyContext ctx) const

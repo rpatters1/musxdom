@@ -651,6 +651,39 @@ public:
     /// @brief Get the key signature of the entry
     [[nodiscard]] MusxInstance<KeySignature> getKeySignature() const;
 
+    /**
+     * @brief Calculates the written pitch at a staff position using the entry's effective key and clef.
+     * @param staffPosition Staff position relative to the staff reference line.
+     * @param actualAlteration Alteration relative to the natural note name, in EDO divisions. If omitted, the
+     * effective written key signature supplies the alteration.
+     * @return The spelled written pitch at the staff position.
+     */
+    [[nodiscard]]
+    music_theory::Pitch calcPitchFromStaffPosition(int staffPosition,
+        std::optional<int> actualAlteration = std::nullopt) const;
+
+    /**
+     * @brief Calculates the concert pitch at a staff position using the entry's effective key and clef.
+     * @param staffPosition Staff position relative to the staff reference line.
+     * @param actualAlteration Alteration relative to the natural note name, in EDO divisions. If omitted, the
+     * effective concert key signature supplies the alteration.
+     * @return The spelled concert pitch at the staff position.
+     */
+    [[nodiscard]]
+    music_theory::Pitch calcPitchFromStaffPositionConcert(int staffPosition,
+        std::optional<int> actualAlteration = std::nullopt) const;
+
+    /**
+     * @brief Calculates the pitch at a staff position in the current part's concert- or written-pitch view.
+     * @param staffPosition Staff position relative to the staff reference line.
+     * @param actualAlteration Alteration relative to the natural note name, in EDO divisions. If omitted, the
+     * effective key signature in the selected view supplies the alteration.
+     * @return The spelled pitch at the staff position in the selected view.
+     */
+    [[nodiscard]]
+    music_theory::Pitch calcPitchFromStaffPositionInView(int staffPosition,
+        std::optional<int> actualAlteration = std::nullopt) const;
+
     /// @brief Gets the applicable part data for the entry, or nullptr if none.
     [[nodiscard]] MusxInstance<details::EntryPartFieldDetail> getPartFieldData() const;
 
