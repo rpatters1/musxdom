@@ -3073,10 +3073,9 @@ public:
             MUSX_INTEGRITY_ERROR("Text options specify both a percent and an absolute line spacing. "
                 "The absolute value was discarded.");
         } else if (!lineSpacingPercentage && !lineSpacingEvpu) {
-            lineSpacingPercentage = options::TextOptions::DEFAULT_LINE_SPACING_PERCENT;
+            lineSpacingEvpu = 0;
             util::Logger::log(util::Logger::LogLevel::Verbose,
-                "Text block specifies no line spacing. "
-                + std::to_string(options::TextOptions::DEFAULT_LINE_SPACING_PERCENT) + " percent was assumed.");
+                "Text block specifies no line spacing. Zero EVPU was assumed.");
         }
     }
 
