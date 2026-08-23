@@ -55,6 +55,10 @@ TEST(TextBlockTest, PopulateFields)
       <wordWrap/>
       <textTag>expression</textTag>
     </textBlock>
+    <textBlock cmper="34">
+      <textID>222</textID>
+      <textTag>block</textTag>
+    </textBlock>
   </others>
 </finale>
     )xml";
@@ -96,6 +100,11 @@ TEST(TextBlockTest, PopulateFields)
     EXPECT_FALSE(textBlock2->roundCorners);
     EXPECT_EQ(textBlock2->cornerRadius, 0);
     EXPECT_EQ(textBlock2->textType, others::TextBlock::TextType::Expression);
+
+    auto textBlock3 = others->get<others::TextBlock>(SCORE_PARTID, 34);
+    ASSERT_TRUE(textBlock3) << "TextBlock 34 not found but does exist";
+    EXPECT_FALSE(textBlock3->lineSpacingPercentage.has_value());
+    EXPECT_EQ(textBlock3->lineSpacingEvpu, 0);
 }
 
 TEST(PageTextAssignTest, PopulateFields)
