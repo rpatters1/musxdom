@@ -1,5 +1,7 @@
 var NAVTREEINDEX37 =
 {
+"structmusx_1_1util_1_1EnigmaString_1_1EnigmaParsingOptions.html#adef67c2fa4be0c0f5ef82c46a8e3a8a8":[2,0,1,2,6,0,5],
+"structmusx_1_1util_1_1EnigmaStyles.html":[2,0,1,2,7],
 "structmusx_1_1util_1_1EnigmaStyles.html#a44d9baabb1ff9f1a44c0d201936bd39e":[2,0,1,2,7,1],
 "structmusx_1_1util_1_1EnigmaStyles.html#a5a7ee150f534afc35cc5a5545742ed80":[2,0,1,2,7,5],
 "structmusx_1_1util_1_1EnigmaStyles.html#a5c7a62c1475b70521ba54e0ccec5768d":[2,0,1,2,7,0],

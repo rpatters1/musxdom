@@ -1,5 +1,7 @@
 var NAVTREEINDEX35 =
 {
+"structmusx_1_1dom_1_1NoteInfoPtr_1_1TieStandInSource.html#a6722f236da0f3d0d1bdecbb424effa0c":[1,0,1,0,43,3,0],
+"structmusx_1_1dom_1_1NoteInfoPtr_1_1TieStandInSource.html#a6722f236da0f3d0d1bdecbb424effa0ca12f05e6678501bcf7e584f1ed7b3a687":[2,0,1,0,44,3,0,1],
 "structmusx_1_1dom_1_1NoteInfoPtr_1_1TieStandInSource.html#a6722f236da0f3d0d1bdecbb424effa0ca12f05e6678501bcf7e584f1ed7b3a687":[1,0,1,0,43,3,0,1],
 "structmusx_1_1dom_1_1NoteInfoPtr_1_1TieStandInSource.html#a6722f236da0f3d0d1bdecbb424effa0ca4db299e39add7118b3416bcd257ac4af":[2,0,1,0,44,3,0,0],
 "structmusx_1_1dom_1_1NoteInfoPtr_1_1TieStandInSource.html#a6722f236da0f3d0d1bdecbb424effa0ca4db299e39add7118b3416bcd257ac4af":[1,0,1,0,43,3,0,0],
@@ -247,7 +249,5 @@ var NAVTREEINDEX35 =
 "structmusx_1_1dom_1_1ShapeDefInstruction_1_1Undocumented.html#a91275c8060f02b2004977d74387b8480":[1,0,1,0,53,18,0],
 "structmusx_1_1dom_1_1ShapeDefInstruction_1_1VerticalMode.html":[1,0,1,0,53,19],
 "structmusx_1_1dom_1_1ShapeDefInstruction_1_1VerticalMode.html":[2,0,1,0,54,19],
-"structmusx_1_1dom_1_1ShapeDefInstruction_1_1VerticalMode.html#a3d1ffcdf55d5e6e34e36ff8e9c0bd3a8":[2,0,1,0,54,19,0],
-"structmusx_1_1dom_1_1ShapeDefInstruction_1_1VerticalMode.html#a3d1ffcdf55d5e6e34e36ff8e9c0bd3a8":[1,0,1,0,53,19,0],
-"structmusx_1_1dom_1_1StaffPositionPitchOptions.html":[2,0,1,0,55]
+"structmusx_1_1dom_1_1ShapeDefInstruction_1_1VerticalMode.html#a3d1ffcdf55d5e6e34e36ff8e9c0bd3a8":[2,0,1,0,54,19,0]
 };

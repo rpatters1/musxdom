@@ -1,5 +1,7 @@
 var NAVTREEINDEX36 =
 {
+"structmusx_1_1dom_1_1ShapeDefInstruction_1_1VerticalMode.html#a3d1ffcdf55d5e6e34e36ff8e9c0bd3a8":[1,0,1,0,53,19,0],
+"structmusx_1_1dom_1_1StaffPositionPitchOptions.html":[2,0,1,0,55],
 "structmusx_1_1dom_1_1StaffPositionPitchOptions.html":[1,0,1,0,54],
 "structmusx_1_1dom_1_1StaffPositionPitchOptions.html#a474d75dfd5b136e2d5bad9040769c698":[2,0,1,0,55,1],
 "structmusx_1_1dom_1_1StaffPositionPitchOptions.html#a474d75dfd5b136e2d5bad9040769c698":[1,0,1,0,54,1],
@@ -247,7 +249,5 @@ var NAVTREEINDEX36 =
 "structmusx_1_1util_1_1EnigmaString_1_1EnigmaParsingOptions.html#a26c726f6852c0984dab0c0a022d9dbae":[2,0,1,2,6,0,1],
 "structmusx_1_1util_1_1EnigmaString_1_1EnigmaParsingOptions.html#a643d6e29d771186916a8402725afb080":[2,0,1,2,6,0,6],
 "structmusx_1_1util_1_1EnigmaString_1_1EnigmaParsingOptions.html#a8cf0bc9198c167dee7a437dc3ed07ec9":[2,0,1,2,6,0,3],
-"structmusx_1_1util_1_1EnigmaString_1_1EnigmaParsingOptions.html#abedd7b2e4770b5ac09e3c2b2413037e0":[2,0,1,2,6,0,4],
-"structmusx_1_1util_1_1EnigmaString_1_1EnigmaParsingOptions.html#adef67c2fa4be0c0f5ef82c46a8e3a8a8":[2,0,1,2,6,0,5],
-"structmusx_1_1util_1_1EnigmaStyles.html":[2,0,1,2,7]
+"structmusx_1_1util_1_1EnigmaString_1_1EnigmaParsingOptions.html#abedd7b2e4770b5ac09e3c2b2413037e0":[2,0,1,2,6,0,4]
 };

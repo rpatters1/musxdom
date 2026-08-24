@@ -1,5 +1,7 @@
 var NAVTREEINDEX29 =
 {
+"classmusx_1_1xml_1_1rapidxml_1_1Document.html#aab02758903e5ac12ecba0360b713c31d":[1,0,1,2,1,1,1],
+"classmusx_1_1xml_1_1rapidxml_1_1Document.html#aab02758903e5ac12ecba0360b713c31d":[2,0,1,4,1,1,1],
 "classmusx_1_1xml_1_1rapidxml_1_1Document.html#af030d74e10f85f1d151f9d8a4ef38aac":[1,0,1,2,1,1,0],
 "classmusx_1_1xml_1_1rapidxml_1_1Document.html#af030d74e10f85f1d151f9d8a4ef38aac":[2,0,1,4,1,1,0],
 "classmusx_1_1xml_1_1rapidxml_1_1Element.html":[2,0,1,4,1,2],
@@ -247,7 +249,5 @@ var NAVTREEINDEX29 =
 "namespacemusic__theory.html#acb68e55d250cfd1ba7a7d5ca0bcbb869a9d5ed678fe57bcca610140957afab571":[1,0,0,4,6],
 "namespacemusic__theory.html#acb68e55d250cfd1ba7a7d5ca0bcbb869adfcf28d0734569a6a693bc8194de62bf":[1,0,0,4,4],
 "namespacemusic__theory.html#acb68e55d250cfd1ba7a7d5ca0bcbb869af623e75af30e62bbd73d6df5b50bb7b5":[1,0,0,4,1],
-"namespacemusic__theory.html#acca84f587bc2b11d1a42cfb98a869ed4":[1,0,0,16],
-"namespacemusic__theory.html#acf8c49a568a6a6043714a796c4de89e4":[1,0,0,5],
-"namespacemusic__theory.html#ad044685489c9b3d008be12762a490463":[1,0,0,13]
+"namespacemusic__theory.html#acca84f587bc2b11d1a42cfb98a869ed4":[1,0,0,16]
 };

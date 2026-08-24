@@ -1,5 +1,7 @@
 var NAVTREEINDEX27 =
 {
+"classmusx_1_1dom_1_1others_1_1TextBlock.html#a6b03249a4ab25e49b3ab8fe187157726":[1,0,1,0,3,85,8],
+"classmusx_1_1dom_1_1others_1_1TextBlock.html#a6b03249a4ab25e49b3ab8fe187157726":[2,0,1,0,3,85,8],
 "classmusx_1_1dom_1_1others_1_1TextBlock.html#a7a1467251c0c3e5685a9b3483b36245b":[2,0,1,0,3,85,14],
 "classmusx_1_1dom_1_1others_1_1TextBlock.html#a7a1467251c0c3e5685a9b3483b36245b":[1,0,1,0,3,85,14],
 "classmusx_1_1dom_1_1others_1_1TextBlock.html#a8156491d2fec35dbe7748081c623dd43":[2,0,1,0,3,85,15],
@@ -247,7 +249,5 @@ var NAVTREEINDEX27 =
 "classmusx_1_1dom_1_1texts_1_1ExpressionText.html":[1,0,1,0,4,2],
 "classmusx_1_1dom_1_1texts_1_1ExpressionText.html#aba62017f8e8a23f2657322d1d245c1a1":[2,0,1,0,6,2,0],
 "classmusx_1_1dom_1_1texts_1_1ExpressionText.html#aba62017f8e8a23f2657322d1d245c1a1":[1,0,1,0,4,2,0],
-"classmusx_1_1dom_1_1texts_1_1FileInfoText.html":[2,0,1,0,6,3],
-"classmusx_1_1dom_1_1texts_1_1FileInfoText.html":[1,0,1,0,4,3],
-"classmusx_1_1dom_1_1texts_1_1FileInfoText.html#a4455690874447b44689900f86bba4c2a":[2,0,1,0,6,3,0]
+"classmusx_1_1dom_1_1texts_1_1FileInfoText.html":[2,0,1,0,6,3]
 };

@@ -140,6 +140,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ad883a6ef4d3eb0ee61262df38581573c" id="r_ad883a6ef4d3eb0ee61262df38581573c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classmusx_1_1dom_1_1EntryInfoPtr.html">EntryInfoPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1details_1_1LyricAssign.html#ad883a6ef4d3eb0ee61262df38581573c">calcWordExtensionEndpoint</a> () const</td></tr>
 <tr class="memdesc:ad883a6ef4d3eb0ee61262df38581573c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate the entry to which an automatic word extension extends.  <br /></td></tr>
 <tr class="separator:ad883a6ef4d3eb0ee61262df38581573c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6bc89d182b474397ba3e2767b76e8351" id="r_a6bc89d182b474397ba3e2767b76e8351"><td class="memItemLeft" align="right" valign="top">std::optional&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1details_1_1LyricAssign.html#a6bc89d182b474397ba3e2767b76e8351">calcDisplayNumberText</a> () const</td></tr>
+<tr class="memdesc:a6bc89d182b474397ba3e2767b76e8351"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate the verse/chorus/section number to display to the left of this assignment's syllable, if any.  <br /></td></tr>
+<tr class="separator:a6bc89d182b474397ba3e2767b76e8351"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classmusx_1_1dom_1_1EntryDetailsBase"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classmusx_1_1dom_1_1EntryDetailsBase')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classmusx_1_1dom_1_1EntryDetailsBase.html">musx::dom::EntryDetailsBase</a></td></tr>
 <tr class="memitem:a2a4a374edc4b5ee0dcc1a13dca0bf64d inherit pub_methods_classmusx_1_1dom_1_1EntryDetailsBase" id="r_a2a4a374edc4b5ee0dcc1a13dca0bf64d"><td class="memItemLeft" align="right" valign="top">
 <a class="el" href="namespacemusx_1_1dom.html#aaf6ff3bd65d56ab74135ba5914f68f5b">EntryNumber</a>&#160;</td><td class="memItemRight" valign="bottom"><b>getEntryNumber</b> () const</td></tr>
@@ -395,6 +398,26 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>SharedNodes</b> = st
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="a6bc89d182b474397ba3e2767b76e8351" name="a6bc89d182b474397ba3e2767b76e8351"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6bc89d182b474397ba3e2767b76e8351">&#9670;&#160;</a></span>calcDisplayNumberText()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::optional&lt; std::string &gt; musx::dom::details::LyricAssign::calcDisplayNumberText </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Calculate the verse/chorus/section number to display to the left of this assignment's syllable, if any. </p>
+<dl class="section return"><dt>Returns</dt><dd>The formatted number (e.g. "1."), or std::nullopt if no number should be displayed. </dd></dl>
+
+</div>
+</div>
 <a id="ad883a6ef4d3eb0ee61262df38581573c" name="ad883a6ef4d3eb0ee61262df38581573c"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ad883a6ef4d3eb0ee61262df38581573c">&#9670;&#160;</a></span>calcWordExtensionEndpoint()</h2>
 
