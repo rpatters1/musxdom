@@ -27,7 +27,10 @@
 #include <string>
 #include <string_view>
 #include <optional>
+#include <utility>
+#include <vector>
 
+#include "musx/util/EnigmaString.h"
 #include "musx/util/Fraction.h"
 #include "BaseClasses.h"
 #include "EnumClasses.h"
@@ -456,10 +459,58 @@ public:
 class LyricsSyllableInfo : DocumentElementNoPart
 {
 public:
+    /**
+     * @class ElisionRun
+     * @brief One text run produced by splitting a syllable's text at an embedded Finale elision
+     * marker. See @ref LyricsSyllableInfo::calcElisionRuns.
+     *
+     * #hasHyphenBefore and #hasHyphenAfter are redistributed from the whole syllable: only the
+     * first run can carry hasHyphenBefore, and only the last can carry hasHyphenAfter. A syllable
+     * preceded and followed by a hyphen therefore splits into an #hasHyphenAfter-only run
+     * followed by an #hasHyphenBefore-only run; hasHyphenBefore and hasHyphenAfter are never both
+     * true on the same run of a split.
+     *
+     * A run's style chunks are resolved when the run is created, so it holds no reference back to
+     * its syllable and is safe to copy or store independently of it.
+     */
+    class ElisionRun
+    {
+    public:
+        std::optional<char32_t> joinMarker;     ///< The codepoint joining this run to the previous one; absent for the first run.
+        bool hasHyphenBefore{};                 ///< See LyricsSyllableInfo::hasHyphenBefore.
+        bool hasHyphenAfter{};                  ///< See LyricsSyllableInfo::hasHyphenAfter.
+
+        /// @brief This run's text (all style chunks concatenated).
+        std::string text() const;
+
+        /// @brief Iterates this run's already-resolved style chunks. In the common case (one
+        /// style throughout the run) the callback is called exactly once.
+        /// @param callback The callback for each chunk of this run with a different style.
+        /// @return True if the run was fully parsed. False if parsing was aborted by the callback function.
+        bool iterateStyles(util::EnigmaString::TextChunkCallback callback) const;
+
+    private:
+        std::vector<std::pair<std::string, util::EnigmaStyles>> m_chunks;
+
+        friend class LyricsSyllableInfo;
+    };
+
     std::string syllable;       ///< the syllable text with no hyphenation or font information.
     bool hasHyphenBefore;       ///< indicates the syllable is preceded by a hyphen.
     bool hasHyphenAfter;        ///< indicates the syllable if followed by a hyphen.
     int strippedUnderscores;    ///< indicates the number of trailing underscores stripped (because smart word extensions convert them to word extensions).
+
+    /// @brief Parse this syllable into chunks with EnigmaStyles for that chunk. In the most common case, the callback is called exactly once.
+    /// However, this design allows for detecting uncommon cases of style changes within a syllable.
+    /// @param callback The callback for each chunk of the syllable with a different style.
+    /// @return True if the syllable was fully parsed. False if parsing was aborted by the callback function.
+    bool iterateStyles(util::EnigmaString::TextChunkCallback callback) const;
+
+    /// @brief Splits #syllable at embedded Finale elision markers, redistributing
+    /// #hasHyphenBefore and #hasHyphenAfter onto the first and last run respectively. A syllable
+    /// with no markers returns a single run spanning the whole syllable.
+    /// @return At least one run.
+    std::vector<ElisionRun> calcElisionRuns() const;
 
 private:
     /**
@@ -476,16 +527,22 @@ private:
 
     /// @brief Constructor function
     /// @param document Shared pointer to the document.
+    /// @param owner MusxInstance ptr to the owning LyricsTextBase, to reach its style table.
     /// @param text The syllable text.
     /// @param before Whether there is a hyphen before the syllable.
     /// @param after Whether there is a hyphen after the syllable.
     /// @param underscores The number of trailing underscores stripped.
     /// @param enigmaStylesIndex The enigma style (in LyricsTextBase) for this syllable.
-    LyricsSyllableInfo(const DocumentWeakPtr& document, const std::string text, bool before, bool after, int underscores, std::vector<StyleSpan>&& enigmaStyleMap)
-        : DocumentElementNoPart(document), syllable(text), hasHyphenBefore(before), hasHyphenAfter(after), strippedUnderscores(underscores), m_enigmaStyleMap(std::move(enigmaStyleMap))
+    LyricsSyllableInfo(const DocumentWeakPtr& document, const MusxInstance<texts::LyricsTextBase>& owner, const std::string text, bool before, bool after, int underscores, std::vector<StyleSpan>&& enigmaStyleMap)
+        : DocumentElementNoPart(document), syllable(text), hasHyphenBefore(before), hasHyphenAfter(after), strippedUnderscores(underscores), m_owner(owner), m_enigmaStyleMap(std::move(enigmaStyleMap))
     {
     }
 
+    /// @brief Shared implementation for #iterateStyles and #ElisionRun::iterateStyles: iterates
+    /// style chunks clipped to [@p rangeStart, @p rangeEnd).
+    bool iterateStylesInRange(size_t rangeStart, size_t rangeEnd, const util::EnigmaString::TextChunkCallback& callback) const;
+
+    MusxInstanceWeak<texts::LyricsTextBase> m_owner; ///< the LyricsTextBase that owns this syllable's style table.
     std::vector<StyleSpan> m_enigmaStyleMap; ///< the enigma style (in LyricsTextBase) for this syllable.
 
     friend class texts::LyricsTextBase;

@@ -75,6 +75,11 @@ void LyricsTextBase::createSyllableInfo(const MusxInstance<TextsBase>& ptrToThis
         return false;
     }();
 
+    // ptrToThis is guaranteed to actually point to this LyricsTextBase: createSyllableInfo is
+    // only ever called (by the factory, or directly) with ptrToThis pointing to the same object
+    // it is a method of.
+    const MusxInstance<LyricsTextBase> self = std::static_pointer_cast<const LyricsTextBase>(ptrToThis);
+
     syllables.clear();
     m_syllableStyles.clear();
     auto parsingContext = getRawTextCtx(ptrToThis, SCORE_PARTID);
@@ -103,7 +108,7 @@ void LyricsTextBase::createSyllableInfo(const MusxInstance<TextsBase>& ptrToThis
             } else {
                 if (inSeparator) {
                     if (!current.empty()) {
-                        syllables.push_back(MusxInstance<LyricsSyllableInfo>(new  LyricsSyllableInfo(getDocument(), current, lastSeparatorHadHyphen, currSeparatorHasHyphen, underscores, std::move(currentEnigmaStyles))));
+                        syllables.push_back(MusxInstance<LyricsSyllableInfo>(new  LyricsSyllableInfo(getDocument(), self, current, lastSeparatorHadHyphen, currSeparatorHasHyphen, underscores, std::move(currentEnigmaStyles))));
                         current.clear();
                         currentEnigmaStyles.clear();
                         currentEnigmaStyles.push_back({ current.size(), current.size(), m_syllableStyles.size() - 1 });
@@ -122,7 +127,7 @@ void LyricsTextBase::createSyllableInfo(const MusxInstance<TextsBase>& ptrToThis
     });
 
     if (!current.empty()) {
-        syllables.push_back(MusxInstance<LyricsSyllableInfo>(new  LyricsSyllableInfo(getDocument(), current, lastSeparatorHadHyphen, currSeparatorHasHyphen, underscores, std::move(currentEnigmaStyles))));
+        syllables.push_back(MusxInstance<LyricsSyllableInfo>(new  LyricsSyllableInfo(getDocument(), self, current, lastSeparatorHadHyphen, currSeparatorHasHyphen, underscores, std::move(currentEnigmaStyles))));
     }
 }
 
@@ -131,27 +136,7 @@ bool LyricsTextBase::iterateStylesForSyllable(size_t syllableIndex, util::Enigma
     if (syllableIndex >= syllables.size()) {
         return false;
     }
-    const auto& syllable = syllables[syllableIndex];
-    for (const auto& span : syllable->m_enigmaStyleMap) {
-        MUSX_ASSERT_IF(span.start > syllable->syllable.size() || span.end > syllable->syllable.size()) {
-            throw std::logic_error("syllable's enigmaStyles map contained out-of-range start or end values.");
-        }
-        MUSX_ASSERT_IF(span.start > span.end) {
-            throw std::logic_error("syllable's enigmaStyles map contained start value greater than end value.");
-        }
-        if (span.start == syllable->syllable.size()) {
-            continue;
-        }
-        MUSX_ASSERT_IF(span.styleIndex >= m_syllableStyles.size()) {
-            throw std::logic_error("syllable's enigmaStyles map contained out-of-range styleIndex.");
-        }
-        std::string_view segment(syllable->syllable.data() + span.start, span.end - span.start);
-        const auto& style = m_syllableStyles.at(span.styleIndex);
-        if (!callback(std::string(segment), style)) {
-            return false;
-        }
-    }
-    return true;
+    return syllables[syllableIndex]->iterateStyles(std::move(callback));
 }
 
 } // namespace texts
