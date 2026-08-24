@@ -94,6 +94,7 @@ $(document).ready(function(){initNavTree('classmusx_1_1dom_1_1LyricsSyllableInfo
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
+<a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="#friends">Friends</a> &#124;
 <a href="classmusx_1_1dom_1_1LyricsSyllableInfo-members.html">List of all members</a>  </div>
@@ -117,6 +118,21 @@ $(document).ready(function(){initNavTree('classmusx_1_1dom_1_1LyricsSyllableInfo
   </map>
 </div></div>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
+Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1LyricsSyllableInfo_1_1ElisionRun.html">ElisionRun</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">One text run produced by splitting a syllable's text at an embedded Finale elision marker. See <a class="el" href="classmusx_1_1dom_1_1LyricsSyllableInfo.html#a68cf07bf61a45e7b6e64955f40d6dca0">LyricsSyllableInfo::calcElisionRuns</a>.  <a href="classmusx_1_1dom_1_1LyricsSyllableInfo_1_1ElisionRun.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a0688e6581b69a01b6afe187d19c8fe86" id="r_a0688e6581b69a01b6afe187d19c8fe86"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1LyricsSyllableInfo.html#a0688e6581b69a01b6afe187d19c8fe86">iterateStyles</a> (<a class="el" href="classmusx_1_1util_1_1EnigmaString.html#ab7774814f864c7fc4e840f73af322936">util::EnigmaString::TextChunkCallback</a> callback) const</td></tr>
+<tr class="memdesc:a0688e6581b69a01b6afe187d19c8fe86"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parse this syllable into chunks with EnigmaStyles for that chunk. In the most common case, the callback is called exactly once. However, this design allows for detecting uncommon cases of style changes within a syllable.  <br /></td></tr>
+<tr class="separator:a0688e6581b69a01b6afe187d19c8fe86"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a68cf07bf61a45e7b6e64955f40d6dca0" id="r_a68cf07bf61a45e7b6e64955f40d6dca0"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classmusx_1_1dom_1_1LyricsSyllableInfo_1_1ElisionRun.html">ElisionRun</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1LyricsSyllableInfo.html#a68cf07bf61a45e7b6e64955f40d6dca0">calcElisionRuns</a> () const</td></tr>
+<tr class="memdesc:a68cf07bf61a45e7b6e64955f40d6dca0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Splits <a class="el" href="classmusx_1_1dom_1_1LyricsSyllableInfo.html#ac95d1935ad0c0fb402bae93ebacb43be" title="the syllable text with no hyphenation or font information.">syllable</a> at embedded Finale elision markers, redistributing <a class="el" href="classmusx_1_1dom_1_1LyricsSyllableInfo.html#acd9a00db6a6f2871cd1a2b9aa9f3cb20" title="indicates the syllable is preceded by a hyphen.">hasHyphenBefore</a> and <a class="el" href="classmusx_1_1dom_1_1LyricsSyllableInfo.html#a6832c2545c6f3410b6da2eca679c5608" title="indicates the syllable if followed by a hyphen.">hasHyphenAfter</a> onto the first and last run respectively. A syllable with no markers returns a single run spanning the whole syllable.  <br /></td></tr>
+<tr class="separator:a68cf07bf61a45e7b6e64955f40d6dca0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:ac95d1935ad0c0fb402bae93ebacb43be" id="r_ac95d1935ad0c0fb402bae93ebacb43be"><td class="memItemLeft" align="right" valign="top"><a id="ac95d1935ad0c0fb402bae93ebacb43be" name="ac95d1935ad0c0fb402bae93ebacb43be"></a>
@@ -144,7 +160,55 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>texts::LyricsTextBas
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Contains the syllable information for a single syllable. (See <a class="el" href="classmusx_1_1dom_1_1texts_1_1LyricsTextBase.html">texts::LyricsTextBase</a>) </p>
-</div></div><!-- contents -->
+</div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="a68cf07bf61a45e7b6e64955f40d6dca0" name="a68cf07bf61a45e7b6e64955f40d6dca0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a68cf07bf61a45e7b6e64955f40d6dca0">&#9670;&#160;</a></span>calcElisionRuns()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; <a class="el" href="classmusx_1_1dom_1_1LyricsSyllableInfo_1_1ElisionRun.html">LyricsSyllableInfo::ElisionRun</a> &gt; musx::dom::LyricsSyllableInfo::calcElisionRuns </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Splits <a class="el" href="classmusx_1_1dom_1_1LyricsSyllableInfo.html#ac95d1935ad0c0fb402bae93ebacb43be" title="the syllable text with no hyphenation or font information.">syllable</a> at embedded Finale elision markers, redistributing <a class="el" href="classmusx_1_1dom_1_1LyricsSyllableInfo.html#acd9a00db6a6f2871cd1a2b9aa9f3cb20" title="indicates the syllable is preceded by a hyphen.">hasHyphenBefore</a> and <a class="el" href="classmusx_1_1dom_1_1LyricsSyllableInfo.html#a6832c2545c6f3410b6da2eca679c5608" title="indicates the syllable if followed by a hyphen.">hasHyphenAfter</a> onto the first and last run respectively. A syllable with no markers returns a single run spanning the whole syllable. </p>
+<dl class="section return"><dt>Returns</dt><dd>At least one run. </dd></dl>
+
+</div>
+</div>
+<a id="a0688e6581b69a01b6afe187d19c8fe86" name="a0688e6581b69a01b6afe187d19c8fe86"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0688e6581b69a01b6afe187d19c8fe86">&#9670;&#160;</a></span>iterateStyles()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool musx::dom::LyricsSyllableInfo::iterateStyles </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classmusx_1_1util_1_1EnigmaString.html#ab7774814f864c7fc4e840f73af322936">util::EnigmaString::TextChunkCallback</a>&#160;</td>
+          <td class="paramname"><em>callback</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Parse this syllable into chunks with EnigmaStyles for that chunk. In the most common case, the callback is called exactly once. However, this design allows for detecting uncommon cases of style changes within a syllable. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">callback</td><td>The callback for each chunk of the syllable with a different style. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True if the syllable was fully parsed. False if parsing was aborted by the callback function. </dd></dl>
+
+</div>
+</div>
+</div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->

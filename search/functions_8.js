@@ -39,5 +39,6 @@ var searchData=
   ['iteraterawentries_36',['iteraterawentries',['../classmusx_1_1dom_1_1details_1_1GFrameHold.html#a6489be37c60c0f65ec8476b4645c1b6b',1,'musx::dom::details::GFrameHold::iterateRawEntries()'],['../classmusx_1_1dom_1_1others_1_1Frame.html#ae1e562d49d11702cd64344635ec7716e',1,'musx::dom::others::Frame::iterateRawEntries()']]],
   ['iteratestartingsmartshapes_37',['iterateStartingSmartShapes',['../classmusx_1_1dom_1_1EntryInfoPtr.html#a26f97bd814099c2cbac95479de6dc8f3',1,'musx::dom::EntryInfoPtr']]],
   ['iteratestaves_38',['iterateStaves',['../classmusx_1_1dom_1_1details_1_1StaffGroupInfo.html#adf05ab035de85c9dc4bd194eeeebef41',1,'musx::dom::details::StaffGroupInfo']]],
-  ['iteratestylesforsyllable_39',['iterateStylesForSyllable',['../classmusx_1_1dom_1_1texts_1_1LyricsTextBase.html#aaa07f7d49633f9ff62d6441cc696f7eb',1,'musx::dom::texts::LyricsTextBase']]]
+  ['iteratestyles_39',['iteratestyles',['../classmusx_1_1dom_1_1LyricsSyllableInfo_1_1ElisionRun.html#a019d561abd41acb0f00b6ec64e01bdc5',1,'musx::dom::LyricsSyllableInfo::ElisionRun::iterateStyles()'],['../classmusx_1_1dom_1_1LyricsSyllableInfo.html#a0688e6581b69a01b6afe187d19c8fe86',1,'musx::dom::LyricsSyllableInfo::iterateStyles()']]],
+  ['iteratestylesforsyllable_40',['iterateStylesForSyllable',['../classmusx_1_1dom_1_1texts_1_1LyricsTextBase.html#aaa07f7d49633f9ff62d6441cc696f7eb',1,'musx::dom::texts::LyricsTextBase']]]
 ];
