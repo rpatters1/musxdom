@@ -960,5 +960,141 @@ util::Fraction TimeSignature::calcBeatValueAt(Edu eduPosition) const
     return lastBeatValue;
 }
 
+// ******************************
+// ***** LyricsSyllableInfo *****
+// ******************************
+
+namespace {
+
+// The only two characters Finale's own MusicXML exporter treats as elision markers when
+// embedded in an otherwise ordinary lyric syllable: U+00A0 (no-break space) and U+203F
+// (undertie). Any other character, including a non-breaking hyphen, en dash, or em dash, is
+// left embedded as ordinary text.
+const std::array<char32_t, 2> kElisionMarkerCodepoints = { char32_t(0x00A0), char32_t(0x203F) };
+
+const std::array<std::string, 2> kElisionMarkerUtf8 = {
+    util::EnigmaString::toU8(kElisionMarkerCodepoints[0]),
+    util::EnigmaString::toU8(kElisionMarkerCodepoints[1]),
+};
+
+struct ElisionMarkerMatch
+{
+    size_t position;
+    size_t markerIndex;
+};
+
+/// @brief Finds the first elision marker in @p text at or after @p searchFrom.
+/// @return The byte offset and which marker (index into kElisionMarkerCodepoints/kElisionMarkerUtf8)
+/// was found, or std::nullopt if none.
+std::optional<ElisionMarkerMatch> findNextElisionMarker(const std::string& text, size_t searchFrom)
+{
+    std::optional<ElisionMarkerMatch> result;
+    for (size_t i = 0; i < kElisionMarkerUtf8.size(); ++i) {
+        if (const auto pos = text.find(kElisionMarkerUtf8[i], searchFrom); pos != std::string::npos) {
+            if (!result || pos < result->position) {
+                result = ElisionMarkerMatch{ pos, i };
+            }
+        }
+    }
+    return result;
+}
+
+} // namespace
+
+bool LyricsSyllableInfo::iterateStylesInRange(size_t rangeStart, size_t rangeEnd, const util::EnigmaString::TextChunkCallback& callback) const
+{
+    auto owner = m_owner.lock();
+    MUSX_ASSERT_IF(!owner) {
+        throw std::logic_error("Attempt to iterate styles for a lyric syllable, but its owning LyricsTextBase is no longer allocated.");
+    }
+    for (const auto& span : m_enigmaStyleMap) {
+        MUSX_ASSERT_IF(span.start > syllable.size() || span.end > syllable.size()) {
+            throw std::logic_error("syllable's enigmaStyles map contained out-of-range start or end values.");
+        }
+        MUSX_ASSERT_IF(span.start > span.end) {
+            throw std::logic_error("syllable's enigmaStyles map contained start value greater than end value.");
+        }
+        const size_t clipStart = (std::max)(span.start, rangeStart);
+        const size_t clipEnd = (std::min)(span.end, rangeEnd);
+        if (clipStart >= clipEnd) {
+            continue;
+        }
+        MUSX_ASSERT_IF(span.styleIndex >= owner->m_syllableStyles.size()) {
+            throw std::logic_error("syllable's enigmaStyles map contained out-of-range styleIndex.");
+        }
+        std::string_view segment(syllable.data() + clipStart, clipEnd - clipStart);
+        const auto& style = owner->m_syllableStyles.at(span.styleIndex);
+        if (!callback(std::string(segment), style)) {
+            return false;
+        }
+    }
+    return true;
+}
+
+bool LyricsSyllableInfo::iterateStyles(util::EnigmaString::TextChunkCallback callback) const
+{
+    return iterateStylesInRange(0, syllable.size(), callback);
+}
+
+std::string LyricsSyllableInfo::ElisionRun::text() const
+{
+    std::string result;
+    for (const auto& [chunkText, style] : m_chunks) {
+        result += chunkText;
+    }
+    return result;
+}
+
+bool LyricsSyllableInfo::ElisionRun::iterateStyles(util::EnigmaString::TextChunkCallback callback) const
+{
+    for (const auto& [chunkText, style] : m_chunks) {
+        if (!callback(chunkText, style)) {
+            return false;
+        }
+    }
+    return true;
+}
+
+std::vector<LyricsSyllableInfo::ElisionRun> LyricsSyllableInfo::calcElisionRuns() const
+{
+    std::vector<ElisionRun> result;
+
+    std::vector<ElisionMarkerMatch> matches;
+    size_t searchFrom = 0;
+    while (const auto found = findNextElisionMarker(syllable, searchFrom)) {
+        matches.push_back(*found);
+        searchFrom = found->position + kElisionMarkerUtf8[found->markerIndex].size();
+    }
+
+    const auto addRun = [&](size_t rangeStart, size_t rangeEnd, std::optional<char32_t> joinMarker, bool runHasHyphenBefore, bool runHasHyphenAfter) {
+        ElisionRun run;
+        run.joinMarker = joinMarker;
+        run.hasHyphenBefore = runHasHyphenBefore;
+        run.hasHyphenAfter = runHasHyphenAfter;
+        iterateStylesInRange(rangeStart, rangeEnd, [&](const std::string& chunkText, const util::EnigmaStyles& style) -> bool {
+            run.m_chunks.emplace_back(chunkText, style);
+            return true;
+        });
+        result.emplace_back(std::move(run));
+    };
+
+    if (matches.empty()) {
+        addRun(0, syllable.size(), std::nullopt, hasHyphenBefore, hasHyphenAfter);
+        return result;
+    }
+
+    size_t rangeStart = 0;
+    for (size_t i = 0; i <= matches.size(); ++i) {
+        const size_t rangeEnd = (i < matches.size()) ? matches[i].position : syllable.size();
+        const std::optional<char32_t> joinMarker = (i > 0) ? std::optional<char32_t>(kElisionMarkerCodepoints[matches[i - 1].markerIndex]) : std::nullopt;
+        addRun(rangeStart, rangeEnd, joinMarker, i == 0 && hasHyphenBefore, i == matches.size() && hasHyphenAfter);
+        if (i < matches.size()) {
+            rangeStart = matches[i].position + kElisionMarkerUtf8[matches[i].markerIndex].size();
+        }
+    }
+
+    return result;
+}
+
 } // namespace dom
 } // namespace musx

@@ -1403,3 +1403,147 @@ TEST(TextsTest, ExpressionsAndTitles)
     EXPECT_TRUE(result);
     EXPECT_EQ(output, "Clarinet in B♭ page: 1 page: 1");
 }
+
+TEST(TextsTest, LyricSyllableElisionRuns)
+{
+    using texts::LyricsVerse;
+
+    // U+00A0 (non-breaking space) and U+203F (undertie): the only two characters Finale's own
+    // MusicXML export treats as elision markers embedded in a syllable's text.
+    constexpr const char* kNbsp = "\xC2\xA0";
+    constexpr const char* kUndertie = "\xE2\x80\xBF";
+    // U+2011 (non-breaking hyphen): not an elision marker; stays embedded as ordinary text.
+    constexpr const char* kNonBreakingHyphen = "\xE2\x80\x91";
+
+    std::vector<char> syllXml;
+    musxtest::readFile(musxtest::getInputPath() / "syllables.enigmaxml", syllXml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(syllXml);
+    ASSERT_TRUE(doc);
+
+    auto texts = doc->getTexts();
+    ASSERT_TRUE(texts);
+    auto lyrics = texts->getArray<LyricsVerse>();
+    ASSERT_FALSE(lyrics.empty());
+
+    auto mutableLyrics = const_cast<LyricsVerse*>(lyrics[0].get());
+
+    // No embedded marker: one run, spanning the whole syllable, with the syllable's own hyphen
+    // flags untouched.
+    {
+        mutableLyrics->text = "^fontid(1)^size(12)^nfx(0)plain";
+        mutableLyrics->createSyllableInfo(lyrics[0]);
+        ASSERT_EQ(lyrics[0]->syllables.size(), 1u);
+        const auto runs = lyrics[0]->syllables[0]->calcElisionRuns();
+        ASSERT_EQ(runs.size(), 1u);
+        EXPECT_EQ(runs[0].text(), "plain");
+        EXPECT_FALSE(runs[0].joinMarker.has_value());
+        EXPECT_FALSE(runs[0].hasHyphenBefore);
+        EXPECT_FALSE(runs[0].hasHyphenAfter);
+    }
+
+    // A non-breaking hyphen is not an elision trigger: it stays embedded as ordinary text.
+    {
+        mutableLyrics->text = std::string("^fontid(1)^size(12)^nfx(0)stre") + kNonBreakingHyphen + "ngth";
+        mutableLyrics->createSyllableInfo(lyrics[0]);
+        ASSERT_EQ(lyrics[0]->syllables.size(), 1u);
+        const auto runs = lyrics[0]->syllables[0]->calcElisionRuns();
+        ASSERT_EQ(runs.size(), 1u);
+        EXPECT_EQ(runs[0].text(), std::string("stre") + kNonBreakingHyphen + "ngth");
+    }
+
+    // An embedded NBSP splits into two runs, joined by the NBSP codepoint itself (not a plain
+    // ASCII space).
+    {
+        mutableLyrics->text = std::string("^fontid(1)^size(12)^nfx(0)and") + kNbsp + "a";
+        mutableLyrics->createSyllableInfo(lyrics[0]);
+        ASSERT_EQ(lyrics[0]->syllables.size(), 1u);
+        const auto runs = lyrics[0]->syllables[0]->calcElisionRuns();
+        ASSERT_EQ(runs.size(), 2u);
+        EXPECT_EQ(runs[0].text(), "and");
+        EXPECT_FALSE(runs[0].joinMarker.has_value());
+        EXPECT_EQ(runs[1].text(), "a");
+        ASSERT_TRUE(runs[1].joinMarker.has_value());
+        EXPECT_EQ(*runs[1].joinMarker, char32_t(0x00A0));
+    }
+
+    // An embedded undertie behaves the same way, joined by the undertie codepoint.
+    {
+        mutableLyrics->text = std::string("^fontid(1)^size(12)^nfx(0)str") + kUndertie + "en" + kUndertie + "gth";
+        mutableLyrics->createSyllableInfo(lyrics[0]);
+        ASSERT_EQ(lyrics[0]->syllables.size(), 1u);
+        const auto runs = lyrics[0]->syllables[0]->calcElisionRuns();
+        ASSERT_EQ(runs.size(), 3u);
+        EXPECT_EQ(runs[0].text(), "str");
+        EXPECT_EQ(runs[1].text(), "en");
+        EXPECT_EQ(runs[2].text(), "gth");
+        ASSERT_TRUE(runs[1].joinMarker.has_value());
+        EXPECT_EQ(*runs[1].joinMarker, char32_t(0x203F));
+        ASSERT_TRUE(runs[2].joinMarker.has_value());
+        EXPECT_EQ(*runs[2].joinMarker, char32_t(0x203F));
+    }
+
+    // Hyphen-edge redistribution: a three-syllable hyphen chain ("dai-ly-food"), each syllable
+    // additionally split by an internal NBSP. Confirms a syllable's real leading hyphen can only
+    // land on the first run, its real trailing hyphen only on the last, and a true "middle"
+    // syllable ("ly", hyphenated on both sides) never produces a run flagged as both.
+    {
+        mutableLyrics->text = std::string("^fontid(1)^size(12)^nfx(0)d") + kNbsp + "ai-l" + kNbsp + "y-fo" + kNbsp + "od,";
+        mutableLyrics->createSyllableInfo(lyrics[0]);
+        ASSERT_EQ(lyrics[0]->syllables.size(), 3u);
+
+        {
+            const auto runs = lyrics[0]->syllables[0]->calcElisionRuns();
+            ASSERT_EQ(runs.size(), 2u);
+            EXPECT_EQ(runs[0].text(), "d");
+            EXPECT_FALSE(runs[0].hasHyphenBefore);
+            EXPECT_FALSE(runs[0].hasHyphenAfter);
+            EXPECT_EQ(runs[1].text(), "ai");
+            EXPECT_FALSE(runs[1].hasHyphenBefore);
+            EXPECT_TRUE(runs[1].hasHyphenAfter);
+        }
+        {
+            const auto runs = lyrics[0]->syllables[1]->calcElisionRuns();
+            ASSERT_EQ(runs.size(), 2u);
+            EXPECT_EQ(runs[0].text(), "l");
+            EXPECT_TRUE(runs[0].hasHyphenBefore);
+            EXPECT_FALSE(runs[0].hasHyphenAfter);
+            EXPECT_EQ(runs[1].text(), "y");
+            EXPECT_FALSE(runs[1].hasHyphenBefore);
+            EXPECT_TRUE(runs[1].hasHyphenAfter);
+        }
+        {
+            const auto runs = lyrics[0]->syllables[2]->calcElisionRuns();
+            ASSERT_EQ(runs.size(), 2u);
+            EXPECT_EQ(runs[0].text(), "fo");
+            EXPECT_TRUE(runs[0].hasHyphenBefore);
+            EXPECT_FALSE(runs[0].hasHyphenAfter);
+            EXPECT_EQ(runs[1].text(), "od,");
+            EXPECT_FALSE(runs[1].hasHyphenBefore);
+            EXPECT_FALSE(runs[1].hasHyphenAfter);
+        }
+    }
+
+    // Style changes within a run are preserved: reusing the multi-font "fi/na/le" syllable
+    // (no elision markers, so one run) confirms the run's iterateStyles reports the same chunks
+    // as the whole-syllable iterateStyles did before this feature existed.
+    {
+        auto lyrics2 = texts->getArray<LyricsVerse>();
+        ASSERT_GE(lyrics2.size(), 6);
+        const auto runs = lyrics2[5]->syllables[0]->calcElisionRuns();
+        ASSERT_EQ(runs.size(), 1u);
+        EXPECT_EQ(runs[0].text(), "finale");
+
+        std::vector<std::string> expectedChunks = { "fi", "na", "le" };
+        std::vector<bool> expectedItalics = { false, true, false };
+        size_t nextIndex = 0;
+        runs[0].iterateStyles([&](const std::string& chunk, const musx::util::EnigmaStyles& styles) -> bool {
+            EXPECT_LT(nextIndex, expectedChunks.size());
+            if (nextIndex >= expectedChunks.size()) return false;
+            EXPECT_EQ(chunk, expectedChunks[nextIndex]);
+            EXPECT_EQ(styles.font->italic, expectedItalics[nextIndex]);
+            nextIndex++;
+            return true;
+        });
+        EXPECT_EQ(nextIndex, expectedChunks.size());
+    }
+}

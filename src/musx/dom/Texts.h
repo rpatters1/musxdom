@@ -139,6 +139,8 @@ public:
 
 private:
     std::vector<util::EnigmaStyles> m_syllableStyles; ///< the list of font styles in this text.
+
+    friend class ::musx::dom::LyricsSyllableInfo;
 };
 
 /**
