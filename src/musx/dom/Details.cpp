@@ -669,6 +669,30 @@ EntryInfoPtr LyricAssign::calcWordExtensionEndpoint() const
     return {};
 }
 
+std::optional<std::string> LyricAssign::calcDisplayNumberText() const
+{
+    bool showNumber = displayVerseNum;
+    if (!showNumber && syllable == 1) {
+        if (auto lyricOptions = getDocument()->getOptions()->get<options::LyricOptions>()) {
+            switch (getLyricTextType()) {
+                case LyricTextType::Verse:
+                    showNumber = lyricOptions->showAutoNumbersOnVerses;
+                    break;
+                case LyricTextType::Chorus:
+                    showNumber = lyricOptions->showAutoNumbersOnChoruses;
+                    break;
+                case LyricTextType::Section:
+                    showNumber = lyricOptions->showAutoNumbersOnSections;
+                    break;
+            }
+        }
+    }
+    if (!showNumber) {
+        return std::nullopt;
+    }
+    return std::to_string(lyricNumber) + ".";
+}
+
 // *****************************
 // ***** MeasureTextAssign *****
 // *****************************

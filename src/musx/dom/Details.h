@@ -1346,6 +1346,11 @@ public:
     /// uses legacy word extensions.
     EntryInfoPtr calcWordExtensionEndpoint() const;
 
+    /// @brief Calculate the verse/chorus/section number to display to the left of this
+    /// assignment's syllable, if any.
+    /// @return The formatted number (e.g. "1."), or std::nullopt if no number should be displayed.
+    std::optional<std::string> calcDisplayNumberText() const;
+
     static const xml::XmlElementArray<LyricAssign>& xmlMappingArray();   ///< Required for musx::factory::FieldPopulator.
 };
 
