@@ -1547,3 +1547,59 @@ TEST(TextsTest, LyricSyllableElisionRuns)
         EXPECT_EQ(nextIndex, expectedChunks.size());
     }
 }
+
+TEST(TextsTest, ImportTextRetainsConcreteTypeAndUsesIndependentNumbering)
+{
+    constexpr static musxtest::string_view sourceXml = R"xml(
+<?xml version="1.0" encoding="UTF-8"?>
+<finale>
+    <texts>
+        <blockText number="4">Copied block</blockText>
+        <verse number="7">first second</verse>
+    </texts>
+</finale>
+)xml";
+    constexpr static musxtest::string_view targetXml = R"xml(
+<?xml version="1.0" encoding="UTF-8"?>
+<finale>
+    <texts>
+        <blockText number="8">Existing block</blockText>
+        <verse number="2">existing lyric</verse>
+        <smartShapeText number="20">Independent type</smartShapeText>
+    </texts>
+</finale>
+)xml";
+    constexpr Cmper importedBlockId = 9;
+    constexpr Cmper importedVerseId = 3;
+
+    const auto source =
+        musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(sourceXml);
+    const auto target =
+        musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(targetXml);
+    const auto sourceBlock = source->getTexts()->get<texts::BlockText>(4);
+    const auto sourceVerse = source->getTexts()->get<texts::LyricsVerse>(7);
+    ASSERT_TRUE(sourceBlock);
+    ASSERT_TRUE(sourceVerse);
+
+    EXPECT_EQ(target->getTexts()->nextFreeCmper<texts::BlockText>(),
+        std::optional<Cmper>(importedBlockId));
+    EXPECT_EQ(target->getTexts()->nextFreeCmper<texts::LyricsVerse>(),
+        std::optional<Cmper>(importedVerseId));
+
+    EXPECT_EQ(texts::importTextInto(target, sourceBlock),
+        std::optional<Cmper>(importedBlockId));
+    EXPECT_EQ(texts::importTextInto(target, sourceVerse),
+        std::optional<Cmper>(importedVerseId));
+
+    const auto block = target->getTexts()->get<texts::BlockText>(importedBlockId);
+    const auto verse = target->getTexts()->get<texts::LyricsVerse>(importedVerseId);
+    ASSERT_TRUE(block);
+    ASSERT_TRUE(verse);
+    EXPECT_EQ(block->text, "Copied block");
+    EXPECT_EQ(verse->text, "first second");
+    EXPECT_EQ(block->getShareMode(), EnigmaBase::ShareMode::All);
+    EXPECT_EQ(verse->getShareMode(), EnigmaBase::ShareMode::All);
+    ASSERT_EQ(verse->syllables.size(), 2u);
+    EXPECT_EQ(verse->syllables[0]->syllable, "first");
+    EXPECT_EQ(verse->syllables[1]->syllable, "second");
+}

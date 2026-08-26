@@ -677,7 +677,8 @@ bool ShapeDef::iterateInstructions(std::function<bool(const ShapeDefInstruction:
 
 
 std::optional<Cmper> importShapeDefInto(const DocumentPtr& target,
-    const MusxInstance<ShapeDef>& source)
+    const MusxInstance<ShapeDef>& source,
+    const ImportObjectCallback& onImported)
 {
     MUSX_ASSERT_IF(!target) {
         throw std::invalid_argument("importShapeDefInto received a null target document");
@@ -702,6 +703,9 @@ std::optional<Cmper> importShapeDefInto(const DocumentPtr& target,
     // A shape that draws nothing owns no lists to copy.
     if (source->instructionList == 0 && source->dataList == 0) {
         target->getOthers()->add(ShapeDef::XmlNodeName, shape);
+        if (onImported) {
+            onImported(*shape);
+        }
         return *newShapeId;
     }
 
@@ -739,7 +743,7 @@ std::optional<Cmper> importShapeDefInto(const DocumentPtr& target,
             FontInfo font = parsed->font;
             if (const auto sourceFont = sourceDocument->getOthers()->get<FontDefinition>(
                     SCORE_PARTID, font.fontId)) {
-                const auto resolved = importFontDefinitionInto(target, sourceFont);
+                const auto resolved = importFontDefinitionInto(target, sourceFont, onImported);
                 if (!resolved) {
                     return std::nullopt;
                 }
@@ -785,6 +789,11 @@ std::optional<Cmper> importShapeDefInto(const DocumentPtr& target,
     target->getOthers()->add(ShapeInstructionList::XmlNodeName, newInstructions);
     target->getOthers()->add(ShapeData::XmlNodeName, newData);
     target->getOthers()->add(ShapeDef::XmlNodeName, shape);
+    if (onImported) {
+        onImported(*newInstructions);
+        onImported(*newData);
+        onImported(*shape);
+    }
     return *newShapeId;
 }
 

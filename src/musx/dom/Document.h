@@ -27,6 +27,7 @@
 #include <map>
 #include <optional>
 #include <string>
+#include <type_traits>
 #include <unordered_map>
 #include <vector>
 
@@ -55,6 +56,11 @@ using namespace header;
 
 namespace others {
 class MeasureExprAssign;
+}
+
+namespace texts {
+class FileInfoText;
+class LyricsTextBase;
 }
 
 enum class KnownShapeDefType;
@@ -331,6 +337,56 @@ private:
     // Grant the factory class access to the private constructor
     friend class musx::factory::DocumentFactory;
 };
+
+namespace texts {
+
+template <typename T>
+[[nodiscard]]
+std::optional<Cmper> importTextInto(const DocumentPtr& target,
+    const MusxInstance<T>& source, const ImportObjectCallback& onImported)
+{
+    static_assert(is_pool_type_v<TextsPool, T>, "Type T is not registered in TextsPool");
+    MUSX_ASSERT_IF(!target) {
+        throw std::invalid_argument("importTextInto received a null target document");
+    }
+    MUSX_ASSERT_IF(!source) {
+        throw std::invalid_argument("importTextInto received null text");
+    }
+
+    std::optional<Cmper> importedId;
+    if constexpr (std::is_same_v<T, FileInfoText>) {
+        importedId = source->getTextNumber();
+        if (target->getTexts()->get<FileInfoText>(*importedId)) {
+            return std::nullopt;
+        }
+    } else {
+        importedId = target->getTexts()->nextFreeCmper<T>();
+    }
+    if (!importedId) {
+        return std::nullopt;
+    }
+    auto imported = std::make_shared<T>(
+        target, SCORE_PARTID, EnigmaBase::ShareMode::All, *importedId);
+    imported->text = source->text;
+    target->getTexts()->add(T::XmlNodeName, imported);
+    if (onImported) {
+        onImported(*imported);
+    }
+    if constexpr (std::is_base_of_v<LyricsTextBase, T>) {
+        imported->createSyllableInfo(imported);
+    }
+    return importedId;
+}
+
+template <typename T>
+[[nodiscard]]
+std::optional<Cmper> importTextInto(const DocumentPtr& target,
+    const MusxInstance<T>& source)
+{
+    return importTextInto(target, source, {});
+}
+
+} // namespace texts
 
 } // namespace dom
 } // namespace musx

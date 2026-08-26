@@ -212,6 +212,30 @@ public:
     constexpr static std::string_view XmlNodeName = "smartShapeText";
 };
 
+/// @brief Copies a raw text string into another document.
+///
+/// The copy retains @p source's concrete text type and is created at score scope with @ref
+/// EnigmaBase::ShareMode::All. It receives that type's next free text number in @p target. The
+/// exception is @ref FileInfoText, whose number identifies its semantic type and is therefore
+/// retained; importing fails if that type is already present. Derived lyric syllable information
+/// is rebuilt for copied lyric text.
+///
+/// @tparam T A registered @ref TextsPool type.
+/// @param target The document to import into. May be the same document as @p source's.
+/// @param source The raw text to import.
+/// @param onImported Called with the newly created text object.
+/// @return The copied text number within @p target, or std::nullopt when no valid number is free.
+/// @throws std::invalid_argument if @p target or @p source is null. Debug builds assert instead.
+template <typename T>
+[[nodiscard]]
+std::optional<Cmper> importTextInto(const DocumentPtr& target,
+    const MusxInstance<T>& source, const ImportObjectCallback& onImported);
+
+template <typename T>
+[[nodiscard]]
+std::optional<Cmper> importTextInto(const DocumentPtr& target,
+    const MusxInstance<T>& source);
+
 /**
  * @class ExpressionText
  * @brief Contains text blocks associated with text expressions

@@ -20,9 +20,13 @@
  * THE SOFTWARE.
  */
 
- #include "gtest/gtest.h"
- #include "musx/musx.h"
- #include "test_utils.h"
+#include <algorithm>
+#include <typeindex>
+#include <vector>
+
+#include "gtest/gtest.h"
+#include "musx/musx.h"
+#include "test_utils.h"
 
  using namespace musx::dom;
 
@@ -504,6 +508,155 @@ TEST(SmartShapeCustomLine, Populate)
         EXPECT_EQ(line->lineCapEndType, others::SmartShapeCustomLine::LineCapType::ArrowheadPreset);
         EXPECT_EQ(line->lineCapEndArrowId, 1);
     }
+}
+
+TEST(SmartShapeCustomLine, ImportCopiesDependenciesAndUsesShareModeAll)
+{
+    constexpr static musxtest::string_view sourceXml = R"xml(
+<?xml version="1.0" encoding="UTF-8"?>
+<finale>
+    <others>
+        <fontName cmper="4">
+            <charsetBank>Mac</charsetBank>
+            <charsetVal>0</charsetVal>
+            <pitch>0</pitch>
+            <family>0</family>
+            <name>Line Font</name>
+        </fontName>
+        <shapeDef cmper="6">
+            <shapeType>other</shapeType>
+        </shapeDef>
+        <ssLineStyle cmper="2">
+            <lineStyle>char</lineStyle>
+            <charParams>
+                <lineChar>126</lineChar>
+                <fontID>4</fontID>
+                <fontSize>24</fontSize>
+                <efx>
+                    <bold/>
+                    <italic/>
+                </efx>
+                <baselineShiftEms>-88</baselineShiftEms>
+            </charParams>
+            <lineCapStartType>arrowheadCustom</lineCapStartType>
+            <lineCapEndType>arrowheadCustom</lineCapEndType>
+            <lineCapStartArrowID>6</lineCapStartArrowID>
+            <lineCapEndArrowID>6</lineCapEndArrowID>
+            <makeHorz/>
+            <leftStartRawTextID>3</leftStartRawTextID>
+            <leftContRawTextID>4</leftContRawTextID>
+            <rightEndRawTextID>3</rightEndRawTextID>
+            <leftStartX>7</leftStartX>
+            <lineCapStartHookLength>192</lineCapStartHookLength>
+        </ssLineStyle>
+    </others>
+    <texts>
+        <smartShapeText number="3">Alpha</smartShapeText>
+        <smartShapeText number="4">Beta</smartShapeText>
+    </texts>
+</finale>
+)xml";
+    constexpr static musxtest::string_view targetXml = R"xml(
+<?xml version="1.0" encoding="UTF-8"?>
+<finale>
+    <others>
+        <fontName cmper="1">
+            <charsetBank>Mac</charsetBank>
+            <charsetVal>0</charsetVal>
+            <pitch>0</pitch>
+            <family>0</family>
+            <name>Target Font</name>
+        </fontName>
+        <shapeDef cmper="7">
+            <shapeType>other</shapeType>
+        </shapeDef>
+        <ssLineStyle cmper="4">
+            <lineStyle>solid</lineStyle>
+            <solidParams>
+                <lineWidth>115</lineWidth>
+            </solidParams>
+        </ssLineStyle>
+    </others>
+    <texts>
+        <smartShapeText number="9">Existing</smartShapeText>
+    </texts>
+</finale>
+)xml";
+    constexpr Cmper sourceLineId = 2;
+    constexpr Cmper importedFontId = 2;
+    constexpr Cmper importedLineId = 5;
+    constexpr Cmper importedShapeId = 8;
+    constexpr Cmper importedAlphaTextId = 10;
+    constexpr Cmper importedBetaTextId = 11;
+
+    auto source =
+        musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(sourceXml);
+    auto target =
+        musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(targetXml);
+    const auto sourceLine =
+        source->getOthers()->get<others::SmartShapeCustomLine>(SCORE_PARTID, sourceLineId);
+    ASSERT_TRUE(sourceLine);
+
+    std::vector<std::type_index> importedTypes;
+    const auto imported = others::importSmartShapeCustomLineInto(target, sourceLine,
+        [&importedTypes](const EnigmaBase& object) {
+            importedTypes.emplace_back(typeid(object));
+        });
+    ASSERT_EQ(imported, std::optional<Cmper>(importedLineId));
+    EXPECT_EQ(importedTypes.size(), 5u);
+    EXPECT_EQ(std::count(importedTypes.begin(), importedTypes.end(),
+                  std::type_index(typeid(others::FontDefinition))), 1);
+    EXPECT_EQ(std::count(importedTypes.begin(), importedTypes.end(),
+                  std::type_index(typeid(others::ShapeDef))), 1);
+    EXPECT_EQ(std::count(importedTypes.begin(), importedTypes.end(),
+                  std::type_index(typeid(texts::SmartShapeText))), 2);
+    EXPECT_EQ(std::count(importedTypes.begin(), importedTypes.end(),
+                  std::type_index(typeid(others::SmartShapeCustomLine))), 1);
+    const auto line =
+        target->getOthers()->get<others::SmartShapeCustomLine>(SCORE_PARTID, *imported);
+    ASSERT_TRUE(line);
+    EXPECT_EQ(line->getSourcePartId(), SCORE_PARTID);
+    EXPECT_EQ(line->getShareMode(), EnigmaBase::ShareMode::All);
+    EXPECT_EQ(line->lineStyle, others::SmartShapeCustomLine::LineStyle::Char);
+    ASSERT_TRUE(line->charParams);
+    ASSERT_TRUE(line->charParams->font);
+    EXPECT_EQ(line->charParams->lineChar, 126);
+    EXPECT_EQ(line->charParams->font->fontId, importedFontId);
+    EXPECT_EQ(line->charParams->font->getName(), "Line Font");
+    EXPECT_EQ(line->charParams->font->fontSize, 24);
+    EXPECT_TRUE(line->charParams->font->bold);
+    EXPECT_TRUE(line->charParams->font->italic);
+    EXPECT_EQ(line->charParams->baselineShiftEms, -88);
+    EXPECT_EQ(line->leftStartX, 7);
+    EXPECT_EQ(line->lineCapStartHookLength, 192);
+
+    EXPECT_EQ(line->lineCapStartArrowId, importedShapeId);
+    EXPECT_EQ(line->lineCapEndArrowId, importedShapeId);
+    const auto shape =
+        target->getOthers()->get<others::ShapeDef>(SCORE_PARTID, importedShapeId);
+    ASSERT_TRUE(shape);
+    EXPECT_EQ(shape->getSourcePartId(), SCORE_PARTID);
+    EXPECT_EQ(shape->getShareMode(), EnigmaBase::ShareMode::All);
+
+    const auto font =
+        target->getOthers()->get<others::FontDefinition>(SCORE_PARTID, importedFontId);
+    ASSERT_TRUE(font);
+    EXPECT_EQ(font->getSourcePartId(), SCORE_PARTID);
+    EXPECT_EQ(font->getShareMode(), EnigmaBase::ShareMode::All);
+
+    EXPECT_EQ(line->leftStartRawTextId, importedAlphaTextId);
+    EXPECT_EQ(line->rightEndRawTextId, importedAlphaTextId);
+    EXPECT_EQ(line->leftContRawTextId, importedBetaTextId);
+    const auto alpha =
+        target->getTexts()->get<texts::SmartShapeText>(importedAlphaTextId);
+    const auto beta =
+        target->getTexts()->get<texts::SmartShapeText>(importedBetaTextId);
+    ASSERT_TRUE(alpha);
+    ASSERT_TRUE(beta);
+    EXPECT_EQ(alpha->text, "Alpha");
+    EXPECT_EQ(beta->text, "Beta");
+    EXPECT_EQ(alpha->getShareMode(), EnigmaBase::ShareMode::All);
+    EXPECT_EQ(beta->getShareMode(), EnigmaBase::ShareMode::All);
 }
 
 TEST(CenterShape, Populate)

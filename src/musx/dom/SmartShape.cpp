@@ -19,9 +19,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-#include <string>
+#include <array>
 #include <cmath>
 #include <limits>
+#include <map>
+#include <string>
 
 #include "musx/musx.h"
 
@@ -517,6 +519,167 @@ util::EnigmaParsingContext others::SmartShapeCustomLine::getRawTextCtx(Cmper for
         return rawText->getRawTextCtx(rawText, forPartId);
     }
     return {};
+}
+
+std::optional<Cmper> others::importSmartShapeCustomLineInto(const DocumentPtr& target,
+    const MusxInstance<SmartShapeCustomLine>& source,
+    const ImportObjectCallback& onImported)
+{
+    MUSX_ASSERT_IF(!target) {
+        throw std::invalid_argument(
+            "importSmartShapeCustomLineInto received a null target document");
+    }
+    MUSX_ASSERT_IF(!source) {
+        throw std::invalid_argument(
+            "importSmartShapeCustomLineInto received a null custom line");
+    }
+
+    const auto newLineId =
+        target->getOthers()->nextFreeCmper<SmartShapeCustomLine>(SCORE_PARTID);
+    if (!newLineId) {
+        return std::nullopt;
+    }
+    const auto sourceDocument = source->getDocument();
+
+    std::optional<Cmper> importedFontId;
+    if (source->charParams) {
+        if (!source->charParams->font) {
+            return std::nullopt;
+        }
+        importedFontId = source->charParams->font->fontId;
+        if (const auto sourceFont = sourceDocument->getOthers()->get<FontDefinition>(
+                SCORE_PARTID, *importedFontId)) {
+            importedFontId = importFontDefinitionInto(target, sourceFont, onImported);
+            if (!importedFontId) {
+                return std::nullopt;
+            }
+        } else if (*importedFontId != 0) {
+            return std::nullopt;
+        }
+    }
+
+    std::map<Cmper, Cmper> importedShapes;
+    const auto importArrow = [&](SmartShapeCustomLine::LineCapType type, Cmper sourceId)
+        -> std::optional<Cmper> {
+        if (type != SmartShapeCustomLine::LineCapType::ArrowheadCustom || sourceId == 0) {
+            return sourceId;
+        }
+        if (const auto found = importedShapes.find(sourceId); found != importedShapes.end()) {
+            return found->second;
+        }
+        const auto sourceShape =
+            sourceDocument->getOthers()->get<ShapeDef>(SCORE_PARTID, sourceId);
+        if (!sourceShape) {
+            return std::nullopt;
+        }
+        const auto imported = importShapeDefInto(target, sourceShape, onImported);
+        if (imported) {
+            importedShapes.emplace(sourceId, *imported);
+        }
+        return imported;
+    };
+    const auto startArrowId =
+        importArrow(source->lineCapStartType, source->lineCapStartArrowId);
+    const auto endArrowId =
+        importArrow(source->lineCapEndType, source->lineCapEndArrowId);
+    if (!startArrowId || !endArrowId) {
+        return std::nullopt;
+    }
+
+    std::map<Cmper, Cmper> importedTexts;
+    const auto importText = [&](Cmper sourceId) -> std::optional<Cmper> {
+        if (sourceId == 0) {
+            return Cmper(0);
+        }
+        if (const auto found = importedTexts.find(sourceId); found != importedTexts.end()) {
+            return found->second;
+        }
+        const auto sourceText = sourceDocument->getTexts()->get<texts::SmartShapeText>(sourceId);
+        if (!sourceText) {
+            return std::nullopt;
+        }
+        const auto imported = texts::importTextInto(target, sourceText, onImported);
+        if (imported) {
+            importedTexts.emplace(sourceId, *imported);
+        }
+        return imported;
+    };
+
+    auto result = std::make_shared<SmartShapeCustomLine>(
+        target, SCORE_PARTID, EnigmaBase::ShareMode::All, *newLineId);
+    result->lineStyle = source->lineStyle;
+    if (source->charParams) {
+        result->charParams = std::make_shared<SmartShapeCustomLine::CharParams>(result);
+        result->charParams->lineChar = source->charParams->lineChar;
+        result->charParams->font = std::make_shared<FontInfo>(
+            target, source->charParams->font->getSizeIsPercent());
+        result->charParams->font->fontId = *importedFontId;
+        result->charParams->font->fontSize = source->charParams->font->fontSize;
+        result->charParams->font->bold = source->charParams->font->bold;
+        result->charParams->font->italic = source->charParams->font->italic;
+        result->charParams->font->underline = source->charParams->font->underline;
+        result->charParams->font->strikeout = source->charParams->font->strikeout;
+        result->charParams->font->absolute = source->charParams->font->absolute;
+        result->charParams->font->hidden = source->charParams->font->hidden;
+        result->charParams->baselineShiftEms = source->charParams->baselineShiftEms;
+    }
+    if (source->solidParams) {
+        result->solidParams = std::make_shared<SmartShapeCustomLine::SolidParams>(result);
+        result->solidParams->lineWidth = source->solidParams->lineWidth;
+    }
+    if (source->dashedParams) {
+        result->dashedParams = std::make_shared<SmartShapeCustomLine::DashedParams>(result);
+        result->dashedParams->lineWidth = source->dashedParams->lineWidth;
+        result->dashedParams->dashOn = source->dashedParams->dashOn;
+        result->dashedParams->dashOff = source->dashedParams->dashOff;
+    }
+    result->lineCapStartType = source->lineCapStartType;
+    result->lineCapEndType = source->lineCapEndType;
+    result->lineCapStartArrowId = *startArrowId;
+    result->lineCapEndArrowId = *endArrowId;
+    result->makeHorz = source->makeHorz;
+    result->lineAfterLeftStartText = source->lineAfterLeftStartText;
+    result->lineBeforeRightEndText = source->lineBeforeRightEndText;
+    result->lineAfterLeftContText = source->lineAfterLeftContText;
+
+    constexpr std::array rawTextMembers{
+        &SmartShapeCustomLine::leftStartRawTextId,
+        &SmartShapeCustomLine::leftContRawTextId,
+        &SmartShapeCustomLine::rightEndRawTextId,
+        &SmartShapeCustomLine::centerFullRawTextId,
+        &SmartShapeCustomLine::centerAbbrRawTextId,
+    };
+    for (const auto member : rawTextMembers) {
+        const auto importedId = importText(source.get()->*member);
+        if (!importedId) {
+            return std::nullopt;
+        }
+        result.get()->*member = *importedId;
+    }
+
+    result->leftStartX = source->leftStartX;
+    result->leftStartY = source->leftStartY;
+    result->leftContX = source->leftContX;
+    result->leftContY = source->leftContY;
+    result->rightEndX = source->rightEndX;
+    result->rightEndY = source->rightEndY;
+    result->centerFullX = source->centerFullX;
+    result->centerFullY = source->centerFullY;
+    result->centerAbbrX = source->centerAbbrX;
+    result->centerAbbrY = source->centerAbbrY;
+    result->lineStartX = source->lineStartX;
+    result->lineStartY = source->lineStartY;
+    result->lineEndX = source->lineEndX;
+    result->lineEndY = source->lineEndY;
+    result->lineContX = source->lineContX;
+    result->lineCapStartHookLength = source->lineCapStartHookLength;
+    result->lineCapEndHookLength = source->lineCapEndHookLength;
+
+    target->getOthers()->add(SmartShapeCustomLine::XmlNodeName, result);
+    if (onImported) {
+        onImported(*result);
+    }
+    return *newLineId;
 }
 
 } // namespace dom

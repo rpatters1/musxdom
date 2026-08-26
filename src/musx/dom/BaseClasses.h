@@ -23,6 +23,7 @@
 
 #include <cassert>
 #include <filesystem>
+#include <functional>
 #include <set>
 #include <string_view>
 #include <unordered_set>
@@ -158,6 +159,11 @@ private:
     const ShareMode m_shareMode;
     SharedNodes m_unlinkedNodes;
 };
+
+/// @brief Receives each document-pool object newly created by an import helper.
+/// @details Reused target objects are not reported. Nested import helpers forward the same
+/// callback, so one callback observes the complete set of objects created by the operation.
+using ImportObjectCallback = std::function<void(const EnigmaBase&)>;
 
 /**
  * @class CommonClassBase

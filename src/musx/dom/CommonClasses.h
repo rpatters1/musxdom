@@ -89,12 +89,15 @@ std::string normalizeFontName(std::string_view name);
 ///
 /// @param target The document to import into. May be the same document as @p source's.
 /// @param source The definition to import.
+/// @param onImported Called for every definition this operation creates. Existing equivalent
+/// definitions that are reused are not reported.
 /// @return The cmper naming the typeface within @p target, or std::nullopt when @p target has no
 /// free cmper left for a new definition. A returned 0 always means the default music font.
 /// @throws std::invalid_argument if @p target or @p source is null. Debug builds assert instead.
 [[nodiscard]]
 std::optional<Cmper> importFontDefinitionInto(const DocumentPtr& target,
-    const MusxInstance<others::FontDefinition>& source);
+    const MusxInstance<others::FontDefinition>& source,
+    const ImportObjectCallback& onImported = {});
 
 /**
  * @struct FontInfo

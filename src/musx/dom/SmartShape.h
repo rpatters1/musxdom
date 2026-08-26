@@ -635,6 +635,29 @@ public:
     static const xml::XmlElementArray<SmartShapeCustomLine>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
 
+/// @brief Copies a custom line and its document-local dependencies into another document.
+///
+/// The copied line receives the next free @ref SmartShapeCustomLine cmper in @p target. Character
+/// fonts, custom arrowhead shapes, and raw Smart Shape text strings are copied or resolved through
+/// @ref importFontDefinitionInto, @ref importShapeDefInto, and @ref
+/// texts::importTextInto. The new line is rewired to their target-document cmpers.
+/// Repeated references to one source dependency share one imported target object.
+///
+/// Nothing is added to the SmartShapeCustomLine pool unless every dependency can be resolved.
+/// Successfully imported dependencies may remain when a later dependency cannot be imported;
+/// unreferenced fonts, shapes, and raw text strings do not affect rendering.
+///
+/// @param target The document to import into. May be the same document as @p source's.
+/// @param source The custom line to import.
+/// @param onImported Called for the custom line and every dependency this operation creates.
+/// @return The copied line's cmper within @p target, or std::nullopt when a destination pool has no
+/// free cmper or a referenced source object cannot be resolved.
+/// @throws std::invalid_argument if @p target or @p source is null. Debug builds assert instead.
+[[nodiscard]]
+std::optional<Cmper> importSmartShapeCustomLineInto(const DocumentPtr& target,
+    const MusxInstance<SmartShapeCustomLine>& source,
+    const ImportObjectCallback& onImported = {});
+
 /**
  * @class SmartShapeMeasureAssign
  * @brief Assigns a smart shape or center shape to a measure.

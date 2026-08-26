@@ -634,6 +634,7 @@ public:
 ///
 /// @param target The document to import into. May be the same document as @p source's.
 /// @param source The shape to import.
+/// @param onImported Called for the shape and every dependency this operation creates.
 /// @return The @ref ShapeDef cmper within @p target, or std::nullopt when a pool has no free
 /// cmper left, when the source is missing its instruction or data list, or when a font it names
 /// cannot be resolved.
@@ -642,7 +643,8 @@ public:
 /// imported rather than refused.
 [[nodiscard]]
 std::optional<Cmper> importShapeDefInto(const DocumentPtr& target,
-    const MusxInstance<ShapeDef>& source);
+    const MusxInstance<ShapeDef>& source,
+    const ImportObjectCallback& onImported = {});
 
 } // namespace others
 } // namespace dom
