@@ -13,20 +13,20 @@ var classmusx_1_1dom_1_1options_1_1SmartShapeOptions =
       [ "StaffFromTopEndOffset", "classmusx_1_1dom_1_1options_1_1SmartShapeOptions.html#a0ceb435b794a50517ea2b9f2ac3bfb7daf3b537f57af29ca86b34b1e32d2f509e", null ]
     ] ],
     [ "ConnectionIndex", "classmusx_1_1dom_1_1options_1_1SmartShapeOptions.html#a27c3004019ee7ce50ddb667492080b3c", [
-      [ "HeadRightTop", "classmusx_1_1dom_1_1options_1_1SmartShapeOptions.html#a27c3004019ee7ce50ddb667492080b3ca44b63f585ff75c130f1e67e9d02ee221", null ],
       [ "HeadLeftTop", "classmusx_1_1dom_1_1options_1_1SmartShapeOptions.html#a27c3004019ee7ce50ddb667492080b3ca4b6a98205eee2985155fa16d031a31bf", null ],
-      [ "StemRightTop", "classmusx_1_1dom_1_1options_1_1SmartShapeOptions.html#a27c3004019ee7ce50ddb667492080b3caa903c682a328d5bb9b17a0f5050b3826", null ],
-      [ "StemLeftTop", "classmusx_1_1dom_1_1options_1_1SmartShapeOptions.html#a27c3004019ee7ce50ddb667492080b3ca2e46005afad966d74fd3ee0311b52210", null ],
+      [ "HeadRightTop", "classmusx_1_1dom_1_1options_1_1SmartShapeOptions.html#a27c3004019ee7ce50ddb667492080b3ca44b63f585ff75c130f1e67e9d02ee221", null ],
       [ "HeadRightBottom", "classmusx_1_1dom_1_1options_1_1SmartShapeOptions.html#a27c3004019ee7ce50ddb667492080b3ca5a25dc087d87292a1f25133ab07b3330", null ],
       [ "HeadLeftBottom", "classmusx_1_1dom_1_1options_1_1SmartShapeOptions.html#a27c3004019ee7ce50ddb667492080b3ca3fca95b1705b55e8da0d4d563bc0e55a", null ],
+      [ "StemLeftTop", "classmusx_1_1dom_1_1options_1_1SmartShapeOptions.html#a27c3004019ee7ce50ddb667492080b3ca2e46005afad966d74fd3ee0311b52210", null ],
+      [ "StemRightTop", "classmusx_1_1dom_1_1options_1_1SmartShapeOptions.html#a27c3004019ee7ce50ddb667492080b3caa903c682a328d5bb9b17a0f5050b3826", null ],
       [ "StemRightBottom", "classmusx_1_1dom_1_1options_1_1SmartShapeOptions.html#a27c3004019ee7ce50ddb667492080b3ca8e3d42ad986f22312245ab64f202582d", null ],
       [ "StemLeftBottom", "classmusx_1_1dom_1_1options_1_1SmartShapeOptions.html#a27c3004019ee7ce50ddb667492080b3cac2ef7a6a2b78a5419ef9695a7a6af217", null ],
-      [ "NoteRightCenter", "classmusx_1_1dom_1_1options_1_1SmartShapeOptions.html#a27c3004019ee7ce50ddb667492080b3cafb5dc1e2869c017eb89aaf5fed495e4d", null ],
-      [ "NoteLeftCenter", "classmusx_1_1dom_1_1options_1_1SmartShapeOptions.html#a27c3004019ee7ce50ddb667492080b3cabfbfb4b4c297226cd9608c433ceb7351", null ],
+      [ "NoteLeftTop", "classmusx_1_1dom_1_1options_1_1SmartShapeOptions.html#a27c3004019ee7ce50ddb667492080b3cac32bea98d082a16da8635bbb1876ea90", null ],
+      [ "NoteRightTop", "classmusx_1_1dom_1_1options_1_1SmartShapeOptions.html#a27c3004019ee7ce50ddb667492080b3caa0eb9d1bb59f412ef47865f3f8ab5ff5", null ],
       [ "NoteRightBottom", "classmusx_1_1dom_1_1options_1_1SmartShapeOptions.html#a27c3004019ee7ce50ddb667492080b3ca73a912fd901816dafb626e8da9a24e6f", null ],
       [ "NoteLeftBottom", "classmusx_1_1dom_1_1options_1_1SmartShapeOptions.html#a27c3004019ee7ce50ddb667492080b3cab607a9c0b509a40af30dea684980922b", null ],
-      [ "NoteRightTop", "classmusx_1_1dom_1_1options_1_1SmartShapeOptions.html#a27c3004019ee7ce50ddb667492080b3caa0eb9d1bb59f412ef47865f3f8ab5ff5", null ],
-      [ "NoteLeftTop", "classmusx_1_1dom_1_1options_1_1SmartShapeOptions.html#a27c3004019ee7ce50ddb667492080b3cac32bea98d082a16da8635bbb1876ea90", null ]
+      [ "NoteLeftCenter", "classmusx_1_1dom_1_1options_1_1SmartShapeOptions.html#a27c3004019ee7ce50ddb667492080b3cabfbfb4b4c297226cd9608c433ceb7351", null ],
+      [ "NoteRightCenter", "classmusx_1_1dom_1_1options_1_1SmartShapeOptions.html#a27c3004019ee7ce50ddb667492080b3cafb5dc1e2869c017eb89aaf5fed495e4d", null ]
     ] ],
     [ "GlissandoConnectStyleType", "classmusx_1_1dom_1_1options_1_1SmartShapeOptions.html#aaff1cea140b40412884990309ba6f60f", [
       [ "DefaultStart", "classmusx_1_1dom_1_1options_1_1SmartShapeOptions.html#aaff1cea140b40412884990309ba6f60fa18eb7db36373f1d600eb2eac8d51c822", null ],
