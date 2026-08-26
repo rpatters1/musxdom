@@ -875,6 +875,54 @@ TEST(SmartShapes, EntriesInShapeTest)
     }
 }
 
+TEST(SmartShapes, EndpointNotes)
+{
+    std::vector<char> enigmaXml;
+    musxtest::readFile(musxtest::getInputPath() / "trill-to.enigmaxml", enigmaXml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(enigmaXml);
+    ASSERT_TRUE(doc);
+
+    auto shape = doc->getOthers()->get<others::SmartShape>(SCORE_PARTID, 1);
+    ASSERT_TRUE(shape);
+    EXPECT_EQ(shape->shapeType, others::SmartShape::ShapeType::TabSlide);
+    EXPECT_TRUE(shape->entryBased);
+    EXPECT_EQ(shape->startNoteId, 1);
+    EXPECT_EQ(shape->endNoteId, 1);
+
+    const auto startNote = shape->calcStartNote();
+    ASSERT_TRUE(startNote);
+    EXPECT_EQ(startNote.getEntryInfo()->getEntry()->getEntryNumber(), shape->startTermSeg->endPoint->entryNumber);
+    EXPECT_EQ(startNote->getNoteId(), shape->startNoteId);
+
+    const auto endNote = shape->calcEndNote();
+    ASSERT_TRUE(endNote);
+    EXPECT_EQ(endNote.getEntryInfo()->getEntry()->getEntryNumber(), shape->endTermSeg->endPoint->entryNumber);
+    EXPECT_EQ(endNote->getNoteId(), shape->endNoteId);
+
+    // The shape spans two entries, so the two ends are different notes.
+    EXPECT_NE(startNote.getEntryInfo()->getEntry()->getEntryNumber(),
+        endNote.getEntryInfo()->getEntry()->getEntryNumber());
+}
+
+TEST(SmartShapes, EndpointNotesRequireEntryAttachment)
+{
+    std::vector<char> enigmaXml;
+    musxtest::readFile(musxtest::getInputPath() / "independent_timesig.enigmaxml", enigmaXml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(enigmaXml);
+    ASSERT_TRUE(doc);
+
+    // A beat-attached shape has no note association, even where calcAssociatedEntry would find a
+    // nearby entry.
+    auto shape = doc->getOthers()->get<others::SmartShape>(SCORE_PARTID, 4);
+    ASSERT_TRUE(shape);
+    EXPECT_FALSE(shape->entryBased);
+    EXPECT_EQ(shape->startTermSeg->endPoint->entryNumber, 0);
+    EXPECT_EQ(shape->endTermSeg->endPoint->entryNumber, 0);
+
+    EXPECT_FALSE(shape->calcStartNote());
+    EXPECT_FALSE(shape->calcEndNote());
+}
+
 TEST(SmartShapes, VerticalPlacementForBeatAttached)
 {
     constexpr static musxtest::string_view xml = R"xml(
