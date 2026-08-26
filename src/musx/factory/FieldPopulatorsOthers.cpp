@@ -690,8 +690,8 @@ MUSX_XML_ELEMENT_ARRAY(FretboardStyle, {
         { i->fingNumFont = FieldPopulator<FontInfo>::createAndPopulate(c, e, i->getDocument()); }},
     {"horzFingNumOff", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<FretboardStyle>& i) { i->horzFingNumOff = e->getTextAs<Efix>(); }},
     {"vertFingNumOff", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<FretboardStyle>& i) { i->vertFingNumOff = e->getTextAs<Efix>(); }},
-    {"name", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<FretboardStyle>& i) { i->name = e->getTextAs<std::string>(); }},
-    {"fretNumText", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<FretboardStyle>& i) { i->fretNumText = e->getTextAs<std::string>(); }},
+    {"name", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<FretboardStyle>& i) { i->name = e->getText(); }},
+    {"fretNumText", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<FretboardStyle>& i) { i->fretNumText = e->getText(); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(KeyFormat, {

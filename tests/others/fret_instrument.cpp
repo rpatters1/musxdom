@@ -276,3 +276,22 @@ TEST(FretboardStyle, PopulateTest)
     EXPECT_EQ(style->name, "Jazz");
     EXPECT_EQ(style->fretNumText, "fr.");
 }
+
+TEST(FretboardStyle, PreservesWhitespaceInName)
+{
+    constexpr static musxtest::string_view xml = R"xml(
+<?xml version="1.0" encoding="UTF-8"?>
+<finale>
+  <others>
+    <fretStyle cmper="0">
+      <name>Jazz 2</name>
+    </fretStyle>
+  </others>
+</finale>
+    )xml";
+
+    const auto document = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(xml);
+    const auto styles = document->getOthers()->getArray<others::FretboardStyle>(SCORE_PARTID);
+    ASSERT_FALSE(styles.empty());
+    EXPECT_EQ(styles.front()->name, "Jazz 2");
+}
