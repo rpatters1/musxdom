@@ -468,6 +468,10 @@ TEST(SmartShapeOptions, ArrayTests)
     EXPECT_EQ(bendNoteStart->connectIndex, SmartShapeOptions::ConnectionIndex::NoteRightTop);
     EXPECT_EQ(bendNoteStart->xOffset, 8);
 
+    auto bendStaffEnd = smartShapeOptions->bendCurveConnectStyles.at(SmartShapeOptions::BendCurveConnectStyleType::StaffEnd);
+    ASSERT_TRUE(bendStaffEnd);
+    EXPECT_EQ(bendStaffEnd->connectIndex, SmartShapeOptions::ConnectionIndex::HeadLeftTop);
+
     auto bendStaffEndOffset = smartShapeOptions->bendCurveConnectStyles.at(SmartShapeOptions::BendCurveConnectStyleType::StaffEndOffset);
     ASSERT_TRUE(bendStaffEndOffset);
     EXPECT_EQ(bendStaffEndOffset->connectIndex, SmartShapeOptions::ConnectionIndex::NoteRightTop);

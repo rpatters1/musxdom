@@ -1211,20 +1211,20 @@ public:
     /// @brief Connection index values
     enum class ConnectionIndex
     {
-        HeadRightTop,
         HeadLeftTop,
-        StemRightTop,
-        StemLeftTop,
+        HeadRightTop,
         HeadRightBottom,
         HeadLeftBottom,
+        StemLeftTop,
+        StemRightTop,
         StemRightBottom,
         StemLeftBottom,
-        NoteRightCenter,
-        NoteLeftCenter,
+        NoteLeftTop,
+        NoteRightTop,
         NoteRightBottom,
         NoteLeftBottom,
-        NoteRightTop,
-        NoteLeftTop
+        NoteLeftCenter,
+        NoteRightCenter
     };
 
     /// @enum SlurConnectStyleType

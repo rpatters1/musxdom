@@ -182,20 +182,20 @@ MUSX_XML_ENUM_MAPPING(RepeatOptions::WingStyle, {
 });
 
 MUSX_XML_ENUM_MAPPING(SmartShapeOptions::ConnectionIndex, {
-    {"headRightTop", SmartShapeOptions::ConnectionIndex::HeadRightTop},
     {"headLeftTop", SmartShapeOptions::ConnectionIndex::HeadLeftTop},
-    {"stemRightTop", SmartShapeOptions::ConnectionIndex::StemRightTop},
-    {"stemLeftTop", SmartShapeOptions::ConnectionIndex::StemLeftTop},
+    {"headRightTop", SmartShapeOptions::ConnectionIndex::HeadRightTop},
     {"headRightBottom", SmartShapeOptions::ConnectionIndex::HeadRightBottom},
     {"headLeftBottom", SmartShapeOptions::ConnectionIndex::HeadLeftBottom},
+    {"stemLeftTop", SmartShapeOptions::ConnectionIndex::StemLeftTop},
+    {"stemRightTop", SmartShapeOptions::ConnectionIndex::StemRightTop},
     {"stemRightBottom", SmartShapeOptions::ConnectionIndex::StemRightBottom},
     {"stemLeftBottom", SmartShapeOptions::ConnectionIndex::StemLeftBottom},
-    {"noteRightCenter", SmartShapeOptions::ConnectionIndex::NoteRightCenter},
-    {"noteLeftCenter", SmartShapeOptions::ConnectionIndex::NoteLeftCenter},
+    {"noteLeftTop", SmartShapeOptions::ConnectionIndex::NoteLeftTop},
+    {"noteRightTop", SmartShapeOptions::ConnectionIndex::NoteRightTop},
     {"noteRightBottom", SmartShapeOptions::ConnectionIndex::NoteRightBottom},
     {"noteLeftBottom", SmartShapeOptions::ConnectionIndex::NoteLeftBottom},
-    {"noteLeftTop", SmartShapeOptions::ConnectionIndex::NoteLeftTop},
-    {"noteRightTop", SmartShapeOptions::ConnectionIndex::NoteRightTop}
+    {"noteLeftCenter", SmartShapeOptions::ConnectionIndex::NoteLeftCenter},
+    {"noteRightCenter", SmartShapeOptions::ConnectionIndex::NoteRightCenter}
 });
 
 MUSX_XML_ENUM_MAPPING(SmartShapeOptions::SlurConnectStyleType, {
