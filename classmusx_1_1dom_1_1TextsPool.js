@@ -4,5 +4,6 @@ var classmusx_1_1dom_1_1TextsPool =
     [ "add", "classmusx_1_1dom_1_1TextsPool.html#a67054a830965bbff9cef4b5a0167f7e2", null ],
     [ "get", "classmusx_1_1dom_1_1TextsPool.html#a43b851e25bdcb4297f9fe9c433d25c07", null ],
     [ "getArray", "classmusx_1_1dom_1_1TextsPool.html#a00929fbc1d91a48d405832f01ccd3ecd", null ],
-    [ "integrityCheckAll", "classmusx_1_1dom_1_1TextsPool.html#a999bfe7cb215677fa00e1353bc73e39a", null ]
+    [ "integrityCheckAll", "classmusx_1_1dom_1_1TextsPool.html#a999bfe7cb215677fa00e1353bc73e39a", null ],
+    [ "nextFreeCmper", "classmusx_1_1dom_1_1TextsPool.html#abf15849ad1d27815709b40994bd1e234", null ]
 ];

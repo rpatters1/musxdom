@@ -1,5 +1,9 @@
 var NAVTREEINDEX37 =
 {
+"structmusx_1_1util_1_1Cue_1_1EntryAnalysis.html#afebe01071ba5105010f9f9844a07ae68":[2,0,1,2,3,0,1],
+"structmusx_1_1util_1_1Cue_1_1EntryAnalysis.html#afed28a539a9920868ec114afc50d71b4":[2,0,1,2,3,0,5],
+"structmusx_1_1util_1_1Cue_1_1FrameAnalysis.html":[2,0,1,2,3,1],
+"structmusx_1_1util_1_1Cue_1_1FrameAnalysis.html#a52884d9a0973d3116ba67555d4c2f58c":[2,0,1,2,3,1,0],
 "structmusx_1_1util_1_1Cue_1_1FrameAnalysis.html#abe18a95b001006917503038e98611d58":[2,0,1,2,3,1,1],
 "structmusx_1_1util_1_1Cue_1_1FrameAnalysis.html#ac0404de6ac33f115feab8172bceaa9c3":[2,0,1,2,3,1,2],
 "structmusx_1_1util_1_1Cue_1_1StaffMeasureAnalysis.html":[2,0,1,2,3,2],

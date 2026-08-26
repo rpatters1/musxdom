@@ -283,6 +283,9 @@ Classes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="typedef-members" name="typedef-members"></a>
 Typedefs</h2></td></tr>
+<tr class="memitem:aafc96d2d41f4032a3db69ba5f7959d52" id="r_aafc96d2d41f4032a3db69ba5f7959d52"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemusx_1_1dom.html#aafc96d2d41f4032a3db69ba5f7959d52">ImportObjectCallback</a> = std::function&lt; void(const <a class="el" href="classmusx_1_1dom_1_1EnigmaBase.html">EnigmaBase</a> &amp;)&gt;</td></tr>
+<tr class="memdesc:aafc96d2d41f4032a3db69ba5f7959d52"><td class="mdescLeft">&#160;</td><td class="mdescRight">Receives each document-pool object newly created by an import helper.  <br /></td></tr>
+<tr class="separator:aafc96d2d41f4032a3db69ba5f7959d52"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9fd6f660a4f7c02787b6bbe3307a15af" id="r_a9fd6f660a4f7c02787b6bbe3307a15af"><td class="memItemLeft" align="right" valign="top"><a id="a9fd6f660a4f7c02787b6bbe3307a15af" name="a9fd6f660a4f7c02787b6bbe3307a15af"></a>
 using&#160;</td><td class="memItemRight" valign="bottom"><b>Duration</b> = std::pair&lt; <a class="el" href="namespacemusx_1_1dom.html#a3c91ee84b72cc27a2899191d6baee312">NoteType</a>, unsigned &gt;</td></tr>
 <tr class="memdesc:a9fd6f660a4f7c02787b6bbe3307a15af"><td class="mdescLeft">&#160;</td><td class="mdescRight">Expresses a duration as a <a class="el" href="namespacemusx_1_1dom.html#a3c91ee84b72cc27a2899191d6baee312" title="Enum class representing note types based on EDU values.">NoteType</a> and a number of dots (unsigned) <br /></td></tr>
@@ -668,9 +671,9 @@ Functions</h2></td></tr>
 <tr class="memitem:a52074e6f04c7b798c6eca1cf4b5185c5" id="r_a52074e6f04c7b798c6eca1cf4b5185c5"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemusx_1_1dom.html#a52074e6f04c7b798c6eca1cf4b5185c5">normalizeFontName</a> (std::string_view name)</td></tr>
 <tr class="memdesc:a52074e6f04c7b798c6eca1cf4b5185c5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Normalizes a font name for comparison by removing ASCII whitespace and folding ASCII case.  <br /></td></tr>
 <tr class="separator:a52074e6f04c7b798c6eca1cf4b5185c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abc7a5964448cf4e48814d95fc3572e69" id="r_abc7a5964448cf4e48814d95fc3572e69"><td class="memItemLeft" align="right" valign="top">std::optional&lt; <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemusx_1_1dom.html#abc7a5964448cf4e48814d95fc3572e69">importFontDefinitionInto</a> (const <a class="el" href="namespacemusx_1_1dom.html#ac52edbaa60f81ba3df76ee77b37e95fd">DocumentPtr</a> &amp;target, const <a class="el" href="namespacemusx_1_1dom.html#a4223cd531120dbef7acd854c3d2631b8">MusxInstance</a>&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1FontDefinition.html">others::FontDefinition</a> &gt; &amp;source)</td></tr>
-<tr class="memdesc:abc7a5964448cf4e48814d95fc3572e69"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copies a font definition into another document, reusing an equivalent one when present.  <br /></td></tr>
-<tr class="separator:abc7a5964448cf4e48814d95fc3572e69"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af75c85b0212b243fef382233e652e04d" id="r_af75c85b0212b243fef382233e652e04d"><td class="memItemLeft" align="right" valign="top">std::optional&lt; <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemusx_1_1dom.html#af75c85b0212b243fef382233e652e04d">importFontDefinitionInto</a> (const <a class="el" href="namespacemusx_1_1dom.html#ac52edbaa60f81ba3df76ee77b37e95fd">DocumentPtr</a> &amp;target, const <a class="el" href="namespacemusx_1_1dom.html#a4223cd531120dbef7acd854c3d2631b8">MusxInstance</a>&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1FontDefinition.html">others::FontDefinition</a> &gt; &amp;source, const <a class="el" href="namespacemusx_1_1dom.html#aafc96d2d41f4032a3db69ba5f7959d52">ImportObjectCallback</a> &amp;onImported={})</td></tr>
+<tr class="memdesc:af75c85b0212b243fef382233e652e04d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copies a font definition into another document, reusing an equivalent one when present.  <br /></td></tr>
+<tr class="separator:af75c85b0212b243fef382233e652e04d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad70355206e90c7b79b7860fc5d75bff0" id="r_ad70355206e90c7b79b7860fc5d75bff0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemusx_1_1dom.html#a9fd6f660a4f7c02787b6bbe3307a15af">Duration</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemusx_1_1dom.html#ad70355206e90c7b79b7860fc5d75bff0">calcDurationInfoFromEdu</a> (<a class="el" href="namespacemusx_1_1dom.html#a907ef641c247f1a5dbe75bbc972661f5">Edu</a> duration)</td></tr>
 <tr class="memdesc:ad70355206e90c7b79b7860fc5d75bff0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the <a class="el" href="namespacemusx_1_1dom.html#a3c91ee84b72cc27a2899191d6baee312">NoteType</a> and number of dots in an <a class="el" href="namespacemusx_1_1dom.html#a907ef641c247f1a5dbe75bbc972661f5">Edu</a> value.  <br /></td></tr>
 <tr class="separator:ad70355206e90c7b79b7860fc5d75bff0"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -778,6 +781,23 @@ template&lt;typename Pool , typename T &gt; </td></tr>
 <div class="textblock"><p>The DOM (document object model) for musx files. </p>
 <p>classes representing the musx document </p>
 </div><h2 class="groupheader">Typedef Documentation</h2>
+<a id="aafc96d2d41f4032a3db69ba5f7959d52" name="aafc96d2d41f4032a3db69ba5f7959d52"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aafc96d2d41f4032a3db69ba5f7959d52">&#9670;&#160;</a></span>ImportObjectCallback</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="namespacemusx_1_1dom.html#aafc96d2d41f4032a3db69ba5f7959d52">musx::dom::ImportObjectCallback</a> = typedef std::function&lt;void(const <a class="el" href="classmusx_1_1dom_1_1EnigmaBase.html">EnigmaBase</a>&amp;)&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Receives each document-pool object newly created by an import helper. </p>
+<p>Reused target objects are not reported. Nested import helpers forward the same callback, so one callback observes the complete set of objects created by the operation. </p>
+
+</div>
+</div>
 <a id="a4223cd531120dbef7acd854c3d2631b8" name="a4223cd531120dbef7acd854c3d2631b8"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a4223cd531120dbef7acd854c3d2631b8">&#9670;&#160;</a></span>MusxInstance</h2>
 
@@ -1612,8 +1632,8 @@ template&lt;typename T &gt; </div>
 
 </div>
 </div>
-<a id="abc7a5964448cf4e48814d95fc3572e69" name="abc7a5964448cf4e48814d95fc3572e69"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abc7a5964448cf4e48814d95fc3572e69">&#9670;&#160;</a></span>importFontDefinitionInto()</h2>
+<a id="af75c85b0212b243fef382233e652e04d" name="af75c85b0212b243fef382233e652e04d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af75c85b0212b243fef382233e652e04d">&#9670;&#160;</a></span>importFontDefinitionInto()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1628,7 +1648,13 @@ template&lt;typename T &gt; </div>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const <a class="el" href="namespacemusx_1_1dom.html#a4223cd531120dbef7acd854c3d2631b8">MusxInstance</a>&lt; <a class="el" href="classmusx_1_1dom_1_1others_1_1FontDefinition.html">others::FontDefinition</a> &gt; &amp;&#160;</td>
-          <td class="paramname"><em>source</em>&#160;</td>
+          <td class="paramname"><em>source</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="namespacemusx_1_1dom.html#aafc96d2d41f4032a3db69ba5f7959d52">ImportObjectCallback</a> &amp;&#160;</td>
+          <td class="paramname"><em>onImported</em> = <code>{}</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -1645,6 +1671,7 @@ template&lt;typename T &gt; </div>
   <table class="params">
     <tr><td class="paramname">target</td><td>The document to import into. May be the same document as <code>source's</code>. </td></tr>
     <tr><td class="paramname">source</td><td>The definition to import. </td></tr>
+    <tr><td class="paramname">onImported</td><td>Called for every definition this operation creates. Existing equivalent definitions that are reused are not reported. </td></tr>
   </table>
   </dd>
 </dl>

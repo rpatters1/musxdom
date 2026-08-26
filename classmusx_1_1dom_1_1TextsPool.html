@@ -129,6 +129,10 @@ template&lt;typename T &gt; </td></tr>
 <tr class="memitem:a43b851e25bdcb4297f9fe9c433d25c07"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="namespacemusx_1_1dom.html#a4223cd531120dbef7acd854c3d2631b8">MusxInstance</a>&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>get</b> (<a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> cmper) const</td></tr>
 <tr class="memdesc:a43b851e25bdcb4297f9fe9c433d25c07"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a single item out of the pool. <br /></td></tr>
 <tr class="separator:a43b851e25bdcb4297f9fe9c433d25c07"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abf15849ad1d27815709b40994bd1e234" id="r_abf15849ad1d27815709b40994bd1e234"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:abf15849ad1d27815709b40994bd1e234"><td class="memTemplItemLeft" align="right" valign="top">std::optional&lt; <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1TextsPool.html#abf15849ad1d27815709b40994bd1e234">nextFreeCmper</a> () const</td></tr>
+<tr class="memdesc:abf15849ad1d27815709b40994bd1e234"><td class="mdescLeft">&#160;</td><td class="mdescRight">The text number one past the highest currently used for <code>T</code>.  <br /></td></tr>
+<tr class="separator:abf15849ad1d27815709b40994bd1e234"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="friends" name="friends"></a>
 Friends</h2></td></tr>
@@ -138,7 +142,45 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>bench::PoolAccessor&
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Text pool. </p>
-</div></div><!-- contents -->
+</div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="abf15849ad1d27815709b40994bd1e234" name="abf15849ad1d27815709b40994bd1e234"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abf15849ad1d27815709b40994bd1e234">&#9670;&#160;</a></span>nextFreeCmper()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::optional&lt; <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> &gt; musx::dom::TextsPool::nextFreeCmper </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The text number one past the highest currently used for <code>T</code>. </p>
+<p>Each text type numbers independently, so a number free for one type says nothing about another.</p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">T</td><td>The text type whose numbers are being counted. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The next free text number, or std::nullopt when the number space for <code>T</code> is exhausted. </dd></dl>
+
+</div>
+</div>
+</div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
