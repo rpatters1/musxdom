@@ -116,7 +116,8 @@ namespace {
 
 /// @brief Copies every stored field of a font definition onto a fresh instance in @p target.
 MusxInstance<others::FontDefinition> cloneFontDefinition(const DocumentPtr& target,
-    const MusxInstance<others::FontDefinition>& source, Cmper cmper)
+    const MusxInstance<others::FontDefinition>& source, Cmper cmper,
+    const ImportObjectCallback& onImported)
 {
     // SCORE_PARTID and ShareMode::All are correct for anything newly created: no linked part can
     // reference an object that did not exist a moment ago, so there is nothing to unshare from.
@@ -131,12 +132,16 @@ MusxInstance<others::FontDefinition> cloneFontDefinition(const DocumentPtr& targ
     // mean the same typeface; it is not a canonical form to store.
     clone->name = source->name;
     target->getOthers()->add(others::FontDefinition::XmlNodeName, clone);
+    if (onImported) {
+        onImported(*clone);
+    }
     return clone;
 }
 
 /// @brief The non-zero cmper in @p target naming @p source's typeface, cloning when absent.
 std::optional<Cmper> importNonZeroFontDefinition(const DocumentPtr& target,
-    const MusxInstance<others::FontDefinition>& source)
+    const MusxInstance<others::FontDefinition>& source,
+    const ImportObjectCallback& onImported)
 {
     // Match on typeface, never on cmper. Cmper 0 is excluded: its name follows whatever the
     // document's default music font currently is, so matching a concrete typeface onto it would
@@ -155,7 +160,7 @@ std::optional<Cmper> importNonZeroFontDefinition(const DocumentPtr& target,
     if (!available) {
         return std::nullopt;
     }
-    return cloneFontDefinition(target, source, *available)->getCmper();
+    return cloneFontDefinition(target, source, *available, onImported)->getCmper();
 }
 
 /// @brief The definition naming @p target's own default music font, when it can be determined.
@@ -178,7 +183,8 @@ MusxInstance<others::FontDefinition> findDefaultMusicFont(const DocumentPtr& tar
 } // namespace
 
 std::optional<Cmper> importFontDefinitionInto(const DocumentPtr& target,
-    const MusxInstance<others::FontDefinition>& source)
+    const MusxInstance<others::FontDefinition>& source,
+    const ImportObjectCallback& onImported)
 {
     MUSX_ASSERT_IF(!target) {
         throw std::invalid_argument("importFontDefinitionInto received a null target document");
@@ -188,7 +194,7 @@ std::optional<Cmper> importFontDefinitionInto(const DocumentPtr& target,
     }
 
     if (source->getCmper() != 0) {
-        return importNonZeroFontDefinition(target, source);
+        return importNonZeroFontDefinition(target, source, onImported);
     }
 
     // Id 0 names the destination's own default music font rather than a typeface, so it is passed
@@ -201,14 +207,14 @@ std::optional<Cmper> importFontDefinitionInto(const DocumentPtr& target,
         if (const auto music = findDefaultMusicFont(target)) {
             // The target's own FontOptions already say which typeface id 0 stands for, and that
             // answer outranks the source's.
-            cloneFontDefinition(target, music, 0);
+            cloneFontDefinition(target, music, 0, onImported);
         } else {
-            cloneFontDefinition(target, source, 0);
+            cloneFontDefinition(target, source, 0, onImported);
             // The same typeface must also be reachable by a concrete cmper. Id 0 tracks whatever
             // the music font later becomes, and matching never selects it, so without this the
             // typeface would be unaddressable as itself. Failing that leaves 0 resolvable, which
             // is what was asked for, so the result still stands.
-            static_cast<void>(importNonZeroFontDefinition(target, source));
+            static_cast<void>(importNonZeroFontDefinition(target, source, onImported));
         }
     }
     // Cmper rather than a bare 0: constructing the optional from an int narrows, which MSVC

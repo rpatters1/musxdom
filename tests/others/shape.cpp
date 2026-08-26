@@ -22,6 +22,8 @@
 
 #include <algorithm>
 #include <filesystem>
+#include <typeindex>
+#include <vector>
 
 #include "gtest/gtest.h"
 #include "musx/musx.h"
@@ -764,8 +766,23 @@ TEST(ShapeTest, ImportShapeDefCopiesListsAndRemapsItsFont)
     auto shape = source->getOthers()->get<others::ShapeDef>(SCORE_PARTID, 2);
     ASSERT_TRUE(shape);
 
-    const auto imported = others::importShapeDefInto(target, shape);
+    std::vector<std::type_index> importedTypes;
+    const auto imported = others::importShapeDefInto(target, shape,
+        [&importedTypes](const EnigmaBase& object) { importedTypes.emplace_back(typeid(object)); });
     ASSERT_TRUE(imported);
+    EXPECT_EQ(importedTypes.size(), 4u);
+    EXPECT_EQ(std::count(importedTypes.begin(), importedTypes.end(),
+                  std::type_index(typeid(others::FontDefinition))),
+        1);
+    EXPECT_EQ(std::count(importedTypes.begin(), importedTypes.end(),
+                  std::type_index(typeid(others::ShapeInstructionList))),
+        1);
+    EXPECT_EQ(std::count(importedTypes.begin(), importedTypes.end(),
+                  std::type_index(typeid(others::ShapeData))),
+        1);
+    EXPECT_EQ(std::count(importedTypes.begin(), importedTypes.end(),
+                  std::type_index(typeid(others::ShapeDef))),
+        1);
     // Each pool numbers independently, so the copy takes the next free cmper in each.
     EXPECT_EQ(*imported, 7);
 

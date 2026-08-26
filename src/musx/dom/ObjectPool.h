@@ -436,6 +436,26 @@ public:
         return bindWithPartId<T>(getEffectiveSourceForPart<T>(key), key.partId);
     }
 
+    /// @brief Returns the identifier one past the highest currently used in @p items.
+    /// @tparam T The type stored in @p items.
+    /// @tparam IdGetter A callable that returns an item's @ref Cmper identifier.
+    /// @param items The items whose identifiers are being counted.
+    /// @param getId The callable used to obtain each identifier.
+    /// @return The next free identifier, or std::nullopt when the identifier space is exhausted.
+    template <typename T, typename IdGetter>
+    static std::optional<Cmper> nextFreeCmper(
+        const MusxInstanceList<T>& items, IdGetter getId)
+    {
+        Cmper highest = 0;
+        for (const auto& item : items) {
+            highest = (std::max)(highest, std::invoke(getId, *item));
+        }
+        if (highest == (std::numeric_limits<Cmper>::max)()) {
+            return std::nullopt;
+        }
+        return Cmper(highest + 1);
+    }
+
     /// @brief Constructs the object pool
     /// @param document THe document for this pool.
     /// @param knownShareModes Optional parameter that specifies known share modes for certain elements.
@@ -595,14 +615,7 @@ public:
     std::optional<Cmper> nextFreeCmper(Cmper partId) const
     {
         static_assert(is_pool_type_v<OthersPool, T>, "Type T is not registered in OthersPool");
-        Cmper highest = 0;
-        for (const auto& item : getArray<T>(partId)) {
-            highest = (std::max)(highest, item->getCmper());
-        }
-        if (highest == (std::numeric_limits<Cmper>::max)()) {
-            return std::nullopt;
-        }
-        return Cmper(highest + 1);
+        return m_pool.nextFreeCmper(getArray<T>(partId), &OthersBase::getCmper);
     }
 };
 /** @brief Shared `OthersPool` pointer */
@@ -805,6 +818,21 @@ public:
         static_assert(is_pool_type_v<TextsPool, T>, "Type T is not registered in TextsPool");
         return m_pool.getSource<T>({ std::type_index(typeid(T)), T::XmlNodeName,
             SCORE_PARTID, cmper, std::nullopt, std::nullopt });
+    }
+
+    /// @brief The text number one past the highest currently used for @c T.
+    ///
+    /// Each text type numbers independently, so a number free for one type says nothing about
+    /// another.
+    ///
+    /// @tparam T The text type whose numbers are being counted.
+    /// @return The next free text number, or std::nullopt when the number space for @c T is
+    /// exhausted.
+    template <typename T>
+    std::optional<Cmper> nextFreeCmper() const
+    {
+        static_assert(is_pool_type_v<TextsPool, T>, "Type T is not registered in TextsPool");
+        return m_pool.nextFreeCmper(getArray<T>(), &TextsBase::getTextNumber);
     }
 };
 /** @brief Shared `OthersPool` pointer */
