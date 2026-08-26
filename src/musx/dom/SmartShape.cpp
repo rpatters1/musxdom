@@ -370,6 +370,34 @@ bool others::SmartShape::iterateEntries(std::function<bool(const EntryInfoPtr&)>
     return staffList->iterateEntries(*startIndex, *endIndex, createGlobalMusicRange(), iterator);
 }
 
+NoteInfoPtr others::SmartShape::calcEndpointNote(
+    const std::shared_ptr<TerminationSeg>& termSeg, NoteNumber noteId) const
+{
+    MUSX_ASSERT_IF(!termSeg) {
+        throw std::logic_error("SmartShape termination segment is null.");
+    }
+    if (!entryBased) {
+        return NoteInfoPtr();
+    }
+    // calcAssociatedEntry's fuzzy search is deliberately not wanted here: entryBased guarantees the
+    // endpoint carries an entry number, so the lookup below is exact.
+    const auto entry = termSeg->endPoint->calcAssociatedEntry();
+    if (!entry) {
+        return NoteInfoPtr();
+    }
+    return entry.findNoteId(noteId);
+}
+
+NoteInfoPtr others::SmartShape::calcStartNote() const
+{
+    return calcEndpointNote(startTermSeg, startNoteId);
+}
+
+NoteInfoPtr others::SmartShape::calcEndNote() const
+{
+    return calcEndpointNote(endTermSeg, endNoteId);
+}
+
 NoteInfoPtr others::SmartShape::calcArpeggiatedTieToNote(const EntryInfoPtr& forStartEntry) const
 {
     return musx::util::calcSmartShapeArpeggiatedTieToNote(*this, forStartEntry);

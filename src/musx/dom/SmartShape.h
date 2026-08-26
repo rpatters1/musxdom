@@ -413,6 +413,26 @@ public:
     [[nodiscard]]
     MusicRange createGlobalMusicRange() const;
 
+    /// @brief Returns the note this shape starts from.
+    ///
+    /// #startNoteId names the note within the start endpoint's entry. The endpoint's own entry is
+    /// used as it stands; no nearby entry is substituted.
+    /// @note An entry does not imply a note: an endpoint on a zero-note entry resolves to that
+    /// entry and still returns null.
+    /// @return The note, or null if #entryBased is not set, the start endpoint's entry cannot be
+    /// resolved, or that entry contains no note with id #startNoteId.
+    [[nodiscard]] NoteInfoPtr calcStartNote() const;
+
+    /// @brief Returns the note this shape ends on.
+    ///
+    /// #endNoteId names the note within the end endpoint's entry. The endpoint's own entry is used
+    /// as it stands; no nearby entry is substituted.
+    /// @note An entry does not imply a note: an endpoint on a zero-note entry resolves to that
+    /// entry and still returns null.
+    /// @return The note, or null if #entryBased is not set, the end endpoint's entry cannot be
+    /// resolved, or that entry contains no note with id #endNoteId.
+    [[nodiscard]] NoteInfoPtr calcEndNote() const;
+
     /// @brief Returns the tied-to note if this slur is being used as an arpeggiated tie on the specified entry.
     ///
     /// - The start entry must consist only of a single note.
@@ -466,6 +486,14 @@ public:
         fullCtlPtAdj->integrityCheck(ptrToThis);
     }
 
+private:
+    /// @brief Shared implementation of #calcStartNote and #calcEndNote.
+    /// @param termSeg The termination segment to resolve. Must not be null.
+    /// @param noteId The note id belonging to @p termSeg.
+    [[nodiscard]] NoteInfoPtr calcEndpointNote(
+        const std::shared_ptr<TerminationSeg>& termSeg, NoteNumber noteId) const;
+
+public:
     constexpr static std::string_view XmlNodeName = "smartShape"; ///< XML node name
     static const xml::XmlElementArray<SmartShape>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
 };
