@@ -234,8 +234,8 @@ public:
         Scandinavian
     };
 
-    double fretPercent{};            ///< Percent size of fretboard relative to default. (1.0 is 100%)
-    double chordPercent{};           ///< Percent size of chord symbol relative to default. (1.0 is 100%)
+    double fretPercent{};            ///< Percent size of fretboard relative to default. (100.0 is 100%)
+    double chordPercent{};           ///< Percent size of chord symbol relative to default. (100.0 is 100%)
     Evpu chordSharpLift{};           ///< Vertical offset for sharp chord symbols.
     Evpu chordFlatLift{};            ///< Vertical offset for flat chord symbols.
     Evpu chordNaturalLift{};         ///< Vertical offset for natural chord symbols.
@@ -243,7 +243,7 @@ public:
     Cmper fretStyleId{};             ///< Default @ref others::FretboardStyle ID.
     Cmper fretInstId{};              ///< Default @ref others::FretInstrument ID.
     bool multiFretItemsPerStr{};     ///< Allow multiple fret items per string.
-    bool useFretboardFont{};         ///< Default value for whether to use the fretboard font rather that group/style (xml node is `<useFretFont>`)
+    bool useFretboardFont{};         ///< Selects the fretboard font rather than group/style. Finale has no known UI for this and may never reference it. (XML node is `<useFretFont>`.)
     bool italicizeCapoChords{};      ///< Italicize capo chords.
     ChordAlignment chordAlignment{}; ///< Horizontal alignment for chord symbols.
     ChordStyle chordStyle{};         ///< Style of chord spelling.
