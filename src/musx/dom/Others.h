@@ -2993,9 +2993,12 @@ public:
 
     /// @brief Computes the absolute tempo represented by the TempoChange Instance.
     /// @param noteType optional note type for which to get the beats per minute. (The default is NoteType::Quarter.)
-    /// @return The per minute value.
+    /// @return The per minute value. Because #ratio is an integer, it cannot encode most tempos exactly.
+    /// The value returned is the shortest decimal that converts back to #ratio, which states the encoded
+    /// tempo without adding precision the encoding does not carry. It therefore usually has a fractional
+    /// part, and callers that need a whole number must round it themselves.
     /// @throws std::logic_error if this instance represents a relative tempo.
-    int getAbsoluteTempo(NoteType noteType = NoteType::Quarter) const;
+    double getAbsoluteTempo(NoteType noteType = NoteType::Quarter) const;
 
     constexpr static std::string_view XmlNodeName = "tempoDef"; ///< The XML node name for this type.
     static const xml::XmlElementArray<TempoChange>& xmlMappingArray(); ///< Required for musx::factory::FieldPopulator.
@@ -3108,6 +3111,10 @@ public:
     int playPass{};                                 ///< "Play Only on Pass" value.
     bool hideMeasureNum{};                          ///< "Hide Measure Numbers" (used on Rehearsal Marks)
     bool matchPlayback{};                           ///< "Match Playback to Metronome Marking Text"
+                                                    ///< This may be a user interface feature that keeps #value in step with
+                                                    ///< the metronome marking in the expression text as the text is edited,
+                                                    ///< rather than a setting the playback engine consults. It does not
+                                                    ///< appear to affect #auxData1, which continues to supply the beat unit.
     bool useAuxData{};                              ///< Whether auxiliary data is used.
     bool hasEnclosure{};                            ///< Whether the text expression has an enclosure. (xml node is "newEnclosure")
     bool breakMmRest{};                             ///< Whether the text breaks multimeasure rests.
