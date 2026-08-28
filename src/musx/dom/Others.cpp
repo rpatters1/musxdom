@@ -21,6 +21,7 @@
  */
 #include <string>
 #include <vector>
+#include <cmath>
 #include <cstdlib>
 #include <exception>
 #include <type_traits>
@@ -1701,17 +1702,36 @@ std::pair<util::Fraction, util::Fraction> StaffSystem::calcMinMaxStaffSizes() co
 // ***** TempoChange *****
 // ***********************
 
-int TempoChange::getAbsoluteTempo(NoteType noteType) const
+double TempoChange::getAbsoluteTempo(NoteType noteType) const
 {
     if (isRelative) {
         throw std::logic_error("Tempo change at measure " + std::to_string(getCmper()) + " inci " + std::to_string(getInci().value())
             + " is a relative tempo change.");
     }
-    double result = (ratio * unit) / 65536.0;
     /* The value here is relative to 60 BPM == 1024 */
-    result *= 60.0;
-    result /= double(noteType);
-    return int(std::lround(result));
+    const double ratioUnits = 65536.0 * double(noteType);
+    const double exactTempo = (double(ratio) * double(unit) * 60.0) / ratioUnits;
+    if (!unit || exactTempo <= 0.0) {
+        return exactTempo;
+    }
+
+    // #ratio is an integer and so cannot encode most tempos exactly: at unit 1000, a quarter-note
+    // tempo of 50 is stored as 55924, which reads back as 49.99995. Every tempo that converts to
+    // the same ratio states this instance equally well, so report the shortest of them. That keeps
+    // a stored 50 reading as 50 while leaving a genuinely fractional tempo at its own value, and it
+    // cannot invent precision: a decimal too fine for the ratio to distinguish never converts back.
+    const auto ratioFor = [&](double tempo) {
+        return std::llround((tempo * ratioUnits) / (double(unit) * 60.0));
+    };
+    constexpr int maxDecimalPlaces = 9;
+    double scale = 1.0;
+    for (int decimalPlaces = 0; decimalPlaces <= maxDecimalPlaces; decimalPlaces++, scale *= 10.0) {
+        const double candidate = std::round(exactTempo * scale) / scale;
+        if (ratioFor(candidate) == ratio) {
+            return candidate;
+        }
+    }
+    return exactTempo;
 }
 
 // *********************
