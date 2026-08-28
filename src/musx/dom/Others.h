@@ -3111,6 +3111,10 @@ public:
     int playPass{};                                 ///< "Play Only on Pass" value.
     bool hideMeasureNum{};                          ///< "Hide Measure Numbers" (used on Rehearsal Marks)
     bool matchPlayback{};                           ///< "Match Playback to Metronome Marking Text"
+                                                    ///< This may be a user interface feature that keeps #value in step with
+                                                    ///< the metronome marking in the expression text as the text is edited,
+                                                    ///< rather than a setting the playback engine consults. It does not
+                                                    ///< appear to affect #auxData1, which continues to supply the beat unit.
     bool useAuxData{};                              ///< Whether auxiliary data is used.
     bool hasEnclosure{};                            ///< Whether the text expression has an enclosure. (xml node is "newEnclosure")
     bool breakMmRest{};                             ///< Whether the text breaks multimeasure rests.
