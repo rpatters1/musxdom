@@ -126,9 +126,9 @@ Public Member Functions</h2></td></tr>
 &#160;</td><td class="memItemRight" valign="bottom"><b>TempoChange</b> (const <a class="el" href="namespacemusx_1_1dom.html#aa76356b1ad3580081294898c79615c4d">DocumentWeakPtr</a> &amp;document, <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> partId, <a class="el" href="classmusx_1_1dom_1_1EnigmaBase.html#ac655bdce0724d5e32cfcd6203c9a5d1f">ShareMode</a> shareMode, <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> cmper, <a class="el" href="namespacemusx_1_1dom.html#a7e1523afa8705d91b1d694405c2feefb">Inci</a> inci)</td></tr>
 <tr class="memdesc:a73f3bc7980e2fd36437e53091bc14af2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor function. <br /></td></tr>
 <tr class="separator:a73f3bc7980e2fd36437e53091bc14af2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab2100eab2d26d9368aaebb0bc5906e19" id="r_ab2100eab2d26d9368aaebb0bc5906e19"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1TempoChange.html#ab2100eab2d26d9368aaebb0bc5906e19">getAbsoluteTempo</a> (<a class="el" href="namespacemusx_1_1dom.html#a3c91ee84b72cc27a2899191d6baee312">NoteType</a> noteType=NoteType::Quarter) const</td></tr>
-<tr class="memdesc:ab2100eab2d26d9368aaebb0bc5906e19"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the absolute tempo represented by the <a class="el" href="classmusx_1_1dom_1_1others_1_1TempoChange.html" title="A single tempo change value entered with Finale&#39;s Tempo tool.">TempoChange</a> Instance.  <br /></td></tr>
-<tr class="separator:ab2100eab2d26d9368aaebb0bc5906e19"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aded36de538f031c9476fe264de178b5c" id="r_aded36de538f031c9476fe264de178b5c"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1TempoChange.html#aded36de538f031c9476fe264de178b5c">getAbsoluteTempo</a> (<a class="el" href="namespacemusx_1_1dom.html#a3c91ee84b72cc27a2899191d6baee312">NoteType</a> noteType=NoteType::Quarter) const</td></tr>
+<tr class="memdesc:aded36de538f031c9476fe264de178b5c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the absolute tempo represented by the <a class="el" href="classmusx_1_1dom_1_1others_1_1TempoChange.html" title="A single tempo change value entered with Finale&#39;s Tempo tool.">TempoChange</a> Instance.  <br /></td></tr>
+<tr class="separator:aded36de538f031c9476fe264de178b5c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classmusx_1_1dom_1_1OthersBase"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classmusx_1_1dom_1_1OthersBase')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classmusx_1_1dom_1_1OthersBase.html">musx::dom::OthersBase</a></td></tr>
 <tr class="memitem:aeea2dce2bc876010d075adcba280c1ab inherit pub_methods_classmusx_1_1dom_1_1OthersBase" id="r_aeea2dce2bc876010d075adcba280c1ab"><td class="memItemLeft" align="right" valign="top">
 &#160;</td><td class="memItemRight" valign="bottom"><b>OthersBase</b> (const <a class="el" href="classmusx_1_1dom_1_1OthersBase.html">OthersBase</a> &amp;)=default</td></tr>
@@ -286,14 +286,14 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>SharedNodes</b> = st
 <p>The cmper is the measure number, and incis should be stored in order by <a class="el" href="classmusx_1_1dom_1_1others_1_1TempoChange.html#af0470e922cb67aa2f95f1aef9501a706" title="The position within the measure. (xml node is &lt;eldur&gt;)">eduPosition</a>.</p>
 <p>This class is identified by the XML node name "tempoDef". </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="ab2100eab2d26d9368aaebb0bc5906e19" name="ab2100eab2d26d9368aaebb0bc5906e19"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab2100eab2d26d9368aaebb0bc5906e19">&#9670;&#160;</a></span>getAbsoluteTempo()</h2>
+<a id="aded36de538f031c9476fe264de178b5c" name="aded36de538f031c9476fe264de178b5c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aded36de538f031c9476fe264de178b5c">&#9670;&#160;</a></span>getAbsoluteTempo()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">int musx::dom::others::TempoChange::getAbsoluteTempo </td>
+          <td class="memname">double musx::dom::others::TempoChange::getAbsoluteTempo </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="namespacemusx_1_1dom.html#a3c91ee84b72cc27a2899191d6baee312">NoteType</a>&#160;</td>
           <td class="paramname"><em>noteType</em> = <code>NoteType::Quarter</code></td><td>)</td>
@@ -309,7 +309,7 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>SharedNodes</b> = st
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>The per minute value. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>The per minute value. Because <a class="el" href="classmusx_1_1dom_1_1others_1_1TempoChange.html#a840cd69b82a8444e3722601abc5d9c59">ratio</a> is an integer, it cannot encode most tempos exactly. The value returned is the shortest decimal that converts back to <a class="el" href="classmusx_1_1dom_1_1others_1_1TempoChange.html#a840cd69b82a8444e3722601abc5d9c59">ratio</a>, which states the encoded tempo without adding precision the encoding does not carry. It therefore usually has a fractional part, and callers that need a whole number must round it themselves. </dd></dl>
 <dl class="exception"><dt>Exceptions</dt><dd>
   <table class="exception">
     <tr><td class="paramname">std::logic_error</td><td>if this instance represents a relative tempo. </td></tr>
@@ -346,7 +346,7 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>SharedNodes</b> = st
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Absolute or relative ratio. Relative ratios are are a percent value * 10. 100% would have a value of 1000. See <a class="el" href="classmusx_1_1dom_1_1others_1_1TempoChange.html#ab2100eab2d26d9368aaebb0bc5906e19" title="Computes the absolute tempo represented by the TempoChange Instance.">getAbsoluteTempo</a> for how to use absolute ratios. The xml provides one of two nodes for this field: <code>&lt;relativeRatio&gt;</code> or <code>&lt;absoluteRatio&gt;</code>. </p>
+<p>Absolute or relative ratio. Relative ratios are are a percent value * 10. 100% would have a value of 1000. See <a class="el" href="classmusx_1_1dom_1_1others_1_1TempoChange.html#aded36de538f031c9476fe264de178b5c" title="Computes the absolute tempo represented by the TempoChange Instance.">getAbsoluteTempo</a> for how to use absolute ratios. The xml provides one of two nodes for this field: <code>&lt;relativeRatio&gt;</code> or <code>&lt;absoluteRatio&gt;</code>. </p>
 
 </div>
 </div>
