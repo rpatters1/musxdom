@@ -307,9 +307,7 @@ char32_t&#160;</td><td class="memItemRight" valign="bottom"><b>rest64th</b> {}</
 char32_t&#160;</td><td class="memItemRight" valign="bottom"><b>rest128th</b> {}</td></tr>
 <tr class="memdesc:a19ebe04e2e4963cc1578516fdcae4159"><td class="mdescLeft">&#160;</td><td class="mdescRight">Code point for 128th rest (<a class="el" href="classmusx_1_1dom_1_1options_1_1FontOptions.html#a794a0a1c04e4b92a27daee007bd5694aa7904ec4d979d5fe9b4a61bc691359cf1" title="Rests notation font.">FontOptions::FontType::Rests</a>) <br /></td></tr>
 <tr class="separator:a19ebe04e2e4963cc1578516fdcae4159"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2058043cb9021646ac1852cd474e8dc3" id="r_a2058043cb9021646ac1852cd474e8dc3"><td class="memItemLeft" align="right" valign="top"><a id="a2058043cb9021646ac1852cd474e8dc3" name="a2058043cb9021646ac1852cd474e8dc3"></a>
-char32_t&#160;</td><td class="memItemRight" valign="bottom"><b>restDefMeas</b> {}</td></tr>
-<tr class="memdesc:a2058043cb9021646ac1852cd474e8dc3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Code point for default measure rest (<a class="el" href="classmusx_1_1dom_1_1options_1_1FontOptions.html#a794a0a1c04e4b92a27daee007bd5694aa7904ec4d979d5fe9b4a61bc691359cf1" title="Rests notation font.">FontOptions::FontType::Rests</a>) <br /></td></tr>
+<tr class="memitem:a2058043cb9021646ac1852cd474e8dc3" id="r_a2058043cb9021646ac1852cd474e8dc3"><td class="memItemLeft" align="right" valign="top">char32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1options_1_1MusicSymbolOptions.html#a2058043cb9021646ac1852cd474e8dc3">restDefMeas</a> {}</td></tr>
 <tr class="separator:a2058043cb9021646ac1852cd474e8dc3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a355bb56e4a4dee1ab7f1e5c226c80e5e" id="r_a355bb56e4a4dee1ab7f1e5c226c80e5e"><td class="memItemLeft" align="right" valign="top"><a id="a355bb56e4a4dee1ab7f1e5c226c80e5e" name="a355bb56e4a4dee1ab7f1e5c226c80e5e"></a>
 char32_t&#160;</td><td class="memItemRight" valign="bottom"><b>oneBarRepeat</b> {}</td></tr>
@@ -506,7 +504,23 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>SharedNodes</b> = st
 </ul>
 <p>Use <a class="el" href="classmusx_1_1dom_1_1FontInfo.html#a276d28190fb869e1ef6dba4aa6d926c7" title="Calculates if this is a symbol font. (See others::FontDefinition::calcIsSymbolFont....">FontInfo::calcIsSymbolFont</a> to determine whether a (non-SMuFL) font uses raw glyph indices.</p>
 <p>This class corresponds to the XML element "musicSymbolOptions". </p>
-</div></div><!-- contents -->
+</div><h2 class="groupheader">Member Data Documentation</h2>
+<a id="a2058043cb9021646ac1852cd474e8dc3" name="a2058043cb9021646ac1852cd474e8dc3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2058043cb9021646ac1852cd474e8dc3">&#9670;&#160;</a></span>restDefMeas</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">char32_t musx::dom::options::MusicSymbolOptions::restDefMeas {}</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Code point for default measure rest (<a class="el" href="classmusx_1_1dom_1_1options_1_1FontOptions.html#a794a0a1c04e4b92a27daee007bd5694aa7904ec4d979d5fe9b4a61bc691359cf1" title="Rests notation font.">FontOptions::FontType::Rests</a>). Finale uses this value only when it recognizes the glyph as a rest; otherwise it uses <a class="el" href="classmusx_1_1dom_1_1options_1_1MusicSymbolOptions.html#a81c59ea0e8cc3514cf64ca5893933b61" title="Code point for whole rest (FontOptions::FontType::Rests)">restWhole</a>. </p>
+
+</div>
+</div>
+</div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
