@@ -564,10 +564,9 @@ public:
  */
 class FontDefinition : public OthersBase
 {
-    static constexpr uint32_t SYMBOL_CHARSET_MAC = 0xfff; // (4095)
-    static constexpr uint32_t SYMBOL_CHARSET_WIN = 2;
-
 public:
+    static constexpr uint32_t SYMBOL_CHARSET_MAC = 0xfff; ///< macOS symbol charset (4095).
+    static constexpr uint32_t SYMBOL_CHARSET_WIN = 2;     ///< Windows symbol charset.
     /** @brief Constructor function */
     explicit FontDefinition(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper)
         : OthersBase(document, partId, shareMode, cmper) {}

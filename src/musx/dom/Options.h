@@ -899,7 +899,9 @@ public:
     char32_t rest32nd{};                ///< Code point for 32nd rest (#FontOptions::FontType::Rests)
     char32_t rest64th{};                ///< Code point for 64th rest (#FontOptions::FontType::Rests)
     char32_t rest128th{};               ///< Code point for 128th rest (#FontOptions::FontType::Rests)
-    char32_t restDefMeas{};             ///< Code point for default measure rest (#FontOptions::FontType::Rests)
+    char32_t restDefMeas{};             ///< Code point for default measure rest (#FontOptions::FontType::Rests).
+                                        ///< Finale uses this value only when it recognizes the glyph as a rest;
+                                        ///< otherwise it uses #restWhole.
     char32_t oneBarRepeat{};            ///< Code point for one-bar repeat (#FontOptions::FontType::AltNotSlash)
     char32_t twoBarRepeat{};            ///< Code point for two-bar repeat (#FontOptions::FontType::AltNotSlash)
     char32_t slashBar{};                ///< Code point for slash bar (#FontOptions::FontType::AltNotSlash)
