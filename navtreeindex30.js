@@ -1,5 +1,7 @@
 var NAVTREEINDEX30 =
 {
+"namespacemusic__theory.html#a815d2a1e748a138127d59c252e4fa946":[1,0,0,2],
+"namespacemusic__theory.html#a815d2a1e748a138127d59c252e4fa946a0d61f8370cad1d412f80b84d143e1257":[1,0,0,2,2],
 "namespacemusic__theory.html#a815d2a1e748a138127d59c252e4fa946a4cb9cfa22009948bec6cd029cb616e00":[1,0,0,2,7],
 "namespacemusic__theory.html#a815d2a1e748a138127d59c252e4fa946a50fdf989a6b1d1c6999550038f0a46f4":[1,0,0,2,5],
 "namespacemusic__theory.html#a815d2a1e748a138127d59c252e4fa946a5c6ba25104401c9ee0650230fc6ba413":[1,0,0,2,6],
@@ -247,7 +249,5 @@ var NAVTREEINDEX30 =
 "namespacemusx_1_1dom.html#ae1cc711919158f264a344a6a966f5d4c":[1,0,1,0,92],
 "namespacemusx_1_1dom.html#ae1cc711919158f264a344a6a966f5d4ca4f1f6016fc9f3f2353c0cc7c67b292bd":[1,0,1,0,92,2],
 "namespacemusx_1_1dom.html#ae1cc711919158f264a344a6a966f5d4ca92b09c7c48c520c3c55e497875da437c":[1,0,1,0,92,1],
-"namespacemusx_1_1dom.html#ae1cc711919158f264a344a6a966f5d4ca945d5e233cf7d6240f6b783b36a374ff":[1,0,1,0,92,0],
-"namespacemusx_1_1dom.html#ae7da4591a9b109eadbf985a0589a1251":[1,0,1,0,124],
-"namespacemusx_1_1dom.html#aea2ad29fab8a84e0bc89e8d209068a2e":[1,0,1,0,66]
+"namespacemusx_1_1dom.html#ae1cc711919158f264a344a6a966f5d4ca945d5e233cf7d6240f6b783b36a374ff":[1,0,1,0,92,0]
 };

@@ -129,6 +129,15 @@ template&lt;typename T &gt; </td></tr>
 <tr class="memitem:a4ecc82b88a0e77434498fd041c2a3df6"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="namespacemusx_1_1dom.html#a4223cd531120dbef7acd854c3d2631b8">MusxInstance</a>&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>get</b> (<a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> partId, <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> cmper, std::optional&lt; <a class="el" href="namespacemusx_1_1dom.html#a7e1523afa8705d91b1d694405c2feefb">Inci</a> &gt; inci=std::nullopt) const</td></tr>
 <tr class="memdesc:a4ecc82b88a0e77434498fd041c2a3df6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a single item out of the pool. <br /></td></tr>
 <tr class="separator:a4ecc82b88a0e77434498fd041c2a3df6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0bcee1b3a5e6f0a85e396faa8eed63db" id="r_a0bcee1b3a5e6f0a85e396faa8eed63db"><td class="memTemplParams" colspan="2"><a id="a0bcee1b3a5e6f0a85e396faa8eed63db" name="a0bcee1b3a5e6f0a85e396faa8eed63db"></a>
+template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a0bcee1b3a5e6f0a85e396faa8eed63db"><td class="memTemplItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="namespacemusx_1_1dom.html#a4223cd531120dbef7acd854c3d2631b8">MusxInstance</a>&lt; T &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>getAllSources</b> () const</td></tr>
+<tr class="memdesc:a0bcee1b3a5e6f0a85e396faa8eed63db"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns every physically stored source object of type <code>T</code>. <br /></td></tr>
+<tr class="separator:a0bcee1b3a5e6f0a85e396faa8eed63db"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af106c21d0caf7649074c990f0352ced4" id="r_af106c21d0caf7649074c990f0352ced4"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:af106c21d0caf7649074c990f0352ced4"><td class="memTemplItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="namespacemusx_1_1dom.html#a4223cd531120dbef7acd854c3d2631b8">MusxInstance</a>&lt; T &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1OthersPool.html#af106c21d0caf7649074c990f0352ced4">getAllSources</a> (<a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> cmper, std::optional&lt; <a class="el" href="namespacemusx_1_1dom.html#a7e1523afa8705d91b1d694405c2feefb">Inci</a> &gt; inci=std::nullopt) const</td></tr>
+<tr class="memdesc:af106c21d0caf7649074c990f0352ced4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns physically stored source objects for one comparator and optional incidence.  <br /></td></tr>
+<tr class="separator:af106c21d0caf7649074c990f0352ced4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7d9b751047708bea06d02261c2376693" id="r_a7d9b751047708bea06d02261c2376693"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:a7d9b751047708bea06d02261c2376693"><td class="memTemplItemLeft" align="right" valign="top">std::optional&lt; <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1OthersPool.html#a7d9b751047708bea06d02261c2376693">nextFreeCmper</a> (<a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> partId) const</td></tr>
 <tr class="memdesc:a7d9b751047708bea06d02261c2376693"><td class="mdescLeft">&#160;</td><td class="mdescRight">The cmper one past the highest currently used for <code>T</code>.  <br /></td></tr>
@@ -146,6 +155,54 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>bench::PoolAccessor&
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>A pool that manages collections of <code><a class="el" href="classmusx_1_1dom_1_1OthersBase.html" title="EnigmaBase class for all &quot;others&quot; types.">OthersBase</a></code> objects. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="af106c21d0caf7649074c990f0352ced4" name="af106c21d0caf7649074c990f0352ced4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af106c21d0caf7649074c990f0352ced4">&#9670;&#160;</a></span>getAllSources()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; <a class="el" href="namespacemusx_1_1dom.html#a4223cd531120dbef7acd854c3d2631b8">MusxInstance</a>&lt; T &gt; &gt; musx::dom::OthersPool::getAllSources </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a>&#160;</td>
+          <td class="paramname"><em>cmper</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::optional&lt; <a class="el" href="namespacemusx_1_1dom.html#a7e1523afa8705d91b1d694405c2feefb">Inci</a> &gt;&#160;</td>
+          <td class="paramname"><em>inci</em> = <code>std::nullopt</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns physically stored source objects for one comparator and optional incidence. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">cmper</td><td>The comparator to select. </td></tr>
+    <tr><td class="paramname">inci</td><td>If present, restricts the result to this incidence. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Source objects in part and incidence order, without sharing fallbacks or copies. </dd></dl>
+
+</div>
+</div>
 <a id="a7d9b751047708bea06d02261c2376693" name="a7d9b751047708bea06d02261c2376693"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a7d9b751047708bea06d02261c2376693">&#9670;&#160;</a></span>nextFreeCmper()</h2>
 

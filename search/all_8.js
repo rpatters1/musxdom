@@ -33,7 +33,7 @@ var searchData=
   ['indrppos_30',['indRpPos',['../classmusx_1_1dom_1_1others_1_1PageTextAssign.html#a24c18443b48e38a42d6fd4846cf0f1ac',1,'musx::dom::others::PageTextAssign']]],
   ['info_31',['Info',['../classmusx_1_1util_1_1Logger.html#a022f4477cac1558e8687be693d111caba4059b0251f66a18cb56f544728796875',1,'musx::util::Logger']]],
   ['ingoma_32',['Ingoma',['../namespacemusx_1_1dom_1_1uuid.html#a005bfa9cc36546f594ce8c0b6a56e615',1,'musx::dom::uuid']]],
-  ['initializepartial_33',['initializePartial',['../classmusx_1_1factory_1_1PartSharingFactory.html#a60534d36c0bfc002d32eb07f9f445974',1,'musx::factory::PartSharingFactory']]],
+  ['initializepartial_33',['initializePartial',['../classmusx_1_1factory_1_1PartSharingFactory.html#a6f6dbb2497d4fe610e75d30d4125e8c5',1,'musx::factory::PartSharingFactory']]],
   ['innerbodyh_34',['innerBodyH',['../classmusx_1_1dom_1_1options_1_1PianoBraceBracketOptions.html#a49ec730dac8edc2ce8080b97ed809409',1,'musx::dom::options::PianoBraceBracketOptions']]],
   ['innerbodyv_35',['innerBodyV',['../classmusx_1_1dom_1_1options_1_1PianoBraceBracketOptions.html#ade97d88a29b352086034905be7904943',1,'musx::dom::options::PianoBraceBracketOptions']]],
   ['innertiph_36',['innerTipH',['../classmusx_1_1dom_1_1options_1_1PianoBraceBracketOptions.html#ac90d1313561f018beb94fdc8a74541c3',1,'musx::dom::options::PianoBraceBracketOptions']]],

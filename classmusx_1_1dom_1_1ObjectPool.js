@@ -6,6 +6,7 @@ var classmusx_1_1dom_1_1ObjectPool =
     [ "ObjectPool", "classmusx_1_1dom_1_1ObjectPool.html#a0ae0ef4e948779d7230251dcc5ab73b2", null ],
     [ "ObjectPool", "classmusx_1_1dom_1_1ObjectPool.html#a620120a282c01ea0cab21653d215a6ce", null ],
     [ "add", "classmusx_1_1dom_1_1ObjectPool.html#ad3ffb171f6897f6d8c4ee274c855d2b4", null ],
+    [ "getAllSources", "classmusx_1_1dom_1_1ObjectPool.html#aa930ef1c00c0c65dce6e19318afcefa3", null ],
     [ "getArray", "classmusx_1_1dom_1_1ObjectPool.html#a9a07535329e364b5688c5745600533b0", null ],
     [ "getArrayForPart", "classmusx_1_1dom_1_1ObjectPool.html#a848eecce838a7a09f0a36e3876ab1d00", null ],
     [ "getEffectiveForPart", "classmusx_1_1dom_1_1ObjectPool.html#addf661a4327a0748043216b0824a3ab6", null ],
