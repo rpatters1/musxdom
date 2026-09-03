@@ -320,57 +320,6 @@ TEST(MeasureTest, PopulatePart)
     EXPECT_EQ(measure3->leftBarlineType, others::Measure::BarlineType::Final); // Inherited from score
 }
 
-TEST(MeasureTest, UnlinkedNodes)
-{
-    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(measureXml);
-    auto others = doc->getOthers();
-    ASSERT_TRUE(others);
-
-    const Cmper partId = 1;
-
-    // Measure 1 (Part 1)
-    auto measure1 = others->get<others::Measure>(partId, 1);
-    ASSERT_TRUE(measure1) << "Measure 1 for part 1 not found";
-
-    auto unlinkedNodes = measure1->getUnlinkedNodes();
-
-    // Check overridden nodes
-    EXPECT_NE(unlinkedNodes.find("width"), unlinkedNodes.end()) << "Width should be unlinked in Measure 1 Part 1";
-
-    // Check linked nodes
-    EXPECT_EQ(unlinkedNodes.find("beats"), unlinkedNodes.end()) << "Beats should be linked in Measure 1 Part 1";
-    EXPECT_EQ(unlinkedNodes.find("groupBarlineOverride"), unlinkedNodes.end()) << "GroupBarlineOverride should be linked in Measure 1 Part 1";
-
-    // Measure 2 (Part 1)
-    auto measure2 = others->get<others::Measure>(partId, 2);
-    ASSERT_TRUE(measure2) << "Measure 2 for part 1 not found";
-
-    unlinkedNodes = measure2->getUnlinkedNodes();
-
-    // Check overridden nodes
-    EXPECT_NE(unlinkedNodes.find("width"), unlinkedNodes.end()) << "Width should be unlinked in Measure 2 Part 1";
-    EXPECT_NE(unlinkedNodes.find("posMode"), unlinkedNodes.end()) << "Positioning mode should be unlinked in Measure 2 Part 1";
-
-    // Check linked nodes
-    EXPECT_EQ(unlinkedNodes.find("beats"), unlinkedNodes.end()) << "Beats should be linked in Measure 2 Part 1";
-    EXPECT_EQ(unlinkedNodes.find("useDisplayTimesig"), unlinkedNodes.end()) << "UseDisplayTimesig should be linked in Measure 2 Part 1";
-
-    // Measure 3 (Part 1)
-    auto measure3 = others->get<others::Measure>(partId, 3);
-    ASSERT_TRUE(measure3) << "Measure 3 for part 1 not found";
-
-    unlinkedNodes = measure3->getUnlinkedNodes();
-
-    // Check overridden nodes
-    EXPECT_NE(unlinkedNodes.find("width"), unlinkedNodes.end()) << "Width should be unlinked in Measure 3 Part 1";
-    EXPECT_NE(unlinkedNodes.find("frontSpaceExtra"), unlinkedNodes.end()) << "FrontSpaceExtra should be unlinked in Measure 3 Part 1";
-    EXPECT_NE(unlinkedNodes.find("backSpaceExtra"), unlinkedNodes.end()) << "BackSpaceExtra should be unlinked in Measure 3 Part 1";
-
-    // Check linked nodes
-    EXPECT_EQ(unlinkedNodes.find("barline"), unlinkedNodes.end()) << "Barline should be linked in Measure 3 Part 1";
-    EXPECT_EQ(unlinkedNodes.find("compositeNumerator"), unlinkedNodes.end()) << "CompositeNumerator should be linked in Measure 3 Part 1";
-}
-
 TEST(MeasureTest, CompositeTimeSig1)
 {
   constexpr static musxtest::string_view testXml = R"xml(

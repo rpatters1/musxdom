@@ -407,8 +407,7 @@ TEST(DocumentConstructionTest, SupportsNoneAndPartialSharing)
             auto part = std::make_shared<musx::dom::others::LayerAttributes>(
                 document, 1, EnigmaBase::ShareMode::Partial, layerId);
             musx::factory::PartSharingFactory::initializePartial(
-                part, std::shared_ptr<const musx::dom::others::LayerAttributes>(score),
-                std::vector<std::string_view>{"restOffset"});
+                part, std::shared_ptr<const musx::dom::others::LayerAttributes>(score));
             part->restOffset = 99;
             document->getOthers()->add(musx::dom::others::LayerAttributes::XmlNodeName, part);
         }
@@ -425,7 +424,6 @@ TEST(DocumentConstructionTest, SupportsNoneAndPartialSharing)
     ASSERT_TRUE(partLayer);
     EXPECT_EQ(scoreLayer->restOffset, 10);
     EXPECT_EQ(partLayer->restOffset, 99);
-    EXPECT_TRUE(partLayer->getUnlinkedNodes().count("restOffset"));
     EXPECT_EQ(unshared->getShareMode(), EnigmaBase::ShareMode::None);
 }
 

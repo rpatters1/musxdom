@@ -94,16 +94,12 @@ CreatedInstanceInfo createRegisteredType(const PoolPtr& pool,
         document, partId, shareMode, std::forward<Args>(args)...);
     if constexpr (!std::is_same_v<PoolPtr, dom::EntryPoolPtr>) {
         if (shareMode == dom::EnigmaBase::ShareMode::Partial) {
-            std::vector<std::string> unlinkedNodeNames;
-            for (auto child = node->getFirstChildElement(); child; child = child->getNextSibling()) {
-                unlinkedNodeNames.emplace_back(child->getTagName());
-            }
             const auto scoreValue = getScoreValue<T>(pool, std::forward<Args>(args)...);
             if (!scoreValue) {
                 throw std::invalid_argument(
                     "Score instance not found for partially linked part instance");
             }
-            PartSharingFactory::initializePartial(instance, scoreValue, unlinkedNodeNames);
+            PartSharingFactory::initializePartial(instance, scoreValue);
         }
     }
     FieldPopulator<T>::populate(context, instance, node);

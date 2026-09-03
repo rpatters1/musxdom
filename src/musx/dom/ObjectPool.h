@@ -384,6 +384,36 @@ public:
     }
 
     /**
+     * @brief Returns physically stored objects of one type across every source part.
+     * @param cmper1 If present, restricts the result to this first comparator.
+     * @param cmper2 If present, restricts the result to this second comparator.
+     * @param inci If present, restricts the result to this incidence.
+     * @return Source objects in key order, without sharing fallbacks or part-context copies.
+     */
+    template <typename T>
+    std::vector<MusxInstance<T>> getAllSources(
+        std::optional<Cmper> cmper1 = std::nullopt,
+        std::optional<Cmper> cmper2 = std::nullopt,
+        std::optional<Inci> inci = std::nullopt) const
+    {
+        const ObjectKey lowerKey{std::type_index(typeid(T)), T::XmlNodeName, SCORE_PARTID, cmper1, cmper2, inci};
+        const auto upperKey = [&]() -> ObjectKey {
+            auto result = makeEndKey(lowerKey);
+            result.partId = (std::numeric_limits<Cmper>::max)();
+            return result;
+        }();
+        std::vector<MusxInstance<T>> result;
+        for (auto it = m_pool.lower_bound(lowerKey); it != m_pool.upper_bound(upperKey); ++it) {
+            const auto& key = it->first;
+            if (cmper1 && key.cmper1 != cmper1) continue;
+            if (cmper2 && key.cmper2 != cmper2) continue;
+            if (inci && key.inci != inci) continue;
+            result.push_back(checkedStaticCast<T>(key, it->second));
+        }
+        return result;
+    }
+
+    /**
      * @brief Retrieves the first (and usually only) object of a specific type from the pool for a part
      * @warning The returned value is the source item from the pool and is guaranteed not to be a copy.
      * Because of this, it does not reflect the requested part id. External callers should not
@@ -604,6 +634,28 @@ public:
             T::XmlNodeName, partId, cmper, std::nullopt, inci });
     }
 
+    /** @brief Returns every physically stored source object of type @p T. */
+    template <typename T>
+    std::vector<MusxInstance<T>> getAllSources() const
+    {
+        static_assert(is_pool_type_v<OthersPool, T>, "Type T is not registered in OthersPool");
+        return m_pool.template getAllSources<T>();
+    }
+
+    /**
+     * @brief Returns physically stored source objects for one comparator and optional incidence.
+     * @param cmper The comparator to select.
+     * @param inci If present, restricts the result to this incidence.
+     * @return Source objects in part and incidence order, without sharing fallbacks or copies.
+     */
+    template <typename T>
+    std::vector<MusxInstance<T>> getAllSources(
+        Cmper cmper, std::optional<Inci> inci = std::nullopt) const
+    {
+        static_assert(is_pool_type_v<OthersPool, T>, "Type T is not registered in OthersPool");
+        return m_pool.template getAllSources<T>(cmper, std::nullopt, inci);
+    }
+
     /// @brief The cmper one past the highest currently used for @c T.
     ///
     /// Each type numbers independently, so a cmper free for one type says nothing about another.
@@ -684,6 +736,29 @@ public:
         static_assert(is_pool_type_v<DetailsPool, T>, "Type T is not registered in DetailsPool");
         return m_pool.getEffectiveForPart<T>({ std::type_index(typeid(T)),
             T::XmlNodeName, partId, cmper1, cmper2, inci });
+    }
+
+    /** @brief Returns every physically stored source object of type @p T. */
+    template <typename T>
+    std::vector<MusxInstance<T>> getAllSources() const
+    {
+        static_assert(is_pool_type_v<DetailsPool, T>, "Type T is not registered in DetailsPool");
+        return m_pool.template getAllSources<T>();
+    }
+
+    /**
+     * @brief Returns physically stored source objects for one comparator pair and optional incidence.
+     * @param cmper1 The first comparator to select.
+     * @param cmper2 The second comparator to select.
+     * @param inci If present, restricts the result to this incidence.
+     * @return Source objects in part and incidence order, without sharing fallbacks or copies.
+     */
+    template <typename T>
+    std::vector<MusxInstance<T>> getAllSources(
+        Cmper cmper1, Cmper cmper2, std::optional<Inci> inci = std::nullopt) const
+    {
+        static_assert(is_pool_type_v<DetailsPool, T>, "Type T is not registered in DetailsPool");
+        return m_pool.template getAllSources<T>(cmper1, cmper2, inci);
     }
 
     /** @brief Get a single EntryDetailsBase item out of the pool */

@@ -24,7 +24,6 @@
 #include <cassert>
 #include <filesystem>
 #include <functional>
-#include <set>
 #include <string_view>
 #include <unordered_set>
 #include <memory>
@@ -90,15 +89,12 @@ class EnigmaBase : public DocumentElement
     Cmper getPartId() const = delete;
 
 public:
-    /// @brief The container type for shared nodes
-    using SharedNodes = std::set<std::string>;
-
     /// @enum ShareMode
     /// @brief Describes how this instance is shared between part and score.
     enum class ShareMode
     {
         All,            /*!< All parts and score always share (no "share" attribute). Default. */
-        Partial,        /*!< Part and score share some attributes and have their own unlinked versions of others. (attribute "share"="true") */
+        Partial,        /*!< Part and score share some attributes. The object contains the effective values for its source part; per-field linkage is not retained. (attribute "share"="true") */
         None            /*!< Each part and score has its own version of the DOM class. (attribute "share"="false") */
     };
 
@@ -115,19 +111,6 @@ public:
      * @brief Gets the sharing mode for this instance.
      */
     ShareMode getShareMode() const { return m_shareMode; }
-
-    /**
-     * @brief Gets the unlinked nodes for this instance. (Only populated for `ShareMode::Partial`)
-     */
-    const SharedNodes& getUnlinkedNodes() const { return m_unlinkedNodes; }
-
-    /**
-     * @brief Adds a shared node for this instance.
-     */
-    void addUnlinkedNode(const std::string& nodeName)
-    {
-        m_unlinkedNodes.insert(nodeName);
-    }
 
     /// @brief Performs a final consistency check after population.
     virtual void integrityCheck([[maybe_unused]] const std::shared_ptr<EnigmaBase>& ptrToThis) { }
@@ -157,7 +140,6 @@ protected:
 
 private:
     const ShareMode m_shareMode;
-    SharedNodes m_unlinkedNodes;
 };
 
 /// @brief Receives each document-pool object newly created by an import helper.
@@ -187,7 +169,6 @@ protected:
     // Because the part ID and share mode are hard-coded for this category of classes,
     // these EnigmaBase functions do not return useful results.
     using EnigmaBase::getShareMode;
-    using EnigmaBase::getUnlinkedNodes;
 };
 
 /**
