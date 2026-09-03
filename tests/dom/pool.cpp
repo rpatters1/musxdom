@@ -241,3 +241,50 @@ TEST(PoolTest, Vector)
     EXPECT_EQ(others->getArray<others::TextExpressionDef>(SCORE_PARTID, 1)[0]->description, "fortissississimo (velocity = 127)");
     EXPECT_EQ(others->getArray<others::TextExpressionDef>(SCORE_PARTID, 4).size(), 0);
 }
+
+TEST(PoolTest, PhysicalSourcesAcrossParts)
+{
+    constexpr Cmper pageId = 2;
+    constexpr Cmper orphanPartId = 22;
+    constexpr Inci firstIncidence = 0;
+    constexpr Inci secondIncidence = 1;
+    constexpr StaffCmper staffId = 1;
+    constexpr MeasCmper measureId = 3;
+
+    auto session = musx::factory::DocumentFactory::begin();
+    const auto document = session.getDocument();
+    auto scorePage = std::make_shared<others::PageGraphicAssign>(
+        document, SCORE_PARTID, EnigmaBase::ShareMode::All, pageId, firstIncidence);
+    auto orphanPage = std::make_shared<others::PageGraphicAssign>(
+        document, orphanPartId, EnigmaBase::ShareMode::Partial, pageId, firstIncidence);
+    auto secondOrphanPage = std::make_shared<others::PageGraphicAssign>(
+        document, orphanPartId, EnigmaBase::ShareMode::Partial, pageId, secondIncidence);
+    document->getOthers()->add(others::PageGraphicAssign::XmlNodeName, scorePage);
+    document->getOthers()->add(others::PageGraphicAssign::XmlNodeName, orphanPage);
+    document->getOthers()->add(others::PageGraphicAssign::XmlNodeName, secondOrphanPage);
+
+    const auto allPages = document->getOthers()->getAllSources<others::PageGraphicAssign>();
+    ASSERT_EQ(allPages.size(), 3);
+    EXPECT_EQ(allPages[0]->getSourcePartId(), SCORE_PARTID);
+    EXPECT_EQ(allPages[1]->getSourcePartId(), orphanPartId);
+    EXPECT_EQ(allPages[2]->getInci(), secondIncidence);
+    const auto selectedPages = document->getOthers()->getAllSources<others::PageGraphicAssign>(
+        pageId, firstIncidence);
+    ASSERT_EQ(selectedPages.size(), 2);
+    EXPECT_EQ(selectedPages[1].get(), orphanPage.get());
+
+    auto scoreDetail = std::make_shared<details::GFrameHold>(
+        document, SCORE_PARTID, EnigmaBase::ShareMode::All, staffId, measureId);
+    auto orphanDetail = std::make_shared<details::GFrameHold>(
+        document, orphanPartId, EnigmaBase::ShareMode::Partial, staffId, measureId);
+    document->getDetails()->add(details::GFrameHold::XmlNodeName, scoreDetail);
+    document->getDetails()->add(details::GFrameHold::XmlNodeName, orphanDetail);
+
+    const auto allDetails = document->getDetails()->getAllSources<details::GFrameHold>();
+    ASSERT_EQ(allDetails.size(), 2);
+    EXPECT_EQ(allDetails[1]->getSourcePartId(), orphanPartId);
+    const auto selectedDetails = document->getDetails()->getAllSources<details::GFrameHold>(
+        staffId, measureId);
+    ASSERT_EQ(selectedDetails.size(), 2);
+    EXPECT_EQ(selectedDetails[1].get(), orphanDetail.get());
+}

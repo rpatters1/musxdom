@@ -54,27 +54,24 @@ class PartSharingFactory
 {
 public:
     /**
-     * @brief Copies score values into a partial part object and records its unlinked fields.
-     * @details Call this before applying the part-specific field values. Integrity validation is
-     * deferred until the document construction session is finished.
+     * @brief Copies score values into a partial part object.
+     * @details This operation is independent of the source representation. It preserves the part
+     * object's identity and sharing mode, rebinds contained-object ownership, and leaves the caller
+     * to apply the part fields supplied by XML, a binary reader, or another source.
      */
-    template <typename T, typename NodeNames>
+    template <typename T>
     static void initializePartial(const std::shared_ptr<T>& partInstance,
-                                  const std::shared_ptr<const T>& scoreInstance,
-                                  const NodeNames& unlinkedNodeNames)
+                                  const std::shared_ptr<const T>& scoreInstance)
     {
         static_assert(std::is_base_of_v<dom::EnigmaBase, T>, "T must derive from EnigmaBase");
-        if (!partInstance || !scoreInstance) {
+        MUSX_ASSERT_IF(!partInstance || !scoreInstance) {
             throw std::invalid_argument("Partial sharing requires both score and part instances.");
         }
-        if (partInstance->getShareMode() != dom::EnigmaBase::ShareMode::Partial) {
+        MUSX_ASSERT_IF(partInstance->getShareMode() != dom::EnigmaBase::ShareMode::Partial) {
             throw std::invalid_argument("Invalid score/part instances for partial sharing.");
         }
         *partInstance = *scoreInstance;
         dom::PartContextRebinder<T>::rebind(partInstance);
-        for (const auto& nodeName : unlinkedNodeNames) {
-            partInstance->addUnlinkedNode(std::string(nodeName));
-        }
     }
 };
 
