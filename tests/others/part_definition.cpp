@@ -282,6 +282,7 @@ TEST(PartDefinitionTest, MissingPartGlobals)
 
     auto partGlobals = doc->getOthers()->get<others::PartGlobals>(SCORE_PARTID, MUSX_GLOBALS_CMPER);
     ASSERT_TRUE(partGlobals);
+    EXPECT_TRUE(partGlobals->showTransposed);
     EXPECT_EQ(partGlobals->scrollViewIUlist, BASE_SYSTEM_ID);
     EXPECT_EQ(partGlobals->studioViewIUlist, STUDIO_VIEW_SYSTEM_ID);
     EXPECT_EQ(partGlobals->specialPartExtractionIUList, 0);

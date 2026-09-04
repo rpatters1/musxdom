@@ -209,6 +209,7 @@ void resolvePartDefinitions(const dom::DocumentPtr& document)
                 part->getCmper(), dom::MUSX_GLOBALS_CMPER)) {
             auto partGlobals = std::make_shared<dom::others::PartGlobals>(document, part->getCmper(),
                 dom::EnigmaBase::ShareMode::None, dom::MUSX_GLOBALS_CMPER);
+            partGlobals->showTransposed = true;
             partGlobals->scrollViewIUlist = dom::BASE_SYSTEM_ID;
             partGlobals->studioViewIUlist = dom::STUDIO_VIEW_SYSTEM_ID;
             document->getOthers()->add(dom::others::PartGlobals::XmlNodeName, partGlobals);
