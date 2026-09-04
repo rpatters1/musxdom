@@ -1648,6 +1648,69 @@ bool StaffListSet<ScoreList, PartsList, ScoreForcedList, PartsForcedList>::conta
 template class StaffListSet<StaffListCategoryScore, StaffListCategoryParts>;
 template class StaffListSet<StaffListRepeatScore, StaffListRepeatParts, StaffListRepeatScoreForced, StaffListRepeatPartsForced>;
 
+namespace {
+
+template <typename Target>
+void importCategoryStaffListType(const DocumentPtr& target, const DocumentPtr& source,
+    Cmper cmper, const ImportObjectCallback& onImported)
+{
+    for (const auto& sourceList : source->getOthers()->getAllSources<Target>()) {
+        if (sourceList->getCmper() != cmper) {
+            continue;
+        }
+        auto result = std::make_shared<Target>(target, sourceList->getSourcePartId(),
+            sourceList->getShareMode(), sourceList->getCmper());
+        if constexpr (std::is_base_of_v<StaffList, Target>) {
+            result->values = sourceList->values;
+        } else {
+            result->name = sourceList->name;
+        }
+        target->getOthers()->add(Target::XmlNodeName, result);
+        if (onImported) {
+            onImported(*result);
+        }
+    }
+}
+
+template <typename Target>
+bool documentHasCategoryStaffListCmper(const DocumentPtr& document, Cmper cmper)
+{
+    for (const auto& list : document->getOthers()->getAllSources<Target>()) {
+        if (list->getCmper() == cmper) {
+            return true;
+        }
+    }
+    return false;
+}
+
+bool documentHasCategoryStaffListCmper(const DocumentPtr& document, Cmper cmper)
+{
+    return documentHasCategoryStaffListCmper<StaffListCategoryName>(document, cmper)
+        || documentHasCategoryStaffListCmper<StaffListCategoryParts>(document, cmper)
+        || documentHasCategoryStaffListCmper<StaffListCategoryScore>(document, cmper);
+}
+
+} // namespace
+
+std::optional<Cmper> importCategoryStaffListInto(const DocumentPtr& target, const DocumentPtr& source,
+    Cmper cmper, const ImportObjectCallback& onImported)
+{
+    MUSX_ASSERT_IF(!target) {
+        throw std::invalid_argument("importCategoryStaffListInto received a null target document");
+    }
+    MUSX_ASSERT_IF(!source) {
+        throw std::invalid_argument("importCategoryStaffListInto received a null source document");
+    }
+    if (documentHasCategoryStaffListCmper(target, cmper)
+        || !documentHasCategoryStaffListCmper(source, cmper)) {
+        return std::nullopt;
+    }
+    importCategoryStaffListType<StaffListCategoryName>(target, source, cmper, onImported);
+    importCategoryStaffListType<StaffListCategoryParts>(target, source, cmper, onImported);
+    importCategoryStaffListType<StaffListCategoryScore>(target, source, cmper, onImported);
+    return cmper;
+}
+
 // ***********************
 // ***** StaffSystem *****
 // ***********************

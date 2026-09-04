@@ -536,6 +536,82 @@ TEST(StaffListCategory, Populate)
     musxtest::staffListCheck(names[2]->name, score[2], { 1, 2, 3 });
 }
 
+TEST(StaffListCategory, ImportIntoDocument)
+{
+    std::vector<char> xml;
+    musxtest::readFile(musxtest::getInputPath() / "stafflists.enigmaxml", xml);
+    const auto source =
+        musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
+    auto targetSession = musx::factory::DocumentFactory::begin();
+    const auto target = targetSession.getDocument();
+
+    std::size_t importedCount = 0;
+    const auto onImported = [&importedCount](const EnigmaBase&) { ++importedCount; };
+    for (Cmper cmper = 1; cmper <= 8; ++cmper) {
+        EXPECT_EQ(others::importCategoryStaffListInto(target, source, cmper, onImported), cmper);
+    }
+
+    const auto sourceNames =
+        source->getOthers()->getArray<others::StaffListCategoryName>(SCORE_PARTID);
+    const auto targetNames =
+        target->getOthers()->getArray<others::StaffListCategoryName>(SCORE_PARTID);
+    const auto sourceParts =
+        source->getOthers()->getArray<others::StaffListCategoryParts>(SCORE_PARTID);
+    const auto targetParts =
+        target->getOthers()->getArray<others::StaffListCategoryParts>(SCORE_PARTID);
+    const auto sourceScore =
+        source->getOthers()->getArray<others::StaffListCategoryScore>(SCORE_PARTID);
+    const auto targetScore =
+        target->getOthers()->getArray<others::StaffListCategoryScore>(SCORE_PARTID);
+
+    ASSERT_EQ(targetNames.size(), sourceNames.size());
+    ASSERT_EQ(targetParts.size(), sourceParts.size());
+    ASSERT_EQ(targetScore.size(), sourceScore.size());
+    EXPECT_EQ(importedCount, targetNames.size() + targetParts.size() + targetScore.size());
+    for (std::size_t index = 0; index < targetNames.size(); ++index) {
+        EXPECT_EQ(targetNames[index]->getCmper(), sourceNames[index]->getCmper());
+        EXPECT_EQ(targetNames[index]->name, sourceNames[index]->name);
+    }
+    for (std::size_t index = 0; index < targetParts.size(); ++index) {
+        EXPECT_EQ(targetParts[index]->getCmper(), sourceParts[index]->getCmper());
+        EXPECT_EQ(targetParts[index]->values, sourceParts[index]->values);
+    }
+    for (std::size_t index = 0; index < targetScore.size(); ++index) {
+        EXPECT_EQ(targetScore[index]->getCmper(), sourceScore[index]->getCmper());
+        EXPECT_EQ(targetScore[index]->values, sourceScore[index]->values);
+    }
+    ASSERT_FALSE(targetScore.empty());
+    EXPECT_NE(targetScore.front().get(), sourceScore.front().get());
+}
+
+TEST(StaffListCategory, ImportRefusesExistingCmper)
+{
+    std::vector<char> xml;
+    musxtest::readFile(musxtest::getInputPath() / "stafflists.enigmaxml", xml);
+    const auto source =
+        musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
+    auto targetSession = musx::factory::DocumentFactory::begin();
+    const auto target = targetSession.getDocument();
+    auto existing = std::make_shared<others::StaffListCategoryParts>(target,
+        SCORE_PARTID, EnigmaBase::ShareMode::All, 1);
+    existing->values = {42};
+    target->getOthers()->add(others::StaffListCategoryParts::XmlNodeName, existing);
+
+    std::size_t importedCount = 0;
+    EXPECT_FALSE(others::importCategoryStaffListInto(target, source, 1,
+        [&importedCount](const EnigmaBase&) { ++importedCount; }));
+
+    const auto parts = target->getOthers()->getArray<others::StaffListCategoryParts>(SCORE_PARTID);
+    const auto names = target->getOthers()->getArray<others::StaffListCategoryName>(SCORE_PARTID);
+    const auto score = target->getOthers()->getArray<others::StaffListCategoryScore>(SCORE_PARTID);
+    ASSERT_EQ(parts.size(), 1);
+    ASSERT_FALSE(parts.empty());
+    EXPECT_EQ(parts.front()->values, std::vector<StaffCmper>{42});
+    EXPECT_TRUE(names.empty());
+    EXPECT_TRUE(score.empty());
+    EXPECT_EQ(importedCount, 0);
+}
+
 TEST(ExpressionAssignments, CalcAssociatedEntry)
 {
     std::vector<char> xml;
