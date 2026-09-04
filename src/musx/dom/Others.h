@@ -463,9 +463,7 @@ public:
 
 /**
  * @class ChordSuffixPlayback
- * @brief Represents a list of repeat ending numbers for a @ref RepeatEndingStart instance.
- *
- * An array of semitone offsets that define the playback and voicing for the chord suffix. They
+ * @brief An array of semitone offsets that define the playback and voicing for the chord suffix. They
  * are offsets from the root of the chord and may be negative or positive. Finale chord playback
  * has no support for microtone scales, so all values in this table are strictly half-steps.
  *
@@ -2699,6 +2697,18 @@ public:
 
     constexpr static std::string_view XmlNodeName = "categoryStaffListScore"; ///< The XML node name for this type.
 };
+
+/// @brief Copies one marking-category staff list from one document into another.
+/// @param target The document to import into.
+/// @param source The document whose score list, parts list, and optional name are copied.
+/// @param cmper The category staff-list cmper to copy.
+/// @param onImported Called for every object this operation creates.
+/// @return @p cmper, or std::nullopt if the source has no component at @p cmper or the target
+/// already has any category staff-list component there. A refusal imports nothing.
+/// @throws std::invalid_argument if @p target or @p source is null. Debug builds assert instead.
+[[nodiscard]]
+std::optional<Cmper> importCategoryStaffListInto(const DocumentPtr& target, const DocumentPtr& source,
+    Cmper cmper, const ImportObjectCallback& onImported = {});
 
 /**
  * @class StaffListRepeatName
