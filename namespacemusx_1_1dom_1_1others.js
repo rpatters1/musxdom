@@ -168,6 +168,7 @@ var namespacemusx_1_1dom_1_1others =
       [ "AboveStaffOrEntry", "namespacemusx_1_1dom_1_1others.html#a023ae0114cd3ab43481656c49ef69371a17a026eb256d96a5d552b198c50dd42d", null ],
       [ "BelowStaffOrEntry", "namespacemusx_1_1dom_1_1others.html#a023ae0114cd3ab43481656c49ef69371abb687185d85176091c6c1b32eff713e4", null ]
     ] ],
+    [ "importCategoryStaffListInto", "namespacemusx_1_1dom_1_1others.html#a215ece3e8eb25e6c0aed61ae4321ac7d", null ],
     [ "importShapeDefInto", "namespacemusx_1_1dom_1_1others.html#ac031b81394c97d30318be2e6321ad237", null ],
     [ "importSmartShapeCustomLineInto", "namespacemusx_1_1dom_1_1others.html#a7049c0f83134b6d56932cd9a1acda141", null ]
 ];

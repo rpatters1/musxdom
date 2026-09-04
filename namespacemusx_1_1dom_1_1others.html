@@ -128,7 +128,7 @@ Classes</h2></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Represents a single element in a chord suffix (e.g., a symbol like "1" or "+").  <a href="classmusx_1_1dom_1_1others_1_1ChordSuffixElement.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1ChordSuffixPlayback.html">ChordSuffixPlayback</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Represents a list of repeat ending numbers for a <a class="el" href="classmusx_1_1dom_1_1others_1_1RepeatEndingStart.html">RepeatEndingStart</a> instance.  <a href="classmusx_1_1dom_1_1others_1_1ChordSuffixPlayback.html#details">More...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">An array of semitone offsets that define the playback and voicing for the chord suffix. They are offsets from the root of the chord and may be negative or positive. Finale chord playback has no support for microtone scales, so all values in this table are strictly half-steps.  <a href="classmusx_1_1dom_1_1others_1_1ChordSuffixPlayback.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1others_1_1ClefList.html">ClefList</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Represents an element in multimeasure clef list with its positioning and percentage values.  <a href="classmusx_1_1dom_1_1others_1_1ClefList.html#details">More...</a><br /></td></tr>
@@ -510,6 +510,9 @@ Enumerations</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
+<tr class="memitem:a215ece3e8eb25e6c0aed61ae4321ac7d" id="r_a215ece3e8eb25e6c0aed61ae4321ac7d"><td class="memItemLeft" align="right" valign="top">std::optional&lt; <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemusx_1_1dom_1_1others.html#a215ece3e8eb25e6c0aed61ae4321ac7d">importCategoryStaffListInto</a> (const <a class="el" href="namespacemusx_1_1dom.html#ac52edbaa60f81ba3df76ee77b37e95fd">DocumentPtr</a> &amp;target, const <a class="el" href="namespacemusx_1_1dom.html#ac52edbaa60f81ba3df76ee77b37e95fd">DocumentPtr</a> &amp;source, <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> cmper, const <a class="el" href="namespacemusx_1_1dom.html#aafc96d2d41f4032a3db69ba5f7959d52">ImportObjectCallback</a> &amp;onImported={})</td></tr>
+<tr class="memdesc:a215ece3e8eb25e6c0aed61ae4321ac7d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copies one marking-category staff list from one document into another.  <br /></td></tr>
+<tr class="separator:a215ece3e8eb25e6c0aed61ae4321ac7d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac031b81394c97d30318be2e6321ad237" id="r_ac031b81394c97d30318be2e6321ad237"><td class="memItemLeft" align="right" valign="top">std::optional&lt; <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemusx_1_1dom_1_1others.html#ac031b81394c97d30318be2e6321ad237">importShapeDefInto</a> (const <a class="el" href="namespacemusx_1_1dom.html#ac52edbaa60f81ba3df76ee77b37e95fd">DocumentPtr</a> &amp;target, const <a class="el" href="namespacemusx_1_1dom.html#a4223cd531120dbef7acd854c3d2631b8">MusxInstance</a>&lt; ShapeDef &gt; &amp;source, const <a class="el" href="namespacemusx_1_1dom.html#aafc96d2d41f4032a3db69ba5f7959d52">ImportObjectCallback</a> &amp;onImported={})</td></tr>
 <tr class="memdesc:ac031b81394c97d30318be2e6321ad237"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copies a shape and everything it owns into another document.  <br /></td></tr>
 <tr class="separator:ac031b81394c97d30318be2e6321ad237"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -791,6 +794,64 @@ Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Function Documentation</h2>
+<a id="a215ece3e8eb25e6c0aed61ae4321ac7d" name="a215ece3e8eb25e6c0aed61ae4321ac7d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a215ece3e8eb25e6c0aed61ae4321ac7d">&#9670;&#160;</a></span>importCategoryStaffListInto()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::optional&lt; <a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a> &gt; musx::dom::others::importCategoryStaffListInto </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="namespacemusx_1_1dom.html#ac52edbaa60f81ba3df76ee77b37e95fd">DocumentPtr</a> &amp;&#160;</td>
+          <td class="paramname"><em>target</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="namespacemusx_1_1dom.html#ac52edbaa60f81ba3df76ee77b37e95fd">DocumentPtr</a> &amp;&#160;</td>
+          <td class="paramname"><em>source</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">Cmper</a>&#160;</td>
+          <td class="paramname"><em>cmper</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="namespacemusx_1_1dom.html#aafc96d2d41f4032a3db69ba5f7959d52">ImportObjectCallback</a> &amp;&#160;</td>
+          <td class="paramname"><em>onImported</em> = <code>{}</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Copies one marking-category staff list from one document into another. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">target</td><td>The document to import into. </td></tr>
+    <tr><td class="paramname">source</td><td>The document whose score list, parts list, and optional name are copied. </td></tr>
+    <tr><td class="paramname">cmper</td><td>The category staff-list cmper to copy. </td></tr>
+    <tr><td class="paramname">onImported</td><td>Called for every object this operation creates. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><code>cmper</code>, or std::nullopt if the source has no component at <code>cmper</code> or the target already has any category staff-list component there. A refusal imports nothing. </dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::invalid_argument</td><td>if <code>target</code> or <code>source</code> is null. Debug builds assert instead. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a id="ac031b81394c97d30318be2e6321ad237" name="ac031b81394c97d30318be2e6321ad237"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ac031b81394c97d30318be2e6321ad237">&#9670;&#160;</a></span>importShapeDefInto()</h2>
 

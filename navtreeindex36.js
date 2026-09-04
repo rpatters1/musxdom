@@ -1,5 +1,6 @@
 var NAVTREEINDEX36 =
 {
+"structmusx_1_1dom_1_1ShapeDefInstruction_1_1StartObject.html#a2ee1f8421d77970b760b2e3d1f96fe28":[2,0,1,0,54,17,3],
 "structmusx_1_1dom_1_1ShapeDefInstruction_1_1StartObject.html#a2ee1f8421d77970b760b2e3d1f96fe28":[1,0,1,0,53,17,3],
 "structmusx_1_1dom_1_1ShapeDefInstruction_1_1StartObject.html#a3e2179fcccc6292963caff1f15cb74e3":[2,0,1,0,54,17,0],
 "structmusx_1_1dom_1_1ShapeDefInstruction_1_1StartObject.html#a3e2179fcccc6292963caff1f15cb74e3":[1,0,1,0,53,17,0],
@@ -248,6 +249,5 @@ var NAVTREEINDEX36 =
 "structmusx_1_1util_1_1ArrowheadPresetSpec.html#a8b85331657ac586a9228554e68ee4415":[2,0,1,2,2,1],
 "structmusx_1_1util_1_1ArrowheadPresetSpec.html#af14401993b054ef4c23fcee1a5e4c014":[2,0,1,2,2,3],
 "structmusx_1_1util_1_1Cue_1_1EntryAnalysis.html":[2,0,1,2,3,0],
-"structmusx_1_1util_1_1Cue_1_1EntryAnalysis.html#a167c6deb90bb778f87f75e52b3269055":[2,0,1,2,3,0,4],
-"structmusx_1_1util_1_1Cue_1_1EntryAnalysis.html#a2fc0d8de323f3fe10f6c5d44f27cd6c9":[2,0,1,2,3,0,6]
+"structmusx_1_1util_1_1Cue_1_1EntryAnalysis.html#a167c6deb90bb778f87f75e52b3269055":[2,0,1,2,3,0,4]
 };

@@ -89,12 +89,12 @@ var NAVTREEINDEX =
 "classmusx_1_1xml_1_1pugi_1_1Element.html#a81bcef1aefcb85d94b589e5fb7dfa967",
 "namespacemusic__theory.html#a815d2a1e748a138127d59c252e4fa946",
 "namespacemusx_1_1dom.html#ae7da4591a9b109eadbf985a0589a1251",
-"namespacemusx_1_1dom_1_1uuid.html#a3018c46f43884464d3e1ac018094e525",
-"namespacemusx_1_1dom_1_1uuid.html#a802efb5beda5a2fcd5f37c84803e52a1",
-"namespacemusx_1_1dom_1_1uuid.html#acdb4a22bab1a962e88c16dc891e0e14b",
+"namespacemusx_1_1dom_1_1uuid.html#a2f847f8f3f43dea8b536e56e65405fc4",
+"namespacemusx_1_1dom_1_1uuid.html#a800ce3f7e8862e69d03bdecceb23876c",
+"namespacemusx_1_1dom_1_1uuid.html#accf7e1a89303e48658fd4e4ac382fd28",
 "structmusx_1_1dom_1_1NoteInfoPtr_1_1NoteheadInfo.html",
 "structmusx_1_1dom_1_1ShapeDefInstruction_1_1StartObject.html#a2ee1f8421d77970b760b2e3d1f96fe28",
-"structmusx_1_1util_1_1Cue_1_1EntryAnalysis.html#a6cc7c2f0d4d45b35f45cb91ff5a3e161"
+"structmusx_1_1util_1_1Cue_1_1EntryAnalysis.html#a2fc0d8de323f3fe10f6c5d44f27cd6c9"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';
