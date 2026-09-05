@@ -11,6 +11,13 @@ namespace factory {
 class ConstructionContext
 {
 public:
+    /// @brief Records @p fontId if it is non-default, then returns it unchanged.
+    [[nodiscard]] dom::Cmper assignFontId(dom::Cmper fontId)
+    {
+        registerFontId(fontId);
+        return fontId;
+    }
+
     /// @brief Records a non-default font definition ID referenced during construction.
     void registerFontId(dom::Cmper fontId)
     {
@@ -22,9 +29,8 @@ public:
 private:
     friend void resolveFontDefinitions(const dom::DocumentPtr&, const ConstructionContext&);
 
-    /// @brief Returns all non-default font definition IDs referenced during construction.
+    /// @brief Returns the recorded non-default font definition IDs.
     [[nodiscard]] const std::set<dom::Cmper>& referencedFontIds() const { return m_referencedFontIds; }
-    [[nodiscard]] std::set<dom::Cmper>& referencedFontIds() { return m_referencedFontIds; }
 
     std::set<dom::Cmper> m_referencedFontIds;
 };

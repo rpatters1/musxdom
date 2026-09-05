@@ -233,8 +233,7 @@ void resolveShapeDefs(const dom::DocumentPtr& document, ConstructionContext& con
             const auto dataCount = static_cast<std::size_t>(instruction->numData);
             if (dataIndex + dataCount > data->values.size()) break;
             if (instruction->type == dom::ShapeDefInstructionType::SetFont && dataCount >= 3) {
-                const auto fontId = dom::Cmper(data->values[dataIndex]);
-                context.registerFontId(fontId);
+                context.registerFontId(dom::Cmper(data->values[dataIndex]));
             }
             dataIndex += dataCount;
         }

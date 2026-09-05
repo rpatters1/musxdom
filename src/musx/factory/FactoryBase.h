@@ -314,8 +314,7 @@ void populateFontEfx(ConstructionContext& context, const XmlElementPtr& e, const
 /// @param fontId The destination font ID.
 inline void populateFontId(ConstructionContext& context, const XmlElementPtr& e, dom::Cmper& fontId)
 {
-    fontId = e->getTextAs<dom::Cmper>();
-    context.registerFontId(fontId);
+    fontId = context.assignFontId(e->getTextAs<dom::Cmper>());
 }
 
 template <typename T>

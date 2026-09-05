@@ -367,7 +367,7 @@ std::optional<Cmper> importTextInto(const DocumentPtr& target,
     }
     auto imported = std::make_shared<T>(
         target, SCORE_PARTID, EnigmaBase::ShareMode::All, *importedId);
-    imported->text = source->text;
+    *imported = *source;
     target->getTexts()->add(T::XmlNodeName, imported);
     if (onImported) {
         onImported(*imported);

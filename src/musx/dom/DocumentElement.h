@@ -82,10 +82,10 @@ protected:
     DocumentElement(const DocumentElement&) = default;        ///< explicit default copy constructor
     DocumentElement(DocumentElement&&) noexcept = default;    ///< explicit default move constructor
 
-    /// @brief no-op copy assignment operator allows subclasses to copy their values.
+    /// @brief Copy assignment preserves the destination DOM instance's document and part ID.
     DocumentElement& operator=(const DocumentElement&) { return *this; }
 
-    /// @brief no-op move assignment operator allows subclasses to move their values.
+    /// @brief Move assignment preserves the destination DOM instance's document and part ID.
     DocumentElement& operator=(DocumentElement&&) noexcept { return *this; }
 
 private:

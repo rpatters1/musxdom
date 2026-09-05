@@ -1133,6 +1133,18 @@ public:
     constexpr static std::string_view XmlNodeName = "markingsCategoryName"; ///< The XML node name for this type.
 };
 
+/// @brief Copies one marking category and its optional name from one document into another.
+/// @param target The document to import into.
+/// @param source The document whose category and optional name are copied.
+/// @param cmper The marking-category cmper to copy.
+/// @param onImported Called for every object this operation creates, including font definitions.
+/// @return @p cmper, or std::nullopt if the source has no category at @p cmper or the target
+/// already has either category component there. A refusal imports nothing.
+/// @throws std::invalid_argument if @p target or @p source is null. Debug builds assert instead.
+[[nodiscard]]
+std::optional<Cmper> importMarkingCategoryInto(const DocumentPtr& target,
+    const DocumentPtr& source, Cmper cmper, const ImportObjectCallback& onImported = {});
+
 class MeasureNumberRegion;
 /**
  * @class Measure

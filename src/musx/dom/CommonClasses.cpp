@@ -124,13 +124,7 @@ MusxInstance<others::FontDefinition> cloneFontDefinition(const DocumentPtr& targ
     // An importer for a ShareMode::None class would know to say so.
     auto clone = std::make_shared<others::FontDefinition>(
         target, SCORE_PARTID, EnigmaBase::ShareMode::All, cmper);
-    clone->charsetBank = source->charsetBank;
-    clone->charsetVal = source->charsetVal;
-    clone->pitch = source->pitch;
-    clone->family = source->family;
-    // The source spelling is retained deliberately. Normalization decides whether two names
-    // mean the same typeface; it is not a canonical form to store.
-    clone->name = source->name;
+    *clone = *source;
     target->getOthers()->add(others::FontDefinition::XmlNodeName, clone);
     if (onImported) {
         onImported(*clone);
