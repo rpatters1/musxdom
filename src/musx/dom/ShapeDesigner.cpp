@@ -698,7 +698,7 @@ std::optional<Cmper> importShapeDefInto(const DocumentPtr& target,
     // An importer for a ShareMode::None class would know to say so.
     auto shape = std::make_shared<ShapeDef>(
         target, SCORE_PARTID, EnigmaBase::ShareMode::All, *newShapeId);
-    shape->shapeType = source->shapeType;
+    *shape = *source;
 
     // A shape that draws nothing owns no lists to copy.
     if (source->instructionList == 0 && source->dataList == 0) {
@@ -770,15 +770,17 @@ std::optional<Cmper> importShapeDefInto(const DocumentPtr& target,
 
     auto newInstructions = std::make_shared<ShapeInstructionList>(
         target, SCORE_PARTID, EnigmaBase::ShareMode::All, *newInstructionsId);
+    *newInstructions = *instructions;
+    newInstructions->instructions.clear();
     for (const auto& instruction : instructions->instructions) {
         auto copy = std::make_shared<ShapeInstructionList::InstructionInfo>();
-        copy->numData = instruction->numData;
-        copy->type = instruction->type;
+        *copy = *instruction;
         newInstructions->instructions.push_back(std::move(copy));
     }
 
     auto newData = std::make_shared<ShapeData>(
         target, SCORE_PARTID, EnigmaBase::ShareMode::All, *newDataId);
+    *newData = *data;
     newData->values = std::move(values);
 
     // The three pools number independently, so the copied ShapeDef is rewired rather than

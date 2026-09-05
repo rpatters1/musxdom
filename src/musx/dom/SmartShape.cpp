@@ -635,40 +635,25 @@ std::optional<Cmper> others::importSmartShapeCustomLineInto(const DocumentPtr& t
 
     auto result = std::make_shared<SmartShapeCustomLine>(
         target, SCORE_PARTID, EnigmaBase::ShareMode::All, *newLineId);
-    result->lineStyle = source->lineStyle;
+    *result = *source;
     if (source->charParams) {
         result->charParams = std::make_shared<SmartShapeCustomLine::CharParams>(result);
-        result->charParams->lineChar = source->charParams->lineChar;
+        *result->charParams = *source->charParams;
         result->charParams->font = std::make_shared<FontInfo>(
             target, source->charParams->font->getSizeIsPercent());
+        *result->charParams->font = *source->charParams->font;
         result->charParams->font->fontId = *importedFontId;
-        result->charParams->font->fontSize = source->charParams->font->fontSize;
-        result->charParams->font->bold = source->charParams->font->bold;
-        result->charParams->font->italic = source->charParams->font->italic;
-        result->charParams->font->underline = source->charParams->font->underline;
-        result->charParams->font->strikeout = source->charParams->font->strikeout;
-        result->charParams->font->absolute = source->charParams->font->absolute;
-        result->charParams->font->hidden = source->charParams->font->hidden;
-        result->charParams->baselineShiftEms = source->charParams->baselineShiftEms;
     }
     if (source->solidParams) {
         result->solidParams = std::make_shared<SmartShapeCustomLine::SolidParams>(result);
-        result->solidParams->lineWidth = source->solidParams->lineWidth;
+        *result->solidParams = *source->solidParams;
     }
     if (source->dashedParams) {
         result->dashedParams = std::make_shared<SmartShapeCustomLine::DashedParams>(result);
-        result->dashedParams->lineWidth = source->dashedParams->lineWidth;
-        result->dashedParams->dashOn = source->dashedParams->dashOn;
-        result->dashedParams->dashOff = source->dashedParams->dashOff;
+        *result->dashedParams = *source->dashedParams;
     }
-    result->lineCapStartType = source->lineCapStartType;
-    result->lineCapEndType = source->lineCapEndType;
     result->lineCapStartArrowId = *startArrowId;
     result->lineCapEndArrowId = *endArrowId;
-    result->makeHorz = source->makeHorz;
-    result->lineAfterLeftStartText = source->lineAfterLeftStartText;
-    result->lineBeforeRightEndText = source->lineBeforeRightEndText;
-    result->lineAfterLeftContText = source->lineAfterLeftContText;
 
     constexpr std::array rawTextMembers{
         &SmartShapeCustomLine::leftStartRawTextId,
@@ -684,24 +669,6 @@ std::optional<Cmper> others::importSmartShapeCustomLineInto(const DocumentPtr& t
         }
         result.get()->*member = *importedId;
     }
-
-    result->leftStartX = source->leftStartX;
-    result->leftStartY = source->leftStartY;
-    result->leftContX = source->leftContX;
-    result->leftContY = source->leftContY;
-    result->rightEndX = source->rightEndX;
-    result->rightEndY = source->rightEndY;
-    result->centerFullX = source->centerFullX;
-    result->centerFullY = source->centerFullY;
-    result->centerAbbrX = source->centerAbbrX;
-    result->centerAbbrY = source->centerAbbrY;
-    result->lineStartX = source->lineStartX;
-    result->lineStartY = source->lineStartY;
-    result->lineEndX = source->lineEndX;
-    result->lineEndY = source->lineEndY;
-    result->lineContX = source->lineContX;
-    result->lineCapStartHookLength = source->lineCapStartHookLength;
-    result->lineCapEndHookLength = source->lineCapEndHookLength;
 
     target->getOthers()->add(SmartShapeCustomLine::XmlNodeName, result);
     if (onImported) {

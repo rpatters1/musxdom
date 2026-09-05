@@ -132,10 +132,12 @@ protected:
     EnigmaBase(const EnigmaBase&) = default;        ///< explicit default copy constructor
     EnigmaBase(EnigmaBase&&) noexcept = default;    ///< explicit default move constructor
 
-    /// @brief no-op copy assignment operator allows subclasses to copy their values.
+    /// @brief Copy assignment preserves the destination DOM instance's document, source part, and
+    /// sharing mode.
     EnigmaBase& operator=(const EnigmaBase&) { return *this; }
 
-    /// @brief no-op move assignment operator allows subclasses to move their values.
+    /// @brief Move assignment preserves the destination DOM instance's document, source part, and
+    /// sharing mode.
     EnigmaBase& operator=(EnigmaBase&&) noexcept { return *this; }
 
 private:
@@ -184,7 +186,7 @@ protected:
     // the source instance. If that distinction matters, the owner must use PartContextRebinder.
     // PartContextRebinder<details::CenterShape> is a simple example.
 
-    /// @brief Assignment preserves the destination's parent while allowing subclasses to copy their values.
+    /// @brief Copy assignment preserves the destination DOM instance's document and parent.
     ContainedClassBase& operator=(const ContainedClassBase& other)
     {
         if (this != &other) {
@@ -193,7 +195,7 @@ protected:
         return *this;
     }
 
-    /// @brief Move assignment preserves the destination's parent while allowing subclasses to move their values.
+    /// @brief Move assignment preserves the destination DOM instance's document and parent.
     ContainedClassBase& operator=(ContainedClassBase&& other) noexcept
     {
         if (this != &other) {
@@ -277,7 +279,8 @@ protected:
     OthersBase(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper, std::optional<Inci> inci = std::nullopt)
         : EnigmaBase(document, partId, shareMode), m_requestedPartId(partId), m_cmper(cmper), m_inci(inci) {}
 
-    /// @brief Assignment operator delegates to base, preserving OthersBase state.
+    /// @brief Copy assignment preserves the destination DOM instance's document, source and
+    /// requested part IDs, sharing mode, cmper, and inci.
     OthersBase& operator=(const OthersBase& other)
     {
         if (this != &other) {
@@ -285,7 +288,8 @@ protected:
         }
         return *this;
     }
-    /// @brief Assignment operator delegates to base, preserving OthersBase state.
+    /// @brief Move assignment preserves the destination DOM instance's document, source and
+    /// requested part IDs, sharing mode, cmper, and inci.
     OthersBase& operator=(OthersBase&& other) noexcept
     {
         if (this != &other) {
@@ -410,7 +414,8 @@ protected:
     DetailsBase(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper cmper1, Cmper cmper2, std::optional<Inci> inci = std::nullopt)
         : EnigmaBase(document, partId, shareMode), m_requestedPartId(partId), m_cmper1(cmper1), m_cmper2(cmper2), m_inci(inci) {}
 
-    /// @brief Assignment operator delegates to base, preserving OthersBase state.
+    /// @brief Copy assignment preserves the destination DOM instance's document, source and
+    /// requested part IDs, sharing mode, both cmpers, and inci.
     DetailsBase& operator=(const DetailsBase& other)
     {
         if (this != &other) {
@@ -418,7 +423,8 @@ protected:
         }
         return *this;
     }
-    /// @brief Assignment operator delegates to base, preserving OthersBase state.
+    /// @brief Move assignment preserves the destination DOM instance's document, source and
+    /// requested part IDs, sharing mode, both cmpers, and inci.
     DetailsBase& operator=(DetailsBase&& other) noexcept
     {
         if (this != &other) {
@@ -576,6 +582,33 @@ public:
     TextsBase(const DocumentWeakPtr& document, Cmper partId, ShareMode shareMode, Cmper textNumber)
         : EnigmaBase(document, partId, shareMode), m_textNumber(textNumber) {}
 
+    TextsBase(const TextsBase&) = default;        ///< explicit default copy constructor
+    TextsBase(TextsBase&&) noexcept = default;    ///< explicit default move constructor
+
+protected:
+    /// @brief Copies the text without changing the destination DOM instance's document, source
+    /// part, sharing mode, or text number.
+    TextsBase& operator=(const TextsBase& other)
+    {
+        if (this != &other) {
+            this->EnigmaBase::operator=(other);
+            text = other.text;
+        }
+        return *this;
+    }
+
+    /// @brief Moves the text without changing the destination DOM instance's document, source
+    /// part, sharing mode, or text number.
+    TextsBase& operator=(TextsBase&& other) noexcept
+    {
+        if (this != &other) {
+            this->EnigmaBase::operator=(std::move(other));
+            text = std::move(other.text);
+        }
+        return *this;
+    }
+
+public:
     std::string text;    ///< Raw Enigma string (with Enigma string tags), encoded UTF-8.
 
     /**

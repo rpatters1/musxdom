@@ -276,6 +276,57 @@ TEST(MarkingCategory, MissingCategoryType)
     );
 }
 
+TEST(MarkingCategory, ImportIntoDocument)
+{
+    constexpr Cmper categoryId = 10;
+    std::vector<char> xml;
+    musxtest::readFile(musxtest::getInputPath() / "endingtext.enigmaxml", xml);
+    const auto source =
+        musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
+    auto targetSession = musx::factory::DocumentFactory::begin();
+    const auto target = targetSession.getDocument();
+
+    std::size_t importedCount = 0;
+    const auto imported = others::importMarkingCategoryInto(target, source, categoryId,
+        [&importedCount](const EnigmaBase&) { ++importedCount; });
+    ASSERT_EQ(imported, std::optional<Cmper>(categoryId));
+    const auto sourceCategory =
+        source->getOthers()->get<others::MarkingCategory>(SCORE_PARTID, categoryId);
+    const auto targetCategory =
+        target->getOthers()->get<others::MarkingCategory>(SCORE_PARTID, categoryId);
+    ASSERT_TRUE(sourceCategory);
+    ASSERT_TRUE(targetCategory);
+    EXPECT_EQ(targetCategory->categoryType, sourceCategory->categoryType);
+    EXPECT_EQ(targetCategory->getName(), sourceCategory->getName());
+    EXPECT_EQ(targetCategory->textFont->fontSize, sourceCategory->textFont->fontSize);
+    EXPECT_EQ(targetCategory->textFont->getEnigmaStyles(),
+        sourceCategory->textFont->getEnigmaStyles());
+    EXPECT_GE(importedCount, 2);
+}
+
+TEST(MarkingCategory, ImportRefusesExistingCmper)
+{
+    constexpr Cmper categoryId = 10;
+    std::vector<char> xml;
+    musxtest::readFile(musxtest::getInputPath() / "endingtext.enigmaxml", xml);
+    const auto source =
+        musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
+    auto targetSession = musx::factory::DocumentFactory::begin();
+    const auto target = targetSession.getDocument();
+    auto existingName = std::make_shared<others::MarkingCategoryName>(target, SCORE_PARTID,
+        EnigmaBase::ShareMode::All, categoryId);
+    existingName->name = "existing";
+    target->getOthers()->add(others::MarkingCategoryName::XmlNodeName, existingName);
+
+    std::size_t importedCount = 0;
+    EXPECT_FALSE(others::importMarkingCategoryInto(target, source, categoryId,
+        [&importedCount](const EnigmaBase&) { ++importedCount; }));
+    EXPECT_FALSE(target->getOthers()->get<others::MarkingCategory>(SCORE_PARTID, categoryId));
+    EXPECT_EQ(target->getOthers()->get<others::MarkingCategoryName>(SCORE_PARTID, categoryId)->name,
+        "existing");
+    EXPECT_EQ(importedCount, 0);
+}
+
 TEST(MeasureExprAssign, Populate)
 {
     constexpr static musxtest::string_view xml = R"xml(

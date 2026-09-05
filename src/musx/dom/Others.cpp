@@ -193,6 +193,55 @@ CategoryStaffListSet MarkingCategory::createStaffListSet() const
     return CategoryStaffListSet(getDocument(), getRequestedPartId(), staffList);
 }
 
+std::optional<Cmper> importMarkingCategoryInto(const DocumentPtr& target,
+    const DocumentPtr& source, Cmper cmper, const ImportObjectCallback& onImported)
+{
+    MUSX_ASSERT_IF(!target) {
+        throw std::invalid_argument("importMarkingCategoryInto received a null target document");
+    }
+    MUSX_ASSERT_IF(!source) {
+        throw std::invalid_argument("importMarkingCategoryInto received a null source document");
+    }
+    const auto sourceCategory = source->getOthers()->get<MarkingCategory>(SCORE_PARTID, cmper);
+    if (!sourceCategory
+        || target->getOthers()->get<MarkingCategory>(SCORE_PARTID, cmper)
+        || target->getOthers()->get<MarkingCategoryName>(SCORE_PARTID, cmper)) {
+        return std::nullopt;
+    }
+
+    const auto importFont = [&](const std::shared_ptr<FontInfo>& sourceFont) {
+        if (!sourceFont) return std::shared_ptr<FontInfo>{};
+        auto result = std::make_shared<FontInfo>(target);
+        *result = *sourceFont;
+        const auto sourceDefinition = source->getOthers()->get<FontDefinition>(
+            SCORE_PARTID, sourceFont->fontId);
+        if (sourceDefinition) {
+            if (const auto importedId = importFontDefinitionInto(target, sourceDefinition, onImported)) {
+                result->fontId = *importedId;
+            }
+        }
+        return result;
+    };
+
+    auto importedCategory = std::make_shared<MarkingCategory>(
+        target, SCORE_PARTID, EnigmaBase::ShareMode::All, cmper);
+    *importedCategory = *sourceCategory;
+    importedCategory->textFont = importFont(sourceCategory->textFont);
+    importedCategory->musicFont = importFont(sourceCategory->musicFont);
+    importedCategory->numberFont = importFont(sourceCategory->numberFont);
+    target->getOthers()->add(MarkingCategory::XmlNodeName, importedCategory);
+    if (onImported) onImported(*importedCategory);
+
+    if (const auto sourceName = source->getOthers()->get<MarkingCategoryName>(SCORE_PARTID, cmper)) {
+        auto importedName = std::make_shared<MarkingCategoryName>(
+            target, SCORE_PARTID, EnigmaBase::ShareMode::All, cmper);
+        *importedName = *sourceName;
+        target->getOthers()->add(MarkingCategoryName::XmlNodeName, importedName);
+        if (onImported) onImported(*importedName);
+    }
+    return cmper;
+}
+
 // *******************
 // ***** Measure *****
 // *******************
@@ -1660,11 +1709,7 @@ void importCategoryStaffListType(const DocumentPtr& target, const DocumentPtr& s
         }
         auto result = std::make_shared<Target>(target, sourceList->getSourcePartId(),
             sourceList->getShareMode(), sourceList->getCmper());
-        if constexpr (std::is_base_of_v<StaffList, Target>) {
-            result->values = sourceList->values;
-        } else {
-            result->name = sourceList->name;
-        }
+        *result = *sourceList;
         target->getOthers()->add(Target::XmlNodeName, result);
         if (onImported) {
             onImported(*result);
