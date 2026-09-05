@@ -388,57 +388,56 @@ $(document).ready(function(){initNavTree('FactoryBase_8h_source.html',''); initR
 <div class="line"><a id="l00311" name="l00311"></a><span class="lineno">  311</span> </div>
 <div class="line"><a id="l00315" name="l00315"></a><span class="lineno">  315</span><span class="keyword">inline</span> <span class="keywordtype">void</span> populateFontId(ConstructionContext&amp; context, <span class="keyword">const</span> <a class="code hl_typedef" href="namespacemusx_1_1xml.html#a54b9e383b0a54d0c3ba00bb6c9ceff9e">XmlElementPtr</a>&amp; e, <a class="code hl_typedef" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">dom::Cmper</a>&amp; fontId)</div>
 <div class="line"><a id="l00316" name="l00316"></a><span class="lineno">  316</span>{</div>
-<div class="line"><a id="l00317" name="l00317"></a><span class="lineno">  317</span>    fontId = e-&gt;getTextAs&lt;<a class="code hl_typedef" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">dom::Cmper</a>&gt;();</div>
-<div class="line"><a id="l00318" name="l00318"></a><span class="lineno">  318</span>    context.registerFontId(fontId);</div>
-<div class="line"><a id="l00319" name="l00319"></a><span class="lineno">  319</span>}</div>
-<div class="line"><a id="l00320" name="l00320"></a><span class="lineno">  320</span> </div>
-<div class="line"><a id="l00321" name="l00321"></a><span class="lineno">  321</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line"><a id="l00322" name="l00322"></a><span class="lineno">  322</span><span class="keyword">inline</span> <span class="keywordtype">bool</span> populateBoolean(ConstructionContext&amp;, <span class="keyword">const</span> <a class="code hl_typedef" href="namespacemusx_1_1xml.html#a54b9e383b0a54d0c3ba00bb6c9ceff9e">XmlElementPtr</a>&amp; element, <span class="keyword">const</span> std::shared_ptr&lt;T&gt;&amp; instance)</div>
-<div class="line"><a id="l00323" name="l00323"></a><span class="lineno">  323</span>{</div>
-<div class="line"><a id="l00324" name="l00324"></a><span class="lineno">  324</span>    MUSX_ASSERT_IF(!element) {</div>
-<div class="line"><a id="l00325" name="l00325"></a><span class="lineno">  325</span>        <span class="keywordflow">throw</span> std::logic_error(<span class="stringliteral">&quot;Null element passed to populateBoolean function.&quot;</span>);</div>
-<div class="line"><a id="l00326" name="l00326"></a><span class="lineno">  326</span>    }</div>
-<div class="line"><a id="l00327" name="l00327"></a><span class="lineno">  327</span> </div>
-<div class="line"><a id="l00328" name="l00328"></a><span class="lineno">  328</span>    <span class="keywordflow">if</span> (!element-&gt;getFirstChildElement(<span class="stringliteral">&quot;offInPart&quot;</span>)) {</div>
-<div class="line"><a id="l00329" name="l00329"></a><span class="lineno">  329</span>        <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
-<div class="line"><a id="l00330" name="l00330"></a><span class="lineno">  330</span>    }</div>
-<div class="line"><a id="l00331" name="l00331"></a><span class="lineno">  331</span> </div>
-<div class="line"><a id="l00332" name="l00332"></a><span class="lineno">  332</span>    <span class="keywordflow">if</span> <span class="keyword">constexpr</span> (std::is_base_of_v&lt;EnigmaBase, T&gt;) {</div>
-<div class="line"><a id="l00333" name="l00333"></a><span class="lineno">  333</span>        <span class="keyword">const</span> <a class="code hl_class" href="classmusx_1_1dom_1_1EnigmaBase.html">EnigmaBase</a>&amp; instAsBase = *instance;</div>
-<div class="line"><a id="l00334" name="l00334"></a><span class="lineno">  334</span>        <span class="keywordflow">return</span> instAsBase.<a class="code hl_function" href="classmusx_1_1dom_1_1EnigmaBase.html#afa936c79b75fa6063f8f9512e19216b9">getSourcePartId</a>() == <a class="code hl_variable" href="namespacemusx_1_1dom.html#a5dd453394b3375a5be17055a82ddd9f0">SCORE_PARTID</a>; <span class="comment">// return false if this is a part</span></div>
-<div class="line"><a id="l00335" name="l00335"></a><span class="lineno">  335</span>    } <span class="keywordflow">else</span> {</div>
-<div class="line"><a id="l00336" name="l00336"></a><span class="lineno">  336</span>        <span class="keywordflow">return</span> <span class="keyword">false</span>; <span class="comment">// I don&#39;t think we&#39;ll ever get an `offInPart` for the score, so assume it is for a part if we aren&#39;t a Base subclass</span></div>
-<div class="line"><a id="l00337" name="l00337"></a><span class="lineno">  337</span>    }</div>
-<div class="line"><a id="l00338" name="l00338"></a><span class="lineno">  338</span>}</div>
-<div class="line"><a id="l00339" name="l00339"></a><span class="lineno">  339</span> </div>
-<div class="line"><a id="l00340" name="l00340"></a><span class="lineno">  340</span><span class="keyword">inline</span> std::vector&lt;std::uint8_t&gt; hexToBytes(std::string_view hex)</div>
-<div class="line"><a id="l00341" name="l00341"></a><span class="lineno">  341</span>{</div>
-<div class="line"><a id="l00342" name="l00342"></a><span class="lineno">  342</span>    std::vector&lt;std::uint8_t&gt; out;</div>
-<div class="line"><a id="l00343" name="l00343"></a><span class="lineno">  343</span> </div>
-<div class="line"><a id="l00344" name="l00344"></a><span class="lineno">  344</span>    <span class="keywordflow">if</span> (hex.size() % 2 == 0) {</div>
-<div class="line"><a id="l00345" name="l00345"></a><span class="lineno">  345</span>        out.reserve(hex.size() / 2);</div>
-<div class="line"><a id="l00346" name="l00346"></a><span class="lineno">  346</span>        <span class="keywordflow">for</span> (std::size_t i = 0; i &lt; hex.size(); i += 2) {</div>
-<div class="line"><a id="l00347" name="l00347"></a><span class="lineno">  347</span>            <span class="keywordtype">unsigned</span> value = 0;</div>
-<div class="line"><a id="l00348" name="l00348"></a><span class="lineno">  348</span>            <span class="keyword">const</span> <span class="keywordtype">char</span>* first = hex.data() + i;</div>
-<div class="line"><a id="l00349" name="l00349"></a><span class="lineno">  349</span>            <span class="keyword">const</span> <span class="keywordtype">char</span>* last  = first + 2;          <span class="comment">// OK even when last == data()+size()</span></div>
-<div class="line"><a id="l00350" name="l00350"></a><span class="lineno">  350</span>            <span class="keyword">auto</span> [ptr, ec] = std::from_chars(first, last, value, 16);</div>
-<div class="line"><a id="l00351" name="l00351"></a><span class="lineno">  351</span>            <span class="keywordflow">if</span> (ec != std::errc()) {</div>
-<div class="line"><a id="l00352" name="l00352"></a><span class="lineno">  352</span>                i = hex.size(); <span class="comment">// break out of loop if MUSX_INTEGRITY_ERROR does not throw</span></div>
-<div class="line"><a id="l00353" name="l00353"></a><span class="lineno">  353</span>                MUSX_INTEGRITY_ERROR(<span class="stringliteral">&quot;Invalid hex digit in hex string.&quot;</span>);</div>
-<div class="line"><a id="l00354" name="l00354"></a><span class="lineno">  354</span>            }</div>
-<div class="line"><a id="l00355" name="l00355"></a><span class="lineno">  355</span>            out.push_back(<span class="keyword">static_cast&lt;</span>std::uint8_t<span class="keyword">&gt;</span>(value));</div>
-<div class="line"><a id="l00356" name="l00356"></a><span class="lineno">  356</span>        }</div>
-<div class="line"><a id="l00357" name="l00357"></a><span class="lineno">  357</span>    } <span class="keywordflow">else</span> {</div>
-<div class="line"><a id="l00358" name="l00358"></a><span class="lineno">  358</span>        MUSX_INTEGRITY_ERROR(<span class="stringliteral">&quot;Encountered odd-length hex string.&quot;</span>);</div>
-<div class="line"><a id="l00359" name="l00359"></a><span class="lineno">  359</span>    }</div>
-<div class="line"><a id="l00360" name="l00360"></a><span class="lineno">  360</span> </div>
-<div class="line"><a id="l00361" name="l00361"></a><span class="lineno">  361</span>    <span class="keywordflow">return</span> out;</div>
-<div class="line"><a id="l00362" name="l00362"></a><span class="lineno">  362</span>}</div>
-<div class="line"><a id="l00363" name="l00363"></a><span class="lineno">  363</span> </div>
-<div class="line"><a id="l00364" name="l00364"></a><span class="lineno">  364</span><span class="preprocessor">#endif </span><span class="comment">// DOXYGEN_SHOULD_IGNORE_THIS</span></div>
-<div class="line"><a id="l00365" name="l00365"></a><span class="lineno">  365</span> </div>
-<div class="line"><a id="l00366" name="l00366"></a><span class="lineno">  366</span>} <span class="comment">// namespace factory</span></div>
-<div class="line"><a id="l00367" name="l00367"></a><span class="lineno">  367</span>} <span class="comment">// namespace musx</span></div>
+<div class="line"><a id="l00317" name="l00317"></a><span class="lineno">  317</span>    fontId = context.assignFontId(e-&gt;getTextAs&lt;<a class="code hl_typedef" href="namespacemusx_1_1dom.html#a849c0fb091707be060d840e877486f65">dom::Cmper</a>&gt;());</div>
+<div class="line"><a id="l00318" name="l00318"></a><span class="lineno">  318</span>}</div>
+<div class="line"><a id="l00319" name="l00319"></a><span class="lineno">  319</span> </div>
+<div class="line"><a id="l00320" name="l00320"></a><span class="lineno">  320</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a id="l00321" name="l00321"></a><span class="lineno">  321</span><span class="keyword">inline</span> <span class="keywordtype">bool</span> populateBoolean(ConstructionContext&amp;, <span class="keyword">const</span> <a class="code hl_typedef" href="namespacemusx_1_1xml.html#a54b9e383b0a54d0c3ba00bb6c9ceff9e">XmlElementPtr</a>&amp; element, <span class="keyword">const</span> std::shared_ptr&lt;T&gt;&amp; instance)</div>
+<div class="line"><a id="l00322" name="l00322"></a><span class="lineno">  322</span>{</div>
+<div class="line"><a id="l00323" name="l00323"></a><span class="lineno">  323</span>    MUSX_ASSERT_IF(!element) {</div>
+<div class="line"><a id="l00324" name="l00324"></a><span class="lineno">  324</span>        <span class="keywordflow">throw</span> std::logic_error(<span class="stringliteral">&quot;Null element passed to populateBoolean function.&quot;</span>);</div>
+<div class="line"><a id="l00325" name="l00325"></a><span class="lineno">  325</span>    }</div>
+<div class="line"><a id="l00326" name="l00326"></a><span class="lineno">  326</span> </div>
+<div class="line"><a id="l00327" name="l00327"></a><span class="lineno">  327</span>    <span class="keywordflow">if</span> (!element-&gt;getFirstChildElement(<span class="stringliteral">&quot;offInPart&quot;</span>)) {</div>
+<div class="line"><a id="l00328" name="l00328"></a><span class="lineno">  328</span>        <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a id="l00329" name="l00329"></a><span class="lineno">  329</span>    }</div>
+<div class="line"><a id="l00330" name="l00330"></a><span class="lineno">  330</span> </div>
+<div class="line"><a id="l00331" name="l00331"></a><span class="lineno">  331</span>    <span class="keywordflow">if</span> <span class="keyword">constexpr</span> (std::is_base_of_v&lt;EnigmaBase, T&gt;) {</div>
+<div class="line"><a id="l00332" name="l00332"></a><span class="lineno">  332</span>        <span class="keyword">const</span> <a class="code hl_class" href="classmusx_1_1dom_1_1EnigmaBase.html">EnigmaBase</a>&amp; instAsBase = *instance;</div>
+<div class="line"><a id="l00333" name="l00333"></a><span class="lineno">  333</span>        <span class="keywordflow">return</span> instAsBase.<a class="code hl_function" href="classmusx_1_1dom_1_1EnigmaBase.html#afa936c79b75fa6063f8f9512e19216b9">getSourcePartId</a>() == <a class="code hl_variable" href="namespacemusx_1_1dom.html#a5dd453394b3375a5be17055a82ddd9f0">SCORE_PARTID</a>; <span class="comment">// return false if this is a part</span></div>
+<div class="line"><a id="l00334" name="l00334"></a><span class="lineno">  334</span>    } <span class="keywordflow">else</span> {</div>
+<div class="line"><a id="l00335" name="l00335"></a><span class="lineno">  335</span>        <span class="keywordflow">return</span> <span class="keyword">false</span>; <span class="comment">// I don&#39;t think we&#39;ll ever get an `offInPart` for the score, so assume it is for a part if we aren&#39;t a Base subclass</span></div>
+<div class="line"><a id="l00336" name="l00336"></a><span class="lineno">  336</span>    }</div>
+<div class="line"><a id="l00337" name="l00337"></a><span class="lineno">  337</span>}</div>
+<div class="line"><a id="l00338" name="l00338"></a><span class="lineno">  338</span> </div>
+<div class="line"><a id="l00339" name="l00339"></a><span class="lineno">  339</span><span class="keyword">inline</span> std::vector&lt;std::uint8_t&gt; hexToBytes(std::string_view hex)</div>
+<div class="line"><a id="l00340" name="l00340"></a><span class="lineno">  340</span>{</div>
+<div class="line"><a id="l00341" name="l00341"></a><span class="lineno">  341</span>    std::vector&lt;std::uint8_t&gt; out;</div>
+<div class="line"><a id="l00342" name="l00342"></a><span class="lineno">  342</span> </div>
+<div class="line"><a id="l00343" name="l00343"></a><span class="lineno">  343</span>    <span class="keywordflow">if</span> (hex.size() % 2 == 0) {</div>
+<div class="line"><a id="l00344" name="l00344"></a><span class="lineno">  344</span>        out.reserve(hex.size() / 2);</div>
+<div class="line"><a id="l00345" name="l00345"></a><span class="lineno">  345</span>        <span class="keywordflow">for</span> (std::size_t i = 0; i &lt; hex.size(); i += 2) {</div>
+<div class="line"><a id="l00346" name="l00346"></a><span class="lineno">  346</span>            <span class="keywordtype">unsigned</span> value = 0;</div>
+<div class="line"><a id="l00347" name="l00347"></a><span class="lineno">  347</span>            <span class="keyword">const</span> <span class="keywordtype">char</span>* first = hex.data() + i;</div>
+<div class="line"><a id="l00348" name="l00348"></a><span class="lineno">  348</span>            <span class="keyword">const</span> <span class="keywordtype">char</span>* last  = first + 2;          <span class="comment">// OK even when last == data()+size()</span></div>
+<div class="line"><a id="l00349" name="l00349"></a><span class="lineno">  349</span>            <span class="keyword">auto</span> [ptr, ec] = std::from_chars(first, last, value, 16);</div>
+<div class="line"><a id="l00350" name="l00350"></a><span class="lineno">  350</span>            <span class="keywordflow">if</span> (ec != std::errc()) {</div>
+<div class="line"><a id="l00351" name="l00351"></a><span class="lineno">  351</span>                i = hex.size(); <span class="comment">// break out of loop if MUSX_INTEGRITY_ERROR does not throw</span></div>
+<div class="line"><a id="l00352" name="l00352"></a><span class="lineno">  352</span>                MUSX_INTEGRITY_ERROR(<span class="stringliteral">&quot;Invalid hex digit in hex string.&quot;</span>);</div>
+<div class="line"><a id="l00353" name="l00353"></a><span class="lineno">  353</span>            }</div>
+<div class="line"><a id="l00354" name="l00354"></a><span class="lineno">  354</span>            out.push_back(<span class="keyword">static_cast&lt;</span>std::uint8_t<span class="keyword">&gt;</span>(value));</div>
+<div class="line"><a id="l00355" name="l00355"></a><span class="lineno">  355</span>        }</div>
+<div class="line"><a id="l00356" name="l00356"></a><span class="lineno">  356</span>    } <span class="keywordflow">else</span> {</div>
+<div class="line"><a id="l00357" name="l00357"></a><span class="lineno">  357</span>        MUSX_INTEGRITY_ERROR(<span class="stringliteral">&quot;Encountered odd-length hex string.&quot;</span>);</div>
+<div class="line"><a id="l00358" name="l00358"></a><span class="lineno">  358</span>    }</div>
+<div class="line"><a id="l00359" name="l00359"></a><span class="lineno">  359</span> </div>
+<div class="line"><a id="l00360" name="l00360"></a><span class="lineno">  360</span>    <span class="keywordflow">return</span> out;</div>
+<div class="line"><a id="l00361" name="l00361"></a><span class="lineno">  361</span>}</div>
+<div class="line"><a id="l00362" name="l00362"></a><span class="lineno">  362</span> </div>
+<div class="line"><a id="l00363" name="l00363"></a><span class="lineno">  363</span><span class="preprocessor">#endif </span><span class="comment">// DOXYGEN_SHOULD_IGNORE_THIS</span></div>
+<div class="line"><a id="l00364" name="l00364"></a><span class="lineno">  364</span> </div>
+<div class="line"><a id="l00365" name="l00365"></a><span class="lineno">  365</span>} <span class="comment">// namespace factory</span></div>
+<div class="line"><a id="l00366" name="l00366"></a><span class="lineno">  366</span>} <span class="comment">// namespace musx</span></div>
 <div class="ttc" id="aclassmusx_1_1dom_1_1EnigmaBase_html"><div class="ttname"><a href="classmusx_1_1dom_1_1EnigmaBase.html">musx::dom::EnigmaBase</a></div><div class="ttdoc">Base for DOM classes that are represented in EnigmaData.</div><div class="ttdef"><b>Definition</b> BaseClasses.h:88</div></div>
 <div class="ttc" id="aclassmusx_1_1dom_1_1EnigmaBase_html_afa936c79b75fa6063f8f9512e19216b9"><div class="ttname"><a href="classmusx_1_1dom_1_1EnigmaBase.html#afa936c79b75fa6063f8f9512e19216b9">musx::dom::EnigmaBase::getSourcePartId</a></div><div class="ttdeci">Cmper getSourcePartId() const</div><div class="ttdoc">Gets the source partId for this instance. If an instance is fully shared with the score,...</div><div class="ttdef"><b>Definition</b> BaseClasses.h:108</div></div>
 <div class="ttc" id="aclassmusx_1_1factory_1_1FactoryBase_html"><div class="ttname"><a href="classmusx_1_1factory_1_1FactoryBase.html">musx::factory::FactoryBase</a></div><div class="ttdoc">Factory base class.</div><div class="ttdef"><b>Definition</b> FactoryBase.h:57</div></div>
