@@ -1872,6 +1872,7 @@ public:
     bool fullNameExpand{};                    ///< "Expand Single Word" for full name (xml node is `<fullExpand>`)
     bool abbrvNameExpand{};                   ///< "Expand Single Word" for abbreviated name (xml node is `<abbrvExpand>`)
     HideStaves hideStaves{};                  ///< "When Hiding Empty Staves" option (xml node is `<optimize>`)
+    Cmper customBarShape{};                   ///< Cmper of Shape Designer @ref others::ShapeDef for the custom group barline. (Used when #barlineType is `BarlineType::Custom`.)
 
     Cmper multiStaffGroupId{};      ///< Calculated cmper for @ref others::MultiStaffGroupId, if any. This value is not in the xml.
                                     ///< It is set by the factory with the Resolver function for @ref others::MultiStaffGroupId.
