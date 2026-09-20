@@ -32,6 +32,7 @@ var classmusx_1_1dom_1_1details_1_1StaffGroup =
     [ "abbrvNameYadj", "classmusx_1_1dom_1_1details_1_1StaffGroup.html#a2690beb584e3147cea715a6deb226b80", null ],
     [ "barlineType", "classmusx_1_1dom_1_1details_1_1StaffGroup.html#a8cd4fb5427d54ab645dade0ad7eb6ebc", null ],
     [ "bracket", "classmusx_1_1dom_1_1details_1_1StaffGroup.html#a479a055383bd9de736989d73317644cc", null ],
+    [ "customBarShape", "classmusx_1_1dom_1_1details_1_1StaffGroup.html#a8d0ae9f6053301117dd318b64a483dfd", null ],
     [ "drawBarlines", "classmusx_1_1dom_1_1details_1_1StaffGroup.html#a675720317dd09f9e1790da1354c114d2", null ],
     [ "endInst", "classmusx_1_1dom_1_1details_1_1StaffGroup.html#aa4d3b37711a512db07284afe78eb9095", null ],
     [ "endMeas", "classmusx_1_1dom_1_1details_1_1StaffGroup.html#adddfe45e412b366057550a19ee7b2179", null ],

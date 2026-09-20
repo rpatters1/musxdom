@@ -1,5 +1,7 @@
 var NAVTREEINDEX28 =
 {
+"classmusx_1_1dom_1_1others_1_1TonalCenterFlats.html#a97a0e9923a385187b52a76ae6f0a30d9":[2,0,1,0,3,95,0],
+"classmusx_1_1dom_1_1others_1_1TonalCenterSharps.html":[2,0,1,0,3,96],
 "classmusx_1_1dom_1_1others_1_1TonalCenterSharps.html":[1,0,1,0,3,96],
 "classmusx_1_1dom_1_1others_1_1TonalCenterSharps.html#a97a0e9923a385187b52a76ae6f0a30d9":[1,0,1,0,3,96,0],
 "classmusx_1_1dom_1_1others_1_1TonalCenterSharps.html#a97a0e9923a385187b52a76ae6f0a30d9":[2,0,1,0,3,96,0],
@@ -247,7 +249,5 @@ var NAVTREEINDEX28 =
 "classmusx_1_1xml_1_1IXmlDocument.html#a928c674094e777c54b524716fcc7b1f0":[1,0,1,2,4,2],
 "classmusx_1_1xml_1_1IXmlDocument.html#a9f8306733e03b3be63d1de4f98500b8d":[2,0,1,4,4,1],
 "classmusx_1_1xml_1_1IXmlDocument.html#a9f8306733e03b3be63d1de4f98500b8d":[1,0,1,2,4,1],
-"classmusx_1_1xml_1_1IXmlDocument.html#ae4b3f92715297e4add1d33d8bcaabe80":[2,0,1,4,4,3],
-"classmusx_1_1xml_1_1IXmlDocument.html#ae4b3f92715297e4add1d33d8bcaabe80":[1,0,1,2,4,3],
-"classmusx_1_1xml_1_1IXmlElement.html":[1,0,1,2,5]
+"classmusx_1_1xml_1_1IXmlDocument.html#ae4b3f92715297e4add1d33d8bcaabe80":[2,0,1,4,4,3]
 };

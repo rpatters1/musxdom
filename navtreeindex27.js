@@ -1,5 +1,7 @@
 var NAVTREEINDEX27 =
 {
+"classmusx_1_1dom_1_1others_1_1Staff_1_1Transposition.html#a3e1b557e7c6827ba497c48cad3022f95":[2,0,1,0,3,66,3,0],
+"classmusx_1_1dom_1_1others_1_1Staff_1_1Transposition.html#a57e24a5af4091f114ec25eec8a766eb0":[2,0,1,0,3,66,3,4],
 "classmusx_1_1dom_1_1others_1_1Staff_1_1Transposition.html#a57e24a5af4091f114ec25eec8a766eb0":[1,0,1,0,3,66,3,4],
 "classmusx_1_1dom_1_1others_1_1Staff_1_1Transposition.html#abd3552c584bad2132b7d29fa8a141535":[1,0,1,0,3,66,3,5],
 "classmusx_1_1dom_1_1others_1_1Staff_1_1Transposition.html#abd3552c584bad2132b7d29fa8a141535":[2,0,1,0,3,66,3,5],
@@ -247,7 +249,5 @@ var NAVTREEINDEX27 =
 "classmusx_1_1dom_1_1others_1_1TimeCompositeUpper_1_1CompositeItem.html#aaae0d01831682dbb5952103f9cc3fb0a":[2,0,1,0,3,94,0,2],
 "classmusx_1_1dom_1_1others_1_1TonalCenterFlats.html":[1,0,1,0,3,95],
 "classmusx_1_1dom_1_1others_1_1TonalCenterFlats.html":[2,0,1,0,3,95],
-"classmusx_1_1dom_1_1others_1_1TonalCenterFlats.html#a97a0e9923a385187b52a76ae6f0a30d9":[1,0,1,0,3,95,0],
-"classmusx_1_1dom_1_1others_1_1TonalCenterFlats.html#a97a0e9923a385187b52a76ae6f0a30d9":[2,0,1,0,3,95,0],
-"classmusx_1_1dom_1_1others_1_1TonalCenterSharps.html":[2,0,1,0,3,96]
+"classmusx_1_1dom_1_1others_1_1TonalCenterFlats.html#a97a0e9923a385187b52a76ae6f0a30d9":[1,0,1,0,3,95,0]
 };

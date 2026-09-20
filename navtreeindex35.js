@@ -1,5 +1,7 @@
 var NAVTREEINDEX35 =
 {
+"structmusx_1_1dom_1_1EntryFrame_1_1TupletInfo.html#a4b987c1ed0b3462317fc1577d6273cc7":[2,0,1,0,20,0,5],
+"structmusx_1_1dom_1_1EntryFrame_1_1TupletInfo.html#a4b987c1ed0b3462317fc1577d6273cc7":[1,0,1,0,19,0,5],
 "structmusx_1_1dom_1_1EntryFrame_1_1TupletInfo.html#a4cc361a243e8b23fd5dcd39edc570a00":[2,0,1,0,20,0,7],
 "structmusx_1_1dom_1_1EntryFrame_1_1TupletInfo.html#a4cc361a243e8b23fd5dcd39edc570a00":[1,0,1,0,19,0,7],
 "structmusx_1_1dom_1_1EntryFrame_1_1TupletInfo.html#a7e2e2986bd5202416eccef9167ee7d30":[2,0,1,0,20,0,6],
@@ -247,7 +249,5 @@ var NAVTREEINDEX35 =
 "structmusx_1_1dom_1_1ShapeDefInstruction_1_1ExternalGraphic.html#accd22a526f550d38df1d9e4beb44ed01":[1,0,1,0,54,6,2],
 "structmusx_1_1dom_1_1ShapeDefInstruction_1_1ExternalGraphic.html#accd22a526f550d38df1d9e4beb44ed01":[2,0,1,0,55,6,2],
 "structmusx_1_1dom_1_1ShapeDefInstruction_1_1LineWidth.html":[1,0,1,0,54,7],
-"structmusx_1_1dom_1_1ShapeDefInstruction_1_1LineWidth.html":[2,0,1,0,55,7],
-"structmusx_1_1dom_1_1ShapeDefInstruction_1_1LineWidth.html#a542b427c0d39e509b4fca14ac1b561e8":[1,0,1,0,54,7,0],
-"structmusx_1_1dom_1_1ShapeDefInstruction_1_1LineWidth.html#a542b427c0d39e509b4fca14ac1b561e8":[2,0,1,0,55,7,0]
+"structmusx_1_1dom_1_1ShapeDefInstruction_1_1LineWidth.html":[2,0,1,0,55,7]
 };
