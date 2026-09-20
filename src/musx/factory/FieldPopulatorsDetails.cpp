@@ -474,6 +474,7 @@ MUSX_XML_ELEMENT_ARRAY(StaffGroup, {
     {"fullExpand", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<StaffGroup>& i) { i->fullNameExpand = populateBoolean(c, e, i); }},
     {"abbrvExpand", [](ConstructionContext& c, const XmlElementPtr& e, const std::shared_ptr<StaffGroup>& i) { i->abbrvNameExpand = populateBoolean(c, e, i); }},
     {"optimize", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<StaffGroup>& i) { i->hideStaves = toEnum<StaffGroup::HideStaves>(e); }},
+    {"customBarShape", [](ConstructionContext&, const XmlElementPtr& e, const std::shared_ptr<StaffGroup>& i) { i->customBarShape = e->getTextAs<Cmper>(); }},
 });
 
 MUSX_XML_ELEMENT_ARRAY(StaffSize, {

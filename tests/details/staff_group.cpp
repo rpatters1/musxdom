@@ -335,6 +335,25 @@ TEST(StaffGroupTest, PopulateFields)
     EXPECT_EQ(staffGroup->staves.find(4), staffGroup->staves.end()) << "group does not contain staff 4";
 }
 
+TEST(StaffGroupTest, CustomBarShape)
+{
+    std::vector<char> xml;
+    musxtest::readFile(musxtest::getInputPath() / "group_cust_barline.enigmaxml", xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
+    ASSERT_TRUE(doc);
+    auto details = doc->getDetails();
+    ASSERT_TRUE(details);
+
+    auto staffGroup = details->get<details::StaffGroup>(SCORE_PARTID, doc->calcScrollViewCmper(SCORE_PARTID), 1);
+    ASSERT_TRUE(staffGroup);
+    EXPECT_EQ(staffGroup->barlineType, details::StaffGroup::BarlineType::Custom);
+    EXPECT_TRUE(staffGroup->ownBarline);
+    EXPECT_EQ(staffGroup->customBarShape, 5);
+
+    auto shape = doc->getOthers()->get<others::ShapeDef>(SCORE_PARTID, staffGroup->customBarShape);
+    EXPECT_TRUE(shape) << "custom barline shape should exist";
+}
+
 TEST(StaffGroupTest, DiagnosticPartNameDoesNotRequireInstrumentMap)
 {
     auto previousLogger = musx::util::Logger::getCallback();
