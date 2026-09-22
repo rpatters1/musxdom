@@ -110,6 +110,10 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a6f6dbb2497d4fe610e75d30d4125e8c5"><td class="memTemplItemLeft" align="right" valign="top">static void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classmusx_1_1factory_1_1PartSharingFactory.html#a6f6dbb2497d4fe610e75d30d4125e8c5">initializePartial</a> (const std::shared_ptr&lt; T &gt; &amp;partInstance, const std::shared_ptr&lt; const T &gt; &amp;scoreInstance)</td></tr>
 <tr class="memdesc:a6f6dbb2497d4fe610e75d30d4125e8c5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copies score values into a partial part object.  <br /></td></tr>
 <tr class="separator:a6f6dbb2497d4fe610e75d30d4125e8c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9aafef6e268c439fc87e00d1216ce79d" id="r_a9aafef6e268c439fc87e00d1216ce79d"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a9aafef6e268c439fc87e00d1216ce79d"><td class="memTemplItemLeft" align="right" valign="top">static constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classmusx_1_1factory_1_1PartSharingFactory.html#a9aafef6e268c439fc87e00d1216ce79d">isPartialDespiteUnshared</a> ()</td></tr>
+<tr class="memdesc:a9aafef6e268c439fc87e00d1216ce79d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true for types a source representation reports as unshared even though a part instance carries only the fields it overrides.  <br /></td></tr>
+<tr class="separator:a9aafef6e268c439fc87e00d1216ce79d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Initializes a partially shared part object from its score object. </p>
@@ -152,6 +156,36 @@ template&lt;typename T &gt; </div>
 
 <p>Copies score values into a partial part object. </p>
 <p>This operation is independent of the source representation. It preserves the part object's identity and sharing mode, rebinds contained-object ownership, and leaves the caller to apply the part fields supplied by XML, a binary reader, or another source. </p>
+
+</div>
+</div>
+<a id="a9aafef6e268c439fc87e00d1216ce79d" name="a9aafef6e268c439fc87e00d1216ce79d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9aafef6e268c439fc87e00d1216ce79d">&#9670;&#160;</a></span>isPartialDespiteUnshared()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static constexpr bool musx::factory::PartSharingFactory::isPartialDespiteUnshared </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns true for types a source representation reports as unshared even though a part instance carries only the fields it overrides. </p>
+<p>Such a part instance must be initialized from the score instance and then have its own fields applied, exactly as for a partially shared type. Taking it verbatim would reset every field the part omits to that field's default. Types answering true here are created with <a class="el" href="classmusx_1_1dom_1_1EnigmaBase.html#ac655bdce0724d5e32cfcd6203c9a5d1fa44ffd38a6dea695cbe2b34efdcc6cf27">dom::EnigmaBase::ShareMode::Partial</a> no matter which sharing the source reports. </p>
 
 </div>
 </div>
