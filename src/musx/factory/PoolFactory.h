@@ -73,6 +73,20 @@ public:
         *partInstance = *scoreInstance;
         dom::PartContextRebinder<T>::rebind(partInstance);
     }
+
+    /**
+     * @brief Returns true for types a source representation reports as unshared even though a
+     * part instance carries only the fields it overrides.
+     * @details Such a part instance must be initialized from the score instance and then have its
+     * own fields applied, exactly as for a partially shared type. Taking it verbatim would reset
+     * every field the part omits to that field's default. Types answering true here are created
+     * with @ref dom::EnigmaBase::ShareMode::Partial no matter which sharing the source reports.
+     */
+    template <typename T>
+    static constexpr bool isPartialDespiteUnshared()
+    {
+        return std::is_base_of_v<dom::others::NamePositioning, T>;
+    }
 };
 
 /** @brief Creates an options pool from an XML `<options>` element. */

@@ -930,6 +930,10 @@ public:
  *
  * This class is used both for default names as well as name positioning @ref Staff, @ref StaffStyle,
  * and @ref details::StaffGroup.
+ *
+ * Pooled subclasses of this class are always exposed with @ref ShareMode::Partial when a part
+ * has its own instance. A part instance carries the score instance's values for every field the
+ * part does not override.
  */
 class NamePositioning : public OthersBase
 {

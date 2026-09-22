@@ -87,7 +87,9 @@ CreatedInstanceInfo createRegisteredType(const PoolPtr& pool,
         ? partAttr->template getValueAs<dom::Cmper>() : dom::SCORE_PARTID;
     auto shareMode = dom::EnigmaBase::ShareMode::All;
     if (const auto shareAttr = node->findAttribute("shared")) {
-        shareMode = shareAttr->template getValueAs<bool>()
+        const bool isPartial = PartSharingFactory::isPartialDespiteUnshared<T>()
+            || shareAttr->template getValueAs<bool>();
+        shareMode = isPartial
             ? dom::EnigmaBase::ShareMode::Partial : dom::EnigmaBase::ShareMode::None;
     }
     auto instance = std::make_shared<T>(
