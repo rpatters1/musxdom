@@ -1130,6 +1130,91 @@ TEST(StaffTest, NamePositioning)
     checkNamePos(2, 11, -72, 0, Align::Right, -144, -48, Align::Left);  // staff values (abbrv is overridden in the staff)
 }
 
+TEST(StaffTest, NamePositioningUnlinked)
+{
+    std::vector<char> xml;
+    musxtest::readFile(musxtest::getInputPath() / "name_pos.enigmaxml", xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
+    ASSERT_TRUE(doc);
+
+    using Align = AlignJustify;
+
+    constexpr Cmper partId = 1;
+    constexpr StaffCmper staffId = 1;
+    constexpr MeasCmper measId = 1;
+
+    // Finale writes <namePosFull> for the part with shared="false", but the part node carries
+    // only horzOff and vertOff. The remaining values come from the score node.
+    auto scoreStaff = others::StaffComposite::createCurrent(doc, SCORE_PARTID, staffId, measId, 0);
+    ASSERT_TRUE(scoreStaff);
+    auto scoreFull = scoreStaff->getFullNamePosition();
+    ASSERT_TRUE(scoreFull);
+    EXPECT_EQ(scoreFull->horzOff, -123);
+    EXPECT_EQ(scoreFull->vertOff, -12);
+    EXPECT_EQ(scoreFull->justify, Align::Center);
+    EXPECT_EQ(scoreFull->hAlign, Align::Center);
+    EXPECT_TRUE(scoreFull->indivPos);
+    EXPECT_TRUE(scoreFull->expand);
+
+    auto partStaff = others::StaffComposite::createCurrent(doc, partId, staffId, measId, 0);
+    ASSERT_TRUE(partStaff);
+    auto partFull = partStaff->getFullNamePosition();
+    ASSERT_TRUE(partFull);
+    EXPECT_EQ(partFull->getShareMode(), EnigmaBase::ShareMode::Partial);
+    EXPECT_EQ(partFull->horzOff, -45);          // overridden by the part
+    EXPECT_EQ(partFull->vertOff, -12);          // overridden by the part
+    EXPECT_EQ(partFull->justify, Align::Center);    // inherited from the score
+    EXPECT_EQ(partFull->hAlign, Align::Center);     // inherited from the score
+    EXPECT_TRUE(partFull->indivPos);                // inherited from the score
+    EXPECT_TRUE(partFull->expand);                  // inherited from the score
+
+    // The part has no <namePosAbbrv> node, so the score node applies.
+    auto partAbrv = partStaff->getAbbreviatedNamePosition();
+    ASSERT_TRUE(partAbrv);
+    EXPECT_EQ(partAbrv->horzOff, -72);
+    EXPECT_EQ(partAbrv->vertOff, 0);
+    EXPECT_EQ(partAbrv->justify, Align::Right);
+    EXPECT_EQ(partAbrv->hAlign, Align::Right);
+    EXPECT_TRUE(partAbrv->expand);
+}
+
+TEST(StaffTest, NamePositioningUnlinkedEmptyPartNode)
+{
+    std::vector<char> xml;
+    musxtest::readFile(musxtest::getInputPath() / "namepos_partonly.enigmaxml", xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(xml);
+    ASSERT_TRUE(doc);
+
+    using Align = AlignJustify;
+
+    constexpr Cmper partId = 1;
+    constexpr StaffCmper staffId = 1;
+    constexpr MeasCmper measId = 1;
+
+    auto partStaff = others::StaffComposite::createCurrent(doc, partId, staffId, measId, 0);
+    ASSERT_TRUE(partStaff);
+
+    // The score node is not individually positioned, but the part node is.
+    auto partFull = partStaff->getFullNamePosition();
+    ASSERT_TRUE(partFull);
+    EXPECT_EQ(partFull->horzOff, -72);
+    EXPECT_EQ(partFull->vertOff, -12);      // overridden by the part
+    EXPECT_TRUE(partFull->indivPos);        // overridden by the part
+    EXPECT_EQ(partFull->justify, Align::Right); // inherited from the score
+    EXPECT_EQ(partFull->hAlign, Align::Right);  // inherited from the score
+    EXPECT_TRUE(partFull->expand);              // inherited from the score
+
+    // An empty part node overrides nothing, so the part matches the score.
+    auto partAbrv = partStaff->getAbbreviatedNamePosition();
+    ASSERT_TRUE(partAbrv);
+    EXPECT_EQ(partAbrv->horzOff, -72);
+    EXPECT_EQ(partAbrv->vertOff, 0);
+    EXPECT_EQ(partAbrv->justify, Align::Right);
+    EXPECT_EQ(partAbrv->hAlign, Align::Right);
+    EXPECT_FALSE(partAbrv->indivPos);
+    EXPECT_TRUE(partAbrv->expand);
+}
+
 TEST(StaffTest, NoteShapesStaff)
 {
     std::vector<char> xml;
