@@ -1088,6 +1088,7 @@ var namespacemusx_1_1dom =
     [ "instrumentSoloOrEnsembleFromUuid", "namespacemusx_1_1dom.html#af2b19f44f6d0121ff79ab1e9abe6c1b9", null ],
     [ "normalizeFontName", "namespacemusx_1_1dom.html#a52074e6f04c7b798c6eca1cf4b5185c5", null ],
     [ "BASE_SYSTEM_ID", "namespacemusx_1_1dom.html#ac87f0744ae26e5eb9f08d9615fc15bc5", null ],
+    [ "DEFAULT_MUSIC_FONT_ID", "namespacemusx_1_1dom.html#a571ac19b9f4b6d3053c9b88150813f9b", null ],
     [ "EDU_PER_WHOLE_NOTE", "namespacemusx_1_1dom.html#ace087082aba8a546ecd9abe14e0b2fc2", null ],
     [ "EFIX_PER_EVPU", "namespacemusx_1_1dom.html#a6e7e94e8e870c83e2fb15709b0c87fa3", null ],
     [ "EFIX_PER_SPACE", "namespacemusx_1_1dom.html#a32cf484712b32f0ca4834fd858e5f193", null ],

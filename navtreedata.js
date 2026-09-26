@@ -88,13 +88,13 @@ var NAVTREEINDEX =
 "classmusx_1_1dom_1_1others_1_1TonalCenterFlats.html#a97a0e9923a385187b52a76ae6f0a30d9",
 "classmusx_1_1xml_1_1IXmlDocument.html#ae4b3f92715297e4add1d33d8bcaabe80",
 "namespacemembers_r.html",
-"namespacemusx_1_1dom.html#a93764339b56e531ea37af5181b20b113a5d7f7e81aa8208d8c7916e0ec7642552",
-"namespacemusx_1_1dom_1_1uuid.html#a20a239fd28652f13a663916b7931b802",
-"namespacemusx_1_1dom_1_1uuid.html#a6dc5db3b7e7fb18a2e178e9a430924a8",
-"namespacemusx_1_1dom_1_1uuid.html#abbdb7232c1f84689929e503949c0a988",
-"structmusx_1_1dom_1_1EntryFrame_1_1TupletInfo.html#a4b987c1ed0b3462317fc1577d6273cc7",
-"structmusx_1_1dom_1_1ShapeDefInstruction_1_1LineWidth.html#a542b427c0d39e509b4fca14ac1b561e8",
-"structmusx_1_1dom_1_1options_1_1TextOptions_1_1InsertSymbolInfo.html#af200cadce559f5246025b0f2e837a47c"
+"namespacemusx_1_1dom.html#a93764339b56e531ea37af5181b20b113a55c3e960afea2bb200e05469a33ed71b",
+"namespacemusx_1_1dom_1_1uuid.html#a204ce2547eef6bee0b800da0008b8d2f",
+"namespacemusx_1_1dom_1_1uuid.html#a6d9b22bc0a74feadf933117dc0650c6b",
+"namespacemusx_1_1dom_1_1uuid.html#abbbec95a22fcee0a9b3c1a5d9ee40e1f",
+"structmusx_1_1dom_1_1EntryFrame_1_1TupletInfo.html#a4767e3e0a24fb4dcf1645dea6ec5ae4a",
+"structmusx_1_1dom_1_1ShapeDefInstruction_1_1LineWidth.html",
+"structmusx_1_1dom_1_1options_1_1TextOptions_1_1InsertSymbolInfo.html#ae2d93cb453eabd285b1680f1dfe782a2"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';
