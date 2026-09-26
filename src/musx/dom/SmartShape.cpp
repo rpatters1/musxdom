@@ -605,7 +605,7 @@ std::optional<Cmper> others::importSmartShapeCustomLineInto(const DocumentPtr& t
             if (!importedFontId) {
                 return std::nullopt;
             }
-        } else if (*importedFontId != 0) {
+        } else if (*importedFontId != DEFAULT_MUSIC_FONT_ID) {
             return std::nullopt;
         }
     }

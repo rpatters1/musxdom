@@ -79,6 +79,7 @@ constexpr Cmper MUSX_GLOBALS_CMPER = 65534; ///< The prefs cmper for global vari
 constexpr int MAX_LAYERS = 4;       ///< The maximum number of music layers in a Finale document.
 constexpr int MAX_ALTERATIONS = 7;  ///< Maximum absolute value for chromatic alterations supported in Finale.
 constexpr Cmper SCORE_PARTID = 0;   ///< The part id of the score.
+constexpr Cmper DEFAULT_MUSIC_FONT_ID = 0; ///< The font id that names the document's default music font rather than a specific typeface.
 
 constexpr double EVPU_PER_INCH = 288.0;         ///< Number of Evpu units per inch
 constexpr double EVPU_PER_POINT = 4.0;          ///< Number of Evpu units per 72 DPI point

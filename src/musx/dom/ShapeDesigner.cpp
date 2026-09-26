@@ -748,7 +748,7 @@ std::optional<Cmper> importShapeDefInto(const DocumentPtr& target,
                     return std::nullopt;
                 }
                 font.fontId = *resolved;
-            } else if (font.fontId != 0) {
+            } else if (font.fontId != DEFAULT_MUSIC_FONT_ID) {
                 // The source names a font it does not itself define, so there is nothing to
                 // resolve and the number cannot be carried across.
                 return std::nullopt;
