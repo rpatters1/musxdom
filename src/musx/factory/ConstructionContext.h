@@ -21,7 +21,7 @@ public:
     /// @brief Records a non-default font definition ID referenced during construction.
     void registerFontId(dom::Cmper fontId)
     {
-        if (fontId != 0) {
+        if (fontId != dom::DEFAULT_MUSIC_FONT_ID) {
             m_referencedFontIds.insert(fontId);
         }
     }

@@ -146,7 +146,7 @@ std::optional<Cmper> importNonZeroFontDefinition(const DocumentPtr& target,
     const auto wanted = normalizeFontName(source->name);
     for (const auto& font : target->getOthers()->getArray<others::FontDefinition>(SCORE_PARTID)) {
         const auto cmper = font->getCmper();
-        if (cmper != 0 && normalizeFontName(font->name) == wanted) {
+        if (cmper != DEFAULT_MUSIC_FONT_ID && normalizeFontName(font->name) == wanted) {
             return cmper;
         }
     }
@@ -163,7 +163,7 @@ MusxInstance<others::FontDefinition> findDefaultMusicFont(const DocumentPtr& tar
     const auto music = options::FontOptions::getFontInfoOrNull(
         target, options::FontOptions::FontType::Music);
     // A music font stored as 0 says nothing here: it is the very reference being resolved.
-    if (!music || music->fontId == 0) {
+    if (!music || music->fontId == DEFAULT_MUSIC_FONT_ID) {
         return nullptr;
     }
     auto result = target->getOthers()->get<others::FontDefinition>(SCORE_PARTID, music->fontId);
@@ -187,7 +187,7 @@ std::optional<Cmper> importFontDefinitionInto(const DocumentPtr& target,
         throw std::invalid_argument("importFontDefinitionInto received a null font definition");
     }
 
-    if (source->getCmper() != 0) {
+    if (source->getCmper() != DEFAULT_MUSIC_FONT_ID) {
         return importNonZeroFontDefinition(target, source, onImported);
     }
 
@@ -196,14 +196,14 @@ std::optional<Cmper> importFontDefinitionInto(const DocumentPtr& target,
     // resolve: a reference naming nothing is the defect this function exists to avoid.
     const auto existing = target->getOthers()->getArray<others::FontDefinition>(SCORE_PARTID);
     const auto hasZero = std::any_of(existing.begin(), existing.end(),
-        [](const MusxInstance<others::FontDefinition>& font) { return font->getCmper() == 0; });
+        [](const MusxInstance<others::FontDefinition>& font) { return font->getCmper() == DEFAULT_MUSIC_FONT_ID; });
     if (!hasZero) {
         if (const auto music = findDefaultMusicFont(target)) {
             // The target's own FontOptions already say which typeface id 0 stands for, and that
             // answer outranks the source's.
-            cloneFontDefinition(target, music, 0, onImported);
+            cloneFontDefinition(target, music, DEFAULT_MUSIC_FONT_ID, onImported);
         } else {
-            cloneFontDefinition(target, source, 0, onImported);
+            cloneFontDefinition(target, source, DEFAULT_MUSIC_FONT_ID, onImported);
             // The same typeface must also be reachable by a concrete cmper. Id 0 tracks whatever
             // the music font later becomes, and matching never selects it, so without this the
             // typeface would be unaddressable as itself. Failing that leaves 0 resolvable, which
@@ -211,9 +211,7 @@ std::optional<Cmper> importFontDefinitionInto(const DocumentPtr& target,
             static_cast<void>(importNonZeroFontDefinition(target, source, onImported));
         }
     }
-    // Cmper rather than a bare 0: constructing the optional from an int narrows, which MSVC
-    // reports under /W4 and the build treats as an error.
-    return Cmper(0);
+    return DEFAULT_MUSIC_FONT_ID;
 }
 
 std::string FontInfo::getName() const

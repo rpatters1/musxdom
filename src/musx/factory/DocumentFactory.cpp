@@ -44,7 +44,7 @@ namespace factory {
 void resolveFontDefinitions(const dom::DocumentPtr& document, const ConstructionContext& context)
 {
     for (const auto fontId : context.referencedFontIds()) {
-        if (fontId == 0) continue;
+        if (fontId == dom::DEFAULT_MUSIC_FONT_ID) continue;
         if (document->getOthers()->get<dom::others::FontDefinition>(dom::SCORE_PARTID, fontId)) {
             continue;
         }

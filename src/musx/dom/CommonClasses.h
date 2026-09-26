@@ -213,7 +213,7 @@ public:
 
     /// @brief Calculates if this is the default music font.
     bool calcIsDefaultMusic() const
-    { return fontId == 0; }
+    { return fontId == DEFAULT_MUSIC_FONT_ID; }
 
     /// @brief Calculates if this is a symbol font. (See #others::FontDefinition::calcIsSymbolFont.)
     bool calcIsSymbolFont() const;
