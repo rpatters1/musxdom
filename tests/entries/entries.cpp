@@ -654,7 +654,7 @@ TEST(EntryTest, HiddenFullMeasureRest)
     ASSERT_TRUE(doc);
 
     // Measure 6 is in 3/4 and measure 7 in 4/2. Each holds only a hidden whole rest.
-    for (MeasCmper measureId : {6, 7}) {
+    for (MeasCmper measureId : {MeasCmper(6), MeasCmper(7)}) {
         auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, measureId);
         ASSERT_TRUE(gfhold);
         auto entryFrame = gfhold.createEntryFrame(0);
