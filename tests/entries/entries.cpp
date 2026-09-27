@@ -646,6 +646,28 @@ TEST(EntryTest, FullMeasureRestV1V2)
     }
 }
 
+TEST(EntryTest, HiddenFullMeasureRest)
+{
+    std::vector<char> xml;
+    musxtest::readFile(musxtest::getInputPath() / "hidden_full_measure_rests.enigmaxml", xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xml);
+    ASSERT_TRUE(doc);
+
+    // Measure 6 is in 3/4 and measure 7 in 4/2. Each holds only a hidden whole rest.
+    for (MeasCmper measureId : {6, 7}) {
+        auto gfhold = details::GFrameHoldContext(doc, SCORE_PARTID, 1, measureId);
+        ASSERT_TRUE(gfhold);
+        auto entryFrame = gfhold.createEntryFrame(0);
+        ASSERT_TRUE(entryFrame);
+        ASSERT_EQ(entryFrame->getEntries().size(), 1u);
+
+        auto entryInfoPtr = EntryInfoPtr(entryFrame, 0);
+        EXPECT_TRUE(entryInfoPtr->getEntry()->isHidden) << "measure " << measureId;
+        EXPECT_TRUE(entryInfoPtr->getEntry()->isPossibleFullMeasureRest()) << "measure " << measureId;
+        EXPECT_TRUE(entryInfoPtr.calcIsFullMeasureRest()) << "measure " << measureId;
+    }
+}
+
 TEST(EntryTest, CalcPitchFromStaffPositionWithoutNotes)
 {
     std::vector<char> xml;

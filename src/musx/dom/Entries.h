@@ -497,12 +497,15 @@ public:
     bool hasStem() const { return duration < Edu(NoteType::Whole); }
 
     /// @brief Returns true if the entry could be a full-measure rest.
+    ///
+    /// The result does not depend on #isHidden: a hidden whole rest is still a possible full-measure rest. Callers
+    /// that treat hidden and visible rests differently must check visibility themselves.
     /// @note Finale recognizes only whole rests as possible full-measure rests. Any other rest types (specifically
     /// breve rests in 4/2 and larger time signatures) are implemented by users as workarounds. These workarouds typically
     /// involve suppressing Finale's full-measure rest display and replacing them with a text expression.
     [[nodiscard]]
     bool isPossibleFullMeasureRest() const
-    { return !isNote && !isHidden && duration == Edu(NoteType::Whole); }
+    { return !isNote && duration == Edu(NoteType::Whole); }
 
     void integrityCheck(const std::shared_ptr<EnigmaBase>& ptrToThis) override
     {
@@ -964,6 +967,9 @@ public:
     [[nodiscard]] int calcEntrySize() const;
 
     /// @brief Returns whether this is a full measure rest.
+    ///
+    /// A hidden rest can be a full measure rest. Callers that treat hidden and visible rests differently must
+    /// check visibility themselves.
     /// @note Note that in Finale, only whole rests are used as full measure rests.
     [[nodiscard]] bool calcIsFullMeasureRest() const;
 
