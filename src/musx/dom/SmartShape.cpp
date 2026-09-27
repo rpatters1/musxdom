@@ -424,7 +424,34 @@ NoteInfoPtr others::SmartShape::calcArpeggiatedTieToNote(const EntryInfoPtr& for
 
 bool others::SmartShape::calcIsValid() const
 {
-    return startTermSeg->endPoint->calcIsValid() && endTermSeg->endPoint->calcIsValid();
+    const auto& startPoint = *startTermSeg->endPoint;
+    const auto& endPoint = *endTermSeg->endPoint;
+    if (!startPoint.calcIsValid() || !endPoint.calcIsValid()) {
+        return false;
+    }
+    if (entryBased) {
+        return !calcIsBackwards();
+    }
+    return endPoint.calcMeasure() >= startPoint.calcMeasure();
+}
+
+bool others::SmartShape::calcIsBackwards() const
+{
+    const auto& startPoint = *startTermSeg->endPoint;
+    const auto& endPoint = *endTermSeg->endPoint;
+    if (const int comparison = endPoint.compareMetricPosition(startPoint); comparison != 0) {
+        return comparison < 0;
+    }
+    if (!startPoint.entryNumber || !endPoint.entryNumber || startPoint.entryNumber == endPoint.entryNumber) {
+        return false;
+    }
+    const auto startEntry = startPoint.calcAssociatedEntry();
+    const auto endEntry = endPoint.calcAssociatedEntry();
+    if (!startEntry || !endEntry || startEntry.getStaff() != endEntry.getStaff() || startEntry.getMeasure() != endEntry.getMeasure()
+        || startEntry.getLayerIndex() != endEntry.getLayerIndex()) {
+        return false;
+    }
+    return endEntry.getIndexInFrame() < startEntry.getIndexInFrame();
 }
 
 bool others::SmartShape::calcIsSlur() const
