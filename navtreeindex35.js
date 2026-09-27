@@ -1,5 +1,7 @@
 var NAVTREEINDEX35 =
 {
+"structmusx_1_1dom_1_1EntryFrame_1_1TupletInfo.html#a3f505387d04fded946fe24bb75fa01a1":[2,0,1,0,20,0,4],
+"structmusx_1_1dom_1_1EntryFrame_1_1TupletInfo.html#a4767e3e0a24fb4dcf1645dea6ec5ae4a":[1,0,1,0,19,0,8],
 "structmusx_1_1dom_1_1EntryFrame_1_1TupletInfo.html#a4767e3e0a24fb4dcf1645dea6ec5ae4a":[2,0,1,0,20,0,8],
 "structmusx_1_1dom_1_1EntryFrame_1_1TupletInfo.html#a4b987c1ed0b3462317fc1577d6273cc7":[2,0,1,0,20,0,5],
 "structmusx_1_1dom_1_1EntryFrame_1_1TupletInfo.html#a4b987c1ed0b3462317fc1577d6273cc7":[1,0,1,0,19,0,5],
@@ -247,7 +249,5 @@ var NAVTREEINDEX35 =
 "structmusx_1_1dom_1_1ShapeDefInstruction_1_1ExternalGraphic.html#a6e1c2e028cf25587e977208245e9337e":[2,0,1,0,55,6,1],
 "structmusx_1_1dom_1_1ShapeDefInstruction_1_1ExternalGraphic.html#a70bbee262056ee20493ced866888d2f5":[1,0,1,0,54,6,0],
 "structmusx_1_1dom_1_1ShapeDefInstruction_1_1ExternalGraphic.html#a70bbee262056ee20493ced866888d2f5":[2,0,1,0,55,6,0],
-"structmusx_1_1dom_1_1ShapeDefInstruction_1_1ExternalGraphic.html#accd22a526f550d38df1d9e4beb44ed01":[1,0,1,0,54,6,2],
-"structmusx_1_1dom_1_1ShapeDefInstruction_1_1ExternalGraphic.html#accd22a526f550d38df1d9e4beb44ed01":[2,0,1,0,55,6,2],
-"structmusx_1_1dom_1_1ShapeDefInstruction_1_1LineWidth.html":[1,0,1,0,54,7]
+"structmusx_1_1dom_1_1ShapeDefInstruction_1_1ExternalGraphic.html#accd22a526f550d38df1d9e4beb44ed01":[1,0,1,0,54,6,2]
 };

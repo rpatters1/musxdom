@@ -642,7 +642,7 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Returns true if the entry could be a full-measure rest. </p>
-<dl class="section note"><dt>Note</dt><dd>Finale recognizes only whole rests as possible full-measure rests. Any other rest types (specifically breve rests in 4/2 and larger time signatures) are implemented by users as workarounds. These workarouds typically involve suppressing Finale's full-measure rest display and replacing them with a text expression. </dd></dl>
+<p>The result does not depend on <a class="el" href="classmusx_1_1dom_1_1Entry.html#aa140b2bc34357eee1085828bae9c9bae" title="Indicates the entry is hidden, (xml node is &lt;ignore&gt;)">isHidden</a>: a hidden whole rest is still a possible full-measure rest. Callers that treat hidden and visible rests differently must check visibility themselves. </p><dl class="section note"><dt>Note</dt><dd>Finale recognizes only whole rests as possible full-measure rests. Any other rest types (specifically breve rests in 4/2 and larger time signatures) are implemented by users as workarounds. These workarouds typically involve suppressing Finale's full-measure rest display and replacing them with a text expression. </dd></dl>
 
 </div>
 </div>

@@ -1,5 +1,7 @@
 var NAVTREEINDEX29 =
 {
+"classmusx_1_1xml_1_1IXmlDocument.html#a9f8306733e03b3be63d1de4f98500b8d":[1,0,1,2,4,1],
+"classmusx_1_1xml_1_1IXmlDocument.html#ae4b3f92715297e4add1d33d8bcaabe80":[2,0,1,4,4,3],
 "classmusx_1_1xml_1_1IXmlDocument.html#ae4b3f92715297e4add1d33d8bcaabe80":[1,0,1,2,4,3],
 "classmusx_1_1xml_1_1IXmlElement.html":[2,0,1,4,5],
 "classmusx_1_1xml_1_1IXmlElement.html":[1,0,1,2,5],
@@ -247,7 +249,5 @@ var NAVTREEINDEX29 =
 "namespacemembers_l.html":[1,1,0,11],
 "namespacemembers_m.html":[1,1,0,12],
 "namespacemembers_n.html":[1,1,0,13],
-"namespacemembers_o.html":[1,1,0,14],
-"namespacemembers_p.html":[1,1,0,15],
-"namespacemembers_q.html":[1,1,0,16]
+"namespacemembers_o.html":[1,1,0,14]
 };
