@@ -1050,3 +1050,46 @@ TEST(SmartShapes, VerticalPlacementForBeatAttached)
     // Entry-based shapes have no beat-attached placement.
     EXPECT_EQ(placementFor(5), VerticalPlacement::NotApplicable);
 }
+
+TEST(SmartShapes, BackwardShapes)
+{
+    std::vector<char> enigmaXml;
+    musxtest::readFile(musxtest::getInputPath() / "backward_smart_shapes.enigmaxml", enigmaXml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(enigmaXml);
+    ASSERT_TRUE(doc);
+
+    auto shape = [&](Cmper shapeId) {
+        auto result = doc->getOthers()->get<others::SmartShape>(SCORE_PARTID, shapeId);
+        EXPECT_TRUE(result) << "smart shape " << shapeId;
+        return result;
+    };
+
+    // Grace entries 15 and 18 share a metric position, so only their order in the layer separates them.
+    {
+        auto graces = shape(3);
+        ASSERT_TRUE(graces);
+        EXPECT_EQ(graces->endTermSeg->endPoint->compareMetricPosition(*graces->startTermSeg->endPoint), 0);
+    }
+
+    struct Expected
+    {
+        Cmper shapeId;
+        bool backwards;
+        bool valid;
+    };
+    for (const auto& expected : {
+             Expected{1, false, true},  // entry-attached, forward
+             Expected{2, true, false},  // entry-attached, backward within a measure
+             Expected{3, false, true},  // entry-attached, forward between graces at one position
+             Expected{4, true, false},  // entry-attached, backward between graces at one position
+             Expected{5, true, false},  // entry-attached, backward across measures
+             Expected{6, true, true},   // beat-attached, backward within a measure: Finale draws it
+             Expected{7, true, false},  // beat-attached, backward across measures
+             Expected{8, false, true},  // beat-attached, forward across measures
+         }) {
+        auto smartShape = shape(expected.shapeId);
+        ASSERT_TRUE(smartShape);
+        EXPECT_EQ(smartShape->calcIsBackwards(), expected.backwards) << "smart shape " << expected.shapeId;
+        EXPECT_EQ(smartShape->calcIsValid(), expected.valid) << "smart shape " << expected.shapeId;
+    }
+}

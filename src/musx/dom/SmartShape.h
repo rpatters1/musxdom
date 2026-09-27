@@ -400,8 +400,21 @@ public:
 
     /// @brief Finale sometimes leaves dead smart shapes hanging around that it does not display. This
     /// function tells you if you should process the smart shape.
+    ///
+    /// A shape is invalid if either endpoint is invalid (see smartshape::EndPoint::calcIsValid). Finale also
+    /// does not display a shape that runs backwards (see #calcIsBackwards) if it is #entryBased, or if its
+    /// end is in an earlier measure than its start. A beat-attached shape that runs backwards within a
+    /// single measure is displayed, so it is valid.
     [[nodiscard]]
     bool calcIsValid() const;
+
+    /// @brief Returns true if the end endpoint comes before the start endpoint.
+    ///
+    /// Endpoints are compared by measure and then by position within the measure. Two entry-attached
+    /// endpoints at the same position in the same layer of the same staff measure are ordered by their
+    /// entries' order in the layer, which places grace notes before the entry they precede.
+    [[nodiscard]]
+    bool calcIsBackwards() const;
 
     /// @brief Returns true if this smart shape is a type of slur.
     [[nodiscard]]
