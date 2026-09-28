@@ -98,6 +98,27 @@ TEST(FrameTest, IntegrityCheck)
         musx::dom::integrity_error
     ) << "inci is out of sequence";
 
+    constexpr static musxtest::string_view xmlSkippedInci = R"xml(
+<?xml version="1.0" encoding="UTF-8"?>
+<finale>
+  <others>
+    <frameSpec cmper="1" inci="0">
+      <startEntry>1</startEntry>
+      <endEntry>2</endEntry>
+    </frameSpec>
+    <frameSpec cmper="1" inci="2">
+      <startEntry>3</startEntry>
+      <endEntry>4</endEntry>
+    </frameSpec>
+  </others>
+</finale>
+    )xml";
+
+    EXPECT_THROW(
+        auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xmlSkippedInci),
+        musx::dom::integrity_error
+    ) << "inci skips its predecessor";
+
     constexpr static musxtest::string_view xmlStartTime = R"xml(
 <?xml version="1.0" encoding="UTF-8"?>
 <finale>

@@ -226,11 +226,13 @@ public:
      */
     void add(ObjectKey key, ObjectPtr object)
     {
-        if (key.inci.has_value()) {
-            ObjectKey noInciKey = key;
-            noInciKey.inci = std::nullopt;
-            auto currentIncis = getArray<ObjectBaseType>(noInciKey, key.partId);
-            if (key.inci.value() != int(currentIncis.size())) {
+        if (key.inci.has_value() && key.inci.value() != 0) {
+            // Incis arrive in order, so the prior inci is normally the node inserted just before this one.
+            // Checking only the predecessor reports a gap once rather than again for every inci after it.
+            ObjectKey priorKey = key;
+            priorKey.inci = key.inci.value() - 1;
+            const bool priorIsHint = m_insertionHint && !((*m_insertionHint)->first < priorKey) && !(priorKey < (*m_insertionHint)->first);
+            if (!priorIsHint && m_pool.find(priorKey) == m_pool.end()) {
                 MUSX_INTEGRITY_ERROR("Node " + std::string(key.nodeId) + " has inci " + std::to_string(key.inci.value()) + " that is out of sequence.");
             }
         }
