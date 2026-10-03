@@ -178,7 +178,6 @@ using RegisteredOptions = RegisteredTypes<
 using RegisteredOthers = RegisteredTypes<
     dom::others::AcciAmountFlats,
     dom::others::AcciAmountSharps,
-    dom::others::AcciAmountSharps,
     dom::others::AcciOrderFlats,
     dom::others::AcciOrderSharps,
     dom::others::OssiaBounds,
