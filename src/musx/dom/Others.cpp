@@ -1158,7 +1158,11 @@ void Page::calcSystemInfo(const DocumentPtr& document)
                     hasInvalidSystem = true;
                     break;
                 }
-                if (system->endMeas <= system->startMeas) {
+                // A system that holds only the first part of a split measure stores that measure as both its start
+                // and its end, since the end is the first measure of the next system.
+                const bool holdsOnlySplitStart = system->endMeas == system->startMeas
+                    && document->getOthers()->get<SplitMeasure>(part->getCmper(), system->startMeas);
+                if (system->endMeas < system->startMeas || (system->endMeas == system->startMeas && !holdsOnlySplitStart)) {
                     reportStructuralLayoutProblem("Page " + std::to_string(page->getCmper()) + " of part " + part->getName()
                         + " has an invalid measure range for system " + std::to_string(systemId) + ".");
                     hasInvalidSystem = true;
