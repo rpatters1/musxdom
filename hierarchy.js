@@ -441,6 +441,8 @@ var hierarchy =
     [ "musx::dom::ShapeDefInstruction::SetGray", "structmusx_1_1dom_1_1ShapeDefInstruction_1_1SetGray.html", null ],
     [ "musx::dom::ShapeDefInstruction", "structmusx_1_1dom_1_1ShapeDefInstruction.html", null ],
     [ "musx::dom::ShapeDefInstruction::Slur", "structmusx_1_1dom_1_1ShapeDefInstruction_1_1Slur.html", null ],
+    [ "musx::dom::others::Measure::Spacing", "structmusx_1_1dom_1_1others_1_1Measure_1_1Spacing.html", null ],
+    [ "musx::dom::others::Measure::SpacingSlot", "structmusx_1_1dom_1_1others_1_1Measure_1_1SpacingSlot.html", null ],
     [ "musx::dom::details::StaffGroupInfo", "classmusx_1_1dom_1_1details_1_1StaffGroupInfo.html", null ],
     [ "musx::dom::others::StaffListSet< ScoreList, PartsList, ScoreForcedList, PartsForcedList >", "classmusx_1_1dom_1_1others_1_1StaffListSet.html", null ],
     [ "musx::util::Cue::StaffMeasureAnalysis", "structmusx_1_1util_1_1Cue_1_1StaffMeasureAnalysis.html", null ],

@@ -1,5 +1,7 @@
 var classmusx_1_1dom_1_1others_1_1Measure =
 [
+    [ "Spacing", "structmusx_1_1dom_1_1others_1_1Measure_1_1Spacing.html", "structmusx_1_1dom_1_1others_1_1Measure_1_1Spacing" ],
+    [ "SpacingSlot", "structmusx_1_1dom_1_1others_1_1Measure_1_1SpacingSlot.html", "structmusx_1_1dom_1_1others_1_1Measure_1_1SpacingSlot" ],
     [ "BarlineType", "classmusx_1_1dom_1_1others_1_1Measure.html#a6d4c0949f42ef1f337f8e2ae0ee0c117", [
       [ "None", "classmusx_1_1dom_1_1others_1_1Measure.html#a6d4c0949f42ef1f337f8e2ae0ee0c117a6adf97f83acf6453d4a6a4b1070f3754", null ],
       [ "OptionsDefault", "classmusx_1_1dom_1_1others_1_1Measure.html#a6d4c0949f42ef1f337f8e2ae0ee0c117aa92deda61e5101f6c17e7fb660ff17a8", null ],
@@ -33,9 +35,12 @@ var classmusx_1_1dom_1_1others_1_1Measure =
     [ "calcDisplayNumber", "classmusx_1_1dom_1_1others_1_1Measure.html#a3a0f5d6105af79216d3eb85fb4eabf89", null ],
     [ "calcDisplayNumberText", "classmusx_1_1dom_1_1others_1_1Measure.html#a02b718c5a179e31ace1a8122066bfc94", null ],
     [ "calcDuration", "classmusx_1_1dom_1_1others_1_1Measure.html#acae376781db54c20039e5a6c6626f17b", null ],
+    [ "calcEduFromEvpu", "classmusx_1_1dom_1_1others_1_1Measure.html#a1fa06bfafb05e7bccbc95efa2946d94e", null ],
+    [ "calcFirstBeatEvpu", "classmusx_1_1dom_1_1others_1_1Measure.html#af44bc969121ffda2bf7283fbc27470b0", null ],
     [ "calcMinLegacyPickupSpacer", "classmusx_1_1dom_1_1others_1_1Measure.html#a53580a7769b31e9aa51fee60790865c4", null ],
     [ "calcMinLegacyPickupSpacer", "classmusx_1_1dom_1_1others_1_1Measure.html#a7292509dd15a52901b8b7e27b1c0fa1e", null ],
     [ "calcShouldShowFullNames", "classmusx_1_1dom_1_1others_1_1Measure.html#a9ff1882e9350038250970527105eebc1", null ],
+    [ "calcSpacing", "classmusx_1_1dom_1_1others_1_1Measure.html#acc382fd3592b0376f733e2ba14a4e7ba", null ],
     [ "calcTimeStretch", "classmusx_1_1dom_1_1others_1_1Measure.html#af967a7eb6a48dbd1c5515884e593382f", null ],
     [ "createDisplayTimeSignature", "classmusx_1_1dom_1_1others_1_1Measure.html#af87c40eb79db6e09ac99b05c46e8bedb", null ],
     [ "createKeySignature", "classmusx_1_1dom_1_1others_1_1Measure.html#a03099d87e8e56693e6451f03c7b717cc", null ],
