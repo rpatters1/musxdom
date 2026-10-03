@@ -249,3 +249,53 @@ TEST(PageTest, UncalculatedScoreLayoutIsInformational)
         EXPECT_NE(message.find("has not been calculated"), std::string::npos);
     }
 }
+
+constexpr static musxtest::string_view splitMeasureSystemXml = R"xml(
+<?xml version="1.0" encoding="UTF-8"?>
+<finale>
+  <others>
+    <measSpec cmper="1">
+      <width>600</width>
+      <posSplit/>
+    </measSpec>
+    <measSpec cmper="2">
+      <width>600</width>
+    </measSpec>
+    <pageSpec cmper="1">
+      <firstSystem>1</firstSystem>
+    </pageSpec>
+    <staffSystemSpec cmper="1">
+      <startMeas>1</startMeas>
+      <endMeas>1</endMeas>
+    </staffSystemSpec>
+    <staffSystemSpec cmper="2">
+      <startMeas>1</startMeas>
+      <endMeas>3</endMeas>
+    </staffSystemSpec>
+    <splitMeas cmper="1">
+      <data>300</data>
+    </splitMeas>
+    <partDef cmper="0"/>
+    <partGlobals cmper="65534"/>
+  </others>
+</finale>
+)xml";
+
+TEST(PageTest, SystemHoldingOnlySplitMeasureStart)
+{
+    // System 1 holds only the first part of measure 1, so it stores measure 1 as both start and end.
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(splitMeasureSystemXml);
+    ASSERT_TRUE(doc);
+    auto page = doc->getOthers()->get<others::Page>(SCORE_PARTID, 1);
+    ASSERT_TRUE(page);
+    EXPECT_EQ(page->lastSystemId, 2);
+    EXPECT_EQ(page->firstMeasureId, 1);
+    EXPECT_EQ(page->lastMeasureId, 2);
+
+    // Without the split point, the same range is invalid.
+    std::string unsplitXml(splitMeasureSystemXml);
+    const auto splitStart = unsplitXml.find("<splitMeas");
+    const auto splitEnd = unsplitXml.find("</splitMeas>") + std::string("</splitMeas>").size();
+    unsplitXml.erase(splitStart, splitEnd - splitStart);
+    EXPECT_THROW((void)musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(unsplitXml), musx::dom::integrity_error);
+}

@@ -21,6 +21,7 @@
  */
 #include <string>
 #include <vector>
+#include <algorithm>
 #include <cmath>
 #include <cstdlib>
 #include <exception>
@@ -424,6 +425,78 @@ util::Fraction Measure::calcDuration(const std::optional<StaffCmper>& forStaff) 
 {
     auto timeSig = createTimeSignature(forStaff);
     return timeSig->calcTotalDuration();
+}
+
+Measure::Spacing Measure::calcSpacing() const
+{
+    const auto doc = getDocument();
+    const auto spacingOptions = doc->getOptions()->get<options::MusicSpacingOptions>();
+    const Evpu musFront = spacingOptions ? spacingOptions->musFront : 0;
+    const Evpu musBack = spacingOptions ? spacingOptions->musBack : 0;
+
+    // The music area begins after the extra space at the front and runs to the barline, less the music-back space.
+    Spacing result;
+    result.musicStart = musFront + frontSpaceExtra;
+    // backSpaceExtra is intentionally not part of this calculation.
+    result.musicWidth = width - musBack - result.musicStart;
+
+    const auto beatChart = doc->getOthers()->getArray<BeatChartElement>(getRequestedPartId(), getCmper());
+    if (!beatChart.empty() && beatChart[0]->control && beatChart.size() > 1) {
+        const auto& control = *beatChart[0]->control;
+        const auto& first = *beatChart[1];
+        // Finale lays the chart out at whichever is wider: its ideal positions, which end at the control's total
+        // width, or its minimum positions, which end at the control's minimum width. Ideal positions are moved right
+        // by the first element's minimum position, which holds extra space before the first element. A manually
+        // edited chart stores a minimum width of 1 and a chart from before Finale 3.0 none, so both use ideal positions.
+        const bool usesMinPositions = control.minWidth > control.totalWidth;
+        for (size_t i = 1; i < beatChart.size(); i++) {
+            const auto& element = *beatChart[i];
+            result.slots.push_back({usesMinPositions ? first.pos + element.minPos : element.pos + first.minPos, element.dur});
+        }
+        result.spacingWidth = usesMinPositions ? first.pos + control.minWidth : control.totalWidth + first.minPos;
+        result.endEdu = control.totalDur;
+    } else {
+        result.slots.push_back({0, 0});
+        result.spacingWidth = result.musicWidth;
+        result.endEdu = calcDuration().calcEduDuration();
+    }
+    return result;
+}
+
+EvpuFloat Measure::calcFirstBeatEvpu() const
+{
+    const auto spacing = calcSpacing();
+    if (spacing.musicWidth <= 0 || spacing.spacingWidth <= 0) {
+        return spacing.musicStart;
+    }
+    return spacing.musicStart + EvpuFloat(spacing.slots.front().offset) * spacing.musicWidth / spacing.spacingWidth;
+}
+
+EduFloat Measure::calcEduFromEvpu(EvpuFloat evpuFromLeftEdge) const
+{
+    const auto spacing = calcSpacing();
+    if (spacing.musicWidth <= 0 || spacing.spacingWidth <= 0) {
+        return spacing.slots.front().edu;
+    }
+    // Interpolate in the unstretched spacing, where the offset of a position in the music area is scaled
+    // by spacingWidth / musicWidth. The end of the spacing closes the last slot.
+    std::vector<SpacingSlot> points = spacing.slots;
+    points.push_back({spacing.spacingWidth, spacing.endEdu});
+    const EvpuFloat offset = (evpuFromLeftEdge - spacing.musicStart) * spacing.spacingWidth / spacing.musicWidth;
+    if (offset <= points.front().offset) {
+        return points.front().edu;
+    }
+    size_t next = 1;
+    while (next + 1 < points.size() && offset > points[next].offset) {
+        next++;
+    }
+    // Past the end, this continues along the last segment, as Finale does for an offset beyond the barline.
+    const auto& prev = points[next - 1];
+    const auto& last = points[next];
+    if (last.offset <= prev.offset) {
+        return last.edu;
+    }
+    return prev.edu + (offset - prev.offset) * (last.edu - prev.edu) / (last.offset - prev.offset);
 }
 
 // *****************************
@@ -1158,7 +1231,11 @@ void Page::calcSystemInfo(const DocumentPtr& document)
                     hasInvalidSystem = true;
                     break;
                 }
-                if (system->endMeas <= system->startMeas) {
+                // A system that holds only the first part of a split measure stores that measure as both its start
+                // and its end, since the end is the first measure of the next system.
+                const bool holdsOnlySplitStart = system->endMeas == system->startMeas
+                    && document->getOthers()->get<SplitMeasure>(part->getCmper(), system->startMeas);
+                if (system->endMeas < system->startMeas || (system->endMeas == system->startMeas && !holdsOnlySplitStart)) {
                     reportStructuralLayoutProblem("Page " + std::to_string(page->getCmper()) + " of part " + part->getName()
                         + " has an invalid measure range for system " + std::to_string(systemId) + ".");
                     hasInvalidSystem = true;

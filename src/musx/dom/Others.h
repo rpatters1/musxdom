@@ -1308,6 +1308,57 @@ public:
     /// Otherwise, it returns the global duration of the measure.
     util::Fraction calcDuration(const std::optional<StaffCmper>& forStaff = std::nullopt) const;
 
+    /// @brief One beat position in a measure's unstretched spacing. See #Spacing.
+    struct SpacingSlot
+    {
+        Evpu offset{};  ///< The slot's offset in the unstretched spacing, in Evpu from the start of the music area.
+        Edu edu{};      ///< The slot's global Edu position in the measure.
+    };
+
+    /// @brief A measure's horizontal spacing as Finale uses it to place metric positions.
+    ///
+    /// The music area runs from @ref options::MusicSpacingOptions::musFront plus #frontSpaceExtra to #width less
+    /// @ref options::MusicSpacingOptions::musBack. With a @ref BeatChartElement array, each element is a slot, and
+    /// the chart is laid out at whichever is wider, its ideal or its minimum positions. When
+    /// @ref BeatChartElement::Control::minWidth exceeds @ref BeatChartElement::Control::totalWidth, each slot is at the
+    /// first element's @ref BeatChartElement::pos plus the element's @ref BeatChartElement::minPos, and the spacing ends
+    /// at the first element's position plus the minimum width. Otherwise each slot is at its own position plus the
+    /// first element's minimum position, and the spacing ends at the total width plus that minimum position. A manually
+    /// edited chart (minimum width 1) and one from before Finale 3.0 (no minimum width) always use their positions.
+    /// Without a beat chart there is one slot, at the start of the music area.
+    ///
+    /// Finale stretches the spacing uniformly to fill the music area, so a slot is drawn at #musicStart plus its offset
+    /// times #musicWidth / #spacingWidth. Either width can be zero or negative in a malformed or degenerate measure.
+    struct Spacing
+    {
+        Evpu musicStart{};          ///< Where the music area begins, in Evpu from the measure's left edge.
+        Evpu musicWidth{};          ///< The width of the music area, in Evpu.
+        Evpu spacingWidth{};        ///< The unstretched width of the spacing, in Evpu.
+        Edu endEdu{};               ///< The Edu position at the end of the spacing (the measure's duration).
+        std::vector<SpacingSlot> slots;    ///< The slots in increasing order. There is always at least one.
+    };
+
+    /// @brief Calculates the measure's horizontal spacing. See #Spacing.
+    [[nodiscard]] Spacing calcSpacing() const;
+
+    /// @brief Calculates the horizontal position of the first beat, in Evpu from the measure's left edge.
+    ///
+    /// The first beat is the first slot of #calcSpacing, stretched into the music area.
+    [[nodiscard]] EvpuFloat calcFirstBeatEvpu() const;
+
+    /// @brief Converts a horizontal offset from the measure's left edge to a global Edu position in the measure.
+    ///
+    /// This approximates Finale's own conversion, as used when it upgrades legacy horizontal offsets and places
+    /// @ref SplitMeasure points. It interpolates linearly between the slots of #calcSpacing as stretched into the
+    /// music area, reaching #Spacing::endEdu at the end of it. Entries are not consulted, so the result is
+    /// approximate when the measure has a beat chart.
+    ///
+    /// @param evpuFromLeftEdge The horizontal offset from the measure's left edge, in Scroll View.
+    /// @return The Edu position, unrounded. Positions before the first beat return zero. Positions past the end of
+    /// the music area continue at the slope of its last segment, so they exceed the measure's duration. Finale's
+    /// own conversions round to the nearest Edu, half away from zero.
+    [[nodiscard]] EduFloat calcEduFromEvpu(EvpuFloat evpuFromLeftEdge) const;
+
     /// @brief Calculates the time stretch. This is the value by which independent time edus are multiplied to get global edus.
     /// @param forStaff The staff for which to calculate the time stretch.
     util::Fraction calcTimeStretch(StaffCmper forStaff) const
@@ -2613,11 +2664,9 @@ public:
  * split once, but Finale stores them as an array. Perhaps this was intended to support alternative
  * break positions depending on spacing. See the warning below for the actual behavior.
  *
- * The array entries are Evpu offsets in Scroll View. Determining the exact split location would require
- * converting between Scroll View Evpu positions and beat positions, which in turn depends on understanding
- * beat charts and Finale’s layout process. A crude first approximation may be to divide the split position by
- * #Measure::width, which might yield a usable fraction of the graphical measure width to display on the
- * previous system.
+ * The array entries are Evpu offsets from the measure's left edge in Scroll View. Determining the exact split location
+ * would require Finale's layout process. #Measure::calcEduFromEvpu approximates the beat position of a split
+ * point from the measure's beat chart and spacing.
  *
  * @note This is a legacy Finale feature. It was never consistently implemented across the program,
  * and over time it became less useful as newer features were developed without support for it.
