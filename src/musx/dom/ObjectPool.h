@@ -833,6 +833,25 @@ public:
         }
     }
 
+    /// @brief Iterates every stored entry once, including entries not referenced by a frame.
+    /// @param iterator Called for each entry; return false to stop iteration.
+    /// @return True if all entries were visited, or false if iteration stopped early.
+    /// @throws std::invalid_argument if @p iterator is empty.
+    /// @note Iteration order is unspecified.
+    bool iterateRawEntries(std::function<bool(const MusxInstance<Entry>&)> iterator) const
+    {
+        MUSX_ASSERT_IF (!iterator) {
+            throw std::invalid_argument("EntryPool::iterateRawEntries requires an iterator.");
+        }
+        for (const auto& [entryNumber, entry] : m_pool) {
+            (void)entryNumber;
+            if (!iterator(entry)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     /** @brief Get an entry from the EntryPool. */
     MusxInstance<Entry> get(EntryNumber entryNumber) const
     {
