@@ -236,6 +236,9 @@ TEST(EntryTest, IntegrityCheck)
     auto entry = entries->get(1001);
     ASSERT_TRUE(entry);
 
+    EXPECT_EQ(entry->getPreviousEntryNumber(), 1000) << "stored previous entry number is returned even though it does not exist";
+    EXPECT_EQ(entry->getNextEntryNumber(), 1002) << "stored next entry number is returned even though it does not exist";
+
     EXPECT_THROW(
         static_cast<void>(entry->getNext()),
         musx::dom::integrity_error

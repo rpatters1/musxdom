@@ -150,20 +150,22 @@ static bool forVoice2(int voice)
 
 MusxInstance<Entry> Entry::getNext() const
 {
-    if (!m_next) return nullptr;
-    auto retval = getDocument()->getEntries()->get(m_next);
+    const EntryNumber nextEntryNumber = getNextEntryNumber();
+    if (!nextEntryNumber) return nullptr;
+    auto retval = getDocument()->getEntries()->get(nextEntryNumber);
     if (!retval) {
-        MUSX_INTEGRITY_ERROR("Entry " + std::to_string(m_entnum) + " has next entry " + std::to_string(m_next) + " that does not exist.");
+        MUSX_INTEGRITY_ERROR("Entry " + std::to_string(getEntryNumber()) + " has next entry " + std::to_string(nextEntryNumber) + " that does not exist.");
     }
     return retval;
 }
 
 MusxInstance<Entry> Entry::getPrevious() const
 {
-    if (!m_prev) return nullptr;
-    auto retval = getDocument()->getEntries()->get(m_prev);
+    const EntryNumber previousEntryNumber = getPreviousEntryNumber();
+    if (!previousEntryNumber) return nullptr;
+    auto retval = getDocument()->getEntries()->get(previousEntryNumber);
     if (!retval) {
-        MUSX_INTEGRITY_ERROR("Entry " + std::to_string(m_entnum) + " has previous entry " + std::to_string(m_prev) + " that does not exist.");
+        MUSX_INTEGRITY_ERROR("Entry " + std::to_string(getEntryNumber()) + " has previous entry " + std::to_string(previousEntryNumber) + " that does not exist.");
     }
     return retval;
 }
