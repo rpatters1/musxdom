@@ -467,6 +467,20 @@ public:
     [[nodiscard]]
     EntryNumber getEntryNumber() const { return m_entnum; }
 
+    /// @brief Gets the stored previous entry number in this list.
+    ///
+    /// The number is returned as stored, whether or not an entry with that number exists. Use #getPrevious to resolve it.
+    /// @return The previous entry number, or 0 if none.
+    [[nodiscard]]
+    EntryNumber getPreviousEntryNumber() const { return m_prev; }
+
+    /// @brief Gets the stored next entry number in this list.
+    ///
+    /// The number is returned as stored, whether or not an entry with that number exists. Use #getNext to resolve it.
+    /// @return The next entry number, or 0 if none.
+    [[nodiscard]]
+    EntryNumber getNextEntryNumber() const { return m_next; }
+
     /// @brief Gets the next entry in this list or nullptr if none.
     ///
     /// Note that the entry list may contain entries that aren't in any frame. These should be ignored.
