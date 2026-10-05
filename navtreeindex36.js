@@ -1,5 +1,7 @@
 var NAVTREEINDEX36 =
 {
+"structmusx_1_1dom_1_1ShapeDefInstruction_1_1Ellipse.html#a53177406661880a444be76b250824a45":[1,0,1,0,54,5,1],
+"structmusx_1_1dom_1_1ShapeDefInstruction_1_1ExternalGraphic.html":[2,0,1,0,55,6],
 "structmusx_1_1dom_1_1ShapeDefInstruction_1_1ExternalGraphic.html":[1,0,1,0,54,6],
 "structmusx_1_1dom_1_1ShapeDefInstruction_1_1ExternalGraphic.html#a6e1c2e028cf25587e977208245e9337e":[1,0,1,0,54,6,1],
 "structmusx_1_1dom_1_1ShapeDefInstruction_1_1ExternalGraphic.html#a6e1c2e028cf25587e977208245e9337e":[2,0,1,0,55,6,1],
@@ -247,7 +249,5 @@ var NAVTREEINDEX36 =
 "structmusx_1_1dom_1_1options_1_1SmartShapeOptions_1_1ControlStyle.html#ae8162b4c016df9cd1984991d5253162c":[2,0,1,0,2,21,1,2],
 "structmusx_1_1dom_1_1options_1_1TextOptions_1_1InsertSymbolInfo.html":[1,0,1,0,2,24,0],
 "structmusx_1_1dom_1_1options_1_1TextOptions_1_1InsertSymbolInfo.html":[2,0,1,0,2,24,0],
-"structmusx_1_1dom_1_1options_1_1TextOptions_1_1InsertSymbolInfo.html#a3e1b557e7c6827ba497c48cad3022f95":[2,0,1,0,2,24,0,0],
-"structmusx_1_1dom_1_1options_1_1TextOptions_1_1InsertSymbolInfo.html#a3e1b557e7c6827ba497c48cad3022f95":[1,0,1,0,2,24,0,0],
-"structmusx_1_1dom_1_1options_1_1TextOptions_1_1InsertSymbolInfo.html#a57cf53760a0a5c83c199101c89919122":[2,0,1,0,2,24,0,5]
+"structmusx_1_1dom_1_1options_1_1TextOptions_1_1InsertSymbolInfo.html#a3e1b557e7c6827ba497c48cad3022f95":[2,0,1,0,2,24,0,0]
 };

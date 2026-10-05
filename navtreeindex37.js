@@ -1,5 +1,7 @@
 var NAVTREEINDEX37 =
 {
+"structmusx_1_1dom_1_1options_1_1TextOptions_1_1InsertSymbolInfo.html#a3e1b557e7c6827ba497c48cad3022f95":[1,0,1,0,2,24,0,0],
+"structmusx_1_1dom_1_1options_1_1TextOptions_1_1InsertSymbolInfo.html#a57cf53760a0a5c83c199101c89919122":[2,0,1,0,2,24,0,5],
 "structmusx_1_1dom_1_1options_1_1TextOptions_1_1InsertSymbolInfo.html#a57cf53760a0a5c83c199101c89919122":[1,0,1,0,2,24,0,5],
 "structmusx_1_1dom_1_1options_1_1TextOptions_1_1InsertSymbolInfo.html#a5dea2d4320cb8e07057969ff5a644a7f":[2,0,1,0,2,24,0,4],
 "structmusx_1_1dom_1_1options_1_1TextOptions_1_1InsertSymbolInfo.html#a5dea2d4320cb8e07057969ff5a644a7f":[1,0,1,0,2,24,0,4],

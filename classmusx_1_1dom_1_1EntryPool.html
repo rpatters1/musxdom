@@ -123,6 +123,10 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>add</b> (<a class="el
 void&#160;</td><td class="memItemRight" valign="bottom"><b>integrityCheckAll</b> () const</td></tr>
 <tr class="memdesc:a283590b4d355e659606b63b0aa734c4c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Validates every entry in entry-number order. <br /></td></tr>
 <tr class="separator:a283590b4d355e659606b63b0aa734c4c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adcc2a88e134862e424ee0f2baae3fe4c" id="r_adcc2a88e134862e424ee0f2baae3fe4c"><td class="memTemplParams" colspan="2">template&lt;typename Iterator &gt; </td></tr>
+<tr class="memitem:adcc2a88e134862e424ee0f2baae3fe4c"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1EntryPool.html#adcc2a88e134862e424ee0f2baae3fe4c">iterateRawEntries</a> (Iterator &amp;&amp;iterator) const</td></tr>
+<tr class="memdesc:adcc2a88e134862e424ee0f2baae3fe4c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Iterates every stored entry once, including entries not referenced by a frame.  <br /></td></tr>
+<tr class="separator:adcc2a88e134862e424ee0f2baae3fe4c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aafa4cd49a100c140d7f0cde0dd42f13a" id="r_aafa4cd49a100c140d7f0cde0dd42f13a"><td class="memItemLeft" align="right" valign="top"><a id="aafa4cd49a100c140d7f0cde0dd42f13a" name="aafa4cd49a100c140d7f0cde0dd42f13a"></a>
 <a class="el" href="namespacemusx_1_1dom.html#a4223cd531120dbef7acd854c3d2631b8">MusxInstance</a>&lt; <a class="el" href="classmusx_1_1dom_1_1Entry.html">Entry</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>get</b> (<a class="el" href="namespacemusx_1_1dom.html#aaf6ff3bd65d56ab74135ba5914f68f5b">EntryNumber</a> entryNumber) const</td></tr>
 <tr class="memdesc:aafa4cd49a100c140d7f0cde0dd42f13a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get an entry from the <a class="el" href="classmusx_1_1dom_1_1EntryPool.html" title="Entry pool.">EntryPool</a>. <br /></td></tr>
@@ -136,7 +140,52 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>bench::PoolAccessor&
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p><a class="el" href="classmusx_1_1dom_1_1Entry.html" title="Represents an entry containing metadata and notes.">Entry</a> pool. </p>
-</div></div><!-- contents -->
+</div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="adcc2a88e134862e424ee0f2baae3fe4c" name="adcc2a88e134862e424ee0f2baae3fe4c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adcc2a88e134862e424ee0f2baae3fe4c">&#9670;&#160;</a></span>iterateRawEntries()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Iterator &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool musx::dom::EntryPool::iterateRawEntries </td>
+          <td>(</td>
+          <td class="paramtype">Iterator &amp;&amp;&#160;</td>
+          <td class="paramname"><em>iterator</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Iterates every stored entry once, including entries not referenced by a frame. </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">Iterator</td><td>A callable that accepts an entry and returns a bool. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">iterator</td><td>Called for each entry; return false to stop iteration. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True if all entries were visited, or false if iteration stopped early. </dd></dl>
+<dl class="section note"><dt>Note</dt><dd>Iteration order is unspecified. </dd></dl>
+
+</div>
+</div>
+</div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
