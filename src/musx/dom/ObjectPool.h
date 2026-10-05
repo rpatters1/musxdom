@@ -833,6 +833,23 @@ public:
         }
     }
 
+    /// @brief Iterates every stored entry once, including entries not referenced by a frame.
+    /// @tparam Iterator A callable that accepts an entry and returns a bool.
+    /// @param iterator Called for each entry; return false to stop iteration.
+    /// @return True if all entries were visited, or false if iteration stopped early.
+    /// @note Iteration order is unspecified.
+    template <typename Iterator>
+    bool iterateRawEntries(Iterator&& iterator) const
+    {
+        for (const auto& [entryNumber, entry] : m_pool) {
+            (void)entryNumber;
+            if (!iterator(entry)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     /** @brief Get an entry from the EntryPool. */
     MusxInstance<Entry> get(EntryNumber entryNumber) const
     {
