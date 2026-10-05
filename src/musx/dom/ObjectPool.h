@@ -834,15 +834,13 @@ public:
     }
 
     /// @brief Iterates every stored entry once, including entries not referenced by a frame.
+    /// @tparam Iterator A callable that accepts an entry and returns a bool.
     /// @param iterator Called for each entry; return false to stop iteration.
     /// @return True if all entries were visited, or false if iteration stopped early.
-    /// @throws std::invalid_argument if @p iterator is empty.
     /// @note Iteration order is unspecified.
-    bool iterateRawEntries(std::function<bool(const MusxInstance<Entry>&)> iterator) const
+    template <typename Iterator>
+    bool iterateRawEntries(Iterator&& iterator) const
     {
-        MUSX_ASSERT_IF (!iterator) {
-            throw std::invalid_argument("EntryPool::iterateRawEntries requires an iterator.");
-        }
         for (const auto& [entryNumber, entry] : m_pool) {
             (void)entryNumber;
             if (!iterator(entry)) {
