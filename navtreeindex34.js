@@ -1,5 +1,9 @@
 var NAVTREEINDEX34 =
 {
+"namespacemusx_1_1dom_1_1uuid.html#ab87f47f13fe9d8f092e0ed379fbe49e0":[1,0,1,0,5,122],
+"namespacemusx_1_1dom_1_1uuid.html#ab8ce3547e07794b6b7e6fc1ebea34eb7":[1,0,1,0,5,88],
+"namespacemusx_1_1dom_1_1uuid.html#ab8e1356ea9a9ff0cbd44bcb84ff31b72":[1,0,1,0,5,106],
+"namespacemusx_1_1dom_1_1uuid.html#ab8f6ab56937f53e44cb5b1b4d2db0d82":[1,0,1,0,5,727],
 "namespacemusx_1_1dom_1_1uuid.html#ab9091988ca08e601518060adcd2c04ec":[1,0,1,0,5,137],
 "namespacemusx_1_1dom_1_1uuid.html#ab91d5e1124c12919bf530ec898570809":[1,0,1,0,5,704],
 "namespacemusx_1_1dom_1_1uuid.html#ab94781380e7c035aab6c81af5549aba9":[1,0,1,0,5,151],
@@ -245,9 +249,5 @@ var NAVTREEINDEX34 =
 "structmusic__theory_1_1Pitch.html#aee7354814c377218f9a53a17b594e1a6":[2,0,0,0,2],
 "structmusx_1_1dom_1_1EmbeddedGraphicData.html":[2,0,1,0,16],
 "structmusx_1_1dom_1_1EmbeddedGraphicData.html":[1,0,1,0,15],
-"structmusx_1_1dom_1_1EmbeddedGraphicData.html#a3f11648513a274e89136b8a2dabc2368":[2,0,1,0,16,0],
-"structmusx_1_1dom_1_1EmbeddedGraphicData.html#a3f11648513a274e89136b8a2dabc2368":[1,0,1,0,15,0],
-"structmusx_1_1dom_1_1EmbeddedGraphicData.html#a4fcb4768de1e4b04b01da74ffcf8b908":[2,0,1,0,16,1],
-"structmusx_1_1dom_1_1EmbeddedGraphicData.html#a4fcb4768de1e4b04b01da74ffcf8b908":[1,0,1,0,15,1],
-"structmusx_1_1dom_1_1EntryFrame_1_1TupletInfo.html":[2,0,1,0,20,0]
+"structmusx_1_1dom_1_1EmbeddedGraphicData.html#a3f11648513a274e89136b8a2dabc2368":[2,0,1,0,16,0]
 };

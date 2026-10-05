@@ -1,5 +1,9 @@
 var NAVTREEINDEX35 =
 {
+"structmusx_1_1dom_1_1EmbeddedGraphicData.html#a3f11648513a274e89136b8a2dabc2368":[1,0,1,0,15,0],
+"structmusx_1_1dom_1_1EmbeddedGraphicData.html#a4fcb4768de1e4b04b01da74ffcf8b908":[2,0,1,0,16,1],
+"structmusx_1_1dom_1_1EmbeddedGraphicData.html#a4fcb4768de1e4b04b01da74ffcf8b908":[1,0,1,0,15,1],
+"structmusx_1_1dom_1_1EntryFrame_1_1TupletInfo.html":[2,0,1,0,20,0],
 "structmusx_1_1dom_1_1EntryFrame_1_1TupletInfo.html":[1,0,1,0,19,0],
 "structmusx_1_1dom_1_1EntryFrame_1_1TupletInfo.html#a02cbdd31f6215041a82e00cf40b444be":[1,0,1,0,19,0,10],
 "structmusx_1_1dom_1_1EntryFrame_1_1TupletInfo.html#a02cbdd31f6215041a82e00cf40b444be":[2,0,1,0,20,0,10],
@@ -245,9 +249,5 @@ var NAVTREEINDEX35 =
 "structmusx_1_1dom_1_1ShapeDefInstruction_1_1DrawChar.html":[2,0,1,0,55,4],
 "structmusx_1_1dom_1_1ShapeDefInstruction_1_1DrawChar.html#a0cb71d1267494145afff2e0500ec61af":[1,0,1,0,54,4,0],
 "structmusx_1_1dom_1_1ShapeDefInstruction_1_1DrawChar.html#a0cb71d1267494145afff2e0500ec61af":[2,0,1,0,55,4,0],
-"structmusx_1_1dom_1_1ShapeDefInstruction_1_1Ellipse.html":[1,0,1,0,54,5],
-"structmusx_1_1dom_1_1ShapeDefInstruction_1_1Ellipse.html":[2,0,1,0,55,5],
-"structmusx_1_1dom_1_1ShapeDefInstruction_1_1Ellipse.html#a35c350296ca4f628a3872ad288a16441":[1,0,1,0,54,5,0],
-"structmusx_1_1dom_1_1ShapeDefInstruction_1_1Ellipse.html#a35c350296ca4f628a3872ad288a16441":[2,0,1,0,55,5,0],
-"structmusx_1_1dom_1_1ShapeDefInstruction_1_1Ellipse.html#a53177406661880a444be76b250824a45":[2,0,1,0,55,5,1]
+"structmusx_1_1dom_1_1ShapeDefInstruction_1_1Ellipse.html":[1,0,1,0,54,5]
 };

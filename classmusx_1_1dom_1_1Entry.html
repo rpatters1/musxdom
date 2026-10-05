@@ -135,6 +135,12 @@ Public Member Functions</h2></td></tr>
 <a class="el" href="namespacemusx_1_1dom.html#aaf6ff3bd65d56ab74135ba5914f68f5b">EntryNumber</a>&#160;</td><td class="memItemRight" valign="bottom"><b>getEntryNumber</b> () const</td></tr>
 <tr class="memdesc:a0d3cc0d02d7768f4153b0741d0a238ca"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the entry number for this entry. <br /></td></tr>
 <tr class="separator:a0d3cc0d02d7768f4153b0741d0a238ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ace2cdd12276e703b65202b71455b6c9d" id="r_ace2cdd12276e703b65202b71455b6c9d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemusx_1_1dom.html#aaf6ff3bd65d56ab74135ba5914f68f5b">EntryNumber</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1Entry.html#ace2cdd12276e703b65202b71455b6c9d">getPreviousEntryNumber</a> () const</td></tr>
+<tr class="memdesc:ace2cdd12276e703b65202b71455b6c9d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the stored previous entry number in this list.  <br /></td></tr>
+<tr class="separator:ace2cdd12276e703b65202b71455b6c9d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a09d00584a829dfca623dbbb4d665271b" id="r_a09d00584a829dfca623dbbb4d665271b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemusx_1_1dom.html#aaf6ff3bd65d56ab74135ba5914f68f5b">EntryNumber</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1Entry.html#a09d00584a829dfca623dbbb4d665271b">getNextEntryNumber</a> () const</td></tr>
+<tr class="memdesc:a09d00584a829dfca623dbbb4d665271b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the stored next entry number in this list.  <br /></td></tr>
+<tr class="separator:a09d00584a829dfca623dbbb4d665271b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a23ec586ae3f82602d46c3b6368b69e76" id="r_a23ec586ae3f82602d46c3b6368b69e76"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacemusx_1_1dom.html#a4223cd531120dbef7acd854c3d2631b8">MusxInstance</a>&lt; <a class="el" href="classmusx_1_1dom_1_1Entry.html">Entry</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmusx_1_1dom_1_1Entry.html#a23ec586ae3f82602d46c3b6368b69e76">getNext</a> () const</td></tr>
 <tr class="memdesc:a23ec586ae3f82602d46c3b6368b69e76"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the next entry in this list or nullptr if none.  <br /></td></tr>
 <tr class="separator:a23ec586ae3f82602d46c3b6368b69e76"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -540,6 +546,34 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
+<a id="a09d00584a829dfca623dbbb4d665271b" name="a09d00584a829dfca623dbbb4d665271b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a09d00584a829dfca623dbbb4d665271b">&#9670;&#160;</a></span>getNextEntryNumber()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacemusx_1_1dom.html#aaf6ff3bd65d56ab74135ba5914f68f5b">EntryNumber</a> musx::dom::Entry::getNextEntryNumber </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Gets the stored next entry number in this list. </p>
+<p>The number is returned as stored, whether or not an entry with that number exists. Use <a class="el" href="classmusx_1_1dom_1_1Entry.html#a23ec586ae3f82602d46c3b6368b69e76" title="Gets the next entry in this list or nullptr if none.">getNext</a> to resolve it. </p><dl class="section return"><dt>Returns</dt><dd>The next entry number, or 0 if none. </dd></dl>
+
+</div>
+</div>
 <a id="a3342a6cc4cc79b6ebfc754f5ef8f8742" name="a3342a6cc4cc79b6ebfc754f5ef8f8742"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a3342a6cc4cc79b6ebfc754f5ef8f8742">&#9670;&#160;</a></span>getPrevious()</h2>
 
@@ -557,6 +591,34 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Gets the previous entry in this list or nullptr if none. </p>
 <p><a class="el" href="classmusx_1_1dom_1_1Note.html" title="Represents a single note element in an entry.">Note</a> that the entry list may contain entries that aren't in any frame. These should be ignored. </p>
+
+</div>
+</div>
+<a id="ace2cdd12276e703b65202b71455b6c9d" name="ace2cdd12276e703b65202b71455b6c9d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ace2cdd12276e703b65202b71455b6c9d">&#9670;&#160;</a></span>getPreviousEntryNumber()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacemusx_1_1dom.html#aaf6ff3bd65d56ab74135ba5914f68f5b">EntryNumber</a> musx::dom::Entry::getPreviousEntryNumber </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Gets the stored previous entry number in this list. </p>
+<p>The number is returned as stored, whether or not an entry with that number exists. Use <a class="el" href="classmusx_1_1dom_1_1Entry.html#a3342a6cc4cc79b6ebfc754f5ef8f8742" title="Gets the previous entry in this list or nullptr if none.">getPrevious</a> to resolve it. </p><dl class="section return"><dt>Returns</dt><dd>The previous entry number, or 0 if none. </dd></dl>
 
 </div>
 </div>
