@@ -24,9 +24,63 @@
 #include "musx/musx.h"
 #include "test_utils.h"
 
+#include <algorithm>
 #include <array>
 
 using namespace musx::dom;
+
+TEST(EntryTest, EntryFrameSkipsUnusableEntries)
+{
+    constexpr EntryNumber kBothEntryNumber = 5;
+    constexpr EntryNumber kInvalidEntryNumber = 6;
+    constexpr EntryNumber kZeroDurationEntryNumber = 7;
+    constexpr size_t kExpectedWarningCount = 7;
+    std::vector<char> xml;
+    musxtest::readFile(musxtest::getInputPath() / "enharmonic_unlinked.enigmaxml", xml);
+    auto doc = musx::factory::DocumentFactory::create<musx::xml::pugi::Document>(xml);
+    ASSERT_TRUE(doc);
+
+    auto both = std::const_pointer_cast<Entry>(doc->getEntries()->get(kBothEntryNumber));
+    auto invalid = std::const_pointer_cast<Entry>(doc->getEntries()->get(kInvalidEntryNumber));
+    auto zeroDuration = std::const_pointer_cast<Entry>(doc->getEntries()->get(kZeroDurationEntryNumber));
+    ASSERT_TRUE(both && invalid && zeroDuration);
+    const auto originalDuration = zeroDuration->duration;
+    both->duration = 0;
+    both->isValid = false;
+    invalid->isValid = false;
+    zeroDuration->duration = 0;
+
+    auto previousLogger = musx::util::Logger::getCallback();
+    struct LoggerRestorer {
+        musx::util::Logger::LogCallback callback;
+        ~LoggerRestorer() { musx::util::Logger::setCallback(std::move(callback)); }
+    } loggerRestorer{previousLogger};
+    std::vector<std::pair<musx::util::Logger::LogLevel, std::string>> diagnostics;
+    musx::util::Logger::setCallback([&](musx::util::Logger::LogLevel level, const std::string& message) {
+        diagnostics.emplace_back(level, message);
+    });
+
+    const details::GFrameHoldContext hold(doc, SCORE_PARTID, 1, 1);
+    ASSERT_TRUE(hold);
+    EXPECT_FALSE(hold.createEntryFrame(0));
+    zeroDuration->duration = originalDuration;
+    auto mixedFrame = hold.createEntryFrame(0);
+    ASSERT_TRUE(mixedFrame);
+    ASSERT_EQ(mixedFrame->getEntries().size(), 1);
+    EXPECT_EQ(mixedFrame->getEntries().front()->getEntry()->getEntryNumber(), kZeroDurationEntryNumber);
+    EXPECT_EQ(doc->getEntries()->get(kBothEntryNumber)->duration, 0);
+    EXPECT_FALSE(doc->getEntries()->get(kInvalidEntryNumber)->isValid);
+    EXPECT_EQ(diagnostics.size(), kExpectedWarningCount);
+    EXPECT_TRUE(std::all_of(diagnostics.begin(), diagnostics.end(), [](const auto& diagnostic) {
+        return diagnostic.first == musx::util::Logger::LogLevel::Warning;
+    }));
+    EXPECT_TRUE(std::any_of(diagnostics.begin(), diagnostics.end(), [&](const auto& diagnostic) {
+        return diagnostic.second.find("entry " + std::to_string(kBothEntryNumber) + " with zero symbolic duration") != std::string::npos;
+    }));
+    EXPECT_TRUE(std::any_of(diagnostics.begin(), diagnostics.end(), [&](const auto& diagnostic) {
+        return diagnostic.second.find("invalid entry " + std::to_string(kBothEntryNumber)) != std::string::npos;
+    }));
+}
 
 TEST(EntryTest, PopulateFields)
 {
