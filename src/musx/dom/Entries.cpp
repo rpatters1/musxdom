@@ -2589,9 +2589,6 @@ std::shared_ptr<const EntryFrame> details::GFrameHoldContext::createEntryFrame(L
         const util::Fraction timeStretch = staff->floatTime
                                          ? measure->calcTimeStretch(staff->getCmper())
                                          : 1;
-        entryFrame = std::make_shared<EntryFrame>(*this, layerIndex, timeStretch, staff);
-        entryFrame->keySignature = measure->createKeySignature(m_hold->getStaff());
-        entryFrame->measureStaffDuration = measure->calcDuration(m_hold->getStaff());
         auto entries = frame->getEntries();
         std::vector<TupletState> v1ActiveTuplets; // List of active tuplets for v1
         std::vector<TupletState> v2ActiveTuplets; // List of active tuplets for v2
@@ -2600,6 +2597,23 @@ std::shared_ptr<const EntryFrame> details::GFrameHoldContext::createEntryFrame(L
         int graceIndex = 0;
         for (size_t i = 0; i < entries.size(); i++) {
             const auto& entry = entries[i];
+            const bool zeroDuration = entry->duration == 0;
+            const bool invalid = !entry->isValid;
+            if (zeroDuration) {
+                util::Logger::log(util::Logger::LogLevel::Warning,
+                    "Skipping entry " + std::to_string(entry->getEntryNumber()) + " with zero symbolic duration in frame " + std::to_string(frame->getCmper()) + ".");
+            }
+            if (invalid) {
+                util::Logger::log(util::Logger::LogLevel::Warning,
+                    "Skipping invalid entry " + std::to_string(entry->getEntryNumber()) + " in frame " + std::to_string(frame->getCmper()) + ".");
+            }
+            if (zeroDuration || invalid) continue;
+            if (!entryFrame) {
+                entryFrame = std::make_shared<EntryFrame>(*this, layerIndex, timeStretch, staff);
+                entryFrame->keySignature = measure->createKeySignature(m_hold->getStaff());
+                entryFrame->measureStaffDuration = measure->calcDuration(m_hold->getStaff());
+            }
+            const size_t entryIndex = entryFrame->getEntries().size();
             auto entryInfo = std::shared_ptr<EntryInfo>(new EntryInfo(entry));
             if (entry->v2Launch) {
                 // Note: v1 tuplets do not appear to affect v2 entries. If they did this would be correct:
@@ -2627,7 +2641,7 @@ std::shared_ptr<const EntryFrame> details::GFrameHoldContext::createEntryFrame(L
                     });
                     for (const auto& tuplet : tuplets) {
                         size_t index = entryFrame->tupletInfo.size();
-                        entryFrame->tupletInfo.emplace_back(entryFrame, tuplet, i, actualElapsedDuration, entry->voice2);
+                        entryFrame->tupletInfo.emplace_back(entryFrame, tuplet, entryIndex, actualElapsedDuration, entry->voice2);
                         activeTuplets.emplace_back(tuplet, index);
                     }
                 }
@@ -2665,7 +2679,7 @@ std::shared_ptr<const EntryFrame> details::GFrameHoldContext::createEntryFrame(L
                 //          This code only extends them to the end of the v2 sequence. This is by design.
                 for (const auto& tuplet : activeTuplets) {
                     auto& tuplInf = entryFrame->tupletInfo[tuplet.infoIndex];
-                    tuplInf.endIndex = i;
+                    tuplInf.endIndex = entryIndex;
                     tuplInf.endDura = actualElapsedDuration;
                 }
                 activeTuplets.erase(
@@ -2675,7 +2689,9 @@ std::shared_ptr<const EntryFrame> details::GFrameHoldContext::createEntryFrame(L
                 );
             }
         }
-        entryFrame->maxElapsedStaffDuration = (std::max)(v1ActualElapsedDuration, v2ActualElapsedDuration);
+        if (entryFrame) {
+            entryFrame->maxElapsedStaffDuration = (std::max)(v1ActualElapsedDuration, v2ActualElapsedDuration);
+        }
     } else {
         MUSX_INTEGRITY_ERROR("GFrameHold for staff " + std::to_string(m_hold->getStaff()) + " and measure "
             + std::to_string(m_hold->getMeasure()) + " points to non-existent frame [" + std::to_string(m_hold->frames[layerIndex]) + "]");

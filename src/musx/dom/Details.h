@@ -29,6 +29,7 @@
 #include "music_theory/music_theory.hpp"
 
 #include "musx/util/EnigmaString.h"
+#include "musx/util/Logger.h"
 #include "musx/util/PseudoTieUtils.h"
 #include "MusxInstance.h"
 #include "BaseClasses.h"
@@ -1200,7 +1201,11 @@ public:
             MUSX_INTEGRITY_ERROR("GFrameHold for staff " + std::to_string(getCmper1()) + " and measure " + std::to_string(getCmper2()) + " has both clef and clef list.");
         }
         if (!clefListId && !clefId.has_value()) {
-            MUSX_INTEGRITY_ERROR("GFrameHold for staff " + std::to_string(getCmper1()) + " and measure " + std::to_string(getCmper2()) + " has neither clef nor clef list.");
+            clefId = ClefIndex(0);
+            util::Logger::log(
+                util::Logger::LogLevel::Verbose,
+                "GFrameHold for staff " + std::to_string(getCmper1()) + " and measure " + std::to_string(getCmper2()) +
+                    " has neither clef nor clef list.");
         }
     }
 

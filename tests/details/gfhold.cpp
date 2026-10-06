@@ -146,10 +146,15 @@ constexpr static musxtest::string_view xmlNoClefs = R"xml(
 </finale>
     )xml";
 
-    EXPECT_THROW(
-        auto doc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xmlNoClefs),
-        musx::dom::integrity_error
-    ) << "neither clef nor clef list specified";
+    constexpr StaffCmper kNoClefsStaffId = 3;
+    constexpr MeasCmper kNoClefsMeasureId = 915;
+    auto noClefsDoc = musx::factory::DocumentFactory::create<musx::xml::rapidxml::Document>(xmlNoClefs);
+    ASSERT_TRUE(noClefsDoc);
+    auto noClefsHold = details::GFrameHoldContext(noClefsDoc, SCORE_PARTID, kNoClefsStaffId, kNoClefsMeasureId);
+    ASSERT_TRUE(noClefsHold);
+    ASSERT_TRUE(noClefsHold->clefId.has_value());
+    EXPECT_EQ(*noClefsHold->clefId, 0);
+    EXPECT_EQ(noClefsHold->clefListId, 0);
 
     constexpr static musxtest::string_view xmlNotIterable = R"xml(
 <?xml version="1.0" encoding="UTF-8"?>
