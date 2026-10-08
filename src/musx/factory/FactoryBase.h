@@ -328,7 +328,9 @@ inline bool populateBoolean(ConstructionContext&, const XmlElementPtr& element, 
         return true;
     }
 
-    if constexpr (std::is_base_of_v<EnigmaBase, T>) {
+    if constexpr (std::is_base_of_v<dom::ContainedClassBase, T>) {
+        return instance->getParent()->getSourcePartId() == dom::SCORE_PARTID;
+    } else if constexpr (std::is_base_of_v<EnigmaBase, T>) {
         const EnigmaBase& instAsBase = *instance;
         return instAsBase.getSourcePartId() == SCORE_PARTID; // return false if this is a part
     } else {
