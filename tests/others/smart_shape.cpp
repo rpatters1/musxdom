@@ -257,6 +257,9 @@ TEST(SmartShape, PartiallySharedTerminationSegments)
           <x>12</x>
           <on/>
         </endPtAdj>
+        <ctlPtAdj>
+          <on/>
+        </ctlPtAdj>
       </startTermSeg>
       <endTermSeg>
         <endPt>
@@ -272,6 +275,11 @@ TEST(SmartShape, PartiallySharedTerminationSegments)
         <endPt>
           <edu>0</edu>
         </endPt>
+        <ctlPtAdj>
+          <on>
+            <offInPart/>
+          </on>
+        </ctlPtAdj>
       </startTermSeg>
       <endTermSeg>
         <endPt>
@@ -334,6 +342,11 @@ TEST(SmartShape, PartiallySharedTerminationSegments)
     ASSERT_TRUE(partShape->startTermSeg->endPointAdj);
     EXPECT_EQ(partShape->startTermSeg->endPointAdj->horzOffset, 12);
     EXPECT_TRUE(partShape->startTermSeg->endPointAdj->active);
+
+    EXPECT_TRUE(scoreShape->startTermSeg->ctlPtAdj->active);
+    EXPECT_FALSE(partShape->startTermSeg->ctlPtAdj->active);
+    EXPECT_EQ(scoreShape->startTermSeg->ctlPtAdj->getParent<others::SmartShape>().get(), scoreShape.get());
+    EXPECT_EQ(partShape->startTermSeg->ctlPtAdj->getParent<others::SmartShape>().get(), partShape.get());
 
     EXPECT_NE(partShape->startTermSeg.get(), scoreShape->startTermSeg.get());
     EXPECT_NE(partShape->startTermSeg->endPoint.get(), scoreShape->startTermSeg->endPoint.get());
