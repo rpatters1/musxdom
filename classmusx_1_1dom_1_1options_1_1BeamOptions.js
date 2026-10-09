@@ -2,9 +2,9 @@ var classmusx_1_1dom_1_1options_1_1BeamOptions =
 [
     [ "FlattenStyle", "classmusx_1_1dom_1_1options_1_1BeamOptions.html#a2fbdc2db25e53f9854495c06467ea2f7", [
       [ "OnEndNotes", "classmusx_1_1dom_1_1options_1_1BeamOptions.html#a2fbdc2db25e53f9854495c06467ea2f7a2541087e462f18f756e654dea7089ed9", null ],
+      [ "AlwaysFlat", "classmusx_1_1dom_1_1options_1_1BeamOptions.html#a2fbdc2db25e53f9854495c06467ea2f7abf7636fb8962b48ff995c57cb5970128", null ],
       [ "OnStandardNote", "classmusx_1_1dom_1_1options_1_1BeamOptions.html#a2fbdc2db25e53f9854495c06467ea2f7a4610c7fa0ee41e919877d7cae3011c72", null ],
-      [ "OnExtremeNote", "classmusx_1_1dom_1_1options_1_1BeamOptions.html#a2fbdc2db25e53f9854495c06467ea2f7a1d9842eee97b7379c537a45fa78ed80e", null ],
-      [ "AlwaysFlat", "classmusx_1_1dom_1_1options_1_1BeamOptions.html#a2fbdc2db25e53f9854495c06467ea2f7abf7636fb8962b48ff995c57cb5970128", null ]
+      [ "OnExtremeNote", "classmusx_1_1dom_1_1options_1_1BeamOptions.html#a2fbdc2db25e53f9854495c06467ea2f7a1d9842eee97b7379c537a45fa78ed80e", null ]
     ] ],
     [ "BeamOptions", "classmusx_1_1dom_1_1options_1_1BeamOptions.html#a148a81f46d754a292b4825d46874c477", null ],
     [ "beamFourEighthsInCommonTime", "classmusx_1_1dom_1_1options_1_1BeamOptions.html#af6ed16a95786f6a3eeabdee7a53def83", null ],
