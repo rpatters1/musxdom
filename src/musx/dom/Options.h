@@ -174,9 +174,9 @@ public:
     enum class FlattenStyle
     {
         OnEndNotes,         ///< Flatten based on end notes only (the legacy default)
+        AlwaysFlat,         ///< Flatten all beams
         OnStandardNote,     ///< Flatten based on standard note
-        OnExtremeNote,      ///< Flatten based on extreme note
-        AlwaysFlat          ///< Flatten all beams
+        OnExtremeNote       ///< Flatten based on extreme note
     };
 
     Evpu beamStubLength{};                   ///< "Broken Beam Length" in @ref Evpu.
